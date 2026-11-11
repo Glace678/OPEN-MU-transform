@@ -80,7 +80,9 @@ public sealed class HealingHandler
         if (this.IsHealthBelowThreshold(this._player, this._config!.HealThresholdPercent))
         {
             var healSkill = this.FindSkillByType(SkillType.Regeneration);
-            if (healSkill is not null && this._config.AutoHeal)
+            if (healSkill is not null
+                && this._config.AutoHeal
+                && await this._player.TryConsumeForSkillAsync(healSkill).ConfigureAwait(false))
             {
                 await this._player.ForEachWorldObserverAsync<IShowSkillAnimationPlugIn>(
                     p => p.ShowSkillAnimationAsync(this._player, this._player, healSkill.Skill!, true),
@@ -141,6 +143,11 @@ public sealed class HealingHandler
 
             if (this.IsHealthBelowThreshold(member, this._config.HealPartyThresholdPercent))
             {
+                if (!await this._player.TryConsumeForSkillAsync(healSkill).ConfigureAwait(false))
+                {
+                    break;
+                }
+
                 await this._player.ForEachWorldObserverAsync<IShowSkillAnimationPlugIn>(
                     p => p.ShowSkillAnimationAsync(this._player, member, healSkill.Skill!, true),
                     includeThis: true).ConfigureAwait(false);

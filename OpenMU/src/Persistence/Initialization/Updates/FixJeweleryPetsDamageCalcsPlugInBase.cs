@@ -64,14 +64,14 @@ public abstract class FixJeweleryPetsDamageCalcsPlugInBase : UpdatePlugInBase
 
         foreach (var jeweleryItem in jewelery)
         {
-            if (jeweleryItem.BasePowerUpAttributes.FirstOrDefault(p =>
-                    p.TargetAttribute == Stats.IceResistance ||
-                    p.TargetAttribute == Stats.PoisonResistance ||
-                    p.TargetAttribute == Stats.LightningResistance ||
-                    p.TargetAttribute == Stats.FireResistance ||
-                    p.TargetAttribute == Stats.EarthResistance ||
-                    p.TargetAttribute == Stats.WindResistance ||
-                    p.TargetAttribute == Stats.WaterResistance) is { } resistancePowerUp)
+            foreach (var resistancePowerUp in jeweleryItem.BasePowerUpAttributes.Where(p =>
+                         p.TargetAttribute == Stats.IceResistance ||
+                         p.TargetAttribute == Stats.PoisonResistance ||
+                         p.TargetAttribute == Stats.LightningResistance ||
+                         p.TargetAttribute == Stats.FireResistance ||
+                         p.TargetAttribute == Stats.EarthResistance ||
+                         p.TargetAttribute == Stats.WindResistance ||
+                         p.TargetAttribute == Stats.WaterResistance))
             {
                 resistancePowerUp.BaseValue = 1;
             }

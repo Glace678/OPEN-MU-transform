@@ -99,12 +99,32 @@ export class MobileConfig {
     return context.filesDir + '/game-data';
   }
 
+  static dataVersionMarkerPath(context: Context): string {
+    return MobileConfig.dataRoot(context) + '/.openmu-data-version';
+  }
+
+  static writeDataVersionMarker(context: Context): void {
+    const markerPath = MobileConfig.dataVersionMarkerPath(context);
+    const out = fs.openSync(markerPath, fs.OpenMode.CREATE | fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
+    try {
+      writeTextSync(out.fd, GAME_DATA_VERSION + '\n');
+    } finally {
+      fs.closeSync(out);
+    }
+  }
+
   static async isGameDataReady(context: Context): Promise<boolean> {
     const root = MobileConfig.dataRoot(context);
     try {
-      // accessSync throws when the path is missing/inaccessible.
+      // Require both Data/ and the version marker written after extraction completes.
       fs.accessSync(root + '/Data');
-      return true;
+      const markerFile = fs.openSync(MobileConfig.dataVersionMarkerPath(context), fs.OpenMode.READ_ONLY);
+      try {
+        const version = fs.readTextSync(markerFile.fd).trim();
+        return version === GAME_DATA_VERSION;
+      } finally {
+        fs.closeSync(markerFile);
+      }
     } catch (e) {
       return false;
     }

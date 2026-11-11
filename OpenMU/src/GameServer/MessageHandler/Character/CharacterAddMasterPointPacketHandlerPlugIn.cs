@@ -30,6 +30,11 @@ internal class CharacterAddMasterPointPacketHandlerPlugIn : ISubPacketHandlerPlu
     /// <inheritdoc />
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < AddMasterSkillPoint.Length)
+        {
+            return;
+        }
+
         AddMasterSkillPoint message = packet;
         await this._addMasterPointAction.AddMasterPointAsync(player, message.SkillId).ConfigureAwait(false);
     }

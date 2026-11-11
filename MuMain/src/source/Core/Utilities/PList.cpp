@@ -183,21 +183,31 @@ BOOL CPList::RemoveAt(NODE* position)
     if (::IsBadReadPtr(pOldNode, sizeof(NODE)))
         return FALSE;
 
+    if (pOldNode != m_pNodeHead && ::IsBadReadPtr(pOldNode->pPrev, sizeof(NODE)))
+        return FALSE;
+
+    if (pOldNode != m_pNodeTail && ::IsBadReadPtr(pOldNode->pNext, sizeof(NODE)))
+        return FALSE;
+
     if (pOldNode == m_pNodeHead)
+    {
         m_pNodeHead = pOldNode->pNext;
+        if (m_pNodeHead != NULL && !::IsBadReadPtr(m_pNodeHead, sizeof(NODE)))
+            m_pNodeHead->pPrev = NULL;
+    }
     else
     {
-        if (::IsBadReadPtr(pOldNode->pPrev, sizeof(NODE)))
-            return FALSE;
         pOldNode->pPrev->pNext = pOldNode->pNext;
     }
 
     if (pOldNode == m_pNodeTail)
+    {
         m_pNodeTail = pOldNode->pPrev;
+        if (m_pNodeTail != NULL && !::IsBadReadPtr(m_pNodeTail, sizeof(NODE)))
+            m_pNodeTail->pNext = NULL;
+    }
     else
     {
-        if (::IsBadReadPtr(pOldNode->pNext, sizeof(NODE)))
-            return FALSE;
         pOldNode->pNext->pPrev = pOldNode->pPrev;
     }
     FreeNode(pOldNode);

@@ -22,6 +22,8 @@ class TestF24DeployPS51Compatibility(unittest.TestCase):
     def test_quickstart_powershell_scanner(self):
         audit = SecurityScanner.audit_quickstart_powershell_compatibility(self.script_path)
         self.assertTrue(audit["exists"])
+        self.assertFalse(audit["has_getint32"])
+        self.assertTrue(audit["is_ps51_compatible"])
 
     def test_powershell_51_safe_randomizer_logic(self):
         # Emulate the PS 5.1-compatible random generation: GetBytes(byte[]) modulo

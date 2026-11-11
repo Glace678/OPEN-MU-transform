@@ -596,7 +596,8 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
             auto* pCloth = (CPhysicsCloth*)o->m_pCloth;
             if (!pCloth[0].Move2(0.005f, 5))
             {
-                CHARACTER* c = &CharactersClient[(int)o->PKKey];
+                const int  pkIndex = static_cast<int>(o->PKKey);
+                CHARACTER* c       = (pkIndex >= 0 && pkIndex < MAX_CHARACTERS_CLIENT) ? &CharactersClient[pkIndex] : nullptr;
                 DeleteCloth(c, o);
             }
             else
@@ -877,6 +878,8 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
                         glColor4f(0.f, 0.f, 0.f, 0.7f);
                     }
                     b->RenderBodyShadow(-1, -1, 8, 9);
+                    glColor4f(1.f, 1.f, 1.f, 1.f);
+                    DisableAlphaBlend();
                 }
             }
         }
@@ -963,6 +966,8 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
                     }
 
                     b->RenderBodyShadow();
+                    glColor4f(1.f, 1.f, 1.f, 1.f);
+                    DisableAlphaBlend();
                 }
             }
 
@@ -1109,6 +1114,8 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
                     Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]);
                     VectorCopy(Position, b->BodyOrigin);
                     b->RenderBodyShadow();
+                    glColor4f(1.f, 1.f, 1.f, 1.f);
+                    DisableAlphaBlend();
                 }
             }
         }
@@ -1405,10 +1412,10 @@ void Draw_RenderObject(OBJECT* o, bool Translate, int Select, int ExtraMon)
                 // is never passed to RenderMesh()/RenderBody() for this object, so nothing else
                 // here would trigger its materialization under the lazy gate.
                 b->EnsureCpuVertices(1);
-                auto* pSideHair = new CSideHair;
-                pSideHair->Create(VertexTransform, b, o);
-                pSideHair->Render(VertexTransform, LightTransform);
-                pSideHair->Destroy();
+                CSideHair sideHair;
+                sideHair.Create(VertexTransform, b, o);
+                sideHair.Render(VertexTransform, LightTransform);
+                sideHair.Destroy();
             }
             else if (o->Type == MODEL_DRAKAN)
             {
@@ -3351,6 +3358,7 @@ void RenderObjectVisual(OBJECT* o)
             }*/
                     break;
             }
+            break;
         case WD_6STADIUM:
             switch (o->Type)
             {
@@ -4112,7 +4120,7 @@ void MoveObject(OBJECT* o)
         }
     }
     Alpha(o);
-    if (o->Alpha < 0.01f)
+    if (o->Alpha < 0.01f || !Models || o->Type < 0 || o->Type >= MAX_MODELS)
         return;
     BMD* b           = &Models[o->Type];
     b->CurrentAction = o->CurrentAction;
@@ -4130,12 +4138,18 @@ void MoveObject(OBJECT* o)
     }
     else if (IsIceCity() && (o->Type == 16 || o->Type == 17 || o->Type == 68))
     {
-        fSpeed = b->Actions[o->CurrentAction].PlaySpeed;
+        if (b->Actions != nullptr && o->CurrentAction >= 0 && o->CurrentAction < b->NumActions)
+        {
+            fSpeed = b->Actions[o->CurrentAction].PlaySpeed;
+        }
     }
 #ifdef ASG_ADD_MAP_KARUTAN
     else if (IsKarutanMap() && (o->Type == 66 || o->Type == 107))
     {
-        fSpeed = b->Actions[o->CurrentAction].PlaySpeed;
+        if (b->Actions != nullptr && o->CurrentAction >= 0 && o->CurrentAction < b->NumActions)
+        {
+            fSpeed = b->Actions[o->CurrentAction].PlaySpeed;
+        }
     }
 #endif  // ASG_ADD_MAP_KARUTAN
 
@@ -5365,8 +5379,9 @@ int LoadWorldObjects(const wchar_t* fileName, bool encrypted)
     auto parsed = bytes ? Data::WorldObjects::ObjectPlacementData::Parse(*bytes, encrypted, MAX_MODELS) : std::nullopt;
     if (!parsed)
     {
-        wchar_t message[256];
-        mu_swprintf(message, L"%ls is missing, unreadable, or contains invalid world objects.", fileName);
+        wchar_t message[256]{};
+        mu_swprintf_s(message, std::size(message), L"%ls is missing, unreadable, or contains invalid world objects.",
+                      fileName ? fileName : L"<null>");
         MessageBox(g_hWnd, message, nullptr, MB_OK);
         SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return -1;
@@ -8491,6 +8506,7 @@ void RenderPartObjectBody(BMD* b, OBJECT* o, int Type, float Alpha, int RenderTy
         o->HiddenMesh = 0;
         b->StreamMesh = 1;
         b->RenderMesh(1, RENDER_TEXTURE, 1.f, -1, o->BlendMeshLight, o->BlendMeshTexCoordU, WorldTime * 0.0005f);
+        b->StreamMesh = -1;
     }
     else if (Type == MODEL_HURRICANE_ARMOR || Type == MODEL_HURRICANE_GLOVES || Type == MODEL_HURRICANE_PANTS ||
              Type == MODEL_HURRICANE_BOOTS)
@@ -8546,10 +8562,10 @@ void RenderPartObjectBody(BMD* b, OBJECT* o, int Type, float Alpha, int RenderTy
         Vector(Luminosity, Luminosity, Luminosity + 0.1f, b->BodyLight);
         b->RenderMesh(2, RENDER_TEXTURE, o->Alpha, -2, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordU);
 
-        o->Alpha          = 0.5f;
-        float Luminosity4 = sinf(WorldTime * 0.0025f) * 0.5f + 0.7f;
+        const float fBladeAlpha = 0.5f;
         Vector(0.4f, 0.4f, 0.8f, b->BodyLight);
-        b->RenderMesh(1, RENDER_TEXTURE, o->Alpha, -2, o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordU);
+        b->RenderMesh(1, RENDER_TEXTURE, fBladeAlpha, -2, o->BlendMeshLight, o->BlendMeshTexCoordU,
+                      o->BlendMeshTexCoordU);
     }
     else if (Type == MODEL_SYLPHID_RAY_ARMOR)
     {
@@ -12150,7 +12166,8 @@ void RenderPartObject(OBJECT* o, int Type, void* p2, vec3_t Light, float Alpha, 
                     auto* pCloth = (CPhysicsCloth*)p->m_pCloth[i];
                     if (!pCloth->Move2(0.005f, 5))
                     {
-                        DeleteCloth(NULL, o, p);
+                        DeleteCloth(NULL, NULL, p);
+                        break;
                     }
                     else
                     {
@@ -12160,7 +12177,7 @@ void RenderPartObject(OBJECT* o, int Type, void* p2, vec3_t Light, float Alpha, 
             }
             else if (iCloth == 0)
             {
-                DeleteCloth(NULL, o, p);
+                DeleteCloth(NULL, NULL, p);
             }
         }
     }

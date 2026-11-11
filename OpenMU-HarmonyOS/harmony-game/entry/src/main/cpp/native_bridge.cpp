@@ -1,4 +1,6 @@
+#include <cstdlib>
 #include <string>
+#include <vector>
 #include <unistd.h>
 #include <napi/native_api.h>
 
@@ -18,13 +20,12 @@ static bool GetStringArg(napi_env env, napi_value value, std::string& out) {
     if (napi_get_value_string_utf8(env, value, nullptr, 0, &needed) != napi_ok) {
         return false;
     }
-    std::string buffer(needed, '\0');
+    std::vector<char> buffer(needed + 1, '\0');
     size_t copied = 0;
-    if (napi_get_value_string_utf8(env, value, &buffer[0], needed + 1, &copied) != napi_ok) {
+    if (napi_get_value_string_utf8(env, value, buffer.data(), buffer.size(), &copied) != napi_ok) {
         return false;
     }
-    buffer.resize(copied);
-    out = buffer;
+    out.assign(buffer.data(), copied);
     return true;
 }
 
@@ -74,6 +75,11 @@ static napi_value SetDataRoot(napi_env env, napi_callback_info info) {
         if (getcwd(cwd, sizeof(cwd)) == nullptr) {
             return ThrowNapiError(env, "SetDataRoot: getcwd failed");
         }
+        path = cwd;
+    }
+    const std::string configPath = path + "/config.ini";
+    if (setenv("MU_CONFIG_FILE", configPath.c_str(), 1) != 0) {
+        return ThrowNapiError(env, "SetDataRoot: setenv MU_CONFIG_FILE failed");
     }
     napi_value result;
     napi_get_undefined(env, &result);

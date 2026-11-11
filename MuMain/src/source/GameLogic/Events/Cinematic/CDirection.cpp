@@ -194,7 +194,14 @@ void CDirection::SummonCreateMonster(EMonsterType Type, int x, int y, float Angl
 
     stl_Monster.push_back(DMonster);
 
-    c                  = CreateMonster(Type, x, y, DMonster.m_Index + NUMOFMON);
+    c = CreateMonster(Type, x, y, DMonster.m_Index + NUMOFMON);
+    if (c == nullptr)
+    {
+        stl_Monster.pop_back();
+        if (NextCheck)
+            m_iCheckTime++;
+        return;
+    }
     c->Key             = NUMOFMON + DMonster.m_Index++;
     c->Object.Angle[2] = Angle;
     c->Weapon[0].Type  = -1;
@@ -278,6 +285,9 @@ void CDirection::SummonCreateMonster(EMonsterType Type, int x, int y, float Angl
 
 bool CDirection::MoveCreatedMonster(int Index, int x, int y, float Angle, int Speed)
 {
+    if (Index < 0 || static_cast<size_t>(Index) >= stl_Monster.size())
+        return false;
+
     CHARACTER* c     = nullptr;
     bool       bNext = false;
 
@@ -344,12 +354,23 @@ bool CDirection::MoveCreatedMonster(int Index, int x, int y, float Angle, int Sp
 
 bool CDirection::ActionCreatedMonster(int Index, int Action, int Count, bool TankerAttack, bool NextCheck)
 {
+    if (Index < 0 || static_cast<size_t>(Index) >= stl_Monster.size())
+    {
+        if (NextCheck)
+            m_iCheckTime++;
+        return false;
+    }
+
     CHARACTER* c     = nullptr;
     bool       bNext = false;
 
     c = FindLiveCharacterByKey(Index + NUMOFMON);
     if (c == nullptr)
+    {
+        if (NextCheck)
+            m_iCheckTime++;
         return false;
+    }
 
     if (stl_Monster[Index].m_iActionCheck == Count)
         bNext = true;

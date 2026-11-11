@@ -62,7 +62,14 @@ public class ConnectServerContainer : ServerContainerBase, IEnumerable<IConnectS
             .FirstOrDefault(server => server.ConfigurationId == connectServerDefinitionId)
                             ?? throw new InvalidOperationException($"ConnectServer with Definition with id {connectServerDefinitionId} was not found.");
         await connectServer.StopAsync(default).ConfigureAwait(false);
+        foreach (var observer in this._observers.Values)
+        {
+            observer.RemoveObserver(connectServer);
+        }
+
+        this._connectServers.Remove(connectServer);
         this._servers.Remove(connectServer);
+        (connectServer as IDisposable)?.Dispose();
     }
 
     /// <summary>
@@ -116,10 +123,16 @@ public class ConnectServerContainer : ServerContainerBase, IEnumerable<IConnectS
     /// <inheritdoc />
     protected override async Task StopInnerAsync(CancellationToken cancellationToken)
     {
-        foreach (var connectServer in this._connectServers)
+        foreach (var connectServer in this._connectServers.ToList())
         {
             await connectServer.StopAsync(cancellationToken).ConfigureAwait(false);
+            foreach (var observer in this._observers.Values)
+            {
+                observer.RemoveObserver(connectServer);
+            }
+
             this._servers.Remove(connectServer);
+            (connectServer as IDisposable)?.Dispose();
         }
 
         this._connectServers.Clear();

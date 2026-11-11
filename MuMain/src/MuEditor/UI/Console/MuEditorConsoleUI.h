@@ -36,11 +36,11 @@ public:
     void LogEditor(const std::string& message);
     void LogGame(const std::string& message);
 
-    const std::string& GetEditorLog() const { return m_strEditorConsole; }
-    const std::string& GetGameLog() const { return m_strGameConsole; }
+    std::string GetEditorLog() const;
+    std::string GetGameLog() const;
 
-    void ClearEditorLog() { m_strEditorConsole.clear(); }
-    void ClearGameLog() { m_strGameConsole.clear(); }
+    void ClearEditorLog();
+    void ClearGameLog();
 
     void Render();
 
@@ -53,6 +53,8 @@ private:
 
     std::string   m_strEditorConsole;
     std::string   m_strGameConsole;
+    std::string   m_renderEditorConsole;
+    std::string   m_renderGameConsole;
     std::ofstream m_logFile;
     std::string   m_strLogFilePath;
 

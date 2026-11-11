@@ -440,7 +440,7 @@ public static class ItemSerializerHelper
         var blackOption = item.Definition!.PossibleItemOptions.FirstOrDefault(o => o.PossibleOptions.Any(p => p.OptionType == fenrirOptionType))
                           ?? throw new ArgumentException($"The fenrir flag {fenrirFlag} in {fenrirByte} was set, but the option is not defined as possible option in the item definition ({item.Definition.Number}, {item.Definition.Group}).");
         var optionLink = persistenceContext.CreateNew<ItemOptionLink>();
-        optionLink.ItemOption = blackOption.PossibleOptions.First();
+        optionLink.ItemOption = blackOption.PossibleOptions.First(p => p.OptionType == fenrirOptionType);
         item.ItemOptions.Add(optionLink);
     }
 }

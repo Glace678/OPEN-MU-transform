@@ -72,10 +72,15 @@ public sealed class CastleSiegeTributeWithdrawAction
                             {
                                 await context.SaveOwnerAsync().ConfigureAwait(false);
                             }
-                            catch
+                            catch (Exception ex)
                             {
-                                // Best-effort compensation: the in-memory treasury value is restored
-                                // regardless; a failure here only leaves a tiny debit, never a free credit.
+                                context.IsEconomyPersistencePending = true;
+                                player.Logger.LogError(
+                                    ex,
+                                    "Failed to immediately persist compensated Castle Siege tribute {PreviousTribute} after player {Player} could not receive {Amount} Zen; marked economy persistence pending.",
+                                    previousTribute,
+                                    player,
+                                    amount);
                             }
                         }
                     }

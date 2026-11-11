@@ -97,8 +97,6 @@ void PetObject::Release()
     if (NULL != m_obj)
     {
         m_obj->Live = FALSE;
-        delete m_obj;
-        m_obj = nullptr;
     }
 
     for (ActionMap::iterator iter = m_actionMap.begin(); iter != m_actionMap.end(); iter++)
@@ -111,6 +109,12 @@ void PetObject::Release()
         }
     }
     m_actionMap.clear();
+
+    if (NULL != m_obj)
+    {
+        delete m_obj;
+        m_obj = nullptr;
+    }
 
     m_speedMap.clear();
 

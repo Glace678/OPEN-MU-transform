@@ -17,8 +17,7 @@
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendLogin)(int32_t, const wchar_t*, const wchar_t*, uint32_t, const BYTE*,
                                                    const BYTE*);
-inline SendLogin dotnet_SendLogin =
-    reinterpret_cast<SendLogin>(symLoad(munique_client_library_handle, "ConnectionManager_SendLogin"));
+inline SendLogin dotnet_SendLogin = BindManagedPacketSymbol<SendLogin>("ConnectionManager_SendLogin");
 
 void PacketFunctions_ClientToServer_Custom::SendLogin(const wchar_t* username, const wchar_t* password,
                                                       const BYTE* clientVersion, const BYTE* clientSerial)
@@ -27,8 +26,8 @@ void PacketFunctions_ClientToServer_Custom::SendLogin(const wchar_t* username, c
 }
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendAuthenticateExt)(int32_t, uint16_t, uint32_t);
-inline SendAuthenticateExt dotnet_SendAuthenticateExt = reinterpret_cast<SendAuthenticateExt>(
-    symLoad(munique_client_library_handle, "ConnectionManager_SendAuthenticateExt"));
+inline SendAuthenticateExt dotnet_SendAuthenticateExt =
+    BindManagedPacketSymbol<SendAuthenticateExt>("ConnectionManager_SendAuthenticateExt");
 
 void PacketFunctions_ChatServer_Custom::SendAuthenticateExt(uint16_t roomId, uint32_t token)
 {
@@ -36,8 +35,8 @@ void PacketFunctions_ChatServer_Custom::SendAuthenticateExt(uint16_t roomId, uin
 }
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendChatMessageExt)(int32_t, BYTE, const wchar_t*);
-inline SendChatMessageExt dotnet_SendChatMessageExt = reinterpret_cast<SendChatMessageExt>(
-    symLoad(munique_client_library_handle, "ConnectionManager_SendChatMessageExt"));
+inline SendChatMessageExt dotnet_SendChatMessageExt =
+    BindManagedPacketSymbol<SendChatMessageExt>("ConnectionManager_SendChatMessageExt");
 
 void PacketFunctions_ChatServer_Custom::SendChatMessageExt(BYTE senderIndex, const wchar_t* message)
 {

@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import os as _os, sys as _sys
-import config
-W = _os.path.dirname(_os.path.abspath(__file__))
 r"""
 Claude Code 任务唤醒与恢复脚本 (Wakeup & Resume Script)
 用于在指定时间（明天凌晨 2:00）自动唤醒因 429 限流被中断的 Claude Code 任务，
@@ -13,6 +10,10 @@ Claude Code 任务唤醒与恢复脚本 (Wakeup & Resume Script)
 - 目标模型: ark-code-latest
 - 思考模式: max (effort: max)
 """
+
+import os as _os, sys as _sys
+import config
+W = _os.path.dirname(_os.path.abspath(__file__))
 
 import sys
 import os
@@ -51,16 +52,23 @@ def ensure_claude_settings():
             settings["model"] = MODEL_NAME
             modified = True
 
-        if "modelSettings" not in settings:
+        if not isinstance(settings.get("modelSettings"), dict):
             settings["modelSettings"] = {}
 
-        if settings["modelSettings"].get(MODEL_NAME, {}).get("effortLevel") != EFFORT_LEVEL:
-            settings["modelSettings"][MODEL_NAME] = {"effortLevel": EFFORT_LEVEL}
+        model_cfg = settings["modelSettings"].get(MODEL_NAME)
+        if not isinstance(model_cfg, dict):
+            model_cfg = {}
+            settings["modelSettings"][MODEL_NAME] = model_cfg
+
+        if model_cfg.get("effortLevel") != EFFORT_LEVEL:
+            model_cfg["effortLevel"] = EFFORT_LEVEL
             modified = True
 
         if modified:
-            with open(SETTINGS_FILE, "w", encoding="utf-8") as f:
+            tmp_file = SETTINGS_FILE + ".tmp"
+            with open(tmp_file, "w", encoding="utf-8") as f:
                 json.dump(settings, f, indent=2, ensure_ascii=False)
+            os.replace(tmp_file, SETTINGS_FILE)
             print(f"[✓] 已更新 {SETTINGS_FILE}：模型设为 {MODEL_NAME}，思考级别设为 {EFFORT_LEVEL}")
         else:
             print(f"[✓] {SETTINGS_FILE} 已是 {MODEL_NAME} (effort: {EFFORT_LEVEL})")
@@ -117,7 +125,9 @@ def launch_claude(interactive=True):
     ensure_claude_settings()
 
     # 找到 claude 命令的路径
-    claude_cmd = shutil.which("claude") or "claude"
+    claude_cmd = shutil.which("claude")
+    if not claude_cmd:
+        raise FileNotFoundError("未在 PATH 中找到 'claude' 可执行文件，请先安装 Claude Code CLI。")
 
     # 构建启动命令
     cmd_args = [
@@ -145,7 +155,7 @@ def launch_claude(interactive=True):
         subprocess.Popen(
             cmd_args,
             cwd=TARGET_DIR,
-            creationflags=subprocess.CREATE_NEW_CONSOLE,
+            creationflags=getattr(subprocess, "CREATE_NEW_CONSOLE", 0),
             env=env
         )
         print("[✓] 任务窗口已成功拉起并保持运行！")
@@ -180,13 +190,19 @@ def main():
     # 如果用户通过命令行指定了时间参数，例如 02:00
     for arg in sys.argv[1:]:
         if ":" in arg and not arg.startswith("--"):
+            parts = arg.split(":")
+            if len(parts) != 2:
+                print(f"[!] 无效的时间格式 '{arg}'，请使用 HH:MM（例如 02:00）", file=sys.stderr)
+                sys.exit(2)
             try:
-                parts = arg.split(":")
                 h, m = int(parts[0]), int(parts[1])
+                if not (0 <= h <= 23 and 0 <= m <= 59):
+                    raise ValueError("hour/minute out of range")
                 target_time = get_target_wakeup_time(target_hour=h, target_minute=m)
                 break
-            except Exception:
-                pass
+            except ValueError:
+                print(f"[!] 无效的时间参数 '{arg}'，小时需为 00-23，分钟需为 00-59", file=sys.stderr)
+                sys.exit(2)
 
     wait_until(target_time)
     launch_claude(interactive=interactive)

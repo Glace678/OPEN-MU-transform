@@ -61,7 +61,9 @@ for idx, txt in qw:
 # npcname txt -> unique quoted names
 npc = {}
 npc_path = os.path.join(formats.CHS, 'NpcName_Chs.txt')
-for line in open(npc_path, 'rb').read().decode('utf-8', 'replace').splitlines():
+with open(npc_path, 'rb') as fh:
+    npc_lines = fh.read().decode('utf-8', 'replace').splitlines()
+for line in npc_lines:
     m = re.search(r'^\s*(\d+)\s+\d+\s+"([^"]*)"', line)
     if m and m.group(2).strip() and re.search(r'[A-Za-z]', m.group(2)):
         nm = m.group(2)
@@ -73,11 +75,16 @@ for nm in npc:
 items = [{'id': k, 'en': en, 'budget': uniq[en]['budget'],
           'kinds': sorted(uniq[en]['kinds'])} for k, en in
          enumerate(sorted(uniq.keys()))]
-with open(config.STRINGS_JSON, 'w', encoding='utf-8') as fh:
+strings_tmp = config.STRINGS_JSON + '.tmp'
+with open(strings_tmp, 'w', encoding='utf-8') as fh:
     json.dump({'strings': items}, fh, ensure_ascii=False, indent=0)
+os.replace(strings_tmp, config.STRINGS_JSON)
 # locs for the apply step
-with open(os.path.join(config.LOC, 'locs.json'), 'w', encoding='utf-8') as fh:
+locs_path = os.path.join(config.LOC, 'locs.json')
+locs_tmp = locs_path + '.tmp'
+with open(locs_tmp, 'w', encoding='utf-8') as fh:
     json.dump({en: v for en, v in locs.items()}, fh, ensure_ascii=False)
+os.replace(locs_tmp, locs_path)
 
 # per-kind counts
 from collections import Counter

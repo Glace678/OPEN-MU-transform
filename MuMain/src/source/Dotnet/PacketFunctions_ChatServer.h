@@ -26,6 +26,7 @@
 class PacketFunctions_ChatServer : public PacketFunctions_ChatServer_Custom
 {
 public:
+
     /// <summary>
     /// Sends a Authenticate to this connection.
     /// </summary>

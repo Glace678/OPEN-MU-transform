@@ -8,6 +8,7 @@ using MUnique.OpenMU.GameLogic.Attributes;
 using MUnique.OpenMU.GameLogic.NPC;
 using MUnique.OpenMU.GameLogic.PlayerActions;
 using MUnique.OpenMU.GameLogic.Views.Character;
+using MUnique.OpenMU.GameLogic.Views.Inventory;
 using MUnique.OpenMU.GameLogic.Views.Login;
 using MUnique.OpenMU.GameLogic.Views.NPC;
 
@@ -36,67 +37,78 @@ public class ResetCharacterAction
     /// </summary>
     public async ValueTask ResetCharacterAsync()
     {
-        var resetFeature = this._player.GameContext.FeaturePlugIns.GetPlugIn<ResetFeaturePlugIn>();
-        if (resetFeature is null)
+        ResetConfiguration? completedConfiguration = null;
+        await this._player.RunPersistenceExclusiveAsync(async () =>
         {
-            await this.ShowMessageAsync(nameof(PlayerMessage.ResetNotEnabled)).ConfigureAwait(false);
+            var resetFeature = this._player.GameContext.FeaturePlugIns.GetPlugIn<ResetFeaturePlugIn>();
+            if (resetFeature is null)
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.ResetNotEnabled)).ConfigureAwait(false);
+                return;
+            }
+
+            if (this._player.PlayerState.CurrentState != PlayerState.EnteredWorld && this._npc is null)
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.CantResetWithOpenedWindows)).ConfigureAwait(false);
+                return;
+            }
+
+            if (this._player.Attributes is null || this._player.SelectedCharacter is null)
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.NotEnteredTheGame)).ConfigureAwait(false);
+                return;
+            }
+
+            var configuration = resetFeature.Configuration;
+            if (configuration is null)
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.ResetNotConfigured)).ConfigureAwait(false);
+                return;
+            }
+
+            var resetProgression = ResetProgressionCalculator.Calculate(this.GetResetCount(), (int)this._player.Attributes[Stats.PointsPerReset], configuration);
+
+            if (this._player.Level < configuration.RequiredLevel)
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.RequiredLevelForReset), configuration.RequiredLevel).ConfigureAwait(false);
+                return;
+            }
+
+            if (configuration.ResetLimit > 0 && resetProgression.NextResetCount > configuration.ResetLimit)
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.MaximumResetsReached), configuration.ResetLimit).ConfigureAwait(false);
+                return;
+            }
+
+            if (!await this.TryConsumeResetCostsAsync(configuration, resetProgression).ConfigureAwait(false))
+            {
+                return;
+            }
+
+            this._player.Attributes[Stats.Resets] = resetProgression.NextResetCount;
+            this._player.Attributes[Stats.Level] = configuration.LevelAfterReset;
+            this._player.SelectedCharacter.Experience = 0;
+            this.UpdateStats(configuration, resetProgression);
+            if (configuration.MoveHome)
+            {
+                await this.MoveHomeAsync().ConfigureAwait(false);
+            }
+
+            completedConfiguration = configuration;
+        }).ConfigureAwait(false);
+
+        if (completedConfiguration is null)
+        {
             return;
         }
 
-        if (this._player.PlayerState.CurrentState != PlayerState.EnteredWorld && this._npc is null)
-        {
-            await this.ShowMessageAsync(nameof(PlayerMessage.CantResetWithOpenedWindows)).ConfigureAwait(false);
-            return;
-        }
-
-        if (this._player.Attributes is null || this._player.SelectedCharacter is null)
-        {
-            await this.ShowMessageAsync(nameof(PlayerMessage.NotEnteredTheGame)).ConfigureAwait(false);
-            return;
-        }
-
-        var configuration = resetFeature.Configuration;
-        if (configuration is null)
-        {
-            await this.ShowMessageAsync(nameof(PlayerMessage.ResetNotConfigured)).ConfigureAwait(false);
-            return;
-        }
-
-        var resetProgression = ResetProgressionCalculator.Calculate(this.GetResetCount(), (int)this._player.Attributes[Stats.PointsPerReset], configuration);
-
-        if (this._player.Level < configuration.RequiredLevel)
-        {
-            await this.ShowMessageAsync(nameof(PlayerMessage.RequiredLevelForReset), configuration.RequiredLevel).ConfigureAwait(false);
-            return;
-        }
-
-        if (configuration.ResetLimit > 0 && resetProgression.NextResetCount > configuration.ResetLimit)
-        {
-            await this.ShowMessageAsync(nameof(PlayerMessage.MaximumResetsReached), configuration.ResetLimit).ConfigureAwait(false);
-            return;
-        }
-
-        if (!await this.TryConsumeResetCostsAsync(configuration, resetProgression).ConfigureAwait(false))
-        {
-            return;
-        }
-
-        this._player.Attributes[Stats.Resets] = resetProgression.NextResetCount;
-        this._player.Attributes[Stats.Level] = configuration.LevelAfterReset;
-        this._player.SelectedCharacter.Experience = 0;
-        this.UpdateStats(configuration, resetProgression);
-        if (configuration.MoveHome)
-        {
-            await this.MoveHomeAsync().ConfigureAwait(false);
-        }
-
-        if (configuration.LogOut)
+        if (completedConfiguration.LogOut)
         {
             await this._logoutAction.LogoutAsync(this._player, LogoutType.BackToCharacterSelection).ConfigureAwait(false);
         }
         else
         {
-            await this.UpdateClientStatsAsync(configuration).ConfigureAwait(false);
+            await this.UpdateClientStatsAsync(completedConfiguration).ConfigureAwait(false);
         }
     }
 
@@ -116,6 +128,11 @@ public class ResetCharacterAction
     private int GetResetCount()
     {
         return (int)this._player.Attributes![Stats.Resets];
+    }
+
+    private static int GetStackUnitCount(Item item)
+    {
+        return item.IsStackable() ? Math.Max(0, (int)item.Durability) : 1;
     }
 
     private async ValueTask<bool> TryConsumeResetCostsAsync(ResetConfiguration configuration, ResetProgression resetProgression)
@@ -138,9 +155,26 @@ public class ResetCharacterAction
             return false;
         }
 
+        var remainingToConsume = resetProgression.RequiredItemAmount;
         foreach (var item in requiredItems)
         {
-            await this._player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
+            if (remainingToConsume <= 0)
+            {
+                break;
+            }
+
+            var itemUnits = GetStackUnitCount(item);
+            if (item.IsStackable() && itemUnits > remainingToConsume)
+            {
+                item.Durability -= (byte)remainingToConsume;
+                remainingToConsume = 0;
+                await this._player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
+            }
+            else
+            {
+                remainingToConsume -= itemUnits;
+                await this._player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
+            }
         }
 
         return true;
@@ -159,13 +193,14 @@ public class ResetCharacterAction
         }
 
         var requiredDefinition = configuration.RequiredResetItem;
-        var requiredItems = this._player.Inventory.Items
+        var candidateItems = this._player.Inventory.Items
             .Where(item => item.Definition is { } definition
                            && definition.Group == requiredDefinition.Group
-                           && definition.Number == requiredDefinition.Number)
-            .Take(requiredItemAmount)
+                           && definition.Number == requiredDefinition.Number
+                           && GetStackUnitCount(item) > 0)
             .ToList();
-        if (requiredItems.Count < requiredItemAmount)
+        var availableAmount = candidateItems.Sum(GetStackUnitCount);
+        if (availableAmount < requiredItemAmount)
         {
             await this.ShowMessageAsync(
                 nameof(PlayerMessage.NotEnoughItemsForReset),
@@ -174,7 +209,7 @@ public class ResetCharacterAction
             return null;
         }
 
-        return requiredItems;
+        return candidateItems;
     }
 
     private void UpdateStats(ResetConfiguration configuration, ResetProgression resetProgression)
@@ -192,7 +227,9 @@ public class ResetCharacterAction
         }
         else
         {
-            this._player.SelectedCharacter!.LevelUpPoints += resetProgression.PointsForReset;
+            this._player.SelectedCharacter!.LevelUpPoints = (int)Math.Min(
+                int.MaxValue,
+                (long)this._player.SelectedCharacter!.LevelUpPoints + resetProgression.PointsForReset);
         }
     }
 

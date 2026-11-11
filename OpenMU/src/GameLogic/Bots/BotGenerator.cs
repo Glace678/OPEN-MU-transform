@@ -136,6 +136,11 @@ internal sealed class BotGenerator
             var existing = await context.GetAccountByLoginNameAsync(loginName, cancellationToken).ConfigureAwait(false);
             if (existing is not null)
             {
+                if (!existing.IsBot)
+                {
+                    this._logger.LogWarning("Account '{LoginName}' already exists and is not marked as a bot account; skipping generation.", loginName);
+                }
+
                 continue;
             }
 

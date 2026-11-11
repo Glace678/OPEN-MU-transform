@@ -55,19 +55,11 @@ public static class WebApplicationExtensions
 
         var services = builder.Services;
 
-        // The panel runs behind a reverse proxy (nginx/traefik) in the private docker
-        // network which terminates TLS. Trust the forwarded headers (client IP, scheme
-        // and host) only from the standard private ranges so the request is seen as
-        // HTTPS and the Secure auth cookie is sent back (otherwise login silently fails).
-        services.Configure<Microsoft.AspNetCore.Builder.ForwardedHeadersOptions>(options =>
-        {
-            options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor
-                | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
-                | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedHost;
-            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("10.0.0.0"), 8));
-            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("172.16.0.0"), 12));
-            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("192.168.0.0"), 16));
-        });
+        // The panel may run behind a TLS-terminating reverse proxy in a private Docker network,
+        // or directly on LAN/loopback. Trust X-Forwarded-Proto from private networks so HTTPS
+        // scheme detection works behind nginx/traefik, while NEVER trusting X-Forwarded-For or
+        // X-Forwarded-Host unless OPENMU_TRUSTED_PROXIES explicitly lists the proxy IP/CIDR.
+        services.Configure<Microsoft.AspNetCore.Builder.ForwardedHeadersOptions>(ConfigureAdminForwardedHeaders);
 
         var supportedCultures = CultureHelper
             .GetAvailableCultures<Properties.Resources>()
@@ -141,38 +133,7 @@ public static class WebApplicationExtensions
         // Must run before any other middleware so scheme/host/client IP from the
         // reverse proxy are visible to redirects, auth cookie policy, etc.
         app.UseForwardedHeaders();
-
-        // When the launcher binds the panel to 0.0.0.0 for the phone GM API, only the whitelisted
-        // surface (e.g. /api/mobile-gm) may be reachable on the non-loopback interface. The panel UI
-        // (login, register, all pages, Blazor circuits) stays loopback-only. This is a network-layer
-        // restriction; the actual mobile-gm authentication is unchanged.
-        var publicPathWhitelist = Environment.GetEnvironmentVariable(PublicPathWhitelistEnvironmentVariable);
-        if (!string.IsNullOrWhiteSpace(publicPathWhitelist))
-        {
-            app.Use(async (context, next) =>
-            {
-                var localAddress = context.Connection.LocalIpAddress;
-                if (localAddress is not null)
-                {
-                    if (localAddress.IsIPv4MappedToIPv6)
-                    {
-                        localAddress = localAddress.MapToIPv4();
-                    }
-
-                    if (!System.Net.IPAddress.IsLoopback(localAddress))
-                    {
-                        var path = context.Request.Path.Value ?? string.Empty;
-                        if (!path.StartsWith(publicPathWhitelist, StringComparison.OrdinalIgnoreCase))
-                        {
-                            context.Response.StatusCode = 404; // Status404NotFound
-                            return;
-                        }
-                    }
-                }
-
-                await next();
-            });
-        }
+        app.UsePublicPathWhitelist();
 
         if (app.Environment.IsDevelopment())
         {
@@ -214,6 +175,80 @@ public static class WebApplicationExtensions
 
         return app;
     }
+
+    /// <summary>Configures safe forwarded-header processing for AdminPanel hosts.</summary>
+    /// <param name="options">The forwarded headers options.</param>
+    internal static void ConfigureAdminForwardedHeaders(Microsoft.AspNetCore.Builder.ForwardedHeadersOptions options)
+    {
+        options.ForwardLimit = 1;
+        var trustedProxies = Environment.GetEnvironmentVariable("OPENMU_TRUSTED_PROXIES");
+        if (!string.IsNullOrWhiteSpace(trustedProxies))
+        {
+            options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor
+                | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+            options.KnownProxies.Clear();
+            options.KnownNetworks.Clear();
+            foreach (var entry in trustedProxies.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            {
+                var slashIndex = entry.IndexOf('/');
+                if (slashIndex > 0
+                    && System.Net.IPAddress.TryParse(entry.AsSpan(0, slashIndex), out var networkAddress)
+                    && int.TryParse(entry.AsSpan(slashIndex + 1), out var prefixLength))
+                {
+                    options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(networkAddress, prefixLength));
+                }
+                else if (System.Net.IPAddress.TryParse(entry, out var proxyIp))
+                {
+                    options.KnownProxies.Add(proxyIp);
+                }
+            }
+
+            return;
+        }
+
+        options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+        options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("10.0.0.0"), 8));
+        options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("172.16.0.0"), 12));
+        options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("192.168.0.0"), 16));
+    }
+
+    /// <summary>
+    /// Restricts non-loopback requests to the configured path segment prefix when
+    /// <c>OPENMU_ADMIN_PUBLIC_PATH_WHITELIST</c> is set.
+    /// </summary>
+    /// <param name="app">The application builder.</param>
+    internal static void UsePublicPathWhitelist(this IApplicationBuilder app)
+    {
+        var publicPathWhitelist = Environment.GetEnvironmentVariable(PublicPathWhitelistEnvironmentVariable);
+        if (string.IsNullOrWhiteSpace(publicPathWhitelist))
+        {
+            return;
+        }
+
+        var trimmed = publicPathWhitelist.Trim();
+        var allowedPrefix = new Microsoft.AspNetCore.Http.PathString(trimmed.StartsWith('/') ? trimmed : "/" + trimmed);
+        app.Use(async (context, next) =>
+        {
+            var localAddress = NormalizeAddress(context.Connection.LocalIpAddress);
+            var remoteAddress = NormalizeAddress(context.Connection.RemoteIpAddress);
+            var isDirectLoopback = localAddress is not null
+                && remoteAddress is not null
+                && System.Net.IPAddress.IsLoopback(localAddress)
+                && System.Net.IPAddress.IsLoopback(remoteAddress);
+
+            if (!isDirectLoopback
+                && !context.Request.Path.StartsWithSegments(allowedPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                context.Response.StatusCode = Microsoft.AspNetCore.Http.StatusCodes.Status404NotFound;
+                return;
+            }
+
+            await next().ConfigureAwait(false);
+        });
+    }
+
+    private static System.Net.IPAddress? NormalizeAddress(System.Net.IPAddress? address) =>
+        address is { IsIPv4MappedToIPv6: true } ? address.MapToIPv4() : address;
 
     /// <summary>Creates a file provider for the configured log directory, creating it when needed.</summary>
     /// <returns>The log directory file provider.</returns>

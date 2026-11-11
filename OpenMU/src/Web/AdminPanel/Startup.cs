@@ -97,16 +97,7 @@ public class Startup
         services.AddSingleton<MobileGmService>();
         services.AddAccountSelfServiceGuard();
 
-        // In the all-in-one deployment the app runs behind a reverse proxy (nginx/traefik)
-        // in the private docker network which terminates TLS. Trust the forwarded headers
-        // from private ranges so that the request (and the Secure auth cookie) is seen as HTTPS.
-        services.Configure<ForwardedHeadersOptions>(options =>
-        {
-            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
-            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
-            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
-            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
-        });
+        services.Configure<ForwardedHeadersOptions>(WebApplicationExtensions.ConfigureAdminForwardedHeaders);
     }
 
     /// <summary>
@@ -118,6 +109,7 @@ public class Startup
     {
         // Must run before everything else, so subsequent middleware sees the original scheme.
         app.UseForwardedHeaders();
+        app.UsePublicPathWhitelist();
 
         if (env.IsDevelopment())
         {

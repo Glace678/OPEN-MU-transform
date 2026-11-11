@@ -352,6 +352,16 @@ bool SEASON3B::CNewUICursedTempleResult::Render()
 
 void SEASON3B::CNewUICursedTempleResult::ReceiveCursedTempleGameResult(const BYTE* ReceiveBuffer)
 {
+    if (ReceiveBuffer == nullptr)
+        return;
+
+    const int packetSize =
+        (ReceiveBuffer[0] == 0xC1 || ReceiveBuffer[0] == 0xC3)
+            ? static_cast<int>(ReceiveBuffer[1])
+            : ((static_cast<int>(ReceiveBuffer[1]) << 8) | static_cast<int>(ReceiveBuffer[2]));
+    if (packetSize < static_cast<int>(sizeof(PMSG_CURSED_TEMPLE_RESULT)))
+        return;
+
     auto data = (LPPMSG_CURSED_TEMPLE_RESULT)ReceiveBuffer;
 
     int alliedPoint   = data->btAlliedPoint;
@@ -383,6 +393,9 @@ void SEASON3B::CNewUICursedTempleResult::ReceiveCursedTempleGameResult(const BYT
 
     for (int i = 0; i < userCount; i++)
     {
+        if (Offset + static_cast<int>(sizeof(PMSG_CURSED_TEMPLE_USER_ADD_EXP)) > packetSize)
+            break;
+
         auto data2 = (LPPMSG_CURSED_TEMPLE_USER_ADD_EXP)(ReceiveBuffer + Offset);
 
         CursedTempleGameResult TempData{};

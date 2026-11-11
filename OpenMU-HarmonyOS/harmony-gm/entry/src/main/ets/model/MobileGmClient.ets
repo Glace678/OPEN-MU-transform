@@ -53,6 +53,13 @@ export class ApiError extends Error {
   }
 }
 
+export class NotAuthorizedError extends ApiError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'NotAuthorizedError';
+  }
+}
+
 function trimSlash(value: string): string {
   let result = (value ?? '').trim();
   while (result.endsWith('/')) {
@@ -93,14 +100,34 @@ export function isAllowedServerUrl(rawUrl: string): boolean {
   if (authority.includes('@')) {
     return false;
   }
-  const host = authority.split(':')[0];
+  let host = '';
+  if (authority.startsWith('[')) {
+    const close = authority.indexOf(']');
+    if (close <= 1) {
+      return false;
+    }
+    const after = authority.substring(close + 1);
+    if (after.length > 0 && !/^:\d+$/.test(after)) {
+      return false;
+    }
+    host = authority.substring(1, close).toLowerCase();
+  } else {
+    const colon = authority.indexOf(':');
+    if (colon !== -1 && authority.indexOf(':', colon + 1) !== -1) {
+      return false;
+    }
+    if (colon !== -1 && !/^:\d+$/.test(authority.substring(colon))) {
+      return false;
+    }
+    host = (colon === -1 ? authority : authority.substring(0, colon)).toLowerCase();
+  }
   if (host.length === 0) {
     return false;
   }
   if (protocol === 'https') {
     return true;
   }
-  if (host === 'localhost' || host === '127.0.0.1') {
+  if (host === 'localhost' || host === '127.0.0.1' || host === '::1') {
     return true;
   }
   const parts = host.split('.');
@@ -138,8 +165,17 @@ export function isLocalServerUrl(rawUrl: string): boolean {
   }
   const rest = value.substring(protocolMatch[0].length);
   const authority = rest.split(/[/?#]/)[0];
-  const host = authority.split(':')[0].replace(/^\[|\]$/g, '');
-  if (host === 'localhost' || host === '127.0.0.1' || host === '::1' || host === '[::1]') {
+  let host = '';
+  if (authority.startsWith('[')) {
+    const close = authority.indexOf(']');
+    if (close <= 1) {
+      return false;
+    }
+    host = authority.substring(1, close).toLowerCase();
+  } else {
+    host = authority.split(':')[0].toLowerCase();
+  }
+  if (host === 'localhost' || host === '127.0.0.1' || host === '::1') {
     return true;
   }
   const parts = host.split('.');
@@ -154,9 +190,59 @@ export function isLocalServerUrl(rawUrl: string): boolean {
     || (a === 169 && b === 254);
 }
 
+export function canonicalOrigin(rawUrl: string): string {
+  const value = (rawUrl ?? '').trim();
+  const protocolMatch = value.match(/^([a-zA-Z][a-zA-Z0-9+.-]*):\/\//);
+  if (!protocolMatch) {
+    return '';
+  }
+  const scheme = protocolMatch[1].toLowerCase();
+  const rest = value.substring(protocolMatch[0].length);
+  const authority = rest.split(/[/?#]/)[0];
+  if (authority.length === 0 || authority.includes('@')) {
+    return '';
+  }
+  if (authority.startsWith('[')) {
+    const close = authority.indexOf(']');
+    if (close <= 1) {
+      return '';
+    }
+    const host = authority.substring(0, close + 1).toLowerCase();
+    const after = authority.substring(close + 1);
+    const defaultPort = scheme === 'https' ? ':443' : ':80';
+    const port = after.length > 0 ? after : defaultPort;
+    return `${scheme}://${host}${port}`;
+  }
+  const colon = authority.indexOf(':');
+  const host = (colon === -1 ? authority : authority.substring(0, colon)).toLowerCase();
+  const defaultPort = scheme === 'https' ? ':443' : ':80';
+  const port = colon === -1 ? defaultPort : authority.substring(colon);
+  return `${scheme}://${host}${port}`;
+}
+
 interface RawResponse {
   code: number;
   body: string;
+  setCookie: string;
+}
+
+function extractCookiePair(headers: Object | undefined): string {
+  if (!headers || typeof headers !== 'object') {
+    return '';
+  }
+  const record = headers as Record<string, Object>;
+  for (const key of Object.keys(record)) {
+    if (key.toLowerCase() !== 'set-cookie') {
+      continue;
+    }
+    const raw = record[key];
+    const first = Array.isArray(raw) ? String(raw[0] ?? '') : String(raw ?? '');
+    const pair = first.split(';')[0].trim();
+    if (pair.includes('=')) {
+      return pair;
+    }
+  }
+  return '';
 }
 
 // The server reports the real option numbers because they are not necessarily
@@ -187,10 +273,12 @@ export class MobileGmClient {
   // 107-02: build-time-injected GM bearer (X-OpenMU-Mobile-Key). Rotate this; do
   // not reuse it as the login derivation seed (see header note).
   private packageKey: string;
+  private sessionCookie: string;
 
-  constructor(baseUrl: string, packageKey: string) {
+  constructor(baseUrl: string, packageKey: string, sessionCookie: string = '') {
     this.baseUrl = trimSlash(baseUrl);
     this.packageKey = packageKey;
+    this.sessionCookie = clean(sessionCookie);
     // H-03: reject the committed 43-'A' build-profile placeholder so a build that
     // forgot to inject the real MOBILE_PACKAGE_KEY cannot talk to the server.
     if (/^A{43}$/.test(packageKey)) {
@@ -208,8 +296,12 @@ export class MobileGmClient {
     try {
       const headers: Record<string, string> = {
         'Accept': 'application/json',
-        'X-OpenMU-Mobile-Key': this.packageKey
+        'X-OpenMU-Mobile-Key': this.packageKey,
+        'X-OpenMU-Client': 'MobileGM'
       };
+      if (this.sessionCookie.length > 0) {
+        headers['Cookie'] = this.sessionCookie;
+      }
       if (body !== undefined) {
         headers['Content-Type'] = 'application/json; charset=utf-8';
       }
@@ -223,7 +315,11 @@ export class MobileGmClient {
       const text = typeof response.result === 'string'
         ? response.result
         : new TextDecoder().decode(response.result as ArrayBuffer);
-      return { code: response.responseCode as number, body: text };
+      return {
+        code: response.responseCode as number,
+        body: text,
+        setCookie: extractCookiePair(response.header)
+      };
     } catch (e) {
       throw new ApiError('无法连接服务器：' + ((e as Error).message ?? '网络错误'));
     } finally {
@@ -231,8 +327,34 @@ export class MobileGmClient {
     }
   }
 
+  async login(username: string, password: string, twoFactorCode: string = ''): Promise<string> {
+    const payload = JSON.stringify({
+      username: clean(username),
+      password: password ?? '',
+      twoFactorCode: clean(twoFactorCode)
+    });
+    const response = await this.send('POST', '/login', payload);
+    if (response.code === 401 || response.code === 403) {
+      const message = this.extractMessage(response.body);
+      throw new NotAuthorizedError(message || '管理员用户名、密码或两步验证码错误');
+    }
+    if (response.code < 200 || response.code >= 300) {
+      const message = this.extractMessage(response.body);
+      throw new ApiError('登录失败 HTTP ' + response.code + (message ? '：' + message : ''));
+    }
+    if (response.setCookie.length === 0) {
+      throw new ApiError('登录响应未返回管理员会话 Cookie');
+    }
+    this.sessionCookie = response.setCookie;
+    return response.setCookie;
+  }
+
   private async requestJson(method: string, path: string, body?: string): Promise<Object | null> {
     const response = await this.send(method, path, body);
+    if (response.code === 401 || response.code === 403) {
+      const message = this.extractMessage(response.body);
+      throw new NotAuthorizedError(message || '管理员会话未登录或已过期');
+    }
     if (response.code < 200 || response.code >= 300) {
       const message = this.extractMessage(response.body);
       throw new ApiError('服务器返回 HTTP ' + response.code + (message ? '：' + message : ''));
@@ -287,9 +409,9 @@ export class MobileGmClient {
       accountName = clean((root['account'] as string) ?? (root['loginName'] as string));
     }
 
-    let array = root['characters'] as Object[] | undefined;
+    let array = root['onlineCharacters'] as Object[] | undefined;
     if (!array) {
-      array = root['onlineCharacters'] as Object[] | undefined;
+      array = root['characters'] as Object[] | undefined;
     }
     if (!array) {
       throw new ApiError('服务器状态响应缺少在线角色列表');

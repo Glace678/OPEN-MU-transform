@@ -23,15 +23,19 @@ class TestB17WingCraftingUnderflowBoundaries(unittest.TestCase):
         self.assertEqual(lvl, 0)
 
     def test_level_255_downgrade(self):
-        # 255 is byte max
-        self.assertEqual(EconomyEngine.downgrade_wing_level(255), 254)
+        # 255 is byte max; downgrades by 2 or 3 steps
+        self.assertEqual(EconomyEngine.downgrade_wing_level(255, downgrade_steps=2), 253)
+        self.assertEqual(EconomyEngine.downgrade_wing_level(255, downgrade_steps=3), 252)
 
     def test_level_3_wing_downgrade(self):
-        self.assertEqual(EconomyEngine.downgrade_wing_level(3), 2)
+        self.assertEqual(EconomyEngine.downgrade_wing_level(3, downgrade_steps=2), 1)
+        self.assertEqual(EconomyEngine.downgrade_wing_level(3, downgrade_steps=3), 0)
 
     def test_level_0_does_not_mutate_to_positive(self):
-        res = EconomyEngine.downgrade_wing_level(0)
+        res = EconomyEngine.downgrade_wing_level(0, downgrade_steps=3)
         self.assertLessEqual(res, 0)
+        with self.assertRaises(ValueError):
+            EconomyEngine.downgrade_wing_level(5, downgrade_steps=1)
 
 
 if __name__ == "__main__":

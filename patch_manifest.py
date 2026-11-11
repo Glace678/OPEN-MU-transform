@@ -36,6 +36,8 @@ with open(LIVE, encoding='utf-8') as f:
     m = json.load(f)
 
 files = m['files'] if isinstance(m, dict) and 'files' in m else m
+if not isinstance(files, list) or not files:
+    sys.exit('ERROR: manifest has no file entries')
 print('entries:', len(files))
 
 # discover key names from first entry
@@ -50,7 +52,9 @@ def get_path(e):
 
 def norm(p):
     p = p.replace('\\', '/')
-    return p[2:] if p.startswith('./') else p
+    while p.startswith('./'):
+        p = p[2:]
+    return p.lstrip('/')
 
 updated = []
 for e in files:
@@ -82,10 +86,20 @@ if missing_targets:
     print('ERROR: required target(s) not patched:', ', '.join(missing_targets), file=sys.stderr)
     sys.exit(1)
 
-# Keep a copy of the previous manifest next to the live one before rewriting.
+# Keep a copy of the previous manifest next to the live one before rewriting atomically.
 shutil.copy2(LIVE, LIVE + '.bak')
-with open(LIVE, 'w', encoding='utf-8') as f:
-    json.dump(m, f, ensure_ascii=False, indent=2)
+tmp_live = LIVE + '.tmp'
+try:
+    with open(tmp_live, 'w', encoding='utf-8') as f:
+        json.dump(m, f, ensure_ascii=False, indent=2)
+    os.replace(tmp_live, LIVE)
+except Exception:
+    if os.path.exists(tmp_live):
+        try:
+            os.remove(tmp_live)
+        except OSError:
+            pass
+    raise
 
 print('patched OK, entries changed:', len(updated))
 for u in updated:

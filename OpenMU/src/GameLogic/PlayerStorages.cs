@@ -104,14 +104,19 @@ internal sealed class PlayerStorages
             // Try one more time to force-add items individually using the captured list
             foreach (var item in items)
             {
+                var originalSlot = item.ItemSlot;
                 await temporaryStorage.RemoveItemAsync(item).ConfigureAwait(false);
                 if (!await inventory.AddItemAsync(item).ConfigureAwait(false))
                 {
-                    this._player.Logger.LogError("Failed to return item {item} to inventory. Item is lost. id: {itemid}", item, item.GetId());
+                    await temporaryStorage.AddItemAsync(originalSlot, item).ConfigureAwait(false);
+                    this._player.Logger.LogError("Failed to return item {item} to inventory. Item retained in temporary storage. id: {itemid}", item, item.GetId());
                 }
             }
 
-            this.TemporaryStorage = null;
+            if (temporaryStorage.ItemStorage.Items.Count == 0)
+            {
+                this.TemporaryStorage = null;
+            }
         }
         catch (Exception ex)
         {

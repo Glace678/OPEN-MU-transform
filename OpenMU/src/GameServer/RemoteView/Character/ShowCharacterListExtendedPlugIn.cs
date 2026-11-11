@@ -60,29 +60,28 @@ public class ShowCharacterListExtendedPlugIn : IShowCharacterListPlugIn
 
     private async ValueTask SendCharacterListAsync(IConnection connection, Account account, CharacterCreationUnlockFlags unlockFlags)
     {
-        var guildPositions = new GuildPosition?[account.Characters.Count];
-        int i = 0;
-        foreach (var character in account.Characters)
+        var characters = account.Characters.OrderBy(c => c.CharacterSlot).ToList();
+        var guildPositions = new GuildPosition?[characters.Count];
+        for (int i = 0; i < characters.Count; i++)
         {
-            guildPositions[i] = await this._player.GameServerContext.GuildServer.GetGuildPositionAsync(character.Id).ConfigureAwait(false);
-            i++;
+            guildPositions[i] = await this._player.GameServerContext.GuildServer.GetGuildPositionAsync(characters[i].Id).ConfigureAwait(false);
         }
 
         var appearanceSerializer = this._player.AppearanceSerializer;
         int Write()
         {
-            var size = CharacterListExtendedRef.GetRequiredSize(account.Characters.Count);
+            var size = CharacterListExtendedRef.GetRequiredSize(characters.Count);
             var span = connection.Output.GetSpan(size)[..size];
             var packet = new CharacterListExtendedRef(span)
             {
                 UnlockFlags = unlockFlags,
-                CharacterCount = (byte)account.Characters.Count,
+                CharacterCount = (byte)characters.Count,
                 IsVaultExtended = account.IsVaultExtended,
             };
 
-            var j = 0;
-            foreach (var character in account.Characters.OrderBy(c => c.CharacterSlot))
+            for (var j = 0; j < characters.Count; j++)
             {
+                var character = characters[j];
                 var characterData = packet[j];
                 characterData.SlotIndex = character.CharacterSlot;
                 characterData.Name = character.Name;
@@ -90,7 +89,6 @@ public class ShowCharacterListExtendedPlugIn : IShowCharacterListPlugIn
                 characterData.Status = character.CharacterStatus.Convert();
                 characterData.GuildPosition = guildPositions[j].Convert();
                 appearanceSerializer.WriteAppearanceData(characterData.Appearance, new CharacterAppearanceDataAdapter(character), false);
-                j++;
             }
 
             return size;

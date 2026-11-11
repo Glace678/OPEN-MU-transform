@@ -24,18 +24,19 @@ public class GuildWarKillScorePlugIn : IAttackableGotKilledPlugIn
     /// <param name="killer">The killer.</param>
     public async ValueTask AttackableGotKilledAsync(IAttackable killed, IAttacker? killer)
     {
-        if (killer is Player { GuildWarContext: not null } killerPlayer
-            && killed is Player { GuildWarContext: not null } killedPlayer
-            && killerPlayer.GuildWarContext!.Team != killedPlayer.GuildWarContext!.Team)
+        if (killer is Player { GuildWarContext: { State: GuildWarState.Started } killerWarContext } killerPlayer
+            && killed is Player { GuildWarContext: { State: GuildWarState.Started } killedWarContext } killedPlayer
+            && killerWarContext.Score == killedWarContext.Score
+            && killerWarContext.Team != killedWarContext.Team)
         {
             var score = killedPlayer.GuildStatus?.Position == GuildPosition.GuildMaster ? (byte)2 : (byte)1;
-            if (killerPlayer.GuildWarContext.Team == GuildWarTeam.First)
+            if (killerWarContext.Team == GuildWarTeam.First)
             {
-                killerPlayer.GuildWarContext.Score.IncreaseFirstGuildScore(score);
+                killerWarContext.Score.IncreaseFirstGuildScore(score);
             }
             else
             {
-                killerPlayer.GuildWarContext.Score.IncreaseSecondGuildScore(score);
+                killerWarContext.Score.IncreaseSecondGuildScore(score);
             }
         }
     }

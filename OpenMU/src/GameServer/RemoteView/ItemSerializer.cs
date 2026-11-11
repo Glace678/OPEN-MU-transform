@@ -126,6 +126,11 @@ public class ItemSerializer : IItemSerializer
     /// <inheritdoc />
     public Item DeserializeItem(Span<byte> array, GameConfiguration gameConfiguration, IContext persistenceContext)
     {
+        if (array.Length < this.NeededSpace)
+        {
+            throw new ArgumentException($"Input byte array is too short ({array.Length} < {this.NeededSpace}).", nameof(array));
+        }
+
         var itemNumber = array[0] + ((array[0] & 0x80) << 1);
         var itemGroup = (array[5] & 0xF0) >> 4;
         var definition = gameConfiguration.Items.FirstOrDefault(def => def.Number == itemNumber && def.Group == itemGroup)

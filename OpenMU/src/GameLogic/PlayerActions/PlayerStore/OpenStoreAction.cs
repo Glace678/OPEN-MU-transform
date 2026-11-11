@@ -21,26 +21,43 @@ public class OpenStoreAction
     {
         using var loggerScope = player.Logger.BeginScope(this.GetType());
         var character = player.SelectedCharacter;
-        if (character is null)
+        if (character is null || player.ShopStorage is not { } shopStorage)
         {
-            player.Logger.LogWarning("OpenStore request failed: No character selected.");
+            player.Logger.LogWarning("OpenStore request failed: No character or shop storage available.");
             return;
         }
 
-        if (player.ShopStorage?.Items.Any(i => !i.StorePrice.HasValue) ?? true)
+        if (player.PlayerState.CurrentState != PlayerState.EnteredWorld || !player.IsAlive)
         {
-            player.Logger.LogWarning("OpenStore request failed: Not all store items have a price assigned. Player: [{0}], StoreName: [{1}]", character.Name, character.StoreName);
+            player.Logger.LogWarning("OpenStore request failed: Player [{0}] is not alive in EnteredWorld state.", character.Name);
             return;
         }
 
-        if (player.ShopStorage?.Items.Any(i => i.ItemOptions.Any(o => o.ItemOption?.OptionType == ItemOptionTypes.HarmonyOption)) ?? true)
+        using (await shopStorage.StoreLock.LockAsync())
         {
-            player.Logger.LogWarning("OpenStore request failed: Items with an harmony option can't be traded. Player: [{0}], StoreName: [{1}]", character.Name, character.StoreName);
-            return;
+            if (player.SelectedCharacter != character
+                || player.PlayerState.CurrentState != PlayerState.EnteredWorld
+                || !player.IsAlive)
+            {
+                return;
+            }
+
+            if (!shopStorage.Items.Any() || shopStorage.Items.Any(i => !i.StorePrice.HasValue || i.StorePrice.Value < 0))
+            {
+                player.Logger.LogWarning("OpenStore request failed: Store is empty or not all store items have a valid price assigned. Player: [{0}], StoreName: [{1}]", character.Name, character.StoreName);
+                return;
+            }
+
+            if (shopStorage.Items.Any(i => i.ItemOptions.Any(o => o.ItemOption?.OptionType == ItemOptionTypes.HarmonyOption)))
+            {
+                player.Logger.LogWarning("OpenStore request failed: Items with an harmony option can't be traded. Player: [{0}], StoreName: [{1}]", character.Name, character.StoreName);
+                return;
+            }
+
+            character.StoreName = storeName;
+            shopStorage.StoreOpen = true;
         }
 
-        character.StoreName = storeName;
-        player.ShopStorage.StoreOpen = true;
         player.Logger.LogDebug("OpenStore: Player: [{0}], StoreName: [{1}]", character.Name, character.StoreName);
         await player.ForEachWorldObserverAsync<IPlayerShopOpenedPlugIn>(p => p.PlayerShopOpenedAsync(player), true).ConfigureAwait(false);
     }

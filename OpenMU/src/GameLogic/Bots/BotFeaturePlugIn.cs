@@ -11,6 +11,7 @@ using System.Threading;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.GameLogic.PlugIns;
+using MUnique.OpenMU.Persistence;
 using MUnique.OpenMU.PlugIns;
 
 /// <summary>
@@ -235,10 +236,20 @@ public class BotFeaturePlugIn : IFeaturePlugIn, IPeriodicTaskPlugIn, ISupportCus
 
             // Switching the feature off is what makes this a purge instead of a reset: the generation
             // below would otherwise create the whole population again, right after it was deleted.
+            var wasEnabled = configuration.Enabled;
+            var wasPurge = configuration.PurgeBots;
+            var wasReset = configuration.ResetBots;
             configuration.Enabled = false;
             configuration.PurgeBots = false;
             configuration.ResetBots = false;
-            await this.PersistConfigurationAsync(gameContext, configuration, logger).ConfigureAwait(false);
+            if (!await this.PersistConfigurationAsync(gameContext, configuration, logger).ConfigureAwait(false))
+            {
+                configuration.Enabled = wasEnabled;
+                configuration.PurgeBots = wasPurge;
+                configuration.ResetBots = wasReset;
+                state.NextRunUtc = DateTime.UtcNow + MaintenanceInterval;
+                return;
+            }
 
             logger.LogInformation("Purge requested: deleted {Deleted} bot account(s) and switched the bot feature off.", deleted);
         }
@@ -277,11 +288,19 @@ public class BotFeaturePlugIn : IFeaturePlugIn, IPeriodicTaskPlugIn, ISupportCus
 
                 // Clear the flag (in memory and persisted) so the next restart does not purge again.
                 configuration.ResetBots = false;
-                await this.PersistConfigurationAsync(gameContext, configuration, logger).ConfigureAwait(false);
+                if (!await this.PersistConfigurationAsync(gameContext, configuration, logger).ConfigureAwait(false))
+                {
+                    configuration.ResetBots = true;
+                    state.NextRunUtc = DateTime.UtcNow + MaintenanceInterval;
+                    return;
+                }
             }
             catch (Exception ex)
             {
+                configuration.ResetBots = true;
+                state.NextRunUtc = DateTime.UtcNow + MaintenanceInterval;
                 logger.LogError(ex, "Failed to reset the bot population.");
+                return;
             }
         }
 
@@ -621,7 +640,7 @@ public class BotFeaturePlugIn : IFeaturePlugIn, IPeriodicTaskPlugIn, ISupportCus
     /// Persists the current configuration back to its <see cref="PlugInConfiguration"/> row, so a
     /// programmatic change (e.g. clearing the reset flag) survives a restart.
     /// </summary>
-    private async ValueTask PersistConfigurationAsync(GameContext gameContext, BotConfiguration configuration, ILogger logger)
+    private async ValueTask<bool> PersistConfigurationAsync(GameContext gameContext, BotConfiguration configuration, ILogger logger)
     {
         try
         {
@@ -629,20 +648,24 @@ public class BotFeaturePlugIn : IFeaturePlugIn, IPeriodicTaskPlugIn, ISupportCus
             // and the change is actually persisted - the in-memory cached config graph is not tracked.
             using var context = gameContext.PersistenceContextProvider.CreateNewContext();
             var typeId = typeof(BotFeaturePlugIn).GUID;
-            var gameConfiguration = (await context.GetAsync<GameConfiguration>().ConfigureAwait(false)).FirstOrDefault();
+            var configurations = await context.GetAsync<GameConfiguration>().ConfigureAwait(false);
+            var currentConfigId = gameContext.Configuration.GetId();
+            var gameConfiguration = configurations.FirstOrDefault(c => c.GetId() == currentConfigId)
+                ?? configurations.FirstOrDefault();
             var entity = gameConfiguration?.PlugInConfigurations.FirstOrDefault(c => c.TypeId == typeId);
             if (entity is null)
             {
                 logger.LogWarning("Could not find the bot plugin configuration row to persist.");
-                return;
+                return false;
             }
 
             entity.SetConfiguration(configuration, gameContext.PlugInManager.CustomConfigReferenceHandler);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            return await context.SaveChangesAsync().ConfigureAwait(false);
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Failed to persist the bot plugin configuration.");
+            return false;
         }
     }
 

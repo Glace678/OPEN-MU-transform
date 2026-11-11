@@ -25,7 +25,8 @@ public static class CharacterExtensions
     /// <returns>The maximum fruit points of the character.</returns>
     public static ushort GetMaximumFruitPoints(this Character character)
     {
-        var index = (int)character.Attributes.First(a => a.Definition == Stats.Level).Value - 1;
+        var level = (int)(character.Attributes.FirstOrDefault(a => a.Definition == Stats.Level)?.Value ?? 1);
+        var index = Math.Clamp(level, 1, MaxLevel) - 1;
         return character.CharacterClass?.FruitCalculation switch
         {
             FruitCalculationStrategy.DarkLord => FruitPointsPerLevelDarkLord[index],

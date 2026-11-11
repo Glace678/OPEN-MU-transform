@@ -14,9 +14,10 @@ using namespace SEASON3B;
 
 CNewUIEmpireGuardianNPC::CNewUIEmpireGuardianNPC()
 {
-    m_pNewUIMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
-    m_bCanClick       = true;
+    m_pNewUIMng         = NULL;
+    m_pNewUI3DRenderMng = NULL;
+    m_Pos.x = m_Pos.y   = 0;
+    m_bCanClick         = true;
 }
 
 CNewUIEmpireGuardianNPC::~CNewUIEmpireGuardianNPC()
@@ -59,10 +60,15 @@ void CNewUIEmpireGuardianNPC::InitButton(CNewUIButton* pNewUIButton, int iPos_x,
 
 void CNewUIEmpireGuardianNPC::Release()
 {
-    UnloadImages();
+    if (m_pNewUI3DRenderMng)
+    {
+        m_pNewUI3DRenderMng->Remove3DRenderObj(this);
+        m_pNewUI3DRenderMng = NULL;
+    }
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }

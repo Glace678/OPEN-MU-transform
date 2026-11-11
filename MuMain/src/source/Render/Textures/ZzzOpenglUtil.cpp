@@ -76,25 +76,29 @@ void OpenExploper(wchar_t* Name, wchar_t* para)
 
 bool CheckID_HistoryDay(wchar_t* Name, WORD day)
 {
+    if (!Name)
+        return false;
+
     typedef struct __day_history__
     {
         wchar_t ID[MAX_USERNAME_SIZE + 1];
         WORD    date;
     } dayHistory;
 
-    FILE*      fp;
-    dayHistory days[100];
-    int        count    = 0;
-    WORD       num      = 0;
-    bool       sameName = false;
-    bool       update   = true;
+    constexpr int kMaxHistory = 100;
+    FILE*         fp          = nullptr;
+    dayHistory    days[kMaxHistory]{};
+    int           count    = 0;
+    WORD          num      = 0;
+    bool          sameName = false;
+    bool          update   = true;
 
     if ((fp = _wfopen(L"dconfig.ini", L"rb")) != NULL)
     {
         if (fread(&num, sizeof(WORD), 1, fp) != 1)
             num = 0;  // #20: reject unreadable header
 
-        if (num > 100)
+        if (num > kMaxHistory)
         {
             num = 0;
         }
@@ -102,20 +106,22 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
         {
             for (int i = 0; i < num; ++i)
             {
-                if (fread(days[i].ID, sizeof(char), MAX_USERNAME_SIZE + 1, fp) != MAX_USERNAME_SIZE + 1 ||
-                    fread(&days[i].date, sizeof(WORD), 1, fp) != 1)
-                    break;                              // #20: truncated/corrupt record
-                days[i].ID[MAX_USERNAME_SIZE] = L'\0';  // #20: force NUL
+                if (fread(days[count].ID, sizeof(wchar_t), MAX_USERNAME_SIZE + 1, fp) != MAX_USERNAME_SIZE + 1 ||
+                    fread(&days[count].date, sizeof(WORD), 1, fp) != 1)
+                    break;                                  // #20: truncated/corrupt record
+                days[count].ID[MAX_USERNAME_SIZE] = L'\0';  // #20: force NUL
 
-                if (!wcscmp(days[i].ID, Name))
+                if (!wcscmp(days[count].ID, Name))
                 {
                     sameName = true;
-                    if (days[i].date == day)
+                    if (days[count].date == day)
                     {
                         update = false;
-                        break;
                     }
-                    days[i].date = day;
+                    else
+                    {
+                        days[count].date = day;
+                    }
                 }
                 count++;
             }
@@ -127,22 +133,32 @@ bool CheckID_HistoryDay(wchar_t* Name, WORD day)
     {
         if (!sameName)
         {
-            memcpy(days[num].ID, Name, (MAX_USERNAME_SIZE + 1) * sizeof(char));
-            days[num].date = day;
+            if (count >= kMaxHistory)
+            {
+                memmove(&days[0], &days[1], sizeof(dayHistory) * (kMaxHistory - 1));
+                count = kMaxHistory - 1;
+            }
+            memset(days[count].ID, 0, sizeof(days[count].ID));
+            wcsncpy(days[count].ID, Name, MAX_USERNAME_SIZE);
+            days[count].ID[MAX_USERNAME_SIZE] = L'\0';
+            days[count].date                  = day;
 
-            num++;
+            count++;
         }
 
         fp = _wfopen(L"dconfig.ini", L"wb");
-
-        fwrite(&num, sizeof(WORD), 1, fp);
-        for (int i = 0; i < num; ++i)
+        if (fp != NULL)
         {
-            fwrite(days[i].ID, sizeof(char), MAX_USERNAME_SIZE + 1, fp);
-            fwrite(&days[i].date, sizeof(WORD), 1, fp);
-        }
+            const WORD outNum = static_cast<WORD>(count);
+            fwrite(&outNum, sizeof(WORD), 1, fp);
+            for (int i = 0; i < count; ++i)
+            {
+                fwrite(days[i].ID, sizeof(wchar_t), MAX_USERNAME_SIZE + 1, fp);
+                fwrite(&days[i].date, sizeof(WORD), 1, fp);
+            }
 
-        fclose(fp);
+            fclose(fp);
+        }
     }
 
     //    showShoppingMall = update;

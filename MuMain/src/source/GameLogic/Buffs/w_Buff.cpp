@@ -176,7 +176,7 @@ const eBuffState Buff::GetBuff(int iterindex)
     return eBuffNone;
 }
 
-bool Buff::IsEqualBuffType(IN int iBuffType, OUT wchar_t* szBuffName)
+bool Buff::IsEqualBuffType(IN int iBuffType, OUT wchar_t* szBuffName, size_t cchBuffName)
 {
     auto     iter = m_Buff.begin();
     BuffInfo buffinfo;
@@ -186,7 +186,10 @@ bool Buff::IsEqualBuffType(IN int iBuffType, OUT wchar_t* szBuffName)
         buffinfo = TheBuffInfo().GetBuffinfo(iter->first);
         if (buffinfo.s_BuffEffectType == iBuffType)
         {
-            wcscpy(szBuffName, buffinfo.s_BuffName);
+            if (szBuffName != nullptr && cchBuffName > 0)
+            {
+                wcsncpy_s(szBuffName, cchBuffName, buffinfo.s_BuffName, _TRUNCATE);
+            }
             return true;
         }
 

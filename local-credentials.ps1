@@ -37,11 +37,17 @@ function Get-LocalGameCredential {
     )
     $secrets = Get-LocalSecrets -KeysDir $KeysDir
     $key = [System.Text.Encoding]::UTF8.GetBytes($secrets.AccountPassword)
-    $h1 = (New-Object System.Security.Cryptography.HMACSHA256(, $key)).ComputeHash(
-        [System.Text.Encoding]::UTF8.GetBytes('OpenMU-Solo.LoginName.v1'))
-    $h2 = (New-Object System.Security.Cryptography.HMACSHA256(, $key)).ComputeHash(
-        [System.Text.Encoding]::UTF8.GetBytes('OpenMU-Solo.LoginPassword.v1'))
-    $user = 'solo' + [BitConverter]::ToString($h1).Replace('-', '').Substring(0, 6)
-    $pass = [Convert]::ToBase64String($h2).Substring(0, 20).Replace('+', '-').Replace('/', '_')
-    return [pscustomobject]@{ Username = $user; Password = $pass }
+    $hmac1 = New-Object System.Security.Cryptography.HMACSHA256(, $key)
+    $hmac2 = New-Object System.Security.Cryptography.HMACSHA256(, $key)
+    try {
+        $h1 = $hmac1.ComputeHash([System.Text.Encoding]::UTF8.GetBytes('OpenMU-Solo.LoginName.v1'))
+        $h2 = $hmac2.ComputeHash([System.Text.Encoding]::UTF8.GetBytes('OpenMU-Solo.LoginPassword.v1'))
+        $user = 'solo' + [BitConverter]::ToString($h1).Replace('-', '').Substring(0, 6)
+        $pass = [Convert]::ToBase64String($h2).Substring(0, 20).Replace('+', '-').Replace('/', '_')
+        return [pscustomobject]@{ Username = $user; Password = $pass }
+    } finally {
+        $hmac1.Dispose()
+        $hmac2.Dispose()
+        [Array]::Clear($key, 0, $key.Length)
+    }
 }

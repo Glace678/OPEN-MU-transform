@@ -88,6 +88,8 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
         case MONSTER_ICE_WALKER:
             OpenMonsterModel(MONSTER_MODEL_ICE_WALKER);
             pCharacter = CreateCharacter(Key, MODEL_ICE_WALKER, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             //pCharacter->Object.Scale = 1.0f;
             pCharacter->Object.Scale   = 1.2f;
             pCharacter->Weapon[0].Type = -1;
@@ -96,7 +98,9 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
 
         case MONSTER_GIANT_MAMMOTH:
             OpenMonsterModel(MONSTER_MODEL_GIANT_MAMMOTH);
-            pCharacter                 = CreateCharacter(Key, MODEL_GIANT_MAMMOTH, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_GIANT_MAMMOTH, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 1.7f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -110,7 +114,9 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
 
         case MONSTER_ICE_GIANT:
             OpenMonsterModel(MONSTER_MODEL_ICE_GIANT);
-            pCharacter                  = CreateCharacter(Key, MODEL_ICE_GIANT, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_ICE_GIANT, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale    = 1.0f;
             pCharacter->Weapon[0].Type  = -1;
             pCharacter->Weapon[1].Type  = -1;
@@ -119,7 +125,9 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
 
         case MONSTER_COOLUTIN:
             OpenMonsterModel(MONSTER_MODEL_COOLUTIN);
-            pCharacter                 = CreateCharacter(Key, MODEL_COOLUTIN, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_COOLUTIN, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 1.0f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -127,7 +135,9 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
 
         case MONSTER_IRON_KNIGHT:
             OpenMonsterModel(MONSTER_MODEL_IRON_KNIGHT);
-            pCharacter                 = CreateCharacter(Key, MODEL_IRON_KNIGHT, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_IRON_KNIGHT, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 1.5f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -135,7 +145,9 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
 
         case MONSTER_SELUPAN: {
             OpenMonsterModel(MONSTER_MODEL_SELUPAN);
-            pCharacter                 = CreateCharacter(Key, MODEL_SELUPAN, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_SELUPAN, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 2.0f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -149,7 +161,9 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
         break;
         case MONSTER_SPIDER_EGGS_1: {
             OpenMonsterModel(MONSTER_MODEL_SPIDER_EGGS_1);
-            pCharacter                         = CreateCharacter(Key, MODEL_SPIDER_EGGS_1, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_SPIDER_EGGS_1, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale           = 0.3f;
             pCharacter->Weapon[0].Type         = -1;
             pCharacter->Weapon[1].Type         = -1;
@@ -159,7 +173,9 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
         break;
         case MONSTER_SPIDER_EGGS_2: {
             OpenMonsterModel(MONSTER_MODEL_SPIDER_EGGS_2);
-            pCharacter                         = CreateCharacter(Key, MODEL_SPIDER_EGGS_2, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_SPIDER_EGGS_2, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale           = 0.3f;
             pCharacter->Weapon[0].Type         = -1;
             pCharacter->Weapon[1].Type         = -1;
@@ -169,7 +185,9 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
         break;
         case MONSTER_SPIDER_EGGS_3: {
             OpenMonsterModel(MONSTER_MODEL_SPIDER_EGGS_3);
-            pCharacter                         = CreateCharacter(Key, MODEL_SPIDER_EGGS_3, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_SPIDER_EGGS_3, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale           = 0.3f;
             pCharacter->Weapon[0].Type         = -1;
             pCharacter->Weapon[1].Type         = -1;
@@ -181,6 +199,8 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
         case MONSTER_DARK_MAMMOTH: {
             OpenMonsterModel(MONSTER_MODEL_DARK_MAMMOTH);
             pCharacter = CreateCharacter(Key, MODEL_DARK_MAMMOTH, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             //pCharacter->Object.Scale = 1.7f;
             pCharacter->Object.Scale   = 1.9f;
             pCharacter->Weapon[0].Type = -1;
@@ -196,6 +216,8 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
         case MONSTER_DARK_GIANT: {
             OpenMonsterModel(MONSTER_MODEL_DARK_GIANT);
             pCharacter = CreateCharacter(Key, MODEL_DARK_GIANT, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             //pCharacter->Object.Scale = 1.0f;
             pCharacter->Object.Scale    = 1.1f;
             pCharacter->Weapon[0].Type  = -1;
@@ -207,6 +229,8 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
         case MONSTER_DARK_COOLUTIN: {
             OpenMonsterModel(MONSTER_MODEL_DARK_COOLUTIN);
             pCharacter = CreateCharacter(Key, MODEL_DARK_COOLUTIN, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             //pCharacter->Object.Scale = 1.0f;
             pCharacter->Object.Scale   = 1.3f;
             pCharacter->Weapon[0].Type = -1;
@@ -216,6 +240,8 @@ CHARACTER* CGM_Raklion::CreateMonster(int iType, int PosX, int PosY, int Key)
         case MONSTER_DARK_IRON_KNIGHT: {
             OpenMonsterModel(MONSTER_MODEL_DARK_IRON_KNIGHT);
             pCharacter = CreateCharacter(Key, MODEL_DARK_IRON_KNIGHT, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             //pCharacter->Object.Scale = 1.5f;
             pCharacter->Object.Scale   = 1.8f;
             pCharacter->Weapon[0].Type = -1;

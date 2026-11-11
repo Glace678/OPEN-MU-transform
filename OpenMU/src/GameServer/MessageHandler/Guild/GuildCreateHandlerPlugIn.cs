@@ -31,6 +31,11 @@ internal class GuildCreateHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < GuildCreateRequest.Length)
+        {
+            return;
+        }
+
         GuildCreateRequest request = packet;
         await this._createAction.CreateGuildAsync(player, request.GuildName, request.GuildEmblem.ToArray()).ConfigureAwait(false);
     }

@@ -64,13 +64,21 @@ internal sealed class BotServerPartition
     public static async ValueTask<BotServerPartition> CreateAsync(IGameContext gameContext, BotConfiguration configuration, ILogger logger)
     {
         var requestedAccounts = Math.Max(configuration.NumberOfAccounts, 0);
+        if (gameContext is not IGameServerContext serverContext)
+        {
+            // A context which is not a game server (e.g. standalone/in-memory tests): animate everything locally.
+            return new BotServerPartition(1, requestedAccounts, true);
+        }
+
         var charactersPerAccount = configuration.GetEffectiveCharactersPerAccount();
         var capacities = await GetAccountCapacitiesAsync(gameContext, configuration, charactersPerAccount, logger).ConfigureAwait(false);
-        if (gameContext is not IGameServerContext serverContext || capacities.Count == 0)
+        if (capacities.Count == 0)
         {
-            // A deployment we cannot split (no server definitions readable, or a context which is not a
-            // game server, e.g. in tests): behave exactly like before - this server animates everything.
-            return new BotServerPartition(1, requestedAccounts, true);
+            // Fail closed on a real game server when server definitions cannot be read: falling back to
+            // "animate everything" would make multiple game servers simultaneously generate and drive the
+            // same bot accounts.
+            logger.LogWarning("Game server {ServerId} could not determine authoritative bot server partitions; skipping bot startup for now.", serverContext.Id);
+            return new BotServerPartition(1, 0, false);
         }
 
         var (partition, assignedAccounts) = Split(capacities, serverContext.Id, requestedAccounts);
@@ -188,7 +196,7 @@ internal sealed class BotServerPartition
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Could not read the game server definitions; this server animates the whole bot population.");
+            logger.LogError(ex, "Could not read the game server definitions; bot partition will fail closed.");
             return [];
         }
     }

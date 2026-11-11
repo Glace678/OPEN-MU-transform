@@ -375,7 +375,7 @@ void CMuHelper::CleanupTargets()
     for (const int& iMonsterId : setTargets)
     {
         int iIndex = FindCharacterIndex(iMonsterId);
-        if (iIndex == MAX_CHARACTERS_CLIENT)
+        if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
         {
             DeleteTarget(iMonsterId);
             continue;
@@ -1209,25 +1209,36 @@ ActionSkillType CMuHelper::GetDrainLifeSkill()
 
 int CMuHelper::ObtainItem()
 {
-    if (m_iCurrentItem == MAX_ITEMS)
+    int currentItem = MAX_ITEMS;
     {
-        m_iCurrentItem = SelectItemToObtain();
-        if (m_iCurrentItem == MAX_ITEMS)
+        _itemsLock.lock();
+        currentItem = m_iCurrentItem;
+        _itemsLock.unlock();
+    }
+
+    if (currentItem < 0 || currentItem >= MAX_ITEMS)
+    {
+        currentItem = SelectItemToObtain();
+        if (currentItem < 0 || currentItem >= MAX_ITEMS)
         {
             return 1;
         }
+
+        _itemsLock.lock();
+        m_iCurrentItem = currentItem;
+        _itemsLock.unlock();
     }
 
-    ITEM_t* pDrop = &Items[m_iCurrentItem];
+    ITEM_t* pDrop = &Items[currentItem];
 
     if (!pDrop->Object.Live)
     {
-        DeleteItem(m_iCurrentItem);
+        DeleteItem(currentItem);
         return 1;
     }
 
-    TargetX = (int)(Items[m_iCurrentItem].Object.Position[0] / TERRAIN_SCALE);
-    TargetY = (int)(Items[m_iCurrentItem].Object.Position[1] / TERRAIN_SCALE);
+    TargetX = (int)(Items[currentItem].Object.Position[0] / TERRAIN_SCALE);
+    TargetY = (int)(Items[currentItem].Object.Position[1] / TERRAIN_SCALE);
 
     int iDistance = ComputeDistanceBetween({Hero->PositionX, Hero->PositionY}, {TargetX, TargetY});
     if (iDistance <= m_iObtainingDistance)
@@ -1245,9 +1256,9 @@ int CMuHelper::ObtainItem()
         {
             if (SendGetItem == -1)
             {
-                SendGetItem = m_iCurrentItem;
-                SocketClient->ToGameServer()->SendPickupItemRequest(m_iCurrentItem);
-                DeleteItem(m_iCurrentItem);
+                SendGetItem = currentItem;
+                SocketClient->ToGameServer()->SendPickupItemRequest(currentItem);
+                DeleteItem(currentItem);
             }
         }
     }
@@ -1257,6 +1268,11 @@ int CMuHelper::ObtainItem()
 
 bool CMuHelper::ShouldObtainItem(int iItemId)
 {
+    if (iItemId < 0 || iItemId >= MAX_ITEMS)
+    {
+        return false;
+    }
+
     ITEM_t* pDrop = &Items[iItemId];
     ITEM*   pItem = &pDrop->Item;
 
@@ -1285,6 +1301,11 @@ bool CMuHelper::ShouldObtainItem(int iItemId)
 
 void CMuHelper::AddItem(int iItemId, POINT posWhere)
 {
+    if (iItemId < 0 || iItemId >= MAX_ITEMS)
+    {
+        return;
+    }
+
     _itemsLock.lock();
     m_setItems.insert(iItemId);
     _itemsLock.unlock();
@@ -1294,12 +1315,11 @@ void CMuHelper::DeleteItem(int iItemId)
 {
     _itemsLock.lock();
     m_setItems.erase(iItemId);
-    _itemsLock.unlock();
-
     if (iItemId == m_iCurrentItem)
     {
         m_iCurrentItem = MAX_ITEMS;
     }
+    _itemsLock.unlock();
 }
 
 int CMuHelper::SelectItemToObtain()

@@ -38,9 +38,14 @@ public class LogInHandlerPlugIn : ISubPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
-        if (packet.Length < 42)
+        if (packet.Length < 31)
         {
-            if (packet.Length > 28 + 3)
+            return;
+        }
+
+        if (packet.Length < 43)
+        {
+            if (packet.Length >= 33)
             {
                 LoginShortPassword message = packet;
                 await this.HandleLoginAsync(player, this.Decrypt(message.Username), this.Decrypt(message.Password), message.TickCount, ClientVersionResolver.Resolve(message.ClientVersion)).ConfigureAwait(false);

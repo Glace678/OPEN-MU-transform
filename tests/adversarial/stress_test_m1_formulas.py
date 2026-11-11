@@ -107,72 +107,128 @@ class Milestone1EmpiricalStressTests(unittest.TestCase):
         total_points = (design["normalCap"] - 1) * design["pointsPerLevel"]
         self.assertEqual(total_points, 1995)
 
+    @staticmethod
+    def _load_skill_initializer_constants() -> Dict[str, Dict[str, float]]:
+        skills_dir = os.path.join(REPO_ROOT, "OpenMU", "src", "Persistence", "Initialization", "Skills")
+        specs = {
+            "LifeSwell": (
+                "LifeSwellEffectInitializer.cs",
+                {
+                    "duration_max": r"magicEffect\.Duration\.MaximumValue\s*=\s*([0-9.]+)f?",
+                    "duration_per_energy": r"durationPerEnergy\.InputOperand\s*=\s*([0-9.]+)f?",
+                    "boost_per_energy": r"boostPerEnergy\.InputOperand\s*=\s*([0-9.]+)f?",
+                    "boost_per_vitality": r"boostPerVitality\.InputOperand\s*=\s*([0-9.]+)f?",
+                    "boost_max": r"healthPowerUpDefinition\.Boost\.MaximumValue\s*=\s*([0-9.]+)f?",
+                },
+            ),
+            "SoulBarrier": (
+                "SoulBarrierEffectInitializer.cs",
+                {
+                    "duration_per_energy": r"durationPerEnergy\.InputOperand\s*=\s*([0-9.]+)f?",
+                    "boost_per_energy": r"boostPerEnergy\.InputOperand\s*=\s*([0-9.]+)f?",
+                    "boost_per_agility": r"boostPerAgility\.InputOperand\s*=\s*([0-9.]+)f?",
+                },
+            ),
+            "GreaterDamage": (
+                "GreaterDamageEffectInitializer.cs",
+                {
+                    "boost_per_energy": r"boostPerEnergy\.InputOperand\s*=\s*([0-9.]+)f?",
+                },
+            ),
+            "GreaterDefense": (
+                "GreaterDefenseEffectInitializer.cs",
+                {
+                    "boost_per_energy": r"boostPerEnergy\.InputOperand\s*=\s*([0-9.]+)f?",
+                },
+            ),
+            "Berserker": (
+                "BerserkerEffectInitializer.cs",
+                {
+                    "duration_max": r"magicEffect\.Duration\.MaximumValue\s*=\s*([0-9.]+)f?",
+                    "duration_per_energy": r"durationPerEnergy\.InputOperand\s*=\s*([0-9.]+)f?",
+                    "mana_max": r"manaPowerUpDefinition\.Boost\.MaximumValue\s*=\s*([0-9.]+)f?",
+                    "mana_per_energy": r"manaMultiplier\.InputOperand\s*=\s*([0-9.]+)f?",
+                    "hp_per_energy": r"healthMultiplier\.InputOperand\s*=\s*([0-9.]+)f?",
+                    "min_phys_per_stat": r"minDmgPerStrengthAndAgility\.InputOperand\s*=\s*([0-9.]+)f?",
+                    "max_phys_per_stat": r"maxDmgPerStrengthAndAgility\.InputOperand\s*=\s*([0-9.]+)f?",
+                },
+            ),
+        }
+        loaded: Dict[str, Dict[str, float]] = {}
+        for key, (filename, regex_map) in specs.items():
+            path = os.path.join(skills_dir, filename)
+            with open(path, "r", encoding="utf-8") as fh:
+                src = fh.read()
+            if "InputOperator.Divide" in src:
+                raise AssertionError(f"{filename} still contains legacy integer-step InputOperator.Divide")
+            loaded[key] = {}
+            for field_name, pat in regex_map.items():
+                m = re.search(pat, src)
+                if not m:
+                    raise AssertionError(f"Missing {field_name} pattern in {filename}")
+                loaded[key][field_name] = float(m.group(1))
+        return loaded
+
     def test_05_buff_formulas_no_integer_divisor_steps(self):
         """
-        Adversarially test the derivative (slope) of buff outputs.
-        Under integer divisor formulas (e.g. Energy / 7 or Energy / 8 or Energy / 20),
-        the derivative df/dE is 0 for several consecutive points and then jumps discretely.
-        Under the new continuous decimal formulas, df/dE is strictly positive and constant
-        (affine linear) without discrete steps or plateaus.
+        Adversarially test the derivative (slope) of buff outputs parsed directly
+        from OpenMU C# skill effect initializers.
         """
         test_energies = [0, 10, 50, 100, 200, 500, 1000, 2000, 5000]
+        coeffs = self._load_skill_initializer_constants()
+        gd_slope = coeffs["GreaterDamage"]["boost_per_energy"]
+        gdef_slope = coeffs["GreaterDefense"]["boost_per_energy"]
+        ls_e_slope = coeffs["LifeSwell"]["boost_per_energy"]
+        ls_v_slope = coeffs["LifeSwell"]["boost_per_vitality"]
 
-        # Formulas from C# effect initializers
-        # LifeSwell: durationPerEnergy = 0.00558, boostPerEnergy = 0.000525, boostPerVitality = 0.000108
-        # SoulBarrier: durationPerEnergy = 0.0256, boostPerEnergy = 0.000052
-        # GreaterDamage: boostPerEnergy = 0.1445
-        # GreaterDefense: boostPerEnergy = 0.1265
-        # Berserker: durationPerEnergy = 0.0512, manaMultiplierPerEnergy = 0.000338
+        self.assertAlmostEqual(gd_slope, 0.1445, places=6)
+        self.assertAlmostEqual(gdef_slope, 0.1265, places=6)
+        self.assertAlmostEqual(ls_e_slope, 0.000525, places=6)
+        self.assertAlmostEqual(ls_v_slope, 0.000108, places=6)
 
-        # 1. GreaterDamage: 3.0 + E * 0.1445
-        # Compare with legacy integer division: 3 + floor(E / 7)
+        # 1. GreaterDamage: 3.0 + E * boostPerEnergy
         for E in test_energies:
-            d1 = (3.0 + (E + 1) * 0.1445) - (3.0 + E * 0.1445)
-            d2 = (3.0 + (E + 2) * 0.1445) - (3.0 + (E + 1) * 0.1445)
-            self.assertAlmostEqual(d1, 0.1445, places=5, msg="GreaterDamage must have continuous derivative")
-            self.assertAlmostEqual(d2, 0.1445, places=5)
+            d1 = (3.0 + (E + 1) * gd_slope) - (3.0 + E * gd_slope)
+            d2 = (3.0 + (E + 2) * gd_slope) - (3.0 + (E + 1) * gd_slope)
+            self.assertAlmostEqual(d1, gd_slope, places=5, msg="GreaterDamage must have continuous derivative")
+            self.assertAlmostEqual(d2, gd_slope, places=5)
             self.assertGreater(d1, 0.0, "Derivative must be strictly positive (no zero-gain plateau)")
 
-            # In legacy, E=1 -> 3+0=3 (gain 0), E=7 -> 3+1=4 (gain 1)
-            legacy_d1 = (3 + (E + 1) // 7) - (3 + E // 7)
-            # Notice that for many E, legacy_d1 is 0!
-            # The new formula gives exact 0.1445 at every point!
-
-        # 2. GreaterDefense: 2.0 + E * 0.1265
+        # 2. GreaterDefense: 2.0 + E * boostPerEnergy
         for E in test_energies:
-            d1 = (2.0 + (E + 1) * 0.1265) - (2.0 + E * 0.1265)
-            self.assertAlmostEqual(d1, 0.1265, places=5, msg="GreaterDefense must have continuous derivative")
+            d1 = (2.0 + (E + 1) * gdef_slope) - (2.0 + E * gdef_slope)
+            self.assertAlmostEqual(d1, gdef_slope, places=5, msg="GreaterDefense must have continuous derivative")
             self.assertGreater(d1, 0.0)
 
-        # 3. LifeSwell HP Boost: 0.12 + E * 0.000525 + V * 0.000108 (capped at 2.0)
+        # 3. LifeSwell HP Boost: 0.12 + E * boostPerEnergy + V * boostPerVitality (capped at MaximumValue)
         for E in [0, 100, 500, 1000]:
-            dE = (0.12 + (E + 1) * 0.000525) - (0.12 + E * 0.000525)
-            self.assertAlmostEqual(dE, 0.000525, places=6)
+            dE = (0.12 + (E + 1) * ls_e_slope) - (0.12 + E * ls_e_slope)
+            self.assertAlmostEqual(dE, ls_e_slope, places=6)
             self.assertGreater(dE, 0.0)
 
         for V in [0, 100, 500, 1000]:
-            dV = (0.12 + (V + 1) * 0.000108) - (0.12 + V * 0.000108)
-            self.assertAlmostEqual(dV, 0.000108, places=6)
+            dV = (0.12 + (V + 1) * ls_v_slope) - (0.12 + V * ls_v_slope)
+            self.assertAlmostEqual(dV, ls_v_slope, places=6)
             self.assertGreater(dV, 0.0)
 
     def test_06_buff_formulas_extreme_values_and_explosive_multiplier_prevention(self):
         """
-        Adversarially evaluate all 5 buff formulas at extreme values:
+        Adversarially evaluate all 5 C# buff initializer formulas at extreme values:
         Energy/Vitality in [0, 100, 500, 2000, 5000].
-        Assert:
-        - No NaN or Inf
-        - Strict adherence to maximum caps (LifeSwell duration <= 180, LifeSwell boost <= 2.0, Berserker duration <= 180, Berserker mana <= 1.0)
-        - Reasonable, bounded outputs without explosive multipliers.
         """
         extreme_values = [0, 100, 500, 2000, 5000]
+        coeffs = self._load_skill_initializer_constants()
+        ls = coeffs["LifeSwell"]
+        sb = coeffs["SoulBarrier"]
+        gd = coeffs["GreaterDamage"]
+        gdef = coeffs["GreaterDefense"]
+        bk = coeffs["Berserker"]
 
         for E in extreme_values:
             for V in extreme_values:
                 # --- LifeSwell ---
-                ls_duration_raw = 60.0 + E * 0.00558
-                ls_duration = min(180.0, ls_duration_raw)
-                ls_boost_raw = 0.12 + E * 0.000525 + V * 0.000108
-                ls_boost = min(2.0, ls_boost_raw)
+                ls_duration = min(ls["duration_max"], 60.0 + E * ls["duration_per_energy"])
+                ls_boost = min(ls["boost_max"], 0.12 + E * ls["boost_per_energy"] + V * ls["boost_per_vitality"])
 
                 self.assertTrue(math.isfinite(ls_duration))
                 self.assertTrue(math.isfinite(ls_boost))
@@ -182,38 +238,31 @@ class Milestone1EmpiricalStressTests(unittest.TestCase):
                 self.assertLessEqual(ls_boost, 2.0, f"LifeSwell boost {ls_boost} exceeded 2.0 (200%) cap at E={E}, V={V}")
 
                 # --- SoulBarrier ---
-                sb_duration = 60.0 + E * 0.0256
-                # Agility assumed proportional or equal to V for stress
-                sb_decrement = 0.10 + E * 0.000052 + V * 0.000208
+                sb_duration = 60.0 + E * sb["duration_per_energy"]
+                sb_decrement = 0.10 + E * sb["boost_per_energy"] + V * sb["boost_per_agility"]
                 self.assertTrue(math.isfinite(sb_duration))
                 self.assertTrue(math.isfinite(sb_decrement))
                 self.assertGreaterEqual(sb_duration, 60.0)
                 self.assertGreaterEqual(sb_decrement, 0.10)
-                # At E=5000, V=5000: 0.10 + 0.26 + 1.04 = 1.40.
-                # In combat, damage decrement is typically bounded or combined with armor.
 
                 # --- GreaterDamage ---
-                gd_damage = 3.0 + E * 0.1445
+                gd_damage = 3.0 + E * gd["boost_per_energy"]
                 self.assertTrue(math.isfinite(gd_damage))
                 self.assertGreaterEqual(gd_damage, 3.0)
-                # At E=5000: 3 + 722.5 = 725.5 bonus damage. Finite, positive, no explosive overflow.
                 self.assertLess(gd_damage, 10000.0)
 
                 # --- GreaterDefense ---
-                gdef_defense = 2.0 + E * 0.1265
+                gdef_defense = 2.0 + E * gdef["boost_per_energy"]
                 self.assertTrue(math.isfinite(gdef_defense))
                 self.assertGreaterEqual(gdef_defense, 2.0)
-                # At E=5000: 2 + 632.5 = 634.5 bonus defense. Finite, positive.
                 self.assertLess(gdef_defense, 10000.0)
 
                 # --- Berserker ---
-                bk_duration_raw = 30.0 + E * 0.0512
-                bk_duration = min(180.0, bk_duration_raw)
-                bk_mana_mult_raw = E * 0.000338
-                bk_mana_mult = min(1.0, bk_mana_mult_raw)
-                bk_hp_decrement = -0.40 + E * 0.000168
-                bk_min_phys = 140.0 + (E + V) * 0.0208
-                bk_max_phys = 160.0 + (E + V) * 0.0338
+                bk_duration = min(bk["duration_max"], 30.0 + E * bk["duration_per_energy"])
+                bk_mana_mult = min(bk["mana_max"], E * bk["mana_per_energy"])
+                bk_hp_decrement = -0.40 + E * bk["hp_per_energy"]
+                bk_min_phys = 140.0 + (E + V) * bk["min_phys_per_stat"]
+                bk_max_phys = 160.0 + (E + V) * bk["max_phys_per_stat"]
 
                 self.assertTrue(math.isfinite(bk_duration))
                 self.assertTrue(math.isfinite(bk_mana_mult))
@@ -229,15 +278,17 @@ class Milestone1EmpiricalStressTests(unittest.TestCase):
 
     def test_07_hyperbolic_armor_and_hit_chance_boundaries(self):
         """
-        Adversarially test AttackableExtensions combat formula functions:
-        - CalculateHitChance(attackRate, defenseRate) in [0.05, 0.95]
-        - CalculateArmorMitigation(armor, rank) in [0.0, 0.60]
-        - CalculateDamage(baseDamage, armor, rank) >= 1.0
+        Adversarially test SimulationEngine combat formula functions against boundary inputs:
+        - engine.hit_chance(accuracy, evasion) in [hitMin, hitMax]
+        - engine.reduction(armor, rank) in [0.0, armorCap]
+        - post-mitigation damage >= minimum_damage(level) >= 1.0
         """
         from tests.adversarial.sim_engine import SimulationEngine
         engine = SimulationEngine()
+        hit_min = engine.D["combat"]["hitMin"]
+        hit_max = engine.D["combat"]["hitMax"]
+        armor_cap = engine.D["combat"]["armorCap"]
 
-        # Hit chance boundary tests
         test_rate_pairs = [
             (0.0, 10000.0),
             (10000.0, 0.0),
@@ -249,17 +300,12 @@ class Milestone1EmpiricalStressTests(unittest.TestCase):
         ]
 
         for att, df in test_rate_pairs:
-            safe_att = max(1.0, att if math.isfinite(att) else 1.0)
-            safe_def = max(1.0, df if math.isfinite(df) else 1.0)
-            ratio = safe_att / (safe_att + safe_def)
-            hit_chance = max(0.05, min(0.95, ratio))
-
-            self.assertGreaterEqual(hit_chance, 0.05)
-            self.assertLessEqual(hit_chance, 0.95)
-            # Ensure no 3% cliff
+            hit_chance = engine.hit_chance(att, df)
+            self.assertTrue(math.isfinite(hit_chance))
+            self.assertGreaterEqual(hit_chance, hit_min)
+            self.assertLessEqual(hit_chance, hit_max)
             self.assertNotEqual(hit_chance, 0.03)
 
-        # Armor mitigation boundary tests
         test_armor_rank_pairs = [
             (0.0, 1.0),
             (0.0, 450.0),
@@ -267,21 +313,19 @@ class Milestone1EmpiricalStressTests(unittest.TestCase):
             (1000.0, 50.0),
             (50000.0, 1.0),
             (50000.0, 450.0),
-            (-100.0, -10.0), # Adversarial negative
+            (-100.0, -10.0),
         ]
 
         for arm, rnk in test_armor_rank_pairs:
-            safe_armor = max(0.0, arm if math.isfinite(arm) else 0.0)
             safe_rank = max(1.0, rnk if math.isfinite(rnk) else 1.0)
-            mitigation = safe_armor / (safe_armor + 70.0 + 2.4 * safe_rank)
-            clamped_mitigation = max(0.0, min(0.60, mitigation))
+            clamped_mitigation = engine.reduction(arm, safe_rank)
 
+            self.assertTrue(math.isfinite(clamped_mitigation))
             self.assertGreaterEqual(clamped_mitigation, 0.0)
-            self.assertLessEqual(clamped_mitigation, 0.60)
+            self.assertLessEqual(clamped_mitigation, armor_cap)
 
-            # Damage calculation
             base_damage = 50.0
-            damage = max(1.0, base_damage * (1.0 - clamped_mitigation))
+            damage = max(engine.minimum_damage(1), base_damage * (1.0 - clamped_mitigation))
             self.assertGreaterEqual(damage, 1.0)
             self.assertLessEqual(damage, base_damage)
 

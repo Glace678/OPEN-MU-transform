@@ -67,7 +67,7 @@ final class ServerAddressPolicy {
         }
         int[] octets = new int[4];
         for (int index = 0; index < parts.length; index++) {
-            if (parts[index].isEmpty()) {
+            if (parts[index].isEmpty() || (parts[index].length() > 1 && parts[index].charAt(0) == '0')) {
                 return false;
             }
             for (int character = 0; character < parts[index].length(); character++) {

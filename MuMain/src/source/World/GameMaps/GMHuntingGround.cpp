@@ -534,6 +534,7 @@ bool M31HuntingGround::RenderHuntingGroundMonsterVisual(CHARACTER* pCharacter, O
             vec3_t Light, Position;
 
             Vector(0.4f, 1.0f, 0.7f, Light);
+            VectorCopy(pObject->Position, Position);
 
             if (pObject->CurrentAction == MONSTER01_WALK || pObject->CurrentAction == MONSTER01_RUN)
             {
@@ -564,11 +565,11 @@ bool M31HuntingGround::RenderHuntingGroundMonsterVisual(CHARACTER* pCharacter, O
                 vec3_t Angle;
                 Vector(-55.f, sinf(WorldTime * 0.03f) * 45.f, pObject->Angle[2], Angle);
                 if (rand_fps_check(2))
+                    BoneManager::GetBonePosition(pObject, L"Monster84_PoisonRight", Position);
+                else
+                    BoneManager::GetBonePosition(pObject, L"Monster84_PoisonLeft", Position);
+                if (rand_fps_check(2))
                 {
-                    if (rand_fps_check(2))
-                        BoneManager::GetBonePosition(pObject, L"Monster84_PoisonRight", Position);
-                    else
-                        BoneManager::GetBonePosition(pObject, L"Monster84_PoisonLeft", Position);
                     CreateParticle(BITMAP_SMOKE, Position, pObject->Angle, Light, 11,
                                    (float)(rand() % 32 + 50) * 0.025f);
                 }

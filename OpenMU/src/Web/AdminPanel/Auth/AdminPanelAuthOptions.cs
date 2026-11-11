@@ -20,6 +20,13 @@ public class AdminPanelAuthOptions
     public bool RequireTwoFactor { get; set; }
 
     /// <summary>
+    /// Gets or sets the cookie secure policy. Defaults to <see cref="Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest"/>
+    /// so HTTPS deployments (direct TLS or via <c>X-Forwarded-Proto: https</c>) always emit <c>Secure</c> cookies while
+    /// local loopback/LAN HTTP mobile GM sessions remain functional without TLS.
+    /// </summary>
+    public Microsoft.AspNetCore.Http.CookieSecurePolicy CookieSecurePolicy { get; set; } = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
+
+    /// <summary>
     /// Gets or sets the time after which an inactive session expires.
     /// </summary>
     public TimeSpan SessionTimeout { get; set; } = TimeSpan.FromHours(8);

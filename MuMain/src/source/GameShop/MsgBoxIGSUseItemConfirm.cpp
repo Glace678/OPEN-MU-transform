@@ -61,7 +61,7 @@ bool CMsgBoxIGSUseItemConfirm::Create(float fPriority)
 void CMsgBoxIGSUseItemConfirm::Initialize(int iStorageSeq, int iStorageItemSeq, WORD wItemCode, wchar_t szItemType,
                                           wchar_t* pszItemName)
 {
-    wchar_t szText[256] = {
+    wchar_t szText[1024] = {
         0,
     };
 
@@ -70,10 +70,18 @@ void CMsgBoxIGSUseItemConfirm::Initialize(int iStorageSeq, int iStorageItemSeq, 
     m_wItemCode       = wItemCode;
     m_szItemType      = szItemType;
 
-    wcscpy(m_szItemName, pszItemName);
+    if (pszItemName)
+    {
+        wcsncpy(m_szItemName, pszItemName, std::size(m_szItemName) - 1);
+        m_szItemName[std::size(m_szItemName) - 1] = L'\0';
+    }
+    else
+    {
+        m_szItemName[0] = L'\0';
+    }
 
     // Description
-    mu_swprintf(szText, I18N::Game::DoYouWishToUseS, pszItemName);
+    mu_swprintf_trunc(szText, I18N::Game::DoYouWishToUseS, m_szItemName);
     m_iDesciptionLine = ::DivideStringByPixel(&m_szDescription[0][0], UIMAX_TEXT_LINE, MAX_TEXT_LENGTH, szText,
                                               IGS_TEXT_DIVIDE_WIDTH, false, '#');
 }
@@ -143,6 +151,8 @@ CALLBACK_RESULT CMsgBoxIGSUseItemConfirm::OKButtonDown(class CNewUIMessageBoxBas
                                                        const leaf::xstreambuf&     xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSUseItemConfirm*>(pOwner);
+    if (!pOwnMsgBox)
+        return CALLBACK_CONTINUE;
 
     // ��������� ����Ϸ��� ����Ÿ���� ������ ��� �޼��� ó��
     BuffScriptLoader& pBuffInfo                   = TheBuffInfo();
@@ -150,7 +160,7 @@ CALLBACK_RESULT CMsgBoxIGSUseItemConfirm::OKButtonDown(class CNewUIMessageBoxBas
     wchar_t           szBuffName[MAX_TEXT_LENGTH] = {
         '\0',
     };
-    bool bEqualBuff = Hero->Object.m_BuffMap.IsEqualBuffType(iBuffType, szBuffName);
+    bool bEqualBuff = Hero && Hero->Object.m_BuffMap.IsEqualBuffType(iBuffType, szBuffName);
 
 #ifdef LEM_FIX_WARNINNGMSG_DELETE
     bEqualBuff = false;
@@ -161,10 +171,13 @@ CALLBACK_RESULT CMsgBoxIGSUseItemConfirm::OKButtonDown(class CNewUIMessageBoxBas
         //  ���� ���â
         CMsgBoxIGSUseBuffConfirm* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSUseBuffConfirmLayout), &pMsgBox);
-        pMsgBox->Initialize(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode,
-                            pOwnMsgBox->m_szItemType, pOwnMsgBox->m_szItemName, szBuffName);
+        if (pMsgBox)
+        {
+            pMsgBox->Initialize(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode,
+                                pOwnMsgBox->m_szItemType, pOwnMsgBox->m_szItemName, szBuffName);
+        }
     }
-    else
+    else if (SocketClient)
     {
         SocketClient->ToGameServer()->SendCashShopStorageItemConsumeRequest(
             pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode,

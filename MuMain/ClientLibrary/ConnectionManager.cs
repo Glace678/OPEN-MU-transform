@@ -77,13 +77,7 @@ public unsafe partial class ConnectionManager
     [UnmanagedCallersOnly(EntryPoint = "ConnectionManager_Send")]
     public static void Send(int handle, byte* data, int count)
     {
-        ConnectionWrapper? connection;
-        lock (ConnectionsLock)
-        {
-            Connections.TryGetValue(handle, out connection);
-        }
-
-        if (connection is null)
+        if (!Connections.TryGetValue(handle, out var connection))
         {
             Debug.WriteLine("Connection with handle {0} not found.", handle);
             return;
@@ -91,7 +85,21 @@ public unsafe partial class ConnectionManager
 
         try
         {
-            var bytes = new Span<byte>(data, count);
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            if (count < 2)
+            {
+                throw new ArgumentOutOfRangeException(nameof(count), count, "A packet must contain at least a 2-byte header.");
+            }
+
+            var bytes = new ReadOnlySpan<byte>(data, count);
+            if (count < 3 && (bytes[0] is 0xC2 or 0xC4))
+            {
+                throw new ArgumentOutOfRangeException(nameof(count), count, $"A {bytes[0]:X2} packet must contain at least a 3-byte header.");
+            }
 
             // PROTO-4: C1/C3 frames encode their length in one byte. SetPacketSize
             // would silently write only the low 8 bits, desynchronizing the peer
@@ -103,13 +111,13 @@ public unsafe partial class ConnectionManager
                     nameof(count));
             }
 
-            bytes.SetPacketSize();
             connection.Send(bytes);
             Debug.WriteLine("Sent {0} bytes with handle {1}", count, handle);
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Error sending {count} bytes with handle {handle}: {ex}");
+            Connections.TryRemove(handle, out _);
             connection.DisconnectAndDispose();
         }
     }
@@ -121,12 +129,7 @@ public unsafe partial class ConnectionManager
     [UnmanagedCallersOnly(EntryPoint = "ConnectionManager_BeginReceive")]
     public static void BeginReceive(int connectionHandle)
     {
-        ConnectionWrapper? connection;
-        lock (ConnectionsLock)
-        {
-            Connections.TryGetValue(connectionHandle, out connection);
-        }
-
+        Connections.TryGetValue(connectionHandle, out var connection);
         connection?.BeginReceive();
     }
 
@@ -137,13 +140,22 @@ public unsafe partial class ConnectionManager
     [UnmanagedCallersOnly(EntryPoint = "ConnectionManager_Disconnect")]
     public static void Disconnect(int connectionHandle)
     {
-        ConnectionWrapper? connection;
-        lock (ConnectionsLock)
+        if (Connections.TryRemove(connectionHandle, out var connection))
         {
-            Connections.TryGetValue(connectionHandle, out connection);
+            connection.DisconnectAndDispose();
+        }
+    }
+
+    private static void CopyBinaryField(byte* source, uint sourceByteLength, Span<byte> destination)
+    {
+        destination.Clear();
+        if (source is null || sourceByteLength == 0 || destination.IsEmpty)
+        {
+            return;
         }
 
-        connection?.DisconnectAndDispose();
+        var copyLength = (int)Math.Min(sourceByteLength, (uint)destination.Length);
+        new ReadOnlySpan<byte>(source, copyLength).CopyTo(destination);
     }
 
     private static int ConnectInner(string host, int port, bool isEncrypted, delegate* unmanaged<int, int, byte*, void> onPacketReceived, delegate* unmanaged<int, void> onDisconnected)

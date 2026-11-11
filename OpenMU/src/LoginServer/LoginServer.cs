@@ -40,6 +40,10 @@ public class LoginServer : ILoginServer
     public async ValueTask LogOffAsync(string accountName, byte serverId)
     {
         using var l = await this._syncRoot.LockAsync();
-        this._connectedAccounts.Remove(accountName);
+        if (this._connectedAccounts.TryGetValue(accountName, out var currentServerId)
+            && currentServerId == serverId)
+        {
+            this._connectedAccounts.Remove(accountName);
+        }
     }
 }

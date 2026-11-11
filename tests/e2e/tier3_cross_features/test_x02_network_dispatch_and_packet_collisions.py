@@ -50,9 +50,16 @@ class TestX02NetworkDispatchAndPacketCollisions(unittest.TestCase):
         valid, _ = PacketFramingEngine.validate_client_dispatch(c2_letter)
         self.assertTrue(valid)
 
-        # Memory copy into FS_LETTER_TEXT is clamped to 1024
+        # Memory copy into FS_LETTER_TEXT is clamped to 1050 (header 50 + text 1000)
         safe_len = LetterTextBufferValidator.get_safe_copy_length(len(c2_letter))
-        self.assertEqual(safe_len, 1024)
+        self.assertEqual(safe_len, 1050)
+        self.assertEqual(LetterTextBufferValidator.get_safe_text_length(len(c2_letter)), 1000)
+
+        # Verify trailing stream bytes beyond declared_size do not leak into PacketFrame.payload
+        framed = PacketFramingEngine.frame_packet(c2_letter + b"\xDE\xAD\xBE\xEF")
+        self.assertTrue(framed.is_valid)
+        self.assertEqual(len(framed.raw), len(c2_letter))
+        self.assertEqual(framed.payload, huge_payload)
 
     def test_illusion_temple_packet_dispatch_and_layout(self):
         # IllusionTempleState (HeadCode 0x9E, 10 bytes)

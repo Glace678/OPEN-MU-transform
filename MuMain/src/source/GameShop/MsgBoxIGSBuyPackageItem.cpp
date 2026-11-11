@@ -59,7 +59,10 @@ bool CMsgBoxIGSBuyPackageItem::Create(float fPriority)
 
 void CMsgBoxIGSBuyPackageItem::Initialize(CShopPackage* pPackage)
 {
-    int     iProductSeq;
+    if (!pPackage)
+        return;
+
+    int     iProductSeq             = 0;
     int     iValue                  = 0;
     wchar_t szText[MAX_TEXT_LENGTH] = {
         '\0',
@@ -78,24 +81,26 @@ void CMsgBoxIGSBuyPackageItem::Initialize(CShopPackage* pPackage)
         m_BtnPresent.SetEnable(false);
     }
 
-    wcsncpy(m_szPackageName, pPackage->PackageProductName, MAX_TEXT_LENGTH);
+    wcsncpy(m_szPackageName, pPackage->PackageProductName, MAX_TEXT_LENGTH - 1);
+    m_szPackageName[MAX_TEXT_LENGTH - 1] = L'\0';
     ConvertGold(pPackage->Price, szText);
-    mu_swprintf(m_szPrice, L"%ls %ls", szText, pPackage->PricUnitName);
+    mu_swprintf_trunc(m_szPrice, L"%ls %ls", szText, pPackage->PricUnitName);
 
     // Period
     pPackage->SetProductSeqFirst();
-    pPackage->GetProductSeqNext(iProductSeq);
-
-    g_InGameShopSystem->GetProductInfoFromProductSeq(
-        iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_USE_LIMIT_PERIOD, iValue, szText);
+    if (pPackage->GetProductSeqNext(iProductSeq))
+    {
+        g_InGameShopSystem->GetProductInfoFromProductSeq(
+            iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_USE_LIMIT_PERIOD, iValue, szText);
+    }
 
     if (iValue > 0)
     {
-        mu_swprintf(m_szPeriod, L"%d %ls", iValue, szText);
+        mu_swprintf_trunc(m_szPeriod, L"%d %ls", iValue, szText);
     }
     else
     {
-        mu_swprintf(m_szPeriod, L"-");
+        mu_swprintf_trunc(m_szPeriod, L"-");
     }
 
     m_wItemCode = _wtoi(pPackage->InGamePackageID);
@@ -273,13 +278,18 @@ CALLBACK_RESULT CMsgBoxIGSBuyPackageItem::LButtonUp(class CNewUIMessageBoxBase* 
 
 CALLBACK_RESULT CMsgBoxIGSBuyPackageItem::BuyBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto*                 pOwnMsgBox = dynamic_cast<CMsgBoxIGSBuyPackageItem*>(pOwner);
-    CMsgBoxIGSBuyConfirm* pMsgBox    = NULL;
-    CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSBuyConfirmLayout), &pMsgBox);
+    auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSBuyPackageItem*>(pOwner);
+    if (!pOwnMsgBox)
+        return CALLBACK_CONTINUE;
 
-    pMsgBox->Initialize(pOwnMsgBox->m_wItemCode, pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq, 0,
-                        pOwnMsgBox->m_iCashType, pOwnMsgBox->m_szPackageName, pOwnMsgBox->m_szPrice,
-                        pOwnMsgBox->m_szPeriod);
+    CMsgBoxIGSBuyConfirm* pMsgBox = NULL;
+    CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSBuyConfirmLayout), &pMsgBox);
+    if (pMsgBox)
+    {
+        pMsgBox->Initialize(pOwnMsgBox->m_wItemCode, pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq, 0,
+                            pOwnMsgBox->m_iCashType, pOwnMsgBox->m_szPackageName, pOwnMsgBox->m_szPrice,
+                            pOwnMsgBox->m_szPeriod);
+    }
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
@@ -291,13 +301,17 @@ CALLBACK_RESULT CMsgBoxIGSBuyPackageItem::PresentBtnDown(class CNewUIMessageBoxB
                                                          const leaf::xstreambuf&     xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSBuyPackageItem*>(pOwner);
+    if (!pOwnMsgBox)
+        return CALLBACK_CONTINUE;
 
     CMsgBoxIGSSendGift* pMsgBox = NULL;
     CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSSendGiftLayout), &pMsgBox);
-
-    pMsgBox->Initialize(pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq, 0, pOwnMsgBox->m_wItemCode,
-                        pOwnMsgBox->m_iCashType, pOwnMsgBox->m_szPackageName, pOwnMsgBox->m_szPrice,
-                        pOwnMsgBox->m_szPeriod);
+    if (pMsgBox)
+    {
+        pMsgBox->Initialize(pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq, 0, pOwnMsgBox->m_wItemCode,
+                            pOwnMsgBox->m_iCashType, pOwnMsgBox->m_szPackageName, pOwnMsgBox->m_szPrice,
+                            pOwnMsgBox->m_szPeriod);
+    }
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);

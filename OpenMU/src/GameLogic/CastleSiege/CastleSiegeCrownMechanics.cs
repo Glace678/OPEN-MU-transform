@@ -103,6 +103,15 @@ public static class CastleSiegeCrownMechanics
             throw new InvalidOperationException("The Crown winner is not a selected attacking guild.");
         }
 
+        var previousMiddleOwner = context.MiddleOwnerGuildId;
+        var previousSides = context.FinalGuildList.Values.ToDictionary(g => g, g => g.Side);
+        var previousOwnerGuildId = context.SiegeData.OwnerGuildId;
+        var previousIsOccupied = context.SiegeData.IsOccupied;
+        var previousTaxChaos = context.SiegeData.TaxChaos;
+        var previousTaxStore = context.SiegeData.TaxStore;
+        var previousTaxHunt = context.SiegeData.TaxHunt;
+        var previousIsHuntZoneEnabled = context.SiegeData.IsHuntZoneEnabled;
+
         context.MiddleOwnerGuildId = guildStatus.GuildId;
         foreach (var guild in context.FinalGuildList.Values)
         {
@@ -119,8 +128,26 @@ public static class CastleSiegeCrownMechanics
         }
 
         var ownershipChanged = ApplyOwner(context, capturingGuild);
-        await context.SaveFinalGuildListAsync().ConfigureAwait(false);
-        await context.SaveOwnerAsync().ConfigureAwait(false);
+        try
+        {
+            await context.SaveOwnerAndFinalGuildListAsync().ConfigureAwait(false);
+        }
+        catch
+        {
+            context.MiddleOwnerGuildId = previousMiddleOwner;
+            foreach (var (guild, side) in previousSides)
+            {
+                guild.Side = side;
+            }
+
+            context.SiegeData.OwnerGuildId = previousOwnerGuildId;
+            context.SiegeData.IsOccupied = previousIsOccupied;
+            context.SiegeData.TaxChaos = previousTaxChaos;
+            context.SiegeData.TaxStore = previousTaxStore;
+            context.SiegeData.TaxHunt = previousTaxHunt;
+            context.SiegeData.IsHuntZoneEnabled = previousIsHuntZoneEnabled;
+            throw;
+        }
         if (ownershipChanged)
         {
             await CastleSiegeEconomyNotifier.BroadcastTaxRatesAsync(context).ConfigureAwait(false);

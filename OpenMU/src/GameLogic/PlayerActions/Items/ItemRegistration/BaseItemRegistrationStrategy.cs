@@ -36,121 +36,141 @@ public abstract class BaseItemRegistrationStrategy : IItemRegistrationStrategy
     /// <inheritdoc />
     public virtual async ValueTask RegisterAsync(Player player, PlugIns.ItemRegistration.NpcItemRegistrationRule rule)
     {
-        var item = player.Inventory?.Items.FirstOrDefault(i => i.Definition?.Group == rule.AcceptedItemGroup && i.Definition?.Number == rule.AcceptedItemNumber);
-        if (item is null)
+        await player.RunPersistenceExclusiveAsync(async () =>
         {
-            await player.ShowLocalizedBlueMessageAsync("ItemRegistrationMissingRequiredItem").ConfigureAwait(false);
-            await this.OnMissingItemAsync(player).ConfigureAwait(false);
-            return;
-        }
-
-        int requiredItemsCount = rule.RequiredItemsCount;
-        if (requiredItemsCount <= 0 || this.TargetStat is null)
-        {
-            requiredItemsCount = 1;
-        }
-
-        int peekRegistered = (int)(player.SelectedCharacter?.Attributes.FirstOrDefault(a => a.Definition == this.TargetStat)?.Value
-            ?? player.Attributes?[this.TargetStat] ?? 0) + 1;
-        bool willCompleteRegistration = this.TargetStat is null || peekRegistered >= requiredItemsCount;
-
-        if (willCompleteRegistration && rule.RewardZen > 0 && (long)player.Money + rule.RewardZen > player.GameContext.Configuration.MaximumInventoryMoney)
-        {
-            await player.ShowLocalizedBlueMessageAsync("ItemRegistrationInventoryMoneyLimitReached").ConfigureAwait(false);
-            await this.OnRegistrationCompletedAsync(player).ConfigureAwait(false);
-            return;
-        }
-
-        await player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
-
-        int currentRegistered = 1;
-        int totalRegistered = 1;
-
-        StatAttribute? registeredStat = null;
-        if (this.TargetStat != null)
-        {
-            registeredStat = this.EnsureStatExists(player, this.TargetStat);
-            currentRegistered = (int)(registeredStat?.Value ?? player.Attributes?[this.TargetStat] ?? 0) + 1;
-
-            if (registeredStat != null)
+            var item = player.Inventory?.Items.FirstOrDefault(i => i.Definition?.Group == rule.AcceptedItemGroup && i.Definition?.Number == rule.AcceptedItemNumber);
+            if (item is null)
             {
-                registeredStat.Value = currentRegistered;
-            }
-        }
-
-        StatAttribute? totalStat = null;
-        if (this.TargetTotalStat != null)
-        {
-            totalStat = this.EnsureStatExists(player, this.TargetTotalStat);
-            totalRegistered = (int)(totalStat?.Value ?? player.Attributes?[this.TargetTotalStat] ?? 0) + 1;
-
-            if (totalStat != null)
-            {
-                totalStat.Value = totalRegistered;
-            }
-        }
-
-        if (player.Attributes != null)
-        {
-            if (this.TargetStat != null)
-            {
-                player.Attributes[this.TargetStat] = currentRegistered;
+                await player.ShowLocalizedBlueMessageAsync("ItemRegistrationMissingRequiredItem").ConfigureAwait(false);
+                await this.OnMissingItemAsync(player).ConfigureAwait(false);
+                return;
             }
 
-            if (this.TargetTotalStat != null)
+            int requiredItemsCount = rule.RequiredItemsCount;
+            if (requiredItemsCount <= 0 || this.TargetStat is null)
             {
-                player.Attributes[this.TargetTotalStat] = totalRegistered;
-            }
-        }
-
-        if (currentRegistered >= requiredItemsCount)
-        {
-            int remaining = currentRegistered - requiredItemsCount;
-            if (registeredStat != null)
-            {
-                registeredStat.Value = remaining;
+                requiredItemsCount = 1;
             }
 
-            if (player.Attributes != null && this.TargetStat != null)
-            {
-                player.Attributes[this.TargetStat] = remaining;
-            }
+            int peekRegistered = (int)(player.SelectedCharacter?.Attributes.FirstOrDefault(a => a.Definition == this.TargetStat)?.Value
+                ?? player.Attributes?[this.TargetStat] ?? 0) + 1;
+            bool willCompleteRegistration = this.TargetStat is null || peekRegistered >= requiredItemsCount;
 
-            int zenReward = rule.RewardZen;
+            int zenReward = willCompleteRegistration ? rule.RewardZen : 0;
             if (zenReward > 0)
             {
-                if (!player.TryAddMoney(zenReward))
+                if ((long)player.Money + zenReward > player.GameContext.Configuration.MaximumInventoryMoney
+                    || !player.TryAddMoney(zenReward))
                 {
-                    player.Logger.LogWarning(
-                        "Could not credit registration reward of {Reward} zen to {Player} (money cap reached); the registration still completed.",
-                        zenReward,
-                        player.Name);
+                    await player.ShowLocalizedBlueMessageAsync("ItemRegistrationInventoryMoneyLimitReached").ConfigureAwait(false);
+                    await this.OnRegistrationCompletedAsync(player).ConfigureAwait(false);
+                    return;
                 }
-
-                await player.InvokeViewPlugInAsync<Views.Inventory.IUpdateMoneyPlugIn>(
-                    p => p.UpdateMoneyAsync()).ConfigureAwait(false);
             }
 
-            if (rule.RewardDropItemGroup is { } dropGroup && Rand.NextRandomBool(dropGroup.Chance))
+            try
             {
-                var droppedItem = player.GameContext.DropGenerator.GenerateItemDrop(dropGroup);
-                if (droppedItem != null)
+                if (item.IsStackable() && item.Durability > 1)
                 {
-                    var dropCoordinates = player.CurrentMap!.Terrain.GetRandomCoordinate(player.Position, 2);
-                    var dropped = new DroppedItem(droppedItem, dropCoordinates, player.CurrentMap, player);
-                    await player.CurrentMap.AddAsync(dropped).ConfigureAwait(false);
+                    item.Durability -= 1;
+                    await player.InvokeViewPlugInAsync<Views.Inventory.IItemDurabilityChangedPlugIn>(
+                        p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
+                }
+                else
+                {
+                    await player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
+                }
+            }
+            catch
+            {
+                if (zenReward > 0)
+                {
+                    player.TryRemoveMoney(zenReward);
+                }
+
+                throw;
+            }
+
+            int currentRegistered = 1;
+            int totalRegistered = 1;
+
+            StatAttribute? registeredStat = null;
+            if (this.TargetStat != null)
+            {
+                registeredStat = this.EnsureStatExists(player, this.TargetStat);
+                currentRegistered = (int)(registeredStat?.Value ?? player.Attributes?[this.TargetStat] ?? 0) + 1;
+
+                if (registeredStat != null)
+                {
+                    registeredStat.Value = currentRegistered;
                 }
             }
 
-            await player.ShowLocalizedBlueMessageAsync("ItemRegistrationCompletedWithRewardFormat", requiredItemsCount, requiredItemsCount).ConfigureAwait(false);
-            await player.ShowLocalizedBlueMessageAsync("ItemRegistrationTotalAllTimeFormat", totalRegistered).ConfigureAwait(false);
-        }
-        else
-        {
-            await player.ShowLocalizedBlueMessageAsync("ItemRegistrationProgressFormat", currentRegistered, requiredItemsCount).ConfigureAwait(false);
-        }
+            StatAttribute? totalStat = null;
+            if (this.TargetTotalStat != null)
+            {
+                totalStat = this.EnsureStatExists(player, this.TargetTotalStat);
+                totalRegistered = (int)(totalStat?.Value ?? player.Attributes?[this.TargetTotalStat] ?? 0) + 1;
 
-        await this.OnRegistrationCompletedAsync(player).ConfigureAwait(false);
+                if (totalStat != null)
+                {
+                    totalStat.Value = totalRegistered;
+                }
+            }
+
+            if (player.Attributes != null)
+            {
+                if (this.TargetStat != null)
+                {
+                    player.Attributes[this.TargetStat] = currentRegistered;
+                }
+
+                if (this.TargetTotalStat != null)
+                {
+                    player.Attributes[this.TargetTotalStat] = totalRegistered;
+                }
+            }
+
+            if (currentRegistered >= requiredItemsCount)
+            {
+                int remaining = currentRegistered - requiredItemsCount;
+                if (registeredStat != null)
+                {
+                    registeredStat.Value = remaining;
+                }
+
+                if (player.Attributes != null && this.TargetStat != null)
+                {
+                    player.Attributes[this.TargetStat] = remaining;
+                }
+
+                if (zenReward > 0)
+                {
+                    await player.InvokeViewPlugInAsync<Views.Inventory.IUpdateMoneyPlugIn>(
+                        p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+                }
+
+                if (rule.RewardDropItemGroup is { } dropGroup && Rand.NextRandomBool(dropGroup.Chance))
+                {
+                    var droppedItem = player.GameContext.DropGenerator.GenerateItemDrop(dropGroup);
+                    if (droppedItem != null && player.CurrentMap is { } currentMap)
+                    {
+                        var dropCoordinates = currentMap.Terrain.GetRandomCoordinate(player.Position, 2);
+                        var dropped = new DroppedItem(droppedItem, dropCoordinates, currentMap, player);
+                        await currentMap.AddAsync(dropped).ConfigureAwait(false);
+                    }
+                }
+
+                await player.ShowLocalizedBlueMessageAsync("ItemRegistrationCompletedWithRewardFormat", requiredItemsCount, requiredItemsCount).ConfigureAwait(false);
+                await player.ShowLocalizedBlueMessageAsync("ItemRegistrationTotalAllTimeFormat", totalRegistered).ConfigureAwait(false);
+            }
+            else
+            {
+                await player.ShowLocalizedBlueMessageAsync("ItemRegistrationProgressFormat", currentRegistered, requiredItemsCount).ConfigureAwait(false);
+            }
+
+            await this.OnRegistrationCompletedAsync(player).ConfigureAwait(false);
+        }).ConfigureAwait(false);
     }
 
     /// <summary>

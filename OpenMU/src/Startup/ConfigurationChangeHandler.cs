@@ -92,15 +92,18 @@ public class ConfigurationChangeHandler : IConfigurationChangePublisher
             return;
         }
 
-        foreach (var connectServer in connectServerContainer)
+        var existing = connectServerContainer.FirstOrDefault(cs => cs.ConfigurationId == id);
+        if (existing is null)
         {
-            if (connectServer.ServerState == ServerState.Started)
-            {
-                await connectServer.ShutdownAsync().ConfigureAwait(false);
+            return;
+        }
 
-                //// todo: is applying new settings required?
-                await connectServer.StartAsync().ConfigureAwait(false);
-            }
+        var wasStarted = existing.ServerState == ServerState.Started;
+        await connectServerContainer.RemoveConnectServerAsync(id).ConfigureAwait(false);
+        await connectServerContainer.InitializeConnectServerAsync(id).ConfigureAwait(false);
+        if (wasStarted && connectServerContainer.FirstOrDefault(cs => cs.ConfigurationId == id) is { } recreated)
+        {
+            await recreated.StartAsync().ConfigureAwait(false);
         }
     }
 }

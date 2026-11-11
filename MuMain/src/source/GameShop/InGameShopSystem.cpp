@@ -101,13 +101,15 @@ bool CInGameShopSystem::ScriptDownload()
 {
     m_bFirstScriptDownloaded = true;
 
-    ::GetCurrentDirectory(255, m_szScriptLocalPath);
+    wchar_t szCurDir[MAX_TEXT_LENGTH] = {0};
+    ::GetCurrentDirectory(static_cast<DWORD>(std::size(szCurDir)), szCurDir);
 
     wchar_t szScriptRemotePathforDMZ[MAX_TEXT_LENGTH];
-    mu_swprintf(m_szScriptLocalPath, L"%ls%ls", m_szScriptLocalPath, L"\\data\\InGameShopScript");
-    wcscpy(m_szScriptIPAddress, L"image.webzen.com");
-    wcscpy(m_szScriptRemotePath, L"/Global/Payment/ProductTransfer");
-    wcscpy(szScriptRemotePathforDMZ, L"/Global/Payment/DevScriptGB/ProductTransfer");
+    mu_swprintf_trunc(m_szScriptLocalPath, L"%ls%ls", szCurDir, L"\\data\\InGameShopScript");
+    StringCchCopy(m_szScriptIPAddress, std::size(m_szScriptIPAddress), L"image.webzen.com");
+    StringCchCopy(m_szScriptRemotePath, std::size(m_szScriptRemotePath), L"/Global/Payment/ProductTransfer");
+    StringCchCopy(szScriptRemotePathforDMZ, std::size(szScriptRemotePathforDMZ),
+                  L"/Global/Payment/DevScriptGB/ProductTransfer");
 
 #ifdef FOR_WORK
     HANDLE hFile;
@@ -121,9 +123,9 @@ bool CInGameShopSystem::ScriptDownload()
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
-        wcscpy(m_szScriptRemotePath, szScriptRemotePathforDMZ);
+        StringCchCopy(m_szScriptRemotePath, std::size(m_szScriptRemotePath), szScriptRemotePathforDMZ);
+        CloseHandle(hFile);
     }
-    CloseHandle(hFile);
 #endif  // FOR_WORK
     m_ShopManager.SetListManagerInfo(HTTP, m_szScriptIPAddress, L"", L"", m_szScriptRemotePath, m_szScriptLocalPath,
                                      m_ScriptVerInfo, 10000);
@@ -141,11 +143,15 @@ bool CInGameShopSystem::ScriptDownload()
         wchar_t szText[MAX_TEXT_LENGTH] = {
             '\0',
         };
-        mu_swprintf(szText, I18N::Game::MUItemShopInformationDownloadFailed, m_ScriptVerInfo.Zone, m_ScriptVerInfo.year,
-                    m_ScriptVerInfo.yearId, res.GetErrorMessage());
+        mu_swprintf_trunc(szText, I18N::Game::MUItemShopInformationDownloadFailed, m_ScriptVerInfo.Zone,
+                          m_ScriptVerInfo.year, m_ScriptVerInfo.yearId,
+                          res.GetErrorMessage() ? res.GetErrorMessage() : L"");
         CMsgBoxIGSCommon* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::Error, szText);
+        if (pMsgBox)
+        {
+            pMsgBox->Initialize(I18N::Game::Error, szText);
+        }
         return false;
     }
 
@@ -159,6 +165,8 @@ bool CInGameShopSystem::ScriptDownload()
     ShopOpenUnLock();
 
     CShopList* pShopList = m_ShopManager.GetListPtr();
+    if (!pShopList)
+        return false;
 
     m_pCategoryList = pShopList->GetCategoryListPtr();
     m_pPackageList  = pShopList->GetPackageListPtr();
@@ -171,14 +179,16 @@ bool CInGameShopSystem::BannerDownload()
 {
     m_bFirstBannerDownloaded = true;
 
-    ::GetCurrentDirectory(255, m_szBannerLocalPath);
+    wchar_t szCurDir[MAX_TEXT_LENGTH] = {0};
+    ::GetCurrentDirectory(static_cast<DWORD>(std::size(szCurDir)), szCurDir);
 
     wchar_t szBannerRemotePathforDMZ[MAX_TEXT_LENGTH];
-    mu_swprintf(m_szBannerLocalPath, L"%ls%ls", m_szBannerLocalPath, L"\\data\\InGameShopBanner");
+    mu_swprintf_trunc(m_szBannerLocalPath, L"%ls%ls", szCurDir, L"\\data\\InGameShopBanner");
 
-    wcscpy(m_szBannerIPAddress, L"image.webzen.com");
-    wcscpy(m_szBannerRemotePath, L"/Global/Payment/BannerTransfer");
-    wcscpy(szBannerRemotePathforDMZ, L"/Global/Payment/DevScriptGB/BannerTransfer");
+    StringCchCopy(m_szBannerIPAddress, std::size(m_szBannerIPAddress), L"image.webzen.com");
+    StringCchCopy(m_szBannerRemotePath, std::size(m_szBannerRemotePath), L"/Global/Payment/BannerTransfer");
+    StringCchCopy(szBannerRemotePathforDMZ, std::size(szBannerRemotePathforDMZ),
+                  L"/Global/Payment/DevScriptGB/BannerTransfer");
 
 #ifdef FOR_WORK
     HANDLE hFile;
@@ -192,16 +202,16 @@ bool CInGameShopSystem::BannerDownload()
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
-        wcscpy(m_szBannerRemotePath, szBannerRemotePathforDMZ);
+        StringCchCopy(m_szBannerRemotePath, std::size(m_szBannerRemotePath), szBannerRemotePathforDMZ);
+        CloseHandle(hFile);
     }
-    CloseHandle(hFile);
 #endif  // FOR_WORK
 
 #ifdef KJH_MOD_SHOP_SCRIPT_DOWNLOAD
     m_BannerManager.SetListManagerInfo(HTTP, m_szBannerIPAddress, L"", L"", m_szBannerRemotePath, m_szBannerLocalPath,
                                        m_BannerVerInfo, 4000);
 #else   // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
-    m_BannerManager.SetListManagerInfo(HTTP, m_szIPAddress, "", "", m_szBannerRemotePath, m_szBannerLocalPath,
+    m_BannerManager.SetListManagerInfo(HTTP, m_szBannerIPAddress, L"", L"", m_szBannerRemotePath, m_szBannerLocalPath,
                                        m_BannerVerInfo);
 #endif  // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
 
@@ -218,17 +228,23 @@ bool CInGameShopSystem::BannerDownload()
         wchar_t szText[MAX_TEXT_LENGTH] = {
             '\0',
         };
-        mu_swprintf(szText, I18N::Game::BannerDownloadFailedVersionDDDS, m_BannerVerInfo.Zone, m_BannerVerInfo.year,
-                    m_BannerVerInfo.yearId, res.GetErrorMessage());
+        mu_swprintf_trunc(szText, I18N::Game::BannerDownloadFailedVersionDDDS, m_BannerVerInfo.Zone,
+                          m_BannerVerInfo.year, m_BannerVerInfo.yearId,
+                          res.GetErrorMessage() ? res.GetErrorMessage() : L"");
         CMsgBoxIGSCommon* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::Error, szText);
+        if (pMsgBox)
+        {
+            pMsgBox->Initialize(I18N::Game::Error, szText);
+        }
 
         return false;
     }
 
     m_CurrentBannerVerInfo = m_BannerVerInfo;
     m_pBannerList          = m_BannerManager.GetListPtr();
+    if (!m_pBannerList)
+        return false;
 
     m_pBannerList->SetFirst();
     if (m_pBannerList->GetNext(m_BannerInfo) == false)
@@ -284,6 +300,9 @@ bool CInGameShopSystem::IsBannerDownload()
 
 bool CInGameShopSystem::SelectZone(int iIndex)
 {
+    if (!m_pCategoryList)
+        return false;
+
     int iZoneSeqIndex = GetZoneSeqIndexByIndex(iIndex);
     if ((INGAMESHOP_ERROR_ZERO_SIZE == iZoneSeqIndex) || (INGAMESHOP_ERROR_INVALID_INDEX == iZoneSeqIndex))
     {
@@ -303,6 +322,9 @@ bool CInGameShopSystem::SelectCategory(int iIndex)
 {
     m_listDisplayPackage.clear();
 
+    if (!m_pCategoryList)
+        return false;
+
     int iCategorySeqIndex = GetCategorySeqIndexByIndex(iIndex);
     if ((INGAMESHOP_ERROR_ZERO_SIZE == iCategorySeqIndex) || (INGAMESHOP_ERROR_INVALID_INDEX == iCategorySeqIndex))
     {
@@ -315,7 +337,10 @@ bool CInGameShopSystem::SelectCategory(int iIndex)
         {
             m_bSelectEventCategory = true;
             m_plistSelectPackage   = &m_listEventPackage;
-            SocketClient->ToGameServer()->SendCashShopEventItemListRequest(m_SelectedCategory.ProductDisplaySeq);
+            if (SocketClient)
+            {
+                SocketClient->ToGameServer()->SendCashShopEventItemListRequest(m_SelectedCategory.ProductDisplaySeq);
+            }
             m_bIsRequestEventPackage = true;
         }
         else
@@ -357,6 +382,8 @@ void CInGameShopSystem::PrePage()
 
 int CInGameShopSystem::GetTotalPages()
 {
+    if (!m_plistSelectPackage)
+        return 1;
     return (m_plistSelectPackage->size() / INGAMESHOP_DISPLAY_ITEMLIST_SIZE) + 1;
 }
 
@@ -368,9 +395,14 @@ int CInGameShopSystem::GetSelectPage()
 void CInGameShopSystem::SetNormalPackage()
 {
     CShopPackage Package;
-    int          iPackageSeqIndex;
+    int          iPackageSeqIndex = 0;
 
     m_listNormalPackage.clear();
+    if (!m_pPackageList)
+    {
+        BeginPage();
+        return;
+    }
 
     m_SelectedCategory.SetPackagSeqFirst();
 
@@ -400,6 +432,9 @@ void CInGameShopSystem::InitEventPackage(int iTotalEventPackage)
 
 void CInGameShopSystem::InsertEventPackage(int* pPackageSeq)
 {
+    if (!pPackageSeq || !m_pPackageList)
+        return;
+
     m_SelectedCategory.SetPackagSeqFirst();
 
     CShopPackage Package;
@@ -434,7 +469,7 @@ int CInGameShopSystem::GetSizeCategoriesAsSelectedZone()
 
 int CInGameShopSystem::GetSizePackageAsSelectedCategory()
 {
-    return m_plistSelectPackage->size();
+    return m_plistSelectPackage ? m_plistSelectPackage->size() : 0;
 }
 
 int CInGameShopSystem::GetSizePackageAsDisplayPackage()
@@ -526,20 +561,7 @@ double CInGameShopSystem::GetCashPrepaid()
 
 CShopPackage* CInGameShopSystem::GetDisplayPackage(int iIndex)
 {
-    auto iterPackage = m_listDisplayPackage.begin();
-
-    for (int i = 0; i < (int)m_listDisplayPackage.size(); i++)
-    {
-        if (iterPackage == m_listDisplayPackage.end())
-            return NULL;
-
-        if (i == iIndex)
-            break;
-
-        iterPackage++;
-    }
-
-    return &(*iterPackage);
+    return const_cast<CShopPackage*>(FindDisplayPackage(iIndex));
 }
 
 void CInGameShopSystem::SetIsRequestShopOpenning(bool IsRequestShopOpenning)
@@ -552,8 +574,22 @@ bool CInGameShopSystem::GetIsRequestShopOpenning()
     return m_bIsRequestShopOpenning;
 }
 
-bool CInGameShopSystem::GetPackageInfo(int iPackageSeq, int iPackageAttrType, OUT int& iValue, OUT wchar_t* pszText)
+bool CInGameShopSystem::GetPackageInfo(int iPackageSeq, int iPackageAttrType, OUT int& iValue, OUT wchar_t* pszText,
+                                       size_t cchText)
 {
+    if (!pszText || cchText == 0)
+    {
+        iValue = 0;
+        return false;
+    }
+
+    if (!m_pPackageList)
+    {
+        iValue     = 0;
+        pszText[0] = L'\0';
+        return false;
+    }
+
     CShopPackage Package;
 
     if (m_pPackageList->GetValueByKey(iPackageSeq, Package) == true)
@@ -562,13 +598,13 @@ bool CInGameShopSystem::GetPackageInfo(int iPackageSeq, int iPackageAttrType, OU
         {
             case IGS_PACKAGE_ATT_TYPE_NAME: {
                 iValue = 0;
-                wcscpy(pszText, Package.PackageProductName);
+                StringCchCopy(pszText, cchText, Package.PackageProductName);
                 return true;
             }
             break;
             case IGS_PACKAGE_ATT_TYPE_DESCRIPTION: {
                 iValue = 0;
-                wcscpy(pszText, Package.Description);
+                StringCchCopy(pszText, cchText, Package.Description);
                 return true;
             }
             break;
@@ -578,19 +614,19 @@ bool CInGameShopSystem::GetPackageInfo(int iPackageSeq, int iPackageAttrType, OU
                 };
                 iValue = Package.Price;
                 ConvertGold(iValue, szText);
-                mu_swprintf(pszText, L"%ls %ls", szText, Package.PricUnitName);
+                StringCchPrintf(pszText, cchText, L"%ls %ls", szText, Package.PricUnitName);
                 return true;
             }
             break;
             case IGS_PACKAGE_ATT_TYPE_ITEMCODE: {
                 iValue     = _wtoi(Package.InGamePackageID);
-                pszText[0] = '\0';
+                pszText[0] = L'\0';
                 return true;
             }
             break;
             default: {
                 iValue     = 0;
-                pszText[0] = '\0';
+                pszText[0] = L'\0';
             }
             break;
         }
@@ -600,49 +636,82 @@ bool CInGameShopSystem::GetPackageInfo(int iPackageSeq, int iPackageAttrType, OU
 }
 
 bool CInGameShopSystem::GetProductInfoFromPriceSeq(int iProductSeq, int iPriceSeq, int iAttrType, OUT int& iValue,
-                                                   OUT wchar_t* pszUnitName)
+                                                   OUT wchar_t* pszUnitName, size_t cchUnitName)
 {
+    if (!pszUnitName || cchUnitName == 0)
+    {
+        iValue = -1;
+        return false;
+    }
+
+    if (!m_pProductList)
+    {
+        iValue         = -1;
+        pszUnitName[0] = L'\0';
+        return false;
+    }
+
     CShopProduct Product;
 
     m_pProductList->SetPriceSeqFirst(iProductSeq, iPriceSeq);
 
     while (m_pProductList->GetPriceSeqNext(Product))
     {
-        if (GetProductInfo(&Product, iAttrType, iValue, pszUnitName) == true)
+        if (GetProductInfo(&Product, iAttrType, iValue, pszUnitName, cchUnitName) == true)
         {
             return true;
         }
     }
 
     iValue         = -1;
-    pszUnitName[0] = '\0';
+    pszUnitName[0] = L'\0';
 
     return false;
 }
 
 bool CInGameShopSystem::GetProductInfoFromProductSeq(int iProductSeq, int iAttrType, OUT int& iValue,
-                                                     OUT wchar_t* pszUnitName)
+                                                     OUT wchar_t* pszUnitName, size_t cchUnitName)
 {
+    if (!pszUnitName || cchUnitName == 0)
+    {
+        iValue = -1;
+        return false;
+    }
+
+    if (!m_pProductList)
+    {
+        iValue         = -1;
+        pszUnitName[0] = L'\0';
+        return false;
+    }
+
     CShopProduct Product;
 
     m_pProductList->SetProductSeqFirst(iProductSeq);
 
     while (m_pProductList->GetProductSeqNext(Product))
     {
-        if (GetProductInfo(&Product, iAttrType, iValue, pszUnitName) == true)
+        if (GetProductInfo(&Product, iAttrType, iValue, pszUnitName, cchUnitName) == true)
         {
             return true;
         }
     }
 
     iValue         = -1;
-    pszUnitName[0] = '\0';
+    pszUnitName[0] = L'\0';
 
     return false;
 }
 
-bool CInGameShopSystem::GetProductInfo(CShopProduct* pProduct, int iAttrType, OUT int& iValue, OUT wchar_t* pszUnitName)
+bool CInGameShopSystem::GetProductInfo(CShopProduct* pProduct, int iAttrType, OUT int& iValue, OUT wchar_t* pszUnitName,
+                                       size_t cchUnitName)
 {
+    if (!pProduct || !pszUnitName || cchUnitName == 0)
+    {
+        iValue = -1;
+        return false;
+    }
+
     switch (iAttrType)
     {
         case IGS_PRODUCT_ATT_TYPE_USE_LIMIT_PERIOD: {
@@ -656,21 +725,21 @@ bool CInGameShopSystem::GetProductInfo(CShopProduct* pProduct, int iAttrType, OU
                         if (iValue >= 86400)
                         {
                             iValue /= 86400;
-                            wcscpy(pszUnitName, I18N::Game::Day);
+                            StringCchCopy(pszUnitName, cchUnitName, I18N::Game::Day);
                         }
                         else if (iValue >= 3600)
                         {
                             iValue /= 3600;
-                            wcscpy(pszUnitName, I18N::Game::Hour);
+                            StringCchCopy(pszUnitName, cchUnitName, I18N::Game::Hour);
                         }
                         else if (iValue >= 60)
                         {
                             iValue /= 60;
-                            wcscpy(pszUnitName, I18N::Game::Minute);
+                            StringCchCopy(pszUnitName, cchUnitName, I18N::Game::Minute);
                         }
                         else
                         {
-                            wcscpy(pszUnitName, I18N::Game::Second);
+                            StringCchCopy(pszUnitName, cchUnitName, I18N::Game::Second);
                         }
                     }
                     break;
@@ -678,16 +747,16 @@ bool CInGameShopSystem::GetProductInfo(CShopProduct* pProduct, int iAttrType, OU
                         if (iValue >= 1440)
                         {
                             iValue /= 1440;
-                            wcscpy(pszUnitName, I18N::Game::Day);
+                            StringCchCopy(pszUnitName, cchUnitName, I18N::Game::Day);
                         }
                         else if (iValue >= 60)
                         {
                             iValue /= 60;
-                            wcscpy(pszUnitName, I18N::Game::Hour);
+                            StringCchCopy(pszUnitName, cchUnitName, I18N::Game::Hour);
                         }
                         else
                         {
-                            wcscpy(pszUnitName, I18N::Game::Minute);
+                            StringCchCopy(pszUnitName, cchUnitName, I18N::Game::Minute);
                         }
                     }
                     break;
@@ -695,16 +764,16 @@ bool CInGameShopSystem::GetProductInfo(CShopProduct* pProduct, int iAttrType, OU
                         if (iValue >= 24)
                         {
                             iValue /= 24;
-                            wcscpy(pszUnitName, I18N::Game::Day);
+                            StringCchCopy(pszUnitName, cchUnitName, I18N::Game::Day);
                         }
                         else
                         {
-                            wcscpy(pszUnitName, I18N::Game::Hour);
+                            StringCchCopy(pszUnitName, cchUnitName, I18N::Game::Hour);
                         }
                     }
                     break;
                     default: {
-                        wcscpy(pszUnitName, pProduct->UnitName);
+                        StringCchCopy(pszUnitName, cchUnitName, pProduct->UnitName);
                     }
                     break;
                 }
@@ -718,7 +787,7 @@ bool CInGameShopSystem::GetProductInfo(CShopProduct* pProduct, int iAttrType, OU
                 (pProduct->PropertySeq == 50) || (pProduct->PropertySeq == 60))
             {
                 iValue = _wtoi(pProduct->Value);
-                wcscpy(pszUnitName, pProduct->UnitName);
+                StringCchCopy(pszUnitName, cchUnitName, pProduct->UnitName);
                 return true;
             }
         }
@@ -728,38 +797,40 @@ bool CInGameShopSystem::GetProductInfo(CShopProduct* pProduct, int iAttrType, OU
                 (pProduct->PropertySeq == 8) || (pProduct->PropertySeq == 9) || (pProduct->PropertySeq == 31))
             {
                 iValue = _wtoi(pProduct->Value);
-                wcscpy(pszUnitName, pProduct->UnitName);
+                StringCchCopy(pszUnitName, cchUnitName, pProduct->UnitName);
                 return true;
             }
         }
         break;
         case IGS_PRODUCT_ATT_TYPE_PRICE: {
-            iValue = pProduct->Price;
-            ConvertGold(pProduct->Price, pszUnitName);
+            wchar_t szGold[MAX_TEXT_LENGTH] = {0};
+            iValue                          = pProduct->Price;
+            ConvertGold(pProduct->Price, szGold);
+            StringCchCopy(pszUnitName, cchUnitName, szGold);
             return true;
         }
         break;
         case IGS_PRODUCT_ATT_TYPE_ITEMCODE: {
             iValue         = _wtoi(pProduct->InGamePackageID);
-            pszUnitName[0] = '\0';
+            pszUnitName[0] = L'\0';
             return true;
         }
         break;
         case IGS_PRODUCT_ATT_TYPE_ITEMNAME: {
             iValue = -1;
-            wcscpy(pszUnitName, pProduct->ProductName);
+            StringCchCopy(pszUnitName, cchUnitName, pProduct->ProductName);
             return true;
         }
         break;
         case IGS_PRODUCT_ATT_TYPE_PRICE_SEQUENCE: {
             iValue         = pProduct->PriceSeq;
-            pszUnitName[0] = '\0';
+            pszUnitName[0] = L'\0';
             return true;
         }
         break;
         default: {
             iValue         = -1;
-            pszUnitName[0] = '\0';
+            pszUnitName[0] = L'\0';
         }
         break;
     }
@@ -811,6 +882,9 @@ void CInGameShopSystem::InitZoneInfo()
     m_mapZoneSeqIndex.clear();
     m_listZoneName.clear();
 
+    if (!m_pCategoryList)
+        return;
+
     m_pCategoryList->SetFirst();
     CShopCategory Zone;
 
@@ -829,6 +903,9 @@ void CInGameShopSystem::InitPackagePerPage(int iPageIndex)
 {
     m_listDisplayPackage.clear();
 
+    if (!m_plistSelectPackage || iPageIndex < 1)
+        return;
+
     type_listPackage::iterator iterlistPackage;
 
     iterlistPackage = m_plistSelectPackage->begin();
@@ -836,6 +913,8 @@ void CInGameShopSystem::InitPackagePerPage(int iPageIndex)
     int iBeginDisplayItemIndex = INGAMESHOP_DISPLAY_ITEMLIST_SIZE * (iPageIndex - 1);
     for (int i = 0; i < iBeginDisplayItemIndex; i++)
     {
+        if (iterlistPackage == m_plistSelectPackage->end())
+            return;
         iterlistPackage++;
     }
 
@@ -869,6 +948,8 @@ int CInGameShopSystem::GetCategorySeqIndexByIndex(int iIndex)
 
     if (GetSizeCategoriesAsSelectedZone() <= 0)
         return INGAMESHOP_ERROR_ZERO_SIZE;
+    if (iIndex < 0)
+        return INGAMESHOP_ERROR_INVALID_INDEX;
 
     m_SelectedZone.SetCategoryFirst();
     for (int i = 0; i <= iIndex; i++)
@@ -885,15 +966,19 @@ int CInGameShopSystem::GetCategorySeqIndexByIndex(int iIndex)
 void CInGameShopSystem::SetCategoryName()
 {
     m_listCategoryName.clear();
+    if (!m_pCategoryList)
+        return;
 
-    int           iCategorySeqIndex;
+    int           iCategorySeqIndex = 0;
     CShopCategory Category;
     m_SelectedZone.SetCategoryFirst();
 
     while (m_SelectedZone.GetCategoryNext(iCategorySeqIndex))
     {
-        m_pCategoryList->GetValueByKey(iCategorySeqIndex, Category);
-        m_listCategoryName.push_back(Category.CategroyName);
+        if (m_pCategoryList->GetValueByKey(iCategorySeqIndex, Category))
+        {
+            m_listCategoryName.push_back(Category.CategroyName);
+        }
     }
 }
 

@@ -26,6 +26,11 @@ class TestF23ReleaseTreeCredentials(unittest.TestCase):
         audit_res = SecurityScanner.audit_connection_settings_xml(self.server_xml)
         self.assertTrue(audit_res["exists"])
         self.assertTrue(audit_res["is_well_formed_xml"])
+        self.assertTrue(audit_res["is_clean"], f"Leaked credentials in server ConnectionSettings.xml: {audit_res.get('leaks')}")
+        android_res = SecurityScanner.audit_connection_settings_xml(self.android_xml)
+        self.assertTrue(android_res["exists"])
+        self.assertTrue(android_res["is_well_formed_xml"])
+        self.assertTrue(android_res["is_clean"], f"Leaked credentials in android ConnectionSettings.xml: {android_res.get('leaks')}")
 
     def test_connection_strings_parsed(self):
         audit_res = SecurityScanner.audit_connection_settings_xml(self.server_xml)

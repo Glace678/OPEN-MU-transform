@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.ChatServer;
 
 using System.Buffers;
+using System.Threading;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.Network;
 using MUnique.OpenMU.Network.Packets;
@@ -94,17 +95,19 @@ internal class ChatClient : IChatClient
 
         int WritePacket()
         {
-            var messageLength = (byte)Encoding.UTF8.GetByteCount(message);
+            Span<byte> utf8Buffer = stackalloc byte[byte.MaxValue];
+            Encoding.UTF8.GetEncoder().Convert(message.AsSpan(), utf8Buffer, true, out _, out var actualByteCount, out _);
+            var messageLength = (byte)actualByteCount;
             var length = ChatMessageRef.GetRequiredSize(messageLength);
             var packet = new ChatMessageRef(connection.Output.GetSpan(length)[..length]);
             packet.SenderIndex = senderId;
             packet.MessageLength = messageLength;
-            Encoding.UTF8.GetBytes(message, packet.Message);
+            utf8Buffer[..actualByteCount].CopyTo(packet.Message);
             MessageEncryptor.Encrypt(packet);
             return length;
         }
 
-        await this._connection.SendAsync(WritePacket).ConfigureAwait(false);
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
@@ -117,12 +120,18 @@ internal class ChatClient : IChatClient
 
         int WritePacket()
         {
-            var length = ChatRoomClientsRef.GetRequiredSize(clients.Count);
+            var clientCount = Math.Min(clients.Count, byte.MaxValue);
+            var length = ChatRoomClientsRef.GetRequiredSize(clientCount);
             var packet = new ChatRoomClientsRef(connection.Output.GetSpan(length)[..length]);
-            packet.ClientCount = (byte)clients.Count;
+            packet.ClientCount = (byte)clientCount;
             int i = 0;
             foreach (var client in clients)
             {
+                if (i >= clientCount)
+                {
+                    break;
+                }
+
                 var clientBlock = packet[i];
                 clientBlock.Index = client.Index;
                 clientBlock.Name = client.Nickname ?? string.Empty;
@@ -132,13 +141,13 @@ internal class ChatClient : IChatClient
             return length;
         }
 
-        await this._connection.SendAsync(WritePacket).ConfigureAwait(false);
+        await connection.SendAsync(WritePacket).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
     public async ValueTask SendChatRoomClientUpdateAsync(byte updatedClientId, string updatedClientName, ChatRoomClientUpdateType updateType)
     {
-        if (this._connection is null || !this._connection.Connected)
+        if (this._connection is not { Connected: true } connection)
         {
             return;
         }
@@ -147,11 +156,11 @@ internal class ChatClient : IChatClient
         {
             if (updateType == ChatRoomClientUpdateType.Joined)
             {
-                await this._connection.SendChatRoomClientJoinedAsync(updatedClientId, updatedClientName).ConfigureAwait(false);
+                await connection.SendChatRoomClientJoinedAsync(updatedClientId, updatedClientName).ConfigureAwait(false);
             }
             else
             {
-                await this._connection.SendChatRoomClientLeftAsync(updatedClientId, updatedClientName).ConfigureAwait(false);
+                await connection.SendChatRoomClientLeftAsync(updatedClientId, updatedClientName).ConfigureAwait(false);
             }
         }
         catch (Exception ex)
@@ -163,25 +172,24 @@ internal class ChatClient : IChatClient
     /// <inheritdoc/>
     public async ValueTask LogOffAsync()
     {
-        if (this._connection is null)
+        var connection = Interlocked.Exchange(ref this._connection, null);
+        if (connection is null)
         {
             this._logger.LogDebug("Client {Nickname} is already disconnected.", this.Nickname);
             return;
         }
 
-        this._logger.LogDebug("Client {Connection} is going to be disconnected.", this._connection);
-        if (this._room != null)
+        connection.PacketReceived -= this.ReadPacketAsync;
+        connection.Disconnected -= this.LogOffAsync;
+        this._logger.LogDebug("Client {Connection} is going to be disconnected.", connection);
+        var room = Interlocked.Exchange(ref this._room, null);
+        if (room != null)
         {
-            await this._room.LeaveAsync(this).ConfigureAwait(false);
-            this._room = null;
+            await room.LeaveAsync(this).ConfigureAwait(false);
         }
 
-        if (this._connection is { } connection)
-        {
-            await connection.DisconnectAsync().ConfigureAwait(false);
-        }
+        await connection.DisconnectAsync().ConfigureAwait(false);
 
-        this._connection = null;
         this.Disconnected?.Invoke(this, EventArgs.Empty);
         this.Disconnected = null;
     }
@@ -204,6 +212,13 @@ internal class ChatClient : IChatClient
             return;
         }
 
+        if (sequence.Length > this._packetBuffer.Length)
+        {
+            this._logger.LogWarning("Chat packet length {Length} exceeds maximum buffer size.", sequence.Length);
+            await this.LogOffAsync().ConfigureAwait(false);
+            return;
+        }
+
         sequence.CopyTo(this._packetBuffer);
         var packet = this._packetBuffer.AsMemory(0, (int)sequence.Length);
         if (this._packetBuffer[0] != Authenticate.HeaderType)
@@ -223,16 +238,16 @@ internal class ChatClient : IChatClient
                 // We did never capture such packets, but they don't seem to be wrong (next is 4), so do nothing.
                 break;
             case 4:
-                if (this._room != null && this.CheckMessage(packet))
+                if (this._room is { } room && this.CheckMessage(packet))
                 {
                     MessageDecryptor.Decrypt(packet.Span);
-                    var message = packet.Span.ExtractString(5, int.MaxValue, Encoding.UTF8);
+                    var message = packet.Span.ExtractString(5, packet.Span[4], Encoding.UTF8);
                     if (this._logger.IsEnabled(LogLevel.Debug))
                     {
                         this._logger.LogDebug("Message received from {Index}: \"{message}\"", this.Index, message);
                     }
 
-                    await this._room.SendMessageAsync(this.Index, message).ConfigureAwait(false);
+                    await room.SendMessageAsync(this.Index, message).ConfigureAwait(false);
                 }
 
                 break;
@@ -257,6 +272,13 @@ internal class ChatClient : IChatClient
 
     private async ValueTask AuthenticateAsync(Memory<byte> packet)
     {
+        if (packet.Length < Authenticate.Length)
+        {
+            this._logger.LogWarning("Authentication packet is too short ({Length} bytes).", packet.Length);
+            await this.LogOffAsync().ConfigureAwait(false);
+            return;
+        }
+
         var roomId = NumberConversionExtensions.MakeWord(packet.Span[4], packet.Span[5]);
         var requestedRoom = this._manager.GetChatRoom(roomId);
         if (requestedRoom is null)
@@ -279,6 +301,14 @@ internal class ChatClient : IChatClient
         if (await requestedRoom.TryJoinAsync(this).ConfigureAwait(false))
         {
             this._room = requestedRoom;
+            if (Volatile.Read(ref this._connection) is null)
+            {
+                var orphanedRoom = Interlocked.Exchange(ref this._room, null);
+                if (orphanedRoom is not null)
+                {
+                    await orphanedRoom.LeaveAsync(this).ConfigureAwait(false);
+                }
+            }
         }
         else
         {

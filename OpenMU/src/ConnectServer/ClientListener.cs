@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.ConnectServer.PacketHandler;
 using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Network;
-using Nito.AsyncEx;
 
 /// <summary>
 /// The listener which is waiting for new connecting clients.
@@ -18,7 +17,7 @@ internal class ClientListener
 {
     private readonly ILoggerFactory _loggerFactory;
     private readonly ILogger<ClientListener> _logger;
-    private readonly AsyncLock _clientListLock = new();
+    private readonly object _clientListLock = new();
     private readonly IConnectServerSettings _connectServerSettings;
     private readonly IPacketHandler<Client> _packetHandler;
     private Listener? _listener;
@@ -48,6 +47,32 @@ internal class ClientListener
     /// Gets the connected clients.
     /// </summary>
     public ICollection<Client> Clients { get; }
+
+    /// <summary>
+    /// Gets the current number of connected clients in a thread-safe manner.
+    /// </summary>
+    public int ConnectedClientCount
+    {
+        get
+        {
+            lock (this._clientListLock)
+            {
+                return this.Clients.Count;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets a thread-safe snapshot of the currently connected clients.
+    /// </summary>
+    /// <returns>The snapshot of connected clients.</returns>
+    public IReadOnlyList<Client> GetClientsSnapshot()
+    {
+        lock (this._clientListLock)
+        {
+            return this.Clients.ToList();
+        }
+    }
 
     /// <summary>
     /// Gets the client socket accept plugins.
@@ -103,13 +128,15 @@ internal class ClientListener
         client.Port = ipEndpoint?.Port ?? 0;
         client.Timeout = this._connectServerSettings.Timeout;
 
-        using (await this._clientListLock.LockAsync().ConfigureAwait(false))
+        int currentCount;
+        lock (this._clientListLock)
         {
             this.Clients.Add(client);
+            currentCount = this.Clients.Count;
         }
 
         client.Connection.Disconnected += async () => await this.OnClientDisconnectAsync(client).ConfigureAwait(false);
-        this._logger.LogDebug("Client connected: {0}, current client count: {1}", connection.EndPoint, this.Clients.Count);
+        this._logger.LogDebug("Client connected: {0}, current client count: {1}", connection.EndPoint, currentCount);
         await client.SendHelloAsync().ConfigureAwait(false);
         _ = Task.Run(() => client.Connection.BeginReceiveAsync());
         this.ConnectedClientsChanged?.Invoke(this, EventArgs.Empty);
@@ -117,17 +144,23 @@ internal class ClientListener
 
     private async ValueTask OnClientDisconnectAsync(Client client)
     {
+        bool removed;
+        lock (this._clientListLock)
+        {
+            removed = this.Clients.Remove(client);
+        }
+
+        if (!removed)
+        {
+            return;
+        }
+
         foreach (var plugin in this.ClientSocketDisconnectPlugins)
         {
             plugin.OnAfterDisconnect(client);
         }
 
         this._logger.LogDebug("Connection to Client {0}:{1} disconnected.", client.Address, client.Port);
-        using (await this._clientListLock.LockAsync().ConfigureAwait(false))
-        {
-            this.Clients.Remove(client);
-        }
-
         this.ConnectedClientsChanged?.Invoke(this, EventArgs.Empty);
     }
 }

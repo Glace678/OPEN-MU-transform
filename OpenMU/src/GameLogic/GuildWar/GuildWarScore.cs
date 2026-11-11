@@ -14,6 +14,8 @@ using System.Threading;
 /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
 public class GuildWarScore : INotifyPropertyChanged
 {
+    private readonly object _scoreLock = new();
+
     private uint _firstGuildScore;
 
     private uint _secondGuildScore;
@@ -64,16 +66,29 @@ public class GuildWarScore : INotifyPropertyChanged
     /// <param name="value">The value.</param>
     public void IncreaseFirstGuildScore(byte value = 1)
     {
-        if (!this.HasEnded)
+        PropertyChangedEventHandler? handler;
+        bool endedNow;
+        lock (this._scoreLock)
         {
-            Interlocked.Add(ref this._firstGuildScore, value);
-            this.RaisePropertyChanged(nameof(this.FirstGuildScore));
             if (this.HasEnded)
             {
+                return;
+            }
+
+            this._firstGuildScore += value;
+            handler = this.PropertyChanged;
+            endedNow = this.HasEnded;
+            if (endedNow)
+            {
                 this.Winners = GuildWarTeam.First;
-                this.RaisePropertyChanged(nameof(this.HasEnded));
                 this.PropertyChanged = null;
             }
+        }
+
+        handler?.Invoke(this, new PropertyChangedEventArgs(nameof(this.FirstGuildScore)));
+        if (endedNow)
+        {
+            handler?.Invoke(this, new PropertyChangedEventArgs(nameof(this.HasEnded)));
         }
     }
 
@@ -83,16 +98,29 @@ public class GuildWarScore : INotifyPropertyChanged
     /// <param name="value">The value.</param>
     public void IncreaseSecondGuildScore(byte value = 1)
     {
-        if (!this.HasEnded)
+        PropertyChangedEventHandler? handler;
+        bool endedNow;
+        lock (this._scoreLock)
         {
-            Interlocked.Add(ref this._secondGuildScore, value);
-            this.RaisePropertyChanged(nameof(this.SecondGuildScore));
             if (this.HasEnded)
             {
+                return;
+            }
+
+            this._secondGuildScore += value;
+            handler = this.PropertyChanged;
+            endedNow = this.HasEnded;
+            if (endedNow)
+            {
                 this.Winners = GuildWarTeam.Second;
-                this.RaisePropertyChanged(nameof(this.HasEnded));
                 this.PropertyChanged = null;
             }
+        }
+
+        handler?.Invoke(this, new PropertyChangedEventArgs(nameof(this.SecondGuildScore)));
+        if (endedNow)
+        {
+            handler?.Invoke(this, new PropertyChangedEventArgs(nameof(this.HasEnded)));
         }
     }
 

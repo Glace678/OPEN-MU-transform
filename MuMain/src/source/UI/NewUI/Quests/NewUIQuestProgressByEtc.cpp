@@ -11,6 +11,8 @@
 
 #include "Core/Utilities/UsefulDef.h"
 
+#include <algorithm>
+
 using namespace SEASON3B;
 
 #define QPE_NPC_MAX_LINE_PER_PAGE 7
@@ -19,8 +21,18 @@ using namespace SEASON3B;
 
 CNewUIQuestProgressByEtc::CNewUIQuestProgressByEtc()
 {
-    m_pNewUIMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
+    m_pNewUIMng        = NULL;
+    m_Pos.x = m_Pos.y  = 0;
+    m_dwCurQuestIndex  = 0;
+    m_nSelNPCPage      = 0;
+    m_nMaxNPCPage      = 0;
+    m_eLowerView       = NON_PLAYER_WORDS_MODE;
+    m_nSelAnswer       = QuestProceedAction::Undefined;
+    m_bRequestComplete = false;
+    m_bCanClick        = false;
+    ::memset(m_aszNPCWords, 0, sizeof(m_aszNPCWords));
+    ::memset(m_aszPlayerWords, 0, sizeof(m_aszPlayerWords));
+    ::memset(m_anAnswerLine, 0, sizeof(m_anAnswerLine));
 }
 
 CNewUIQuestProgressByEtc::~CNewUIQuestProgressByEtc()
@@ -63,10 +75,9 @@ bool CNewUIQuestProgressByEtc::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIQuestProgressByEtc::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -120,7 +131,7 @@ bool CNewUIQuestProgressByEtc::ProcessBtns()
                 m_eLowerView = PLAYER_WORDS_MODE;
         }
         else
-            m_nSelNPCPage = MIN(++m_nSelNPCPage, m_nMaxNPCPage);
+            m_nSelNPCPage = std::min(m_nSelNPCPage + 1, m_nMaxNPCPage);
         ::PlayBuffer(SOUND_CLICK01);
 
         if (m_nSelNPCPage == m_nMaxNPCPage && NON_PLAYER_WORDS_MODE != m_eLowerView)
@@ -132,7 +143,7 @@ bool CNewUIQuestProgressByEtc::ProcessBtns()
     }
     else if (m_btnProgressL.UpdateMouseEvent())
     {
-        m_nSelNPCPage = MAX(--m_nSelNPCPage, 0);
+        m_nSelNPCPage = std::max(m_nSelNPCPage - 1, 0);
         ::PlayBuffer(SOUND_CLICK01);
 
         if (0 == m_nSelNPCPage)
@@ -262,9 +273,11 @@ void CNewUIQuestProgressByEtc::RenderSelTextBlock()
     if (m_nSelAnswer == QuestProceedAction::Undefined)
         return;
 
-    int nBlockPosY = m_Pos.y + 203;
+    int nBlockPosY  = m_Pos.y + 203;
     int i;
     int answerIndex = static_cast<int>(m_nSelAnswer) - 1;
+    if (answerIndex < 0 || answerIndex >= QM_MAX_ANSWER)
+        return;
     for (i = 0; i < answerIndex; ++i)
         nBlockPosY += QPE_TEXT_GAP * m_anAnswerLine[i];
 
@@ -391,7 +404,7 @@ void CNewUIQuestProgressByEtc::SetCurNPCWords()
     if (0 == m_dwCurQuestIndex)
         return;
 
-    ::memset(m_aszNPCWords[0], 0, sizeof(char) * QPE_NPC_LINE_MAX * QPE_WORDS_ROW_MAX);
+    ::memset(m_aszNPCWords, 0, sizeof(m_aszNPCWords));
 
     g_pRenderText->SetFont(g_hFont);
     int nLine = ::DivideStringByPixel(&m_aszNPCWords[0][0], QPE_NPC_LINE_MAX, QPE_WORDS_ROW_MAX,
@@ -409,8 +422,8 @@ void CNewUIQuestProgressByEtc::SetCurPlayerWords()
     if (0 == m_dwCurQuestIndex)
         return;
 
-    ::memset(m_aszPlayerWords[0], 0, sizeof(char) * QPE_PLAYER_LINE_MAX * QPE_WORDS_ROW_MAX);
-    ::memset(m_anAnswerLine, 0, sizeof(int) * QM_MAX_ANSWER);
+    ::memset(m_aszPlayerWords, 0, sizeof(m_aszPlayerWords));
+    ::memset(m_anAnswerLine, 0, sizeof(m_anAnswerLine));
 
     g_pRenderText->SetFont(g_hFont);
 
@@ -418,21 +431,19 @@ void CNewUIQuestProgressByEtc::SetCurPlayerWords()
     const wchar_t* pszAnswer;
     int            nPlayerWordsRow = 0;
     int            i;
-    for (i = 0; i < QM_MAX_ANSWER; ++i)
+    for (i = 0; i < QM_MAX_ANSWER && nPlayerWordsRow < QPE_PLAYER_LINE_MAX; ++i)
     {
-        ::mu_swprintf(szAnswer, L"%d.", i + 1);
+        swprintf_s(szAnswer, _countof(szAnswer), L"%d.", i + 1);
         pszAnswer = g_QuestMng.GetAnswer(m_dwCurQuestIndex, i);
         if (NULL == pszAnswer)
             break;
-        ::wcscat(szAnswer, pszAnswer);
+        wcsncat_s(szAnswer, _countof(szAnswer), pszAnswer, _TRUNCATE);
 
-        m_anAnswerLine[i] =
-            ::DivideStringByPixel(&m_aszPlayerWords[nPlayerWordsRow][0], 2, QPE_WORDS_ROW_MAX, szAnswer, 160, false);
+        const int maxAnswerRows = std::min(2, QPE_PLAYER_LINE_MAX - nPlayerWordsRow);
+        m_anAnswerLine[i]       = ::DivideStringByPixel(&m_aszPlayerWords[nPlayerWordsRow][0], maxAnswerRows,
+                                                        QPE_WORDS_ROW_MAX, szAnswer, 160, false);
 
         nPlayerWordsRow += m_anAnswerLine[i];
-
-        if (QPE_PLAYER_LINE_MAX <= nPlayerWordsRow)
-            break;
     }
 }
 
@@ -447,8 +458,15 @@ void CNewUIQuestProgressByEtc::SetCurRequestReward()
 
     m_RequestRewardListBox.Clear();
 
-    SRequestRewardText aRequestRewardText[13];
+    SRequestRewardText aRequestRewardText[13] = {};
     m_bRequestComplete = g_QuestMng.GetRequestRewardText(aRequestRewardText, 13, m_dwCurQuestIndex);
+
+    const int reqCount         = std::min<int>(pQuestRequestReward->m_byRequestCount, 5);
+    const int genCount         = std::min<int>(pQuestRequestReward->m_byGeneralRewardCount, 5);
+    const int totalRewardCount = std::min<int>(static_cast<int>(pQuestRequestReward->m_byGeneralRewardCount) +
+                                                   static_cast<int>(pQuestRequestReward->m_byRandRewardCount),
+                                               5);
+    const int randCount        = totalRewardCount - genCount;
 
     int i = 0;
     int j, nLoop;
@@ -457,21 +475,22 @@ void CNewUIQuestProgressByEtc::SetCurRequestReward()
     {
         if (0 == j)
         {
-            nLoop = 1 + pQuestRequestReward->m_byRequestCount;
+            nLoop = 1 + reqCount;
         }
-        else if (1 == j && pQuestRequestReward->m_byGeneralRewardCount)
+        else if (1 == j && genCount > 0)
         {
             m_RequestRewardListBox.AddText(g_hFont, 0xffffffff, RT3_SORT_LEFT, L" ");
-            nLoop = 1 + pQuestRequestReward->m_byGeneralRewardCount + i;
+            nLoop = 1 + genCount + i;
         }
-        else if (2 == j && pQuestRequestReward->m_byRandRewardCount)
+        else if (2 == j && randCount > 0)
         {
             m_RequestRewardListBox.AddText(g_hFont, 0xffffffff, RT3_SORT_LEFT, L" ");
-            nLoop = 1 + pQuestRequestReward->m_byRandRewardCount + i;
+            nLoop = 1 + randCount + i;
         }
         else
             nLoop = 0;
 
+        nLoop = std::min<int>(nLoop, static_cast<int>(std::size(aRequestRewardText)));
         for (; i < nLoop; ++i)
             m_RequestRewardListBox.AddText(&aRequestRewardText[i], RT3_SORT_CENTER);
     }

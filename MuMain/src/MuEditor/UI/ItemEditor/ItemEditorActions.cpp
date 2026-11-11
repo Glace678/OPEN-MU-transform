@@ -10,15 +10,56 @@
 #include "imgui.h"
 #include <string>
 #include <sstream>
+#include <cwchar>
 #include "../Console/MuEditorConsoleUI.h"
 
 extern std::wstring g_strSelectedML;
+
+namespace
+{
+std::string EscapeCsvField(const std::string& value, bool forceQuote = false)
+{
+    const bool needsQuotes = forceQuote || value.find_first_of(",\"\r\n") != std::string::npos;
+    if (!needsQuotes)
+        return value;
+
+    std::string out;
+    out.reserve(value.size() + 2);
+    out.push_back('"');
+    for (char ch : value)
+    {
+        if (ch == '"')
+            out.push_back('"');
+        out.push_back(ch);
+    }
+    out.push_back('"');
+    return out;
+}
+}
 
 // ===== HELPER FUNCTIONS =====
 
 void CItemEditorActions::ConvertItemName(char* outBuffer, size_t bufferSize, const wchar_t* name)
 {
-    WideCharToMultiByte(CP_UTF8, 0, name, -1, outBuffer, (int)bufferSize, NULL, NULL);
+    if (!outBuffer || bufferSize == 0)
+        return;
+
+    outBuffer[0] = '\0';
+    if (!name)
+        return;
+
+    const size_t srcLen = wcsnlen(name, MAX_ITEM_NAME);
+    if (srcLen == 0)
+        return;
+
+    const int written = WideCharToMultiByte(CP_UTF8, 0, name, static_cast<int>(srcLen), outBuffer,
+                                            static_cast<int>(bufferSize) - 1, nullptr, nullptr);
+    if (written <= 0)
+    {
+        outBuffer[0] = '\0';
+        return;
+    }
+    outBuffer[written] = '\0';
 }
 
 std::string CItemEditorActions::GetFieldValueAsString(const ITEM_ATTRIBUTE& item, const ItemFieldDescriptor& desc)
@@ -47,8 +88,12 @@ std::string CItemEditorActions::GetFieldValueAsString(const ITEM_ATTRIBUTE& item
             ss << *reinterpret_cast<const int*>(fieldPtr);
             break;
 
+        case EItemFieldType::DWord:
+            ss << *reinterpret_cast<const DWORD*>(fieldPtr);
+            break;
+
         case EItemFieldType::WCharArray: {
-            char buffer[256];
+            char buffer[256] = {};
             ConvertItemName(buffer, sizeof(buffer), reinterpret_cast<const wchar_t*>(fieldPtr));
             ss << buffer;
             break;
@@ -69,7 +114,7 @@ std::string CItemEditorActions::GetCSVHeader()
     ss << "Index";
     for (int i = 0; i < fieldCount; ++i)
     {
-        ss << "," << GetFieldDisplayName(fields[i]);
+        ss << "," << EscapeCsvField(GetFieldDisplayName(fields[i]));
     }
 
     return ss.str();
@@ -104,16 +149,7 @@ std::string CItemEditorActions::ExportItemToCSV(int itemIndex, ITEM_ATTRIBUTE& i
     for (int i = 0; i < fieldCount; ++i)
     {
         ss << ",";
-
-        // Quote strings for CSV
-        if (fields[i].type == EItemFieldType::WCharArray)
-        {
-            ss << "\"" << GetFieldValueAsString(item, fields[i]) << "\"";
-        }
-        else
-        {
-            ss << GetFieldValueAsString(item, fields[i]);
-        }
+        ss << EscapeCsvField(GetFieldValueAsString(item, fields[i]), fields[i].type == EItemFieldType::WCharArray);
     }
 
     return ss.str();

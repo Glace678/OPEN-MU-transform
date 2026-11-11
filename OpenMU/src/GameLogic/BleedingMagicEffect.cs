@@ -14,6 +14,7 @@ public sealed class BleedingMagicEffect : MagicEffect
 {
     private readonly Timer _damageTimer;
     private readonly float _damage;
+    private int _isApplyingDamage;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BleedingMagicEffect"/> class.
@@ -56,6 +57,11 @@ public sealed class BleedingMagicEffect : MagicEffect
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Catching all Exceptions.")]
     private async void OnDamageTimerElapsed(object? sender, ElapsedEventArgs e)
     {
+        if (System.Threading.Interlocked.CompareExchange(ref this._isApplyingDamage, 1, 0) != 0)
+        {
+            return;
+        }
+
         try
         {
             if (!this.Owner.IsAlive || this.IsDisposed || this.IsDisposing || this._damage <= 0)
@@ -68,6 +74,10 @@ public sealed class BleedingMagicEffect : MagicEffect
         catch (Exception ex)
         {
             (this.Owner as ILoggerOwner)?.Logger.LogError(ex, "Error when applying bleeding damage");
+        }
+        finally
+        {
+            System.Threading.Volatile.Write(ref this._isApplyingDamage, 0);
         }
     }
 }

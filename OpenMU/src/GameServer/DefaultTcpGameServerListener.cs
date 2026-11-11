@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.GameServer;
 
 using System.IO.Pipelines;
 using System.Net;
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.GameLogic;
@@ -14,6 +15,7 @@ using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Network;
 using MUnique.OpenMU.Network.PlugIns;
 using MUnique.OpenMU.PlugIns;
+using Nito.AsyncEx;
 
 /// <summary>
 /// A game server listener that listens on a TCP port.
@@ -21,6 +23,8 @@ using MUnique.OpenMU.PlugIns;
 /// </summary>
 public class DefaultTcpGameServerListener : IGameServerListener
 {
+    private static readonly ConditionalWeakTable<IGameServerContext, AsyncLock> ConnectionAcceptLocks = new();
+
     private readonly ILogger<DefaultTcpGameServerListener> _logger;
 
     private readonly GameServerEndpoint _endPoint;
@@ -32,6 +36,7 @@ public class DefaultTcpGameServerListener : IGameServerListener
     private readonly IIpAddressResolver _addressResolver;
     private readonly ILoggerFactory _loggerFactory;
     private Listener? _listener;
+    private bool _isRegistered;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DefaultTcpGameServerListener" /> class.
@@ -78,24 +83,54 @@ public class DefaultTcpGameServerListener : IGameServerListener
 
         var port = this._endPoint.NetworkPort;
         this._logger.LogInformation("Starting Server Listener, port {port}", port);
-        this._listener = new Listener(port, this.CreateDecryptor, this.CreateEncryptor, this._loggerFactory);
-        this._listener.ClientAccepted += this.OnClientAcceptedAsync;
-        this._listener.ClientAccepting += this.OnClientAcceptingAsync;
-        if (this._endPoint.AlternativePublishedPort > 0)
+        var listener = new Listener(port, this.CreateDecryptor, this.CreateEncryptor, this._loggerFactory);
+        listener.ClientAccepted += this.OnClientAcceptedAsync;
+        listener.ClientAccepting += this.OnClientAcceptingAsync;
+        this._listener = listener;
+
+        var resolverSubscribed = false;
+        try
         {
-            port = this._endPoint.AlternativePublishedPort;
-            this._logger.LogWarning("GameServer endpoint of port {0} has registered an alternative public port of {1}.", this._endPoint.NetworkPort, port);
+            listener.Start();
+            var publishedEndPoint = await this.GetPublishedEndpointAsync(logAlternativePort: true).ConfigureAwait(false);
+            this._stateObserver.RegisterGameServer(this._gameServerInfo, publishedEndPoint);
+            this._isRegistered = true;
+
+            if (this._addressResolver is ConfigurableIpResolver configurableIpResolver)
+            {
+                configurableIpResolver.ConfigurationChanged += this.OnResolverConfigurationChanged;
+                resolverSubscribed = true;
+            }
+
+            this._logger.LogInformation("Server listener started.");
         }
-
-        this._stateObserver.RegisterGameServer(this._gameServerInfo, new IPEndPoint(await this._addressResolver.ResolveIPv4Async().ConfigureAwait(false), port));
-
-        if (this._addressResolver is ConfigurableIpResolver configurableIpResolver)
+        catch
         {
-            configurableIpResolver.ConfigurationChanged += this.OnResolverConfigurationChanged;
-        }
+            if (resolverSubscribed && this._addressResolver is ConfigurableIpResolver configurableIpResolver)
+            {
+                configurableIpResolver.ConfigurationChanged -= this.OnResolverConfigurationChanged;
+            }
 
-        this._listener.Start();
-        this._logger.LogInformation("Server listener started.");
+            if (this._isRegistered)
+            {
+                this._isRegistered = false;
+                try
+                {
+                    this._stateObserver.UnregisterGameServer(this._gameServerInfo.Id);
+                }
+                catch (Exception unregisterEx)
+                {
+                    this._logger.LogError(unregisterEx, "Failed to roll back game server registration after start failure.");
+                }
+            }
+
+            listener.ClientAccepted -= this.OnClientAcceptedAsync;
+            listener.ClientAccepting -= this.OnClientAcceptingAsync;
+            listener.Stop();
+            this._listener = null;
+            this.EncryptionFactoryPlugIn = null;
+            throw;
+        }
     }
 
     /// <inheritdoc/>
@@ -107,7 +142,12 @@ public class DefaultTcpGameServerListener : IGameServerListener
         }
 
         var port = this._endPoint.NetworkPort;
-        this._stateObserver.UnregisterGameServer(this._gameServerInfo.Id);
+        if (this._isRegistered)
+        {
+            this._isRegistered = false;
+            this._stateObserver.UnregisterGameServer(this._gameServerInfo.Id);
+        }
+
         this._logger.LogInformation($"Stopping listener on port {port}.");
         if (this._listener is null || !this._listener.IsBound)
         {
@@ -132,16 +172,35 @@ public class DefaultTcpGameServerListener : IGameServerListener
                 return;
             }
 
-            var newAddress = await this._addressResolver.ResolveIPv4Async().ConfigureAwait(false);
+            var publishedEndPoint = await this.GetPublishedEndpointAsync(logAlternativePort: false).ConfigureAwait(false);
+            if (this._listener?.IsBound is not true)
+            {
+                return;
+            }
 
-            var port = this._endPoint.NetworkPort;
-            this._stateObserver.UnregisterGameServer(this._gameServerInfo.Id);
-            this._stateObserver.RegisterGameServer(this._gameServerInfo, new IPEndPoint(newAddress, port));
+            this._stateObserver.RegisterGameServer(this._gameServerInfo, publishedEndPoint);
+            this._isRegistered = true;
         }
         catch (Exception ex)
         {
             this._logger.LogError(ex, "Failed to re-register at game server state observer after the ip resolver has been changed.");
         }
+    }
+
+    private async ValueTask<IPEndPoint> GetPublishedEndpointAsync(bool logAlternativePort)
+    {
+        var port = this._endPoint.NetworkPort;
+        if (this._endPoint.AlternativePublishedPort > 0)
+        {
+            port = this._endPoint.AlternativePublishedPort;
+            if (logAlternativePort)
+            {
+                this._logger.LogWarning("GameServer endpoint of port {0} has registered an alternative public port of {1}.", this._endPoint.NetworkPort, port);
+            }
+        }
+
+        var address = await this._addressResolver.ResolveIPv4Async().ConfigureAwait(false);
+        return new IPEndPoint(address, port);
     }
 
     private IPipelinedEncryptor? CreateEncryptor(PipeWriter arg)
@@ -174,17 +233,50 @@ public class DefaultTcpGameServerListener : IGameServerListener
         var remoteEndPoint = connection.EndPoint as IPEndPoint;
         this.Log(l => l.LogDebug($"Game Client connected, Address {remoteEndPoint}"));
 
-        var remotePlayer = new RemotePlayer(this._gameContext, connection, this.ClientVersion);
-        connection.Disconnected += async () =>
+        var acceptLock = ConnectionAcceptLocks.GetOrCreateValue(this._gameContext);
+        using (await acceptLock.LockAsync().ConfigureAwait(false))
         {
-            await remotePlayer.DisconnectAsync().ConfigureAwait(false);
-            this._stateObserver.CurrentConnectionsChanged(this._gameContext.Id, this._gameContext.PlayerCount);
-        };
+            if (this._listener?.IsBound is not true
+                || this._gameContext.PlayerCount >= this._gameContext.ServerConfiguration.MaximumPlayers)
+            {
+                this.Log(l => l.LogDebug($"Rejecting accepted game client {remoteEndPoint} because the listener stopped or the server reached capacity."));
+                await connection.DisconnectAsync().ConfigureAwait(false);
+                connection.Dispose();
+                return;
+            }
 
-        await this.OnPlayerConnectedAsync(remotePlayer).ConfigureAwait(false);
+            var remotePlayer = new RemotePlayer(this._gameContext, connection, this.ClientVersion);
+            connection.Disconnected += async () =>
+            {
+                try
+                {
+                    await remotePlayer.DisconnectAsync().ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    this._logger.LogError(ex, "Unexpected error while disconnecting remote player {Player}.", remotePlayer);
+                }
+                finally
+                {
+                    try
+                    {
+                        this._stateObserver.CurrentConnectionsChanged(this._gameContext.Id, this._gameContext.PlayerCount);
+                    }
+                    catch (Exception ex)
+                    {
+                        this._logger.LogError(ex, "Unexpected error while updating current connection count.");
+                    }
+                }
+            };
 
-        // we don't want to await the call.
-        _ = Task.Run(connection.BeginReceiveAsync);
+            await this.OnPlayerConnectedAsync(remotePlayer).ConfigureAwait(false);
+        }
+
+        if (connection.Connected)
+        {
+            // we don't want to await the call.
+            _ = Task.Run(connection.BeginReceiveAsync);
+        }
     }
 
     private async ValueTask OnPlayerConnectedAsync(Player player)

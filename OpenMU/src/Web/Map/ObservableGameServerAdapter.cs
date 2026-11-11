@@ -154,26 +154,45 @@ public class ObservableGameServerAdapter : Disposable, IObservableGameServer
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Catching all Exceptions.")]
     private async void OnGameMapCreated(object? sender, GameMap gameMap)
     {
+        GameMapInfoAdapter? map = null;
         try
         {
             lock (this._mapsLock)
             {
-                if (this._gameMapInfos.FirstOrDefault(i => i.Id == gameMap.Id) is not null)
+                if (this.IsDisposed || this._gameMapInfos.Any(i => i.Id == gameMap.Id))
                 {
-                    // we already know this map - should never happen.
                     return;
                 }
             }
 
-            var map = await this.CreateMapAdapterAsync(gameMap).ConfigureAwait(false);
+            map = await this.CreateMapAdapterAsync(gameMap).ConfigureAwait(false);
+            var added = false;
             lock (this._mapsLock)
             {
-                this._gameMapInfos.Add(map);
+                if (!this.IsDisposed && this._gameMapInfos.All(i => i.Id != gameMap.Id))
+                {
+                    this._gameMapInfos.Add(map);
+                    added = true;
+                }
             }
+
+            if (!added)
+            {
+                map.PropertyChanged -= this.OnMapPropertyChanged;
+                map.Dispose();
+                return;
+            }
+
             this.RaisePropertyChanged(nameof(this.Maps));
         }
         catch
         {
+            if (map is not null)
+            {
+                map.PropertyChanged -= this.OnMapPropertyChanged;
+                map.Dispose();
+            }
+
             // must be catched because it's an async void method.
         }
     }

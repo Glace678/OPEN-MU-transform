@@ -12,6 +12,7 @@ import subprocess
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -52,6 +53,8 @@ previous_manifest_bytes = None
 backups = {}
 # Files that did not exist before this run; rollback must remove them again.
 new_files = set()
+server_was_stopped = False
+launcher_started = False
 
 
 def sha256_of(path: Path) -> str:
@@ -67,7 +70,7 @@ def run(cmd):
     subprocess.run([str(part) for part in cmd], check=True)
 
 
-def stop_server():
+def stop_server() -> bool:
     """Kill the launcher and wait (bounded) until its processes are really gone."""
     subprocess.run(
         ["powershell", "-NoProfile", "-Command",
@@ -81,13 +84,18 @@ def stop_server():
              "Get-Process -Name " + ",".join(SERVER_PROCESS_NAMES) + " -ErrorAction SilentlyContinue"],
             capture_output=True, text=True, check=False).stdout.strip()
         if not still_running:
-            return
+            return True
         time.sleep(1)
     print(f"warning: {SERVER_PROCESS_NAMES} still running after {STOP_TIMEOUT_SECONDS}s", file=sys.stderr)
+    return False
 
 
 def wait_for_health():
     """Poll the explicit health probe until it answers 200, so we do not report a false success."""
+    parsed = urllib.parse.urlparse(HEALTH_URL)
+    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        print(f"invalid OPENMU_HEALTH_URL: {HEALTH_URL}", file=sys.stderr)
+        return False
     deadline = time.monotonic() + HEALTH_TIMEOUT_SECONDS
     while time.monotonic() < deadline:
         try:
@@ -109,8 +117,7 @@ def rollback(step):
 
     # A process started from the new binaries must be stopped before restoring;
     # otherwise it keeps running from the rolled-back (possibly locked) files.
-    stack_was_started = step not in {"missing build output", "copying"}
-    if stack_was_started:
+    if launcher_started:
         stop_server()
 
     for dst, backup in reversed(list(backups.items())):
@@ -128,12 +135,14 @@ def rollback(step):
             print(f"could not remove new file {dst}: {error}", file=sys.stderr)
     if previous_manifest_bytes is not None:
         try:
-            MANIFEST.write_bytes(previous_manifest_bytes)
+            tmp_manifest = MANIFEST.with_name(MANIFEST.name + ".rollback.tmp")
+            tmp_manifest.write_bytes(previous_manifest_bytes)
+            os.replace(tmp_manifest, MANIFEST)
             print("restored", MANIFEST)
         except Exception as error:
             print(f"could not restore {MANIFEST}: {error}", file=sys.stderr)
 
-    if stack_was_started:
+    if server_was_stopped and LAUNCHER_EXE.is_file():
         try:
             os.startfile(str(LAUNCHER_EXE))
             print("restarted the launcher with the previous binaries")
@@ -143,20 +152,35 @@ def rollback(step):
     raise SystemExit(1)
 
 
+# 0. Pre-validate build outputs and manifest before stopping the live server.
+missing_sources = [str(BUILD / name) for name in FILES if not (BUILD / name).is_file()]
+if missing_sources:
+    print("missing build output(s):", ", ".join(missing_sources), file=sys.stderr)
+    raise SystemExit(2)
+if not MANIFEST.is_file():
+    print(f"manifest.json not found: {MANIFEST}", file=sys.stderr)
+    raise SystemExit(2)
+
 # 1. Stop the stack.
-stop_server()
+if not stop_server():
+    print("aborting deploy because server processes did not terminate cleanly", file=sys.stderr)
+    raise SystemExit(1)
+server_was_stopped = True
 
 # 2. Copy the new binaries, keeping a timestamped backup of each existing file.
+stamp = time.strftime("%Y%m%d-%H%M%S")
 for name in FILES:
     src = BUILD / name
     dst = SERVER / name
     if not src.exists():
         rollback(f"missing build output {src}")
 
-    stamp = time.strftime("%Y%m%d-%H%M%S")
     if dst.exists():
         backup = dst.with_name(dst.name + f".bak-{stamp}")
-        shutil.copy2(dst, backup)
+        try:
+            shutil.copy2(dst, backup)
+        except Exception:
+            rollback(f"backing up {name}")
         backups[dst] = backup
     else:
         # Brand-new target: rollback must delete it again (nothing to restore).
@@ -175,7 +199,6 @@ try:
 except Exception:
     rollback("reading manifest.json")
 
-stamp = time.strftime("%Y%m%d-%H%M%S")
 backup = MANIFEST.with_name(f"manifest.json.bak-{stamp}")
 try:
     shutil.copy2(MANIFEST, backup)
@@ -206,13 +229,16 @@ except Exception as error:
     rollback(f"updating manifest entries: {error}")
 
 try:
-    MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    tmp_manifest = MANIFEST.with_name(MANIFEST.name + ".tmp")
+    tmp_manifest.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    os.replace(tmp_manifest, MANIFEST)
 except Exception:
     rollback("writing manifest.json")
 
 # 4. Restart the launcher and wait until it actually serves.
 try:
     os.startfile(str(LAUNCHER_EXE))
+    launcher_started = True
 except Exception:
     rollback("starting OpenMU-Local.exe")
 print("launcher started; waiting for the admin panel to answer...")

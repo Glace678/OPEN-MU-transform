@@ -102,17 +102,18 @@ public class SkillListViewPlugIn : ISkillListViewPlugIn
 
         int Write()
         {
-            var size = SkillListUpdateRef.GetRequiredSize(this.SkillList.Count);
+            var count = Math.Min(this.SkillList.Count, byte.MaxValue);
+            var size = SkillListUpdateRef.GetRequiredSize(count);
             var span = connection.Output.GetSpan(size)[..size];
             var packet = new SkillListUpdateRef(span)
             {
-                Count = (byte)this.SkillList.Count,
+                Count = (byte)count,
             };
 
-            for (byte i = 0; i < this.SkillList.Count; i++)
+            for (int i = 0; i < count; i++)
             {
                 var skillEntry = packet[i];
-                skillEntry.SkillIndex = i;
+                skillEntry.SkillIndex = (byte)i;
 
                 var skill = this.SkillList[i];
                 if (skill is not null)
@@ -173,13 +174,18 @@ public class SkillListViewPlugIn : ISkillListViewPlugIn
     /// <returns>The index of the added skill.</returns>
     protected byte AddSkillToList(Skill skill)
     {
-        for (byte i = 0; i < this.SkillList.Count; i++)
+        for (int i = 0; i < this.SkillList.Count && i <= byte.MaxValue; i++)
         {
             if (this.SkillList[i] is null)
             {
                 this.SkillList[i] = skill;
-                return i;
+                return (byte)i;
             }
+        }
+
+        if (this.SkillList.Count > byte.MaxValue)
+        {
+            throw new InvalidOperationException("Skill list exceeded maximum protocol capacity of 256 skills.");
         }
 
         this.SkillList.Add(skill);
@@ -195,7 +201,7 @@ public class SkillListViewPlugIn : ISkillListViewPlugIn
 
         public int GetHashCode(SkillEntry obj)
         {
-            return obj.GetHashCode();
+            return obj.Skill?.GetHashCode() ?? 0;
         }
     }
 }

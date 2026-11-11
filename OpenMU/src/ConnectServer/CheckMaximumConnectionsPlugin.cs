@@ -33,7 +33,7 @@ internal class CheckMaximumConnectionsPlugin : IAfterSocketAcceptPlugin
     public bool OnAfterSocketAccept(Socket socket)
     {
         var maxConnections = this._connectServerSettings.MaxConnections;
-        if (maxConnections <= this._clientListener.Clients.Count)
+        if (maxConnections <= this._clientListener.ConnectedClientCount)
         {
             this._logger.LogWarning("Connection refused from {0}: maximum connections ({1}) reached.", socket.RemoteEndPoint, maxConnections);
             return false;

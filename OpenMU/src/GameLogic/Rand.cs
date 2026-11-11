@@ -103,7 +103,9 @@ public static class Rand
     /// <returns>A random number.</returns>
     public static int NextInt(uint min, uint max)
     {
-        return RandomInstance.Next((int)min, (int)max);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(min, max);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(max, (uint)int.MaxValue);
+        return min == max ? (int)min : (int)RandomInstance.NextInt64(min, max);
     }
 
     /// <summary>
@@ -114,7 +116,8 @@ public static class Rand
     /// <returns>A random number.</returns>
     public static uint NextUInt(uint min, uint max)
     {
-        return (uint)RandomInstance.Next((int)System.Math.Max(min, 0), (int)max);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(min, max);
+        return min == max ? min : (uint)RandomInstance.NextInt64(min, max);
     }
 
     /// <summary>

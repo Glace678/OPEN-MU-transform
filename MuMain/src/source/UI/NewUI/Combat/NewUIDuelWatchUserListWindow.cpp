@@ -8,7 +8,11 @@
 
 using namespace SEASON3B;
 
-CNewUIDuelWatchUserListWindow::CNewUIDuelWatchUserListWindow() {}
+CNewUIDuelWatchUserListWindow::CNewUIDuelWatchUserListWindow()
+{
+    m_pNewUIMng = NULL;
+    m_Pos.x = m_Pos.y = 0;
+}
 
 CNewUIDuelWatchUserListWindow::~CNewUIDuelWatchUserListWindow()
 {
@@ -34,10 +38,9 @@ bool CNewUIDuelWatchUserListWindow::Create(CNewUIManager* pNewUIMng, int x, int 
 
 void CNewUIDuelWatchUserListWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }

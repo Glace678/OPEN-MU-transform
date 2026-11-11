@@ -27,6 +27,24 @@ public static class MobileGmEndpoints
         var group = endpoints.MapGroup("/api/mobile-gm")
             .RequireAuthorization(MobileGmAuthenticationDefaults.Policy);
 
+        // Require an explicit custom header on all state-changing mobile-gm POST requests so
+        // cross-site browser form submissions cannot ride a shared SameSite=Lax cookie when
+        // antiforgery is disabled.
+        group.AddEndpointFilter(async (invocationContext, next) =>
+        {
+            var req = invocationContext.HttpContext.Request;
+            if (HttpMethods.IsPost(req.Method)
+                && !string.Equals(
+                    req.Headers[MobileGmAuthenticationDefaults.ClientHeaderName],
+                    MobileGmAuthenticationDefaults.ClientHeaderValue,
+                    StringComparison.Ordinal))
+            {
+                return Results.Json(new { success = false, error = "missing-client-header" }, statusCode: StatusCodes.Status400BadRequest);
+            }
+
+            return await next(invocationContext).ConfigureAwait(false);
+        });
+
         group.MapGet("/status", async (MobileGmService service) =>
                 Results.Ok(await service.GetStatusAsync().ConfigureAwait(false)));
         group.MapGet("/items", (string? q, MobileGmService service) =>
@@ -62,6 +80,7 @@ public static class MobileGmEndpoints
                 var user = await userManager.FindByNameAsync(loginName).ConfigureAwait(false);
                 if (user is null || user.IsDisabled)
                 {
+                    _ = await Task.Run(() => BCrypt.Net.BCrypt.Verify(password, PublicRegistrationEndpoints.DummyBcryptHash)).ConfigureAwait(false);
                     return Results.Json(new { success = false, error = "invalid-credentials" }, statusCode: StatusCodes.Status401Unauthorized);
                 }
 
@@ -85,9 +104,7 @@ public static class MobileGmEndpoints
                         return Results.Json(new { success = false, twoFactorRequired = true });
                     }
 
-                    var valid = await userManager.VerifyTwoFactorTokenAsync(
-                            user, TokenOptions.DefaultAuthenticatorProvider, code)
-                        .ConfigureAwait(false);
+                    var valid = await AdminLoginService.VerifySecondFactorOrRecoveryCodeAsync(userManager, user, code).ConfigureAwait(false);
                     if (!valid)
                     {
                         await userManager.AccessFailedAsync(user).ConfigureAwait(false);
@@ -106,6 +123,9 @@ public static class MobileGmEndpoints
                     return Results.Json(new { success = false, error = "requires-administrator" }, statusCode: StatusCodes.Status403Forbidden);
                 }
 
+                await AdminLoginService.RecordSuccessfulLoginAsync(userManager, user).ConfigureAwait(false);
+                claims = AdminLoginService.CreateClaims(user, user.IsTwoFactorEnabled);
+
                 var identity = new ClaimsIdentity(
                     claims,
                     CookieAuthenticationDefaults.AuthenticationScheme,
@@ -120,6 +140,7 @@ public static class MobileGmEndpoints
                 return Results.Json(new { success = true });
             })
             .AllowAnonymous()
+            .RequireRateLimiting(MobileGmAuthenticationDefaults.LoginRateLimitPolicy)
             .DisableAntiforgery();
 
         group.MapPost("/logout", async (HttpContext httpContext) =>

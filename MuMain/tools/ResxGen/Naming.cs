@@ -85,7 +85,9 @@ internal static class Naming
     /// Only applied to values that will be emitted in wide groups.
     public static string NormalizePrintfSpecifiersForWide(string s)
     {
-        const string LengthModifiers = "hlLjztI";
+        const string FormatFlags = "-+#0'";
+        const string WidthPrecision = "0123456789.*$";
+        const string LengthModifiers = "hlLjztIw";
         const string Conversions = "cCdiouxXeEfgGaAnpsS";
 
         var sb = new StringBuilder(s.Length + 8);
@@ -134,6 +136,15 @@ internal static class Naming
                 continue;
             }
 
+            if (FormatFlags.IndexOf(ch) >= 0 || WidthPrecision.IndexOf(ch) >= 0)
+            {
+                sb.Append(ch);
+                continue;
+            }
+
+            // Not a valid printf conversion sequence (e.g. "100% sure"): abort format state.
+            inFormat = false;
+            hasLengthModifier = false;
             sb.Append(ch);
         }
         return sb.ToString();
@@ -173,7 +184,14 @@ internal static class Naming
                 default:
                     if (c < 0x20)
                     {
-                        sb.Append(CultureInfo.InvariantCulture, $"\\x{(int)c:x2}");
+                        if (wide)
+                        {
+                            sb.Append(CultureInfo.InvariantCulture, $"\\u{(int)c:x4}");
+                        }
+                        else
+                        {
+                            AppendUtf8Octal(sb, c);
+                        }
                     }
                     else if (c < 0x80)
                     {

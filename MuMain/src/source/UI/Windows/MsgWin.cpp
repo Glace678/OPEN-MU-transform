@@ -48,7 +48,7 @@ void CMsgWin::Create()
         CWin::RegisterButton(&m_aBtn[i]);
     }
 
-    memset(m_aszMsg[0], 0, sizeof(char) * MW_MSG_LINE_MAX * MW_MSG_ROW_MAX);
+    memset(m_aszMsg, 0, sizeof(m_aszMsg));
 
     m_eType         = MWT_NON;
     m_nMsgLine      = 0;
@@ -272,8 +272,10 @@ void CMsgWin::SetMsg(MSG_WIN_TYPE eType, std::wstring lpszMsg, std::wstring lpsz
     }
     else
     {
-        lpszMsg.copy(m_aszMsg[0], MW_MSG_ROW_MAX - 1);
-        lpszMsg2.copy(m_aszMsg[1], MW_MSG_ROW_MAX - 1);
+        const auto len0  = lpszMsg.copy(m_aszMsg[0], MW_MSG_ROW_MAX - 1);
+        m_aszMsg[0][len0] = L'\0';
+        const auto len1  = lpszMsg2.copy(m_aszMsg[1], MW_MSG_ROW_MAX - 1);
+        m_aszMsg[1][len1] = L'\0';
         m_nMsgLine = 2;
     }
 }
@@ -290,7 +292,7 @@ void CMsgWin::PopUp(int nMsgCode, wchar_t* pszMsg)
     switch (m_nMsgCode)
     {
         case MESSAGE_FREE_MSG_NOT_BTN:
-            lpszMsg = pszMsg;
+            lpszMsg = pszMsg ? pszMsg : L"";
             eType   = MWT_NON;
             break;
         case MESSAGE_GAME_END_COUNTDOWN:
@@ -382,6 +384,11 @@ void CMsgWin::PopUp(int nMsgCode, wchar_t* pszMsg)
             lpszMsg = szTempMsg;
             break;
         case MESSAGE_DELETE_CHARACTER_CONFIRM:
+            if (SelectedHero < 0 || SelectedHero >= MAX_CHARACTERS_CLIENT)
+            {
+                m_nMsgCode = -1;
+                return;
+            }
             mu_swprintf(szTempMsg, I18N::Game::WouldYouLikeToDeleteSCharacter, CharactersClient[SelectedHero].ID);
             lpszMsg = szTempMsg;
             eType   = MWT_BTN_BOTH;
@@ -398,8 +405,11 @@ void CMsgWin::PopUp(int nMsgCode, wchar_t* pszMsg)
             lpszMsg = I18N::Game::ThePasswordYouHaveEnteredIsIncorrect;
             break;
         case MESSAGE_DELETE_CHARACTER_SUCCESS:
-            CharactersClient[SelectedHero].Object.Live = false;
-            DeleteMount(&CharactersClient[SelectedHero].Object);
+            if (SelectedHero >= 0 && SelectedHero < MAX_CHARACTERS_CLIENT)
+            {
+                CharactersClient[SelectedHero].Object.Live = false;
+                DeleteMount(&CharactersClient[SelectedHero].Object);
+            }
             SelectedHero = -1;
             rUIMng.m_CharSelMainWin.UpdateDisplay();
             rUIMng.m_CharInfoBalloonMng.UpdateDisplay();
@@ -516,7 +526,9 @@ void CMsgWin::RequestDeleteCharacter()
         g_pSinglePasswdInputBox->SetText(NULL);
         g_pSinglePasswdInputBox->SetState(UISTATE_HIDE);
     }
-    InputEnable          = false;
+    InputEnable = false;
+    if (SelectedHero < 0 || SelectedHero >= MAX_CHARACTERS_CLIENT)
+        return;
     CurrentProtocolState = REQUEST_DELETE_CHARACTER;
     SocketClient->ToGameServer()->SendDeleteCharacter(CharactersClient[SelectedHero].ID, InputText[0]);
 }

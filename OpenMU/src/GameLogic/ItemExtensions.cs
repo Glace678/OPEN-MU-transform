@@ -274,30 +274,51 @@ public static class ItemExtensions
             right = null;
         }
 
-        var random = Rand.NextInt(3, 6);
-        var result = left ?? right ?? pendant;
-        if (result is null)
+        var count = 0;
+        if (left is not null)
+        {
+            count++;
+        }
+
+        if (right is not null && !ReferenceEquals(right, left))
+        {
+            count++;
+        }
+        else
+        {
+            right = null;
+        }
+
+        if (pendant is not null)
+        {
+            count++;
+        }
+
+        if (count == 0)
         {
             return null;
         }
 
-        switch (random % 3)
+        var selectedIndex = Rand.NextInt(0, count);
+        if (left is not null)
         {
-            case 0 when left is { }:
-                result = left;
-                break;
-            case 1 when right is { }:
-                result = right;
-                break;
-            case 2 when pendant is { }:
-                result = pendant;
-                break;
-            default:
-                // keep first available result
-                break;
+            if (selectedIndex == 0)
+            {
+                return left;
+            }
+
+            selectedIndex--;
         }
 
-        return result;
+        if (right is not null)
+        {
+            if (selectedIndex == 0)
+            {
+                return right;
+            }
+        }
+
+        return pendant;
     }
 
     /// <summary>

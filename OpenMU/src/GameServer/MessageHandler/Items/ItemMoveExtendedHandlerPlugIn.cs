@@ -32,6 +32,11 @@ internal class ItemMoveExtendedHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < ItemMoveRequestExtended.Length)
+        {
+            return;
+        }
+
         ItemMoveRequestExtended message = packet;
 
         // we don't transmit the item binary data anymore in this extended message.

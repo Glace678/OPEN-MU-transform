@@ -4,6 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
+- main
 - master
 
 pool:
@@ -18,7 +19,7 @@ steps:
   inputs:
     version: 10.0.x
     performMultiLevelLookup: true
-    includePreviewVersions: true # Required for preview versions
+    includePreviewVersions: false
 
 - script: dotnet restore MUnique.OpenMU.sln
   workingDirectory: src

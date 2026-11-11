@@ -20,6 +20,9 @@ SEASON3B::CNewUIManager::~CNewUIManager()
 
 void SEASON3B::CNewUIManager::AddUIObj(DWORD dwKey, CNewUIObj* pUIObj)
 {
+    if (NULL == pUIObj)
+        return;
+
     auto mi = m_mapUI.find(dwKey);
     if (mi == m_mapUI.end())
     {
@@ -33,7 +36,12 @@ void SEASON3B::CNewUIManager::RemoveUIObj(DWORD dwKey)
     auto mi = m_mapUI.find(dwKey);
     if (mi != m_mapUI.end())
     {
-        auto vi = std::find(m_vecUI.begin(), m_vecUI.end(), (*mi).second);
+        CNewUIObj* pRemoved = (*mi).second;
+        if (m_pActiveMouseUIObj == pRemoved)
+            m_pActiveMouseUIObj = NULL;
+        if (m_pActiveKeyUIObj == pRemoved)
+            m_pActiveKeyUIObj = NULL;
+        auto vi = std::find(m_vecUI.begin(), m_vecUI.end(), pRemoved);
         if (vi != m_vecUI.end())
         {
             m_vecUI.erase(vi);
@@ -44,6 +52,11 @@ void SEASON3B::CNewUIManager::RemoveUIObj(DWORD dwKey)
 
 void SEASON3B::CNewUIManager::RemoveUIObj(CNewUIObj* pUIObj)
 {
+    if (m_pActiveMouseUIObj == pUIObj)
+        m_pActiveMouseUIObj = NULL;
+    if (m_pActiveKeyUIObj == pUIObj)
+        m_pActiveKeyUIObj = NULL;
+
     auto mi = m_mapUI.begin();
     for (; mi != m_mapUI.end(); mi++)
     {
@@ -63,6 +76,7 @@ void SEASON3B::CNewUIManager::RemoveUIObj(CNewUIObj* pUIObj)
 
 void SEASON3B::CNewUIManager::RemoveAllUIObjs()
 {
+    ResetActiveUIObj();
 #if defined(_DEBUG)
 
     {
@@ -111,27 +125,20 @@ bool SEASON3B::CNewUIManager::UpdateMouseEvent()
     auto vecUI = m_vecUI;
 
     auto vi = vecUI.begin();
-    vi      = vecUI.begin();
     for (; vi != vecUI.end(); vi++)
     {
-        if ((*vi)->IsVisible())
-        {
-            CNewUIObj* obj_backup = (*vi);
-            bool       bResult    = (*vi)->UpdateMouseEvent();
+        CNewUIObj* obj_backup = (*vi);
+        if (obj_backup == NULL || std::find(m_vecUI.begin(), m_vecUI.end(), obj_backup) == m_vecUI.end())
+            continue;
 
-            auto vi2 = std::find(vecUI.begin(), vecUI.end(), obj_backup);
-            if (vi2 != vecUI.end())
-            {
-                vi = vi2;
-            }
-            else
-            {
-                break;
-            }
+        if (obj_backup->IsVisible())
+        {
+            bool bResult = obj_backup->UpdateMouseEvent();
 
             if (bResult == false)
             {
-                m_pActiveMouseUIObj = *vi;
+                if (std::find(m_vecUI.begin(), m_vecUI.end(), obj_backup) != m_vecUI.end())
+                    m_pActiveMouseUIObj = obj_backup;
                 return false;
             }
         }
@@ -158,7 +165,11 @@ bool SEASON3B::CNewUIManager::UpdateKeyEvent()
     auto vi = vecUI.begin();
     for (; vi != vecUI.end(); vi++)
     {
-        HWND hRelatedWnd = (*vi)->GetRelatedWnd();
+        CNewUIObj* pUIObj = (*vi);
+        if (pUIObj == NULL || std::find(m_vecUI.begin(), m_vecUI.end(), pUIObj) == m_vecUI.end())
+            continue;
+
+        HWND hRelatedWnd = pUIObj->GetRelatedWnd();
         if (NULL == hRelatedWnd)
         {
             hRelatedWnd = g_hWnd;
@@ -166,11 +177,12 @@ bool SEASON3B::CNewUIManager::UpdateKeyEvent()
 
         HWND hWnd = hFocus;
 
-        if ((*vi)->IsEnabled() && hWnd == hRelatedWnd)
+        if (pUIObj->IsEnabled() && hWnd == hRelatedWnd)
         {
-            if (false == (*vi)->UpdateKeyEvent())
+            if (false == pUIObj->UpdateKeyEvent())
             {
-                m_pActiveKeyUIObj = (*vi);
+                if (std::find(m_vecUI.begin(), m_vecUI.end(), pUIObj) != m_vecUI.end())
+                    m_pActiveKeyUIObj = pUIObj;
                 return false;  //. stop calling UpdateKeyEvent functions
             }
         }
@@ -181,13 +193,18 @@ bool SEASON3B::CNewUIManager::UpdateKeyEvent()
 bool SEASON3B::CNewUIManager::Update()
 {
     std::sort(m_vecUI.begin(), m_vecUI.end(), CompareLayerDepth);
+    auto vecUI = m_vecUI;
 
-    auto vi = m_vecUI.begin();
-    for (; vi != m_vecUI.end(); vi++)
+    auto vi = vecUI.begin();
+    for (; vi != vecUI.end(); vi++)
     {
-        if ((*vi)->IsEnabled())
+        CNewUIObj* pUIObj = (*vi);
+        if (pUIObj == NULL || std::find(m_vecUI.begin(), m_vecUI.end(), pUIObj) == m_vecUI.end())
+            continue;
+
+        if (pUIObj->IsEnabled())
         {
-            if (false == (*vi)->Update())
+            if (false == pUIObj->Update())
             {
                 return false;  //. stop calling Update functions
             }
@@ -205,9 +222,13 @@ bool SEASON3B::CNewUIManager::Render()
     auto vi = vecUI.begin();
     for (; vi != vecUI.end(); vi++)
     {
-        if ((*vi)->IsVisible())
+        CNewUIObj* pUIObj = (*vi);
+        if (pUIObj == NULL || std::find(m_vecUI.begin(), m_vecUI.end(), pUIObj) == m_vecUI.end())
+            continue;
+
+        if (pUIObj->IsVisible())
         {
-            (*vi)->Render();
+            pUIObj->Render();
         }
     }
 
@@ -266,14 +287,20 @@ void SEASON3B::CNewUIManager::ShowAllInterfaces(bool bShow /* = true*/)
 {
     auto mi = m_mapUI.begin();
     for (; mi != m_mapUI.end(); mi++)
-        (*mi).second->Show(bShow);
+    {
+        if ((*mi).second)
+            (*mi).second->Show(bShow);
+    }
 }
 
 void SEASON3B::CNewUIManager::EnableAllInterfaces(bool bEnable /* = true*/)
 {
     auto mi = m_mapUI.begin();
     for (; mi != m_mapUI.end(); mi++)
-        (*mi).second->Show(bEnable);
+    {
+        if ((*mi).second)
+            (*mi).second->Enable(bEnable);
+    }
 }
 
 bool SEASON3B::CNewUIManager::CompareLayerDepth(INewUIBase* pObj1, INewUIBase* pObj2)

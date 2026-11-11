@@ -18,13 +18,32 @@ std::set<CSprite*> CSprite::s_registry;
 
 CSprite::CSprite()
 {
+    m_fScrHeight = (float)REFERENCE_HEIGHT;
+    m_pTexture   = NULL;
+    m_nTexID     = -1;
+    m_fOrgWidth  = 0.0f;
+    m_fOrgHeight = 0.0f;
+    ::memset(m_aScrCoord, 0, sizeof(m_aScrCoord));
+    ::memset(m_aTexCoord, 0, sizeof(m_aTexCoord));
+    m_fDatumX = m_fDatumY = 0.0f;
+    m_byAlpha = m_byRed = m_byGreen = m_byBlue = 255;
+
+    m_nMaxFrame      = 0;
+    m_nNowFrame      = -1;
+    m_nStartFrame    = -1;
+    m_nEndFrame      = -1;
     m_aFrameTexCoord = NULL;
-    m_pTexture       = NULL;
+    m_bRepeat        = false;
+    m_dDelayTime     = 0.0;
+    m_dDeltaTickSum  = 0.0;
 
     m_fArtScaleX = m_fArtScaleY = 1.0f;
     m_fScaleX = m_fScaleY = 1.0f;
     m_fArtPosX = m_fArtPosY = 0.0f;
     m_fArtWidth = m_fArtHeight = 0.0f;
+    m_bTile                    = false;
+    m_nSizingDatums            = SPR_SIZING_DATUMS_LT;
+    m_bShow                    = false;
 
     s_registry.insert(this);
 }
@@ -66,8 +85,8 @@ void CSprite::Create(int nOrgWidth, int nOrgHeight, int nTexID, int nMaxFrame, S
     m_nTexID     = nTexID;
     m_pTexture   = Bitmaps.FindTexture(m_nTexID);
 
-    m_fArtScaleX = fScaleX;
-    m_fArtScaleY = fScaleY;
+    m_fArtScaleX = (fScaleX != 0.0f) ? fScaleX : 1.0f;
+    m_fArtScaleY = (fScaleY != 0.0f) ? fScaleY : 1.0f;
     m_fScaleX    = m_fArtScaleX * ResolutionScaleX();
     m_fScaleY    = m_fArtScaleY * ResolutionScaleY();
 
@@ -90,7 +109,7 @@ void CSprite::Create(int nOrgWidth, int nOrgHeight, int nTexID, int nMaxFrame, S
 
     m_nNowFrame = -1;
 
-    if (-1 < m_nTexID)
+    if (-1 < m_nTexID && m_pTexture != nullptr && m_pTexture->Width > 0.0f && m_pTexture->Height > 0.0f)
     {
         m_aTexCoord[LT].fTU = 0.5f / m_pTexture->Width;
         m_aTexCoord[LT].fTV = 0.5f / m_pTexture->Height;
@@ -230,18 +249,19 @@ void CSprite::SetSizeArt(float fWidth, float fHeight, CHANGE_PRAM eChangedPram)
 
 void CSprite::ApplyArtSize(float fWidth, float fHeight, CHANGE_PRAM eChangedPram, bool bAdjustTexCoords)
 {
+    const bool hasValidTex = (m_pTexture != nullptr && m_pTexture->Width > 0.0f && m_pTexture->Height > 0.0f);
     if (eChangedPram & X)
     {
         if (IS_SIZING_DATUMS_R(m_nSizingDatums))
         {
             m_aScrCoord[LT].fX = m_aScrCoord[LB].fX = m_aScrCoord[RT].fX - fWidth;
-            if (bAdjustTexCoords && m_bTile)
+            if (bAdjustTexCoords && m_bTile && hasValidTex)
                 m_aTexCoord[LT].fTU = m_aTexCoord[LB].fTU = m_aTexCoord[RT].fTU - fWidth / m_pTexture->Width;
         }
         else
         {
             m_aScrCoord[RT].fX = m_aScrCoord[RB].fX = m_aScrCoord[LT].fX + fWidth;
-            if (bAdjustTexCoords && m_bTile)
+            if (bAdjustTexCoords && m_bTile && hasValidTex)
                 m_aTexCoord[RT].fTU = m_aTexCoord[RB].fTU = fWidth / m_pTexture->Width;
         }
     }
@@ -250,13 +270,13 @@ void CSprite::ApplyArtSize(float fWidth, float fHeight, CHANGE_PRAM eChangedPram
         if (IS_SIZING_DATUMS_B(m_nSizingDatums))
         {
             m_aScrCoord[LT].fY = m_aScrCoord[RT].fY = m_aScrCoord[LB].fY + fHeight;
-            if (bAdjustTexCoords && m_bTile)
+            if (bAdjustTexCoords && m_bTile && hasValidTex)
                 m_aTexCoord[LT].fTV = m_aTexCoord[RT].fTV = m_aTexCoord[LB].fTV - fHeight / m_pTexture->Height;
         }
         else
         {
             m_aScrCoord[LB].fY = m_aScrCoord[RB].fY = m_aScrCoord[LT].fY - fHeight;
-            if (bAdjustTexCoords && m_bTile)
+            if (bAdjustTexCoords && m_bTile && hasValidTex)
                 m_aTexCoord[LB].fTV = m_aTexCoord[RB].fTV = fHeight / m_pTexture->Height;
         }
     }

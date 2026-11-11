@@ -29,7 +29,7 @@ public class ChainLightningSkillPlugIn : IAreaSkillPlugIn
     {
         bool FilterTarget(IAttackable attackable)
         {
-            if (!attackable.IsAlive)
+            if (!attackable.IsAlive || attackable.IsAtSafezone() || attackable == attacker)
             {
                 return false;
             }
@@ -52,9 +52,10 @@ public class ChainLightningSkillPlugIn : IAreaSkillPlugIn
                 return true;
             }
 
-            if (attackable is Player { GuildWarContext.State: GuildWarState.Started } guildWarTarget
-                && attacker is Player { GuildWarContext.State: GuildWarState.Started } guildWarAttacker
-                && guildWarTarget.GuildWarContext == guildWarAttacker.GuildWarContext)
+            if (attackable is Player { GuildWarContext: { State: GuildWarState.Started } targetWarContext }
+                && attacker is Player { GuildWarContext: { State: GuildWarState.Started } attackerWarContext }
+                && targetWarContext.Score == attackerWarContext.Score
+                && targetWarContext.Team != attackerWarContext.Team)
             {
                 return true;
             }
@@ -62,7 +63,12 @@ public class ChainLightningSkillPlugIn : IAreaSkillPlugIn
             return false;
         }
 
-        var secondTarget = target.CurrentMap?.GetAttackablesInRange(target.Position, 2).FirstOrDefault(FilterTarget) ?? target;
+        if (skillEntry.Skill is not { } skill)
+        {
+            return;
+        }
+
+        var secondTarget = target.CurrentMap?.GetAttackablesInRange(target.Position, 2).Where(FilterTarget).FirstOrDefault(t => t != target) ?? target;
         var thirdTarget = secondTarget.CurrentMap?.GetAttackablesInRange(secondTarget.Position, 2).Where(FilterTarget).FirstOrDefault(t => t != secondTarget && t != target) ?? secondTarget;
 
         var observable = attacker as IObservable;
@@ -71,21 +77,50 @@ public class ChainLightningSkillPlugIn : IAreaSkillPlugIn
             return;
         }
 
-        await observable.ForEachWorldObserverAsync<IShowChainLightningPlugIn>(o => o.ShowLightningChainAnimationAsync(attacker, skillEntry.Skill!, [target, secondTarget, thirdTarget]), true).ConfigureAwait(false);
+        await observable.ForEachWorldObserverAsync<IShowChainLightningPlugIn>(o => o.ShowLightningChainAnimationAsync(attacker, skill, [target, secondTarget, thirdTarget]), true).ConfigureAwait(false);
+
+        var expectedMap = target.CurrentMap;
+        static bool CanHitDeferredTarget(IAttacker currentAttacker, IAttackable deferredTarget, GameMap? map)
+        {
+            if (map is null || deferredTarget.CurrentMap != map || !deferredTarget.IsAlive || !deferredTarget.IsActive() || deferredTarget.IsAtSafezone())
+            {
+                return false;
+            }
+
+            if (currentAttacker is Player attackerPlayer)
+            {
+                return attackerPlayer.IsAlive && attackerPlayer.IsActive() && !attackerPlayer.IsAtSafezone() && attackerPlayer.CurrentMap == map;
+            }
+
+            return currentAttacker is not IAttackable attackableAttacker || (attackableAttacker.IsAlive && attackableAttacker.IsActive() && attackableAttacker.CurrentMap == map);
+        }
 
         _ = Task.Run(async () =>
         {
-            await Task.Delay(300).ConfigureAwait(false);
+            try
+            {
+                await Task.Delay(300).ConfigureAwait(false);
 
-            // first attack 70 %
-            var hit2Info = await secondTarget.AttackByAsync(attacker, skillEntry, false, 0.7).ConfigureAwait(false);
-            await secondTarget.TryApplyElementalEffectsAsync(attacker, skillEntry, hit2Info).ConfigureAwait(false);
+                // first attack 70 %
+                if (CanHitDeferredTarget(attacker, secondTarget, expectedMap))
+                {
+                    var hit2Info = await secondTarget.AttackByAsync(attacker, skillEntry, false, 0.7).ConfigureAwait(false);
+                    await secondTarget.TryApplyElementalEffectsAsync(attacker, skillEntry, hit2Info).ConfigureAwait(false);
+                }
 
-            await Task.Delay(300).ConfigureAwait(false);
+                await Task.Delay(300).ConfigureAwait(false);
 
-            // second attack 50%
-            var hit3Info = await thirdTarget.AttackByAsync(attacker, skillEntry, false, 0.5).ConfigureAwait(false);
-            await thirdTarget.TryApplyElementalEffectsAsync(attacker, skillEntry, hit3Info).ConfigureAwait(false);
+                // second attack 50%
+                if (CanHitDeferredTarget(attacker, thirdTarget, expectedMap))
+                {
+                    var hit3Info = await thirdTarget.AttackByAsync(attacker, skillEntry, false, 0.5).ConfigureAwait(false);
+                    await thirdTarget.TryApplyElementalEffectsAsync(attacker, skillEntry, hit3Info).ConfigureAwait(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                (attacker as Player)?.Logger.LogError(ex, "Unexpected error during Chain Lightning deferred hits.");
+            }
         });
     }
 }

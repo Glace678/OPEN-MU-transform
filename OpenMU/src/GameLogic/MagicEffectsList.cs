@@ -15,7 +15,6 @@ using Nito.AsyncEx;
 public class MagicEffectsList : AsyncDisposable
 {
     private const byte InvisibleEffectStartIndex = 200;
-    private readonly BitArray _contains = new(0x100);
     private readonly IAttackable _owner;
     private readonly AsyncLock _addLock = new();
 
@@ -55,7 +54,16 @@ public class MagicEffectsList : AsyncDisposable
     /// <summary>
     /// Gets the active visible effect ids.
     /// </summary>
-    public IList<MagicEffect> VisibleEffects => this._activeEffects.Values.Where(me => me.Definition.InformObservers).ToList();
+    public IList<MagicEffect> VisibleEffects
+    {
+        get
+        {
+            using (this._addLock.Lock())
+            {
+                return this._activeEffects.Values.Where(me => me.Definition.InformObservers).ToList();
+            }
+        }
+    }
 
     /// <summary>
     /// Adds the effect and applies the power ups.
@@ -64,9 +72,9 @@ public class MagicEffectsList : AsyncDisposable
     public async ValueTask AddEffectAsync(MagicEffect effect)
     {
         bool added = false;
-        using (await this._addLock.LockAsync())
+        using (await this._addLock.LockAsync().ConfigureAwait(false))
         {
-            if (this._contains[effect.Id])
+            if (this._activeEffects.ContainsKey(effect.Id))
             {
                 this.UpdateEffect(effect);
             }
@@ -74,7 +82,6 @@ public class MagicEffectsList : AsyncDisposable
             {
                 added = true;
                 this._activeEffects.Add(effect.Id, effect);
-                this._contains[effect.Id] = true;
                 foreach (var powerUp in effect.PowerUpElements)
                 {
                     this._owner.Attributes.AddElement(powerUp.Element, powerUp.Target);
@@ -106,9 +113,10 @@ public class MagicEffectsList : AsyncDisposable
     /// </summary>
     public async ValueTask ClearAllEffectsAsync()
     {
-        while (this._activeEffects.Any())
+        var effects = await this.GetActiveEffectsSnapshotAsync().ConfigureAwait(false);
+        foreach (var effect in effects)
         {
-            await this._activeEffects.Values.First().DisposeAsync().ConfigureAwait(false);
+            await effect.DisposeAsync().ConfigureAwait(false);
         }
     }
 
@@ -118,7 +126,7 @@ public class MagicEffectsList : AsyncDisposable
     /// <param name="stat">The stat produced by effect.</param>
     public async ValueTask ClearAllEffectsProducingSpecificStatAsync(AttributeDefinition stat)
     {
-        var effects = this._activeEffects.Values.ToArray();
+        var effects = await this.GetActiveEffectsSnapshotAsync().ConfigureAwait(false);
 
         foreach (var effect in effects)
         {
@@ -134,7 +142,12 @@ public class MagicEffectsList : AsyncDisposable
     /// </summary>
     public async ValueTask ClearEffectsAfterDeathAsync()
     {
-        var effectsToRemove = this._activeEffects.Values.Where(effect => effect.Definition.StopByDeath).ToList();
+        List<MagicEffect> effectsToRemove;
+        using (await this._addLock.LockAsync().ConfigureAwait(false))
+        {
+            effectsToRemove = this._activeEffects.Values.Where(effect => effect.Definition.StopByDeath).ToList();
+        }
+
         foreach (var effect in effectsToRemove)
         {
             await effect.DisposeAsync().ConfigureAwait(false);
@@ -171,15 +184,19 @@ public class MagicEffectsList : AsyncDisposable
 
     private async ValueTask OnEffectTimeOutAsync(MagicEffect effect)
     {
-        using (await this._addLock.LockAsync())
+        effect.EffectTimeOut -= this.OnEffectTimeOutAsync;
+        using (await this._addLock.LockAsync().ConfigureAwait(false))
         {
-            this._activeEffects.Remove(effect.Id);
-            this._contains[effect.Id] = false;
-        }
+            if (!this._activeEffects.TryGetValue(effect.Id, out var currentEffect) || !ReferenceEquals(currentEffect, effect))
+            {
+                return;
+            }
 
-        foreach (var powerUp in effect.PowerUpElements)
-        {
-            this._owner.Attributes.RemoveElement(powerUp.Element, powerUp.Target);
+            this._activeEffects.Remove(effect.Id);
+            foreach (var powerUp in effect.PowerUpElements)
+            {
+                this._owner.Attributes.RemoveElement(powerUp.Element, powerUp.Target);
+            }
         }
 
         if (effect.Id >= InvisibleEffectStartIndex)
@@ -187,10 +204,14 @@ public class MagicEffectsList : AsyncDisposable
             return;
         }
 
-        (this._owner as IWorldObserver)?.InvokeViewPlugInAsync<IDeactivateMagicEffectPlugIn>(p => p.DeactivateMagicEffectAsync(effect, this._owner));
-        if (effect.Definition.InformObservers && this._owner.IsAlive)
+        if (this._owner is IWorldObserver observer)
         {
-            (this._owner as IObservable)?.ForEachWorldObserverAsync<IDeactivateMagicEffectPlugIn>(p => p.DeactivateMagicEffectAsync(effect, this._owner), false);
+            await observer.InvokeViewPlugInAsync<IDeactivateMagicEffectPlugIn>(p => p.DeactivateMagicEffectAsync(effect, this._owner)).ConfigureAwait(false);
+        }
+
+        if (effect.Definition.InformObservers && this._owner.IsAlive && this._owner is IObservable observable)
+        {
+            await observable.ForEachWorldObserverAsync<IDeactivateMagicEffectPlugIn>(p => p.DeactivateMagicEffectAsync(effect, this._owner), false).ConfigureAwait(false);
         }
     }
 

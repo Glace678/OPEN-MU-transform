@@ -7,6 +7,7 @@ namespace MUnique.OpenMU.Web.AdminPanel.Pages;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Persistence;
@@ -68,12 +69,21 @@ public partial class CreateGameServerConfig : ComponentBase, IAsyncDisposable
     [Inject]
     public LoadingOverlayService LoadingService { get; set; } = null!;
 
+    /// <summary>
+    /// Gets or sets the logger.
+    /// </summary>
+    [Inject]
+    public ILogger<CreateGameServerConfig> Logger { get; set; } = null!;
+
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
-        await (this._disposeCts?.CancelAsync() ?? Task.CompletedTask).ConfigureAwait(false);
-        this._disposeCts?.Dispose();
-        this._disposeCts = null;
+        var cts = Interlocked.Exchange(ref this._disposeCts, null);
+        if (cts is not null)
+        {
+            await cts.CancelAsync().ConfigureAwait(false);
+            cts.Dispose();
+        }
 
         try
         {
@@ -93,51 +103,69 @@ public partial class CreateGameServerConfig : ComponentBase, IAsyncDisposable
     protected override async Task OnParametersSetAsync()
     {
         var cts = new CancellationTokenSource();
-        this._disposeCts = cts;
+        var previousCts = Interlocked.Exchange(ref this._disposeCts, cts);
+        if (previousCts is not null)
+        {
+            await previousCts.CancelAsync().ConfigureAwait(false);
+            previousCts.Dispose();
+        }
+
         this._loadTask = Task.Run(() => this.LoadDataAsync(cts.Token), cts.Token);
         await base.OnParametersSetAsync().ConfigureAwait(true);
     }
 
     private async Task LoadDataAsync(CancellationToken cancellationToken)
     {
-        using var loading = this.LoadingService.ShowLoadingIndicator();
-        cancellationToken.ThrowIfCancellationRequested();
-
-        var gameConfiguration = await this.DataSource.GetOwnerAsync(default, cancellationToken).ConfigureAwait(true);
-        using var persistenceContext = this.ContextProvider.CreateNewContext(gameConfiguration);
-
-        var serverConfigs = await persistenceContext.GetAsync<GameServerConfiguration>(cancellationToken).ConfigureAwait(false);
-        var clients = await persistenceContext.GetAsync<GameClientDefinition>(cancellationToken).ConfigureAwait(false);
-        var existingServerDefinitions = (await persistenceContext.GetAsync<GameServerDefinition>(cancellationToken).ConfigureAwait(false)).ToList();
-
-        var nextServerId = 0;
-        var networkPort = 55901;
-        if (existingServerDefinitions.Count > 0)
+        try
         {
-            var usedIds = existingServerDefinitions.Select(s => (int)s.ServerID).ToHashSet();
-            for (int i = 0; i <= byte.MaxValue; i++)
+            using var loading = this.LoadingService.ShowLoadingIndicator();
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var gameConfiguration = await this.DataSource.GetOwnerAsync(default, cancellationToken).ConfigureAwait(true);
+            using var persistenceContext = this.ContextProvider.CreateNewContext(gameConfiguration);
+
+            var serverConfigs = await persistenceContext.GetAsync<GameServerConfiguration>(cancellationToken).ConfigureAwait(false);
+            var clients = await persistenceContext.GetAsync<GameClientDefinition>(cancellationToken).ConfigureAwait(false);
+            var existingServerDefinitions = (await persistenceContext.GetAsync<GameServerDefinition>(cancellationToken).ConfigureAwait(false)).ToList();
+
+            var nextServerId = 0;
+            var networkPort = 55901;
+            if (existingServerDefinitions.Count > 0)
             {
-                if (!usedIds.Contains(i))
+                var usedIds = existingServerDefinitions.Select(s => (int)s.ServerID).ToHashSet();
+                for (int i = 0; i <= byte.MaxValue; i++)
                 {
-                    nextServerId = i;
-                    break;
+                    if (!usedIds.Contains(i))
+                    {
+                        nextServerId = i;
+                        break;
+                    }
                 }
+
+                networkPort = existingServerDefinitions.Max(s => s.Endpoints.FirstOrDefault()?.NetworkPort ?? 55900) + 1;
             }
 
-            networkPort = existingServerDefinitions.Max(s => s.Endpoints.FirstOrDefault()?.NetworkPort ?? 55900) + 1;
+            this._viewModel = new GameServerViewModel
+            {
+                ServerConfiguration = serverConfigs.FirstOrDefault(),
+                ServerId = (byte)nextServerId,
+                ExperienceRate = 1.0f,
+                PvpEnabled = true,
+                NetworkPort = networkPort,
+                Client = clients.FirstOrDefault(),
+            };
+
+            await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
         }
-
-        this._viewModel = new GameServerViewModel
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            ServerConfiguration = serverConfigs.FirstOrDefault(),
-            ServerId = (byte)nextServerId,
-            ExperienceRate = 1.0f,
-            PvpEnabled = true,
-            NetworkPort = networkPort,
-            Client = clients.FirstOrDefault(),
-        };
-
-        await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
+            // Normal cancellation during re-parameterization or disposal.
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "Failed to load defaults for CreateGameServerConfig.");
+            await this.InvokeAsync(() => this.ToastService.ShowError(ex.Message)).ConfigureAwait(false);
+        }
     }
 
     private async ValueTask<GameServerDefinition> CreateDefinitionByViewModelAsync(IContext context)

@@ -27,9 +27,11 @@ class TestF18DevilSquareTicketIndex(unittest.TestCase):
         self.assertFalse(valid)
         self.assertIn("out of inventory bounds", msg)
 
-    def test_zero_index_accepted(self):
+    def test_equipped_slot_zero_index_rejected(self):
+        # DevilSquareEnterHandlerPlugIn.cs:45-47 rejects indices < EquippableSlotsCount (12)
         valid, msg = EconomyEngine.validate_devil_square_ticket_index(0)
-        self.assertTrue(valid)
+        self.assertFalse(valid)
+        self.assertIn("Equipped slot index rejected", msg)
 
 
 if __name__ == "__main__":

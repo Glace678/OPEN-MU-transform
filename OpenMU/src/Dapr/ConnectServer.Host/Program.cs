@@ -26,6 +26,7 @@ metricsRegistry.AddNetworkMeters();
 builder.AddOpenTelemetryMetrics(metricsRegistry);
 
 var app = builder.BuildAndConfigure();
-await app.WaitForDatabaseConnectionInitializationAsync().ConfigureAwait(false);
+_ = app.Services.GetRequiredService<MUnique.OpenMU.Persistence.EntityFramework.IDatabaseConnectionSettingProvider>()
+    .InitializeAsync(app.Lifetime.ApplicationStopping);
 
 app.Run();

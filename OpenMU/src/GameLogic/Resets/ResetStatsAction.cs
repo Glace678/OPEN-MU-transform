@@ -7,6 +7,7 @@ namespace MUnique.OpenMU.GameLogic.Resets;
 using MUnique.OpenMU.GameLogic.NPC;
 using MUnique.OpenMU.GameLogic.PlayerActions;
 using MUnique.OpenMU.GameLogic.Views.Character;
+using MUnique.OpenMU.GameLogic.Views.Inventory;
 using MUnique.OpenMU.GameLogic.Views.Login;
 
 /// <summary>
@@ -31,57 +32,67 @@ public class ResetStatsAction
     /// </summary>
     public async ValueTask ResetStatsAsync()
     {
-        var statResetFeature = this._player.GameContext.FeaturePlugIns.GetPlugIn<StatResetFeaturePlugIn>();
-        if (statResetFeature is null)
+        StatResetConfiguration? completedConfiguration = null;
+        await this._player.RunPersistenceExclusiveAsync(async () =>
         {
-            await this.ShowMessageAsync(nameof(PlayerMessage.StatResetNotEnabled)).ConfigureAwait(false);
+            var statResetFeature = this._player.GameContext.FeaturePlugIns.GetPlugIn<StatResetFeaturePlugIn>();
+            if (statResetFeature is null)
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.StatResetNotEnabled)).ConfigureAwait(false);
+                return;
+            }
+
+            if (this._player.PlayerState.CurrentState != PlayerState.EnteredWorld)
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.CantResetStatsWithOpenedWindows)).ConfigureAwait(false);
+                return;
+            }
+
+            if (this._player.Attributes is null || this._player.SelectedCharacter is null)
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.NotEnteredTheGame)).ConfigureAwait(false);
+                return;
+            }
+
+            var configuration = statResetFeature.Configuration;
+            if (configuration is null)
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.StatResetNotConfigured)).ConfigureAwait(false);
+                return;
+            }
+
+            if (!this._player.IsAtSafezone())
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.CantResetStatsNotInSafezone)).ConfigureAwait(false);
+                return;
+            }
+
+            if (this._player.Level < configuration.RequiredLevel)
+            {
+                await this.ShowMessageAsync(nameof(PlayerMessage.RequiredLevelForStatReset), configuration.RequiredLevel).ConfigureAwait(false);
+                return;
+            }
+
+            if (!await this.TryConsumeCostsAsync(configuration).ConfigureAwait(false))
+            {
+                return;
+            }
+
+            this.ResetAttributes();
+            completedConfiguration = configuration;
+        }).ConfigureAwait(false);
+
+        if (completedConfiguration is null)
+        {
             return;
         }
 
-        if (this._player.PlayerState.CurrentState != PlayerState.EnteredWorld)
-        {
-            await this.ShowMessageAsync(nameof(PlayerMessage.CantResetStatsWithOpenedWindows)).ConfigureAwait(false);
-            return;
-        }
-
-        if (this._player.Attributes is null || this._player.SelectedCharacter is null)
-        {
-            await this.ShowMessageAsync(nameof(PlayerMessage.NotEnteredTheGame)).ConfigureAwait(false);
-            return;
-        }
-
-        var configuration = statResetFeature.Configuration;
-        if (configuration is null)
-        {
-            await this.ShowMessageAsync(nameof(PlayerMessage.StatResetNotConfigured)).ConfigureAwait(false);
-            return;
-        }
-
-        if (!this._player.IsAtSafezone())
-        {
-            await this.ShowMessageAsync(nameof(PlayerMessage.CantResetStatsNotInSafezone)).ConfigureAwait(false);
-            return;
-        }
-
-        if (this._player.Level < configuration.RequiredLevel)
-        {
-            await this.ShowMessageAsync(nameof(PlayerMessage.RequiredLevelForStatReset), configuration.RequiredLevel).ConfigureAwait(false);
-            return;
-        }
-
-        if (!await this.TryConsumeCostsAsync(configuration).ConfigureAwait(false))
-        {
-            return;
-        }
-
-        this.ResetAttributes();
-
-        if (configuration.MoveHome)
+        if (completedConfiguration.MoveHome)
         {
             await this.MoveHomeAsync().ConfigureAwait(false);
         }
 
-        if (configuration.LogOut)
+        if (completedConfiguration.LogOut)
         {
             await this._logoutAction.LogoutAsync(this._player, LogoutType.BackToCharacterSelection).ConfigureAwait(false);
         }
@@ -94,7 +105,7 @@ public class ResetStatsAction
     private void ResetAttributes()
     {
         var selectedCharacter = this._player.SelectedCharacter!;
-        var investedPoints = 0;
+        long investedPoints = 0;
 
         foreach (var statDef in selectedCharacter.CharacterClass!.StatAttributes.Where(s => s.IncreasableByPlayer))
         {
@@ -105,11 +116,11 @@ public class ResetStatsAction
 
             var currentValue = (int)this._player.Attributes![attribute];
             var baseValue = (int)statDef.BaseValue;
-            investedPoints += Math.Max(0, currentValue - baseValue);
+            investedPoints += Math.Max(0, (long)currentValue - baseValue);
             this._player.Attributes[attribute] = baseValue;
         }
 
-        selectedCharacter.LevelUpPoints += investedPoints;
+        selectedCharacter.LevelUpPoints = (int)Math.Min(int.MaxValue, (long)selectedCharacter.LevelUpPoints + investedPoints);
     }
 
     private async ValueTask<bool> TryConsumeCostsAsync(StatResetConfiguration configuration)
@@ -131,7 +142,8 @@ public class ResetStatsAction
             requiredItem = this._player.Inventory.Items
                 .FirstOrDefault(item => item.Definition is { } definition
                                         && definition.Group == requiredDefinition.Group
-                                        && definition.Number == requiredDefinition.Number);
+                                        && definition.Number == requiredDefinition.Number
+                                        && (!item.IsStackable() || item.Durability >= 1));
 
             if (requiredItem is null)
             {
@@ -146,9 +158,29 @@ public class ResetStatsAction
             return false;
         }
 
-        if (requiredItem is not null)
+        try
         {
-            await this._player.DestroyInventoryItemAsync(requiredItem).ConfigureAwait(false);
+            if (requiredItem is not null)
+            {
+                if (requiredItem.IsStackable() && requiredItem.Durability > 1)
+                {
+                    requiredItem.Durability -= 1;
+                    await this._player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(requiredItem, false)).ConfigureAwait(false);
+                }
+                else
+                {
+                    await this._player.DestroyInventoryItemAsync(requiredItem).ConfigureAwait(false);
+                }
+            }
+        }
+        catch
+        {
+            if (configuration.RequiredMoney > 0)
+            {
+                this._player.TryAddMoney(configuration.RequiredMoney);
+            }
+
+            throw;
         }
 
         return true;

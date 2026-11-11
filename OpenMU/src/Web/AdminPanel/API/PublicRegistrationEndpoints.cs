@@ -31,6 +31,10 @@ public static class PublicRegistrationEndpoints
     // The classic login server only accepts 3-10 ASCII letters or digits.
     private static readonly Regex ValidLoginName = new("^[A-Za-z0-9]{3,10}$", RegexOptions.Compiled);
 
+    // Precomputed dummy hash used when an account does not exist so timing and per-IP
+    // lockout behavior stay indistinguishable from an existing account.
+    internal static readonly string DummyBcryptHash = BCrypt.Net.BCrypt.HashPassword("openmu-dummy-password-placeholder");
+
     /// <summary>Maps the public account API without authorization.</summary>
     /// <param name="endpoints">The routes which will receive the account API.</param>
     /// <returns>The supplied builder, to allow further endpoint mappings.</returns>
@@ -244,16 +248,13 @@ public static class PublicRegistrationEndpoints
         {
             using var context = await CreatePlayerContextAsync(configurationContext, persistenceContextProvider).ConfigureAwait(false);
             var account = await context.GetAccountByLoginNameAsync(loginName).ConfigureAwait(false);
-            if (account is null)
+            var targetHash = account?.PasswordHash ?? DummyBcryptHash;
+            var passwordValid = await Task.Run(() => BCrypt.Net.BCrypt.Verify(oldPassword, targetHash)).ConfigureAwait(false);
+            if (account is null || !passwordValid)
             {
-                // Do not count failures for non-existent accounts, otherwise anyone could
-                // lock an arbitrary username for 15 minutes. The response stays identical
-                // so account names cannot be enumerated.
-                return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
-            }
-
-            if (!await Task.Run(() => BCrypt.Net.BCrypt.Verify(oldPassword, account.PasswordHash)).ConfigureAwait(false))
-            {
+                // RegisterFailedAttempt is partitioned by (loginName, client IP), so counting
+                // unknown names only throttles the probing IP while eliminating both the BCrypt
+                // timing oracle and the multi-window lockout-state enumeration oracle.
                 guard.RegisterFailedAttempt(loginName, partitionKey);
                 return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
             }
@@ -353,13 +354,7 @@ public static class PublicRegistrationEndpoints
                 var replacement = await AccountRecoveryService.ResetAsync(credentials, loginName, recoveryCode, newPassword).ConfigureAwait(false);
                 if (replacement is null)
                 {
-                    // Only count it against an existing account; a non-existent account must
-                    // not be lockable by name. The response is identical to avoid enumeration.
-                    if (await credentials.ReadCredentialsAsync(loginName).ConfigureAwait(false) is not null)
-                    {
-                        guard.RegisterFailedAttempt(loginName, partitionKey);
-                    }
-
+                    guard.RegisterFailedAttempt(loginName, partitionKey);
                     return Results.Ok(new AccountRegistrationResponse(false, "invalid_recovery_code", text["InvalidRecoveryCode"].Value));
                 }
 
@@ -443,13 +438,7 @@ public static class PublicRegistrationEndpoints
             var replacement = await AccountRecoveryService.IssueAsync(credentials, loginName, currentPassword).ConfigureAwait(false);
             if (replacement is null)
             {
-                // Only count it against an existing account; a non-existent account must
-                // not be lockable by name. The response is identical to avoid enumeration.
-                if (await credentials.ReadCredentialsAsync(loginName).ConfigureAwait(false) is not null)
-                {
-                    guard.RegisterFailedAttempt(loginName, partitionKey);
-                }
-
+                guard.RegisterFailedAttempt(loginName, partitionKey);
                 return Results.Ok(new AccountRegistrationResponse(false, "bad_credentials", text["BadCredentials"].Value));
             }
 

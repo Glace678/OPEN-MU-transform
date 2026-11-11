@@ -209,7 +209,10 @@ bool SEASON3B::CNewUI3DCamera::UpdateKeyEvent()
     return true;
 }
 
-SEASON3B::CNewUI3DRenderMng::CNewUI3DRenderMng() {}
+SEASON3B::CNewUI3DRenderMng::CNewUI3DRenderMng()
+{
+    m_pNewUIMng = NULL;
+}
 
 SEASON3B::CNewUI3DRenderMng::~CNewUI3DRenderMng()
 {
@@ -218,6 +221,8 @@ SEASON3B::CNewUI3DRenderMng::~CNewUI3DRenderMng()
 
 bool SEASON3B::CNewUI3DRenderMng::Create(CNewUIManager* pNewUIMng)
 {
+    if (NULL == pNewUIMng)
+        return false;
     m_pNewUIMng = pNewUIMng;
     return true;
 }
@@ -225,6 +230,7 @@ bool SEASON3B::CNewUI3DRenderMng::Create(CNewUIManager* pNewUIMng)
 void SEASON3B::CNewUI3DRenderMng::Release()
 {
     RemoveAll3DRenderObjs();
+    m_pNewUIMng = NULL;
 }
 
 void SEASON3B::CNewUI3DRenderMng::UpdateAllCameraDimensions(UINT uiWidth, UINT uiHeight)
@@ -241,6 +247,9 @@ void SEASON3B::CNewUI3DRenderMng::UpdateAllCameraDimensions(UINT uiWidth, UINT u
 void SEASON3B::CNewUI3DRenderMng::Add3DRenderObj(INewUI3DRenderObj* pObj,
                                                  float              fZOrder /* = INFORMATION_CAMERA_Z_ORDER*/)
 {
+    if (NULL == pObj || NULL == m_pNewUIMng)
+        return;
+
     CNewUI3DCamera* pCamera = FindCamera(fZOrder);
     if (NULL == pCamera)
     {
@@ -273,7 +282,8 @@ void SEASON3B::CNewUI3DRenderMng::Remove3DRenderObj(INewUI3DRenderObj* pObj)
         (*li)->Remove3DRenderObj(pObj);
         if ((*li)->IsEmpty())
         {
-            m_pNewUIMng->RemoveUIObj(*li);
+            if (m_pNewUIMng)
+                m_pNewUIMng->RemoveUIObj(*li);
             delete (*li);
             m_listCamera.erase(li);
             break;
@@ -286,8 +296,9 @@ void SEASON3B::CNewUI3DRenderMng::RemoveAll3DRenderObjs()
     auto li = m_listCamera.begin();
     for (; li != m_listCamera.end(); li++)
     {
+        if (m_pNewUIMng)
+            m_pNewUIMng->RemoveUIObj(*li);
         delete (*li);
-        m_pNewUIMng->RemoveUIObj(*li);
     }
     m_listCamera.clear();
 }

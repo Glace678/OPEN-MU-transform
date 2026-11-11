@@ -214,7 +214,12 @@ public class DefaultDropGenerator : IDropGenerator
 
     private static byte GetItemLevelByMonsterLevel(ItemDefinition itemDefinition, int monsterLevel)
     {
-        return Math.Min((byte)((monsterLevel - itemDefinition.DropLevel) / 3), itemDefinition.MaximumItemLevel);
+        if (monsterLevel <= itemDefinition.DropLevel)
+        {
+            return 0;
+        }
+
+        return (byte)Math.Min((monsterLevel - itemDefinition.DropLevel) / 3, itemDefinition.MaximumItemLevel);
     }
 
     private static async ValueTask<IEnumerable<DropItemGroup>> GetQuestItemGroupsAsync(Player player)
@@ -518,7 +523,7 @@ public class DefaultDropGenerator : IDropGenerator
                         .Distinct()
                         .Where(l => l <= this._maxItemOptionLevelDrop)
                         .DefaultIfEmpty(0)
-                        .SelectRandom(),
+                        .SelectRandom(this._randomizer),
                 };
                 item.ItemOptions.Add(itemOptionLink);
             }
@@ -552,7 +557,12 @@ public class DefaultDropGenerator : IDropGenerator
             return;
         }
 
-        var itemOfSet = ancientSet.Items.First(i => object.Equals(i.ItemDefinition, item.Definition));
+        var itemOfSet = ancientSet.Items.FirstOrDefault(i => object.Equals(i.ItemDefinition, item.Definition));
+        if (itemOfSet is null)
+        {
+            return;
+        }
+
         item.ItemSetGroups.Add(itemOfSet);
 
         // For example: +5str or +10str.
@@ -560,7 +570,7 @@ public class DefaultDropGenerator : IDropGenerator
         {
             var bonusOptionLink = new ItemOptionLink();
             bonusOptionLink.ItemOption = bonusOption;
-            bonusOptionLink.Level = bonusOption.LevelDependentOptions.Select(o => o.Level).SelectRandom();
+            bonusOptionLink.Level = bonusOption.LevelDependentOptions.Select(o => o.Level).DefaultIfEmpty(0).SelectRandom(this._randomizer);
             item.ItemOptions.Add(bonusOptionLink);
         }
     }
@@ -582,28 +592,30 @@ public class DefaultDropGenerator : IDropGenerator
             if (i == 0)
             {
                 // The first option is always added without a chance
-                var newOption = excellentOptions.PossibleOptions.SelectRandom(this._randomizer);
-                if (newOption is not null)
+                var newOption = excellentOptions.PossibleOptions
+                    .Where(possibleOption => item.ItemOptions.All(o => !object.Equals(o.ItemOption, possibleOption)))
+                    .SelectRandom(this._randomizer);
+                if (newOption is null)
                 {
-                    item.ItemOptions.Add(new ItemOptionLink { ItemOption = newOption });
-                    existingOptionCount++;
+                    break;
                 }
 
+                item.ItemOptions.Add(new ItemOptionLink { ItemOption = newOption });
+                existingOptionCount++;
                 continue;
             }
 
             if (this._randomizer.NextRandomBool(excellentOptions.AddChance))
             {
-                var newOption = excellentOptions.PossibleOptions.SelectRandom(this._randomizer);
-                while (item.ItemOptions.Any(o => object.Equals(o.ItemOption, newOption)))
+                var newOption = excellentOptions.PossibleOptions
+                    .Where(possibleOption => item.ItemOptions.All(o => !object.Equals(o.ItemOption, possibleOption)))
+                    .SelectRandom(this._randomizer);
+                if (newOption is null)
                 {
-                    newOption = excellentOptions.PossibleOptions.SelectRandom(this._randomizer);
+                    break;
                 }
 
-                if (newOption is not null)
-                {
-                    item.ItemOptions.Add(new ItemOptionLink { ItemOption = newOption });
-                }
+                item.ItemOptions.Add(new ItemOptionLink { ItemOption = newOption });
             }
         }
     }
@@ -627,7 +639,7 @@ public class DefaultDropGenerator : IDropGenerator
             }
             else
             {
-                droppedMoney = (uint)(gainedExperience + BaseMoneyDrop);
+                droppedMoney = (uint)Math.Max(1, Math.Min(uint.MaxValue, (long)gainedExperience + BaseMoneyDrop));
             }
         }
 

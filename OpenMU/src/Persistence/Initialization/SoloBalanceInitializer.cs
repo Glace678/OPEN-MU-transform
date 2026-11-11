@@ -35,6 +35,13 @@ public sealed class SoloBalanceInitializer : InitializerBase
     /// <inheritdoc />
     public override void Initialize()
     {
+        BalanceV1.ValidateProfileMarkers(this.GameConfiguration);
+        if (BalanceV1.IsEnabled(this.GameConfiguration))
+        {
+            throw new InvalidOperationException(
+                "Cannot install Solo profile because this configuration already uses the mutually exclusive balance-v1 profile.");
+        }
+
         if (SoloBalance.IsEnabled(this.GameConfiguration))
         {
             return;

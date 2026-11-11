@@ -27,6 +27,7 @@ public class GuildServer : IGuildServer
 
     private readonly ILogger<GuildServer> _logger;
     private readonly AsyncLock _createContainerLock = new AsyncLock();
+    private readonly AsyncLock _allianceLock = new AsyncLock();
     private readonly ConcurrentDictionary<Guid, byte> _fullyLoadedAllianceIds = new();
     private readonly IDictionary<uint, GuildContainer> _guildDictionary;
     private readonly IDictionary<Guid, uint> _guildIdMapping;
@@ -106,7 +107,7 @@ public class GuildServer : IGuildServer
     public async ValueTask<uint> GetGuildIdByNameAsync(string guildName)
     {
         var guild = this._guildDictionary
-            .FirstOrDefault(x => x.Value.Guild.Name!.Equals(guildName, StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefault(x => string.Equals(x.Value.Guild.Name, guildName, StringComparison.OrdinalIgnoreCase));
 
         return guild.Key;
     }
@@ -117,6 +118,12 @@ public class GuildServer : IGuildServer
         if (amount > 0
             && this._guildDictionary.TryGetValue(guildId, out var guildContainer))
         {
+            using var l = await guildContainer.Lock.LockAsync().ConfigureAwait(false);
+            if (guildContainer.IsRemoved)
+            {
+                return;
+            }
+
             guildContainer.Guild.Score += amount;
             await guildContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
         }
@@ -126,6 +133,7 @@ public class GuildServer : IGuildServer
     public async ValueTask<bool> CreateGuildAsync(string name, string masterName, Guid masterId, byte[] logo, byte serverId)
     {
         var context = this._persistenceContextProvider.CreateNewGuildContext();
+        var contextTransferred = false;
         try
         {
             if (await context.GuildWithNameExistsAsync(name).ConfigureAwait(false))
@@ -146,6 +154,7 @@ public class GuildServer : IGuildServer
             if (await context.SaveChangesAsync().ConfigureAwait(false))
             {
                 var container = this.CreateGuildContainer(guild, context);
+                contextTransferred = true;
                 container.SetServerId(masterId, serverId);
                 container.Members[masterId].PlayerName = masterName;
                 var status = new GuildMemberStatus(container.Id, GuildPosition.GuildMaster);
@@ -157,9 +166,15 @@ public class GuildServer : IGuildServer
         }
         catch (Exception ex)
         {
-            context.Dispose();
             this._logger.LogError(ex, "Error when creating a guild with name '{0}'.", name);
             return false;
+        }
+        finally
+        {
+            if (!contextTransferred)
+            {
+                context.Dispose();
+            }
         }
     }
 
@@ -170,27 +185,51 @@ public class GuildServer : IGuildServer
         {
             if (this._guildDictionary.TryGetValue(guildId, out var guild))
             {
-                // Atomically claim the membership so two concurrent registrations for the same
-                // player can't both pass the check and add the member twice.
-                if (!guild.Members.TryAdd(characterId, new GuildListEntry { PlayerName = characterName, PlayerPosition = role, ServerId = serverId }))
+                GuildPosition assignedStatus;
+                using (await guild.Lock.LockAsync().ConfigureAwait(false))
                 {
-                    this._logger.LogWarning("Guildmember already exists: {0}", characterName);
-                    return;
+                    if (guild.IsRemoved)
+                    {
+                        return;
+                    }
+
+                    // Atomically claim the membership so two concurrent registrations for the same
+                    // player can't both pass the check and add the member twice.
+                    if (!guild.Members.TryAdd(characterId, new GuildListEntry { PlayerName = characterName, PlayerPosition = role, ServerId = serverId }))
+                    {
+                        this._logger.LogWarning("Guildmember already exists: {0}", characterName);
+                        return;
+                    }
+
+                    GuildMember? guildMember = null;
+                    try
+                    {
+                        guildMember = guild.DatabaseContext.CreateNew<GuildMember>();
+                        guildMember.Id = characterId;
+                        guildMember.Status = role;
+                        guildMember.GuildId = guild.Guild.Id;
+                        guild.Guild.Members.Add(guildMember);
+
+                        await guild.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
+                        assignedStatus = guildMember.Status;
+                    }
+                    catch
+                    {
+                        guild.Members.Remove(characterId);
+                        if (guildMember is not null)
+                        {
+                            guild.Guild.Members.Remove(guildMember);
+                        }
+
+                        throw;
+                    }
                 }
 
-                var guildMember = guild.DatabaseContext.CreateNew<GuildMember>();
-                guildMember.Id = characterId;
-                guildMember.Status = role;
-                guildMember.GuildId = guild.Guild.Id;
-                guild.Guild.Members.Add(guildMember);
-
-                await guild.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
-                await this._changePublisher.AssignGuildToPlayerAsync(serverId, characterName, new GuildMemberStatus(guildId, guildMember.Status)).ConfigureAwait(false);
+                await this._changePublisher.AssignGuildToPlayerAsync(serverId, characterName, new GuildMemberStatus(guildId, assignedStatus)).ConfigureAwait(false);
             }
         }
         catch (Exception ex)
         {
-            // Rollback?
             this._logger.LogError(ex, "Error when creating a guild member.");
         }
     }
@@ -202,13 +241,21 @@ public class GuildServer : IGuildServer
         {
             if (this._guildDictionary.TryGetValue(guildId, out var guild))
             {
+                using var l = await guild.Lock.LockAsync().ConfigureAwait(false);
+                if (guild.IsRemoved)
+                {
+                    return;
+                }
+
                 var guildMember = guild.Guild.Members.FirstOrDefault(m => m.Id == characterId);
                 if (guildMember != null)
                 {
                     guildMember.Status = role;
                     await guild.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
-                    var listEntry = guild.Members[characterId];
-                    listEntry.PlayerPosition = role;
+                    if (guild.Members.TryGetValue(characterId, out var listEntry))
+                    {
+                        listEntry.PlayerPosition = role;
+                    }
                 }
             }
         }
@@ -232,10 +279,16 @@ public class GuildServer : IGuildServer
     }
 
     /// <inheritdoc/>
-    public ValueTask GuildMemberLeftGameAsync(uint guildId, Guid guildMemberId, byte serverId)
+    public async ValueTask GuildMemberLeftGameAsync(uint guildId, Guid guildMemberId, byte serverId)
     {
         if (this._guildDictionary.TryGetValue(guildId, out var guild))
         {
+            using var l = await guild.Lock.LockAsync().ConfigureAwait(false);
+            if (guild.IsRemoved)
+            {
+                return;
+            }
+
             guild.SetServerId(guildMemberId, OfflineServerId);
 
             // Keep alliances in memory for simplicity.
@@ -245,8 +298,6 @@ public class GuildServer : IGuildServer
                 this.RemoveGuildContainer(guild);
             }
         }
-
-        return ValueTask.CompletedTask;
     }
 
     /// <inheritdoc/>
@@ -269,27 +320,43 @@ public class GuildServer : IGuildServer
             return;
         }
 
-        var kvp = guildContainer.Members.FirstOrDefault(m => m.Value.PlayerName == playerName);
-        if (default(KeyValuePair<Guid, GuildListEntry>).Equals(kvp))
+        var deleteEntireGuild = false;
+        using (await guildContainer.Lock.LockAsync().ConfigureAwait(false))
         {
-            this._logger.LogWarning($"Guild {guildId} and Player {playerName} not found, so it can't be kicked.");
-            return;
+            if (guildContainer.IsRemoved)
+            {
+                return;
+            }
+
+            var kvp = guildContainer.Members.FirstOrDefault(m => m.Value.PlayerName == playerName);
+            if (default(KeyValuePair<Guid, GuildListEntry>).Equals(kvp))
+            {
+                this._logger.LogWarning($"Guild {guildId} and Player {playerName} not found, so it can't be kicked.");
+                return;
+            }
+
+            var member = kvp.Value;
+            if (member.PlayerPosition == GuildPosition.GuildMaster)
+            {
+                deleteEntireGuild = true;
+            }
+            else
+            {
+                guildContainer.Members.Remove(kvp.Key);
+
+                var guildMember = guildContainer.Guild.Members.FirstOrDefault(m => m.Id == kvp.Key);
+                if (guildMember != null)
+                {
+                    await guildContainer.DatabaseContext.DeleteAsync(guildMember).ConfigureAwait(false);
+                    await guildContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
+                }
+            }
         }
 
-        var member = kvp.Value;
-        if (member.PlayerPosition == GuildPosition.GuildMaster)
+        if (deleteEntireGuild)
         {
             await this.DeleteGuildAsync(guildContainer).ConfigureAwait(false);
             return;
-        }
-
-        guildContainer.Members.Remove(kvp.Key);
-
-        var guildMember = guildContainer.Guild.Members.FirstOrDefault(m => m.Id == kvp.Key);
-        if (guildMember != null)
-        {
-            await guildContainer.DatabaseContext.DeleteAsync(guildMember).ConfigureAwait(false);
-            await guildContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         await this._changePublisher.GuildPlayerKickedAsync(playerName).ConfigureAwait(false);
@@ -316,37 +383,51 @@ public class GuildServer : IGuildServer
             return AllianceCreationResult.TargetGuildNotFound;
         }
 
-        if (targetContainer.Guild.AllianceGuild is not null)
-        {
-            return AllianceCreationResult.TargetGuildAlreadyInAlliance;
-        }
-
         bool isNewAlliance = false;
-        try
+        using (await this._allianceLock.LockAsync().ConfigureAwait(false))
+        using (await LockPairAsync(masterContainer, targetContainer).ConfigureAwait(false))
         {
-            // Set the master guild as alliance master (self-reference)
-            if (masterContainer.Guild.AllianceGuild is null)
+            if (masterContainer.IsRemoved)
             {
-                masterContainer.Guild.AllianceGuild = masterContainer.Guild;
-                await masterContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
-                isNewAlliance = true;
+                return AllianceCreationResult.MasterGuildNotFound;
             }
 
-            // In the target guild's context, load the master guild and set the relationship
-            var masterGuildInTargetContext = await targetContainer.DatabaseContext
-                .GetByIdAsync<Guild>(masterContainer.Guild.Id).ConfigureAwait(false);
-            if (masterGuildInTargetContext is null)
+            if (targetContainer.IsRemoved)
             {
-                return AllianceCreationResult.GuildNotFoundInTargetContext;
+                return AllianceCreationResult.TargetGuildNotFound;
             }
 
-            targetContainer.Guild.AllianceGuild = masterGuildInTargetContext;
-            await targetContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            this._logger.LogError(ex, "Error when creating an alliance.");
-            return AllianceCreationResult.Error;
+            if (targetContainer.Guild.AllianceGuild is not null)
+            {
+                return AllianceCreationResult.TargetGuildAlreadyInAlliance;
+            }
+
+            try
+            {
+                // Set the master guild as alliance master (self-reference)
+                if (masterContainer.Guild.AllianceGuild is null)
+                {
+                    masterContainer.Guild.AllianceGuild = masterContainer.Guild;
+                    await masterContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
+                    isNewAlliance = true;
+                }
+
+                // In the target guild's context, load the master guild and set the relationship
+                var masterGuildInTargetContext = await targetContainer.DatabaseContext
+                    .GetByIdAsync<Guild>(masterContainer.Guild.Id).ConfigureAwait(false);
+                if (masterGuildInTargetContext is null)
+                {
+                    return AllianceCreationResult.GuildNotFoundInTargetContext;
+                }
+
+                targetContainer.Guild.AllianceGuild = masterGuildInTargetContext;
+                await targetContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Error when creating an alliance.");
+                return AllianceCreationResult.Error;
+            }
         }
 
         if (isNewAlliance)
@@ -378,35 +459,54 @@ public class GuildServer : IGuildServer
 
         var masterGuildId = await this.GetGuildIdByNameAsync(allianceMaster).ConfigureAwait(false);
 
+        bool willHaveNoMembers;
+        GuildContainer? masterContainer = null;
         try
         {
-            // Decide in advance whether the alliance has any other members besides the
-            // target (the target is still counted in the current alliance list).
-            var willHaveNoMembers = (await this.GetAllianceGuildsAsync(masterGuildId).ConfigureAwait(false)).Count <= 2;
-            GuildContainer? masterContainer = null;
-
-            targetContainer.Guild.AllianceGuild = null;
-            if (willHaveNoMembers
-                && this._guildDictionary.TryGetValue(masterGuildId, out masterContainer))
+            using (await this._allianceLock.LockAsync().ConfigureAwait(false))
             {
-                // Write both sides in one SaveChanges on the target's context (atomic).
-                var masterInTargetContext = await targetContainer.DatabaseContext
-                    .GetByIdAsync<Guild>(masterContainer.Guild.Id).ConfigureAwait(false);
-                if (masterInTargetContext is not null)
+                // Decide in advance whether the alliance has any other members besides the
+                // target (the target is still counted in the current alliance list).
+                willHaveNoMembers = (await this.GetAllianceGuildsAsync(masterGuildId).ConfigureAwait(false)).Count <= 2;
+                this._guildDictionary.TryGetValue(masterGuildId, out masterContainer);
+
+                using (masterContainer is not null
+                           ? await LockPairAsync(targetContainer, masterContainer).ConfigureAwait(false)
+                           : await targetContainer.Lock.LockAsync().ConfigureAwait(false))
                 {
-                    masterInTargetContext.AllianceGuild = null;
+                    if (targetContainer.IsRemoved || targetContainer.Guild.AllianceGuild is null)
+                    {
+                        return false;
+                    }
+
+                    targetContainer.Guild.AllianceGuild = null;
+                    if (willHaveNoMembers && masterContainer is { IsRemoved: false })
+                    {
+                        // Write both sides in one SaveChanges on the target's context (atomic).
+                        var masterInTargetContext = await targetContainer.DatabaseContext
+                            .GetByIdAsync<Guild>(masterContainer.Guild.Id).ConfigureAwait(false);
+                        if (masterInTargetContext is not null)
+                        {
+                            masterInTargetContext.AllianceGuild = null;
+                        }
+
+                        // Keep the master container's in-memory state in sync.
+                        masterContainer.Guild.AllianceGuild = null;
+                    }
+
+                    await targetContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
                 }
 
-                // Keep the master container's in-memory state in sync.
-                masterContainer.Guild.AllianceGuild = null;
+                if (willHaveNoMembers && masterContainer is not null)
+                {
+                    this._fullyLoadedAllianceIds.TryRemove(masterContainer.Guild.Id, out _);
+                }
             }
 
-            await targetContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
             await this._changePublisher.AllianceDisbandedAsync(masterGuildId, targetGuildId).ConfigureAwait(false);
 
-            if (willHaveNoMembers)
+            if (willHaveNoMembers && masterGuildId != 0)
             {
-                this._fullyLoadedAllianceIds.TryRemove(masterContainer!.Guild.Id, out _);
                 await this._changePublisher.AllianceDisbandedAsync(masterGuildId, masterGuildId).ConfigureAwait(false);
             }
 
@@ -438,29 +538,65 @@ public class GuildServer : IGuildServer
 
         try
         {
-            // Clear AllianceGuild for all members in a single SaveChanges on the master's
-            // context, so the disband is atomic instead of stopping halfway through the loop.
-            var allianceMembers = this._guildDictionary.Values
-                .Where(g => IsInSameAlliance(g.Guild, masterContainer.Guild))
-                .ToList();
-
-            foreach (var member in allianceMembers)
+            using (await this._allianceLock.LockAsync().ConfigureAwait(false))
             {
-                member.Guild.AllianceGuild = null;
-                if (member != masterContainer)
+                if (masterContainer.IsRemoved || !IsAllianceMaster(masterContainer.Guild))
                 {
-                    var memberInMasterContext = await masterContainer.DatabaseContext
-                        .GetByIdAsync<Guild>(member.Guild.Id).ConfigureAwait(false);
-                    if (memberInMasterContext is not null)
+                    return false;
+                }
+
+                // Clear AllianceGuild for all members in a single SaveChanges on the master's
+                // context, so the disband is atomic instead of stopping halfway through the loop.
+                var allianceMembers = this._guildDictionary.Values
+                    .Where(g => IsInSameAlliance(g.Guild, masterContainer.Guild))
+                    .OrderBy(g => g.Id)
+                    .ToList();
+
+                var memberLocks = new List<IDisposable>(allianceMembers.Count + 1);
+                try
+                {
+                    foreach (var member in allianceMembers)
                     {
-                        memberInMasterContext.AllianceGuild = null;
+                        memberLocks.Add(await member.Lock.LockAsync().ConfigureAwait(false));
+                    }
+
+                    if (!allianceMembers.Contains(masterContainer))
+                    {
+                        memberLocks.Add(await masterContainer.Lock.LockAsync().ConfigureAwait(false));
+                    }
+
+                    if (masterContainer.IsRemoved)
+                    {
+                        return false;
+                    }
+
+                    foreach (var member in allianceMembers)
+                    {
+                        member.Guild.AllianceGuild = null;
+                        if (member != masterContainer)
+                        {
+                            var memberInMasterContext = await masterContainer.DatabaseContext
+                                .GetByIdAsync<Guild>(member.Guild.Id).ConfigureAwait(false);
+                            if (memberInMasterContext is not null)
+                            {
+                                memberInMasterContext.AllianceGuild = null;
+                            }
+                        }
+                    }
+
+                    await masterContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
+                }
+                finally
+                {
+                    for (var i = memberLocks.Count - 1; i >= 0; i--)
+                    {
+                        memberLocks[i].Dispose();
                     }
                 }
+
+                this._fullyLoadedAllianceIds.TryRemove(masterContainer.Guild.Id, out _);
             }
 
-            await masterContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
-
-            this._fullyLoadedAllianceIds.TryRemove(masterContainer.Guild.Id, out _);
             await this._changePublisher.AllianceDisbandedAsync(masterGuildId, masterGuildId).ConfigureAwait(false);
             return true;
         }
@@ -552,38 +688,47 @@ public class GuildServer : IGuildServer
 
         try
         {
-            // Both sides are written through context A in a single SaveChanges, so the change
-            // is atomic. Writing them via two contexts/SaveChanges could leave one guild
-            // persisted as hostile while the other side failed.
-            var guildBInContainerA = await guildContainerA.DatabaseContext
-                .GetByIdAsync<Guild>(guildContainerB.Guild.Id).ConfigureAwait(false);
-            if (guildBInContainerA is null)
+            using (await this._allianceLock.LockAsync().ConfigureAwait(false))
+            using (await LockPairAsync(guildContainerA, guildContainerB).ConfigureAwait(false))
             {
-                return false;
-            }
-
-            if (create)
-            {
-                guildContainerA.Guild.Hostility = guildBInContainerA;
-                guildBInContainerA.Hostility = guildContainerA.Guild;
-
-                // Keep context B's in-memory state in sync without a second SaveChanges;
-                // a later save of context B writes the same (idempotent) relationship.
-                var guildAInContainerB = await guildContainerB.DatabaseContext
-                    .GetByIdAsync<Guild>(guildContainerA.Guild.Id).ConfigureAwait(false);
-                if (guildAInContainerB is not null)
+                if (guildContainerA.IsRemoved || guildContainerB.IsRemoved)
                 {
-                    guildContainerB.Guild.Hostility = guildAInContainerB;
+                    return false;
                 }
-            }
-            else
-            {
-                guildContainerA.Guild.Hostility = null;
-                guildBInContainerA.Hostility = null;
-                guildContainerB.Guild.Hostility = null;
-            }
 
-            await guildContainerA.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
+                // Both sides are written through context A in a single SaveChanges, so the change
+                // is atomic. Writing them via two contexts/SaveChanges could leave one guild
+                // persisted as hostile while the other side failed.
+                var guildBInContainerA = await guildContainerA.DatabaseContext
+                    .GetByIdAsync<Guild>(guildContainerB.Guild.Id).ConfigureAwait(false);
+                if (guildBInContainerA is null)
+                {
+                    return false;
+                }
+
+                if (create)
+                {
+                    guildContainerA.Guild.Hostility = guildBInContainerA;
+                    guildBInContainerA.Hostility = guildContainerA.Guild;
+
+                    // Keep context B's in-memory state in sync without a second SaveChanges;
+                    // a later save of context B writes the same (idempotent) relationship.
+                    var guildAInContainerB = await guildContainerB.DatabaseContext
+                        .GetByIdAsync<Guild>(guildContainerA.Guild.Id).ConfigureAwait(false);
+                    if (guildAInContainerB is not null)
+                    {
+                        guildContainerB.Guild.Hostility = guildAInContainerB;
+                    }
+                }
+                else
+                {
+                    guildContainerA.Guild.Hostility = null;
+                    guildBInContainerA.Hostility = null;
+                    guildContainerB.Guild.Hostility = null;
+                }
+
+                await guildContainerA.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
+            }
         }
         catch (Exception ex)
         {
@@ -693,6 +838,31 @@ public class GuildServer : IGuildServer
     /// by player interaction.
     /// </summary>
     /// <param name="guildContainer">The container of the guild which should be deleted.</param>
+    private static async ValueTask<IDisposable> LockPairAsync(GuildContainer first, GuildContainer second)
+    {
+        if (ReferenceEquals(first, second))
+        {
+            return await first.Lock.LockAsync().ConfigureAwait(false);
+        }
+
+        if (first.Id > second.Id)
+        {
+            (first, second) = (second, first);
+        }
+
+        var firstLock = await first.Lock.LockAsync().ConfigureAwait(false);
+        try
+        {
+            var secondLock = await second.Lock.LockAsync().ConfigureAwait(false);
+            return new CombinedLock(firstLock, secondLock);
+        }
+        catch
+        {
+            firstLock.Dispose();
+            throw;
+        }
+    }
+
     private async ValueTask DeleteGuildAsync(GuildContainer guildContainer)
     {
         // If this guild is alliance master, disband the alliance first
@@ -702,14 +872,26 @@ public class GuildServer : IGuildServer
         }
         else if (guildContainer.Guild.AllianceGuild is not null)
         {
-            // Remove from alliance
-            guildContainer.Guild.AllianceGuild = null;
-            await guildContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
+            await this.RemoveAllianceAsync(guildContainer.Id).ConfigureAwait(false);
         }
 
-        await guildContainer.DatabaseContext.DeleteAsync(guildContainer.Guild).ConfigureAwait(false);
-        await guildContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
-        this.RemoveGuildContainer(guildContainer);
+        using (await guildContainer.Lock.LockAsync().ConfigureAwait(false))
+        {
+            if (guildContainer.IsRemoved)
+            {
+                return;
+            }
+
+            if (guildContainer.Guild.AllianceGuild is not null)
+            {
+                guildContainer.Guild.AllianceGuild = null;
+                await guildContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
+            }
+
+            await guildContainer.DatabaseContext.DeleteAsync(guildContainer.Guild).ConfigureAwait(false);
+            await guildContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
+            this.RemoveGuildContainer(guildContainer);
+        }
 
         await this._changePublisher.GuildDeletedAsync(guildContainer.Id).ConfigureAwait(false);
 
@@ -825,6 +1007,12 @@ public class GuildServer : IGuildServer
 
     private void RemoveGuildContainer(GuildContainer guildContainer)
     {
+        if (guildContainer.IsRemoved)
+        {
+            return;
+        }
+
+        guildContainer.IsRemoved = true;
         this._guildDictionary.Remove(guildContainer.Id);
         this._guildIdMapping.Remove(guildContainer.Guild.Id);
         this._idGenerator.GiveBack((int)guildContainer.Id);
@@ -900,5 +1088,14 @@ public class GuildServer : IGuildServer
             .Where(kvp => GetAllianceMasterGuid(kvp.Value.Guild) == masterGuid)
             .Select(kvp => kvp.Key)
             .ToList();
+    }
+
+    private sealed class CombinedLock(IDisposable first, IDisposable second) : IDisposable
+    {
+        public void Dispose()
+        {
+            second.Dispose();
+            first.Dispose();
+        }
     }
 }

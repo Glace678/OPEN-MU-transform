@@ -58,7 +58,10 @@ public:
     void             SetEventCount(std::uint8_t type, std::uint8_t count);
     int              GetEventCount(std::uint8_t byType);
     std::uint32_t    GetNeedZen() { return m_dwNeedZen; }
-    QUEST_ATTRIBUTE* GetCurQuestAttribute() { return &m_Quest[m_byCurrQuestIndex]; }
+    QUEST_ATTRIBUTE* GetCurQuestAttribute()
+    {
+        return &m_Quest[(m_byCurrQuestIndex < MAX_QUESTS) ? m_byCurrQuestIndex : 0];
+    }
 
     std::uint8_t GetCurrQuestIndex() { return m_byCurrQuestIndex; }
     void         SetKillMobInfo(const int* anKillMobInfo);

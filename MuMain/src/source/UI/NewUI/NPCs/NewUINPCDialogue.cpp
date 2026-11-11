@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "UI/NewUI/NPCs/NewUINPCDialogue.h"
+#include "Network/Server/PacketBoundsGuards.h"
 #include "I18N/All.h"
 
 #include "Core/Platform/CrtDbg.h"
@@ -20,7 +21,23 @@ CNewUINPCDialogue::CNewUINPCDialogue()
 {
     m_pNewUIMng = NULL;
     m_Pos.x = m_Pos.y   = 0;
+    m_nSelNPCPage       = 0;
+    m_nMaxNPCPage       = 0;
+    m_nSelTextCount     = 0;
+    m_nSelSelText       = 0;
+    m_nSelSelTextPage   = 0;
+    m_nMaxSelTextPage   = 0;
+    m_eLowerView        = NON_SEL_TEXTS_MODE;
+    m_bQuestListMode    = false;
+    m_dwCurDlgIndex     = 0;
+    m_bCanClick         = false;
     m_dwContributePoint = 0;
+    ::memset(m_aszNPCWords, 0, sizeof(m_aszNPCWords));
+    ::memset(m_aszSelTexts, 0, sizeof(m_aszSelTexts));
+    ::memset(m_anSelTextLine, 0, sizeof(m_anSelTextLine));
+    ::memset(m_anSelTextLinePerPage, 0, sizeof(m_anSelTextLinePerPage));
+    ::memset(m_anSelTextCountPerPage, 0, sizeof(m_anSelTextCountPerPage));
+    ::memset(m_adwQuestIndex, 0, sizeof(m_adwQuestIndex));
 }
 
 CNewUINPCDialogue::~CNewUINPCDialogue()
@@ -63,10 +80,9 @@ bool CNewUINPCDialogue::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUINPCDialogue::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -110,7 +126,8 @@ bool CNewUINPCDialogue::ProcessBtns()
         return true;
     else if (m_btnProgressR.UpdateMouseEvent())
     {
-        m_nSelNPCPage = MIN(++m_nSelNPCPage, m_nMaxNPCPage);
+        if (m_nSelNPCPage < m_nMaxNPCPage)
+            ++m_nSelNPCPage;
         if (m_nSelNPCPage == m_nMaxNPCPage)
         {
             if (NON_SEL_TEXTS_MODE == m_eLowerView)
@@ -128,7 +145,8 @@ bool CNewUINPCDialogue::ProcessBtns()
     }
     else if (m_btnProgressL.UpdateMouseEvent())
     {
-        m_nSelNPCPage = MAX(--m_nSelNPCPage, 0);
+        if (m_nSelNPCPage > 0)
+            --m_nSelNPCPage;
         ::PlayBuffer(SOUND_CLICK01);
 
         if (0 == m_nSelNPCPage)
@@ -139,7 +157,8 @@ bool CNewUINPCDialogue::ProcessBtns()
     }
     else if (m_btnSelTextR.UpdateMouseEvent())
     {
-        m_nSelSelTextPage = MIN(++m_nSelSelTextPage, m_nMaxSelTextPage);
+        if (m_nSelSelTextPage < m_nMaxSelTextPage)
+            ++m_nSelSelTextPage;
         ::PlayBuffer(SOUND_CLICK01);
 
         if (m_nSelSelTextPage == m_nMaxSelTextPage)
@@ -151,7 +170,8 @@ bool CNewUINPCDialogue::ProcessBtns()
     }
     else if (m_btnSelTextL.UpdateMouseEvent())
     {
-        m_nSelSelTextPage = MAX(--m_nSelSelTextPage, 0);
+        if (m_nSelSelTextPage > 0)
+            --m_nSelSelTextPage;
         ::PlayBuffer(SOUND_CLICK01);
 
         if (0 == m_nSelSelTextPage)
@@ -323,8 +343,9 @@ void CNewUINPCDialogue::RenderContributePoint()
     {
         RenderImage(IMAGE_ND_CONTRIBUTE_BG, m_Pos.x + 11, m_Pos.y + 27, 168.f, 18.f);
 
-        wchar_t szContribute[32];
-        ::wprintf(szContribute, I18N::Game::GainContributionU, m_dwContributePoint);
+        wchar_t szContribute[128] = {};
+        swprintf_s(szContribute, _countof(szContribute), I18N::Game::GainContributionU,
+                   static_cast<unsigned int>(m_dwContributePoint));
         g_pRenderText->SetTextColor(255, 230, 210, 255);
         g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 30, szContribute, ND_WIDTH, 0, RT3_SORT_CENTER);
     }
@@ -440,21 +461,27 @@ void CNewUINPCDialogue::SetCurSelTexts()
     const wchar_t* pszAnswer;
     int            nSelTextLineSum = 0;
     int            i;
-    for (i = 0; i < QM_MAX_ND_ANSWER; ++i)
+    for (i = 0; i < QM_MAX_ND_ANSWER && i < (ND_QUEST_INDEX_MAX_COUNT + 1); ++i)
     {
-        ::mu_swprintf(szAnswer, L"%d. ", i + 1);
+        if (nSelTextLineSum >= ND_SEL_TEXT_LINE_MAX)
+            break;
+        swprintf_s(szAnswer, _countof(szAnswer), L"%d. ", i + 1);
         pszAnswer = g_QuestMng.GetNPCDlgAnswer(m_dwCurDlgIndex, i);
         if (NULL == pszAnswer)
             break;
-        ::wcscat(szAnswer, pszAnswer);
+        wcsncat_s(szAnswer, _countof(szAnswer), pszAnswer, _TRUNCATE);
 
-        m_anSelTextLine[i] =
-            ::DivideStringByPixel(&m_aszSelTexts[nSelTextLineSum][0], 2, ND_WORDS_ROW_MAX, szAnswer, 160, false);
+        const int nMaxRows = (ND_SEL_TEXT_LINE_MAX - nSelTextLineSum >= 2) ? 2 : 1;
+        m_anSelTextLine[i] = ::DivideStringByPixel(&m_aszSelTexts[nSelTextLineSum][0], nMaxRows, ND_WORDS_ROW_MAX,
+                                                   szAnswer, 160, false);
 
         nSelTextLineSum += m_anSelTextLine[i];
 
         if (ND_SEL_TEXT_LINE_MAX <= nSelTextLineSum)
+        {
+            ++i;
             break;
+        }
     }
 
     m_nSelTextCount = i;
@@ -480,7 +507,10 @@ void CNewUINPCDialogue::CalculateSelTextMaxPage(int nSelTextCount)
             --m_anSelTextCountPerPage[m_nMaxSelTextPage];
             m_anSelTextLinePerPage[m_nMaxSelTextPage] -= m_anSelTextLine[i];
             if (ND_SEL_TEXT_PAGE_LIMIT == ++m_nMaxSelTextPage)
+            {
+                --m_nMaxSelTextPage;
                 break;
+            }
             ++m_anSelTextCountPerPage[m_nMaxSelTextPage];
             m_anSelTextLinePerPage[m_nMaxSelTextPage] += m_anSelTextLine[i];
         }
@@ -494,10 +524,14 @@ void CNewUINPCDialogue::CalculateSelTextMaxPage(int nSelTextCount)
 
 void CNewUINPCDialogue::SetQuestListText(DWORD* adwSrcQuestIndex, int nIndexCount)
 {
+    static_assert(ND_QUEST_INDEX_MAX_COUNT == MuPacketBounds::QuestIndexMaxCount,
+                  "ND_QUEST_INDEX_MAX_COUNT drifted from MuPacketBounds::QuestIndexMaxCount");
     _ASSERT(0 <= nIndexCount && nIndexCount <= ND_QUEST_INDEX_MAX_COUNT);
+    nIndexCount = MuPacketBounds::ClampQuestIndexCount(adwSrcQuestIndex, nIndexCount);
 
     ::memset(m_adwQuestIndex, 0, sizeof(DWORD) * ND_QUEST_INDEX_MAX_COUNT);
-    ::memcpy(m_adwQuestIndex, adwSrcQuestIndex, sizeof(DWORD) * nIndexCount);
+    if (nIndexCount > 0)
+        ::memcpy(m_adwQuestIndex, adwSrcQuestIndex, sizeof(DWORD) * nIndexCount);
 
     m_nSelTextCount = nIndexCount + 1;
 
@@ -511,30 +545,37 @@ void CNewUINPCDialogue::SetQuestListText(DWORD* adwSrcQuestIndex, int nIndexCoun
     int i;
     for (i = 0; i < m_nSelTextCount; ++i)
     {
+        if (nSelTextRow >= ND_SEL_TEXT_LINE_MAX)
+            break;
         if (m_nSelTextCount - 1 == i)
         {
-            ::mu_swprintf(szSelText, L"%d. ", i + 1);
+            swprintf_s(szSelText, _countof(szSelText), L"%d. ", i + 1);
             pszSelText = g_QuestMng.GetWords(1007);
         }
         else
         {
-            ::mu_swprintf(szSelText, L"%d. [Q]", i + 1);
+            swprintf_s(szSelText, _countof(szSelText), L"%d. [Q]", i + 1);
             pszSelText = g_QuestMng.GetSubject(m_adwQuestIndex[i]);
         }
 
         if (NULL == pszSelText)
             break;
-        ::wcscat(szSelText, pszSelText);
+        wcsncat_s(szSelText, _countof(szSelText), pszSelText, _TRUNCATE);
 
+        const int nMaxRows = (ND_SEL_TEXT_LINE_MAX - nSelTextRow >= 2) ? 2 : 1;
         m_anSelTextLine[i] =
-            ::DivideStringByPixel(&m_aszSelTexts[nSelTextRow][0], 2, ND_WORDS_ROW_MAX, szSelText, 160, false);
+            ::DivideStringByPixel(&m_aszSelTexts[nSelTextRow][0], nMaxRows, ND_WORDS_ROW_MAX, szSelText, 160, false);
 
         nSelTextRow += m_anSelTextLine[i];
 
-        if (ND_SEL_TEXT_LINE_MAX < nSelTextRow)
+        if (ND_SEL_TEXT_LINE_MAX <= nSelTextRow)
+        {
+            ++i;
             break;
+        }
     }
 
+    m_nSelTextCount = i;
     CalculateSelTextMaxPage(i);
 }
 

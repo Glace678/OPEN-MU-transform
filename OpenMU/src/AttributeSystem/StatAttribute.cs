@@ -38,6 +38,21 @@ public class StatAttribute : BaseStatAttribute
     /// </value>
     public new virtual float Value
     {
+        get => this.ValueGetter;
+
+        set
+        {
+            if (Math.Abs(this._statValue - value) > 1e-6f)
+            {
+                this._statValue = value;
+                this.RaiseValueChanged();
+            }
+        }
+    }
+
+    /// <inheritdoc/>
+    protected override float ValueGetter
+    {
         get
         {
             if (this.Definition?.MaximumValue is { } maxValue)
@@ -47,17 +62,5 @@ public class StatAttribute : BaseStatAttribute
 
             return this._statValue;
         }
-
-        set
-        {
-            if (Math.Abs(this._statValue - value) > 0.01f)
-            {
-                this._statValue = value;
-                this.RaiseValueChanged();
-            }
-        }
     }
-
-    /// <inheritdoc/>
-    protected override float ValueGetter => this._statValue;
 }

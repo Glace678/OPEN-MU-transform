@@ -26,8 +26,27 @@ Translatable inventory (Chs language folder), formats derived from the C++ loade
 import struct, os
 from bmd import bux, gen_checksum2, read_questwords, write_questwords
 
-CHS = config.SERVER.chs
-ENG = config.SERVER.eng
+class _LazyServerSubdir(os.PathLike):
+    """Defers config.SERVER.<attr> resolution until filesystem/string conversion."""
+
+    def __init__(self, attr):
+        self._attr = attr
+
+    def _resolve(self):
+        return getattr(config.SERVER, self._attr)
+
+    def __fspath__(self):
+        return self._resolve()
+
+    def __str__(self):
+        return self._resolve()
+
+    def __repr__(self):
+        return f"<_LazyServerSubdir config.SERVER.{self._attr}>"
+
+
+CHS = _LazyServerSubdir('chs')
+ENG = _LazyServerSubdir('eng')
 
 
 def _u8(b):
@@ -43,16 +62,25 @@ def _u8(b):
 class FixedRecs:
     """Generic fixed-record file. records are decrypted bytearrays (per-record XOR)."""
     def __init__(self, path, R, N, key=None, count_prefix=False, trailer=0):
+        if R <= 0 or trailer < 0:
+            raise ValueError(f'invalid FixedRecs geometry R={R}, trailer={trailer}')
         self.path, self.R, self.N, self.key = path, R, N, key
         self.count_prefix = count_prefix
         self.trailer = trailer
-        raw = open(path, 'rb').read()
+        with open(path, 'rb') as fh:
+            raw = fh.read()
         self.raw = raw
         pos = 0
         if count_prefix:
+            if len(raw) < 4:
+                raise ValueError(f'{path}: truncated count-prefixed file: {len(raw)} < 4 bytes')
             (self.count,) = struct.unpack_from('<I', raw, 0)
+            if self.count > 1_000_000:
+                raise ValueError(f'{path}: implausible record count prefix {self.count}')
             pos = 4
             self.N = self.count
+        elif self.N is None or self.N < 0:
+            raise ValueError(f'{path}: invalid fixed record count {self.N}')
         body_end = pos + R * self.N
         # A truncated file would silently yield short records; set_field's slice
         # assignment would then change the record length and encode() would emit
@@ -116,18 +144,46 @@ FMT = {
     'minimap': dict(R=116, N=100,  key=0x2BC1, trailer=45, fields=[('name',16,100)]),
 }
 
-FILES = {
-    'item':    os.path.join(CHS, 'item_chs.bmd'),
-    'skill':   os.path.join(CHS, 'skill_chs.bmd'),
-    'quest':   os.path.join(CHS, 'Quest_chs.bmd'),
-    'movereq': os.path.join(CHS, 'MoveReq_chs.bmd'),
-    'socket':  os.path.join(CHS, 'socketitem_chs.bmd'),
-    'setoption':os.path.join(CHS, 'itemsetoption_chs.bmd'),
-    'buff':    os.path.join(CHS, 'BuffEffect_chs.bmd'),
-    'harmony': os.path.join(CHS, 'JewelOfHarmonyOption_chs.bmd'),
-    'mastertooltip': os.path.join(CHS, 'MasterSkillTooltip_chs.bmd'),  # client now loads per-language (was hardcoded Eng)
+_REL_FILES = {
+    'item':    'item_chs.bmd',
+    'skill':   'skill_chs.bmd',
+    'quest':   'Quest_chs.bmd',
+    'movereq': 'MoveReq_chs.bmd',
+    'socket':  'socketitem_chs.bmd',
+    'setoption': 'itemsetoption_chs.bmd',
+    'buff':    'BuffEffect_chs.bmd',
+    'harmony': 'JewelOfHarmonyOption_chs.bmd',
+    'mastertooltip': 'MasterSkillTooltip_chs.bmd',  # client now loads per-language (was hardcoded Eng)
     'minimap': None,  # 20 files, handled separately
 }
+
+
+class _LazyFilesMap:
+    """Resolves server-tree BMD paths on key lookup so importing formats stays side-effect free."""
+
+    def __getitem__(self, kind):
+        rel = _REL_FILES[kind]
+        return None if rel is None else os.path.join(CHS, rel)
+
+    def get(self, kind, default=None):
+        if kind not in _REL_FILES:
+            return default
+        return self[kind]
+
+    def keys(self):
+        return _REL_FILES.keys()
+
+    def __contains__(self, kind):
+        return kind in _REL_FILES
+
+    def __iter__(self):
+        return iter(_REL_FILES)
+
+    def __len__(self):
+        return len(_REL_FILES)
+
+
+FILES = _LazyFilesMap()
 
 
 def open_fmt(kind, path=None):
@@ -146,7 +202,8 @@ def roundtrip(kind, path=None):
     path = path or FILES[kind]
     f = open_fmt(kind, path)
     out = f.encode()
-    raw = open(path, 'rb').read()
+    with open(path, 'rb') as fh:
+        raw = fh.read()
     return out == raw, len(out), len(raw)
 
 
@@ -157,7 +214,10 @@ def slide_slot_offset(level, j):
 
 def open_slide(path=None):
     path = path if path is not None else os.path.join(CHS, 'slide_chs.bmd')
-    raw = open(path,'rb').read()
+    with open(path, 'rb') as fh:
+        raw = fh.read()
+    if len(raw) < SLIDE_SIZE:
+        raise ValueError(f'{path}: truncated slide file: {len(raw)} < {SLIDE_SIZE} bytes')
     buf = bytearray(raw); bux(buf)
     return raw, buf
 

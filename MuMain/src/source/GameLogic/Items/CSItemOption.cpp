@@ -165,9 +165,11 @@ bool CSItemOption::OpenItemSetOption(const wchar_t* filename)
 
         ITEM_SET_OPTION_FILE current{};
         std::memcpy(&current, pSeek, entrySize);
-        auto* target = &m_ItemSetOption[i];
+        current.strSetName[MAX_ITEM_SET_NAME - 1] = '\0';
+        auto* target                              = &m_ItemSetOption[i];
 
-        CMultiLanguage::ConvertFromUtf8(target->strSetName, current.strSetName);
+        CMultiLanguage::ConvertFromUtf8(target->strSetName, current.strSetName, MAX_ITEM_SET_NAME);
+        target->strSetName[MAX_ITEM_SET_NAME - 1] = L'\0';
         target->byOptionCount         = current.byOptionCount;
         target->bySetItemCount        = 0;  // Is calculated below
         target->byStandardOption      = current.byStandardOption;
@@ -199,19 +201,33 @@ bool CSItemOption::OpenItemSetOption(const wchar_t* filename)
 
 std::uint8_t CSItemOption::IsChangeSetItem(const int Type, const int SubType)
 {
+    if (Type < 0 || Type >= MAX_ITEM)
+    {
+        return 0;
+    }
+
     const ITEM_SET_TYPE& itemSType = m_ItemSetType[Type];
 
     if (SubType == -1)
     {
-        return itemSType.byOption[0] == EMPTY_OPTION && itemSType.byOption[1] == EMPTY_OPTION ? 0 : 255;
+        const bool empty0 = (itemSType.byOption[0] == EMPTY_OPTION || itemSType.byOption[0] == 0);
+        const bool empty1 = (itemSType.byOption[1] == EMPTY_OPTION || itemSType.byOption[1] == 0);
+        return (empty0 && empty1) ? 0 : 255;
     }
 
-    return itemSType.byOption[SubType] == EMPTY_OPTION ? 0 : static_cast<std::uint8_t>(SubType + 1);
+    if (SubType < 0 || SubType >= MAX_ITEM_SETS_PER_ITEM)
+    {
+        return 0;
+    }
+
+    return (itemSType.byOption[SubType] == EMPTY_OPTION || itemSType.byOption[SubType] == 0)
+               ? 0
+               : static_cast<std::uint8_t>(SubType + 1);
 }
 
 std::uint16_t CSItemOption::GetMixItemLevel(const int Type) const
 {
-    if (Type < 0)
+    if (Type < 0 || Type >= MAX_ITEM)
         return 0;
 
     const ITEM_SET_TYPE& itemSType = m_ItemSetType[Type];
@@ -222,20 +238,27 @@ std::uint16_t CSItemOption::GetMixItemLevel(const int Type) const
 
 bool CSItemOption::GetSetItemName(wchar_t* strName, const int iType, const int setType) const
 {
+    if (strName == nullptr || iType < 0 || iType >= MAX_ITEM)
+    {
+        return false;
+    }
+
     const int setItemType = (setType % 0x04);
 
-    if (setItemType > 0)
+    if (setItemType > 0 && setItemType <= MAX_ITEM_SETS_PER_ITEM)
     {
-        const ITEM_SET_TYPE& itemSType = m_ItemSetType[iType];
-        if (itemSType.byOption[setItemType - 1] != 255 && itemSType.byOption[setItemType - 1] != 0)
+        const ITEM_SET_TYPE& itemSType   = m_ItemSetType[iType];
+        const std::uint8_t   optionIndex = itemSType.byOption[setItemType - 1];
+        if (optionIndex > 0 && optionIndex < MAX_SET_OPTION)
         {
-            const ITEM_SET_OPTION& itemOption = m_ItemSetOption[itemSType.byOption[setItemType - 1]];
+            const ITEM_SET_OPTION& itemOption = m_ItemSetOption[optionIndex];
 
-            memcpy(strName, itemOption.strSetName, sizeof itemOption.strSetName);
+            std::wcsncpy(strName, itemOption.strSetName, MAX_ITEM_SET_NAME - 2);
+            strName[MAX_ITEM_SET_NAME - 2] = L'\0';
 
-            const int length    = wcslen(strName);
-            strName[length]     = ' ';
-            strName[length + 1] = 0;
+            const std::size_t length = std::wcslen(strName);
+            strName[length]          = L' ';
+            strName[length + 1]      = L'\0';
             return true;
         }
     }
@@ -245,7 +268,8 @@ bool CSItemOption::GetSetItemName(wchar_t* strName, const int iType, const int s
 
 void CSItemOption::checkItemType(SET_SEARCH_RESULT* optionList, const int iType, const int ancientDiscriminator) const
 {
-    if (ancientDiscriminator <= 0)
+    if (optionList == nullptr || iType < 0 || iType >= MAX_ITEM || ancientDiscriminator <= 0 ||
+        ancientDiscriminator > MAX_ITEM_SETS_PER_ITEM)
     {
         return;
     }
@@ -255,7 +279,7 @@ void CSItemOption::checkItemType(SET_SEARCH_RESULT* optionList, const int iType,
     const ITEM_SET_TYPE& itemSetType   = m_ItemSetType[iType];
     const auto           itemSetNumber = itemSetType.byOption[setTypeIndex];
 
-    if (itemSetNumber != 255 && itemSetNumber != 0)
+    if (itemSetNumber > 0 && itemSetNumber < MAX_SET_OPTION)
     {
         // add set item to list
         for (int i = 0; i < MAX_EQUIPPED_SET_ITEMS; ++i)
@@ -268,7 +292,8 @@ void CSItemOption::checkItemType(SET_SEARCH_RESULT* optionList, const int iType,
                 current->CompleteSetItemCount = m_ItemSetOption[itemSetNumber].bySetItemCount;
                 current->ItemCount++;
                 current->SetTypeIndex = setTypeIndex;
-                wcscpy(current->SetName, m_ItemSetOption[itemSetNumber].strSetName);
+                std::wcsncpy(current->SetName, m_ItemSetOption[itemSetNumber].strSetName, MAX_ITEM_SET_NAME - 1);
+                current->SetName[MAX_ITEM_SET_NAME - 1] = L'\0';
                 break;
             }
 
@@ -305,9 +330,15 @@ void CSItemOption::TryAddSetOption(std::uint8_t option, int value, int optionInd
                                    const ITEM_SET_OPTION& setOptions, bool isThisSetComplete, bool isFullOption,
                                    bool isExtOption, bool fulfillsClassRequirement, int firstClass, int secondClass)
 {
-    if (option == EMPTY_OPTION || value == 0 ||
-        (option >= MASTERY_OPTION &&
-         (setOptions.byRequireClass[firstClass] && secondClass >= setOptions.byRequireClass[firstClass] - 1)))
+    if (set.SetOptionCount < 0 || set.SetOptionCount >= MAX_OPTIONS_PER_ITEM_SET)
+    {
+        return;
+    }
+
+    const bool classSkipped =
+        (firstClass >= 0 && firstClass < MAX_CLASS) &&
+        (setOptions.byRequireClass[firstClass] && secondClass >= setOptions.byRequireClass[firstClass] - 1);
+    if (option == EMPTY_OPTION || value == 0 || (option >= MASTERY_OPTION && classSkipped))
     {
         return;
     }
@@ -325,19 +356,26 @@ void CSItemOption::TryAddSetOption(std::uint8_t option, int value, int optionInd
 
 void CSItemOption::calcSetOptionList(const SET_SEARCH_RESULT* optionList)
 {
+    if (Hero == nullptr || optionList == nullptr)
+    {
+        m_SetSearchResultCount = 0;
+        return;
+    }
+
     const int firstClass  = gCharacterManager.GetBaseClass(Hero->Class);
     const int secondClass = gCharacterManager.IsSecondClass(Hero->Class);
 
     int setCount = 0;
-    for (int i = 0; i < MAX_EQUIPPED_SET_ITEMS; ++i)
+    for (int i = 0; i < MAX_EQUIPPED_SET_ITEMS && setCount < MAX_EQUIPPED_SETS; ++i)
     {
         if (optionList[i].SetNumber == 0)
         {
             break;
         }
 
-        if (optionList[i].ItemCount >= 2)
+        if (optionList[i].ItemCount >= 2 && optionList[i].SetNumber < MAX_SET_OPTION)
         {
+            m_SetSearchResult[setCount] = SET_SEARCH_RESULT_OPT{};
             memcpy(&m_SetSearchResult[setCount], &optionList[i], sizeof(SET_SEARCH_RESULT));
             setCount++;
         }
@@ -354,6 +392,10 @@ void CSItemOption::calcSetOptionList(const SET_SEARCH_RESULT* optionList)
     for (int i = 0; i < m_SetSearchResultCount; ++i)
     {
         auto& set = m_SetSearchResult[i];
+        if (set.SetNumber >= MAX_SET_OPTION)
+        {
+            continue;
+        }
 
         const ITEM_SET_OPTION& setOptions        = m_ItemSetOption[set.SetNumber];
         bool                   isThisSetComplete = false;
@@ -365,7 +407,7 @@ void CSItemOption::calcSetOptionList(const SET_SEARCH_RESULT* optionList)
 
         const auto requireClass = isClassRequirementFulfilled(setOptions, firstClass, secondClass);
         const auto standardOptionCount =
-            std::min<int>(set.CompleteSetItemCount - 1, MAX_ITEM_SET_STANDARD_OPTION_COUNT);
+            std::clamp<int>(static_cast<int>(set.CompleteSetItemCount) - 1, 0, MAX_ITEM_SET_STANDARD_OPTION_COUNT);
         for (int o = 0; o < standardOptionCount; ++o)
         {
             for (int n = 0; n < MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT; ++n)
@@ -557,7 +599,7 @@ void CSItemOption::PlusMastery(int* Value, std::uint8_t MasteryType) const
 
 int CSItemOption::GetDefaultOptionValue(ITEM* ip, std::uint16_t* Value)
 {
-    if (ip->Type > MAX_ITEM)
+    if (ip == nullptr || Value == nullptr || ip->Type < 0 || ip->Type >= MAX_ITEM)
     {
         return -1;
     }
@@ -571,7 +613,7 @@ int CSItemOption::GetDefaultOptionValue(ITEM* ip, std::uint16_t* Value)
 
 bool CSItemOption::GetDefaultOptionText(const ITEM* ip, wchar_t* Text)
 {
-    if (ip->Type > MAX_ITEM)
+    if (ip == nullptr || Text == nullptr || ip->Type < 0 || ip->Type >= MAX_ITEM)
     {
         return false;
     }
@@ -638,7 +680,8 @@ bool CSItemOption::IsNonWeaponSkillOrIsSkillEquipped(ActionSkillType skill)
             continue;
         }
 
-        for (int j = 0; j < item->SpecialNum; j++)
+        const int specialCount = std::min<int>(item->SpecialNum, MAX_ITEM_SPECIAL);
+        for (int j = 0; j < specialCount; j++)
         {
             if (item->Special[j] == baseSkill)
             {
@@ -652,17 +695,22 @@ bool CSItemOption::IsNonWeaponSkillOrIsSkillEquipped(ActionSkillType skill)
 
 int CSItemOption::RenderDefaultOptionText(const ITEM* ip, int TextNum)
 {
+    if (ip == nullptr || TextNum < 0 || TextNum >= 50)
+    {
+        return TextNum;
+    }
+
     int TNum = TextNum;
     if (GetDefaultOptionText(ip, TextList[TNum]))
     {
         TextListColor[TNum] = TEXT_COLOR_BLUE;
         TNum++;
 
-        if ((ip->Type >= ITEM_RING_OF_ICE && ip->Type <= ITEM_RING_OF_POISON) ||
-            (ip->Type >= ITEM_PENDANT_OF_LIGHTING && ip->Type <= ITEM_PENDANT_OF_FIRE) ||
-            (ip->Type >= ITEM_RING_OF_FIRE && ip->Type <= ITEM_PENDANT_OF_WATER))
+        if (TNum < 50 && ((ip->Type >= ITEM_RING_OF_ICE && ip->Type <= ITEM_RING_OF_POISON) ||
+                          (ip->Type >= ITEM_PENDANT_OF_LIGHTING && ip->Type <= ITEM_PENDANT_OF_FIRE) ||
+                          (ip->Type >= ITEM_RING_OF_FIRE && ip->Type <= ITEM_PENDANT_OF_WATER)))
         {
-            mu_swprintf(TextList[TNum], I18N::Game::IncreaseAttributeDamage);  // "Increase Attribute Damage"
+            mu_swprintf_s(TextList[TNum], 100, L"%ls", I18N::Game::IncreaseAttributeDamage);
             TextListColor[TNum] = TEXT_COLOR_BLUE;
             TNum++;
         }
@@ -978,13 +1026,23 @@ void CSItemOption::RenderSetOptionList(const int StartX, const int StartY)
 
         for (int i = 0; i < m_SetSearchResultCount; i++)
         {
+            if (TextNum >= 50)
+            {
+                break;
+            }
+
             const auto& set = m_SetSearchResult[i];
 
             // print set name:
-            mu_swprintf(TextList[TextNum], L"%ls %ls", set.SetName, I18N::Game::Set);
+            mu_swprintf_s(TextList[TextNum], 100, L"%ls %ls", set.SetName, I18N::Game::Set);
             TextListColor[TextNum] = TEXT_COLOR_YELLOW;
             TextBold[TextNum]      = true;
             TextNum++;
+
+            if (TextNum >= 50)
+            {
+                break;
+            }
 
             TextNum = RenderSetOptionList(set, TextNum, true, false);
         }
@@ -998,7 +1056,7 @@ void CSItemOption::CheckRenderOptionHelper(const wchar_t* FilterName)
 {
     wchar_t Name[256];
 
-    if (FilterName[0] != '/')
+    if (FilterName == nullptr || FilterName[0] != '/')
         return;
 
     const auto Length1 = wcslen(FilterName);
@@ -1007,7 +1065,7 @@ void CSItemOption::CheckRenderOptionHelper(const wchar_t* FilterName)
         ITEM_SET_OPTION& setOption = m_ItemSetOption[i];
         if (setOption.byOptionCount < 255)
         {
-            mu_swprintf(Name, L"/%ls", setOption.strSetName);
+            mu_swprintf_s(Name, std::size(Name), L"/%ls", setOption.strSetName);
 
             const auto Length2 = wcslen(Name);
 
@@ -1027,7 +1085,7 @@ void CSItemOption::CheckRenderOptionHelper(const wchar_t* FilterName)
 
 void CSItemOption::RenderOptionHelper(void)
 {
-    if (m_byRenderOptionList == 0)
+    if (m_byRenderOptionList == 0 || m_byRenderOptionList > MAX_SET_OPTION)
         return;
 
     int TextNum = 0;
@@ -1045,20 +1103,21 @@ void CSItemOption::RenderOptionHelper(void)
         return;
     }
 
-    mu_swprintf(TextList[TextNum], L"\n");
+    mu_swprintf_s(TextList[TextNum], 100, L"\n");
     TextNum++;
-    mu_swprintf(TextList[TextNum], L"%ls %ls %ls", setOption.strSetName, I18N::Game::Set, I18N::Game::ItemOptionInfo);
+    mu_swprintf_s(TextList[TextNum], 100, L"%ls %ls %ls", setOption.strSetName, I18N::Game::Set,
+                  I18N::Game::ItemOptionInfo);
     TextListColor[TextNum] = TEXT_COLOR_YELLOW;
     TextNum++;
 
-    mu_swprintf(TextList[TextNum], L"\n");
+    mu_swprintf_s(TextList[TextNum], 100, L"\n");
     TextNum++;
-    mu_swprintf(TextList[TextNum], L"\n");
+    mu_swprintf_s(TextList[TextNum], 100, L"\n");
     TextNum++;
 
-    for (int o = 0; o < MAX_ITEM_SET_STANDARD_OPTION_COUNT; ++o)
+    for (int o = 0; o < MAX_ITEM_SET_STANDARD_OPTION_COUNT && TextNum < 50; ++o)
     {
-        for (int n = 0; n < MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT; ++n)
+        for (int n = 0; n < MAX_ITEM_SET_STANDARD_OPTION_PER_ITEM_COUNT && TextNum < 50; ++n)
         {
             if (getExplainText(TextList[TextNum], setOption.byStandardOption[o][n],
                                setOption.byStandardOptionValue[o][n]))
@@ -1070,9 +1129,9 @@ void CSItemOption::RenderOptionHelper(void)
         }
     }
 
-    for (int o = 0; o < MAX_ITEM_SET_EXT_OPTION_COUNT; ++o)
+    for (int o = 0; o < MAX_ITEM_SET_EXT_OPTION_COUNT && TextNum < 50; ++o)
     {
-        if (getExplainText(TextList[TextNum], setOption.byExtOption[o], setOption.byExtOption[o]))
+        if (getExplainText(TextList[TextNum], setOption.byExtOption[o], setOption.byExtOptionValue[o]))
         {
             TextListColor[TextNum] = TEXT_COLOR_GREEN;
             TextBold[TextNum]      = false;
@@ -1080,9 +1139,9 @@ void CSItemOption::RenderOptionHelper(void)
         }
     }
 
-    for (int o = 0; o < MAX_ITEM_SET_FULL_OPTION_COUNT; ++o)
+    for (int o = 0; o < MAX_ITEM_SET_FULL_OPTION_COUNT && TextNum < 50; ++o)
     {
-        if (getExplainText(TextList[TextNum], setOption.byFullOption[o], setOption.byFullOption[o]))
+        if (getExplainText(TextList[TextNum], setOption.byFullOption[o], setOption.byFullOptionValue[o]))
         {
             TextListColor[TextNum] = TEXT_COLOR_YELLOW;
             TextBold[TextNum]      = false;
@@ -1090,10 +1149,16 @@ void CSItemOption::RenderOptionHelper(void)
         }
     }
 
-    mu_swprintf(TextList[TextNum], L"\n");
-    TextNum++;
-    mu_swprintf(TextList[TextNum], L"\n");
-    TextNum++;
+    if (TextNum < 50)
+    {
+        mu_swprintf_s(TextList[TextNum], 100, L"\n");
+        TextNum++;
+    }
+    if (TextNum < 50)
+    {
+        mu_swprintf_s(TextList[TextNum], 100, L"\n");
+        TextNum++;
+    }
 
     SIZE TextSize = {0, 0};
     GetTextExtentPoint32(g_pRenderText->GetFontDC(), TextList[0], 1, &TextSize);
@@ -1102,7 +1167,8 @@ void CSItemOption::RenderOptionHelper(void)
 
 int CSItemOption::RenderSetOptionListInItem(const ITEM* ip, int TextNum, bool bIsEquippedItem)
 {
-    if (ip->AncientDiscriminator == 0)
+    if (ip == nullptr || ip->Type < 0 || ip->Type >= MAX_ITEM || ip->AncientDiscriminator == 0 ||
+        ip->AncientDiscriminator > MAX_ITEM_SETS_PER_ITEM || TextNum < 0 || TextNum >= 50)
     {
         return TextNum;
     }
@@ -1111,7 +1177,7 @@ int CSItemOption::RenderSetOptionListInItem(const ITEM* ip, int TextNum, bool bI
 
     m_bySelectedItemOption = itemSType.byOption[ip->AncientDiscriminator - 1];
 
-    if (m_bySelectedItemOption <= 0 || m_bySelectedItemOption == 255)
+    if (m_bySelectedItemOption == 0 || m_bySelectedItemOption >= MAX_SET_OPTION)
         return TextNum;
 
     int TNum = TextNum;
@@ -1123,32 +1189,49 @@ int CSItemOption::RenderSetOptionListInItem(const ITEM* ip, int TextNum, bool bI
         return TNum;
     }
 
-    mu_swprintf(TextList[TNum], L"\n");
-    TNum++;
-    mu_swprintf(TextList[TNum], L"%ls %ls", I18N::Game::Set, I18N::Game::ItemOptionInfo);
-    TextListColor[TNum] = TEXT_COLOR_YELLOW;
-    TNum++;
+    if (TNum < 50)
+    {
+        mu_swprintf_s(TextList[TNum], 100, L"\n");
+        TNum++;
+    }
+    if (TNum < 50)
+    {
+        mu_swprintf_s(TextList[TNum], 100, L"%ls %ls", I18N::Game::Set, I18N::Game::ItemOptionInfo);
+        TextListColor[TNum] = TEXT_COLOR_YELLOW;
+        TNum++;
+    }
+    if (TNum < 50)
+    {
+        mu_swprintf_s(TextList[TNum], 100, L"\n");
+        TNum++;
+    }
+    if (TNum < 50)
+    {
+        mu_swprintf_s(TextList[TNum], 100, L"\n");
+        TNum++;
+    }
 
-    mu_swprintf(TextList[TNum], L"\n");
-    TNum++;
-    mu_swprintf(TextList[TNum], L"\n");
-    TNum++;
-
-    for (int i = 0; i < m_SetSearchResultCount; i++)
+    for (int i = 0; i < m_SetSearchResultCount && TNum < 50; i++)
     {
         const auto& set = m_SetSearchResult[i];
         if (wcscmp(set.SetName, setOption.strSetName) == 0)
         {
             // Set Found.
-            TNum = RenderSetOptionList(set, TNum, bIsEquippedItem, true);
+            TNum = RenderSetOptionList(set, static_cast<std::uint8_t>(TNum), bIsEquippedItem, true);
             break;
         }
     }
 
-    mu_swprintf(TextList[TNum], L"\n");
-    TNum++;
-    mu_swprintf(TextList[TNum], L"\n");
-    TNum++;
+    if (TNum < 50)
+    {
+        mu_swprintf_s(TextList[TNum], 100, L"\n");
+        TNum++;
+    }
+    if (TNum < 50)
+    {
+        mu_swprintf_s(TextList[TNum], 100, L"\n");
+        TNum++;
+    }
 
     return TNum;
 }
@@ -1156,7 +1239,7 @@ int CSItemOption::RenderSetOptionListInItem(const ITEM* ip, int TextNum, bool bI
 std::uint8_t CSItemOption::RenderSetOptionList(const SET_SEARCH_RESULT_OPT& set, std::uint8_t textIndex,
                                                bool bIsEquippedItem, bool bShowInactive)
 {
-    for (int j = 0; j < set.SetOptionCount; j++)
+    for (int j = 0; j < set.SetOptionCount && textIndex < 50; j++)
     {
         const auto option = set.SetOption[j];
         if (!bShowInactive && !option.IsActive)
@@ -1187,8 +1270,11 @@ std::uint8_t CSItemOption::RenderSetOptionList(const SET_SEARCH_RESULT_OPT& set,
         }
     }
 
-    mu_swprintf(TextList[textIndex], L"\n");
-    textIndex++;
+    if (textIndex < 50)
+    {
+        mu_swprintf_s(TextList[textIndex], 100, L"\n");
+        textIndex++;
+    }
 
     return textIndex;
 }

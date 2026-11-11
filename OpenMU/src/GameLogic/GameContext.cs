@@ -84,10 +84,7 @@ public class GameContext : AsyncDisposable, IGameContext
             this.ConfigurationChangeMediator = changeMediator;
             this.ItemPowerUpFactory = new ItemPowerUpFactory(loggerFactory.CreateLogger<ItemPowerUpFactory>());
             this.PartyManager = new PartyManager(configuration.MaximumPartySize, loggerFactory.CreateLogger<Party>());
-            this._recoverTimer = new Timer(this.RecoverTimerElapsed, null, this.Configuration.RecoveryInterval, this.Configuration.RecoveryInterval);
-            this._tasksTimer = new Timer(this.ExecutePeriodicTasks, null, 1000, 1000);
             this.FeaturePlugIns = new FeaturePlugInContainer(this.PlugInManager);
-            this._configChangeHandlerRegistration = this.ConfigurationChangeMediator.RegisterObject(this.Configuration, this, this.OnGameConfigurationChangeAsync);
             this.DuelRoomManager = new DuelRoomManager(this.Configuration.DuelConfiguration!);
             this.ExperienceTable = BalanceV1.IsEnabled(this.Configuration)
                 ? BalanceV1.CreateExperienceTable(false)
@@ -95,9 +92,15 @@ public class GameContext : AsyncDisposable, IGameContext
             this.MasterExperienceTable = BalanceV1.IsEnabled(this.Configuration)
                 ? BalanceV1.CreateExperienceTable(true)
                 : CreateExpTable(this.Configuration.MasterExperienceFormula ?? DefaultMasterExperienceFormula, this.Configuration.MaximumMasterLevel);
+            this._configChangeHandlerRegistration = this.ConfigurationChangeMediator.RegisterObject(this.Configuration, this, this.OnGameConfigurationChangeAsync);
+            this._recoverTimer = new Timer(this.RecoverTimerElapsed, null, this.Configuration.RecoveryInterval, this.Configuration.RecoveryInterval);
+            this._tasksTimer = new Timer(this.ExecutePeriodicTasks, null, 1000, 1000);
         }
         catch (Exception ex)
         {
+            this._configChangeHandlerRegistration?.Dispose();
+            this._recoverTimer?.Dispose();
+            this._tasksTimer?.Dispose();
             loggerFactory.CreateLogger<GameContext>().LogError(ex, "Unexpected error in constructor of GameContext.");
             throw;
         }
@@ -273,7 +276,23 @@ public class GameContext : AsyncDisposable, IGameContext
         }
 
         // ReSharper disable once InconsistentlySynchronizedField it's desired behavior to initialize the map outside the lock to keep locked timespan short.
-        await this._mapInitializer.InitializeStateAsync(createdMap).ConfigureAwait(false);
+        try
+        {
+            await this._mapInitializer.InitializeStateAsync(createdMap).ConfigureAwait(false);
+        }
+        catch
+        {
+            using (await this._mapInitializerLock.LockAsync().ConfigureAwait(false))
+            {
+                if (this._mapList.TryGetValue(mapId, out var existing) && ReferenceEquals(existing, createdMap))
+                {
+                    this._mapList.Remove(mapId);
+                }
+            }
+
+            throw;
+        }
+
         this.GameMapCreated?.Invoke(this, createdMap);
         MapCounter.Add(1);
 
@@ -299,7 +318,7 @@ public class GameContext : AsyncDisposable, IGameContext
         {
             if (this._miniGames.TryGetValue(miniGameKey, out miniGameContext))
             {
-                if (miniGameContext.IsDisposed)
+                if (miniGameContext.IsDisposed || miniGameContext.IsDisposing)
                 {
                     this._miniGames.Remove(miniGameKey);
                 }
@@ -331,7 +350,24 @@ public class GameContext : AsyncDisposable, IGameContext
         var createdMap = miniGameContext.Map;
 
         // ReSharper disable once InconsistentlySynchronizedField it's desired behavior to initialize the map outside the lock to keep locked timespan short.
-        await this._mapInitializer.InitializeStateAsync(createdMap).ConfigureAwait(false);
+        try
+        {
+            await this._mapInitializer.InitializeStateAsync(createdMap).ConfigureAwait(false);
+        }
+        catch
+        {
+            using (await this._mapInitializerLock.LockAsync().ConfigureAwait(false))
+            {
+                if (this._miniGames.TryGetValue(miniGameKey, out var existing) && ReferenceEquals(existing, miniGameContext))
+                {
+                    this._miniGames.Remove(miniGameKey);
+                }
+            }
+
+            await miniGameContext.DisposeAsync().ConfigureAwait(false);
+            throw;
+        }
+
         this.GameMapCreated?.Invoke(this, createdMap);
         MiniGameCounter.Add(1);
         return miniGameContext;
@@ -340,11 +376,24 @@ public class GameContext : AsyncDisposable, IGameContext
     /// <inheritdoc />
     public async ValueTask RemoveMiniGameAsync(MiniGameContext miniGameContext)
     {
-        using var l = await this._mapInitializerLock.LockAsync().ConfigureAwait(false);
-        MiniGameCounter.Add(-1);
-        miniGameContext.Dispose();
-        this._miniGames.Remove(miniGameContext.Key);
-        this.GameMapRemoved?.Invoke(this, miniGameContext.Map);
+        bool removed;
+        using (await this._mapInitializerLock.LockAsync().ConfigureAwait(false))
+        {
+            removed = this._miniGames.TryGetValue(miniGameContext.Key, out var existing)
+                      && ReferenceEquals(existing, miniGameContext)
+                      && this._miniGames.Remove(miniGameContext.Key);
+        }
+
+        if (removed)
+        {
+            MiniGameCounter.Add(-1);
+            this.GameMapRemoved?.Invoke(this, miniGameContext.Map);
+        }
+
+        if (!miniGameContext.IsDisposed && !miniGameContext.IsDisposing)
+        {
+            await miniGameContext.DisposeAsync().ConfigureAwait(false);
+        }
     }
 
     /// <summary>
@@ -395,9 +444,9 @@ public class GameContext : AsyncDisposable, IGameContext
         }
 
         PlayerCounter.Add(-1);
-        if (player.SelectedCharacter != null)
+        if (player.SelectedCharacter?.Name is { } characterName)
         {
-            this.PlayersByCharacterName.TryRemove(player.SelectedCharacter.Name, out _);
+            ((ICollection<KeyValuePair<string, Player>>)this.PlayersByCharacterName).Remove(new KeyValuePair<string, Player>(characterName, player));
         }
 
         if (player.CurrentMap is { } currentMap)
@@ -544,13 +593,15 @@ public class GameContext : AsyncDisposable, IGameContext
 #pragma warning restore CS1998
     {
         BalanceV1.ValidateProfileMarkers(gameConfiguration);
-        this._recoverTimer.Change(gameConfiguration.RecoveryInterval, gameConfiguration.RecoveryInterval);
-        this.ExperienceTable = BalanceV1.IsEnabled(gameConfiguration)
+        var experienceTable = BalanceV1.IsEnabled(gameConfiguration)
             ? BalanceV1.CreateExperienceTable(false)
             : CreateExpTable(gameConfiguration.ExperienceFormula ?? DefaultExperienceFormula, gameConfiguration.MaximumLevel);
-        this.MasterExperienceTable = BalanceV1.IsEnabled(gameConfiguration)
+        var masterExperienceTable = BalanceV1.IsEnabled(gameConfiguration)
             ? BalanceV1.CreateExperienceTable(true)
             : CreateExpTable(gameConfiguration.MasterExperienceFormula ?? DefaultMasterExperienceFormula, gameConfiguration.MaximumMasterLevel);
+        this.ExperienceTable = experienceTable;
+        this.MasterExperienceTable = masterExperienceTable;
+        this._recoverTimer.Change(gameConfiguration.RecoveryInterval, gameConfiguration.RecoveryInterval);
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Catching all Exceptions.")]
@@ -598,13 +649,21 @@ public class GameContext : AsyncDisposable, IGameContext
 
     private ValueTask PlayerEnteredWorldAsync(Player player)
     {
-        this.PlayersByCharacterName.TryAdd(player.SelectedCharacter!.Name, player);
+        if (player.SelectedCharacter?.Name is { } name)
+        {
+            this.PlayersByCharacterName[name] = player;
+        }
+
         return ValueTask.CompletedTask;
     }
 
     private ValueTask PlayerLeftWorldAsync(Player player)
     {
-        this.PlayersByCharacterName.TryRemove(player.SelectedCharacter!.Name, out _);
+        if (player.SelectedCharacter?.Name is { } name)
+        {
+            ((ICollection<KeyValuePair<string, Player>>)this.PlayersByCharacterName).Remove(new KeyValuePair<string, Player>(name, player));
+        }
+
         return ValueTask.CompletedTask;
     }
 }

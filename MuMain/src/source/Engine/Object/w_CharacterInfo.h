@@ -227,7 +227,7 @@ public:
     wchar_t OwnerID[32];
 
 private:
-    ST_POSTMOVE_PROCESS* m_pPostMoveProcess;
+    ST_POSTMOVE_PROCESS* m_pPostMoveProcess = nullptr;
 
 public:
     void*  m_pTempParts;

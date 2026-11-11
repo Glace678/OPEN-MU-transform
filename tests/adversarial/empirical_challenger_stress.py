@@ -69,8 +69,8 @@ def run_experiment_1_zero_dodge(engine: SimulationEngine):
 def run_experiment_2_undergeared_stress(engine: SimulationEngine):
     print("\n--- EXPERIMENT 2: Undergeared Scaling Stress (0.70x, 0.50x, 0.30x Penalty) ---")
     penalties = [0.70, 0.50, 0.30]
+    prev_dps_by_build: Dict[Tuple[str, str], float] = {}
     for penalty in penalties:
-        stalls = 0
         min_dps = float("inf")
         max_dps = 0.0
         for cid, bid in ALL_BUILDS:
@@ -88,6 +88,12 @@ def run_experiment_2_undergeared_stress(engine: SimulationEngine):
             assert math.isfinite(dps), f"Non-finite DPS {dps} for {cid}/{bid} under {penalty}x gear"
             assert dps > 0.0, f"Zero or negative DPS {dps} for {cid}/{bid} under {penalty}x gear"
             assert math.isfinite(player.armor) and player.armor > 0, f"Invalid armor {player.armor}"
+            if (cid, bid) in prev_dps_by_build:
+                assert dps < prev_dps_by_build[(cid, bid)], (
+                    f"Non-monotonic DPS for {cid}/{bid} at {penalty}x: "
+                    f"{dps:.4f} >= previous {prev_dps_by_build[(cid, bid)]:.4f}"
+                )
+            prev_dps_by_build[(cid, bid)] = dps
 
             if dps < min_dps:
                 min_dps = dps
@@ -153,20 +159,25 @@ def run_experiment_4_massive_stochastic_boss_fights(engine: SimulationEngine):
         boss_fights = 0
         boss_wins = 0
         boss_ttks = []
-        for cid, bid in ALL_BUILDS:
+        for build_idx, (cid, bid) in enumerate(ALL_BUILDS):
             player = engine.get_player(cid, bid, b_info["player_level"], b_info["player_ml"], gear_id=b_info["gear"])
+            build_ttks = []
             for seed in range(seeds_per_combination):
-                random.seed(seed * 1000 + 42)
-                res = engine.fight(player, boss, count=1, dodge_chance=0.80)
+                fight_seed = seed * 1000 + 42 + build_idx
+                res = engine.fight(player, boss, count=1, dodge_chance=0.80, seed=fight_seed)
                 total_fights += 1
                 boss_fights += 1
                 if res.won:
                     total_wins += 1
                     boss_wins += 1
                 boss_ttks.append(res.seconds)
+                build_ttks.append(res.seconds)
                 burst_ratio = res.max_single_incoming_hit / player.health if player.health > 0 else 1.0
                 if burst_ratio > global_max_burst_ratio:
                     global_max_burst_ratio = burst_ratio
+            assert len({round(t, 6) for t in build_ttks}) > 1, (
+                f"Stochastic variance missing for {boss_name} {cid}/{bid}: all {seeds_per_combination} seeds identical"
+            )
 
         min_ttk = min(boss_ttks)
         max_ttk = max(boss_ttks)
@@ -184,7 +195,7 @@ def run_experiment_4_massive_stochastic_boss_fights(engine: SimulationEngine):
 def run_experiment_5_granular_level_smoothness(engine: SimulationEngine):
     print("\n--- EXPERIMENT 5: Granular Level-by-Level Step Monotonicity (5,600 Steps) ---")
     max_step_minutes = 0.0
-    slowest_level = (None, None, 0, 0.0)
+    slowest_level: Tuple[Any, Any, int, float] = (None, None, 0, 0.0)
 
     for cid, bid in ALL_BUILDS:
         # Step through progression and inspect max step minutes
@@ -193,9 +204,14 @@ def run_experiment_5_granular_level_smoothness(engine: SimulationEngine):
         assert 13.5 <= res.normal_hours <= 16.5, f"{cid}/{bid} clear time {res.normal_hours:.2f}h out of [13.5, 16.5]"
         if res.max_normal_level_minutes > max_step_minutes:
             max_step_minutes = res.max_normal_level_minutes
-            slowest_level = (cid, bid, res.max_normal_level_minutes)
+            slowest_idx = max(range(len(res.level_hours)), key=res.level_hours.__getitem__) if res.level_hours else 0
+            slowest_level = (cid, bid, 1 + slowest_idx, res.max_normal_level_minutes)
 
-    print(f"  Slowest single level across all 14 builds: {slowest_level[0]}/{slowest_level[1]} at {slowest_level[2]:.2f} minutes (Cap: 5.0m).")
+    print(
+        f"  Slowest single level across all 14 builds: "
+        f"{slowest_level[0]}/{slowest_level[1]} (Level {slowest_level[2]}) "
+        f"at {slowest_level[3]:.2f} minutes (Cap: 5.0m)."
+    )
     assert max_step_minutes <= 5.0, f"Level duration cap violated: {max_step_minutes:.2f}m > 5.0m"
     print("  [PASS] Experiment 5: Continuous 1-400 leveling speed with zero progression stalls.")
 

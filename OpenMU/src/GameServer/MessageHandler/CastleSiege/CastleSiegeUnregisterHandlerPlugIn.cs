@@ -30,7 +30,12 @@ internal class CastleSiegeUnregisterHandlerPlugIn : ISubPacketHandlerPlugIn
     /// <inheritdoc/>
     public ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
-        var request = new CastleSiegeUnregisterRequest(packet);
+        if (packet.Length < CastleSiegeUnregisterRequest.Length)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        CastleSiegeUnregisterRequest request = packet;
         return this._action.UnregisterAsync(
             player,
             CastleSiegeHandlerContext.Get(player),

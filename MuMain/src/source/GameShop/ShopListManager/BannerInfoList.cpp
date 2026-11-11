@@ -26,7 +26,7 @@ CBannerInfoList::~CBannerInfoList()  // OK
 
 WZResult CBannerInfoList::LoadBanner(std::wstring strDirPath, std::wstring strScriptFileName, bool bDonwLoad)
 {
-    static WZResult result;
+    WZResult result;
 
     result.BuildSuccessResult();
 
@@ -41,15 +41,26 @@ WZResult CBannerInfoList::LoadBanner(std::wstring strDirPath, std::wstring strSc
         this->Clear();
 
         wchar_t buff[1024] = {0};
+        bool    firstLine  = true;
 
         while (true)
         {
             if (!ifs.getline(buff, std::size(buff)))
                 break;
 
+            const wchar_t* linePtr = buff;
+            if (firstLine)
+            {
+                firstLine = false;
+                if (linePtr[0] == L'\xFEFF')
+                {
+                    ++linePtr;
+                }
+            }
+
             CBannerInfo info;
 
-            if (info.SetBanner(buff, strDirPath, bDonwLoad))
+            if (info.SetBanner(linePtr, strDirPath, bDonwLoad))
             {
                 this->Append(info);
             }
@@ -68,6 +79,7 @@ WZResult CBannerInfoList::LoadBanner(std::wstring strDirPath, std::wstring strSc
 void CBannerInfoList::Clear()  // OK
 {
     this->m_BannerInfos.clear();
+    this->m_BannerInfoIter = this->m_BannerInfos.end();
 }
 
 int CBannerInfoList::GetSize()  // OK

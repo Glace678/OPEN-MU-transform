@@ -23,6 +23,8 @@ public sealed class CastleSiegeHuntZoneEnterAction
     public async ValueTask<bool> EnterAsync(Player player, CastleSiegeContext? context)
     {
         if (context is not { Configuration.Enabled: true }
+            || !player.IsAlive
+            || (player.PlayerState.CurrentState != PlayerState.NpcDialogOpened && player.PlayerState.CurrentState != PlayerState.EnteredWorld)
             || player.OpenedNpc?.Definition.Number != GuardsmanNumber
             || player.CurrentMap?.Definition.Number != context.Configuration.CastleSiegeMapDefinition?.Number
             || context.Configuration.LandOfTrialsMapDefinition is not { } targetMap
@@ -37,7 +39,8 @@ public sealed class CastleSiegeHuntZoneEnterAction
             return false;
         }
 
-        if (!await this._taxProvider.TryPayHuntEntryFeeAsync(player, context).ConfigureAwait(false))
+        var (paid, paidFee) = await this._taxProvider.TryPayHuntEntryFeeWithAmountAsync(player, context).ConfigureAwait(false);
+        if (!paid)
         {
             var fee = await this._taxProvider.GetHuntEntryFeeAsync(player, context).ConfigureAwait(false);
             if (fee > player.Money)
@@ -51,8 +54,25 @@ public sealed class CastleSiegeHuntZoneEnterAction
             return false;
         }
 
+        var previousOpenedNpc = player.OpenedNpc;
         player.OpenedNpc = null;
-        await player.WarpToAsync(targetGate).ConfigureAwait(false);
-        return true;
+        var warped = false;
+        try
+        {
+            warped = await player.TryWarpToAsync(targetGate).ConfigureAwait(false);
+            return warped;
+        }
+        finally
+        {
+            if (!warped)
+            {
+                if (player.PlayerState.CurrentState == PlayerState.NpcDialogOpened && player.OpenedNpc is null)
+                {
+                    player.OpenedNpc = previousOpenedNpc;
+                }
+
+                await this._taxProvider.RevertHuntEntryFeeAsync(player, context, paidFee).ConfigureAwait(false);
+            }
+        }
     }
 }

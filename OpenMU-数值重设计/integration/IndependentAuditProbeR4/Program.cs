@@ -76,13 +76,18 @@ Line("num\tname\tdlvHP\ttgtPostHP\tdlvDef\ttgtPostDef\tdlvDr\ttgtPostDr");
 double[,] tgt = {{3,162,5,24},{26,188,5,26},{418,210,6,27},{28,360,10,34},{29,456,13,38},{30,524,14,40},{12,1474,26,26}};
 foreach(var n in new short[]{3,26,418,28,29,30,12}){
     var m=cfg.Monsters.FirstOrDefault(x=>x.Number==n); if(m==null)continue;
-    Line($"{m.Number}\t{m.Designation}\t{R(m,Stats.MaximumHealth):F1}\t?\t{R(m,Stats.DefenseBase):F1}\t?\t{R(m,Stats.DefenseRatePvm):F1}\t?");
+    int row = -1;
+    for (int i = 0; i < tgt.GetLength(0); i++) { if ((int)tgt[i, 0] == n) { row = i; break; } }
+    string tgtHp = row >= 0 ? tgt[row, 1].ToString("F1", inv) : "?";
+    string tgtDef = row >= 0 ? tgt[row, 2].ToString("F1", inv) : "?";
+    string tgtDr = row >= 0 ? tgt[row, 3].ToString("F1", inv) : "?";
+    Line($"{m.Number}\t{m.Designation}\t{R(m,Stats.MaximumHealth):F1}\t{tgtHp}\t{R(m,Stats.DefenseBase):F1}\t{tgtDef}\t{R(m,Stats.DefenseRatePvm):F1}\t{tgtDr}");
 }
 
 Line("");
 Line("### B: root-cause monsters DELIVERED state, real attacker at monster level ###");
 Line("num\tname\tmLvl\tclass\thits\thit\teff\tttk_s");
-foreach(var n in new short[]{3,26,28,29,30,12}){
+foreach(var n in new short[]{3,26,418,28,29,30,12}){
     var m=cfg.Monsters.FirstOrDefault(x=>x.Number==n); if(m==null)continue;
     int ml=(int)R(m,Stats.Level);
     foreach(var cn in new[]{"Dark Knight","Dark Wizard","Fairy Elf"}){

@@ -41,6 +41,7 @@ CPartyManager* CPartyManager::GetInstance()
 
 void CPartyManager::SearchPartyMember()
 {
+    const int partyCount = std::clamp(PartyNumber, 0, MAX_PARTYS);
     for (int i = 0; i < MAX_CHARACTERS_CLIENT; i++)
     {
         CHARACTER* c = &CharactersClient[i];
@@ -48,7 +49,7 @@ void CPartyManager::SearchPartyMember()
         if (o->Type == MODEL_PLAYER && o->Kind == KIND_PLAYER && o->Live && o->Visible && o->Alpha > 0.f &&
             c->Dead == 0)
         {
-            for (int j = 0; j < PartyNumber; ++j)
+            for (int j = 0; j < partyCount; ++j)
             {
                 PARTY_t* p = &Party[j];
 
@@ -68,18 +69,25 @@ void CPartyManager::SearchPartyMember()
         }
     }
 
-    for (int j = 0; j < PartyNumber; ++j)
+    for (int j = 0; j < partyCount; ++j)
     {
         PARTY_t* p = &Party[j];
 
         if (p->index >= 0)
             continue;
 
-        int length = std::max<int>(wcslen(p->Name), std::max<int>(1, wcslen(Hero->ID)));
-
-        if (!wcsncmp(p->Name, Hero->ID, length))
+        if (Hero != nullptr)
         {
-            p->index = -3;
+            int length = std::max<int>(wcslen(p->Name), std::max<int>(1, wcslen(Hero->ID)));
+
+            if (!wcsncmp(p->Name, Hero->ID, length))
+            {
+                p->index = -3;
+            }
+            else
+            {
+                p->index = -1;
+            }
         }
         else
         {
@@ -95,13 +103,23 @@ bool CPartyManager::IsPartyActive()
 
 bool CPartyManager::IsPartyMember(int index)
 {
+    if (index < 0 || index >= MAX_CHARACTERS_CLIENT)
+    {
+        return false;
+    }
     CHARACTER* c = &CharactersClient[index];
     return IsPartyMemberChar(c);
 }
 
 bool CPartyManager::IsPartyMemberChar(CHARACTER* c)
 {
-    for (int i = 0; i < PartyNumber; ++i)
+    if (c == nullptr)
+    {
+        return false;
+    }
+
+    const int partyCount = std::clamp(PartyNumber, 0, MAX_PARTYS);
+    for (int i = 0; i < partyCount; ++i)
     {
         PARTY_t* p = &Party[i];
 

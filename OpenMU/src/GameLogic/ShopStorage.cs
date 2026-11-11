@@ -44,4 +44,16 @@ public class ShopStorage : Storage, IShopStorage
 
         return await base.AddItemAsync(slot, item).ConfigureAwait(false);
     }
+
+    /// <summary>
+    /// Restores an item back into its original shop slot during an internal purchase rollback,
+    /// bypassing the customer-facing <see cref="StoreOpen"/> guard while holding <see cref="StoreLock"/>.
+    /// </summary>
+    /// <param name="slot">The original shop slot.</param>
+    /// <param name="item">The item to restore.</param>
+    /// <returns><c>true</c> if restored successfully; otherwise, <c>false</c>.</returns>
+    internal ValueTask<bool> RestoreItemInternalAsync(byte slot, Item item)
+    {
+        return base.AddItemAsync(slot, item);
+    }
 }

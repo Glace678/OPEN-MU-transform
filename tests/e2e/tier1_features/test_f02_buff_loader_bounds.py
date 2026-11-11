@@ -31,6 +31,13 @@ class TestF02BuffLoaderBounds(unittest.TestCase):
         safe_size = 128
         self.assertTrue(BuffScriptValidator.is_valid_record_count(safe_count, safe_size))
 
+    def test_non_positive_and_excessive_record_counts_rejected(self):
+        # Non-positive, >10,000 records, or >50 MB allocation payloads must be rejected
+        self.assertFalse(BuffScriptValidator.is_valid_record_count(0, BuffScriptValidator.STRUCT_SIZE))
+        self.assertFalse(BuffScriptValidator.is_valid_record_count(-1, BuffScriptValidator.STRUCT_SIZE))
+        self.assertFalse(BuffScriptValidator.is_valid_record_count(10001, BuffScriptValidator.STRUCT_SIZE))
+        self.assertFalse(BuffScriptValidator.is_valid_record_count(1000, 60 * 1024))
+
 
 if __name__ == "__main__":
     unittest.main()

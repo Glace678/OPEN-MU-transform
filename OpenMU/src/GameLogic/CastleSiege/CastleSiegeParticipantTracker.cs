@@ -55,11 +55,17 @@ public static class CastleSiegeParticipantTracker
             var queuedCharacterIds = new List<Guid>();
             foreach (var participant in eligibleParticipants)
             {
+                if (context.RewardedParticipantIds.ContainsKey(participant.CharacterId))
+                {
+                    continue;
+                }
+
                 if (onlinePlayers.TryGetValue(participant.CharacterId, out var player)
                     && await CastleSiegeRewardDelivery
                         .TryAddToInventoryAsync(player, rewardDefinition)
                         .ConfigureAwait(false))
                 {
+                    context.RewardedParticipantIds.TryAdd(participant.CharacterId, 0);
                     continue;
                 }
 
@@ -71,6 +77,10 @@ public static class CastleSiegeParticipantTracker
                 await CastleSiegeRewardDelivery
                     .QueueAsync(context.GameContext, queuedCharacterIds, rewardDefinition)
                     .ConfigureAwait(false);
+                foreach (var characterId in queuedCharacterIds)
+                {
+                    context.RewardedParticipantIds.TryAdd(characterId, 0);
+                }
             }
         }
 
@@ -82,6 +92,11 @@ public static class CastleSiegeParticipantTracker
 
         foreach (var guild in context.FinalGuildList.Values.Where(guild => guild.Side == ownerGuild.Side))
         {
+            if (context.ScoredGuildIds.ContainsKey(guild.PersistentGuildId))
+            {
+                continue;
+            }
+
             var score = guild.PersistentGuildId == ownerGuild.PersistentGuildId
                 ? context.Configuration.GuildScoreCastleSiege
                 : context.Configuration.GuildScoreCastleSiegeMembers;
@@ -99,6 +114,7 @@ public static class CastleSiegeParticipantTracker
             }
 
             await gameServerContext.GuildServer.IncreaseGuildScoreAsync(runtimeGuildId, score).ConfigureAwait(false);
+            context.ScoredGuildIds.TryAdd(guild.PersistentGuildId, 0);
         }
     }
 

@@ -33,42 +33,46 @@ public class UpdateCharacterStatsPlugIn : IUpdateCharacterStatsPlugIn
     public async ValueTask UpdateCharacterStatsAsync()
     {
         var connection = this._player.Connection;
-        if (connection is null || this._player.Account is null)
+        if (connection is null || this._player.Account is null || this._player.Attributes is not { } attributes || this._player.SelectedCharacter is not { } selectedCharacter)
         {
             return;
         }
 
+        var expTable = this._player.GameServerContext.ExperienceTable;
+        var nextLevelExp = expTable.Length > 0
+            ? (ulong)expTable[Math.Clamp((int)attributes[Stats.Level] + 1, 0, expTable.Length - 1)]
+            : 0UL;
         await connection.SendCharacterInformationAsync(
             this._player.Position.X,
             this._player.Position.Y,
-            this._player.SelectedCharacter!.CurrentMap!.Number.ToUnsigned(),
-            (ulong)this._player.SelectedCharacter.Experience,
-            (ulong)this._player.GameServerContext.ExperienceTable[(int)this._player.Attributes![Stats.Level] + 1],
-            (ushort)Math.Max(0, this._player.SelectedCharacter.LevelUpPoints),
-            (ushort)this._player.Attributes[Stats.BaseStrength],
-            (ushort)this._player.Attributes[Stats.BaseAgility],
-            (ushort)this._player.Attributes[Stats.BaseVitality],
-            (ushort)this._player.Attributes[Stats.BaseEnergy],
-            (ushort)this._player.Attributes[Stats.CurrentHealth],
-            (ushort)this._player.Attributes[Stats.MaximumHealth],
-            (ushort)this._player.Attributes[Stats.CurrentMana],
-            (ushort)this._player.Attributes[Stats.MaximumMana],
-            (ushort)this._player.Attributes[Stats.CurrentShield],
-            (ushort)this._player.Attributes[Stats.MaximumShield],
-            (ushort)this._player.Attributes[Stats.CurrentAbility],
-            (ushort)this._player.Attributes[Stats.MaximumAbility],
+            selectedCharacter.CurrentMap!.Number.ToUnsigned(),
+            (ulong)selectedCharacter.Experience,
+            nextLevelExp,
+            (ushort)Math.Max(0, selectedCharacter.LevelUpPoints),
+            (ushort)attributes[Stats.BaseStrength],
+            (ushort)attributes[Stats.BaseAgility],
+            (ushort)attributes[Stats.BaseVitality],
+            (ushort)attributes[Stats.BaseEnergy],
+            (ushort)attributes[Stats.CurrentHealth],
+            (ushort)attributes[Stats.MaximumHealth],
+            (ushort)attributes[Stats.CurrentMana],
+            (ushort)attributes[Stats.MaximumMana],
+            (ushort)attributes[Stats.CurrentShield],
+            (ushort)attributes[Stats.MaximumShield],
+            (ushort)attributes[Stats.CurrentAbility],
+            (ushort)attributes[Stats.MaximumAbility],
             (uint)this._player.Money,
-            this._player.SelectedCharacter.State.Convert(),
-            this._player.SelectedCharacter.CharacterStatus.Convert(),
-            (ushort)this._player.SelectedCharacter.UsedFruitPoints,
-            this._player.SelectedCharacter.GetMaximumFruitPoints(),
-            (ushort)this._player.Attributes[Stats.BaseLeadership],
-            (ushort)this._player.SelectedCharacter.UsedNegFruitPoints,
-            this._player.SelectedCharacter.GetMaximumFruitPoints(),
-            (byte)this._player.SelectedCharacter.InventoryExtensions)
+            selectedCharacter.State.Convert(),
+            selectedCharacter.CharacterStatus.Convert(),
+            (ushort)selectedCharacter.UsedFruitPoints,
+            selectedCharacter.GetMaximumFruitPoints(),
+            (ushort)attributes[Stats.BaseLeadership],
+            (ushort)selectedCharacter.UsedNegFruitPoints,
+            selectedCharacter.GetMaximumFruitPoints(),
+            (byte)selectedCharacter.InventoryExtensions)
             .ConfigureAwait(false);
 
-        if (this._player.SelectedCharacter.CharacterClass!.IsMasterClass)
+        if (selectedCharacter.CharacterClass!.IsMasterClass)
         {
             await this._player.InvokeViewPlugInAsync<IUpdateMasterStatsPlugIn>(p => p.SendMasterStatsAsync()).ConfigureAwait(false);
         }

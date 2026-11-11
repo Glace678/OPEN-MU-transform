@@ -17,6 +17,7 @@ internal static class Program
             ("empty locale marker is zero coverage", EmptyLocaleMarker),
             ("printf type mismatch is an error", PrintfTypeMismatch),
             ("printf argument count mismatch is an error", PrintfCountMismatch),
+            ("printf argument order mismatch is an error", PrintfOrderMismatch),
             ("verified plain-text label is reported separately", PlainTextLabel),
             ("plain-text classification is restricted to its group", PlainTextGroupScope),
             ("plain-text classification is restricted to its key", PlainTextKeyScope),
@@ -146,6 +147,14 @@ internal static class Program
         using var fixture = new ResourceFixture();
         fixture.Write("Game", "en", ("Value", "%d/%d"));
         fixture.Write("Game", "es", ("Value", "%d"));
+        Equal(1, fixture.Report("es").Groups.Single().PlaceholderMismatches);
+    }
+
+    private static void PrintfOrderMismatch()
+    {
+        using var fixture = new ResourceFixture();
+        fixture.Write("Game", "en", ("Value", "%s +%d"));
+        fixture.Write("Game", "es", ("Value", "%d +%s"));
         Equal(1, fixture.Report("es").Groups.Single().PlaceholderMismatches);
     }
 
@@ -417,7 +426,7 @@ internal static class Program
 
         foreach (var locale in new[] { "fr", "ko", "vi" })
         {
-            Equal(4, report.Groups.Where(row => row.Locale == locale).Sum(row => row.PresentKeys));
+            Equal(9, report.Groups.Where(row => row.Locale == locale).Sum(row => row.PresentKeys));
         }
     }
 

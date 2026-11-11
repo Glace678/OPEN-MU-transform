@@ -113,11 +113,11 @@ void SEASON3B::CNewUICharacterInfoWindow::SetButtonInfo()
 
     m_BtnExit.ChangeButtonImgState(true, IMAGE_CHAINFO_BTN_EXIT, false);
     m_BtnExit.ChangeButtonInfo(m_Pos.x + 13, m_Pos.y + 392, 36, 29);
-    mu_swprintf(strText, I18N::Game::CloseS, L"C");
+    swprintf_s(strText, _countof(strText), I18N::Game::CloseS, L"C");
     m_BtnExit.ChangeToolTipText(strText, true);
     m_BtnQuest.ChangeButtonImgState(true, IMAGE_CHAINFO_BTN_QUEST, false);
     m_BtnQuest.ChangeButtonInfo(m_Pos.x + 50, m_Pos.y + 392, 36, 29);
-    mu_swprintf(strText, L"%ls(%ls)", I18N::Game::Quest, L"T");
+    swprintf_s(strText, _countof(strText), L"%ls(%ls)", I18N::Game::Quest, L"T");
     m_BtnQuest.ChangeToolTipText(strText, true);
     m_BtnPet.ChangeButtonImgState(true, IMAGE_CHAINFO_BTN_PET, false);
     m_BtnPet.ChangeButtonInfo(m_Pos.x + 87, m_Pos.y + 392, 36, 29);
@@ -130,10 +130,9 @@ void SEASON3B::CNewUICharacterInfoWindow::SetButtonInfo()
 
 void SEASON3B::CNewUICharacterInfoWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }

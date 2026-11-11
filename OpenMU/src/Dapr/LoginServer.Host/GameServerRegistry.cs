@@ -51,11 +51,11 @@ public sealed class GameServerRegistry : TimeoutBasedGameServerRegistry
         {
             if (upTime <= this._newServerUptimeLimit)
             {
-                this.NewGameServerAdded?.SafeInvokeAsync(gameServerId);
+                await (this.NewGameServerAdded?.SafeInvokeAsync(gameServerId) ?? ValueTask.CompletedTask).ConfigureAwait(false);
             }
             else
             {
-                this.GameServerAdded?.SafeInvokeAsync(gameServerId);
+                await (this.GameServerAdded?.SafeInvokeAsync(gameServerId) ?? ValueTask.CompletedTask).ConfigureAwait(false);
             }
         }
     }

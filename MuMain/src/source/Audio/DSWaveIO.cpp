@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Audio/DSWaveIO.h"
 
+#include <climits>
 #include <cwchar>
 #include <cstring>
 
@@ -111,7 +112,8 @@ bool waveIO::LoadWaveHeader(const wchar_t* filename)
         return false;
     }
 
-    if (mmioRead(m_hmmio, reinterpret_cast<char*>(&m_wfex), sizeof(PCMWAVEFORMAT)) == -1)
+    if (mmioRead(m_hmmio, reinterpret_cast<char*>(&m_wfex), sizeof(PCMWAVEFORMAT)) !=
+        static_cast<LONG>(sizeof(PCMWAVEFORMAT)))
     {
         ReportWaveWarning(L"Failed to read wave format", filename);
         CloseWaveFile();
@@ -146,6 +148,13 @@ bool waveIO::LoadWaveHeader(const wchar_t* filename)
         return false;
     }
 
+    if (dataChunk.cksize == 0 || dataChunk.cksize > static_cast<DWORD>(INT_MAX))
+    {
+        ReportWaveWarning(L"Invalid wave data chunk size", filename);
+        CloseWaveFile();
+        return false;
+    }
+
     m_DataSize = static_cast<int>(dataChunk.cksize);
     m_DataLeft = m_DataSize;
     return true;
@@ -153,7 +162,7 @@ bool waveIO::LoadWaveHeader(const wchar_t* filename)
 
 bool waveIO::ReadWaveData(char* buffer, int bufferSize)
 {
-    if (!IsInputMode() || buffer == nullptr || bufferSize <= 0 || m_hmmio == nullptr)
+    if (!IsInputMode() || buffer == nullptr || bufferSize <= 0 || m_hmmio == nullptr || m_DataLeft <= 0)
     {
         return false;
     }

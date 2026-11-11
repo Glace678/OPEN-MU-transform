@@ -57,6 +57,6 @@ public sealed class PartyManager : IPartyManager
         => this._partyByCharacterName[characterName] = party;
 
     /// <inheritdoc />
-    void IPartyManager.UntrackMembership(string characterName)
-        => this._partyByCharacterName.TryRemove(characterName, out _);
+    void IPartyManager.UntrackMembership(string characterName, Party party)
+        => ((ICollection<KeyValuePair<string, Party>>)this._partyByCharacterName).Remove(new KeyValuePair<string, Party>(characterName, party));
 }

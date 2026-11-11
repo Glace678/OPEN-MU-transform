@@ -811,7 +811,7 @@ CHARACTER* M39Kanturu3rd::CreateKanturu3rdMonster(int iType, int PosX, int PosY,
         }
         break;
         case MONSTER_MAYA: {
-            OpenMonsterModel(MONSTER_MODEL_BULL_FIGHTER);  // shouldn't that be MONSTER_MODEL_MAYA?
+            OpenMonsterModel(MONSTER_MODEL_MAYA);
             c = CreateCharacter(Key, MODEL_MAYA, PosX, PosY);
             if (c == nullptr)
                 break;  // #MG-38: CreateCharacter failed

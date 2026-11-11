@@ -52,11 +52,15 @@ ULONGLONG DownloadFileInfo::GetFileLength()  // OK
 void DownloadFileInfo::SetFilePath(TCHAR* szFileName, TCHAR* szLocalFilePath, TCHAR* szRemoteFilePath,
                                    TCHAR* szTargerDirPath)  // OK
 {
-    StringCchCopy(this->m_szFileName, sizeof(this->m_szFileName), szFileName);
-    StringCchCopy(this->m_szLocalFilePath, sizeof(this->m_szLocalFilePath), szLocalFilePath);
-    StringCchCopy(this->m_szRemoteFilePath, sizeof(this->m_szRemoteFilePath), szRemoteFilePath);
+    StringCchCopy(this->m_szFileName, std::size(this->m_szFileName), szFileName ? szFileName : TEXT(""));
+    StringCchCopy(this->m_szLocalFilePath, std::size(this->m_szLocalFilePath),
+                  szLocalFilePath ? szLocalFilePath : TEXT(""));
+    StringCchCopy(this->m_szRemoteFilePath, std::size(this->m_szRemoteFilePath),
+                  szRemoteFilePath ? szRemoteFilePath : TEXT(""));
     if (szTargerDirPath)
-        StringCchCopy(this->m_szTargerDirPath, sizeof(this->m_szTargerDirPath), szTargerDirPath);
+        StringCchCopy(this->m_szTargerDirPath, std::size(this->m_szTargerDirPath), szTargerDirPath);
+    else
+        this->m_szTargerDirPath[0] = TEXT('\0');
 }
 
 void DownloadFileInfo::SetFileLength(ULONGLONG uFileLength)  // OK
@@ -128,14 +132,21 @@ BOOL DownloadServerInfo::IsPassive()  // OK
 void DownloadServerInfo::SetServerInfo(TCHAR* szServerURL, INTERNET_PORT nPort, TCHAR* szUserID,
                                        TCHAR* szPassword)  // OK
 {
-    auto* search = wcschr(szServerURL, ':');
-    if (search && search[1] == '/' && search[2] == '/')
-        StringCchCopy(this->m_szServerURL, sizeof(this->m_szServerURL), search + 3);
+    if (szServerURL)
+    {
+        auto* search = wcschr(szServerURL, L':');
+        if (search && search[1] == L'/' && search[2] == L'/')
+            StringCchCopy(this->m_szServerURL, std::size(this->m_szServerURL), search + 3);
+        else
+            StringCchCopy(this->m_szServerURL, std::size(this->m_szServerURL), szServerURL);
+    }
     else
-        StringCchCopy(this->m_szServerURL, sizeof(this->m_szServerURL), szServerURL);
+    {
+        this->m_szServerURL[0] = TEXT('\0');
+    }
     this->m_nPort = nPort;
-    StringCchCopy(this->m_szUserID, sizeof(this->m_szUserID), szUserID);
-    StringCchCopy(this->m_szPassword, sizeof(this->m_szPassword), szPassword);
+    StringCchCopy(this->m_szUserID, std::size(this->m_szUserID), szUserID ? szUserID : TEXT(""));
+    StringCchCopy(this->m_szPassword, std::size(this->m_szPassword), szPassword ? szPassword : TEXT(""));
 }
 
 void DownloadServerInfo::SetDownloaderType(DownloaderType dwDownloaderType)  // OK

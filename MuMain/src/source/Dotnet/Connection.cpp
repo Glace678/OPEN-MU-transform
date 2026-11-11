@@ -1,5 +1,7 @@
 #include "stdafx.h"
+#include <atomic>
 #include <map>
+#include <mutex>
 
 #include "Connection.h"
 
@@ -7,19 +9,22 @@
 #include "PacketBindings_ConnectServer.h"
 #include "PacketBindings_ClientToServer.h"
 
+namespace
+{
+std::recursive_mutex           g_connectionsMutex;
 std::map<int32_t, Connection*> connections;
+}  // namespace
 
 namespace DotNetBridge
 {
-bool g_dotnetErrorDisplayed = false;
+std::atomic<bool> g_dotnetErrorDisplayed{false};
 
 void ReportDotNetError(const char* detail)
 {
-    if (g_dotnetErrorDisplayed)
+    if (g_dotnetErrorDisplayed.exchange(true, std::memory_order_acq_rel))
     {
         return;
     }
-    g_dotnetErrorDisplayed = true;
 
     wchar_t buffer[512];
     std::swprintf(
@@ -48,8 +53,8 @@ bool IsManagedLibraryAvailable()
 using DotNetBridge::ReportDotNetError;
 using DotNetBridge::IsManagedLibraryAvailable;
 
-using onPacketReceived = void(int32_t, int32_t, BYTE*);
-using onDisconnected   = void(int32_t);
+typedef void(CORECLR_DELEGATE_CALLTYPE* onPacketReceived)(int32_t, int32_t, BYTE*);
+typedef void(CORECLR_DELEGATE_CALLTYPE* onDisconnected)(int32_t);
 
 typedef int32_t(CORECLR_DELEGATE_CALLTYPE* Connect)(const wchar_t*, int32_t, BYTE, onPacketReceived, onDisconnected);
 typedef void(CORECLR_DELEGATE_CALLTYPE* Disconnect)(int32_t);
@@ -64,9 +69,10 @@ BeginReceive dotnet_beginreceive = LoadManagedSymbol<BeginReceive>("ConnectionMa
 
 Send dotnet_send = LoadManagedSymbol<Send>("ConnectionManager_Send");
 
-void Connection::OnPacketReceivedS(const int32_t handle, const int32_t size, BYTE* data)
+void CORECLR_DELEGATE_CALLTYPE Connection::OnPacketReceivedS(const int32_t handle, const int32_t size, BYTE* data)
 {
-    const auto it = connections.find(handle);
+    std::lock_guard<std::recursive_mutex> lock(g_connectionsMutex);
+    const auto                            it = connections.find(handle);
     if (it == connections.end())
     {
         return;
@@ -78,9 +84,10 @@ void Connection::OnPacketReceivedS(const int32_t handle, const int32_t size, BYT
     }
 }
 
-void Connection::OnDisconnectedS(const int32_t handle)
+void CORECLR_DELEGATE_CALLTYPE Connection::OnDisconnectedS(const int32_t handle)
 {
-    const auto it = connections.find(handle);
+    std::lock_guard<std::recursive_mutex> lock(g_connectionsMutex);
+    const auto                            it = connections.find(handle);
     if (it == connections.end())
     {
         return;
@@ -99,41 +106,38 @@ Connection::Connection(const wchar_t* host, int32_t port, bool isEncrypted,
     if (!dotnet_connect)
     {
         ReportDotNetError("ConnectionManager_Connect");
-        this->_handle = 0;
+        this->_handle.store(0, std::memory_order_release);
         return;
     }
 
-    this->_handle = dotnet_connect(host, port, isEncrypted ? 1 : 0, &OnPacketReceivedS, &OnDisconnectedS);
+    const int32_t newHandle = dotnet_connect(host, port, isEncrypted ? 1 : 0, &OnPacketReceivedS, &OnDisconnectedS);
+    this->_handle.store(newHandle, std::memory_order_release);
 
-    if (IsConnected())
+    if (newHandle > 0)
     {
-        connections[this->_handle] = this;
-        if (dotnet_beginreceive)
-        {
-            dotnet_beginreceive(this->_handle);
-        }
-
         _chatServer    = new PacketFunctions_ChatServer();
         _connectServer = new PacketFunctions_ConnectServer();
         _gameServer    = new PacketFunctions_ClientToServer();
 
-        _chatServer->SetHandle(this->_handle);
-        _connectServer->SetHandle(this->_handle);
-        _gameServer->SetHandle(this->_handle);
+        _chatServer->SetHandle(newHandle);
+        _connectServer->SetHandle(newHandle);
+        _gameServer->SetHandle(newHandle);
+
+        {
+            std::lock_guard<std::recursive_mutex> lock(g_connectionsMutex);
+            connections[newHandle] = this;
+        }
+
+        if (dotnet_beginreceive)
+        {
+            dotnet_beginreceive(newHandle);
+        }
     }
 }
 
 Connection::~Connection()
 {
-    if (!IsConnected())
-    {
-        return;
-    }
-
-    if (dotnet_disconnect)
-    {
-        dotnet_disconnect(_handle);
-    }
+    Close();
 
     SafeDelete(_chatServer);
     SafeDelete(_connectServer);
@@ -142,12 +146,13 @@ Connection::~Connection()
 
 bool Connection::IsConnected()
 {
-    return this->_handle > 0;
+    return this->_handle.load(std::memory_order_acquire) > 0;
 }
 
 void Connection::Send(const BYTE* data, const int32_t size)
 {
-    if (!IsConnected())
+    const int32_t handle = this->_handle.load(std::memory_order_acquire);
+    if (handle <= 0 || data == nullptr || size <= 0)
     {
         return;
     }
@@ -158,35 +163,54 @@ void Connection::Send(const BYTE* data, const int32_t size)
         return;
     }
 
-    dotnet_send(this->_handle, data, size);
+    dotnet_send(handle, data, size);
 }
 
 void Connection::Close()
 {
-    if (!IsConnected())
+    int32_t handle = 0;
     {
-        return;
+        std::lock_guard<std::recursive_mutex> lock(g_connectionsMutex);
+        handle = this->_handle.exchange(0, std::memory_order_acq_rel);
+        if (handle > 0)
+        {
+            const auto it = connections.find(handle);
+            if (it != connections.end() && it->second == this)
+            {
+                connections.erase(it);
+            }
+        }
     }
 
-    if (dotnet_disconnect)
+    if (handle > 0 && dotnet_disconnect)
     {
-        dotnet_disconnect(this->_handle);
+        dotnet_disconnect(handle);
     }
 }
 
 void Connection::OnDisconnected()
 {
-    if (!IsConnected())
+    std::lock_guard<std::recursive_mutex> lock(g_connectionsMutex);
+    const int32_t                         handle = this->_handle.exchange(0, std::memory_order_acq_rel);
+    if (handle <= 0)
     {
         return;
     }
 
-    connections.erase(this->_handle);
-    this->_handle = 0;
+    const auto it = connections.find(handle);
+    if (it != connections.end() && it->second == this)
+    {
+        connections.erase(it);
+    }
 }
 
 void Connection::OnPacketReceived(const BYTE* data, const int32_t size)
 {
+    if (data == nullptr || size <= 0 || !this->_packetHandler)
+    {
+        return;
+    }
+
     wprintf(L"Received packet, size %d", size);
-    this->_packetHandler(this->_handle, data, size);
+    this->_packetHandler(this->_handle.load(std::memory_order_acquire), data, size);
 }

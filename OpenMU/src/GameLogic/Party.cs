@@ -77,8 +77,23 @@ public sealed class Party : AsyncDisposable
     /// <returns>True if the member was added successfully; false if the party is full.</returns>
     public async ValueTask<bool> AddAsync(IPartyMember newMember)
     {
+        if (newMember.Party is { } existingParty && !ReferenceEquals(existingParty, this))
+        {
+            await existingParty.KickMySelfAsync(newMember).ConfigureAwait(false);
+        }
+
         lock (this._writeLock)
         {
+            if (this.IsDisposed || this.IsDisposing)
+            {
+                return false;
+            }
+
+            if (this._partyMembers.Contains(newMember))
+            {
+                return true;
+            }
+
             if (this._partyMembers.Length >= this._maxPartySize)
             {
                 return false;
@@ -119,9 +134,12 @@ public sealed class Party : AsyncDisposable
             updated[index] = newMember;
 
             newMember.Party = this;
-            oldMember.Party = null;
+            if (ReferenceEquals(oldMember.Party, this))
+            {
+                oldMember.Party = null;
+            }
 
-            this._partyManager.UntrackMembership(oldMember.Name);
+            this._partyManager.UntrackMembership(oldMember.Name, this);
             this._partyManager.TrackMembership(newMember.Name, this);
 
             if (this.PartyMaster == oldMember)
@@ -322,11 +340,14 @@ public sealed class Party : AsyncDisposable
                 var index = i;
                 await member.InvokeViewPlugInAsync<IPartyMemberRemovedPlugIn>(
                     p => p.PartyMemberRemovedAsync(index)).ConfigureAwait(false);
-                this.CleanupMember(member);
             }
             catch (Exception ex)
             {
                 this._logger.LogDebug(ex, "Error notifying {Name} of party dissolution", member.Name);
+            }
+            finally
+            {
+                this.CleanupMember(member);
             }
         }
 
@@ -483,8 +504,12 @@ public sealed class Party : AsyncDisposable
 
     private void CleanupMember(IPartyMember member)
     {
-        member.Party = null;
-        this._partyManager.UntrackMembership(member.Name);
+        if (ReferenceEquals(member.Party, this))
+        {
+            member.Party = null;
+        }
+
+        this._partyManager.UntrackMembership(member.Name, this);
 
         if (member is Player player && player.Attributes is { } attributes)
         {

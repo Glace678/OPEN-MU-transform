@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.GameLogic;
 
+using System.Collections.Concurrent;
 using System.Threading;
 using Microsoft.Extensions.ObjectPool;
 
@@ -16,6 +17,8 @@ internal sealed class LimitedObjectPool<T> : DefaultObjectPool<T>, IObjectPool<T
     where T : class
 {
     private readonly SemaphoreSlim _semaphore;
+    private readonly ConcurrentDictionary<T, byte> _leased = new(ReferenceEqualityComparer.Instance);
+    private int _disposed;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="LimitedObjectPool{T}"/> class.
@@ -46,27 +49,68 @@ internal sealed class LimitedObjectPool<T> : DefaultObjectPool<T>, IObjectPool<T
     /// <inheritdoc />
     public async ValueTask<T> GetAsync(CancellationToken cancellationToken = default)
     {
+        ObjectDisposedException.ThrowIf(Volatile.Read(ref this._disposed) != 0, this);
         await this._semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
-        return base.Get();
+        try
+        {
+            var item = base.Get();
+            this._leased[item] = 0;
+            return item;
+        }
+        catch
+        {
+            this._semaphore.Release();
+            throw;
+        }
     }
 
     /// <inheritdoc />
     public override T Get()
     {
+        ObjectDisposedException.ThrowIf(Volatile.Read(ref this._disposed) != 0, this);
         this._semaphore.Wait();
-        return base.Get();
+        try
+        {
+            var item = base.Get();
+            this._leased[item] = 0;
+            return item;
+        }
+        catch
+        {
+            this._semaphore.Release();
+            throw;
+        }
     }
 
     /// <inheritdoc />
     public override void Return(T obj)
     {
+        if (obj is null || !this._leased.TryRemove(obj, out _))
+        {
+            return;
+        }
+
         base.Return(obj);
-        this._semaphore.Release();
+        if (Volatile.Read(ref this._disposed) == 0)
+        {
+            try
+            {
+                this._semaphore.Release();
+            }
+            catch (ObjectDisposedException)
+            {
+                // Pool was disposed concurrently.
+            }
+        }
     }
 
     /// <inheritdoc />
     public void Dispose()
     {
-        this._semaphore.Dispose();
+        if (Interlocked.Exchange(ref this._disposed, 1) == 0)
+        {
+            this._leased.Clear();
+            this._semaphore.Dispose();
+        }
     }
 }

@@ -12,6 +12,7 @@ namespace MUnique.OpenMU.Web.AdminPanel.API
     using MUnique.OpenMU.GameServer;
     using MUnique.OpenMU.Interfaces;
     using MUnique.OpenMU.Persistence;
+    using MUnique.OpenMU.Persistence.AdminAuth;
     using MUnique.OpenMU.Web.AdminPanel.Auth;
 
     /// <summary>
@@ -44,10 +45,15 @@ namespace MUnique.OpenMU.Web.AdminPanel.API
         /// This is the only endpoint of the API which does something instead of reporting
         /// something, so it requires the operator role and not just the viewer role.
         /// </remarks>
-        [Route("send/{id=0}")]
+        [HttpPost("send/{id=0}")]
         [Authorize(AuthenticationSchemes = ApiKeyAuthenticationDefaults.ApiSchemes, Policy = AdminPolicies.Operator)]
-        public async Task<IActionResult> SendGlobalMessageAsync(int id, [FromQuery(Name = "msg")] string msg)
+        public async Task<IActionResult> SendGlobalMessageAsync(int id, [FromQuery(Name = "msg")] string? msg)
         {
+            if (string.IsNullOrWhiteSpace(msg) || System.Text.Encoding.UTF8.GetByteCount(msg) > 240)
+            {
+                return this.BadRequest("Message must be non-empty and at most 240 UTF-8 bytes.");
+            }
+
             if (!this._gameServers.TryGetValue(id, out var gameServer))
             {
                 return this.NotFound($"Server with id {id} not found.");
@@ -94,14 +100,19 @@ namespace MUnique.OpenMU.Web.AdminPanel.API
         public async Task<IActionResult> ServerStateAsync()
         {
             int sum = 0;
+            var includePlayerNames = this.User.IsInRole(AdminRoles.Operator) || this.User.IsInRole(AdminRoles.Administrator);
             var list = new List<string>();
             foreach (var item in this._gameServers.Values.OfType<GameServer>())
             {
-                await item.Context.ForEachPlayerAsync(player =>
+                if (includePlayerNames)
                 {
-                    list.Add(player.GetName());
-                    return Task.CompletedTask;
-                }).ConfigureAwait(false);
+                    await item.Context.ForEachPlayerAsync(player =>
+                    {
+                        list.Add(player.GetName());
+                        return Task.CompletedTask;
+                    }).ConfigureAwait(false);
+                }
+
                 sum += item.Context.PlayerCount;
             }
 

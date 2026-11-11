@@ -44,6 +44,8 @@ void ReadOffer(std::span<const std::uint8_t> packet)
     offer.quantity  = Read16(packet.subspan(16));
     const auto name = packet.subspan(18, GameShop::SoloCatalog::NameBytes);
     const auto end  = std::find(name.begin(), name.end(), 0);
+    if (g_InGameShopSystem == nullptr)
+        return;
     if (end == name.end() ||
         MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<const char*>(name.data()),
                             static_cast<int>(end - name.begin()), offer.name.data(), offer.name.size() - 1) <= 0)
@@ -61,14 +63,17 @@ void ShowResult(std::uint8_t operation, bool success)
                                                           static_cast<double>(SDL_GetTicks()));
     if (operation == Delete && success)
     {
-        g_pInGameShop->UpdateStorageItemList();
+        if (g_pInGameShop != nullptr)
+            g_pInGameShop->UpdateStorageItemList();
         return;
     }
 
     CMsgBoxIGSCommon* box = nullptr;
-    SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &box);
-    box->Initialize(I18N::Game::SoloShopTitle,
-                    success ? I18N::Game::SoloShopExchangeSucceeded : I18N::Game::SoloShopOperationFailed);
+    if (SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &box) && box != nullptr)
+    {
+        box->Initialize(I18N::Game::SoloShopTitle,
+                        success ? I18N::Game::SoloShopExchangeSucceeded : I18N::Game::SoloShopOperationFailed);
+    }
 }
 }
 
@@ -90,19 +95,29 @@ bool HandlePacket(std::span<const std::uint8_t> packet)
     switch (operation)
     {
         case CatalogBegin:
-            g_InGameShopSystem->BeginSoloCatalog(
-                packet.size() == 8 && Read16(packet.subspan(4)) == 1 ? Read16(packet.subspan(6)) : -1);
+            if (g_InGameShopSystem != nullptr)
+            {
+                g_InGameShopSystem->BeginSoloCatalog(
+                    packet.size() == 8 && Read16(packet.subspan(4)) == 1 ? Read16(packet.subspan(6)) : -1);
+            }
             return true;
         case CatalogOffer:
-            if (packet.size() == OfferLength)
-                ReadOffer(packet);
-            else
-                g_InGameShopSystem->BeginSoloCatalog(-1);
+            if (g_InGameShopSystem != nullptr)
+            {
+                if (packet.size() == OfferLength)
+                    ReadOffer(packet);
+                else
+                    g_InGameShopSystem->BeginSoloCatalog(-1);
+            }
             return true;
         case CatalogEnd:
-            if (packet.size() != 4)
-                g_InGameShopSystem->BeginSoloCatalog(-1);
-            g_InGameShopSystem->FinishSoloCatalog();
+            if (g_InGameShopSystem != nullptr)
+            {
+                if (packet.size() != 4)
+                    g_InGameShopSystem->BeginSoloCatalog(-1);
+                else
+                    g_InGameShopSystem->FinishSoloCatalog();
+            }
             return true;
         case Exchange:
             if (packet.size() == 5)

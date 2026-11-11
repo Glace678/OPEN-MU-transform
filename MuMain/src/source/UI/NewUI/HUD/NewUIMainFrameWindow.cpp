@@ -286,8 +286,6 @@ void SEASON3B::CNewUIMainFrameWindow::SetButtonInfo()
 
 void SEASON3B::CNewUIMainFrameWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUI3DRenderMng)
     {
         m_pNewUI3DRenderMng->Remove3DRenderObj(this);
@@ -296,6 +294,7 @@ void SEASON3B::CNewUIMainFrameWindow::Release()
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -310,9 +309,15 @@ bool SEASON3B::CNewUIMainFrameWindow::Render()
 
     RenderFrame();
 
-    m_pNewUI3DRenderMng->RenderUI2DEffect(ITEMHOTKEYNUMBER_CAMERA_Z_ORDER, UI2DEffectCallback, this, 0, 0);
+    if (m_pNewUI3DRenderMng)
+    {
+        m_pNewUI3DRenderMng->RenderUI2DEffect(ITEMHOTKEYNUMBER_CAMERA_Z_ORDER, UI2DEffectCallback, this, 0, 0);
+    }
 
-    g_pSkillList->RenderCurrentSkillAndHotSkillList();
+    if (g_pSkillList)
+    {
+        g_pSkillList->RenderCurrentSkillAndHotSkillList();
+    }
 
     EnableAlphaTest();
     RenderLifeMana();
@@ -1409,7 +1414,12 @@ int SEASON3B::CNewUIItemHotKey::GetHotKeyItemCount(int iType)
 
 void SEASON3B::CNewUIItemHotKey::SetHotKey(int iHotKey, int iItemType, int iItemLevel)
 {
-    if (iHotKey != -1 && CNewUIMyInventory::CanRegisterItemHotKey(iItemType) == true)
+    if (iHotKey < 0 || iHotKey >= HOTKEY_COUNT)
+    {
+        return;
+    }
+
+    if (CNewUIMyInventory::CanRegisterItemHotKey(iItemType) == true)
     {
         m_iHotKeyItemType[iHotKey]  = iItemType;
         m_iHotKeyItemLevel[iHotKey] = iItemLevel;
@@ -1423,7 +1433,7 @@ void SEASON3B::CNewUIItemHotKey::SetHotKey(int iHotKey, int iItemType, int iItem
 
 int SEASON3B::CNewUIItemHotKey::GetHotKey(int iHotKey)
 {
-    if (iHotKey != -1)
+    if (iHotKey >= 0 && iHotKey < HOTKEY_COUNT)
     {
         return m_iHotKeyItemType[iHotKey];
     }
@@ -1433,7 +1443,7 @@ int SEASON3B::CNewUIItemHotKey::GetHotKey(int iHotKey)
 
 int SEASON3B::CNewUIItemHotKey::GetHotKeyLevel(int iHotKey)
 {
-    if (iHotKey != -1)
+    if (iHotKey >= 0 && iHotKey < HOTKEY_COUNT)
     {
         return m_iHotKeyItemLevel[iHotKey];
     }
@@ -1510,7 +1520,9 @@ void SEASON3B::CNewUIItemHotKey::UseItemRButton()
 
 SEASON3B::CNewUISkillList::CNewUISkillList()
 {
-    m_pNewUIMng = NULL;
+    m_pNewUIMng         = NULL;
+    m_pNewUI3DRenderMng = NULL;
+    m_wHeroPriorSkill   = 0;
     Reset();
 }
 
@@ -1541,12 +1553,12 @@ void SEASON3B::CNewUISkillList::Release()
     if (m_pNewUI3DRenderMng)
     {
         m_pNewUI3DRenderMng->DeleteUI2DEffectObject(UI2DEffectCallback);
+        m_pNewUI3DRenderMng = NULL;
     }
-
-    UnloadImages();
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -1727,22 +1739,37 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
                 continue;
             }
 
-            WORD bySkillType = CharacterAttribute->Skill[m_iHotKeySkillType[iIndex]];
-
-            if (bySkillType == 0 || (bySkillType >= AT_SKILL_STUN && bySkillType <= AT_SKILL_REMOVAL_BUFF))
-                continue;
-
-            BYTE bySkillUseType = SkillAttribute[bySkillType].SkillUseType;
-
-            if (bySkillUseType == SKILL_USE_TYPE_MASTERLEVEL)
+            const int hotKeySlot = m_iHotKeySkillType[iIndex];
+            const bool isPetCommand =
+                (hotKeySlot >= AT_PET_COMMAND_DEFAULT && hotKeySlot < AT_PET_COMMAND_END);
+            if (isPetCommand)
             {
-                continue;
+                if (Hero->m_pPet == NULL)
+                    continue;
+            }
+            else
+            {
+                if (hotKeySlot < 0 || hotKeySlot >= MAX_MAGIC)
+                    continue;
+
+                WORD bySkillType = CharacterAttribute->Skill[hotKeySlot];
+
+                if (bySkillType == 0 || bySkillType >= MAX_SKILLS ||
+                    (bySkillType >= AT_SKILL_STUN && bySkillType <= AT_SKILL_REMOVAL_BUFF))
+                    continue;
+
+                BYTE bySkillUseType = SkillAttribute[bySkillType].SkillUseType;
+
+                if (bySkillUseType == SKILL_USE_TYPE_MASTERLEVEL)
+                {
+                    continue;
+                }
             }
 
             if (m_EventState == EVENT_BTN_HOVER_SKILLHOTKEY)
             {
                 m_bRenderSkillInfo     = true;
-                m_iRenderSkillInfoType = m_iHotKeySkillType[iIndex];
+                m_iRenderSkillInfoType = hotKeySlot;
                 m_iRenderSkillInfoPosX = static_cast<int>(HudX(x - 5.f));
                 m_iRenderSkillInfoPosY = static_cast<int>(HudY(y));
                 return true;
@@ -1751,11 +1778,14 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
             {
                 if (MouseLButtonPush == false)
                 {
-                    if (m_iRenderSkillInfoType == m_iHotKeySkillType[iIndex])
+                    if (m_iRenderSkillInfoType == hotKeySlot)
                     {
-                        m_EventState       = EVENT_NONE;
-                        m_wHeroPriorSkill  = CharacterAttribute->Skill[Hero->CurrentSkill];
-                        Hero->CurrentSkill = m_iHotKeySkillType[iIndex];
+                        m_EventState = EVENT_NONE;
+                        if (Hero->CurrentSkill >= 0 && Hero->CurrentSkill < MAX_MAGIC)
+                        {
+                            m_wHeroPriorSkill = CharacterAttribute->Skill[Hero->CurrentSkill];
+                        }
+                        Hero->CurrentSkill = hotKeySlot;
                         PlayBuffer(SOUND_CLICK01);
                         return false;
                     }
@@ -1873,7 +1903,10 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
         {
             m_EventState = EVENT_NONE;
 
-            m_wHeroPriorSkill = CharacterAttribute->Skill[Hero->CurrentSkill];
+            if (Hero->CurrentSkill >= 0 && Hero->CurrentSkill < MAX_MAGIC)
+            {
+                m_wHeroPriorSkill = CharacterAttribute->Skill[Hero->CurrentSkill];
+            }
 
             Hero->CurrentSkill = i;
             m_bSkillList       = false;
@@ -1925,7 +1958,10 @@ bool SEASON3B::CNewUISkillList::UpdateMouseEvent()
                 {
                     m_EventState = EVENT_NONE;
 
-                    m_wHeroPriorSkill = CharacterAttribute->Skill[Hero->CurrentSkill];
+                    if (Hero->CurrentSkill >= 0 && Hero->CurrentSkill < MAX_MAGIC)
+                    {
+                        m_wHeroPriorSkill = CharacterAttribute->Skill[Hero->CurrentSkill];
+                    }
 
                     Hero->CurrentSkill = i;
                     m_bSkillList       = false;
@@ -2048,6 +2084,11 @@ bool SEASON3B::CNewUISkillList::IsArrayIn(BYTE bySkill)
 
 void SEASON3B::CNewUISkillList::SetHotKey(int iHotKey, int iSkillType)
 {
+    if (iHotKey < 0 || iHotKey >= SKILLHOTKEY_COUNT)
+    {
+        return;
+    }
+
     for (int i = 0; i < SKILLHOTKEY_COUNT; ++i)
     {
         if (m_iHotKeySkillType[i] == iSkillType)
@@ -2062,6 +2103,10 @@ void SEASON3B::CNewUISkillList::SetHotKey(int iHotKey, int iSkillType)
 
 int SEASON3B::CNewUISkillList::GetHotKey(int iHotKey)
 {
+    if (iHotKey < 0 || iHotKey >= SKILLHOTKEY_COUNT)
+    {
+        return -1;
+    }
     return m_iHotKeySkillType[iHotKey];
 }
 
@@ -2110,8 +2155,15 @@ bool SEASON3B::CNewUISkillList::SelectAdjacentHotKeySkill(int direction)
             slot += SKILLHOTKEY_COUNT;
 
         const int skillIndex = m_iHotKeySkillType[slot];
-        if (skillIndex < 0 || CharacterAttribute->Skill[skillIndex] == 0)
+        if (skillIndex >= AT_PET_COMMAND_DEFAULT && skillIndex < AT_PET_COMMAND_END)
+        {
+            if (Hero->m_pPet == NULL)
+                continue;
+        }
+        else if (skillIndex < 0 || skillIndex >= MAX_MAGIC || CharacterAttribute->Skill[skillIndex] == 0)
+        {
             continue;
+        }
 
         const int before = Hero->CurrentSkill;
         UseHotKey(slot);
@@ -2123,26 +2175,47 @@ bool SEASON3B::CNewUISkillList::SelectAdjacentHotKeySkill(int direction)
 
 void SEASON3B::CNewUISkillList::UseHotKey(int iHotKey)
 {
-    if (m_iHotKeySkillType[iHotKey] != -1)
+    if (iHotKey < 0 || iHotKey >= SKILLHOTKEY_COUNT)
     {
-        if (m_iHotKeySkillType[iHotKey] >= AT_PET_COMMAND_DEFAULT && m_iHotKeySkillType[iHotKey] < AT_PET_COMMAND_END)
+        return;
+    }
+
+    const int hotKeyTarget = m_iHotKeySkillType[iHotKey];
+    if (hotKeyTarget != -1)
+    {
+        if (hotKeyTarget >= AT_PET_COMMAND_DEFAULT && hotKeyTarget < AT_PET_COMMAND_END)
         {
             if (Hero->m_pPet == NULL)
             {
                 return;
             }
+
+            if (Hero->CurrentSkill >= 0 && Hero->CurrentSkill < MAX_MAGIC)
+            {
+                m_wHeroPriorSkill = CharacterAttribute->Skill[Hero->CurrentSkill];
+            }
+            Hero->CurrentSkill = hotKeyTarget;
+            return;
         }
 
-        auto wHotKeySkill = CharacterAttribute->Skill[m_iHotKeySkillType[iHotKey]];
+        if (hotKeyTarget < 0 || hotKeyTarget >= MAX_MAGIC)
+        {
+            return;
+        }
+
+        auto wHotKeySkill = CharacterAttribute->Skill[hotKeyTarget];
 
         if (wHotKeySkill == 0)
         {
             return;
         }
 
-        m_wHeroPriorSkill = CharacterAttribute->Skill[Hero->CurrentSkill];
+        if (Hero->CurrentSkill >= 0 && Hero->CurrentSkill < MAX_MAGIC)
+        {
+            m_wHeroPriorSkill = CharacterAttribute->Skill[Hero->CurrentSkill];
+        }
 
-        Hero->CurrentSkill = m_iHotKeySkillType[iHotKey];
+        Hero->CurrentSkill = hotKeyTarget;
 
         auto bySkill = CharacterAttribute->Skill[Hero->CurrentSkill];
 
@@ -2384,16 +2457,19 @@ void SEASON3B::CNewUISkillList::RenderPetSkill()
 
 void SEASON3B::CNewUISkillList::RenderSkillIcon(int iIndex, float x, float y, float width, float height)
 {
-    auto bySkillType = CharacterAttribute->Skill[iIndex];
-
-    if (bySkillType == 0)
+    ActionSkillType bySkillType = AT_SKILL_UNDEFINED;
+    if (iIndex >= AT_PET_COMMAND_DEFAULT && iIndex < AT_PET_COMMAND_END)
     {
-        return;
+        bySkillType = static_cast<ActionSkillType>(iIndex);
+    }
+    else if (iIndex >= 0 && iIndex < MAX_MAGIC)
+    {
+        bySkillType = CharacterAttribute->Skill[iIndex];
     }
 
-    if (iIndex >= AT_PET_COMMAND_DEFAULT)
+    if (bySkillType <= 0 || bySkillType >= MAX_SKILLS)
     {
-        bySkillType = (ActionSkillType)iIndex;
+        return;
     }
 
     bool bCantSkill = false;

@@ -71,7 +71,18 @@ public class OpenWarehouseChatCommandPlugIn : ChatCommandPlugInBase<OpenWarehous
             return;
         }
 
-        var npc = new NonPlayerCharacter(new MonsterSpawnArea { MonsterDefinition = definition }, definition, currentMap);
+        var spawnArea = new MonsterSpawnArea
+        {
+            MonsterDefinition = definition,
+            X1 = player.Position.X,
+            X2 = player.Position.X,
+            Y1 = player.Position.Y,
+            Y2 = player.Position.Y,
+        };
+        var npc = new NonPlayerCharacter(spawnArea, definition, currentMap)
+        {
+            Position = player.Position,
+        };
         await this._talkNpcAction.TalkToNpcAsync(player, npc).ConfigureAwait(false);
     }
 

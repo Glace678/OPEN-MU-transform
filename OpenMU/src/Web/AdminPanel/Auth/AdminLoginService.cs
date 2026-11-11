@@ -151,7 +151,7 @@ public class AdminLoginService
             isValid = await this._userManager
                 .VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultAuthenticatorProvider, normalizedCode)
                 .ConfigureAwait(false)
-                && await this.TryConsumeTimeStepAsync(user).ConfigureAwait(false);
+                && await TryConsumeTimeStepAsync(this._userManager, user, this._logger).ConfigureAwait(false);
         }
 
         if (!isValid)
@@ -212,6 +212,54 @@ public class AdminLoginService
         return claims;
     }
 
+    /// <summary>
+    /// Verifies either a TOTP authenticator code (consuming its time step) or a one-time recovery code.
+    /// </summary>
+    /// <param name="userManager">The user manager.</param>
+    /// <param name="user">The user.</param>
+    /// <param name="rawCode">The submitted code.</param>
+    /// <param name="logger">The optional logger.</param>
+    /// <returns><c>true</c> if the second factor succeeded; otherwise, <c>false</c>.</returns>
+    internal static async Task<bool> VerifySecondFactorOrRecoveryCodeAsync(
+        UserManager<AdminUser> userManager,
+        AdminUser user,
+        string rawCode,
+        ILogger? logger = null)
+    {
+        var normalizedCode = (rawCode ?? string.Empty)
+            .Replace(" ", string.Empty, StringComparison.Ordinal)
+            .Replace("-", string.Empty, StringComparison.Ordinal);
+        if (normalizedCode.Length == 0)
+        {
+            return false;
+        }
+
+        if (await userManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultAuthenticatorProvider, normalizedCode).ConfigureAwait(false))
+        {
+            return await TryConsumeTimeStepAsync(userManager, user, logger).ConfigureAwait(false);
+        }
+
+        if (normalizedCode.Length >= 8)
+        {
+            var recoveryResult = await userManager.RedeemTwoFactorRecoveryCodeAsync(user, normalizedCode).ConfigureAwait(false);
+            return recoveryResult.Succeeded;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Resets the failed access counter and records the login timestamp on the user.
+    /// </summary>
+    /// <param name="userManager">The user manager.</param>
+    /// <param name="user">The user.</param>
+    internal static async Task RecordSuccessfulLoginAsync(UserManager<AdminUser> userManager, AdminUser user)
+    {
+        await userManager.ResetAccessFailedCountAsync(user).ConfigureAwait(false);
+        user.LastLoginAt = DateTime.UtcNow;
+        await userManager.UpdateAsync(user).ConfigureAwait(false);
+    }
+
     private async Task<AdminLoginResult> GetFailedResultAsync(AdminUser user)
     {
         return await this._userManager.IsLockedOutAsync(user).ConfigureAwait(false)
@@ -221,9 +269,7 @@ public class AdminLoginService
 
     private async Task<AdminLoginResult> CompleteLoginAsync(AdminUser user, bool usedSecondFactor, bool isPersistent)
     {
-        await this._userManager.ResetAccessFailedCountAsync(user).ConfigureAwait(false);
-        user.LastLoginAt = DateTime.UtcNow;
-        await this._userManager.UpdateAsync(user).ConfigureAwait(false);
+        await RecordSuccessfulLoginAsync(this._userManager, user).ConfigureAwait(false);
 
         this._logger.LogInformation(
             "Admin panel user '{LoginName}' logged in (second factor: {UsedSecondFactor}).",
@@ -244,19 +290,19 @@ public class AdminLoginService
     /// Remembering the time step of the last successful validation at least prevents that the same
     /// code is accepted twice within the same time step.
     /// </remarks>
-    private async Task<bool> TryConsumeTimeStepAsync(AdminUser user)
+    internal static async Task<bool> TryConsumeTimeStepAsync(UserManager<AdminUser> userManager, AdminUser user, ILogger? logger = null)
     {
         var currentStep = DateTimeOffset.UtcNow.ToUnixTimeSeconds() / TotpTimeStepSeconds;
         if (currentStep <= user.LastAcceptedTotpStep)
         {
-            this._logger.LogWarning(
+            logger?.LogWarning(
                 "Rejected an authenticator code of admin panel user '{LoginName}', because a code of the same time step was already used.",
                 user.LoginName);
             return false;
         }
 
         user.LastAcceptedTotpStep = currentStep;
-        await this._userManager.UpdateAsync(user).ConfigureAwait(false);
-        return true;
+        var updateResult = await userManager.UpdateAsync(user).ConfigureAwait(false);
+        return updateResult.Succeeded;
     }
 }

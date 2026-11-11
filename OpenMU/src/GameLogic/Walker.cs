@@ -71,6 +71,10 @@ public sealed class Walker : IDisposable
         }
 
         using var writerLock = await this._walkLock.WriterLockAsync();
+        if (this._isDisposed)
+        {
+            return Guid.Empty;
+        }
 
         void EnqueueSteps()
         {
@@ -106,6 +110,10 @@ public sealed class Walker : IDisposable
     public async ValueTask StartWalkAsync(Guid walkToken)
     {
         using var writerLock = await this._walkLock.WriterLockAsync();
+        if (this._isDisposed)
+        {
+            return;
+        }
 
         if (walkToken != this._currentWalkToken)
         {

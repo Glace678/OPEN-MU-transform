@@ -34,30 +34,53 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
             return;
         }
 
-        if (!await player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false))
+        var cancellationTokenSource = new SkillCancellationTokenSource();
+        if (!player.TryClaimSkillCancelTokenSource(cancellationTokenSource))
         {
+            cancellationTokenSource.Dispose();
             return;
         }
 
-        await player.ForEachWorldObserverAsync<IShowSkillAnimationPlugIn>(p => p.ShowSkillAnimationAsync(player, player, skill.Number, true), true).ConfigureAwait(false);
+        try
+        {
+            if (!this.CanPlayerSummon(player) || !await player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false))
+            {
+                player.ReleaseSkillCancelTokenSource(cancellationTokenSource);
+                return;
+            }
 
-        var cancellationTokenSource = new SkillCancellationTokenSource();
-        player.SkillCancelTokenSource = cancellationTokenSource;
+            await player.ForEachWorldObserverAsync<IShowSkillAnimationPlugIn>(p => p.ShowSkillAnimationAsync(player, player, skill.Number, true), true).ConfigureAwait(false);
+        }
+        catch
+        {
+            player.ReleaseSkillCancelTokenSource(cancellationTokenSource);
+            throw;
+        }
 
         _ = Task.Run(() => this.RunSummonPartyAsync(player, cancellationTokenSource));
     }
 
-    private async ValueTask RunSummonPartyAsync(Player player, CancellationTokenSource cancellationTokenSource)
+    private async ValueTask RunSummonPartyAsync(Player player, SkillCancellationTokenSource cancellationTokenSource)
     {
-        var cancellationToken = cancellationTokenSource.Token;
-        var partyList = player.Party!.PartyList;
-        var targetPlayers = partyList.OfType<Player>().Where(p => p != player).ToList();
-
         try
         {
+            var cancellationToken = cancellationTokenSource.Token;
+            if (player.Party is not { } party)
+            {
+                return;
+            }
+
+            var targetPlayers = party.PartyList.OfType<Player>().Where(p => p != player).ToList();
+
             for (var count = CountdownSeconds; count > 0; count--)
             {
                 cancellationToken.ThrowIfCancellationRequested();
+
+                if (!player.IsAlive || player.IsAtSafezone() || !this.CanPlayerSummon(player))
+                {
+                    await this.SendPartySummoningCanceledAsync(player).ConfigureAwait(false);
+                    return;
+                }
 
                 targetPlayers.RemoveAll(target => !this.CanPlayerSummonTarget(player, target));
 
@@ -66,12 +89,6 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
                     var countdownMessage = targetPlayer.GetLocalizedMessage("SummoningInSecondsFormat", count);
                     await targetPlayer.InvokeViewPlugInAsync<IChatViewPlugIn>(
                         p => p.ChatMessageAsync(countdownMessage, player.Name, ChatMessageType.Party)).ConfigureAwait(false);
-                }
-
-                if (!player.IsAlive || player.IsAtSafezone())
-                {
-                    await this.SendPartySummoningCanceledAsync(player).ConfigureAwait(false);
-                    return;
                 }
 
                 await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
@@ -91,8 +108,7 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
         }
         finally
         {
-            player.SkillCancelTokenSource?.Dispose();
-            player.SkillCancelTokenSource = null;
+            player.ReleaseSkillCancelTokenSource(cancellationTokenSource);
         }
     }
 
@@ -125,8 +141,19 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
 
     private async ValueTask SummonTargetsAsync(Player player, IEnumerable<Player> targetPlayers)
     {
+        if (!player.IsAlive || player.IsAtSafezone() || !this.CanPlayerSummon(player) || player.CurrentMap is not { } currentMap)
+        {
+            await this.SendPartySummoningCanceledAsync(player).ConfigureAwait(false);
+            return;
+        }
+
         foreach (var targetPlayer in targetPlayers)
         {
+            if (!this.CanPlayerSummonTarget(player, targetPlayer))
+            {
+                continue;
+            }
+
             Point targetPoint = player.Position;
             bool foundValidPoint = false;
             int maxAttempts = 10;
@@ -138,29 +165,34 @@ public class SummonPartySkillPlugin : TargetedSkillPluginBase
 
                 var offsetX = Rand.NextInt(-2, 3);
                 var offsetY = Rand.NextInt(-2, 3);
-                Point testPoint = new((byte)(player.Position.X + offsetX), (byte)(player.Position.Y + offsetY));
+                var candidateX = (byte)Math.Clamp(player.Position.X + offsetX, byte.MinValue, byte.MaxValue);
+                var candidateY = (byte)Math.Clamp(player.Position.Y + offsetY, byte.MinValue, byte.MaxValue);
+                Point testPoint = new(candidateX, candidateY);
 
-                if (player.CurrentMap!.Terrain.WalkMap[testPoint.X, testPoint.Y]
-                    && player.Position.EuclideanDistanceTo(targetPoint) < 6)
+                if (currentMap.Terrain.WalkMap[testPoint.X, testPoint.Y]
+                    && player.Position.EuclideanDistanceTo(testPoint) < 6)
                 {
                     targetPoint = testPoint;
                     foundValidPoint = true;
                 }
             }
 
-            if (player.CurrentMap!.Definition.TryGetRequirementError(targetPlayer, out var errorMessage))
+            if (currentMap.Definition.TryGetRequirementError(targetPlayer, out var errorMessage))
             {
                 await targetPlayer.ShowBlueMessageAsync(errorMessage).ConfigureAwait(false);
                 continue;
             }
 
-            await targetPlayer.TeleportToMapAsync(player.CurrentMap!, targetPoint).ConfigureAwait(false);
+            await targetPlayer.TeleportToMapAsync(currentMap, targetPoint).ConfigureAwait(false);
         }
     }
 
     private bool CanPlayerSummon(Player player)
     {
-        return player.Party is not null
+        return player.IsAlive
+               && !player.IsAtSafezone()
+               && player.CurrentMap is not null
+               && player.Party is not null
                && player.OpenedNpc is null
                && player.CurrentMiniGame is null;
 

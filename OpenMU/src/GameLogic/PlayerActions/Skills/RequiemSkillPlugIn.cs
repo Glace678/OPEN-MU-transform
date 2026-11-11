@@ -21,23 +21,28 @@ public class RequiemSkillPlugIn : IAreaSkillPlugIn
 {
     private const int StunnedMagicEffectNumber = 61; // 0x3D
 
-    private MagicEffectDefinition? _stunEffectDefinition;
-
     /// <inheritdoc />
     public short Key => 224;
 
     /// <inheritdoc />
     public async ValueTask AfterTargetGotAttackedAsync(IAttacker attacker, IAttackable target, SkillEntry skillEntry, Point targetAreaCenter, HitInfo? hitInfo)
     {
-        this._stunEffectDefinition ??= ((Player)attacker).GameContext.Configuration.MagicEffects.First(m => m.Number == StunnedMagicEffectNumber);
-
-        if (!target.IsAlive || !Rand.NextRandomBool(attacker.Attributes[Stats.MasteryStunChance]))
+        if (attacker is not Player player
+            || !target.IsAlive
+            || !Rand.NextRandomBool(attacker.Attributes[Stats.MasteryStunChance]))
         {
             return;
         }
 
-        var powerUp = attacker.Attributes.CreateElement(this._stunEffectDefinition.PowerUpDefinitions.First(pu => pu.TargetAttribute == Stats.IsStunned));
-        var magicEffect = new MagicEffect(TimeSpan.FromSeconds(3), this._stunEffectDefinition, [new MagicEffect.ElementWithTarget(powerUp, Stats.IsStunned)]);
+        var stunEffectDefinition = player.GameContext.Configuration.MagicEffects.FirstOrDefault(m => m.Number == StunnedMagicEffectNumber);
+        var stunPowerUpDefinition = stunEffectDefinition?.PowerUpDefinitions.FirstOrDefault(pu => pu.TargetAttribute == Stats.IsStunned);
+        if (stunEffectDefinition is null || stunPowerUpDefinition is null)
+        {
+            return;
+        }
+
+        var powerUp = attacker.Attributes.CreateElement(stunPowerUpDefinition);
+        var magicEffect = new MagicEffect(TimeSpan.FromSeconds(3), stunEffectDefinition, [new MagicEffect.ElementWithTarget(powerUp, Stats.IsStunned)]);
         await target.MagicEffectList.AddEffectAsync(magicEffect).ConfigureAwait(false);
 
         if (target is ISupportWalk walkSupporter && walkSupporter.IsWalking)

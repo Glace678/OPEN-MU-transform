@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.GameLogic.PlayerActions.Vault;
 
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using MUnique.OpenMU.GameLogic;
@@ -68,18 +69,31 @@ public static class VaultPinSecurity
             return false;
         }
 
+        string? alternatePin = null;
+        if (ushort.TryParse(pin, NumberStyles.None, CultureInfo.InvariantCulture, out var numericPin) && numericPin <= 9999)
+        {
+            var paddedPin = numericPin.ToString("D4", CultureInfo.InvariantCulture);
+            var unpaddedPin = numericPin.ToString(CultureInfo.InvariantCulture);
+            alternatePin = !string.Equals(pin, paddedPin, StringComparison.Ordinal)
+                ? paddedPin
+                : (!string.Equals(pin, unpaddedPin, StringComparison.Ordinal) ? unpaddedPin : null);
+        }
+
         bool valid;
         if (IsBcryptHash(storedPin))
         {
-            valid = BCrypt.Net.BCrypt.Verify(pin, storedPin);
+            valid = BCrypt.Net.BCrypt.Verify(pin, storedPin)
+                    || (alternatePin is not null && BCrypt.Net.BCrypt.Verify(alternatePin, storedPin));
         }
         else
         {
             // Legacy plaintext pin: compare in constant time, then upgrade the storage on success.
-            valid = FixedTimeEquals(pin, storedPin);
+            var matchedPrimary = FixedTimeEquals(pin, storedPin);
+            var matchedAlternate = alternatePin is not null && FixedTimeEquals(alternatePin, storedPin);
+            valid = matchedPrimary || matchedAlternate;
             if (valid)
             {
-                account.VaultPassword = HashPin(pin);
+                account.VaultPassword = HashPin(matchedAlternate ? alternatePin! : pin);
             }
         }
 

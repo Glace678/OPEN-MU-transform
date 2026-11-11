@@ -99,7 +99,29 @@ public class ItemSerializerExtended : IItemSerializer
     /// <inheritdoc />
     public Item DeserializeItem(Span<byte> array, GameConfiguration gameConfiguration, IContext persistenceContext)
     {
+        if (array.Length < 5)
+        {
+            throw new ArgumentException($"Input byte array is too short ({array.Length} < 5).", nameof(array));
+        }
+
+        var flags = (OptionFlags)array[4];
+        var minRequiredLength = 5
+            + (flags.HasFlag(OptionFlags.HasOption) ? 1 : 0)
+            + (flags.HasFlag(OptionFlags.HasExcellent) ? 1 : 0)
+            + (flags.HasFlag(OptionFlags.HasAncient) ? 1 : 0)
+            + (flags.HasFlag(OptionFlags.HasHarmony) ? 1 : 0)
+            + (flags.HasFlag(OptionFlags.HasSockets) ? 1 : 0);
+        if (array.Length < minRequiredLength)
+        {
+            throw new ArgumentException($"Input byte array is too short ({array.Length} < {minRequiredLength}) for option flags {flags}.", nameof(array));
+        }
+
         var itemStruct = new ItemStruct(array);
+        if (array.Length < itemStruct.Length)
+        {
+            throw new ArgumentException($"Input byte array is too short ({array.Length} < {itemStruct.Length}).", nameof(array));
+        }
+
         var itemGroup = itemStruct.Group;
         var itemNumber = itemStruct.Number;
         var definition = gameConfiguration.Items.FirstOrDefault(def => def.Number == itemNumber && def.Group == itemGroup)

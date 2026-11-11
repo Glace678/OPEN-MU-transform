@@ -22,7 +22,17 @@ using namespace SEASON3B;
 
 SEASON3B::CNewUIMiniMap::CNewUIMiniMap()
 {
-    m_pNewUIMng = NULL;
+    m_pNewUIMng        = NULL;
+    m_Pos              = {0, 0};
+    m_Width            = {0, 0};
+    m_MiniWidth        = {0, 0};
+    m_MiniPos          = 0;
+    m_bSuccess         = false;
+    m_hToolTipFont     = NULL;
+    m_TooltipTextColor = 0;
+    memset(m_Lenth, 0, sizeof(m_Lenth));
+    memset(m_Mini_Map_Data, 0, sizeof(m_Mini_Map_Data));
+    memset(m_Btn_Loc, 0, sizeof(m_Btn_Loc));
 }
 
 SEASON3B::CNewUIMiniMap::~CNewUIMiniMap()
@@ -82,15 +92,15 @@ void SEASON3B::CNewUIMiniMap::OpenningProcess() {}
 
 void SEASON3B::CNewUIMiniMap::Release()
 {
-    UnloadImages();
-
-    for (int i = 1; i < 7; i++)
-    {
-        DeleteBitmap(IMAGE_MINIMAP_INTERFACE + i);
-    }
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
+
+        for (int i = 1; i < 7; i++)
+        {
+            DeleteBitmap(IMAGE_MINIMAP_INTERFACE + i);
+        }
+
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -245,18 +255,17 @@ void SEASON3B::CNewUIMiniMap::LoadImages(const wchar_t* Filename)
 
     if (fp != NULL)
     {
-        int   Size   = sizeof(MINI_MAP_FILE);
-        BYTE* Buffer = new BYTE[Size * MAX_MINI_MAP_DATA + 45];
-        fread(Buffer, (Size * MAX_MINI_MAP_DATA) + 45, 1, fp);
-
-        DWORD dwCheckSum;
-        fread(&dwCheckSum, sizeof(DWORD), 1, fp);
+        int        Size       = sizeof(MINI_MAP_FILE);
+        BYTE*      Buffer     = new BYTE[Size * MAX_MINI_MAP_DATA + 45];
+        DWORD      dwCheckSum = 0;
+        const bool readOk     = (fread(Buffer, (Size * MAX_MINI_MAP_DATA) + 45, 1, fp) == 1) &&
+                                (fread(&dwCheckSum, sizeof(DWORD), 1, fp) == 1);
         fclose(fp);
 
-        if (dwCheckSum != GenerateCheckSum2(Buffer, (Size * MAX_MINI_MAP_DATA) + 45, 0x2BC1))
+        if (!readOk || dwCheckSum != GenerateCheckSum2(Buffer, (Size * MAX_MINI_MAP_DATA) + 45, 0x2BC1))
         {
-            wchar_t Text[256];
-            mu_swprintf(Text, L"%ls - File corrupted.", Fname);
+            wchar_t Text[256] = {};
+            swprintf_s(Text, L"%ls - File corrupted.", Fname);
             g_ErrorReport.Write(Text);
             MessageBox(g_hWnd, Text, NULL, MB_OK);
             SendMessage(g_hWnd, WM_DESTROY, 0, 0);
@@ -268,17 +277,16 @@ void SEASON3B::CNewUIMiniMap::LoadImages(const wchar_t* Filename)
             for (i = 0; i < MAX_MINI_MAP_DATA; i++)
             {
                 BuxConvert(pSeek, Size);
-                //memcpy(&(m_Mini_Map_Data[i]), pSeek, Size);
 
                 MINI_MAP_FILE current{};
                 auto          target = &(m_Mini_Map_Data[i]);
                 memcpy(&current, pSeek, Size);
-                memcpy(target, pSeek, Size);
+                target->Kind        = current.Kind;
+                target->Location[0] = current.Location[0];
+                target->Location[1] = current.Location[1];
+                target->Rotation    = current.Rotation;
 
-                CMultiLanguage::ConvertFromUtf8(target->Name, current.Name);
-                /*int wchars_num = MultiByteToWideChar(CP_UTF8, 0, current.Name, -1, NULL, 0);
-                MultiByteToWideChar(CP_UTF8, 0, current.Name, -1, target->Name, wchars_num);
-                target->Name[wchars_num] = L'\0';*/
+                CMultiLanguage::ConvertFromUtf8(target->Name, current.Name, static_cast<int>(sizeof(current.Name)));
                 pSeek += Size;
             }
         }
@@ -340,13 +348,13 @@ bool SEASON3B::CNewUIMiniMap::Check_Btn(int mx, int my)
                 GetTextExtentPoint32(g_pRenderText->GetFontDC(), m_TooltipText.c_str(), m_TooltipText.size(),
                                      &Fontsize);
 
-                Fontsize.cx = Fontsize.cx / ((float)WindowWidth / REFERENCE_WIDTH);
-                Fontsize.cy = Fontsize.cy / ((float)WindowHeight / REFERENCE_HEIGHT);
+                const float safeWinW = (WindowWidth > 0) ? static_cast<float>(WindowWidth) : static_cast<float>(REFERENCE_WIDTH);
+                const float safeWinH = (WindowHeight > 0) ? static_cast<float>(WindowHeight) : static_cast<float>(REFERENCE_HEIGHT);
+                Fontsize.cx = Fontsize.cx / (safeWinW / REFERENCE_WIDTH);
+                Fontsize.cy = Fontsize.cy / (safeWinH / REFERENCE_HEIGHT);
 
                 int x = m_Btn_Loc[i][0] + ((m_Btn_Loc[i][2] / 2) - (Fontsize.cx / 2));
-                int y = m_Btn_Loc[i][1] + m_Btn_Loc[i][3] + 2;
-
-                y = m_Btn_Loc[i][1] - (Fontsize.cy + 2);
+                int y = m_Btn_Loc[i][1] - (Fontsize.cy + 2);
 
                 DWORD backuptextcolor     = g_pRenderText->GetTextColor();
                 DWORD backuptextbackcolor = g_pRenderText->GetBgColor();

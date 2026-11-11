@@ -71,7 +71,9 @@ CHARACTER* GMEmpireGuardian3::CreateMonster(int iType, int PosX, int PosY, int K
     {
         case MONSTER_DUAL_BERSERKER: {
             OpenMonsterModel(MONSTER_MODEL_DUAL_BERSERKER);
-            pCharacter               = CreateCharacter(Key, MODEL_DUAL_BERSERKER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_DUAL_BERSERKER, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale = 1.35f;
 
             m_bCurrentIsRage_Kato = false;
@@ -79,13 +81,17 @@ CHARACTER* GMEmpireGuardian3::CreateMonster(int iType, int PosX, int PosY, int K
         break;
         case MONSTER_BANSHEE: {
             OpenMonsterModel(MONSTER_MODEL_BANSHEE);
-            pCharacter               = CreateCharacter(Key, MODEL_BANSHEE, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_BANSHEE, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale = 1.55f;
         }
         break;
         case MONSTER_HEAD_MOUNTER: {
             OpenMonsterModel(MONSTER_MODEL_HEAD_MOUNTER);
-            pCharacter               = CreateCharacter(Key, MODEL_HEAD_MOUNTER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_HEAD_MOUNTER, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale = 1.25f;
         }
         break;

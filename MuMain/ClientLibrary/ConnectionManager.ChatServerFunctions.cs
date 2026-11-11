@@ -60,8 +60,7 @@ public unsafe partial class ConnectionManager
                 var length = AuthenticateRef.Length;
                 var packet = new AuthenticateRef(pipeWriter.GetSpan(length)[..length]);
                 packet.RoomId = @roomId;
-                packet.Token.Clear();
-                new Span<byte>(@token, (int)tokenByteLength).CopyTo(packet.Token);
+                CopyBinaryField(@token, tokenByteLength, packet.Token);
 
                 return length;
             });
@@ -204,8 +203,7 @@ public unsafe partial class ConnectionManager
                 var packet = new ChatMessageRef(pipeWriter.GetSpan(length)[..length]);
                 packet.SenderIndex = @senderIndex;
                 packet.MessageLength = @messageLength;
-                packet.Message.Clear();
-                new Span<byte>(@message, (int)messageByteLength).CopyTo(packet.Message);
+                CopyBinaryField(@message, messageByteLength, packet.Message);
 
                 return length;
             });

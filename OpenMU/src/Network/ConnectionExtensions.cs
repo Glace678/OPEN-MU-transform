@@ -38,6 +38,11 @@ public static class ConnectionExtensions
         }
 
         using var l = await connection.OutputLock.LockAsync().ConfigureAwait(false);
+        if (!connection.Connected)
+        {
+            return;
+        }
+
         var length = packetBuilder();
         if (length > 0)
         {

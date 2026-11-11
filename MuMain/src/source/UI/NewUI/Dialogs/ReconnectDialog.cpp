@@ -179,8 +179,8 @@ void DrawStatusTexts()
     const int seconds = mgr.GetCountdownSeconds();
     if (seconds > 0)
     {
-        wchar_t countdown[64];
-        mu_swprintf(countdown, I18N::Game::RetryingInSeconds, seconds);
+        wchar_t countdown[64] = {};
+        swprintf_s(countdown, _countof(countdown), I18N::Game::RetryingInSeconds, seconds);
         DrawCenteredText(PANEL_X, COUNTDOWN_Y, PANEL_W, g_hFont, countdown);
     }
 }

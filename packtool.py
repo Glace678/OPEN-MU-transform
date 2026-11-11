@@ -62,11 +62,13 @@ class Record:
 
 def _read_header(data, pos):
     """Validate one [type][len][name] header at `pos`; return (type, name, end)."""
-    if pos + 2 >= len(data):
+    if pos < 0 or pos + 2 >= len(data):
         return None
     type_ = data[pos]
     name_len = data[pos + 1]
     if not (0 <= type_ <= 10 and MIN_NAME_LEN <= name_len <= MAX_NAME_LEN):
+        return None
+    if pos + 2 + name_len > len(data):
         return None
     name = data[pos + 2 : pos + 2 + name_len]
     if not NAME_RE.match(name):
@@ -74,7 +76,7 @@ def _read_header(data, pos):
     decoded = name.decode()
     # A pack name is always a plain relative path; any parent-directory
     # segment is an attack (or corruption), not something to write out.
-    if any(segment == ".." for segment in decoded.split("/")):
+    if any(segment in ("", ".", "..") for segment in decoded.split("/")):
         return None
     return type_, decoded, pos + 2 + name_len
 
@@ -103,15 +105,18 @@ def parse(data):
         pos = None
         for name_len in range(MIN_NAME_LEN, MAX_NAME_LEN + 1):
             candidate = fixed_pos - (2 + name_len)
+            if candidate < 0:
+                break
             probe = _read_header(data, candidate)
             if probe is not None and probe[2] == fixed_pos:
                 pos = candidate
                 break
         if pos is None:
+            pre_start = max(0, fixed_pos - 32)
             print(
                 f"warning: record chain stops before '{name}' "
                 f"(fixed fields at {fixed_pos:#x}); "
-                f"preceding bytes: {data[fixed_pos - 32 : fixed_pos].hex(' ')}",
+                f"preceding bytes: {data[pre_start : fixed_pos].hex(' ')}",
                 file=sys.stderr,
             )
             break
@@ -166,8 +171,8 @@ def cmd_probe(args, data):
 
     for r in records[: 2] + records[-2 :]:
         print(f"\n--- {r.name} @{r.header_pos} ---")
-        chunk = data[r.header_pos - 8 : r.header_pos + args.bytes]
-        base = r.header_pos - 8
+        base = max(0, r.header_pos - 8)
+        chunk = data[base : r.header_pos + max(0, args.bytes)]
         for row in range(0, len(chunk), 16):
             line = chunk[row : row + 16]
             hexs = " ".join(f"{b:02x}" for b in line)
@@ -196,11 +201,15 @@ def cmd_extract(args, data):
     base = os.path.realpath(args.outdir)
     written = 0
     for r in wanted:
-        if r.offset + r.size > len(data):
+        if r.offset < 0 or r.size < 0 or r.offset + r.size > len(data):
             print(f"  SKIP out-of-range {r.name} @{r.offset} size={r.size}", file=sys.stderr)
             continue
         dest = os.path.realpath(os.path.join(args.outdir, r.name.replace("/", os.sep)))
-        if not dest.startswith(base + os.sep):
+        try:
+            inside = os.path.commonpath([base, dest]) == base and dest != base
+        except ValueError:
+            inside = False
+        if not inside:
             print(f"  SKIP unsafe path {r.name}", file=sys.stderr)
             continue
         os.makedirs(os.path.dirname(dest) or args.outdir, exist_ok=True)

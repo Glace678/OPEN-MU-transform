@@ -32,7 +32,11 @@ void RenderText(const wchar_t* text, int x, int y, int sx, int sy, DWORD color, 
 
 using namespace SEASON3B;
 
-CNewUIGoldBowmanLena::CNewUIGoldBowmanLena() {}
+CNewUIGoldBowmanLena::CNewUIGoldBowmanLena()
+{
+    m_pNewUIMng = NULL;
+    m_Pos.x = m_Pos.y = 0;
+}
 
 CNewUIGoldBowmanLena::~CNewUIGoldBowmanLena()
 {
@@ -71,7 +75,12 @@ bool CNewUIGoldBowmanLena::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIGoldBowmanLena::Release()
 {
-    UnloadImages();
+    if (m_pNewUIMng)
+    {
+        UnloadImages();
+        m_pNewUIMng->RemoveUIObj(this);
+        m_pNewUIMng = NULL;
+    }
 }
 
 void CNewUIGoldBowmanLena::LoadImages()
@@ -116,11 +125,12 @@ bool CNewUIGoldBowmanLena::UpdateMouseEvent()
 
     if (m_BtnRegister.UpdateMouseEvent())
     {
-        int registerItem = g_pMyInventory->GetInventoryCtrl()->GetItemCount(ITEM_POTION + 21, 0);
+        CNewUIInventoryCtrl* pInvCtrl = g_pMyInventory ? g_pMyInventory->GetInventoryCtrl() : NULL;
+        int                  registerItem = pInvCtrl ? pInvCtrl->GetItemCount(ITEM_POTION + 21, 0) : 0;
 
         if (registerItem != 0)
         {
-            int index = g_pMyInventory->GetInventoryCtrl()->FindItemIndex(ITEM_POTION + 21, 0);
+            int index = pInvCtrl->FindItemIndex(ITEM_POTION + 21, 0);
 
             if (index != -1)
             {
@@ -151,14 +161,6 @@ bool CNewUIGoldBowmanLena::UpdateMouseEvent()
             return false;
         }
 
-        if (SEASON3B::IsNone(VK_LBUTTON) == false)
-        {
-            return false;
-        }
-        return false;
-    }
-    else
-    {
         if (SEASON3B::IsNone(VK_LBUTTON) == false)
         {
             return false;
@@ -227,32 +229,35 @@ void CNewUIGoldBowmanLena::RenderTexts()
     for (int i = 0; i < 3; ++i)
     {
         memset(&Text, 0, sizeof(wchar_t) * 100);
-        mu_swprintf(Text, I18N::Game::Lookup(700 + i));
+        const wchar_t* line = I18N::Game::Lookup(700 + i);
+        swprintf_s(Text, _countof(Text), L"%ls", line ? line : L"");
         RenderText(Text, m_Pos.x, m_Pos.y + 100 + (i * 15), 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
     }
 
-    int registerItem = g_pMyInventory->GetInventoryCtrl()->GetItemCount(ITEM_POTION + 21, 0);
+    CNewUIInventoryCtrl* pInvCtrl     = g_pMyInventory ? g_pMyInventory->GetInventoryCtrl() : NULL;
+    int                  registerItem = pInvCtrl ? pInvCtrl->GetItemCount(ITEM_POTION + 21, 0) : 0;
 
     memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, L"%ls", I18N::Game::NumberOfRenaYouHaveCollected);
+    swprintf_s(Text, _countof(Text), L"%ls", I18N::Game::NumberOfRenaYouHaveCollected);
     RenderText(Text, m_Pos.x + 20, m_Pos.y + 180, 190, 0, 0xFF47DFFA, 0x00000000, RT3_SORT_LEFT);
 
     memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, L"    X    %d", registerItem);
+    swprintf_s(Text, _countof(Text), L"    X    %d", registerItem);
     RenderText(Text, m_Pos.x + 5, m_Pos.y + 202, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
     memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, L"%ls", I18N::Game::NumberOfRegisteredRena);
+    swprintf_s(Text, _countof(Text), L"%ls", I18N::Game::NumberOfRegisteredRena);
     RenderText(Text, m_Pos.x + 20, m_Pos.y + 225, 190, 0, 0xFF47DFFA, 0x00000000, RT3_SORT_LEFT);
 
     memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, L"    X    %d", g_shEventChipCount);
+    swprintf_s(Text, _countof(Text), L"    X    %d", g_shEventChipCount);
     RenderText(Text, m_Pos.x + 5, m_Pos.y + 245, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
     for (int j = 0; j < 2; ++j)
     {
         memset(&Text, 0, sizeof(wchar_t) * 100);
-        mu_swprintf(Text, I18N::Game::Lookup(703 + j));
+        const wchar_t* line = I18N::Game::Lookup(703 + j);
+        swprintf_s(Text, _countof(Text), L"%ls", line ? line : L"");
         RenderText(Text, m_Pos.x, m_Pos.y + 350 + (j * 15), 190, 0, 0xFFFA47D6, 0x00000000, RT3_SORT_CENTER);
     }
 }

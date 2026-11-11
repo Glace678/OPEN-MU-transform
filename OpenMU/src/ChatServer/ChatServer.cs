@@ -43,6 +43,9 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
 
     private bool _isDisposed;
 
+    private int _cleaningInactiveClients;
+    private int _cleaningUnusedRooms;
+
     private ServerState _serverState;
 
     /// <summary>
@@ -170,6 +173,13 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
         catch (Exception ex)
         {
             this._logger.LogError(ex, "Error while starting");
+            this.RemoveCleanupTimers();
+            foreach (var listener in this._listeners)
+            {
+                listener.Stop();
+            }
+
+            this._listeners.Clear();
             this.ServerState = oldState;
         }
 
@@ -241,9 +251,14 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
         if (!this._isDisposed)
         {
             this._isDisposed = true;
+            this.RemoveCleanupTimers();
+            foreach (var listener in this._listeners)
+            {
+                listener.Stop();
+            }
+
+            this._listeners.Clear();
             this._randomNumberGenerator.Dispose();
-            this._clientCleanupTimer?.Dispose();
-            this._roomCleanupTimer?.Dispose();
         }
     }
 
@@ -315,9 +330,15 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
     private async ValueTask ChatClientAcceptedAsync(ClientAcceptedEventArgs e)
     {
         var chatClient = new ChatClient(e.AcceptedConnection, this._manager, this._loggerFactory.CreateLogger<ChatClient>());
-        this._connectedClients.TryAdd(chatClient, 0);
-        this.RaisePropertyChanged(nameof(this.CurrentConnections));
         chatClient.Disconnected += this.ChatClientDisconnected;
+        this._connectedClients.TryAdd(chatClient, 0);
+        if (this.Settings.MaximumConnections != int.MaxValue && this._connectedClients.Count > this.Settings.MaximumConnections)
+        {
+            await chatClient.LogOffAsync().ConfigureAwait(false);
+            return;
+        }
+
+        this.RaisePropertyChanged(nameof(this.CurrentConnections));
     }
 
     private void ChatClientDisconnected(object? sender, EventArgs e)
@@ -333,6 +354,11 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Catching all Exceptions.")]
     private async void ClientCleanupInactiveClients(object? sender, ElapsedEventArgs e)
     {
+        if (Interlocked.CompareExchange(ref this._cleaningInactiveClients, 1, 0) != 0)
+        {
+            return;
+        }
+
         try
         {
             var bottomDateTimeMargin = DateTime.UtcNow.Subtract(this.Settings.ClientTimeout);
@@ -354,22 +380,36 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
         {
             this._logger.LogError(ex, "Error during checking for inactive clients");
         }
+        finally
+        {
+            Volatile.Write(ref this._cleaningInactiveClients, 0);
+        }
     }
 
-    private void ClientCleanupUnusedRooms(object? sender, ElapsedEventArgs e)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Catching all Exceptions.")]
+    private async void ClientCleanupUnusedRooms(object? sender, ElapsedEventArgs e)
     {
+        if (Interlocked.CompareExchange(ref this._cleaningUnusedRooms, 1, 0) != 0)
+        {
+            return;
+        }
+
         try
         {
             var rooms = this._manager.OpenedRooms.Where(room => room.AuthenticationRequiredUntil < DateTime.UtcNow && room.ConnectedClients.Count < 2).ToList();
             foreach (var room in rooms)
             {
                 this._logger.LogInformation($"Cleaning up room {room.RoomId}");
-                room.Close();
+                await room.DisposeAsync().ConfigureAwait(false);
             }
         }
         catch (Exception ex)
         {
             this._logger.LogError(ex, "Error during cleanup of unused rooms");
+        }
+        finally
+        {
+            Volatile.Write(ref this._cleaningUnusedRooms, 0);
         }
     }
 

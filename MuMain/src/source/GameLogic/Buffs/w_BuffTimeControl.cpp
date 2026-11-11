@@ -113,8 +113,13 @@ void BuffTimeControl::RegisterBuffTime(eBuffState bufftype, DWORD curbufftime)
     // Tick the buff's remaining time every 900ms; the timer removes itself once
     // the buff expires (replaces the per-buff SetTimer/WM_TIMER).
     Core::Time::FrameTimerScheduler::Instance().SetRepeating(bufftimetype, 900, [this, bufftimetype] {
-        if (!CheckBuffTime(bufftimetype))
-            Core::Time::FrameTimerScheduler::Instance().Kill(bufftimetype);
+        auto*      self      = this;
+        const auto timerType = bufftimetype;
+        if (!self->CheckBuffTime(timerType))
+        {
+            self->m_BuffTimeList.erase(timerType);
+            Core::Time::FrameTimerScheduler::Instance().Kill(timerType);
+        }
     });
 }
 

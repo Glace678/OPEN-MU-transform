@@ -37,7 +37,15 @@ public sealed class GameServerRegistry : TimeoutBasedGameServerRegistry
     {
         if (await this.UpdateTimestampAsync(serverInfo.Id).ConfigureAwait(false))
         {
-            this._connectServer.RegisterGameServer(serverInfo, publicEndPoint);
+            try
+            {
+                this._connectServer.RegisterGameServer(serverInfo, publicEndPoint);
+            }
+            catch
+            {
+                await this.RemoveEntryAsync(serverInfo.Id).ConfigureAwait(false);
+                throw;
+            }
         }
         else
         {

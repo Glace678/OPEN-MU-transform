@@ -37,9 +37,12 @@ public static class SelfDefenseExtensions
     /// </returns>
     public static bool IsAnySelfDefenseActive(this Player player)
     {
-        var selfDefenses = player.GameContext.SelfDefenseState.Keys.Where(c => c.Attacker == player).ToList();
+        var now = DateTime.UtcNow;
+        var selfDefenses = player.GameContext.SelfDefenseState.Keys
+            .Where(c => c.Defender == player || c.Attacker == player)
+            .ToList();
         return selfDefenses.Any(sd =>
             player.GameContext.SelfDefenseState.TryGetValue(sd, out var timeout)
-            && timeout >= DateTime.UtcNow);
+            && timeout > now);
     }
 }

@@ -239,17 +239,22 @@ double GetTargetFps()
  * @param outFileName Buffer to receive the filename
  * @param outMessage Buffer to receive the log message
  */
-static void GenerateScreenshotFilename(wchar_t* outFileName, wchar_t* outMessage)
+static void GenerateScreenshotFilename(wchar_t* outFileName, size_t fileNameCap, wchar_t* outMessage, size_t messageCap)
 {
     SYSTEMTIME st;
     GetLocalTime(&st);
-    mu_swprintf(outFileName, L"Screen(%02d_%02d-%02d_%02d)-%04d.jpg", st.wMonth, st.wDay, st.wHour, st.wMinute,
-                GrabScreen);
-    mu_swprintf(outMessage, I18N::Game::SScreenshotSaved, outFileName);
+    swprintf_s(outFileName, fileNameCap, L"Screen(%02d_%02d-%02d_%02d)-%04d.jpg", st.wMonth, st.wDay, st.wHour,
+               st.wMinute, GrabScreen);
+    swprintf_s(outMessage, messageCap, I18N::Game::SScreenshotSaved, outFileName);
 
-    wchar_t lpszTemp[64];
-    mu_swprintf(lpszTemp, L" [%ls / %ls]", g_ServerListManager->GetSelectServerName(), Hero->ID);
-    wcscat(outMessage, lpszTemp);
+    const wchar_t* serverName = g_ServerListManager ? g_ServerListManager->GetSelectServerName() : nullptr;
+    const wchar_t* heroName   = Hero ? Hero->ID : nullptr;
+    if (serverName && serverName[0] != L'\0' && heroName && heroName[0] != L'\0')
+    {
+        wchar_t lpszTemp[128];
+        swprintf_s(lpszTemp, _countof(lpszTemp), L" [%ls / %ls]", serverName, heroName);
+        wcsncat_s(outMessage, messageCap, lpszTemp, _TRUNCATE);
+    }
 }
 
 /**
@@ -257,7 +262,12 @@ static void GenerateScreenshotFilename(wchar_t* outFileName, wchar_t* outMessage
  */
 static void CaptureScreenshot()
 {
-    std::vector<unsigned char> Buffer(WindowWidth * WindowHeight * 3);
+    if (WindowWidth <= 0 || WindowHeight <= 0)
+    {
+        return;
+    }
+
+    std::vector<unsigned char> Buffer(static_cast<size_t>(WindowWidth) * static_cast<size_t>(WindowHeight) * 3);
     // DXP-12: RHI::ReadColorFramebuffer's contract is top-down (unlike raw glReadPixels'
     // bottom-up) -- WriteJpeg's bottomUp=false tells turbojpeg to skip its own flip.
     RHI::ReadColorFramebuffer(0, 0, static_cast<int>(WindowWidth), static_cast<int>(WindowHeight), Buffer.data());
@@ -283,18 +293,18 @@ static void HandleScreenshotCapture()
     }
 
     const bool addTimeStampToCapture = !Core::Input::IsKeyDown(VK_SHIFT);
-    wchar_t    screenshotText[256];
+    wchar_t    screenshotText[256]   = {};
 
-    GenerateScreenshotFilename(GrabFileName, screenshotText);
+    GenerateScreenshotFilename(GrabFileName, _countof(GrabFileName), screenshotText, _countof(screenshotText));
 
-    if (addTimeStampToCapture)
+    if (addTimeStampToCapture && g_pSystemLogBox != nullptr)
     {
         g_pSystemLogBox->AddText(screenshotText, SEASON3B::TYPE_SYSTEM_MESSAGE);
     }
 
     CaptureScreenshot();
 
-    if (!addTimeStampToCapture)
+    if (!addTimeStampToCapture && g_pSystemLogBox != nullptr)
     {
         g_pSystemLogBox->AddText(screenshotText, SEASON3B::TYPE_SYSTEM_MESSAGE);
     }
@@ -829,11 +839,14 @@ static void RenderFpsCounter()
  */
 static void CheckServerConnection()
 {
+    static BOOL s_bClosed = FALSE;
+
     if (SceneFlag == LOG_IN_SCENE && Core::Input::IsVirtualGamepadOfflineLoginAcceptance())
         return;
 
     if (SocketClient != nullptr && SocketClient->IsConnected())
     {
+        s_bClosed = FALSE;
         return;
     }
 
@@ -857,7 +870,6 @@ static void CheckServerConnection()
         return;
     }
 
-    static BOOL s_bClosed = FALSE;
     if (!s_bClosed)
     {
         s_bClosed = TRUE;

@@ -32,7 +32,7 @@ public class DragonRoarSkillPlugIn : IAreaSkillPlugIn
     {
         bool FilterTarget(IAttackable attackable)
         {
-            if (attackable == target)
+            if (attackable == target || attackable == attacker || !attackable.IsAlive || attackable.IsAtSafezone())
             {
                 return false;
             }
@@ -55,9 +55,10 @@ public class DragonRoarSkillPlugIn : IAreaSkillPlugIn
                 return true;
             }
 
-            if (attackable is Player { GuildWarContext.State: GuildWarState.Started } guildWarTarget
-                && attacker is Player { GuildWarContext.State: GuildWarState.Started } guildWarAttacker
-                && guildWarTarget.GuildWarContext == guildWarAttacker.GuildWarContext)
+            if (attackable is Player { GuildWarContext: { State: GuildWarState.Started } targetWarContext }
+                && attacker is Player { GuildWarContext: { State: GuildWarState.Started } attackerWarContext }
+                && targetWarContext.Score == attackerWarContext.Score
+                && targetWarContext.Team != attackerWarContext.Team)
             {
                 return true;
             }
@@ -65,26 +66,26 @@ public class DragonRoarSkillPlugIn : IAreaSkillPlugIn
             return false;
         }
 
-        var extraTargets = target.CurrentMap?.GetAttackablesInRange(target.Position, this.Range).Where(FilterTarget).Take(7);
+        var extraTargets = target.CurrentMap?.GetAttackablesInRange(target.Position, this.Range).Where(FilterTarget).Take(7).ToList();
 
-        if (extraTargets is null)
+        if (extraTargets is null or { Count: 0 } || skillEntry.Skill is not { } skill)
         {
             return;
         }
 
         int i = 1;
-        var skill = skillEntry.Skill!;
+        var hitWeight = skill.NumberOfHitsPerAttack > 1 ? (1.0 / skill.NumberOfHitsPerAttack) : 1.0;
         foreach (var extraTarget in extraTargets)
         {
-            if (i <= 3 || Rand.NextRandomBool())
+            if ((i <= 3 || Rand.NextRandomBool()) && extraTarget.IsAlive && extraTarget.IsActive() && !extraTarget.IsAtSafezone())
             {
                 // first three 100% chance, others 50% chance
-                await extraTarget.AttackByAsync(attacker, skillEntry, false, 1, false).ConfigureAwait(false);
-                await extraTarget.TryApplyElementalEffectsAsync(attacker, skillEntry).ConfigureAwait(false);
+                var extraHitInfo = await extraTarget.AttackByAsync(attacker, skillEntry, false, hitWeight, skill.NumberOfHitsPerAttack > 1 ? false : null).ConfigureAwait(false);
+                await extraTarget.TryApplyElementalEffectsAsync(attacker, skillEntry, extraHitInfo).ConfigureAwait(false);
 
                 for (int hit = 2; hit <= skill.NumberOfHitsPerAttack; hit++)
                 {
-                    await extraTarget.AttackByAsync(attacker, skillEntry, false, 1, hit == skill.NumberOfHitsPerAttack).ConfigureAwait(false);
+                    await extraTarget.AttackByAsync(attacker, skillEntry, false, hitWeight, hit == skill.NumberOfHitsPerAttack).ConfigureAwait(false);
                 }
             }
 

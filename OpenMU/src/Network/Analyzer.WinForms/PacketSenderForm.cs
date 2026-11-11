@@ -36,6 +36,7 @@ public partial class PacketSenderForm : Form
 
         this.sendButton.Click += this.SendButtonClick;
         connection.PropertyChanged += this.ConnectionOnPropertyChanged;
+        this.FormClosed += (_, _) => this._connection.PropertyChanged -= this.ConnectionOnPropertyChanged;
     }
 
     private void ConnectionOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -81,11 +82,11 @@ public partial class PacketSenderForm : Form
 
                 if (this.toClientRadioButton.Checked)
                 {
-                    await this._connection.SendToClientAsync(data).ConfigureAwait(false);
+                    await this._connection.SendToClientAsync(data).ConfigureAwait(true);
                 }
                 else
                 {
-                    await this._connection.SendToServerAsync(data).ConfigureAwait(false);
+                    await this._connection.SendToServerAsync(data).ConfigureAwait(true);
                 }
             }
         }

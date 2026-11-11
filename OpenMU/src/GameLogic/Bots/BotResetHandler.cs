@@ -8,6 +8,7 @@ using MUnique.OpenMU.GameLogic.Attributes;
 using MUnique.OpenMU.GameLogic.Offline;
 using MUnique.OpenMU.GameLogic.PlugIns;
 using MUnique.OpenMU.GameLogic.Resets;
+using MUnique.OpenMU.GameLogic.Views.Inventory;
 
 /// <summary>
 /// Performs character resets for bots on servers where the <see cref="ResetFeaturePlugIn"/> is enabled,
@@ -170,16 +171,21 @@ internal static class BotResetHandler
     /// </summary>
     private static async ValueTask<bool> TryConsumeCostsAsync(OfflinePlayer player, ResetConfiguration configuration, ResetProgression resetProgression)
     {
-        IList<Item> requiredItems = [];
-        if (resetProgression.RequiredItemAmount > 0 && configuration.RequiredResetItem is { } requiredDefinition)
+        IList<Item> matchingItems = [];
+        if (resetProgression.RequiredItemAmount > 0)
         {
-            requiredItems = player.Inventory?.Items
+            if (configuration.RequiredResetItem is not { } requiredDefinition)
+            {
+                return false;
+            }
+
+            matchingItems = player.Inventory?.Items
                 .Where(item => item.Definition is { } definition
                                && definition.Group == requiredDefinition.Group
                                && definition.Number == requiredDefinition.Number)
-                .Take(resetProgression.RequiredItemAmount)
                 .ToList() ?? [];
-            if (requiredItems.Count < resetProgression.RequiredItemAmount)
+            var availableUnits = matchingItems.Sum(static item => Math.Max(1, (int)item.Durability));
+            if (availableUnits < resetProgression.RequiredItemAmount)
             {
                 return false;
             }
@@ -191,9 +197,26 @@ internal static class BotResetHandler
             return false;
         }
 
-        foreach (var item in requiredItems)
+        var remaining = resetProgression.RequiredItemAmount;
+        foreach (var item in matchingItems)
         {
-            await player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
+            if (remaining <= 0)
+            {
+                break;
+            }
+
+            var units = Math.Max(1, (int)item.Durability);
+            if (units <= remaining)
+            {
+                remaining -= units;
+                await player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
+            }
+            else
+            {
+                item.Durability -= remaining;
+                remaining = 0;
+                await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
+            }
         }
 
         return true;

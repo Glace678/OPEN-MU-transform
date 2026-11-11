@@ -89,7 +89,11 @@ finally
     # Dispose the sensitive objects we own. Do NOT rely on String.Remove(0): a
     # .NET String is immutable, so that call only rebound this local and left
     # the admin password alive on the managed heap.
+    if ($null -ne $bytes) { [Array]::Clear($bytes, 0, $bytes.Length) }
+    if ($null -ne $check) { [Array]::Clear($check, 0, $check.Length) }
     if ($null -ne $key) { [Array]::Clear($key, 0, $key.Length) }
+    if ($null -ne $h1) { [Array]::Clear($h1, 0, $h1.Length) }
+    if ($null -ne $h2) { [Array]::Clear($h2, 0, $h2.Length) }
     if ($null -ne $hmac1) { $hmac1.Dispose() }
     if ($null -ne $hmac2) { $hmac2.Dispose() }
     if ($null -ne $rng) { $rng.Dispose() }

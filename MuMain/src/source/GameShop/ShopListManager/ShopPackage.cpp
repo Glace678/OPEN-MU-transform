@@ -18,9 +18,36 @@
 
 CShopPackage::CShopPackage()  // OK
 {
-    this->LeftCount = -1;
+    this->ProductDisplaySeq = 0;
+    this->ViewOrder         = 0;
+    this->PackageProductSeq = 0;
+    memset(this->PackageProductName, 0, sizeof(this->PackageProductName));
+    this->PackageProductType = 0;
+    this->Price              = 0;
+    memset(this->Description, 0, sizeof(this->Description));
+    memset(this->Caution, 0, sizeof(this->Caution));
+    this->SalesFlag    = 0;
+    this->GiftFlag     = 0;
+    this->StartDate    = {};
+    this->EndDate      = {};
+    this->CapsuleFlag  = 0;
+    this->CapsuleCount = 0;
+    memset(this->ProductCashName, 0, sizeof(this->ProductCashName));
+    memset(this->PricUnitName, 0, sizeof(this->PricUnitName));
+    this->DeleteFlag    = 0;
+    this->EventFlag     = 0;
+    this->ProductAmount = 0;
+    memset(this->InGamePackageID, 0, sizeof(this->InGamePackageID));
+    this->ProductCashSeq    = 0;
+    this->PriceCount        = 0;
+    this->DeductMileageFlag = false;
+    this->CashType          = 0;
+    this->CashTypeFlag      = 0;
+    this->LeftCount         = -1;
     this->ProductSeqList.clear();
+    this->ProductSeqIter = this->ProductSeqList.end();
     this->PriceSeqList.clear();
+    this->PriceSeqIter = this->PriceSeqList.end();
 }
 CShopPackage::~CShopPackage()  // OK
 {}
@@ -32,8 +59,11 @@ bool CShopPackage::SetPackage(std::wstring strdata)  // OK
 
     CStringToken token(strdata, L"@");
 
-    if (token.hasMoreTokens() == 0)
+    if (token.countTokens() < 27)
         return 0;
+
+    this->ProductSeqList.clear();
+    this->PriceSeqList.clear();
 
     this->ProductDisplaySeq = _wtoi(token.nextToken().c_str());
     this->ViewOrder         = _wtoi(token.nextToken().c_str());
@@ -62,6 +92,8 @@ bool CShopPackage::SetPackage(std::wstring strdata)  // OK
     this->DeductMileageFlag = _wtoi(token.nextToken().c_str()) != 0;
     this->CashType          = _wtoi(token.nextToken().c_str());
     this->CashTypeFlag      = _wtoi(token.nextToken().c_str());
+    this->ProductSeqIter    = this->ProductSeqList.begin();
+    this->PriceSeqIter      = this->PriceSeqList.begin();
 
     return 1;
 }
@@ -75,6 +107,8 @@ void CShopPackage::SetSingleProduct(int productId)
 {
     ProductSeqList.assign(1, productId);
     PriceSeqList.assign(1, productId);
+    ProductSeqIter = ProductSeqList.begin();
+    PriceSeqIter   = PriceSeqList.begin();
 }
 
 int CShopPackage::GetProductCount()  // OK

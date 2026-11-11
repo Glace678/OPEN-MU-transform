@@ -185,7 +185,7 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
             switch (subCode)
             {
                 case 0x03:  // PRECEIVE_SERVER_ADDRESS / ConnectionInfo (22 bytes C1)
-                    return 13 + headerDelta;
+                    return 22 + headerDelta;
                 case 0x06:  // PRECEIVE_SERVER_LIST / ServerListResponse (6 bytes C1 / 7 bytes C2)
                     return 6 + headerDelta;
                 default:

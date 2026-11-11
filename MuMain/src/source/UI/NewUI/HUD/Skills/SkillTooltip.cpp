@@ -41,6 +41,9 @@ void Render(int sx, int sy, int Type, int /*SkillNum*/, int iRenderPoint /*= STR
     if (!CharacterAttribute)
         return;
 
+    if (Type < 0 || Type >= MAX_SKILLS)
+        return;
+
     const int skillType = CharacterAttribute->Skill[Type];
 
     BuildOptions options;
@@ -72,11 +75,11 @@ void Render(int sx, int sy, int Type, int /*SkillNum*/, int iRenderPoint /*= STR
     if (iRenderPoint == STRP_NONE)
     {
         const int Height =
-            ((model.count - model.skipCount) * TextSize.cy + model.skipCount * TextSize.cy / 2) / g_fScreenRate_y;
+            ((lineCount - model.skipCount) * TextSize.cy + model.skipCount * TextSize.cy / 2) / g_fScreenRate_y;
         sy -= Height;
     }
 
-    RenderTipTextList(sx, sy, model.count, 0, RT3_SORT_CENTER, iRenderPoint);
+    RenderTipTextList(sx, sy, lineCount, 0, RT3_SORT_CENTER, iRenderPoint);
 }
 
 }  // namespace UI::Skills::Tooltip

@@ -107,13 +107,17 @@ bool SEASON3B::CNewUIChatLogWindow::RenderMessages()
     EnableAlphaTest();
     for (int i = iRenderStartLine, s = 0; i <= GetCurrentRenderEndLine(); i++, s++)
     {
-        if (i < 0 && i >= (int)pvecMsgs->size())
+        if (i < 0)
+            continue;
+        if (i >= static_cast<int>(pvecMsgs->size()))
             break;
 
         bool bRenderMessage = true;
         g_pRenderText->SetFont(g_hFont);
 
         auto const pMsgText = (*pvecMsgs)[i];
+        if (pMsgText == nullptr)
+            continue;
 
         if (pMsgText->GetType() == TYPE_WHISPER_MESSAGE)
         {
@@ -473,10 +477,10 @@ void SEASON3B::CNewUIChatLogWindow::ProcessAddText(const type_string& strID, con
     }
 
     //. Auto Scrolling
-    if (nScrollLines > 0 && ((pvecMsgs->size() - (m_iCurrentRenderEndLine + 1) - nScrollLines) < 3))
-        m_iCurrentRenderEndLine = pvecMsgs->size() - 1;
+    if (nScrollLines > 0 && ((static_cast<int>(pvecMsgs->size()) - (m_iCurrentRenderEndLine + 1) - nScrollLines) < 3))
+        m_iCurrentRenderEndLine = static_cast<int>(pvecMsgs->size()) - 1;
     else if (!m_bShowFrame)
-        m_iCurrentRenderEndLine = pvecMsgs->size() - 1;
+        m_iCurrentRenderEndLine = static_cast<int>(pvecMsgs->size()) - 1;
 }
 
 void SEASON3B::CNewUIChatLogWindow::RemoveFrontLine(MESSAGE_TYPE MsgType)
@@ -713,15 +717,22 @@ bool SEASON3B::CNewUIChatLogWindow::UpdateMouseEvent()
         if (GetCurrentRenderEndLine() >= m_nShowingLines)
             iRenderStartLine = GetCurrentRenderEndLine() - m_nShowingLines + 1;
 
+        type_vector_msgs* pvecMsgs = GetMsgs(GetCurrentMsgType());
+        if (pvecMsgs == nullptr)
+        {
+            return false;
+        }
+
         for (int i = iRenderStartLine, s = 0; i <= GetCurrentRenderEndLine(); i++, s++)
         {
-            type_vector_msgs* pvecMsgs = GetMsgs(GetCurrentMsgType());
-            if (pvecMsgs == nullptr)
-            {
-                return false;
-            }
+            if (i < 0)
+                continue;
+            if (i >= static_cast<int>(pvecMsgs->size()))
+                break;
 
             CMessageText* pMsgText = (*pvecMsgs)[i];
+            if (pMsgText == nullptr)
+                continue;
 
             if (pMsgText->GetType() == TYPE_WHISPER_MESSAGE || pMsgText->GetType() == TYPE_CHAT_MESSAGE ||
                 pMsgText->GetType() == TYPE_PARTY_MESSAGE || pMsgText->GetType() == TYPE_GUILD_MESSAGE ||
@@ -943,11 +954,27 @@ void SEASON3B::CNewUIChatLogWindow::SeparateText(IN const type_string& strID, IN
     }
 
     BOOL bSpaceExist = (strText.find_last_of(L" ") != std::wstring::npos) ? TRUE : FALSE;
-    int  iLocToken   = strText.length();
+    int  iLocToken   = static_cast<int>(strText.length());
 
-    while ((required_size > max_first_line_size) && (iLocToken > -1))
+    while ((required_size > max_first_line_size) && (iLocToken > 1))
     {
-        iLocToken = (bSpaceExist) ? strText.find_last_of(L" ", iLocToken - 1) : iLocToken - 1;
+        if (bSpaceExist)
+        {
+            size_t prevSpace = strText.find_last_of(L' ', static_cast<size_t>(iLocToken - 1));
+            if (prevSpace == type_string::npos || prevSpace == 0)
+            {
+                bSpaceExist = FALSE;
+                iLocToken -= 1;
+            }
+            else
+            {
+                iLocToken = static_cast<int>(prevSpace);
+            }
+        }
+        else
+        {
+            iLocToken -= 1;
+        }
 
         GetTextExtentPoint32(g_pRenderText->GetFontDC(), (strText.substr(0, iLocToken)).c_str(), iLocToken, &TextSize);
         required_size = TextSize.cx;
@@ -962,7 +989,7 @@ bool SEASON3B::CNewUIChatLogWindow::CheckFilterText(const type_string& strTestTe
     auto vi_filters = m_vecFilters.begin();
     for (; vi_filters != m_vecFilters.end(); vi_filters++)
     {
-        if (vi_filters->find(strTestText))
+        if (!vi_filters->empty() && strTestText.find(*vi_filters) != type_string::npos)
         {
             return true;
         }
@@ -1146,12 +1173,16 @@ bool SEASON3B::CNewUISystemLogWindow::RenderMessages()
     EnableAlphaTest();
     for (int i = iRenderStartLine; i <= GetCurrentRenderEndLine(); i++)
     {
-        if (i < 0 && i >= static_cast<int>(m_vecAllMsgs.size()))
+        if (i < 0)
+            continue;
+        if (i >= static_cast<int>(m_vecAllMsgs.size()))
             break;
 
         g_pRenderText->SetFont(g_hFont);
 
         auto const message = m_vecAllMsgs[i];
+        if (message == nullptr)
+            continue;
         if (message->GetType() == TYPE_SYSTEM_MESSAGE)
         {
             g_pRenderText->SetBgColor(0, 0, 0, 100);
@@ -1294,7 +1325,7 @@ bool SEASON3B::CNewUISystemLogWindow::CheckChatRedundancy(const type_string& str
     if (m_vecAllMsgs.empty())
         return false;
     auto vri_msgs = m_vecAllMsgs.rbegin();
-    for (int i = 0; (i < iSearchLine) || (vri_msgs != m_vecAllMsgs.rend()); vri_msgs++, i++)
+    for (int i = 0; (i < iSearchLine) && (vri_msgs != m_vecAllMsgs.rend()); vri_msgs++, i++)
         if (0 == (*vri_msgs)->GetText().compare(strText))
             return true;
     return false;

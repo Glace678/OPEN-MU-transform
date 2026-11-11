@@ -53,7 +53,7 @@ bool PetActionCollecter::Model(OBJECT* obj, CHARACTER* Owner, int targetKey, dou
 
 bool PetActionCollecter::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, double tick, bool bForceRender)
 {
-    if (NULL == obj || NULL == Owner)
+    if (NULL == obj || NULL == Owner || NULL == obj->Owner)
         return FALSE;
 
     FindZen(obj);
@@ -96,7 +96,7 @@ bool PetActionCollecter::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, doub
             //------------------------------//
             Distance = sqrtf(Range[0] * Range[0] + Range[1] * Range[1]);
 
-            if (80.0f >= FlyRange)
+            if (Distance >= FlyRange)
             {
                 float Angle   = CreateAngle2D(obj->Position, targetPos);  //test
                 obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 8.0f * FPS_ANIMATION_FACTOR);
@@ -170,7 +170,8 @@ bool PetActionCollecter::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, doub
             float Angle   = CreateAngle2D(obj->Position, targetPos);
             obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 10.0f);
 
-            if (CompTimeControl(1000, m_dwSendDelayTime) && &Hero->Object == obj->Owner && SendGetItem == -1)
+            if (CompTimeControl(1000, m_dwSendDelayTime) && Hero != nullptr && SocketClient != nullptr &&
+                &Hero->Object == obj->Owner && SendGetItem == -1)
             {
                 SendGetItem = m_RootItem.itemIndex;
                 SocketClient->ToGameServer()->SendPickupItemRequest(m_RootItem.itemIndex);
@@ -288,7 +289,7 @@ bool PetActionCollecter::Sound(OBJECT* obj, CHARACTER* Owner, int targetKey, dou
 
 void PetActionCollecter::FindZen(OBJECT* obj)
 {
-    if (NULL == obj || true == m_isRooting)
+    if (NULL == obj || NULL == obj->Owner || true == m_isRooting)
         return;
 
     float dx, dy, dl;

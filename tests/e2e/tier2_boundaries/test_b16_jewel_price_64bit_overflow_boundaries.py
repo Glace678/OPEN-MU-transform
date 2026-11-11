@@ -9,15 +9,15 @@ class TestB16JewelPrice64BitOverflowBoundaries(unittest.TestCase):
     Tests boundary jewel pack levels (0, 15, MAX_GOLD clamp) and unknown jewel types.
     """
 
-    def test_packed_guardian_level_15_max_clamp(self):
-        # Level 15: (15 + 1) * 60,000,000 * 10 = 9,600,000,000 -> clamped to 2,000,000,000
-        price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedGuardian", level=15)
-        self.assertEqual(price, EconomyEngine.MAX_GOLD)
+    def test_packed_guardian_level_15_and_overflow_clamp(self):
+        # Level 15: (15 + 1) * 3,900 * 10 = 624,000; adversarial high level clamps to MAX_GOLD
+        self.assertEqual(EconomyEngine.calculate_packed_jewel_price_64bit("PackedGuardian", level=15), 624_000)
+        self.assertEqual(EconomyEngine.calculate_packed_jewel_price_64bit("PackedGuardian", level=60_000), EconomyEngine.MAX_GOLD)
 
-    def test_packed_life_level_15_max_clamp(self):
-        # Level 15: (15 + 1) * 45,000,000 * 10 = 7,200,000,000 -> clamped to 2,000,000,000
-        price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedLife", level=15)
-        self.assertEqual(price, EconomyEngine.MAX_GOLD)
+    def test_packed_life_level_15_and_overflow_clamp(self):
+        # Level 15: (15 + 1) * 2,950 * 10 = 472,000; adversarial high level clamps to MAX_GOLD
+        self.assertEqual(EconomyEngine.calculate_packed_jewel_price_64bit("PackedLife", level=15), 472_000)
+        self.assertEqual(EconomyEngine.calculate_packed_jewel_price_64bit("PackedLife", level=80_000), EconomyEngine.MAX_GOLD)
 
     def test_packed_gemstone_price_calculation(self):
         # PackedGemstone level 0: (0 + 1) * 18,600 * 10 = 186,000

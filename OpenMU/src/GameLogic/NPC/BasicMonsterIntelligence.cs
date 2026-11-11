@@ -16,6 +16,7 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
 {
     private Timer? _aiTimer;
     private Monster? _monster;
+    private int _isTicking;
 
     /// <summary>
     /// Finalizes an instance of the <see cref="BasicMonsterIntelligence"/> class.
@@ -189,6 +190,11 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Catching all Exceptions.")]
     private async void SafeTick()
     {
+        if (this._aiTimer is null || Interlocked.CompareExchange(ref this._isTicking, 1, 0) != 0)
+        {
+            return;
+        }
+
         try
         {
             await this.TickAsync().ConfigureAwait(false);
@@ -200,6 +206,10 @@ public class BasicMonsterIntelligence : INpcIntelligence, IDisposable
         catch (Exception ex)
         {
             Debug.Fail(ex.Message, ex.StackTrace);
+        }
+        finally
+        {
+            Interlocked.Exchange(ref this._isTicking, 0);
         }
     }
 

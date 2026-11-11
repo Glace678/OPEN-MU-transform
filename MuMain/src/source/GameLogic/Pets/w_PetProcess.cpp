@@ -21,7 +21,7 @@ PetInfoPtr PetInfo::Make()
     return petInfo;
 }
 
-PetInfo::PetInfo() : m_scale(0.0f), m_actions(NULL), m_speeds(NULL), m_count(0) {}
+PetInfo::PetInfo() : m_blendMesh(-1), m_scale(0.0f), m_actions(NULL), m_speeds(NULL), m_count(0) {}
 
 PetInfo::~PetInfo()
 {

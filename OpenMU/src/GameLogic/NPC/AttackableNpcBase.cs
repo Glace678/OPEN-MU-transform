@@ -27,6 +27,7 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     private readonly List<IDisposable> _registrations = new();
 
     private int _health;
+    private int _isAlive;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AttackableNpcBase" /> class.
@@ -59,7 +60,11 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
     public MagicEffectsList MagicEffectList { get; }
 
     /// <inheritdoc />
-    public bool IsAlive { get; private set; }
+    public bool IsAlive
+    {
+        get => Volatile.Read(ref this._isAlive) != 0;
+        private set => Interlocked.Exchange(ref this._isAlive, value ? 1 : 0);
+    }
 
     /// <summary>
     /// Gets a value indicating whether this <see cref="IAttackable" /> is currently teleporting and can't be directly targeted.
@@ -405,26 +410,35 @@ public abstract class AttackableNpcBase : NonPlayerCharacter, IAttackable
 
     private bool TryHit(uint damage, IAttacker attacker)
     {
+        if (Volatile.Read(ref this._isAlive) == 0)
+        {
+            return false;
+        }
+
         if (damage > 0)
         {
             this.RegisterHit(attacker);
         }
 
-        if (damage >= this.Health)
+        var clampedDamage = (int)Math.Min(damage, int.MaxValue);
+        while (true)
         {
-            this.IsAlive = false;
-            this.Health = 0;
-            return true;
-        }
+            var currentHealth = Volatile.Read(ref this._health);
+            if (currentHealth <= 0)
+            {
+                return Interlocked.Exchange(ref this._isAlive, 0) == 1;
+            }
 
-        try
-        {
-            Interlocked.Add(ref this._health, -(int)damage);
-            return false;
-        }
-        catch
-        {
-            return false;
+            var newHealth = clampedDamage >= currentHealth ? 0 : currentHealth - clampedDamage;
+            if (Interlocked.CompareExchange(ref this._health, newHealth, currentHealth) == currentHealth)
+            {
+                if (newHealth == 0)
+                {
+                    return Interlocked.Exchange(ref this._isAlive, 0) == 1;
+                }
+
+                return false;
+            }
         }
     }
 

@@ -46,18 +46,22 @@ public sealed class OfflinePlayerManager
             return false;
         }
 
-        if (!this.TryChargeInitialZenCost(realPlayer))
+        var initialCost = this.CalculateInitialZenCost(realPlayer);
+        if (initialCost > 0 && !realPlayer.TryRemoveMoney(initialCost))
         {
             await this.RemoveAndDisposeAsync(loginName, sentinel).ConfigureAwait(false);
             return false;
         }
 
+        var disconnectedRealPlayer = false;
         try
         {
             await this.TransitionToOfflineAsync(realPlayer, loginName).ConfigureAwait(false);
+            disconnectedRealPlayer = true;
 
             if (!await sentinel.InitializeAsync(loginName, characterName).ConfigureAwait(false))
             {
+                await RefundInitialZenCostAsync(realPlayer, loginName, characterName, initialCost, disconnectedRealPlayer).ConfigureAwait(false);
                 await this.RemoveAndDisposeAsync(loginName, sentinel).ConfigureAwait(false);
                 return false;
             }
@@ -66,6 +70,7 @@ public sealed class OfflinePlayerManager
         }
         catch
         {
+            await RefundInitialZenCostAsync(realPlayer, loginName, characterName, initialCost, disconnectedRealPlayer).ConfigureAwait(false);
             await this.RemoveAndDisposeAsync(loginName, sentinel).ConfigureAwait(false);
             throw;
         }
@@ -125,25 +130,36 @@ public sealed class OfflinePlayerManager
         await realPlayer.DisconnectAsync().ConfigureAwait(false);
     }
 
-    /// <summary>
-    /// Calculates and deducts the initial Zen cost for starting an offline player session.
-    /// The cost is based on the first MuHelper cost stage multiplied by the player's total level.
-    /// </summary>
-    /// <param name="player">The player to charge.</param>
-    /// <returns><c>true</c> if the cost was successfully charged or no cost applies; otherwise <c>false</c>.</returns>
-    private bool TryChargeInitialZenCost(Player player)
+    private static async ValueTask RefundInitialZenCostAsync(Player realPlayer, string loginName, string characterName, int initialCost, bool disconnectedRealPlayer)
     {
-        var initialCost = this.CalculateInitialZenCost(player);
+        if (initialCost <= 0)
+        {
+            return;
+        }
 
-        return initialCost <= 0 || player.TryRemoveMoney(initialCost);
+        if (!disconnectedRealPlayer && realPlayer.SelectedCharacter?.Inventory is not null && realPlayer.TryAddMoney(initialCost))
+        {
+            return;
+        }
+
+        try
+        {
+            using var context = realPlayer.GameContext.PersistenceContextProvider.CreateNewPlayerContext(realPlayer.GameContext.Configuration);
+            var account = await context.GetAccountByLoginNameAsync(loginName).ConfigureAwait(false);
+            var character = account?.Characters.FirstOrDefault(c => c.Name == characterName);
+            if (character?.Inventory is { } inventory)
+            {
+                var maxMoney = realPlayer.GameContext.Configuration.MaximumInventoryMoney;
+                inventory.Money = (int)Math.Min((long)inventory.Money + initialCost, maxMoney);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+            }
+        }
+        catch (Exception ex)
+        {
+            realPlayer.Logger.LogError(ex, "Failed to refund offline initial Zen cost ({Cost}) for account '{LoginName}', character '{CharacterName}'.", initialCost, loginName, characterName);
+        }
     }
 
-    /// <summary>
-    /// Calculates the initial Zen cost for the given player based on the MuHelper configuration
-    /// and the player's combined normal and master level.
-    /// </summary>
-    /// <param name="player">The player for whom to calculate the cost.</param>
-    /// <returns>The Zen amount to charge; 0 if no cost applies.</returns>
     private int CalculateInitialZenCost(Player player)
     {
         var config = player.GameContext.FeaturePlugIns.GetPlugIn<MuHelperFeaturePlugIn>()?.Configuration

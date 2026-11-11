@@ -55,6 +55,11 @@ internal class ClientConnectionCountPlugin : IAfterSocketAcceptPlugin, IAfterDis
     /// <inheritdoc/>
     public void OnAfterDisconnect(Client client)
     {
+        if (client.Address is null || Equals(client.Address, IPAddress.None))
+        {
+            return;
+        }
+
         this._clientCounter.RemoveConnection(client.Address);
     }
 }

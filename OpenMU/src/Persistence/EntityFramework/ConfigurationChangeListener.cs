@@ -49,17 +49,16 @@ public class ConfigurationChangeListener : IConfigurationChangeListener
             && (parent?.GetId() ?? parent as Guid?) is { } parentId)
         {
             using var configContext = this._contextProvider.Value.CreateNewConfigurationContext();
-            var gameConfiguration = (await configContext.GetAsync<GameConfiguration>().ConfigureAwait(false)).FirstOrDefault();
-            if (gameConfiguration is null)
+            var gameConfigurations = await configContext.GetAsync<GameConfiguration>().ConfigureAwait(false);
+            foreach (var gameConfiguration in gameConfigurations)
             {
-                return;
-            }
+                using var context = this._contextProvider.Value.CreateNewContext(gameConfiguration);
+                var cachedParent = await context.GetByIdAsync(parentId, parentCollectionNavigation.DeclaringEntityType.ClrType).ConfigureAwait(false);
+                if (cachedParent is null)
+                {
+                    continue;
+                }
 
-            using var context = this._contextProvider.Value.CreateNewContext(gameConfiguration);
-            var cachedParent = await context.GetByIdAsync(parentId, parentCollectionNavigation.DeclaringEntityType.ClrType).ConfigureAwait(false);
-
-            if (cachedParent is not null)
-            {
                 var cachedConfiguration = configContext.CreateNew(type);
                 if (cachedConfiguration is IAssignable assignable)
                 {
@@ -80,16 +79,20 @@ public class ConfigurationChangeListener : IConfigurationChangeListener
     /// <inheritdoc />
     public async ValueTask ConfigurationRemovedAsync(Type type, Guid id, object? parent, INavigationBase? parentCollectionNavigation)
     {
-        using var configContext = this._contextProvider.Value.CreateNewConfigurationContext();
-        var gameConfiguration = (await configContext.GetAsync<GameConfiguration>().ConfigureAwait(false)).First();
-        using var context = this._contextProvider.Value.CreateNewContext(gameConfiguration);
-
         if (parentCollectionNavigation?.GetCollectionAccessor() is { } collectionAccessor
-            && (parent?.GetId() ?? parent as Guid?) is { } parentId
-            && await context.GetByIdAsync(parentId, parentCollectionNavigation.DeclaringEntityType.ClrType).ConfigureAwait(false) is { } cachedParent
-            && await context.GetByIdAsync(id, type).ConfigureAwait(false) is { } cachedEntity)
+            && (parent?.GetId() ?? parent as Guid?) is { } parentId)
         {
-            collectionAccessor.Remove(cachedParent, cachedEntity);
+            using var configContext = this._contextProvider.Value.CreateNewConfigurationContext();
+            var gameConfigurations = await configContext.GetAsync<GameConfiguration>().ConfigureAwait(false);
+            foreach (var gameConfiguration in gameConfigurations)
+            {
+                using var context = this._contextProvider.Value.CreateNewContext(gameConfiguration);
+                if (await context.GetByIdAsync(parentId, parentCollectionNavigation.DeclaringEntityType.ClrType).ConfigureAwait(false) is { } cachedParent
+                    && await context.GetByIdAsync(id, type).ConfigureAwait(false) is { } cachedEntity)
+                {
+                    collectionAccessor.Remove(cachedParent, cachedEntity);
+                }
+            }
         }
 
         await this._changePublisher.ConfigurationRemovedAsync(type, id).ConfigureAwait(false);

@@ -87,7 +87,7 @@ def scan(source_root: pathlib.Path) -> list[str]:
     for ext in ("*.cpp", "*.h"):
         for path in sorted(source_root.rglob(ext)):
             rel = path.relative_to(source_root).as_posix()
-            if rel.startswith("Render/") or "/ThirdParty/" in rel:
+            if rel.startswith("Render/") or rel.startswith("ThirdParty/") or "/ThirdParty/" in rel:
                 continue
             if rel in FULL_FILE_ALLOWLIST:
                 continue

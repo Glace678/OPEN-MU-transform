@@ -184,6 +184,11 @@ public sealed class BuffHandler
 
         if (skillEntry.Skill?.Target == SkillTarget.ImplicitParty)
         {
+            if (!this.HasEnoughResources(skillEntry))
+            {
+                return false;
+            }
+
             var strategy = this._player.GameContext.PlugInManager
                                .GetStrategy<short, ITargetedSkillPlugin>(skillEntry.Skill!.Number)
                            ?? DefaultPlugin;
@@ -192,11 +197,27 @@ public sealed class BuffHandler
             return true;
         }
 
+        if (!await this._player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false))
+        {
+            return false;
+        }
+
         await this._player.ForEachWorldObserverAsync<IShowSkillAnimationPlugIn>(
             p => p.ShowSkillAnimationAsync(this._player, this._player, skillEntry.Skill!, true),
             includeThis: true).ConfigureAwait(false);
         await this._player.ApplyMagicEffectAsync(this._player, skillEntry).ConfigureAwait(false);
         return true;
+    }
+
+    private bool HasEnoughResources(SkillEntry skillEntry)
+    {
+        if (skillEntry.Skill is not { } skill || this._player.Attributes is not { } attributes)
+        {
+            return false;
+        }
+
+        return skill.Requirements.All(r => r.MinimumValue <= attributes[r.Attribute])
+               && skill.ConsumeRequirements.All(r => this._player.GetRequiredValue(r, skillEntry) <= attributes[r.Attribute]);
     }
 
     /// <summary>
@@ -220,6 +241,11 @@ public sealed class BuffHandler
             if (!this.NeedsPartyBuff(member, skillEntry))
             {
                 continue;
+            }
+
+            if (!await this._player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false))
+            {
+                return false;
             }
 
             await (member as IObservable ?? this._player).ForEachWorldObserverAsync<IShowSkillAnimationPlugIn>(

@@ -15,15 +15,18 @@ namespace
 {
 int GetTextLines(const wchar_t* inText, wchar_t* outText, int maxLine, int lineSize)
 {
+    if (!inText || !outText || maxLine <= 0 || lineSize <= 0)
+    {
+        return 0;
+    }
+
     int            iLine       = 0;
     const wchar_t* lpLineStart = inText;
     wchar_t*       lpDst       = outText;
     const wchar_t* lpSpace     = NULL;
-    int            iMbclen     = 0;
-    for (const wchar_t* lpSeek = inText; *lpSeek; lpSeek += iMbclen, lpDst += iMbclen)
+    for (const wchar_t* lpSeek = inText; *lpSeek != L'\0'; ++lpSeek, ++lpDst)
     {
-        iMbclen = _mbclen((unsigned char*)lpSeek);
-        if (iMbclen + (int)(lpSeek - lpLineStart) >= lineSize)
+        if (1 + (int)(lpSeek - lpLineStart) >= lineSize)
         {
             if (lpSpace && (int)(lpSeek - lpSpace) < std::min<int>(10, lineSize / 2))
             {
@@ -32,23 +35,23 @@ int GetTextLines(const wchar_t* inText, wchar_t* outText, int maxLine, int lineS
             }
 
             lpLineStart = lpSeek;
-            *lpDst      = '\0';
-            if (iLine >= maxLine - 1)
+            *lpDst      = L'\0';
+            if (iLine >= maxLine - 1 || *lpSeek == L'\0')
             {
-                break;
+                return (iLine + 1);
             }
             ++iLine;
             lpDst   = outText + iLine * lineSize;
             lpSpace = NULL;
         }
 
-        memcpy(lpDst, lpSeek, iMbclen);
-        if (*lpSeek == ' ')
+        *lpDst = *lpSeek;
+        if (*lpSeek == L' ')
         {
             lpSpace = lpSeek;
         }
     }
-    *lpDst = '\0';
+    *lpDst = L'\0';
 
     return (iLine + 1);
 }
@@ -98,7 +101,11 @@ const bool JewelHarmonyInfo::OpenJewelHarmonyInfoFile(const std::wstring& filena
 
         std::vector<BYTE> tempBuffer(nSize);
 
-        ::fread(tempBuffer.data(), nSize, 1, fp);
+        if (::fread(tempBuffer.data(), nSize, 1, fp) != 1)
+        {
+            ::fclose(fp);
+            return false;
+        }
         ::BuxConvert((BYTE*)tempBuffer.data(), nSize);
         ::fclose(fp);
 
@@ -115,8 +122,9 @@ const bool JewelHarmonyInfo::OpenJewelHarmonyInfoFile(const std::wstring& filena
             m_OptionData[type][option].OptionType = *reinterpret_cast<int*>(entry);
 
             // Read Name and convert to wchar_t
-            char* name = reinterpret_cast<char*>(entry + sizeof(int));
-            CMultiLanguage::GetSingletonPtr()->ConvertFromUtf8(m_OptionData[type][option].Name, name, NAME_SIZE);
+            char nameBuf[NAME_SIZE + 1] = {};
+            memcpy(nameBuf, entry + sizeof(int), NAME_SIZE);
+            CMultiLanguage::GetSingletonPtr()->ConvertFromUtf8(m_OptionData[type][option].Name, nameBuf, NAME_SIZE);
 
             // Read Minlevel
             m_OptionData[type][option].Minlevel = *reinterpret_cast<int*>(entry + sizeof(int) + NAME_SIZE);
@@ -166,21 +174,21 @@ const bool JewelHarmonyInfo::IsHarmonyJewelOption(int type, int option)
     switch (type)
     {
         case SI_Weapon: {
-            if (0 <= option && (MAXHARMONYJEWELOPTIONINDEX + 1) > option)
+            if (1 <= option && (MAXHARMONYJEWELOPTIONINDEX + 1) > option)
             {
                 isSuccess = true;
             }
         }
         break;
         case SI_Staff: {
-            if (0 <= option && (MAXHARMONYJEWELOPTIONINDEX + 1) - 2 > option)
+            if (1 <= option && (MAXHARMONYJEWELOPTIONINDEX + 1) - 2 > option)
             {
                 isSuccess = true;
             }
         }
         break;
         case SI_Defense: {
-            if (0 <= option && (MAXHARMONYJEWELOPTIONINDEX + 1) - 2 > option)
+            if (1 <= option && (MAXHARMONYJEWELOPTIONINDEX + 1) - 2 > option)
             {
                 isSuccess = true;
             }
@@ -193,7 +201,13 @@ const bool JewelHarmonyInfo::IsHarmonyJewelOption(int type, int option)
 
 void JewelHarmonyInfo::GetStrengthenCapability(StrengthenCapability* pitemSC, const ITEM* pitem, const int index)
 {
-    if (pitem->Jewel_Of_Harmony_Option != 0)
+    if (!pitemSC || !pitem)
+    {
+        return;
+    }
+
+    if (pitem->Jewel_Of_Harmony_Option != 0 && pitem->Jewel_Of_Harmony_OptionLevel >= 0 &&
+        pitem->Jewel_Of_Harmony_OptionLevel < 14)
     {
         StrengthenItem type = GetItemType(static_cast<int>(pitem->Type));
 

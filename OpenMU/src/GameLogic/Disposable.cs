@@ -9,6 +9,8 @@ namespace MUnique.OpenMU.GameLogic;
 /// </summary>
 public class Disposable : IDisposable
 {
+    private int _disposeState;
+
     /// <summary>
     /// Finalizes an instance of the <see cref="Disposable"/> class.
     /// </summary>
@@ -23,7 +25,11 @@ public class Disposable : IDisposable
     /// <value>
     ///   <c>true</c> if this instance is disposed; otherwise, <c>false</c>.
     /// </value>
-    public bool IsDisposed { get; protected set; }
+    public bool IsDisposed
+    {
+        get => System.Threading.Volatile.Read(ref this._disposeState) == 2;
+        protected set => System.Threading.Volatile.Write(ref this._disposeState, value ? 2 : 0);
+    }
 
     /// <summary>
     /// Gets a value indicating whether this instance is disposing.
@@ -31,30 +37,41 @@ public class Disposable : IDisposable
     /// <value>
     ///   <c>true</c> if this instance is disposing; otherwise, <c>false</c>.
     /// </value>
-    public bool IsDisposing { get; private set; }
+    public bool IsDisposing => System.Threading.Volatile.Read(ref this._disposeState) == 1;
 
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     /// </summary>
     public void Dispose()
     {
-        if (!this.IsDisposed && !this.IsDisposing)
+        if (this.TryBeginDispose())
         {
-            this.IsDisposing = true;
+            var succeeded = false;
             try
             {
                 this.Dispose(true);
-
-                this.IsDisposed = true;
+                succeeded = true;
             }
             finally
             {
-                this.IsDisposing = false;
+                this.CompleteDispose(succeeded);
             }
         }
 
         GC.SuppressFinalize(this);
     }
+
+    /// <summary>
+    /// Atomically transitions this instance from active to disposing.
+    /// </summary>
+    /// <returns><c>true</c> if this caller acquired disposal ownership; otherwise, <c>false</c>.</returns>
+    protected bool TryBeginDispose() => System.Threading.Interlocked.CompareExchange(ref this._disposeState, 1, 0) == 0;
+
+    /// <summary>
+    /// Completes a disposal attempt initiated by <see cref="TryBeginDispose"/>.
+    /// </summary>
+    /// <param name="succeeded"><c>true</c> if disposal succeeded; otherwise, <c>false</c>.</param>
+    protected void CompleteDispose(bool succeeded) => System.Threading.Volatile.Write(ref this._disposeState, succeeded ? 2 : 0);
 
     /// <summary>
     /// Releases unmanaged and - optionally - managed resources.

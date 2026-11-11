@@ -35,7 +35,17 @@ internal abstract class GroupPacketHandlerPlugIn : PacketHandlerPlugInContainer<
     /// <inheritdoc />
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.IsEmpty)
+        {
+            return;
+        }
+
         var subTypeIndex = packet.Span[0] % 2 == 1 ? 3 : 4;
+        if (packet.Length <= subTypeIndex)
+        {
+            return;
+        }
+
         var subPacketType = packet.Span[subTypeIndex];
         await this.HandlePacketAsync(player, packet, this[subPacketType]).ConfigureAwait(false);
     }

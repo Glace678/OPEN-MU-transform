@@ -4,6 +4,7 @@
 
 #include "SkillEditorTable.h"
 #include "SkillEditorColumns.h"
+#include "SkillEditorActions.h"
 #include "SkillTooltipEditor.h"
 #include "Data/GameData/SkillData/SkillFieldMetadata.h"
 #include "../MuEditor/UI/Console/MuEditorConsoleUI.h"
@@ -12,6 +13,8 @@
 #include "Core/Globals/_define.h"
 #include "imgui.h"
 #include <algorithm>
+#include <cctype>
+#include <cwchar>
 #include <sstream>
 
 extern SKILL_ATTRIBUTE* SkillAttribute;
@@ -71,7 +74,7 @@ void CSkillEditorTable::Render(const std::string& searchFilter, std::map<std::st
 
     if (visibleColumnCount == 0)
     {
-        ImGui::Text(I18N::Editor::NoColumnsSelectedClickColumnsToShowColumns);
+        ImGui::Text("%s", I18N::Editor::NoColumnsSelectedClickColumnsToShowColumns);
         return;
     }
 
@@ -79,23 +82,34 @@ void CSkillEditorTable::Render(const std::string& searchFilter, std::map<std::st
     if (searchFilter != m_lastSearchFilter || !m_isInitialized)
     {
         m_filteredSkills.clear();
-        for (int i = 0; i < MAX_SKILLS; i++)
+        if (SkillAttribute != nullptr)
         {
-            char nameBuffer[256];
-            WideCharToMultiByte(CP_UTF8, 0, SkillAttribute[i].Name, -1, nameBuffer, sizeof(nameBuffer), NULL, NULL);
-
-            if (nameBuffer[0] == '\0')
-                continue;
-
-            if (searchFilter.length() > 0)
+            for (int i = 0; i < MAX_SKILLS; i++)
             {
-                std::string nameLower = nameBuffer;
-                std::transform(nameLower.begin(), nameLower.end(), nameLower.begin(), ::tolower);
-                if (nameLower.find(searchFilter) == std::string::npos)
+                const size_t srcLen = wcsnlen(SkillAttribute[i].Name, MAX_SKILL_NAME);
+                if (srcLen == 0)
                     continue;
-            }
 
-            m_filteredSkills.push_back(i);
+                char      nameBuffer[256] = {};
+                const int written         = WideCharToMultiByte(CP_UTF8, 0, SkillAttribute[i].Name,
+                                                                static_cast<int>(srcLen), nameBuffer,
+                                                                static_cast<int>(sizeof(nameBuffer)) - 1, nullptr,
+                                                                nullptr);
+                if (written <= 0 || nameBuffer[0] == '\0')
+                    continue;
+                nameBuffer[written] = '\0';
+
+                if (searchFilter.length() > 0)
+                {
+                    std::string nameLower = nameBuffer;
+                    std::transform(nameLower.begin(), nameLower.end(), nameLower.begin(),
+                                   [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+                    if (nameLower.find(searchFilter) == std::string::npos)
+                        continue;
+                }
+
+                m_filteredSkills.push_back(i);
+            }
         }
 
         m_lastSearchFilter = searchFilter;
@@ -157,8 +171,8 @@ void CSkillEditorTable::Render(const std::string& searchFilter, std::map<std::st
             {
                 if (m_filteredSkills[i] == s_scrollToIndex)
                 {
-                    ImGui::SetScrollY(i * ImGui::GetTextLineHeightWithSpacing());
-                    selectedRow = (int)i;
+                    ImGui::SetScrollY((i + 1) * ImGui::GetTextLineHeightWithSpacing());
+                    selectedRow = s_scrollToIndex;
                     break;
                 }
             }
@@ -173,6 +187,11 @@ void CSkillEditorTable::Render(const std::string& searchFilter, std::map<std::st
                 SKILL_ATTRIBUTE& skill      = SkillAttribute[skillIndex];
 
                 ImGui::TableNextRow();
+                if (selectedRow == skillIndex)
+                {
+                    ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg1,
+                                           ImGui::GetColorU32(ImVec4(0.3f, 0.5f, 0.8f, 0.3f)));
+                }
                 ImGui::PushID(skillIndex);
 
                 // Invisible row-spanning selectable for hover detection.
@@ -209,10 +228,10 @@ void CSkillEditorTable::Render(const std::string& searchFilter, std::map<std::st
                     MuEditor::Skills::Tooltip::Render(skillIndex);
                 }
 
-                // Update selected row
+                // Update selected row with actual skill index (not filtered view row)
                 if (rowInteracted)
                 {
-                    selectedRow = row;
+                    selectedRow = skillIndex;
                 }
 
                 ImGui::PopID();
@@ -220,6 +239,13 @@ void CSkillEditorTable::Render(const std::string& searchFilter, std::map<std::st
         }
 
         ImGui::EndTable();
+    }
+
+    if (SkillAttribute != nullptr && selectedRow >= 0 && selectedRow < MAX_SKILLS && ImGui::IsKeyDown(ImGuiKey_LeftCtrl) &&
+        ImGui::IsKeyPressed(ImGuiKey_C))
+    {
+        std::string output = CSkillEditorActions::ExportSkillCombined(selectedRow, SkillAttribute[selectedRow]);
+        ImGui::SetClipboardText(output.c_str());
     }
 }
 

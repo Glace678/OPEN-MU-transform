@@ -30,12 +30,17 @@ internal class UnlockVaultPlugIn : ISubPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < UnlockVaultRef.Length)
+        {
+            return;
+        }
+
         string pin;
 
         void ExtractValues()
         {
             UnlockVaultRef message = packet.Span;
-            pin = message.Pin.ToString();
+            pin = message.Pin.ToString(System.Globalization.CultureInfo.InvariantCulture);
         }
 
         ExtractValues();

@@ -192,6 +192,28 @@ bool CCameraMove::LoadCameraWalkScript(const std::wstring& filename)
         return false;
     }
 
+    constexpr std::uint32_t kMaxWaypoints = 65536;
+    if (waypointCount > kMaxWaypoints)
+    {
+        return false;
+    }
+
+    const long dataOffset = ftell(fileHandle.get());
+    if (dataOffset < 0 || fseek(fileHandle.get(), 0, SEEK_END) != 0)
+    {
+        return false;
+    }
+    const long fileSize = ftell(fileHandle.get());
+    if (fileSize < dataOffset || fseek(fileHandle.get(), dataOffset, SEEK_SET) != 0)
+    {
+        return false;
+    }
+    const std::size_t remainingBytes = static_cast<std::size_t>(fileSize - dataOffset);
+    if (waypointCount > remainingBytes / sizeof(WAYPOINT))
+    {
+        return false;
+    }
+
     m_listWayPoint.reserve(waypointCount);
     for (std::uint32_t index = 0; index < waypointCount; ++index)
     {
@@ -620,13 +642,8 @@ BOOL CCameraMove::SetTourMode(BOOL bFlag, BOOL bRandomStart, int index)
 
     m_CameraStartPos[0] = m_CurrentCameraPos[0] = m_vTourCameraPos[0] = startWaypoint->fCameraX;
     m_CameraStartPos[1] = m_CurrentCameraPos[1] = m_vTourCameraPos[1] = startWaypoint->fCameraY;
-    m_CameraStartPos[2] = m_CurrentCameraPos[2] = m_vTourCameraPos[2] = startWaypoint->fCameraZ;
-
-    // FIX: Apply position offset for LoginScene waypoints during initialization
-    // Offset is also applied in GetCurrentCameraPos() for ongoing tour movement
-    ApplyLoginSceneOffset(m_CameraStartPos[0], m_CameraStartPos[1], m_CameraStartPos[2]);
-    ApplyLoginSceneOffset(m_CurrentCameraPos[0], m_CurrentCameraPos[1], m_CurrentCameraPos[2]);
-    ApplyLoginSceneOffset(m_vTourCameraPos[0], m_vTourCameraPos[1], m_vTourCameraPos[2]);
+    m_CameraStartPos[2] = m_CurrentCameraPos[2] = startWaypoint->fCameraZ;
+    m_vTourCameraPos[2]                         = kTourCameraZPosition;
 
     CameraVector2       toTarget{targetWaypoint->fCameraX - startWaypoint->fCameraX,
                            targetWaypoint->fCameraY - startWaypoint->fCameraY};
@@ -660,7 +677,7 @@ void CCameraMove::UpdateTourWayPoint()
         return (index == 0) ? waypointCount - 1 : index - 1;
     };
 
-    while (true)
+    for (std::size_t stepCount = 0; stepCount < waypointCount; ++stepCount)
     {
         if (m_dwCameraWalkState != CAMERAWALK_STATE_MOVE || waypointCount <= 1)
         {
@@ -743,17 +760,26 @@ void CCameraMove::UpdateTourWayPoint()
                 speedFactor *= -m_fForceSpeed;
             }
 
-            if (m_fForceSpeed >= 0.0f && distanceToTarget <= targetCameraAcc * speedFactor)
+            const bool  canAdvanceForward = !IsTourPaused() || m_fForceSpeed > 0.0f;
+            const float forwardStep       = (m_fForceSpeed > 0.0f) ? (targetCameraAcc * m_fForceSpeed) : targetCameraAcc;
+            if (canAdvanceForward && m_fForceSpeed >= 0.0f && distanceToTarget <= forwardStep)
             {
-                m_dwCurrentIndex = static_cast<DWORD>(WrapForward(targetIndex));
-                m_iDelayCount    = 0;
+                m_CurrentCameraPos[0] = targetWaypoint->fCameraX;
+                m_CurrentCameraPos[1] = targetWaypoint->fCameraY;
+                m_CurrentCameraPos[2] = RequestTerrainHeight(m_CurrentCameraPos[0], m_CurrentCameraPos[1]);
+                m_dwCurrentIndex      = static_cast<DWORD>(WrapForward(targetIndex));
+                m_iDelayCount         = 0;
                 continue;
             }
 
-            if (m_fForceSpeed < 0.0f && distanceToOrigin <= targetCameraAcc * speedFactor)
+            const float backwardStep = originCameraAcc * (-m_fForceSpeed);
+            if (m_fForceSpeed < 0.0f && distanceToOrigin <= backwardStep)
             {
-                m_dwCurrentIndex = static_cast<DWORD>(originIndex);
-                m_iDelayCount    = 0;
+                m_CurrentCameraPos[0] = originWaypoint->fCameraX;
+                m_CurrentCameraPos[1] = originWaypoint->fCameraY;
+                m_CurrentCameraPos[2] = RequestTerrainHeight(m_CurrentCameraPos[0], m_CurrentCameraPos[1]);
+                m_dwCurrentIndex      = static_cast<DWORD>(originIndex);
+                m_iDelayCount         = 0;
                 continue;
             }
 

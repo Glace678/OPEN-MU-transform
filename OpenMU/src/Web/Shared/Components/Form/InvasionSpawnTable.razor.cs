@@ -74,9 +74,9 @@ public partial class InvasionSpawnTable : InputBase<IList<InvasionSpawnConfigura
         }
         catch (Exception ex)
         {
-            result = this.Value ?? new List<InvasionSpawnConfiguration>();
+            result = default;
             validationErrorMessage = ex.Message;
-            return true;
+            return false;
         }
         finally
         {
@@ -186,7 +186,7 @@ public partial class InvasionSpawnTable : InputBase<IList<InvasionSpawnConfigura
         public int Count
         {
             get => this._model.Count;
-            set => this._model.Count = (byte)value;
+            set => this._model.Count = (byte)Math.Clamp(value, byte.MinValue, byte.MaxValue);
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ public partial class InvasionSpawnTable : InputBase<IList<InvasionSpawnConfigura
         public int? X
         {
             get => this._model.X;
-            set => this._model.X = (byte?)value;
+            set => this._model.X = value is { } v ? (byte)Math.Clamp(v, byte.MinValue, byte.MaxValue) : null;
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ public partial class InvasionSpawnTable : InputBase<IList<InvasionSpawnConfigura
         public int? Y
         {
             get => this._model.Y;
-            set => this._model.Y = (byte?)value;
+            set => this._model.Y = value is { } v ? (byte)Math.Clamp(v, byte.MinValue, byte.MaxValue) : null;
         }
 
         private void SyncMapIdsToModel()

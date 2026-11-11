@@ -34,7 +34,14 @@ public class GameServer : IGameServer
 
         async Task InitAsync()
         {
-            this.ConfigurationId = await this._client.InvokeMethodAsync<Guid>(this._targetAppId, $"get{nameof(this.ConfigurationId)}").ConfigureAwait(false);
+            try
+            {
+                this.ConfigurationId = await this._client.InvokeMethodAsync<Guid>(this._targetAppId, $"get{nameof(this.ConfigurationId)}").ConfigureAwait(false);
+            }
+            catch
+            {
+                // Target game server may still be starting up; ConfigurationId stays Guid.Empty until reachable.
+            }
         }
 
         _ = InitAsync();
@@ -182,18 +189,24 @@ public class GameServer : IGameServer
     /// <inheritdoc />
     public async ValueTask AllianceCreatedAsync(uint masterGuildId, uint memberGuildId)
     {
-        await this._client.InvokeMethodAsync(this._targetAppId, nameof(this.AllianceCreatedAsync), (masterGuildId, memberGuildId)).ConfigureAwait(false);
+        await this._client.InvokeMethodAsync(this._targetAppId, nameof(this.AllianceCreatedAsync), new AllianceArguments(masterGuildId, memberGuildId)).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async ValueTask AllianceDisbandedAsync(uint masterGuildId, uint memberGuildId)
     {
-        await this._client.InvokeMethodAsync(this._targetAppId, nameof(this.AllianceDisbandedAsync), (masterGuildId, memberGuildId)).ConfigureAwait(false);
+        await this._client.InvokeMethodAsync(this._targetAppId, nameof(this.AllianceDisbandedAsync), new AllianceArguments(masterGuildId, memberGuildId)).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async ValueTask GuildHostilityChangedAsync(uint guildIdA, IReadOnlyList<uint> allianceGuildIdsA, uint guildIdB, IReadOnlyList<uint> allianceGuildIdsB, bool created)
     {
-        await this._client.InvokeMethodAsync(this._targetAppId, nameof(this.GuildHostilityChangedAsync), (guildIdA, allianceGuildIdsA, guildIdB, allianceGuildIdsB, created)).ConfigureAwait(false);
+        var payload = new GuildHostilityChangedArguments(
+            guildIdA,
+            allianceGuildIdsA.ToArray(),
+            guildIdB,
+            allianceGuildIdsB.ToArray(),
+            created);
+        await this._client.InvokeMethodAsync(this._targetAppId, nameof(this.GuildHostilityChangedAsync), payload).ConfigureAwait(false);
     }
 }

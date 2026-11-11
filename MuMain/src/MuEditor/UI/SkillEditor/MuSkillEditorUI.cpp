@@ -145,7 +145,8 @@ void CMuSkillEditorUI::Render(bool& showEditor)
 
         // Render table with current search filter
         std::string searchFilter = m_szSkillSearchBuffer;
-        std::transform(searchFilter.begin(), searchFilter.end(), searchFilter.begin(), ::tolower);
+        std::transform(searchFilter.begin(), searchFilter.end(), searchFilter.begin(),
+                       [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
 
         m_pTable->Render(searchFilter, m_columnVisibility, m_selectedRow, m_bFreezeColumns, m_bShowHoverTooltip);
 
@@ -169,6 +170,8 @@ void CMuSkillEditorUI::RenderColumnVisibilityMenu()
         ImGui::OpenPopup("ColumnVisibility");
     }
 
+    static bool wasPopupOpen = false;
+
     if (ImGui::BeginPopup("ColumnVisibility"))
     {
         ImGui::Text("%s", I18N::Editor::ToggleColumnVisibility);
@@ -181,6 +184,7 @@ void CMuSkillEditorUI::RenderColumnVisibilityMenu()
             {
                 pair.second = true;
             }
+            SaveColumnPreferences();
         }
         ImGui::SameLine();
         if (ImGui::Button(I18N::Editor::UnselectAll, ImVec2(120, 0)))
@@ -189,12 +193,15 @@ void CMuSkillEditorUI::RenderColumnVisibilityMenu()
             {
                 pair.second = false;
             }
+            SaveColumnPreferences();
         }
 
         ImGui::Separator();
 
+        bool changed = false;
+
         // Index column (special)
-        ImGui::Checkbox(I18N::Editor::Index, &m_columnVisibility["Index"]);
+        changed |= ImGui::Checkbox(I18N::Editor::Index, &m_columnVisibility["Index"]);
 
         // All metadata fields
         const SkillFieldDescriptor* fields     = GetSkillFieldDescriptors();
@@ -203,10 +210,21 @@ void CMuSkillEditorUI::RenderColumnVisibilityMenu()
         for (int i = 0; i < fieldCount; ++i)
         {
             const char* displayName = GetSkillFieldDisplayName(fields[i]);
-            ImGui::Checkbox(displayName, &m_columnVisibility[fields[i].name]);
+            changed |= ImGui::Checkbox(displayName, &m_columnVisibility[fields[i].name]);
+        }
+
+        if (changed)
+        {
+            SaveColumnPreferences();
         }
 
         ImGui::EndPopup();
+        wasPopupOpen = true;
+    }
+    else if (wasPopupOpen)
+    {
+        SaveColumnPreferences();
+        wasPopupOpen = false;
     }
 }
 

@@ -216,6 +216,12 @@ public class Listener
                 {
                     await clientAccepted.Invoke(new ClientAcceptedEventArgs(connection)).ConfigureAwait(false);
                 }
+                else
+                {
+                    this._logger.LogWarning("Accepted client connection has no ClientAccepted handler; disconnecting.");
+                    await connection.DisconnectAsync().ConfigureAwait(false);
+                    connection.Dispose();
+                }
             }
             catch (Exception ex)
             {

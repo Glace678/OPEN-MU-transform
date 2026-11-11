@@ -86,56 +86,65 @@ public class CreateCharacterAction
             return null;
         }
 
-        var freeSlot = this.GetFreeSlot(player);
-        if (freeSlot is null)
-        {
-            return null;
-        }
-
         if (!characterClass.CanGetCreated || characterClass.HomeMap is null)
         {
             return null;
         }
 
-        var character = player.PersistenceContext.CreateNew<DataModel.Entities.Character>();
-        character.CharacterClass = characterClass;
-        character.Name = name;
-        character.CharacterSlot = freeSlot.Value;
-        character.CreateDate = DateTime.UtcNow;
-        character.KeyConfiguration = CreateDefaultKeyConfiguration();
-        var attributes = character.CharacterClass.StatAttributes.Select(a => player.PersistenceContext.CreateNew<StatAttribute>(a.Attribute, a.BaseValue)).ToList();
-        attributes.ForEach(character.Attributes.Add);
-        character.CurrentMap = characterClass.HomeMap;
-        var randomSpawnGate = character.CurrentMap!.ExitGates.Where(g => g.IsSpawnGate).SelectRandom();
-        if (randomSpawnGate is not null)
+        return await player.RunPersistenceExclusiveAsync(async () =>
         {
-            character.PositionX = (byte)Rand.NextInt(randomSpawnGate.X1, randomSpawnGate.X2);
-            character.PositionY = (byte)Rand.NextInt(randomSpawnGate.Y1, randomSpawnGate.Y2);
-        }
-
-        character.Inventory = player.PersistenceContext.CreateNew<ItemStorage>();
-        account.Characters.Add(character);
-        player.GameContext.PlugInManager.GetPlugInPoint<ICharacterCreatedPlugIn>()?.CharacterCreated(player, character);
-        try
-        {
-            await player.SaveProgressAsync().ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            account.Characters.Remove(character);
-            player.PersistenceContext.Detach(character);
-            player.Logger.LogError(ex, "Error when trying to create character '{0}'", name);
-            var message = ex.InnerException?.Message ?? ex.Message;
-            if (message.Contains("IX_Character_Name") || message.Contains("23505"))
+            if (player.PlayerState.CurrentState != PlayerState.CharacterSelection)
             {
-                await player.ShowLocalizedBlueMessageAsync(PlayerMessage.CharacterWithNameAlreadyExists).ConfigureAwait(false);
+                return null;
             }
 
-            return null;
-        }
+            var freeSlot = this.GetFreeSlot(player);
+            if (freeSlot is null)
+            {
+                return null;
+            }
 
-        player.Logger.LogDebug("Creating Character Complete.");
-        return character;
+            var character = player.PersistenceContext.CreateNew<DataModel.Entities.Character>();
+            character.CharacterClass = characterClass;
+            character.Name = name;
+            character.CharacterSlot = freeSlot.Value;
+            character.CreateDate = DateTime.UtcNow;
+            character.KeyConfiguration = CreateDefaultKeyConfiguration();
+            var attributes = character.CharacterClass.StatAttributes.Select(a => player.PersistenceContext.CreateNew<StatAttribute>(a.Attribute, a.BaseValue)).ToList();
+            attributes.ForEach(character.Attributes.Add);
+            character.CurrentMap = characterClass.HomeMap;
+            var randomSpawnGate = character.CurrentMap!.ExitGates.Where(g => g.IsSpawnGate).SelectRandom();
+            if (randomSpawnGate is not null)
+            {
+                var spawnPoint = randomSpawnGate.GetRandomPoint();
+                character.PositionX = spawnPoint.X;
+                character.PositionY = spawnPoint.Y;
+            }
+
+            character.Inventory = player.PersistenceContext.CreateNew<ItemStorage>();
+            account.Characters.Add(character);
+            player.GameContext.PlugInManager.GetPlugInPoint<ICharacterCreatedPlugIn>()?.CharacterCreated(player, character);
+            try
+            {
+                await player.SaveProgressAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                account.Characters.Remove(character);
+                player.PersistenceContext.Detach(character);
+                player.Logger.LogError(ex, "Error when trying to create character '{0}'", name);
+                var message = ex.InnerException?.Message ?? ex.Message;
+                if (message.Contains("IX_Character_Name") || message.Contains("23505"))
+                {
+                    await player.ShowLocalizedBlueMessageAsync(PlayerMessage.CharacterWithNameAlreadyExists).ConfigureAwait(false);
+                }
+
+                return null;
+            }
+
+            player.Logger.LogDebug("Creating Character Complete.");
+            return character;
+        }).ConfigureAwait(false);
     }
 
     private byte? GetFreeSlot(Player player)

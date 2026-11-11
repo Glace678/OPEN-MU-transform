@@ -74,8 +74,13 @@ public class HitAction
 
         if (target is IObservable targetAsObservable)
         {
-            using var readerLock = await targetAsObservable.ObserverLock.ReaderLockAsync();
-            if (!targetAsObservable.Observers.Contains(player))
+            bool isObserver;
+            using (await targetAsObservable.ObserverLock.ReaderLockAsync())
+            {
+                isObserver = targetAsObservable.Observers.Contains(player);
+            }
+
+            if (!isObserver)
             {
                 // Target out of range
                 return;

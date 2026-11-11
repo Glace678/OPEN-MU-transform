@@ -190,18 +190,6 @@ public class AttributeSystem : IAttributeSystem, IEnumerable<IAttribute>
         }
 
         composableAttribute.RemoveElement(element);
-
-        lock (this._attributesLock)
-        {
-            // Only drop the attribute when it is still empty and still the very instance we just mutated,
-            // so a concurrent AddElement that repopulated it does not get its element discarded (TOCTOU).
-            if (!composableAttribute.Elements.Any()
-                && this._attributes.TryGetValue(targetAttribute, out var current)
-                && ReferenceEquals(current, composableAttribute))
-            {
-                this._attributes.Remove(targetAttribute);
-            }
-        }
     }
 
     /// <inheritdoc/>

@@ -85,7 +85,9 @@ public static class AccountRecoveryService
     public static async Task<string?> IssueAsync(IAccountCredentialContext context, string loginName, string currentPassword)
     {
         var expected = await context.ReadCredentialsAsync(loginName).ConfigureAwait(false);
-        if (expected is null || !BCrypt.Net.BCrypt.Verify(currentPassword, expected.PasswordHash))
+        var passwordHash = expected?.PasswordHash ?? PublicRegistrationEndpoints.DummyBcryptHash;
+        var verified = BCrypt.Net.BCrypt.Verify(currentPassword, passwordHash);
+        if (expected is null || !verified)
         {
             return null;
         }

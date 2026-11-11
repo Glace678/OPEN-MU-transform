@@ -61,7 +61,7 @@ def _join(expr, rest):
     parts = [p for p in rest.split('\\') if p]
     if not parts:
         return expr
-    args = ', '.join("'%s'" % p for p in parts)
+    args = ', '.join(repr(p) for p in parts)
     return 'os.path.join(%s, %s)' % (expr, args)
 
 
@@ -105,7 +105,10 @@ def rewrite_source(src, own_subdir):
 
     def sub(m):
         prefix, quote, path = m.group(1), m.group(2), m.group(3)
-        expr = replacement(path)
+        if 'b' in prefix.lower():
+            return m.group(0)
+        norm_path = path if 'r' in prefix.lower() else path.replace('\\\\', '\\')
+        expr = replacement(norm_path)
         if expr is None:
             return m.group(0)
         # Nested forms like os.path.join(config.X, ...) do not start with 'config'.
@@ -147,13 +150,34 @@ def bootstrap_for(rel_depth, needs_config, needs_W):
         lines.append('import os as _os' + (', sys as _sys' if needs_config else ''))
     if needs_config:
         if rel_depth > 0:
-            lines.append(
-                '_sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))'
-            )
+            parent_expr = '_os.path.abspath(__file__)'
+            for _ in range(rel_depth + 1):
+                parent_expr = f'_os.path.dirname({parent_expr})'
+            lines.append(f'_sys.path.insert(0, {parent_expr})')
         lines.append('import config')
     if needs_W:
         lines.append('W = _os.path.dirname(_os.path.abspath(__file__))')
     return lines
+
+
+def _find_bootstrap_insert_line(tree, body):
+    """Return 0-based line index after shebang, coding cookie, docstring, and __future__ imports."""
+    insert_at = 0
+    for i, line in enumerate(body[:3]):
+        if line.startswith('#!') or 'coding:' in line:
+            insert_at = i + 1
+        else:
+            break
+    for node in tree.body:
+        if (isinstance(node, ast.Expr)
+                and isinstance(getattr(node, 'value', None), ast.Constant)
+                and isinstance(node.value.value, str)):
+            insert_at = max(insert_at, node.end_lineno)
+        elif isinstance(node, ast.ImportFrom) and node.module == '__future__':
+            insert_at = max(insert_at, node.end_lineno)
+        else:
+            break
+    return insert_at
 
 
 def migrate(path, apply_changes):
@@ -162,7 +186,8 @@ def migrate(path, apply_changes):
     with open(path, encoding='utf-8', newline='') as fh:
         src = fh.read()
     rel = os.path.relpath(path, WORKSPACE)
-    depth = 0 if os.path.dirname(rel) in ('', '.') else 1
+    rel_dir = os.path.dirname(rel)
+    depth = 0 if rel_dir in ('', '.') else len(rel_dir.split(os.sep))
     new_src, uses_config, uses_W = rewrite_source(src, depth)
     if new_src == src:
         return None
@@ -178,16 +203,11 @@ def migrate(path, apply_changes):
         return ('rewritten', rel) if apply_changes else ('would-rewrite', rel)
 
     lines = bootstrap_for(depth, needs_import, needs_W)
-    body = new_src.split('\n')
-    # Insert after a coding cookie / shebang, which must stay first.
-    insert_at = 0
-    for i, line in enumerate(body[:3]):
-        if line.startswith('#!') or 'coding:' in line:
-            insert_at = i + 1
-        else:
-            break
+    line_ending = '\r\n' if '\r\n' in new_src else '\n'
+    body = new_src.splitlines()
+    insert_at = _find_bootstrap_insert_line(tree, body)
     body[insert_at:insert_at] = lines
-    new_src = '\n'.join(body)
+    new_src = line_ending.join(body) + (line_ending if new_src.endswith(('\r\n', '\n')) else '')
     ast.parse(new_src)  # safety: still syntactically valid
     if apply_changes:
         with open(path, 'w', encoding='utf-8', newline='') as fh:

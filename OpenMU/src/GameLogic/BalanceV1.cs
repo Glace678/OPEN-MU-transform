@@ -288,9 +288,13 @@ public static class BalanceV1
         var armorReduction = Math.Min(
             ArmorReductionCap,
             effectiveArmor / (effectiveArmor + ArmorConstant + (ArmorPerRank * safeRank)));
+        var safeExtraReduction = Math.Clamp(
+            double.IsFinite(extraReduction) ? extraReduction : 0,
+            0,
+            1);
         return Math.Min(
             TotalReductionCap,
-            1 - ((1 - armorReduction) * (1 - Math.Clamp(extraReduction, 0, 1))));
+            1 - ((1 - armorReduction) * (1 - safeExtraReduction)));
     }
 
     /// <summary>Converts normal and master levels to the candidate content rank.</summary>

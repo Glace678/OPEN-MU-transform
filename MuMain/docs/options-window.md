@@ -50,7 +50,12 @@ Standalone clients write next to the executable as `config.ini`. The local
 launcher instead keeps each player's settings in `Data/Keys/game-config.ini`,
 so changing options does not invalidate the installation's file checks.
 New configurations start fullscreen; existing saved window preferences are
-preserved. The options window writes to these sections:
+preserved. On Windows, startup and live fullscreen changes both use borderless
+fullscreen desktop mode rather than exclusive fullscreen. Entering the game,
+switching to the desktop, and exiting therefore do not renegotiate the physical
+display mode or trigger monitor brightness/picture-mode changes.
+
+The options window writes to these sections:
 
 - `[Window]` - width, height, windowed flag.
 - `[Graphics]` - render levels, vsync, fps limit.

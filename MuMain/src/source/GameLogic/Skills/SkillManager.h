@@ -19,7 +19,7 @@ typedef struct DemendConditionInfo
         : SkillType(0), SkillLevel(0), SkillStrength(0), SkillDexterity(0), SkillVitality(0), SkillEnergy(0),
           SkillCharisma(0)
     {
-        ZeroMemory(SkillName, 100);
+        ZeroMemory(SkillName, sizeof(SkillName));
     }
     BOOL operator<=(const DemendConditionInfo& rhs) const
     {

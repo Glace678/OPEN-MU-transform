@@ -239,12 +239,16 @@ bool SaveTerrainAttribute(wchar_t* FileName, int iMap)
 
 void AddTerrainAttribute(int x, int y, BYTE att)
 {
+    if (x < 0 || x >= TERRAIN_SIZE || y < 0 || y >= TERRAIN_SIZE)
+        return;
     int iIndex = (x + (y * TERRAIN_SIZE));
     TerrainWall[iIndex] |= att;
 }
 
 void SubTerrainAttribute(int x, int y, BYTE att)
 {
+    if (x < 0 || x >= TERRAIN_SIZE || y < 0 || y >= TERRAIN_SIZE)
+        return;
     int iIndex = (x + (y * TERRAIN_SIZE));
 
     TerrainWall[iIndex] ^= (TerrainWall[iIndex] & att);
@@ -286,8 +290,11 @@ void SetTerrainWaterState(std::list<int>& terrainIndex, int state)
     {
         for (std::list<int>::iterator iter = terrainIndex.begin(); iter != terrainIndex.end(); ++iter)
         {
-            int index          = *iter;
-            TerrainWall[index] = TW_WATER;
+            int index = *iter;
+            if (index >= 0 && index < TERRAIN_SIZE * TERRAIN_SIZE)
+            {
+                TerrainWall[index] = TW_WATER;
+            }
         }
     }
 }
@@ -349,24 +356,51 @@ bool SaveTerrainMapping(wchar_t* FileName, int iMapNumber)
         fp = _wfopen(FileName, L"rb");
         if (fp == NULL)
         {
-            return (false);
+            return false;
         }
-        fseek(fp, 0, SEEK_END);
-        int EncBytes = ftell(fp);
-        fseek(fp, 0, SEEK_SET);
-        auto* EncData = new unsigned char[EncBytes];
-        fread(EncData, 1, EncBytes, fp);
+        if (fseek(fp, 0, SEEK_END) != 0)
+        {
+            fclose(fp);
+            return false;
+        }
+        long EncBytes = ftell(fp);
+        if (EncBytes <= 0 || fseek(fp, 0, SEEK_SET) != 0)
+        {
+            fclose(fp);
+            return false;
+        }
+        auto*  EncData   = new unsigned char[static_cast<size_t>(EncBytes)];
+        size_t readBytes = fread(EncData, 1, static_cast<size_t>(EncBytes), fp);
         fclose(fp);
+        if (readBytes != static_cast<size_t>(EncBytes))
+        {
+            delete[] EncData;
+            return false;
+        }
 
-        int   DataBytes = MapFileEncrypt(NULL, EncData, EncBytes);
-        auto* Data      = new unsigned char[DataBytes];
+        int DataBytes = MapFileEncrypt(NULL, EncData, EncBytes);
+        if (DataBytes <= 0)
+        {
+            delete[] EncData;
+            return false;
+        }
+        auto* Data = new unsigned char[static_cast<size_t>(DataBytes)];
         MapFileEncrypt(Data, EncData, EncBytes);
         delete[] EncData;
 
         fp = _wfopen(FileName, L"wb");
-        fwrite(Data, DataBytes, 1, fp);
+        if (fp == NULL)
+        {
+            delete[] Data;
+            return false;
+        }
+        const bool ok = (fwrite(Data, static_cast<size_t>(DataBytes), 1, fp) == 1);
         fclose(fp);
         delete[] Data;
+        if (!ok)
+        {
+            return false;
+        }
     }
     return true;
 }
@@ -600,23 +634,24 @@ bool IsTerrainHeightExtMap(int iWorld)
 
 bool OpenTerrainHeight(wchar_t* filename)
 {
-    const int Index = 1080;
-    const int Size  = 256 * 256 + Index;
-    wchar_t   FileName[256];
+    if (!filename)
+        return false;
 
-    wchar_t NewFileName[256];
+    const int Index        = 1080;
+    const int Size         = 256 * 256 + Index;
+    wchar_t   FileName[256]    = {};
+    wchar_t   NewFileName[256] = {};
 
-    for (int i = 0; i < (int)wcslen(filename); i++)
+    const size_t maxCopy = std::size(NewFileName) - 1;
+    for (size_t i = 0; filename[i] != L'\0' && i < maxCopy; i++)
     {
         NewFileName[i]     = filename[i];
-        NewFileName[i + 1] = 0;
-        if (filename[i] == '.')
+        NewFileName[i + 1] = L'\0';
+        if (filename[i] == L'.')
             break;
     }
 
-    wcscpy_s(FileName, L"Data\\");
-    wcscat_s(FileName, NewFileName);
-    wcscat_s(FileName, L"OZB");
+    _snwprintf(FileName, std::size(FileName) - 1, L"Data\\%lsOZB", NewFileName);
 
     FILE*   fp;
     errno_t err = _wfopen_s(&fp, FileName, L"rb");
@@ -708,6 +743,9 @@ bool OpenTerrainHeight(wchar_t* filename)
 
 void SaveTerrainHeight(wchar_t* name)
 {
+    if (!name)
+        return;
+
     auto* Buffer = new unsigned char[256 * 256];
     for (int i = 0; i < 256; i++)
     {
@@ -727,6 +765,11 @@ void SaveTerrainHeight(wchar_t* name)
         }
     }
     FILE* fp = _wfopen(name, L"wb");
+    if (!fp)
+    {
+        SafeDeleteArray(Buffer);
+        return;
+    }
     fwrite(BMPHeader, 1080, 1, fp);
 
     for (int i = 0; i < 256; i++)
@@ -738,27 +781,29 @@ void SaveTerrainHeight(wchar_t* name)
 
 bool OpenTerrainHeightNew(const wchar_t* strFilename)
 {
-    wchar_t FileName[256];
-    wchar_t NewFileName[256];
+    if (!strFilename)
+        return false;
 
-    for (int i = 0; i < (int)wcslen(strFilename); ++i)
+    wchar_t FileName[256]    = {};
+    wchar_t NewFileName[256] = {};
+
+    const size_t maxCopy = std::size(NewFileName) - 1;
+    for (size_t i = 0; strFilename[i] != L'\0' && i < maxCopy; ++i)
     {
         NewFileName[i]     = strFilename[i];
-        NewFileName[i + 1] = 0;
+        NewFileName[i + 1] = L'\0';
 
-        if (strFilename[i] == '.')
+        if (strFilename[i] == L'.')
             break;
     }
 
-    wcscpy(FileName, L"Data\\");
-    wcscat(FileName, NewFileName);
-    wcscat(FileName, L"OZB");
+    _snwprintf(FileName, std::size(FileName) - 1, L"Data\\%lsOZB", NewFileName);
 
     FILE* fp = _wfopen(FileName, L"rb");
     if (!fp)
     {
         wchar_t Text[256];
-        mu_swprintf(Text, L"%ls file not found.", FileName);
+        mu_swprintf_s(Text, std::size(Text), L"%ls file not found.", FileName);
         g_ErrorReport.Write(Text);
         g_ErrorReport.Write(L"\r\n");
         MessageBox(g_hWnd, Text, NULL, MB_OK);
@@ -766,13 +811,36 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
         return false;
     }
 
-    fseek(fp, 0, SEEK_END);
-    int iBytes = ftell(fp);
-    fseek(fp, 0, SEEK_SET);
+    if (fseek(fp, 0, SEEK_END) != 0)
+    {
+        fclose(fp);
+        return false;
+    }
+    const long fileSize = ftell(fp);
+    const long requiredBytes =
+        static_cast<long>(4 + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + TERRAIN_SIZE * TERRAIN_SIZE * 3);
+    if (fileSize < requiredBytes || fseek(fp, 0, SEEK_SET) != 0)
+    {
+        fclose(fp);
+        wchar_t Text[256];
+        mu_swprintf_s(Text, std::size(Text), L"%ls is too small (%ld bytes, needs %ld).", FileName, fileSize,
+                      requiredBytes);
+        g_ErrorReport.Write(Text);
+        g_ErrorReport.Write(L"\r\n");
+        MessageBox(g_hWnd, Text, NULL, MB_OK);
+        SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return false;
+    }
 
-    BYTE* pbyData = new BYTE[iBytes];
-    fread(pbyData, 1, iBytes, fp);
+    const size_t dataSize  = static_cast<size_t>(fileSize);
+    BYTE*        pbyData   = new BYTE[dataSize];
+    const size_t readBytes = fread(pbyData, 1, dataSize, fp);
     fclose(fp);
+    if (readBytes != dataSize)
+    {
+        delete[] pbyData;
+        return false;
+    }
 
     DWORD dwCurPos = 0;
     dwCurPos += 4;
@@ -1095,7 +1163,9 @@ static bool LoadTerrainGLFunctions()
     fn_glPushDebugGroup          = (PFNGLPUSHDEBUGGROUPPROC)MuGL::GetProcAddress("glPushDebugGroup");
     fn_glPopDebugGroup           = (PFNGLPOPDEBUGGROUPPROC)MuGL::GetProcAddress("glPopDebugGroup");
 
-    loaded = (fn_glGenBuffers && fn_glBindBuffer && fn_glBufferData && fn_glBufferSubData && fn_glGenVertexArrays);
+    loaded = (fn_glGenBuffers && fn_glDeleteBuffers && fn_glBindBuffer && fn_glBufferData && fn_glBufferSubData &&
+              fn_glGenVertexArrays && fn_glDeleteVertexArrays && fn_glVertexAttribPointer &&
+              fn_glEnableVertexAttribArray);
     return loaded;
 }
 
@@ -1810,7 +1880,7 @@ void FaceTexture(int Texture, float xf, float yf, bool Water, bool Scale)
         float Water2 = 0.f;
         float Water3 = 0.f;
         float Water4 = 0.f;
-        if (gMapManager.WorldActive == WD_34CRYWOLF_1ST && Texture == 5)
+        if (gMapManager.WorldActive == WD_34CRYWOLF_1ST && Texture == 5 && Hero != nullptr)
         {
             if (rand_fps_check(50))
             {
@@ -2029,7 +2099,7 @@ void RenderTerrainFace(float xf, float yf, int xi, int yi, float lodf)
                 // TASK-30 phase 1: Crywolf-1st base-layer water splash particles (FaceTexture's
                 // WD_34CRYWOLF_1ST && Texture==5 check specifically, not the broader baseIsWater).
                 if (!allCornersOpaque && gMapManager.WorldActive == WD_34CRYWOLF_1ST && originalTex1 == 5 &&
-                    rand_fps_check(50))
+                    Hero != nullptr && rand_fps_check(50))
                 {
                     vec3_t Pos, Light;
                     Vector(0.30f, 0.40f, 0.20f, Light);

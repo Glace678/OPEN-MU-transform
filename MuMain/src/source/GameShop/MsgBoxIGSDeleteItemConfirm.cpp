@@ -133,9 +133,14 @@ CALLBACK_RESULT CMsgBoxIGSDeleteItemConfirm::OKButtonDown(class CNewUIMessageBox
                                                           const leaf::xstreambuf&     xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSDeleteItemConfirm*>(pOwner);
+    if (!pOwnMsgBox)
+        return CALLBACK_CONTINUE;
 
-    SocketClient->ToGameServer()->SendCashShopDeleteStorageItemRequest(
-        pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_szItemType);
+    if (SocketClient)
+    {
+        SocketClient->ToGameServer()->SendCashShopDeleteStorageItemRequest(
+            pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_szItemType);
+    }
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);

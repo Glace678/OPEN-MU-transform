@@ -74,5 +74,9 @@ private:
 
 inline const ITEM_ADD_OPTION& ItemAddOptioninfo::GetItemAddOtioninfo(int type)
 {
+    if (type < 0 || type >= MAX_ITEM)
+    {
+        return m_Temp;
+    }
     return m_ItemAddOption[type];
 }

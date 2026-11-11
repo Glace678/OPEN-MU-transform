@@ -10,32 +10,32 @@ class TestF16JewelPrice64BitOverflow(unittest.TestCase):
     """
 
     def test_packed_bless_price_calculation(self):
-        # (0 + 1) * 9,000,000 * 10 = 90,000,000
+        # ItemPriceCalculator.cs:106: (0 + 1) * 1,480 * 10 = 14,800
         price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedBless", level=0)
-        self.assertEqual(price, 90_000_000)
+        self.assertEqual(price, 14_800)
 
-    def test_packed_guardian_level3_overflow_prevented(self):
-        # Level 3: (3 + 1) * 60,000,000 * 10 = 2,400,000,000 -> clamped to MAX_GOLD (2,000,000,000)
-        price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedGuardian", level=3)
+    def test_packed_guardian_high_level_overflow_prevented(self):
+        # Level 60,000: (60,000 + 1) * 3,900 * 10 = 2,340,039,000 > int32.MaxValue -> clamped to MAX_GOLD (2B)
+        price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedGuardian", level=60_000)
         self.assertEqual(price, EconomyEngine.MAX_GOLD)
         self.assertGreater(price, 0)
 
-    def test_packed_life_high_level_calculation(self):
-        # Level 2: (2 + 1) * 45,000,000 * 10 = 1,350,000,000
+    def test_packed_life_level2_calculation(self):
+        # ItemPriceCalculator.cs:109: (2 + 1) * 2,950 * 10 = 88,500
         price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedLife", level=2)
-        self.assertEqual(price, 1_350_000_000)
+        self.assertEqual(price, 88_500)
 
     def test_packed_creation_calculation(self):
-        # Level 1: (1 + 1) * 36,000,000 * 10 = 720,000,000
+        # ItemPriceCalculator.cs:110: (1 + 1) * 2,360 * 10 = 47,200
         price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedCreation", level=1)
-        self.assertEqual(price, 720_000_000)
+        self.assertEqual(price, 47_200)
 
     def test_comparison_against_32bit_overflow_bug(self):
-        # Demonstrates that legacy 32-bit calculation for PackedGuardian level 3 overflowed to negative
-        buggy_price = EconomyEngine.calculate_packed_jewel_price_32bit_buggy("PackedGuardian", level=3)
-        self.assertLess(buggy_price, 0)  # -1,894,967,296
-        safe_price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedGuardian", level=3)
-        self.assertGreater(safe_price, 0)
+        # Demonstrates that 32-bit signed arithmetic overflows to negative on identical multipliers
+        buggy_price = EconomyEngine.calculate_packed_jewel_price_32bit_buggy("PackedGuardian", level=60_000)
+        self.assertLess(buggy_price, 0)
+        safe_price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedGuardian", level=60_000)
+        self.assertEqual(safe_price, EconomyEngine.MAX_GOLD)
 
 
 if __name__ == "__main__":

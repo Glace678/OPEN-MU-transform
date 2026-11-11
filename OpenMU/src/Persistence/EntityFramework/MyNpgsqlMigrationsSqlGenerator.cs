@@ -100,7 +100,7 @@ internal class MyNpgsqlMigrationsSqlGenerator : NpgsqlMigrationsSqlGenerator
                     $do$
                     BEGIN
                        IF EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = {roleNameLiteral}) THEN
-                          RAISE NOTICE 'Role % already exists. Skipping.', {roleNameLiteral};
+                          ALTER ROLE {quotedRoleName} WITH LOGIN PASSWORD {passwordLiteral};
                        ELSE
                           CREATE ROLE {quotedRoleName} WITH LOGIN PASSWORD {passwordLiteral};
                        END IF;

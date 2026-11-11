@@ -11,6 +11,7 @@
 #include "stdafx.h"
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
 #include "ListManager.h"
+#include <cerrno>
 #ifdef _WIN32
 #include <process.h>
 #endif
@@ -30,7 +31,17 @@ CListManager::CListManager()  // OK
 
 CListManager::~CListManager()  // OK
 {
-    SafeDelete(m_pFTPDownLoader);
+    CFTPFileDownLoader* oldDownloader = NULL;
+    {
+        std::lock_guard<std::mutex> lock(this->m_DownloaderMutex);
+        oldDownloader          = this->m_pFTPDownLoader;
+        this->m_pFTPDownLoader = NULL;
+    }
+    if (oldDownloader != NULL)
+    {
+        oldDownloader->Break();
+        SafeDelete(oldDownloader);
+    }
 }
 
 void CListManager::SetListManagerInfo(DownloaderType type, const wchar_t* ServerIP, const wchar_t* UserID,
@@ -54,23 +65,30 @@ void CListManager::SetListManagerInfo(DownloaderType type, const wchar_t* Server
     this->m_ListManagerInfo.m_DownloaderType    = type;
     this->m_ListManagerInfo.m_nPortNum          = PortNum;
     this->m_ListManagerInfo.m_ftpMode           = ftpMode;
-    this->m_ListManagerInfo.m_strLocalPath      = LocalPath;
-    this->m_ListManagerInfo.m_strRemotePath     = RemotePath;
-    this->m_ListManagerInfo.m_strPWD            = Pwd;
-    this->m_ListManagerInfo.m_strServerIP       = ServerIP;
-    this->m_ListManagerInfo.m_strUserID         = UserID;
+    this->m_ListManagerInfo.m_strLocalPath      = LocalPath ? LocalPath : L"";
+    this->m_ListManagerInfo.m_strRemotePath     = RemotePath ? RemotePath : L"";
+    this->m_ListManagerInfo.m_strPWD            = Pwd ? Pwd : L"";
+    this->m_ListManagerInfo.m_strServerIP       = ServerIP ? ServerIP : L"";
+    this->m_ListManagerInfo.m_strUserID         = UserID ? UserID : L"";
     this->m_ListManagerInfo.m_Version           = Version;
     this->m_ListManagerInfo.m_dwDownloadMaxTime = dwDownloadMaxTime;
 
-    if (GetFileAttributes(LocalPath) == INVALID_FILE_ATTRIBUTES)
-        CreateDirectory(LocalPath, 0);
+    if (!this->m_ListManagerInfo.m_strLocalPath.empty() &&
+        GetFileAttributes(this->m_ListManagerInfo.m_strLocalPath.c_str()) == INVALID_FILE_ATTRIBUTES)
+    {
+        CreateDirectory(this->m_ListManagerInfo.m_strLocalPath.c_str(), 0);
+    }
 
-    if (this->m_ListManagerInfo.m_strLocalPath.substr(this->m_ListManagerInfo.m_strLocalPath.size(), 1) != L"\\")
+    if (this->m_ListManagerInfo.m_strLocalPath.empty() ||
+        (this->m_ListManagerInfo.m_strLocalPath.back() != L'\\' &&
+         this->m_ListManagerInfo.m_strLocalPath.back() != L'/'))
     {
         this->m_ListManagerInfo.m_strLocalPath += L"\\";
     }
 
-    if (this->m_ListManagerInfo.m_strRemotePath.substr(this->m_ListManagerInfo.m_strRemotePath.size(), 1) != L"/")
+    if (this->m_ListManagerInfo.m_strRemotePath.empty() ||
+        (this->m_ListManagerInfo.m_strRemotePath.back() != L'/' &&
+         this->m_ListManagerInfo.m_strRemotePath.back() != L'\\'))
     {
         this->m_ListManagerInfo.m_strRemotePath += L"/";
     }
@@ -166,32 +184,54 @@ WZResult CListManager::FileDownLoad()  // OK
     {
         unsigned int ThreadID = 0;
 
-        auto hHandle = (HANDLE)_beginthreadex(0, 0, CListManager::RunFileDownLoadThread, this, 0, &ThreadID);
+        const uintptr_t uThread = _beginthreadex(0, 0, CListManager::RunFileDownLoadThread, this, 0, &ThreadID);
 
-        if (hHandle == INVALID_HANDLE_VALUE)
+        if (uThread == 0)
         {
-            this->m_Result.BuildResult(8, GetLastError(), L"Fail : _beginthreadex");
-        }
-        else if (WaitForSingleObject(hHandle, this->m_ListManagerInfo.m_dwDownloadMaxTime) == WAIT_TIMEOUT)
-        {
-            if (this->m_pFTPDownLoader != NULL)
-                this->m_pFTPDownLoader->Break();
-
-            WaitForSingleObject(hHandle, INFINITE);
-
-            if (m_pFTPDownLoader != NULL)
-                if (m_pFTPDownLoader->GetFileDownloader() != NULL)
-                    m_pFTPDownLoader->GetFileDownloader()->Break();
-
-            SafeDelete(m_pFTPDownLoader);
-
-            CloseHandle(hHandle);
-
-            this->m_Result.BuildResult(1, 0, L"Time Out!");
+            const DWORD dwErr = GetLastError() ? GetLastError() : static_cast<DWORD>(errno);
+            this->m_Result.BuildResult(8, dwErr, L"Fail : _beginthreadex");
         }
         else
         {
-            CloseHandle(hHandle);
+            HANDLE      hHandle = reinterpret_cast<HANDLE>(uThread);
+            const DWORD dwWait  = WaitForSingleObject(hHandle, this->m_ListManagerInfo.m_dwDownloadMaxTime);
+            const DWORD dwErr   = (dwWait == WAIT_FAILED) ? GetLastError() : ERROR_SUCCESS;
+
+            if (dwWait != WAIT_OBJECT_0)
+            {
+                {
+                    std::lock_guard<std::mutex> lock(this->m_DownloaderMutex);
+                    if (this->m_pFTPDownLoader != NULL)
+                    {
+                        this->m_pFTPDownLoader->Break();
+                    }
+                }
+
+                WaitForSingleObject(hHandle, INFINITE);
+
+                CFTPFileDownLoader* finishedDownloader = NULL;
+                {
+                    std::lock_guard<std::mutex> lock(this->m_DownloaderMutex);
+                    finishedDownloader     = this->m_pFTPDownLoader;
+                    this->m_pFTPDownLoader = NULL;
+                }
+                SafeDelete(finishedDownloader);
+
+                CloseHandle(hHandle);
+
+                if (dwWait == WAIT_TIMEOUT)
+                {
+                    this->m_Result.BuildResult(1, 0, L"Time Out!");
+                }
+                else
+                {
+                    this->m_Result.BuildResult(8, dwErr, L"Fail : WaitForSingleObject");
+                }
+            }
+            else
+            {
+                CloseHandle(hHandle);
+            }
         }
     }
     else
@@ -205,29 +245,25 @@ WZResult CListManager::FileDownLoad()  // OK
 
 WZResult CListManager::FileDownLoadImpl()  // OK
 {
-    if (m_pFTPDownLoader != NULL)
+    CFTPFileDownLoader* oldDownloader = NULL;
+    CFTPFileDownLoader* newDownloader = new CFTPFileDownLoader;
     {
-        m_pFTPDownLoader->Break();
-
-#ifdef _WIN32
-        if (m_pFTPDownLoader->GetFileDownloader() != NULL)
-        {
-            m_pFTPDownLoader->GetFileDownloader()->Break();
-        }
-#endif
+        std::lock_guard<std::mutex> lock(this->m_DownloaderMutex);
+        oldDownloader          = this->m_pFTPDownLoader;
+        this->m_pFTPDownLoader = newDownloader;
     }
 
-    SafeDelete(m_pFTPDownLoader);  // FIX THIS
+    if (oldDownloader != NULL)
+    {
+        oldDownloader->Break();
+        SafeDelete(oldDownloader);
+    }
 
-    this->m_pFTPDownLoader = new CFTPFileDownLoader;
-
-    this->m_Result = this->m_pFTPDownLoader->DownLoadFiles(
+    return newDownloader->DownLoadFiles(
         this->m_ListManagerInfo.m_DownloaderType, this->m_ListManagerInfo.m_strServerIP,
         this->m_ListManagerInfo.m_nPortNum, this->m_ListManagerInfo.m_strUserID, this->m_ListManagerInfo.m_strPWD,
         this->m_ListManagerInfo.m_strRemotePath, this->m_ListManagerInfo.m_strLocalPath,
         this->m_ListManagerInfo.m_ftpMode == FTP_MODE_PASSIVE, this->m_ListManagerInfo.m_Version, this->m_vScriptFiles);
-
-    return this->m_Result;
 }
 
 unsigned int __stdcall CListManager::RunFileDownLoadThread(LPVOID pParam)  // OK

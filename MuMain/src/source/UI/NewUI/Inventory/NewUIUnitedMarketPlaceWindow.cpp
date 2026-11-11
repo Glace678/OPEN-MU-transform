@@ -71,8 +71,6 @@ void CNewUIUnitedMarketPlaceWindow::InitButton(CNewUIButton* pNewUIButton, int i
 
 void CNewUIUnitedMarketPlaceWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUI3DRenderMng)
     {
         m_pNewUI3DRenderMng->Remove3DRenderObj(this);
@@ -81,6 +79,7 @@ void CNewUIUnitedMarketPlaceWindow::Release()
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -258,6 +257,7 @@ void CNewUIUnitedMarketPlaceWindow::LoadImages()
 
 void CNewUIUnitedMarketPlaceWindow::UnloadImages()
 {
+    DeleteBitmap(IMAGE_UNITEDMARKETPLACEWINDOW_BTN_CLOSE);
     DeleteBitmap(IMAGE_UNITEDMARKETPLACEWINDOW_BOTTOM);
     DeleteBitmap(IMAGE_UNITEDMARKETPLACEWINDOW_RIGHT);
     DeleteBitmap(IMAGE_UNITEDMARKETPLACEWINDOW_LEFT);

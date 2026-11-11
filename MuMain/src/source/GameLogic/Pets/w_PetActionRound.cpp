@@ -27,6 +27,9 @@ bool PetActionRound::Model(OBJECT* obj, CHARACTER* Owner, int targetKey, double 
 
 bool PetActionRound::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, double tick, bool bForceRender)
 {
+    if (obj == nullptr || obj->Owner == nullptr)
+        return FALSE;
+
     //*/
     float  fRadWidth  = ((2 * Q_PI) / 5000.0f) * fmodf(tick, 5000);
     float  fRadHeight = ((2 * Q_PI) / 1000.0f) * fmodf(tick, 1000);

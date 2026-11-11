@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <atomic>
+
 #include "GameShop/ShopListManager/interface/IConnecter.h"
 #include "GameShop/ShopListManager/interface/IDownloaderStateEvent.h"
 
@@ -60,7 +62,7 @@ private:
     // Member Object
 
     //							�ٿ�ε� ���� �÷���
-    volatile BOOL m_bBreak;
+    std::atomic<bool> m_bBreak{false};
     //							���..
     WZResult m_Result;
 

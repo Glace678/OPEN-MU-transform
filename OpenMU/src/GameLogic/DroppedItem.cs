@@ -168,15 +168,15 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
     /// <inheritdoc/>
     protected override async ValueTask DisposeAsyncCore()
     {
-        var timer = this._removeTimer;
+        var timer = Interlocked.Exchange(ref this._removeTimer, null);
         if (timer != null)
         {
-            this._removeTimer = null;
             await timer.DisposeAsync().ConfigureAwait(false);
-            await this.CurrentMap.RemoveAsync(this).ConfigureAwait(false);
-            this._dropper = null;
-            this._owners = null;
         }
+
+        await this.CurrentMap.RemoveAsync(this).ConfigureAwait(false);
+        this._dropper = null;
+        this._owners = null;
 
         await base.DisposeAsyncCore().ConfigureAwait(false);
     }
@@ -194,9 +194,6 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
             {
                 if (!this._availableToPick)
                 {
-                    // Already picked up: only make sure the one-shot timer is disposed.
-                    this._removeTimer?.Dispose();
-                    this._removeTimer = null;
                     return;
                 }
 
@@ -277,20 +274,30 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
     private async ValueTask<bool> TryStackOnItemAsync(Player player, Item stackTarget)
     {
         player.Logger.LogDebug("Player {0} tries to pick up {1}, trying to add to an existing item at slot {2}", player, this, stackTarget.ItemSlot);
-        using (await this._pickupLock.LockAsync())
+        Player? dropper;
+        using (await this._pickupLock.LockAsync().ConfigureAwait(false))
         {
-            if (!this._availableToPick)
+            if (!this._availableToPick || !stackTarget.CanCompletelyStackOn(this.Item))
             {
-                player.Logger.LogDebug("Picked up by another player in the mean time, Player {0}, Item {1}", player, this);
+                player.Logger.LogDebug("Picked up by another player or stack target full in the mean time, Player {0}, Item {1}", player, this);
+                return false;
+            }
+
+            var originalDurability = stackTarget.Durability;
+            this._availableToPick = false;
+            dropper = this._dropper;
+            if (dropper != null && !await this.DeleteItemAsync(dropper).ConfigureAwait(false))
+            {
+                this._availableToPick = true;
+                stackTarget.Durability = originalDurability;
                 return false;
             }
 
             stackTarget.Durability = (byte)Math.Min((int)stackTarget.Durability + this.Item.Durability, byte.MaxValue);
-            this._availableToPick = false;
         }
 
         player.Logger.LogInformation("Item '{0}' got picked up by player '{1}'. Durability of available stack {2} increased to {3}", this, player, stackTarget, stackTarget.Durability);
-        this.DisposeAndDelete(null);
+        await this.DisposeAsync().ConfigureAwait(false);
         if (player.GameContext.PlugInManager.GetPlugInPoint<PlugIns.IItemStackedPlugIn>() is { } itemStackedPlugIn)
         {
             await itemStackedPlugIn.ItemStackedAsync(player, this.Item, stackTarget).ConfigureAwait(false);
@@ -299,12 +306,12 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
         return true;
     }
 
-    private async ValueTask DeleteItemAsync(Player player)
+    private async ValueTask<bool> DeleteItemAsync(Player player)
     {
         player.Logger.LogDebug("Item '{0}' which was dropped by player '{1}' is getting deleted.", this, player);
         if (!this._wasItemPersisted)
         {
-            return;
+            return true;
         }
 
         try
@@ -317,13 +324,18 @@ public sealed class DroppedItem : AsyncDisposable, ILocateable
             using var context = repositoryManager.CreateNewTradeContext();
             context.Attach(this.Item);
             await context.DeleteAsync(this.Item).ConfigureAwait(false);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            if (!await context.SaveChangesAsync().ConfigureAwait(false))
+            {
+                return false;
+            }
         }
         catch (Exception e)
         {
             player.Logger.LogWarning("Exception during deleting of the item {0}: {1}\n{2}", this, e.Message, e.StackTrace);
+            return false;
         }
 
         player.GameContext.PlugInManager.GetPlugInPoint<IItemDestroyedPlugIn>()?.ItemDestroyed(this.Item);
+        return true;
     }
 }

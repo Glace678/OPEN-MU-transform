@@ -169,7 +169,6 @@ void DeleteCharacter()
     }
 
     int characterToDelete = SelectedHero;
-    SelectedHero          = -1;
 
     if (g_iChatInputType == 1)
     {

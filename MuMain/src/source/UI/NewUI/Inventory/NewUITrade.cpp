@@ -18,7 +18,14 @@ CNewUITrade::CNewUITrade()
 {
     m_pNewUIMng      = NULL;
     m_pYourInvenCtrl = m_pMyInvenCtrl = NULL;
-    m_Pos.x = m_Pos.y = 0;
+    m_Pos.x = m_Pos.y  = 0;
+    m_posMyConfirm.x   = 0;
+    m_posMyConfirm.y   = 0;
+    m_nTempMyTradeGold = 0;
+    m_bTradeAlert      = false;
+    ::memset(m_szYourID, 0, sizeof(m_szYourID));
+    InitTradeInfo();
+    InitYourInvenBackUp();
 }
 
 CNewUITrade::~CNewUITrade()
@@ -39,6 +46,8 @@ bool CNewUITrade::Create(CNewUIManager* pNewUIMng, int x, int y)
                                           y + 68, COLUMN_TRADE_INVEN, ROW_TRADE_INVEN))
     {
         SafeDelete(m_pYourInvenCtrl);
+        m_pNewUIMng->RemoveUIObj(this);
+        m_pNewUIMng = NULL;
         return false;
     }
 
@@ -47,6 +56,9 @@ bool CNewUITrade::Create(CNewUIManager* pNewUIMng, int x, int y)
                                         COLUMN_TRADE_INVEN, ROW_TRADE_INVEN))
     {
         SafeDelete(m_pMyInvenCtrl);
+        SafeDelete(m_pYourInvenCtrl);
+        m_pNewUIMng->RemoveUIObj(this);
+        m_pNewUIMng = NULL;
         return false;
     }
 
@@ -62,7 +74,7 @@ bool CNewUITrade::Create(CNewUIManager* pNewUIMng, int x, int y)
     m_abtn[BTN_ZEN_INPUT].ChangeButtonInfo(x + 104, y + 390, 36, 29);
     m_abtn[BTN_ZEN_INPUT].ChangeToolTipText(&I18N::Game::ZenTrade, true);
 
-    ::memset(m_szYourID, 0, MAX_USERNAME_SIZE + 1);
+    ::memset(m_szYourID, 0, sizeof(m_szYourID));
     m_bTradeAlert = false;
 
     InitTradeInfo();
@@ -91,13 +103,12 @@ void CNewUITrade::InitYourInvenBackUp()
 
 void CNewUITrade::Release()
 {
-    UnloadImages();
-
     SafeDelete(m_pMyInvenCtrl);
     SafeDelete(m_pYourInvenCtrl);
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -120,8 +131,9 @@ bool CNewUITrade::UpdateMouseEvent()
     if ((m_pYourInvenCtrl && false == m_pYourInvenCtrl->UpdateMouseEvent()) ||
         (m_pMyInvenCtrl && false == m_pMyInvenCtrl->UpdateMouseEvent()))
     {
-        if (SEASON3B::IsPress(VK_LBUTTON) &&
-            CNewUIInventoryCtrl::GetPickedItem()->GetOwnerInventory() == m_pMyInvenCtrl && m_bMyConfirm)
+        CNewUIPickedItem* pPickedItem = CNewUIInventoryCtrl::GetPickedItem();
+        if (SEASON3B::IsPress(VK_LBUTTON) && pPickedItem != nullptr &&
+            pPickedItem->GetOwnerInventory() == m_pMyInvenCtrl && m_bMyConfirm)
         {
             m_bMyConfirm = false;
             SocketClient->ToGameServer()->SendTradeButtonStateChange(TradeButtonState::Unchecked);
@@ -623,21 +635,39 @@ void CNewUITrade::ProcessToReceiveTradeResult(LPPTRADE pTradeData)
 
 void CNewUITrade::ProcessToReceiveYourItemDelete(BYTE byYourInvenIndex)
 {
-    BackUpYourInven(int(byYourInvenIndex));
+    if (m_pYourInvenCtrl == nullptr)
+    {
+        return;
+    }
+
     ITEM* pYourItemObj = m_pYourInvenCtrl->FindItem(int(byYourInvenIndex));
-    m_pYourInvenCtrl->RemoveItem(pYourItemObj);
+    if (pYourItemObj != nullptr)
+    {
+        BackUpYourInven(pYourItemObj);
+        m_pYourInvenCtrl->RemoveItem(pYourItemObj);
+    }
     AlertYourTradeInven();
     ::PlayBuffer(SOUND_GET_ITEM01);
 }
 
 void CNewUITrade::BackUpYourInven(int nYourInvenIndex)
 {
+    if (m_pYourInvenCtrl == nullptr)
+    {
+        return;
+    }
+
     ITEM* pYourItemObj = m_pYourInvenCtrl->FindItem(nYourInvenIndex);
     BackUpYourInven(pYourItemObj);
 }
 
 void CNewUITrade::BackUpYourInven(ITEM* pYourItemObj)
 {
+    if (pYourItemObj == nullptr)
+    {
+        return;
+    }
+
     if ((pYourItemObj->Type >= ITEM_HELPER && pYourItemObj->Type <= ITEM_DARK_HORSE_ITEM) ||
         (pYourItemObj->Type == ITEM_JEWEL_OF_BLESS || pYourItemObj->Type == ITEM_JEWEL_OF_SOUL ||
          pYourItemObj->Type == ITEM_JEWEL_OF_LIFE) ||
@@ -691,6 +721,11 @@ void CNewUITrade::BackUpYourInven(ITEM* pYourItemObj)
 
 void CNewUITrade::ProcessToReceiveYourItemAdd(BYTE byYourInvenIndex, std::span<const BYTE> pbyItemPacket)
 {
+    if (m_pYourInvenCtrl == nullptr)
+    {
+        return;
+    }
+
     m_pYourInvenCtrl->AddItem(byYourInvenIndex, pbyItemPacket);
     AlertYourTradeInven();
     ::PlayBuffer(SOUND_GET_ITEM01);
@@ -698,18 +733,27 @@ void CNewUITrade::ProcessToReceiveYourItemAdd(BYTE byYourInvenIndex, std::span<c
 
 void CNewUITrade::AlertYourTradeInven()
 {
-    int nCount = 0;
-    int nCompareItemType[10];
+    if (m_pYourInvenCtrl == nullptr)
+    {
+        return;
+    }
+
+    int nCount                           = 0;
+    int nCompareItemType[MAX_TRADE_INVEN] = {};
 
     m_bTradeAlert = false;
 
-    int   nYourItems = m_pYourInvenCtrl->GetNumberOfItems();
+    int   nYourItems = static_cast<int>(m_pYourInvenCtrl->GetNumberOfItems());
     ITEM* pYourItemObj;
     int   nCompareValue;
 
     for (int i = 0; i < nYourItems; ++i)
     {
         pYourItemObj = m_pYourInvenCtrl->GetItem(i);
+        if (pYourItemObj == nullptr)
+        {
+            continue;
+        }
         for (int j = 0; j < MAX_TRADE_INVEN; ++j)
         {
             if (m_aYourInvenBackUp[j].Type == pYourItemObj->Type)
@@ -722,7 +766,7 @@ void CNewUITrade::AlertYourTradeInven()
                 }
                 else
                 {
-                    if (0 == nCompareValue)
+                    if (0 == nCompareValue && nCount < MAX_TRADE_INVEN)
                         nCompareItemType[nCount++] = m_aYourInvenBackUp[j].Type;
 
                     pYourItemObj->byColorState = ITEM_COLOR_NORMAL;
@@ -740,7 +784,7 @@ void CNewUITrade::AlertYourTradeInven()
             for (int j = 0; j < nYourItems; ++j)
             {
                 pYourItemObj = m_pYourInvenCtrl->GetItem(j);
-                if (nCompareItemType[i] == pYourItemObj->Type)
+                if (pYourItemObj != nullptr && nCompareItemType[i] == pYourItemObj->Type)
                     pYourItemObj->byColorState = ITEM_COLOR_NORMAL;
             }
         }
@@ -783,9 +827,12 @@ void CNewUITrade::ProcessToReceiveTradeExit(BYTE byState)
 
             m_bTradeAlert = false;
 
-            int nYourItems = m_pYourInvenCtrl->GetNumberOfItems();
-            for (int i = 0; i < nYourItems; ++i)
-                BackUpYourInven(m_pYourInvenCtrl->GetItem(i));
+            if (m_pYourInvenCtrl != nullptr)
+            {
+                int nYourItems = m_pYourInvenCtrl->GetNumberOfItems();
+                for (int i = 0; i < nYourItems; ++i)
+                    BackUpYourInven(m_pYourInvenCtrl->GetItem(i));
+            }
         }
         break;
 

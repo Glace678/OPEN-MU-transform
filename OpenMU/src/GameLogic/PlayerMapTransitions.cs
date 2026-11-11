@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.GameLogic;
 
+using System.Threading;
 using MUnique.OpenMU.GameLogic.PlayerActions;
 using MUnique.OpenMU.GameLogic.PlugIns;
 using MUnique.OpenMU.GameLogic.Views;
@@ -22,6 +23,10 @@ internal sealed class PlayerMapTransitions
     private readonly PlayerMovement _movement;
 
     private readonly PlayerSummon _summon;
+
+    private readonly object _teleportStateLock = new();
+
+    private long _teleportGeneration;
 
     /// <summary>
     /// Whether a <see cref="RecoverFromBlockedSpawnAsync"/> is currently in progress, so that a
@@ -50,12 +55,19 @@ internal sealed class PlayerMapTransitions
     public async Task TeleportAsync(Point target, Skill teleportSkill)
     {
         var player = this._player;
-        if (!player.IsAlive)
+        long generation;
+        lock (this._teleportStateLock)
         {
-            return;
+            if (!player.IsAlive || player.IsTeleporting || player.CurrentMap is null)
+            {
+                return;
+            }
+
+            player.IsTeleporting = true;
+            generation = ++this._teleportGeneration;
         }
 
-        player.IsTeleporting = true;
+        var originMap = player.CurrentMap;
         try
         {
             await (player.SkillCancelTokenSource?.CancelAsync() ?? Task.CompletedTask).ConfigureAwait(false);
@@ -70,28 +82,38 @@ internal sealed class PlayerMapTransitions
 
             await Task.Delay(300).ConfigureAwait(false);
 
+            if (Volatile.Read(ref this._teleportGeneration) != generation || !player.IsAlive || player.CurrentMap != originMap)
+            {
+                return;
+            }
+
             await player.ForEachWorldObserverAsync<IObjectsOutOfScopePlugIn>(p => p.ObjectsOutOfScopeAsync(player.GetAsEnumerable()), false).ConfigureAwait(false);
 
             await Task.Delay(1500).ConfigureAwait(false);
 
-            if (player.IsAlive)
+            if (Volatile.Read(ref this._teleportGeneration) == generation && player.IsAlive && player.CurrentMap == originMap && originMap is not null)
             {
                 await player.InvokeViewPlugInAsync<ITeleportPlugIn>(p => p.ShowTeleportedAsync()).ConfigureAwait(false);
 
                 // We need to restore the previous position to make the Moving on the map data structure work correctly.
                 player.Position = previous;
-                if (player.CurrentMap is { } map)
-                {
-                    await this._movement.MoveOnMapAsync(map, target, MoveType.Teleport).ConfigureAwait(false);
-                }
+                await this._movement.MoveOnMapAsync(originMap, target, MoveType.Teleport).ConfigureAwait(false);
             }
         }
         catch (Exception e)
         {
             player.Logger.LogWarning(e, "Error during teleport");
         }
-
-        player.IsTeleporting = false;
+        finally
+        {
+            lock (this._teleportStateLock)
+            {
+                if (this._teleportGeneration == generation)
+                {
+                    player.IsTeleporting = false;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -102,12 +124,18 @@ internal sealed class PlayerMapTransitions
     public async Task TeleportToMapAsync(GameMap targetMap, Point targetPoint)
     {
         var player = this._player;
-        if (!player.IsAlive)
+        long generation;
+        lock (this._teleportStateLock)
         {
-            return;
+            if (!player.IsAlive || player.IsTeleporting)
+            {
+                return;
+            }
+
+            player.IsTeleporting = true;
+            generation = ++this._teleportGeneration;
         }
 
-        player.IsTeleporting = true;
         try
         {
             await (player.SkillCancelTokenSource?.CancelAsync() ?? Task.CompletedTask).ConfigureAwait(false);
@@ -116,7 +144,7 @@ internal sealed class PlayerMapTransitions
 
             await player.ForEachWorldObserverAsync<IObjectsOutOfScopePlugIn>(p => p.ObjectsOutOfScopeAsync(player.GetAsEnumerable()), false).ConfigureAwait(false);
 
-            if (player.IsAlive)
+            if (Volatile.Read(ref this._teleportGeneration) == generation && player.IsAlive)
             {
                 ExitGate tempGate = new()
                 {
@@ -134,8 +162,16 @@ internal sealed class PlayerMapTransitions
         {
             player.Logger.LogWarning(e, "Error during teleport");
         }
-
-        player.IsTeleporting = false;
+        finally
+        {
+            lock (this._teleportStateLock)
+            {
+                if (this._teleportGeneration == generation)
+                {
+                    player.IsTeleporting = false;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -144,25 +180,49 @@ internal sealed class PlayerMapTransitions
     /// <param name="gate">The gate to which the player should be moved.</param>
     public async ValueTask WarpToAsync(ExitGate gate)
     {
+        _ = await this.TryWarpToAsync(gate).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Tries to move the player to the specified gate, advancing to <see cref="PlayerState.ChangingMap"/>
+    /// before detaching from the current map so rejected/cancelled warps never leave a torn state.
+    /// </summary>
+    /// <param name="gate">The gate to which the player should be moved.</param>
+    /// <returns><c>True</c>, if the warp succeeded; otherwise, <c>false</c>.</returns>
+    public async ValueTask<bool> TryWarpToAsync(ExitGate gate)
+    {
         var player = this._player;
+        if (player.SelectedCharacter is null || gate.Map is null)
+        {
+            return false;
+        }
+
+        var isDisconnected = player.PlayerState.CurrentState.IsDisconnectedOrFinished();
+        if (!isDisconnected
+            && player.PlayerState.CurrentState != GameLogic.PlayerState.ChangingMap
+            && !await player.PlayerState.TryAdvanceToAsync(GameLogic.PlayerState.ChangingMap).ConfigureAwait(false))
+        {
+            return false;
+        }
+
         var isRespawnOnSameMap = object.Equals(player.CurrentMap?.Definition, gate.Map);
         if (!await this.TryRemoveFromCurrentMapAsync(isRespawnOnSameMap).ConfigureAwait(false))
         {
-            return;
+            return false;
         }
 
         await this.PlaceAtGateAsync(gate).ConfigureAwait(false);
         player.CurrentMap = null; // Will be set again, when the client acknowledged the map change by F3 12 packet.
 
-        if (!player.PlayerState.CurrentState.IsDisconnectedOrFinished())
+        if (!isDisconnected && !player.PlayerState.CurrentState.IsDisconnectedOrFinished())
         {
-            await player.PlayerState.TryAdvanceToAsync(GameLogic.PlayerState.ChangingMap).ConfigureAwait(false);
             await player.InvokeViewPlugInAsync<IMapChangePlugIn>(p => p.MapChangeAsync()).ConfigureAwait(false);
         }
 
         // after this, the Client will send us a F3 12 packet, to tell us it loaded
         // the map and is ready to receive the new meet player/monster etc.
         // Then ClientReadyAfterMapChange is called.
+        return true;
     }
 
     /// <summary>
@@ -324,7 +384,12 @@ internal sealed class PlayerMapTransitions
         }
 
         player.IsAlive = false;
-        player.IsTeleporting = false;
+        lock (this._teleportStateLock)
+        {
+            this._teleportGeneration++;
+            player.IsTeleporting = false;
+        }
+
         await this._movement.StopWalkingAsync().ConfigureAwait(false);
         await player.ClearObservingObjectsListAsync().ConfigureAwait(false);
         await this._summon.RemoveFromMapAsync(currentMap).ConfigureAwait(false);
@@ -339,8 +404,9 @@ internal sealed class PlayerMapTransitions
     internal async ValueTask PlaceAtGateAsync(ExitGate gate)
     {
         var player = this._player;
-        player.SelectedCharacter!.PositionX = (byte)Rand.NextInt(gate.X1, gate.X2);
-        player.SelectedCharacter.PositionY = (byte)Rand.NextInt(gate.Y1, gate.Y2);
+        var spawnPoint = gate.GetRandomPoint();
+        player.SelectedCharacter!.PositionX = spawnPoint.X;
+        player.SelectedCharacter.PositionY = spawnPoint.Y;
         player.SelectedCharacter.CurrentMap = gate.Map;
         player.Rotation = gate.Direction;
 

@@ -59,7 +59,10 @@ bool CMsgBoxIGSBuySelectItem::Create(float fPriority)
 
 void CMsgBoxIGSBuySelectItem::Initialize(CShopPackage* pPackage)
 {
-    int iProductSeq, iPriceSeq;
+    if (!pPackage)
+        return;
+
+    int iProductSeq = 0, iPriceSeq = 0;
 
     m_wItemCode = _wtoi(pPackage->InGamePackageID);
 
@@ -75,7 +78,8 @@ void CMsgBoxIGSBuySelectItem::Initialize(CShopPackage* pPackage)
         m_BtnPresent.SetEnable(false);
     }
 
-    wcsncpy(m_szPackageName, pPackage->PackageProductName, MAX_TEXT_LENGTH);
+    wcsncpy(m_szPackageName, pPackage->PackageProductName, MAX_TEXT_LENGTH - 1);
+    m_szPackageName[MAX_TEXT_LENGTH - 1] = L'\0';
 
     ZeroMemory(m_szDescription, sizeof(wchar_t) * UIMAX_TEXT_LINE * MAX_TEXT_LENGTH);
 
@@ -86,6 +90,7 @@ void CMsgBoxIGSBuySelectItem::Initialize(CShopPackage* pPackage)
     pPackage->SetProductSeqFirst();
     if (pPackage->GetProductSeqNext(iProductSeq) == false)
     {
+        return;
     }
 
     pPackage->SetPriceSeqFirst();
@@ -177,10 +182,13 @@ void CMsgBoxIGSBuySelectItem::RenderTexts()
     g_pRenderText->RenderText(GetPos().x + IMAGE_IGS_FRAME_WIDTH, GetPos().y + 20, szText, 200, 0, RT3_SORT_LEFT);
     mu_swprintf(szText, L"Display Seq : %d", m_iDisplaySeq);
     g_pRenderText->RenderText(GetPos().x + IMAGE_IGS_FRAME_WIDTH, GetPos().y + 30, szText, 200, 0, RT3_SORT_LEFT);
-    mu_swprintf(szText, L"Price Seq : %d", m_SelectBuyListBox.GetSelectedText()->m_iPriceSeq);
-    g_pRenderText->RenderText(GetPos().x + IMAGE_IGS_FRAME_WIDTH, GetPos().y + 40, szText, 200, 0, RT3_SORT_LEFT);
-    mu_swprintf(szText, L"Cash Type : %d", m_SelectBuyListBox.GetSelectedText()->m_iCashType);
-    g_pRenderText->RenderText(GetPos().x + IMAGE_IGS_FRAME_WIDTH, GetPos().y + 50, szText, 200, 0, RT3_SORT_LEFT);
+    if (const IGS_SelectBuyItem* pSelected = m_SelectBuyListBox.GetSelectedText())
+    {
+        mu_swprintf(szText, L"Price Seq : %d", pSelected->m_iPriceSeq);
+        g_pRenderText->RenderText(GetPos().x + IMAGE_IGS_FRAME_WIDTH, GetPos().y + 40, szText, 200, 0, RT3_SORT_LEFT);
+        mu_swprintf(szText, L"Cash Type : %d", pSelected->m_iCashType);
+        g_pRenderText->RenderText(GetPos().x + IMAGE_IGS_FRAME_WIDTH, GetPos().y + 50, szText, 200, 0, RT3_SORT_LEFT);
+    }
 #endif  // FOR_WORK
 }
 
@@ -240,14 +248,22 @@ CALLBACK_RESULT CMsgBoxIGSBuySelectItem::LButtonUp(class CNewUIMessageBoxBase* p
 
 CALLBACK_RESULT CMsgBoxIGSBuySelectItem::BuyBtnDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
-    auto*              pOwnMsgBox = dynamic_cast<CMsgBoxIGSBuySelectItem*>(pOwner);
-    IGS_SelectBuyItem* pItem      = pOwnMsgBox->m_SelectBuyListBox.GetSelectedText();
+    auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSBuySelectItem*>(pOwner);
+    if (!pOwnMsgBox)
+        return CALLBACK_CONTINUE;
+
+    IGS_SelectBuyItem* pItem = pOwnMsgBox->m_SelectBuyListBox.GetSelectedText();
+    if (!pItem)
+        return CALLBACK_BREAK;
 
     CMsgBoxIGSBuyConfirm* pMsgBox = NULL;
     CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSBuyConfirmLayout), &pMsgBox);
-    pMsgBox->Initialize(pOwnMsgBox->m_wItemCode, pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq,
-                        pItem->m_iPriceSeq, pItem->m_iCashType, pItem->m_szItemName, pItem->m_szItemPrice,
-                        pItem->m_szItemPeriod);
+    if (pMsgBox)
+    {
+        pMsgBox->Initialize(pOwnMsgBox->m_wItemCode, pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq,
+                            pItem->m_iPriceSeq, pItem->m_iCashType, pItem->m_szItemName, pItem->m_szItemPrice,
+                            pItem->m_szItemPeriod);
+    }
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
@@ -258,13 +274,22 @@ CALLBACK_RESULT CMsgBoxIGSBuySelectItem::BuyBtnDown(class CNewUIMessageBoxBase* 
 CALLBACK_RESULT CMsgBoxIGSBuySelectItem::PresentBtnDown(class CNewUIMessageBoxBase* pOwner,
                                                         const leaf::xstreambuf&     xParam)
 {
-    auto*              pOwnMsgBox = dynamic_cast<CMsgBoxIGSBuySelectItem*>(pOwner);
-    IGS_SelectBuyItem* pItem      = pOwnMsgBox->m_SelectBuyListBox.GetSelectedText();
+    auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSBuySelectItem*>(pOwner);
+    if (!pOwnMsgBox)
+        return CALLBACK_CONTINUE;
+
+    IGS_SelectBuyItem* pItem = pOwnMsgBox->m_SelectBuyListBox.GetSelectedText();
+    if (!pItem)
+        return CALLBACK_BREAK;
 
     CMsgBoxIGSSendGift* pMsgBox = NULL;
     CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSSendGiftLayout), &pMsgBox);
-    pMsgBox->Initialize(pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq, pItem->m_iPriceSeq, pItem->m_wItemCode,
-                        pItem->m_iCashType, pOwnMsgBox->m_szPackageName, pItem->m_szItemPrice, pItem->m_szItemPeriod);
+    if (pMsgBox)
+    {
+        pMsgBox->Initialize(pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq, pItem->m_iPriceSeq,
+                            pItem->m_wItemCode, pItem->m_iCashType, pOwnMsgBox->m_szPackageName, pItem->m_szItemPrice,
+                            pItem->m_szItemPeriod);
+    }
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
@@ -336,15 +361,19 @@ void CMsgBoxIGSBuySelectItem::ListBoxDoAction()
     if (m_SelectBuyListBox.IsChangeLine() == TRUE)
     {
         IGS_SelectBuyItem* pItem = m_SelectBuyListBox.GetSelectedText();
-        wcscpy(m_szPrice, pItem->m_szItemPrice);
-        m_wItemCode = pItem->m_wItemCode;
+        if (pItem)
+        {
+            wcsncpy(m_szPrice, pItem->m_szItemPrice, std::size(m_szPrice) - 1);
+            m_szPrice[std::size(m_szPrice) - 1] = L'\0';
+            m_wItemCode                         = pItem->m_wItemCode;
+        }
     }
 }
 
 void CMsgBoxIGSBuySelectItem::AddData(int iPackageSeq, int iDisplaySeq, int iPriceSeq, int iProductSeq,
                                       wchar_t* pszPriceUnit, int iCashType)
 {
-    int     iValue;
+    int     iValue                  = 0;
     wchar_t szText[MAX_TEXT_LENGTH] = {
         '\0',
     };
@@ -366,32 +395,33 @@ void CMsgBoxIGSBuySelectItem::AddData(int iPackageSeq, int iDisplaySeq, int iPri
 
     g_InGameShopSystem->GetProductInfoFromPriceSeq(iProductSeq, iPriceSeq,
                                                    CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_ITEMNAME, iValue, szText);
-    wcscpy(Item.m_szItemName, szText);
+    wcsncpy(Item.m_szItemName, szText, std::size(Item.m_szItemName) - 1);
+    Item.m_szItemName[std::size(Item.m_szItemName) - 1] = L'\0';
 
     g_InGameShopSystem->GetProductInfoFromPriceSeq(iProductSeq, iPriceSeq,
                                                    CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_PRICE, iValue, szText);
-    mu_swprintf(Item.m_szItemPrice, L"%ls %ls", szText, pszPriceUnit);
+    mu_swprintf_trunc(Item.m_szItemPrice, L"%ls %ls", szText, pszPriceUnit ? pszPriceUnit : L"");
 
     g_InGameShopSystem->GetProductInfoFromPriceSeq(
         iProductSeq, iPriceSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_USE_LIMIT_PERIOD, iValue, szText);
     if (iValue > 0)
     {
-        mu_swprintf(Item.m_szItemPeriod, L"%d %ls", iValue, szText);
+        mu_swprintf_trunc(Item.m_szItemPeriod, L"%d %ls", iValue, szText);
     }
     else
     {
-        mu_swprintf(Item.m_szItemPeriod, L"-");
+        mu_swprintf_trunc(Item.m_szItemPeriod, L"-");
     }
 
     g_InGameShopSystem->GetProductInfoFromPriceSeq(iProductSeq, iPriceSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_NUM,
                                                    iValue, szText);
     if (iValue > 0)
     {
-        mu_swprintf(Item.m_szAttribute, I18N::Game::QuantityDDurationS, iValue, Item.m_szItemPeriod);
+        mu_swprintf_trunc(Item.m_szAttribute, I18N::Game::QuantityDDurationS, iValue, Item.m_szItemPeriod);
     }
     else
     {
-        mu_swprintf(Item.m_szAttribute, I18N::Game::DurationS, Item.m_szItemPeriod);
+        mu_swprintf_trunc(Item.m_szAttribute, I18N::Game::DurationS, Item.m_szItemPeriod);
     }
 
     m_SelectBuyListBox.AddText(Item);

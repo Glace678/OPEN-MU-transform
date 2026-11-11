@@ -21,55 +21,85 @@ public class QuestStartAction
     public async ValueTask StartQuestAsync(Player player, short group, short number)
     {
         using var loggerScope = player.Logger.BeginScope(this.GetType());
-        var quest = player.GetQuest(group, number);
-        if (quest is null)
+        if (player.SelectedCharacter is null)
         {
-            player.Logger.LogWarning("Failed, quest not found");
             return;
         }
 
-        if (quest.MinimumCharacterLevel > player.Level || (quest.MaximumCharacterLevel > 0 && quest.MaximumCharacterLevel < player.Level))
+        await player.RunPersistenceExclusiveAsync(async () =>
         {
-            player.Logger.LogDebug("Failed, character level {0} not in allowed range {1} to {2}.", player.Level, quest.MinimumCharacterLevel, quest.MaximumCharacterLevel);
-            return;
-        }
+            if (player.SelectedCharacter is not { } selectedCharacter)
+            {
+                return;
+            }
 
-        var questState = player.SelectedCharacter!.QuestStates.FirstOrDefault(q => q.Group == group);
-        if (questState is null)
-        {
-            questState = player.PersistenceContext.CreateNew<CharacterQuestState>();
-            questState.Group = group;
-            player.SelectedCharacter.QuestStates.Add(questState);
-        }
+            var quest = player.GetQuest(group, number);
+            if (quest is null)
+            {
+                player.Logger.LogWarning("Failed, quest not found");
+                return;
+            }
 
-        if (questState.ActiveQuest != null)
-        {
-            player.Logger.LogDebug("There is already an active quest of this group.");
-            await player.InvokeViewPlugInAsync<IQuestProgressPlugIn>(p => p.ShowQuestProgressAsync(questState.ActiveQuest, false)).ConfigureAwait(false);
-            return;
-        }
+            if (quest.MinimumCharacterLevel > player.Level || (quest.MaximumCharacterLevel > 0 && quest.MaximumCharacterLevel < player.Level))
+            {
+                player.Logger.LogDebug("Failed, character level {0} not in allowed range {1} to {2}.", player.Level, quest.MinimumCharacterLevel, quest.MaximumCharacterLevel);
+                return;
+            }
 
-        if (Equals(questState.LastFinishedQuest, quest) && !quest.Repeatable)
-        {
-            player.Logger.LogDebug("The quest is not repeatable.");
-            return;
-        }
+            var questState = selectedCharacter.QuestStates.FirstOrDefault(q => q.Group == group);
+            if (questState is null)
+            {
+                questState = player.PersistenceContext.CreateNew<CharacterQuestState>();
+                questState.Group = group;
+                selectedCharacter.QuestStates.Add(questState);
+            }
 
-        if (quest.RequiredStartMoney > 0)
-        {
-            if (player.TryRemoveMoney(quest.RequiredStartMoney))
+            if (questState.ActiveQuest != null)
+            {
+                player.Logger.LogDebug("There is already an active quest of this group.");
+                await player.InvokeViewPlugInAsync<IQuestProgressPlugIn>(p => p.ShowQuestProgressAsync(questState.ActiveQuest, false)).ConfigureAwait(false);
+                return;
+            }
+
+            if (Equals(questState.LastFinishedQuest, quest) && !quest.Repeatable)
+            {
+                player.Logger.LogDebug("The quest is not repeatable.");
+                return;
+            }
+
+            var moneyCharged = false;
+            if (quest.RequiredStartMoney > 0)
+            {
+                if (!player.TryRemoveMoney(quest.RequiredStartMoney))
+                {
+                    await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NotEnoughMoneyToProceed)).ConfigureAwait(false);
+                    return;
+                }
+
+                moneyCharged = true;
+            }
+
+            try
+            {
+                await questState.ClearAsync(player.PersistenceContext).ConfigureAwait(false);
+                questState.ActiveQuest = quest;
+            }
+            catch
+            {
+                if (moneyCharged)
+                {
+                    player.TryAddMoney(quest.RequiredStartMoney);
+                }
+
+                throw;
+            }
+
+            if (moneyCharged)
             {
                 await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
             }
-            else
-            {
-                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NotEnoughMoneyToProceed)).ConfigureAwait(false);
-                return;
-            }
-        }
 
-        await questState.ClearAsync(player.PersistenceContext).ConfigureAwait(false);
-        questState.ActiveQuest = quest;
-        await player.InvokeViewPlugInAsync<IQuestStartedPlugIn>(p => p.QuestStartedAsync(quest)).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IQuestStartedPlugIn>(p => p.QuestStartedAsync(quest)).ConfigureAwait(false);
+        }).ConfigureAwait(false);
     }
 }

@@ -48,9 +48,19 @@ void CBoneManager::RegisterBone(CHARACTER* pCharacter, const std::wstring& name,
 {
     if (pCharacter != NULL)
     {
-        BMD* pModel = &Models[pCharacter->Object.Type];
+        const int modelType = pCharacter->Object.Type;
+        if (modelType < 0 || modelType >= MAX_MODELS || nBone < 0 || nBone >= MAX_BONES)
+        {
+            return;
+        }
+
+        BMD* pModel = &Models[modelType];
         if (pModel != NULL)
         {
+            if (pModel->NumBones > 0 && nBone >= pModel->NumBones)
+            {
+                return;
+            }
             if (FindBone(&pCharacter->Object, name) != NULL)
                 UnregisterBone(pCharacter, name);
 
@@ -102,8 +112,13 @@ int CBoneManager::GetBoneNumber(OBJECT* pObject, const std::wstring& name)
 }
 bool CBoneManager::GetBonePosition(OBJECT* pObject, const std::wstring& name, OUT vec3_t Position)
 {
+    if (pObject == nullptr || pObject->BoneTransform == nullptr)
+    {
+        return false;
+    }
     LPBONEINFO _lpBoneInfo = FindBone(pObject, name);
-    if (_lpBoneInfo)
+    if (_lpBoneInfo && _lpBoneInfo->pModel != nullptr && _lpBoneInfo->nBone >= 0 &&
+        _lpBoneInfo->nBone < _lpBoneInfo->pModel->NumBones)
     {
         vec3_t LocalPos, Relative;
         Vector(0.f, 0.f, 0.f, Relative);
@@ -116,8 +131,13 @@ bool CBoneManager::GetBonePosition(OBJECT* pObject, const std::wstring& name, OU
 }
 bool CBoneManager::GetBonePosition(OBJECT* pObject, const std::wstring& name, IN vec3_t Relative, OUT vec3_t Position)
 {
+    if (pObject == nullptr || pObject->BoneTransform == nullptr)
+    {
+        return false;
+    }
     LPBONEINFO _lpBoneInfo = FindBone(pObject, name);
-    if (_lpBoneInfo)
+    if (_lpBoneInfo && _lpBoneInfo->pModel != nullptr && _lpBoneInfo->nBone >= 0 &&
+        _lpBoneInfo->nBone < _lpBoneInfo->pModel->NumBones)
     {
         vec3_t LocalPos;
         _lpBoneInfo->pModel->TransformPosition(pObject->BoneTransform[_lpBoneInfo->nBone], Relative, LocalPos, false);

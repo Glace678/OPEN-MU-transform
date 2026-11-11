@@ -31,8 +31,26 @@ public abstract class ServerContainerBase : IHostedService
     /// <inheritdoc />
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        await this.StartInnerAsync(cancellationToken).ConfigureAwait(false);
-        this._setupService.DatabaseInitialized += this.OnDatabaseInitializedAsync;
+        try
+        {
+            await this.StartInnerAsync(cancellationToken).ConfigureAwait(false);
+            this._setupService.DatabaseInitialized -= this.OnDatabaseInitializedAsync;
+            this._setupService.DatabaseInitialized += this.OnDatabaseInitializedAsync;
+        }
+        catch (Exception ex)
+        {
+            this._logger.LogError(ex, "Failed to start server container {ContainerType}; rolling back initialized instances.", this.GetType().Name);
+            try
+            {
+                await this.StopInnerAsync(default).ConfigureAwait(false);
+            }
+            catch (Exception cleanupEx)
+            {
+                this._logger.LogError(cleanupEx, "Error while rolling back failed start of {ContainerType}.", this.GetType().Name);
+            }
+
+            throw;
+        }
     }
 
     /// <inheritdoc />

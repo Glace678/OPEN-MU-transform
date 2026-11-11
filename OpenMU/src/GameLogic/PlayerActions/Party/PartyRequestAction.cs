@@ -19,6 +19,11 @@ public class PartyRequestAction
     /// <param name="toRequest">The player which receives the request.</param>
     public async ValueTask HandlePartyRequestAsync(Player player, Player toRequest)
     {
+        if (ReferenceEquals(player, toRequest))
+        {
+            return;
+        }
+
         var isPartyMember = player.Party != null && !Equals(player.Party.PartyMaster, player);
         if (player.CurrentMiniGame?.Definition.AllowParty is false)
         {
@@ -64,8 +69,26 @@ public class PartyRequestAction
 
         if (await toRequest.PlayerState.TryAdvanceToAsync(PlayerState.PartyRequest).ConfigureAwait(false))
         {
-            await this.SendPartyRequestAsync(toRequest, player).ConfigureAwait(false);
-            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.RequestedPlayerForParty), toRequest.Name).ConfigureAwait(false);
+            try
+            {
+                await this.SendPartyRequestAsync(toRequest, player).ConfigureAwait(false);
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.RequestedPlayerForParty), toRequest.Name).ConfigureAwait(false);
+            }
+            catch
+            {
+                toRequest.LastPartyRequester = null;
+                if (toRequest.PlayerState.CurrentState == PlayerState.PartyRequest)
+                {
+                    await toRequest.PlayerState.TryAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
+                }
+
+                throw;
+            }
+
+            if (toRequest.PlayerState.CurrentState == PlayerState.PartyRequest && toRequest.LastPartyRequester is null)
+            {
+                await toRequest.PlayerState.TryAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
+            }
         }
     }
 

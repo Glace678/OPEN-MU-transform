@@ -339,7 +339,24 @@ bool CCharacterManager::IsEquipedWing()
 
 void CCharacterManager::GetMagicSkillDamage(int iType, int* piMinDamage, int* piMaxDamage)
 {
+    if (!piMinDamage || !piMaxDamage)
+        return;
+
+    if (!CharacterMachine)
+    {
+        *piMinDamage = 0;
+        *piMaxDamage = 0;
+        return;
+    }
+
     if (AT_SKILL_SUMMON_EXPLOSION <= iType && iType <= AT_SKILL_SUMMON_REQUIEM)
+    {
+        *piMinDamage = CharacterMachine->Character.MagicDamageMin;
+        *piMaxDamage = CharacterMachine->Character.MagicDamageMax;
+        return;
+    }
+
+    if (!SkillAttribute || iType < 0 || iType >= MAX_SKILLS)
     {
         *piMinDamage = CharacterMachine->Character.MagicDamageMin;
         *piMaxDamage = CharacterMachine->Character.MagicDamageMax;
@@ -371,10 +388,14 @@ void CCharacterManager::GetMagicSkillDamage(int iType, int* piMinDamage, int* pi
 
 void CCharacterManager::GetCurseSkillDamage(int iType, int* piMinDamage, int* piMaxDamage)
 {
+    if (!piMinDamage || !piMaxDamage || !CharacterMachine)
+        return;
+
     if (CLASS_SUMMONER != gCharacterManager.GetBaseClass(CharacterMachine->Character.Class))
         return;
 
-    if (AT_SKILL_SUMMON_EXPLOSION <= iType && iType <= AT_SKILL_SUMMON_REQUIEM)
+    if (SkillAttribute && iType >= 0 && iType < MAX_SKILLS &&
+        AT_SKILL_SUMMON_EXPLOSION <= iType && iType <= AT_SKILL_SUMMON_REQUIEM)
     {
         SKILL_ATTRIBUTE* p = &SkillAttribute[iType];
         *piMinDamage       = CharacterMachine->Character.CurseDamageMin + p->Damage;
@@ -389,6 +410,16 @@ void CCharacterManager::GetCurseSkillDamage(int iType, int* piMinDamage, int* pi
 
 void CCharacterManager::GetSkillDamage(int iType, int* piMinDamage, int* piMaxDamage)
 {
+    if (!piMinDamage || !piMaxDamage)
+        return;
+
+    if (!SkillAttribute || iType < 0 || iType >= MAX_SKILLS)
+    {
+        *piMinDamage = 0;
+        *piMaxDamage = 0;
+        return;
+    }
+
     SKILL_ATTRIBUTE* p = &SkillAttribute[iType];
 
     int Damage = p->Damage;

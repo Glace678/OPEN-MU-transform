@@ -116,9 +116,9 @@ class TestX08EconomyOwnershipAndLifecycleCross(unittest.TestCase):
 
     def test_jewel_bundling_stack_durability_and_price_invariants(self):
         """Bundling 30 jewels computes 64-bit checked price, clamps durability to 255."""
-        # 64-bit price check for 30 packed Bless
+        # 64-bit price check for 30 packed Bless (ItemPriceCalculator.cs:106 -> (2+1)*1,480*10 = 44,400)
         bless_pack_price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedBless", 2)
-        self.assertEqual(bless_pack_price, (2 + 1) * 9_000_000 * 10)
+        self.assertEqual(bless_pack_price, (2 + 1) * 1_480 * 10)
         self.assertLessEqual(bless_pack_price, EconomyEngine.MAX_GOLD)
 
         # Durability clamp on jewel bundle addition

@@ -15,6 +15,10 @@ add_test(
 set_tests_properties(
     client_library_universal_macos_rejected
     PROPERTIES WILL_FAIL TRUE)
+add_test(
+    NAME windows_startup_borderless_fullscreen
+    COMMAND "${CMAKE_COMMAND}" -P
+        "${CMAKE_SOURCE_DIR}/cmake/tests/WindowsStartupFullscreenTests.cmake")
 
 # When cross-compiling Windows binaries on a non-Windows host (CI's Linux
 # runner, WSL/MinGW), wine has to launch the .exe. Setting this once makes

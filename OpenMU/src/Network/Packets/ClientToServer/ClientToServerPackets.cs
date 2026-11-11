@@ -1,4 +1,4 @@
-﻿// <copyright file="ClientToServerPackets.cs" company="MUnique">
+// <copyright file="ClientToServerPackets.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -8409,7 +8409,7 @@ public readonly struct DeleteCharacter
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)Math.Min(data.Length, Length);
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }

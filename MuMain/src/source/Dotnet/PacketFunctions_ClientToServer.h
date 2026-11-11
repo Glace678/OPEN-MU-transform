@@ -26,6 +26,7 @@
 class PacketFunctions_ClientToServer : public PacketFunctions_ClientToServer_Custom
 {
 public:
+
     /// <summary>
     /// Sends a Ping to this connection.
     /// </summary>
@@ -85,10 +86,7 @@ public:
     /// Is sent by the client when: The player tries to log into the game.
     /// Causes reaction on server side: The server is authenticating the sent login name and password. If it's correct, the state of the player is proceeding to be logged in.
     /// </remarks>
-    void SendLoginLongPassword(const BYTE* username, uint32_t usernameByteLength, const BYTE* password,
-                               uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion,
-                               uint32_t clientVersionByteLength, const BYTE* clientSerial,
-                               uint32_t clientSerialByteLength);
+    void SendLoginLongPassword(const BYTE* username, uint32_t usernameByteLength, const BYTE* password, uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion, uint32_t clientVersionByteLength, const BYTE* clientSerial, uint32_t clientSerialByteLength);
 
     /// <summary>
     /// Sends a LoginShortPassword to this connection.
@@ -106,10 +104,7 @@ public:
     /// Is sent by the client when: The player tries to log into the game.
     /// Causes reaction on server side: The server is authenticating the sent login name and password. If it's correct, the state of the player is proceeding to be logged in.
     /// </remarks>
-    void SendLoginShortPassword(const BYTE* username, uint32_t usernameByteLength, const BYTE* password,
-                                uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion,
-                                uint32_t clientVersionByteLength, const BYTE* clientSerial,
-                                uint32_t clientSerialByteLength);
+    void SendLoginShortPassword(const BYTE* username, uint32_t usernameByteLength, const BYTE* password, uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion, uint32_t clientVersionByteLength, const BYTE* clientSerial, uint32_t clientSerialByteLength);
 
     /// <summary>
     /// Sends a Login075 to this connection.
@@ -127,9 +122,7 @@ public:
     /// Is sent by the client when: The player tries to log into the game.
     /// Causes reaction on server side: The server is authenticating the sent login name and password. If it's correct, the state of the player is proceeding to be logged in.
     /// </remarks>
-    void SendLogin075(const BYTE* username, uint32_t usernameByteLength, const BYTE* password,
-                      uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion,
-                      uint32_t clientVersionByteLength, const BYTE* clientSerial, uint32_t clientSerialByteLength);
+    void SendLogin075(const BYTE* username, uint32_t usernameByteLength, const BYTE* password, uint32_t passwordByteLength, uint32_t tickCount, const BYTE* clientVersion, uint32_t clientVersionByteLength, const BYTE* clientSerial, uint32_t clientSerialByteLength);
 
     /// <summary>
     /// Sends a LogOut to this connection.
@@ -268,10 +261,9 @@ public:
     /// <param name="toSlot">The to slot.</param>
     /// <remarks>
     /// Is sent by the client when: A player requests to move an item within or between his available item storage, such as inventory, vault, trade or chaos machine.
-    /// Causes reaction on server side:
+    /// Causes reaction on server side: 
     /// </remarks>
-    void SendItemMoveRequest(ItemStorageKind fromStorage, BYTE fromSlot, const BYTE* itemData,
-                             uint32_t itemDataByteLength, ItemStorageKind toStorage, BYTE toSlot);
+    void SendItemMoveRequest(ItemStorageKind fromStorage, BYTE fromSlot, const BYTE* itemData, uint32_t itemDataByteLength, ItemStorageKind toStorage, BYTE toSlot);
 
     /// <summary>
     /// Sends a ItemMoveRequestExtended to this connection.
@@ -282,10 +274,9 @@ public:
     /// <param name="toSlot">The to slot.</param>
     /// <remarks>
     /// Is sent by the client when: A player requests to move an item within or between his available item storage, such as inventory, vault, trade or chaos machine.
-    /// Causes reaction on server side:
+    /// Causes reaction on server side: 
     /// </remarks>
-    void SendItemMoveRequestExtended(ItemStorageKind fromStorage, BYTE fromSlot, ItemStorageKind toStorage,
-                                     BYTE toSlot);
+    void SendItemMoveRequestExtended(ItemStorageKind fromStorage, BYTE fromSlot, ItemStorageKind toStorage, BYTE toSlot);
 
     /// <summary>
     /// Sends a ConsumeItemRequest to this connection.
@@ -427,11 +418,7 @@ public:
     /// Is sent by the client when: After the client connected to another server due map change.
     /// Causes reaction on server side: The player spawns on the new server.
     /// </remarks>
-    void SendServerChangeAuthentication(const BYTE* accountXor3, uint32_t accountXor3ByteLength,
-                                        const BYTE* characterNameXor3, uint32_t characterNameXor3ByteLength,
-                                        uint32_t authCode1, uint32_t authCode2, uint32_t authCode3, uint32_t authCode4,
-                                        uint32_t tickCount, const BYTE* clientVersion, uint32_t clientVersionByteLength,
-                                        const BYTE* clientSerial, uint32_t clientSerialByteLength);
+    void SendServerChangeAuthentication(const BYTE* accountXor3, uint32_t accountXor3ByteLength, const BYTE* characterNameXor3, uint32_t characterNameXor3ByteLength, uint32_t authCode1, uint32_t authCode2, uint32_t authCode3, uint32_t authCode4, uint32_t tickCount, const BYTE* clientVersion, uint32_t clientVersionByteLength, const BYTE* clientSerial, uint32_t clientSerialByteLength);
 
     /// <summary>
     /// Sends a CastleSiegeStatusRequest to this connection.
@@ -513,8 +500,7 @@ public:
     /// Is sent by the client when: The player opened a castle siege npc and requests to upgrade a gate or statue at a specific position (index)..
     /// Causes reaction on server side: The server returns a response.
     /// </remarks>
-    void SendCastleSiegeDefenseUpgradeRequest(uint32_t npcNumber, uint32_t npcIndex, uint32_t npcUpgradeType,
-                                              uint32_t npcUpgradeValue);
+    void SendCastleSiegeDefenseUpgradeRequest(uint32_t npcNumber, uint32_t npcIndex, uint32_t npcUpgradeType, uint32_t npcUpgradeValue);
 
     /// <summary>
     /// Sends a CastleSiegeTaxInfoRequest to this connection.
@@ -797,8 +783,7 @@ public:
     /// Is sent by the client when: The player wants to buy an item in the cash shop.
     /// Causes reaction on server side: The item is bought and added to the cash shop item storage of the player.
     /// </remarks>
-    void SendCashShopItemBuyRequest(uint32_t packageMainIndex, uint32_t category, uint32_t productMainIndex,
-                                    uint16_t itemIndex, uint32_t coinIndex, BYTE mileageFlag);
+    void SendCashShopItemBuyRequest(uint32_t packageMainIndex, uint32_t category, uint32_t productMainIndex, uint16_t itemIndex, uint32_t coinIndex, BYTE mileageFlag);
 
     /// <summary>
     /// Sends a CashShopItemGiftRequest to this connection.
@@ -815,9 +800,7 @@ public:
     /// Is sent by the client when: The player wants to send a gift to another player.
     /// Causes reaction on server side: The server buys the item with the credits of the player and sends it as gift to the other player.
     /// </remarks>
-    void SendCashShopItemGiftRequest(uint32_t packageMainIndex, uint32_t category, uint32_t productMainIndex,
-                                     uint16_t itemIndex, uint32_t coinIndex, BYTE mileageFlag,
-                                     const wchar_t* giftReceiverName, const wchar_t* giftText);
+    void SendCashShopItemGiftRequest(uint32_t packageMainIndex, uint32_t category, uint32_t productMainIndex, uint16_t itemIndex, uint32_t coinIndex, BYTE mileageFlag, const wchar_t* giftReceiverName, const wchar_t* giftText);
 
     /// <summary>
     /// Sends a CashShopStorageListRequest to this connection.
@@ -853,8 +836,7 @@ public:
     /// Is sent by the client when: The player wants to get or consume an item which is in the cash shop storage.
     /// Causes reaction on server side: The item is applied or added to the inventory.
     /// </remarks>
-    void SendCashShopStorageItemConsumeRequest(uint32_t baseItemCode, uint32_t mainItemCode, uint16_t itemIndex,
-                                               BYTE productType);
+    void SendCashShopStorageItemConsumeRequest(uint32_t baseItemCode, uint32_t mainItemCode, uint16_t itemIndex, BYTE productType);
 
     /// <summary>
     /// Sends a CashShopEventItemListRequest to this connection.
@@ -983,8 +965,7 @@ public:
     /// Is sent by the client when: A player wants to walk on the game map.
     /// Causes reaction on server side: The player gets moved on the map, visible for other surrounding players.
     /// </remarks>
-    void SendWalkRequest(BYTE sourceX, BYTE sourceY, BYTE stepCount, BYTE targetRotation, const BYTE* directions,
-                         uint32_t directionsByteLength);
+    void SendWalkRequest(BYTE sourceX, BYTE sourceY, BYTE stepCount, BYTE targetRotation, const BYTE* directions, uint32_t directionsByteLength);
 
     /// <summary>
     /// Sends a WalkRequest075 to this connection.
@@ -999,8 +980,7 @@ public:
     /// Is sent by the client when: A player wants to walk on the game map.
     /// Causes reaction on server side: The player gets moved on the map, visible for other surrounding players.
     /// </remarks>
-    void SendWalkRequest075(BYTE sourceX, BYTE sourceY, BYTE stepCount, BYTE targetRotation, const BYTE* directions,
-                            uint32_t directionsByteLength);
+    void SendWalkRequest075(BYTE sourceX, BYTE sourceY, BYTE stepCount, BYTE targetRotation, const BYTE* directions, uint32_t directionsByteLength);
 
     /// <summary>
     /// Sends a InstantMoveRequest to this connection.
@@ -1194,8 +1174,7 @@ public:
     /// Is sent by the client when: A player is performing an skill which affects an area of the map.
     /// Causes reaction on server side: It's forwarded to all surrounding players, so that the animation is visible. In the original server implementation, no damage is done yet for attack skills - there are separate hit packets.
     /// </remarks>
-    void SendAreaSkill(uint16_t skillId, BYTE targetX, BYTE targetY, BYTE rotation, uint16_t extraTargetId,
-                       BYTE animationCounter);
+    void SendAreaSkill(uint16_t skillId, BYTE targetX, BYTE targetY, BYTE rotation, uint16_t extraTargetId, BYTE animationCounter);
 
     /// <summary>
     /// Sends a AreaSkill075 to this connection.
@@ -1280,7 +1259,7 @@ public:
     /// <param name="tradeAccepted">The trade accepted.</param>
     /// <remarks>
     /// Is sent by the client when: A requested player responded to a trade request of another player.
-    /// Causes reaction on server side: When the trade request was accepted, the server tries to open a new trade and sends corresponding responses to both players.
+    /// Causes reaction on server side: When the trade request was accepted, the server tries to open a new trade and sends corresponding responses to both players. 
     /// </remarks>
     void SendTradeRequestResponse(BYTE tradeAccepted);
 
@@ -1327,8 +1306,7 @@ public:
     /// Is sent by the client when: A player wants to send a letter to another players character.
     /// Causes reaction on server side: The letter is sent to the other character, if it exists and the player has the required money.
     /// </remarks>
-    void SendLetterSendRequest(uint32_t letterId, const wchar_t* receiver, const wchar_t* title, BYTE rotation,
-                               BYTE animation, uint16_t messageLength, const wchar_t* message);
+    void SendLetterSendRequest(uint32_t letterId, const wchar_t* receiver, const wchar_t* title, BYTE rotation, BYTE animation, uint16_t messageLength, const wchar_t* message);
 
     /// <summary>
     /// Sends a LetterReadRequest to this connection.
@@ -1476,8 +1454,7 @@ public:
     /// Is sent by the client when: A guild master sends a request to another guild master about changing the relationship between their guilds.
     /// Causes reaction on server side: The server sends a response with the result.
     /// </remarks>
-    void SendGuildRelationshipChangeRequest(GuildRelationshipType relationshipType, GuildRequestType requestType,
-                                            uint16_t targetPlayerId);
+    void SendGuildRelationshipChangeRequest(GuildRelationshipType relationshipType, GuildRequestType requestType, uint16_t targetPlayerId);
 
     /// <summary>
     /// Sends a GuildRelationshipChangeResponse to this connection.
@@ -1490,8 +1467,7 @@ public:
     /// Is sent by the client when: A guild master answered the request to another guild master about changing the relationship between their guilds.
     /// Causes reaction on server side: The server sends a response back to the requester. If the guild master agreed, it takes the necessary actions.
     /// </remarks>
-    void SendGuildRelationshipChangeResponse(GuildRelationshipType relationshipType, GuildRequestType requestType,
-                                             BYTE response, uint16_t targetPlayerId);
+    void SendGuildRelationshipChangeResponse(GuildRelationshipType relationshipType, GuildRequestType requestType, BYTE response, uint16_t targetPlayerId);
 
     /// <summary>
     /// Sends a RequestAllianceList to this connection.
@@ -1651,7 +1627,7 @@ public:
     /// <param name="targetId">The target id.</param>
     /// <remarks>
     /// Is sent by the client when: The player wants to command its equipped pet (raven).
-    /// Causes reaction on server side:
+    /// Causes reaction on server side: 
     /// </remarks>
     void SendPetCommandRequest(PetType petType, PetCommandMode commandMode, uint16_t targetId);
 

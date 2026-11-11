@@ -99,7 +99,17 @@ public static class CharacterClassHelper
         var characterClasses = gameConfiguration.CharacterClasses;
         foreach (var characterClassNumber in NumberMapping.Where(c => classes.HasFlag(c.Classes)).Select(c => c.Number))
         {
-            yield return characterClasses.First(c => c.Number == (int)characterClassNumber);
+            if (ignoreMissing)
+            {
+                if (characterClasses.FirstOrDefault(c => c.Number == (int)characterClassNumber) is { } characterClass)
+                {
+                    yield return characterClass;
+                }
+            }
+            else
+            {
+                yield return characterClasses.First(c => c.Number == (int)characterClassNumber);
+            }
         }
     }
 

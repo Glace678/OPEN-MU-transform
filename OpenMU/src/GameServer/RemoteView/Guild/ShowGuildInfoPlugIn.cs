@@ -77,7 +77,11 @@ public class ShowGuildInfoPlugIn : BaseGuildInfoPlugIn<ShowGuildInfoPlugIn>, ISh
             result.AllianceGuildName = guild.AllianceGuild.Name ?? string.Empty;
         }
 
-        guild.Logo.CopyTo(result.Logo);
+        if (guild.Logo is { Length: > 0 } logo)
+        {
+            logo.AsSpan(0, Math.Min(logo.Length, result.Logo.Length)).CopyTo(result.Logo);
+        }
+
         return array.AsMemory();
     }
 }

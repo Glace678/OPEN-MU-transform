@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <limits>
 #include <memory>
 #include <stdexcept>
 #include <utility>
@@ -42,6 +43,9 @@ template <class T> class CList
 public:
     CList();
     ~CList();
+
+    CList(const CList&)            = delete;
+    CList& operator=(const CList&) = delete;
 
     std::size_t GetCount() const { return m_Count; }
     bool        IsEmpty() const { return m_Count == 0; }
@@ -324,18 +328,18 @@ template <class T> void CList<T>::SetData(CNode<T>* node, const T& data)
 
 template <class T> T& CList<T>::GetData(CNode<T>* node)
 {
-    if (IsSentinel(node))
+    if (!node || IsSentinel(node))
     {
-        throw std::out_of_range("Attempted to get data from a sentinel node.");
+        throw std::out_of_range("Attempted to get data from a null or sentinel node.");
     }
     return node->GetData();
 }
 
 template <class T> const T& CList<T>::GetData(const CNode<T>* node) const
 {
-    if (IsSentinel(node))
+    if (!node || IsSentinel(node))
     {
-        throw std::out_of_range("Attempted to get data from a sentinel node.");
+        throw std::out_of_range("Attempted to get data from a null or sentinel node.");
     }
     return node->GetData();
 }
@@ -429,6 +433,9 @@ template <class T, class S> class CBTree
 public:
     CBTree();
     ~CBTree();
+
+    CBTree(const CBTree&)            = delete;
+    CBTree& operator=(const CBTree&) = delete;
 
     CBNode<T, S>* Add(const T& newElement, const S& value);
     void          RemoveNode(CBNode<T, S>*& node);
@@ -578,7 +585,8 @@ template <class T, class S> void CBTree<T, S>::RemoveNode(CBNode<T, S>*& node)
         CBNode<T, S>* left = node->GetLeft();
         if (node == m_pHead)
         {
-            m_pHead = left;
+            m_pHead         = left;
+            left->m_pParent = nullptr;
         }
         else if (node->GetParent()->GetLeft() == node)
         {
@@ -589,6 +597,7 @@ template <class T, class S> void CBTree<T, S>::RemoveNode(CBNode<T, S>*& node)
             node->GetParent()->SetRight(left);
         }
         delete node;
+        node = nullptr;
         --m_Count;
     }
     else if (node->GetRight())
@@ -596,7 +605,8 @@ template <class T, class S> void CBTree<T, S>::RemoveNode(CBNode<T, S>*& node)
         CBNode<T, S>* right = node->GetRight();
         if (node == m_pHead)
         {
-            m_pHead = right;
+            m_pHead          = right;
+            right->m_pParent = nullptr;
         }
         else if (node->GetParent()->GetLeft() == node)
         {
@@ -607,6 +617,7 @@ template <class T, class S> void CBTree<T, S>::RemoveNode(CBNode<T, S>*& node)
             node->GetParent()->SetRight(right);
         }
         delete node;
+        node = nullptr;
         --m_Count;
     }
     else
@@ -624,6 +635,7 @@ template <class T, class S> void CBTree<T, S>::RemoveNode(CBNode<T, S>*& node)
             node->GetParent()->SetRight(nullptr);
         }
         delete node;
+        node = nullptr;
         --m_Count;
     }
 }
@@ -683,31 +695,42 @@ template <class T, class S> CBNode<T, S>* CBTree<T, S>::FindHead()
 
 template <class T, class S> CBNode<T, S>* CBTree<T, S>::GetLeft(CBNode<T, S>* node)
 {
-    return node->GetLeft();
+    return node ? node->GetLeft() : nullptr;
 }
 
 template <class T, class S> CBNode<T, S>* CBTree<T, S>::GetRight(CBNode<T, S>* node)
 {
-    return node->GetRight();
+    return node ? node->GetRight() : nullptr;
 }
 
 template <class T, class S> CBNode<T, S>* CBTree<T, S>::GetParent(CBNode<T, S>* node)
 {
-    return node->GetParent();
+    return node ? node->GetParent() : nullptr;
 }
 
 template <class T, class S> void CBTree<T, S>::SetData(CBNode<T, S>* node, const T& data)
 {
-    node->SetData(data);
+    if (node)
+    {
+        node->SetData(data);
+    }
 }
 
 template <class T, class S> T& CBTree<T, S>::GetData(CBNode<T, S>* node)
 {
+    if (!node)
+    {
+        throw std::out_of_range("Attempted to get data from a null tree node.");
+    }
     return node->GetData();
 }
 
 template <class T, class S> S CBTree<T, S>::GetValue(CBNode<T, S>* node)
 {
+    if (!node)
+    {
+        throw std::out_of_range("Attempted to get value from a null tree node.");
+    }
     return node->GetValue();
 }
 
@@ -739,6 +762,9 @@ public:
     CDimension();   // Constructor
     ~CDimension();  // Destructor
 
+    CDimension(const CDimension&)            = delete;
+    CDimension& operator=(const CDimension&) = delete;
+
     T Set(int nIndex, T Data);
     T Get(int nIndex);
 
@@ -749,7 +775,7 @@ protected:
 template <class T> CDimension<T>::CDimension()
 {
     m_nSize = 16;
-    m_pData = new T[m_nSize];
+    m_pData = new T[m_nSize]();
 }
 
 template <class T> CDimension<T>::~CDimension()
@@ -773,16 +799,30 @@ template <class T> T CDimension<T>::Get(int nIndex)
 
 template <class T> void CDimension<T>::CheckDimensionSize(int nIndex)
 {
+    if (nIndex < 0)
+    {
+        throw std::out_of_range("Negative index in CDimension.");
+    }
+
     if (nIndex >= m_nSize)
     {
-        int nNewSize = m_nSize;
+        int nNewSize = (m_nSize > 0) ? m_nSize : 16;
         while (nNewSize <= nIndex)
         {
+            if (nNewSize > (std::numeric_limits<int>::max)() / 2)
+            {
+                if (nIndex == (std::numeric_limits<int>::max)())
+                {
+                    throw std::length_error("CDimension index exceeds maximum capacity.");
+                }
+                nNewSize = nIndex + 1;
+                break;
+            }
             nNewSize *= 2;
         }
 
         T* pNewBuffer = new T[nNewSize]();
-        memcpy(pNewBuffer, m_pData, m_nSize * sizeof(T));
+        std::copy(m_pData, m_pData + m_nSize, pNewBuffer);
         delete[] m_pData;
         m_pData = pNewBuffer;
         m_nSize = nNewSize;

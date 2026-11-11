@@ -44,10 +44,9 @@ bool CNewUIChaosCastleTime::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIChaosCastleTime::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -104,7 +103,7 @@ bool CNewUIChaosCastleTime::Render()
 
     if (m_iMaxKillMonster != MAX_KILL_MONSTER)
     {
-        mu_swprintf(szText, I18N::Game::CharacterDD, m_iKilledMonster, m_iMaxKillMonster);
+        swprintf_s(szText, _countof(szText), I18N::Game::CharacterDD, m_iKilledMonster, m_iMaxKillMonster);
         g_pRenderText->RenderText(m_Pos.x, m_Pos.y + 13, szText, CHAOSCASTLE_TIME_WINDOW_WIDTH, 0, RT3_SORT_CENTER);
     }
 

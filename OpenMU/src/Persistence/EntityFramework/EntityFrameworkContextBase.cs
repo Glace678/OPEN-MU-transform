@@ -74,6 +74,11 @@ internal class EntityFrameworkContextBase : IContext
     /// </summary>
     protected IContextAwareRepositoryProvider RepositoryProvider { get; }
 
+    /// <summary>
+    /// Gets the lock synchronizing access to <see cref="Context"/>.
+    /// </summary>
+    protected AsyncLock Lock => this._lock;
+
     /// <inheritdoc/>
     public async ValueTask<bool> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -96,36 +101,60 @@ internal class EntityFrameworkContextBase : IContext
             {
                 this._logger.LogWarning(ex, "Optimistic concurrency conflict while saving (attempt {Attempt}/{MaxAttempts}); merging and retrying.", attempt, maxAttempts);
 
-                // ReloadAsync overwrites the tracked entity with the database values, which would
-                // silently discard exactly the changes this save was supposed to persist. Snapshot
-                // the caller's pending modifications first and re-apply them after the refresh, so
-                // the retry still saves the player's change on top of the current database row.
-                var pendingChanges = new Dictionary<EntityEntry, Dictionary<string, object?>>();
-                foreach (var entry in this.Context.ChangeTracker.Entries())
+                using (await this._lock.LockAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    var modifiedProperties = entry.Properties.Where(p => p.IsModified).ToList();
-                    if (modifiedProperties.Count > 0)
+                    // ReloadAsync overwrites the tracked entity with the database values, which would
+                    // silently discard exactly the changes this save was supposed to persist. Snapshot
+                    // the caller's pending modifications and deletions first and re-apply them after the
+                    // refresh, so the retry still saves the player's change on top of the current row.
+                    var pendingChanges = new Dictionary<EntityEntry, Dictionary<string, object?>>();
+                    var deletedEntries = new HashSet<EntityEntry>();
+                    var trackedEntries = this.Context.ChangeTracker.Entries().ToList();
+                    foreach (var entry in trackedEntries)
                     {
-                        pendingChanges[entry] = modifiedProperties.ToDictionary(p => p.Metadata.Name, p => p.CurrentValue);
-                    }
-                }
+                        if (entry.State == EntityState.Deleted)
+                        {
+                            deletedEntries.Add(entry);
+                            continue;
+                        }
 
-                var conflictingEntities = new HashSet<object>(ex.Entries.Select(entry => entry.Entity));
-                foreach (var entry in this.Context.ChangeTracker.Entries())
-                {
-                    if (conflictingEntities.Contains(entry.Entity))
-                    {
-                        await entry.ReloadAsync(cancellationToken).ConfigureAwait(false);
+                        var modifiedProperties = entry.Properties.Where(p => p.IsModified).ToList();
+                        if (modifiedProperties.Count > 0)
+                        {
+                            pendingChanges[entry] = modifiedProperties.ToDictionary(p => p.Metadata.Name, p => p.CurrentValue);
+                        }
                     }
-                }
 
-                foreach (var (entry, values) in pendingChanges)
-                {
-                    foreach (var (propertyName, value) in values)
+                    var conflictingEntities = new HashSet<object>(ex.Entries.Select(entry => entry.Entity));
+                    foreach (var entry in trackedEntries)
                     {
-                        var property = entry.Property(propertyName);
-                        property.CurrentValue = value;
-                        property.IsModified = true;
+                        if (conflictingEntities.Contains(entry.Entity) && entry.State != EntityState.Detached)
+                        {
+                            await entry.ReloadAsync(cancellationToken).ConfigureAwait(false);
+                        }
+                    }
+
+                    foreach (var deletedEntry in deletedEntries)
+                    {
+                        if (deletedEntry.State != EntityState.Detached)
+                        {
+                            deletedEntry.State = EntityState.Deleted;
+                        }
+                    }
+
+                    foreach (var (entry, values) in pendingChanges)
+                    {
+                        if (entry.State == EntityState.Detached)
+                        {
+                            continue;
+                        }
+
+                        foreach (var (propertyName, value) in values)
+                        {
+                            var property = entry.Property(propertyName);
+                            property.CurrentValue = value;
+                            property.IsModified = true;
+                        }
                     }
                 }
 
@@ -179,13 +208,26 @@ internal class EntityFrameworkContextBase : IContext
             return false;
         }
 
-        // Attach a detached shadow of the wallet row (Id + Money only) and mark it modified, so the
+        var existingEntry = this.Context.ChangeTracker.Entries<ItemStorage>()
+            .FirstOrDefault(e => e.Entity.Id == itemStorageId);
+        if (existingEntry is not null)
+        {
+            existingEntry.Entity.Money = newMoney;
+            if (existingEntry.State == EntityState.Unchanged)
+            {
+                existingEntry.Property(x => x.Money).IsModified = true;
+            }
+
+            return true;
+        }
+
+        // Attach a detached shadow of the wallet row (Id + Money only) and mark only Money modified, so the
         // next SaveChanges issues a single UPDATE data."ItemStorage"."Money" WHERE "Id" = @id, in the
         // very same transaction as the traded item transfer. The live player contexts keep tracking
         // their own instance and will re-write the same value on their next periodic save.
         var shadow = new ItemStorage { Id = itemStorageId, Money = newMoney };
         this.Context.Attach(shadow);
-        this.Context.Entry(shadow).State = EntityState.Modified;
+        this.Context.Entry(shadow).Property(x => x.Money).IsModified = true;
         return true;
     }
 

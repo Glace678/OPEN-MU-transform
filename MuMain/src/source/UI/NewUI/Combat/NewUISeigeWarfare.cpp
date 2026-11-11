@@ -170,7 +170,11 @@ bool SEASON3B::CNewUISiegeWarfare::CreateMiniMapUI()
 {
     if (m_pSiegeWarUI != NULL)
     {
+        const BYTE  bySavedGuildStatus   = m_byGuildStatus;
+        const short sSavedGuildMarkIndex = m_sGuildMarkIndex;
         InitMiniMapUI();
+        m_byGuildStatus   = bySavedGuildStatus;
+        m_sGuildMarkIndex = sSavedGuildMarkIndex;
     }
 
     if (!(Hero->EtcPart == PARTS_ATTACK_TEAM_MARK || Hero->EtcPart == PARTS_ATTACK_TEAM_MARK2 ||

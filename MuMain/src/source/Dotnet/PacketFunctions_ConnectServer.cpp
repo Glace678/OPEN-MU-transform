@@ -17,6 +17,7 @@
 #include "PacketFunctions_ConnectServer.h"
 #include "PacketBindings_ConnectServer.h"
 
+
 void PacketFunctions_ConnectServer::SendConnectionInfoRequest075(BYTE serverId)
 {
     dotnet_SendConnectionInfoRequest075(this->GetHandle(), serverId);

@@ -39,22 +39,41 @@ internal class PetCommandRequestHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < PetCommandRequest.Length)
+        {
+            return;
+        }
+
         PetCommandRequest message = packet;
+        if (!TryConvert(message.CommandMode, out var behaviour))
+        {
+            return;
+        }
 
         // The pet type could be interesting here as well.
         // However, the game currently only supports the dark raven and only one offensive pet per player.
-        await this._requestAction.RequestChangeAsync(player, message.TargetId, Convert(message.CommandMode)).ConfigureAwait(false);
+        await this._requestAction.RequestChangeAsync(player, message.TargetId, behaviour).ConfigureAwait(false);
     }
 
-    private static PetBehaviour Convert(PetCommandMode mode)
+    private static bool TryConvert(PetCommandMode mode, out PetBehaviour behaviour)
     {
-        return (PetCommandMode)((byte)mode % SkillOffset) switch
+        switch ((PetCommandMode)((byte)mode % SkillOffset))
         {
-            PetCommandMode.Normal => PetBehaviour.Idle,
-            PetCommandMode.AttackRandom => PetBehaviour.AttackRandom,
-            PetCommandMode.AttackTarget => PetBehaviour.AttackTarget,
-            PetCommandMode.AttackWithOwner => PetBehaviour.AttackWithOwner,
-            _ => throw new ArgumentOutOfRangeException(nameof(mode)),
-        };
+            case PetCommandMode.Normal:
+                behaviour = PetBehaviour.Idle;
+                return true;
+            case PetCommandMode.AttackRandom:
+                behaviour = PetBehaviour.AttackRandom;
+                return true;
+            case PetCommandMode.AttackTarget:
+                behaviour = PetBehaviour.AttackTarget;
+                return true;
+            case PetCommandMode.AttackWithOwner:
+                behaviour = PetBehaviour.AttackWithOwner;
+                return true;
+            default:
+                behaviour = default;
+                return false;
+        }
     }
 }

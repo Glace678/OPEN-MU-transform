@@ -105,8 +105,13 @@ public class NewNpcsInScopePlugIn : INewNpcsInScopePlugIn
     {
         int Write()
         {
-            const int estimatedEffectsPerPlayer = 5;
-            var estimatedSizePerCharacter = AddSummonedMonstersToScopeRef.SummonedMonsterDataRef.GetRequiredSize(estimatedEffectsPerPlayer);
+            const int defaultEstimatedEffectsPerPlayer = 5;
+            var maxEffects = summons
+                .OfType<IAttackable>()
+                .Select(s => Math.Min((int)byte.MaxValue, s.MagicEffectList.VisibleEffects.Count))
+                .DefaultIfEmpty(0)
+                .Max();
+            var estimatedSizePerCharacter = AddSummonedMonstersToScopeRef.SummonedMonsterDataRef.GetRequiredSize(Math.Max(defaultEstimatedEffectsPerPlayer, maxEffects));
             var estimatedSize = AddSummonedMonstersToScopeRef.GetRequiredSize(summons.Count, estimatedSizePerCharacter);
             var span = connection.Output.GetSpan(estimatedSize)[..estimatedSize];
             var packet = new AddSummonedMonstersToScopeRef(span)
@@ -145,7 +150,7 @@ public class NewNpcsInScopePlugIn : INewNpcsInScopePlugIn
                 if (summon is IAttackable attackable)
                 {
                     var activeEffects = attackable.MagicEffectList.VisibleEffects;
-                    block.EffectCount = (byte)activeEffects.Count;
+                    block.EffectCount = (byte)Math.Min(byte.MaxValue, activeEffects.Count);
                     for (int e = block.EffectCount - 1; e >= 0; e--)
                     {
                         var effectBlock = block[e];
@@ -160,7 +165,9 @@ public class NewNpcsInScopePlugIn : INewNpcsInScopePlugIn
                 i++;
             }
 
-            return estimatedSize;
+            var finalSize = packet.FinalSize;
+            span.Slice(0, finalSize).SetPacketSize();
+            return finalSize;
         }
 
         await connection.SendAsync(Write).ConfigureAwait(false);

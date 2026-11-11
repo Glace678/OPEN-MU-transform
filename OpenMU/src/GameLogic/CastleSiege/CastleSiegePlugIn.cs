@@ -352,6 +352,8 @@ public class CastleSiegePlugIn : IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn, I
                 if (!isStartup)
                 {
                     context.ParticipantTracking.Clear();
+                    context.RewardedParticipantIds.Clear();
+                    context.ScoredGuildIds.Clear();
                 }
 
                 context.CrownUser = null;
@@ -376,6 +378,8 @@ public class CastleSiegePlugIn : IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn, I
                 {
                     await CastleSiegeParticipantTracker.AwardRewardsAsync(context).ConfigureAwait(false);
                     context.ParticipantTracking.Clear();
+                    context.RewardedParticipantIds.Clear();
+                    context.ScoredGuildIds.Clear();
                 }
 
                 await context.SaveNpcStatesAsync().ConfigureAwait(false);
@@ -388,6 +392,8 @@ public class CastleSiegePlugIn : IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn, I
                 await context.SetPlayerJoinSideAsync().ConfigureAwait(false);
                 context.ClearPlayerJoinSides();
                 context.ParticipantTracking.Clear();
+                context.RewardedParticipantIds.Clear();
+                context.ScoredGuildIds.Clear();
                 await context.NpcController.DespawnAllAsync().ConfigureAwait(false);
                 context.MiddleOwnerGuildId = null;
                 context.CrownUser = null;

@@ -110,7 +110,8 @@ public class ConfigurationChangeMediator : IConfigurationChangeMediator, IConfig
             (_, value) => value);
         registration.OnCreate += InvokeOnCreateAsync;
 
-        return registration;
+        return new Nito.Disposables.Disposable(() => registration.OnCreate -= InvokeOnCreateAsync);
+
         async ValueTask InvokeOnCreateAsync(TConfig config)
         {
             await onNewConfig(config, obj).ConfigureAwait(false);
@@ -130,7 +131,7 @@ public class ConfigurationChangeMediator : IConfigurationChangeMediator, IConfig
     public async ValueTask HandleConfigurationAddedAsync(Type type, Guid id, object configuration)
     {
         if (this._createRegistrations.TryGetValue(type, out var createRegistration)
-            || this._createRegistrations.TryGetValue(type.BaseType!, out createRegistration))
+            || (type.BaseType is { } baseType && this._createRegistrations.TryGetValue(baseType, out createRegistration)))
         {
             await createRegistration.RaiseOnCreateAsync(configuration).ConfigureAwait(false);
         }

@@ -50,8 +50,19 @@ public class ItemOptionList : IList<IncreasableItemOption>
     /// <inheritdoc />
     public IncreasableItemOption this[int index]
     {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
+        get
+        {
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            var link = this.OptionLinks.ElementAtOrDefault(index)
+                ?? throw new ArgumentOutOfRangeException(nameof(index));
+            return link.ItemOption!;
+        }
+
+        set => throw new NotSupportedException();
     }
 
     /// <inheritdoc />
@@ -94,18 +105,17 @@ public class ItemOptionList : IList<IncreasableItemOption>
     /// <inheritdoc />
     public void CopyTo(IncreasableItemOption[] array, int arrayIndex)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(array);
+        var items = this.OptionLinks.Select(link => link.ItemOption!).ToList();
+        items.CopyTo(array, arrayIndex);
     }
 
     /// <inheritdoc />
     public bool Remove(IncreasableItemOption item)
     {
-        if (this._item.ItemOptions.FirstOrDefault(o => o.ItemOption == item) is { } optionLink)
+        if (this.OptionLinks.FirstOrDefault(o => o.ItemOption == item) is { } optionLink)
         {
-            this._item.ItemOptions.Remove(optionLink);
-            _ = this._persistenceContext.DeleteAsync(optionLink);
-            this.ListChanged?.Invoke(this, EventArgs.Empty);
-            return true;
+            return this.RemoveOptionLink(optionLink);
         }
 
         return false;
@@ -114,8 +124,18 @@ public class ItemOptionList : IList<IncreasableItemOption>
     /// <inheritdoc />
     public int IndexOf(IncreasableItemOption item)
     {
-        var index = this.OptionLinks.TakeWhile(o => o.ItemOption != item).Count();
-        return index == this.Count ? -1 : index;
+        var index = 0;
+        foreach (var link in this.OptionLinks)
+        {
+            if (link.ItemOption == item)
+            {
+                return index;
+            }
+
+            index++;
+        }
+
+        return -1;
     }
 
     /// <inheritdoc />
@@ -127,9 +147,33 @@ public class ItemOptionList : IList<IncreasableItemOption>
     /// <inheritdoc />
     public void RemoveAt(int index)
     {
-        if (this.OptionLinks.Take(index + 1).LastOrDefault()?.ItemOption is { } item)
+        if (index < 0)
         {
-            this.Remove(item);
+            throw new ArgumentOutOfRangeException(nameof(index));
         }
+
+        var optionLink = this.OptionLinks.ElementAtOrDefault(index)
+            ?? throw new ArgumentOutOfRangeException(nameof(index));
+        this.RemoveOptionLink(optionLink);
+    }
+
+    private bool RemoveOptionLink(ItemOptionLink optionLink)
+    {
+        if (!this._item.ItemOptions.Remove(optionLink))
+        {
+            return false;
+        }
+
+        var deleteTask = this._persistenceContext.DeleteAsync(optionLink);
+        if (!deleteTask.IsCompletedSuccessfully)
+        {
+            // Observe any asynchronous fault so it never becomes an unobserved task exception.
+            _ = deleteTask.AsTask().ContinueWith(
+                static t => _ = t.Exception,
+                TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously);
+        }
+
+        this.ListChanged?.Invoke(this, EventArgs.Empty);
+        return true;
     }
 }

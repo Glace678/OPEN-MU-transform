@@ -26,6 +26,7 @@
 class PacketFunctions_ConnectServer : public PacketFunctions_ConnectServer_Custom
 {
 public:
+
     /// <summary>
     /// Sends a ConnectionInfoRequest075 to this connection.
     /// </summary>

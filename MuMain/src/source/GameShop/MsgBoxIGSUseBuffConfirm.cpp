@@ -17,10 +17,12 @@ CMsgBoxIGSUseBuffConfirm::CMsgBoxIGSUseBuffConfirm()
         m_szDescription[i][0] = '\0';
     }
 
-    m_iStorageSeq     = 0;
-    m_iStorageItemSeq = 0;
-    m_wItemCode       = -1;
-    m_szItemType      = '\0';
+    m_iStorageSeq         = 0;
+    m_iStorageItemSeq     = 0;
+    m_wItemCode           = -1;
+    m_szItemType          = '\0';
+    m_iDesciptionLine     = 0;
+    m_szCurrentBuffName[0] = L'\0';
 }
 
 CMsgBoxIGSUseBuffConfirm::~CMsgBoxIGSUseBuffConfirm()
@@ -48,7 +50,7 @@ bool CMsgBoxIGSUseBuffConfirm::Create(float fPriority)
 void CMsgBoxIGSUseBuffConfirm::Initialize(int iStorageSeq, int iStorageItemSeq, WORD wItemCode, wchar_t szItemType,
                                           wchar_t* pszItemName, wchar_t* pszBuffName)
 {
-    wchar_t szText[256] = {
+    wchar_t szText[1024] = {
         0,
     };
 
@@ -56,9 +58,18 @@ void CMsgBoxIGSUseBuffConfirm::Initialize(int iStorageSeq, int iStorageItemSeq, 
     m_iStorageItemSeq = iStorageItemSeq;
     m_wItemCode       = wItemCode;
     m_szItemType      = szItemType;
-    wcscpy(m_szCurrentBuffName, pszBuffName);
+    if (pszBuffName)
+    {
+        wcsncpy(m_szCurrentBuffName, pszBuffName, std::size(m_szCurrentBuffName) - 1);
+        m_szCurrentBuffName[std::size(m_szCurrentBuffName) - 1] = L'\0';
+    }
+    else
+    {
+        m_szCurrentBuffName[0] = L'\0';
+    }
 
-    mu_swprintf(szText, I18N::Game::UsingTheSItemWillNegate, pszItemName, pszBuffName, pszItemName);
+    const wchar_t* szSafeItemName = pszItemName ? pszItemName : L"";
+    mu_swprintf_trunc(szText, I18N::Game::UsingTheSItemWillNegate, szSafeItemName, m_szCurrentBuffName, szSafeItemName);
     m_iDesciptionLine = ::DivideStringByPixel(&m_szDescription[0][0], UIMAX_TEXT_LINE, MAX_TEXT_LENGTH, szText,
                                               IGS_TEXT_DIVIDE_WIDTH, false, '#');
 }
@@ -116,10 +127,16 @@ CALLBACK_RESULT CMsgBoxIGSUseBuffConfirm::OKButtonDown(class CNewUIMessageBoxBas
                                                        const leaf::xstreambuf&     xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSUseBuffConfirm*>(pOwner);
+    if (!pOwnMsgBox)
+        return CALLBACK_CONTINUE;
 
-    SocketClient->ToGameServer()->SendCashShopStorageItemConsumeRequest(
-        pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode, pOwnMsgBox->m_szItemType);
-    SocketClient->ToGameServer()->SendCashShopPointInfoRequest();
+    if (SocketClient)
+    {
+        SocketClient->ToGameServer()->SendCashShopStorageItemConsumeRequest(
+            pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode,
+            pOwnMsgBox->m_szItemType);
+        SocketClient->ToGameServer()->SendCashShopPointInfoRequest();
+    }
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);

@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <string>
+#include <vector>
 
 namespace
 {
@@ -22,21 +23,21 @@ napi_value ThrowNapiError(napi_env env, const char* message)
     return nullptr;
 }
 
-std::string Utf8FromValue(napi_env env, napi_value value)
+bool Utf8FromValue(napi_env env, napi_value value, std::string& out)
 {
     size_t length = 0;
     if (napi_get_value_string_utf8(env, value, nullptr, 0, &length) != napi_ok)
     {
-        return {};
+        return false;
     }
-    std::string result(length, '\0');
+    std::vector<char> buffer(length + 1, '\0');
     size_t copied = 0;
-    if (napi_get_value_string_utf8(env, value, result.data(), length + 1, &copied) != napi_ok)
+    if (napi_get_value_string_utf8(env, value, buffer.data(), buffer.size(), &copied) != napi_ok)
     {
-        return {};
+        return false;
     }
-    result.resize(copied);
-    return result;
+    out.assign(buffer.data(), copied);
+    return true;
 }
 
 napi_value SetEnv(napi_env env, napi_callback_info info)
@@ -52,8 +53,12 @@ napi_value SetEnv(napi_env env, napi_callback_info info)
     {
         return ThrowNapiError(env, "SetEnv expects exactly (name, value)");
     }
-    const std::string name = Utf8FromValue(env, argv[0]);
-    const std::string value = Utf8FromValue(env, argv[1]);
+    std::string name;
+    std::string value;
+    if (!Utf8FromValue(env, argv[0], name) || !Utf8FromValue(env, argv[1], value))
+    {
+        return ThrowNapiError(env, "SetEnv: arguments must be strings");
+    }
     if (name.empty())
     {
         return ThrowNapiError(env, "SetEnv: environment name must not be empty");
@@ -80,8 +85,8 @@ napi_value SetDataRoot(napi_env env, napi_callback_info info)
     {
         return ThrowNapiError(env, "SetDataRoot expects exactly (root)");
     }
-    const std::string root = Utf8FromValue(env, argv[0]);
-    if (root.empty())
+    std::string root;
+    if (!Utf8FromValue(env, argv[0], root) || root.empty())
     {
         return ThrowNapiError(env, "SetDataRoot: root must not be empty");
     }

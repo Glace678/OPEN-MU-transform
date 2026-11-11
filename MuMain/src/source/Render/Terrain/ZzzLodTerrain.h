@@ -20,10 +20,16 @@ inline int TERRAIN_INDEX_REPEAT(int x, int y)
     return ((y & TERRAIN_SIZE_MASK) * TERRAIN_SIZE) + (x & TERRAIN_SIZE_MASK);
 }
 
-inline BYTE TERRAIN_ATTRIBUTE(float x, float y)
+inline WORD TERRAIN_ATTRIBUTE(float x, float y)
 {
-    const int xf = static_cast<int>(x / TERRAIN_SCALE + 0.5f);
-    const int yf = static_cast<int>(y / TERRAIN_SCALE + 0.5f);
+    if (!(x >= 0.0f && y >= 0.0f))
+        return static_cast<WORD>(TW_NOMOVE | TW_NOGROUND);
+    const float fx = x / TERRAIN_SCALE + 0.5f;
+    const float fy = y / TERRAIN_SCALE + 0.5f;
+    if (fx < 0.0f || fy < 0.0f || fx >= static_cast<float>(TERRAIN_SIZE) || fy >= static_cast<float>(TERRAIN_SIZE))
+        return static_cast<WORD>(TW_NOMOVE | TW_NOGROUND);
+    const int xf = static_cast<int>(fx);
+    const int yf = static_cast<int>(fy);
     return TerrainWall[yf * TERRAIN_SIZE + xf];
 }
 

@@ -42,4 +42,20 @@ public class ManageableServerController
     {
         await this._manageableServer.StartAsync().ConfigureAwait(false);
     }
+
+    /// <summary>
+    /// Gets the configuration identifier of the manageable server.
+    /// </summary>
+    /// <returns>The configuration identifier.</returns>
+    [HttpGet($"get{nameof(IManageableServer.ConfigurationId)}")]
+    [HttpPost($"get{nameof(IManageableServer.ConfigurationId)}")]
+    public Guid GetConfigurationId() => this._manageableServer.ConfigurationId;
+
+    /// <summary>
+    /// Gets the current state of the manageable server.
+    /// </summary>
+    /// <returns>The server state.</returns>
+    [HttpGet(nameof(IManageableServer.ServerState))]
+    [HttpPost(nameof(IManageableServer.ServerState))]
+    public ServerState GetServerState() => this._manageableServer.ServerState;
 }

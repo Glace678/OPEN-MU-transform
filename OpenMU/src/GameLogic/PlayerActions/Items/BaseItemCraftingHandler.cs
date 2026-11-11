@@ -152,6 +152,8 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
     /// </returns>
     private async ValueTask<Item?> DoTheMixAsync(IList<CraftingRequiredItemLink> requiredItems, Player player, byte socketSlot, byte successRate)
     {
+        var inputItemSet = requiredItems.SelectMany(r => r.Items).ToHashSet(ReferenceEqualityComparer.Instance);
+
         // Create or modify the result FIRST, before destroying any input items.
         // If CreateOrModify throws (e.g. invalid socketSlot), the input items are
         // still intact and the caller can refund the price. This prevents the
@@ -167,9 +169,43 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
             return null;
         }
 
-        foreach (var requiredItemLink in requiredItems)
+        try
         {
-            await this.RequiredItemChangeAsync(player, requiredItemLink, true).ConfigureAwait(false);
+            foreach (var requiredItemLink in requiredItems)
+            {
+                await this.RequiredItemChangeAsync(player, requiredItemLink, true).ConfigureAwait(false);
+            }
+
+            if (player.TemporaryStorage is { } temporaryStorage)
+            {
+                foreach (var createdItem in resultItems)
+                {
+                    if (!inputItemSet.Contains(createdItem)
+                        && !temporaryStorage.Items.Contains(createdItem))
+                    {
+                        if (!await temporaryStorage.AddItemAsync(createdItem).ConfigureAwait(false))
+                        {
+                            throw new InvalidOperationException($"Failed to place crafted item {createdItem} into temporary storage.");
+                        }
+                    }
+                }
+            }
+        }
+        catch
+        {
+            if (player.TemporaryStorage is { } temporaryStorage)
+            {
+                foreach (var createdItem in resultItems)
+                {
+                    if (!inputItemSet.Contains(createdItem))
+                    {
+                        await temporaryStorage.RemoveItemAsync(createdItem).ConfigureAwait(false);
+                        await player.PersistenceContext.DeleteAsync(createdItem).ConfigureAwait(false);
+                    }
+                }
+            }
+
+            throw;
         }
 
         return resultItems.LastOrDefault();
@@ -189,8 +225,30 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
         {
             case MixResult.Disappear:
                 var point = player.GameContext.PlugInManager.GetPlugInPoint<IItemDestroyedPlugIn>();
-                foreach (var item in itemLink.Items)
+                var hasExactRequiredAmount = itemLink.ItemRequirement.MinimumAmount > 0
+                    && itemLink.ItemRequirement.MaximumAmount == itemLink.ItemRequirement.MinimumAmount
+                    && itemLink.ItemRequirement.AddPercentage == 0;
+                var remainingToConsume = hasExactRequiredAmount ? itemLink.ItemRequirement.MinimumAmount : int.MaxValue;
+                foreach (var item in itemLink.Items.ToList())
                 {
+                    if (hasExactRequiredAmount && remainingToConsume <= 0)
+                    {
+                        break;
+                    }
+
+                    if (hasExactRequiredAmount && item.IsStackable() && item.Durability > remainingToConsume)
+                    {
+                        item.Durability -= remainingToConsume;
+                        remainingToConsume = 0;
+                        await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
+                        break;
+                    }
+
+                    if (hasExactRequiredAmount)
+                    {
+                        remainingToConsume -= item.IsStackable() ? Math.Max(1, (int)item.Durability) : 1;
+                    }
+
                     player.Logger.LogDebug("Item {0} is getting destroyed.", item);
                     await player.TemporaryStorage!.RemoveItemAsync(item).ConfigureAwait(false);
                     await player.PersistenceContext.DeleteAsync(item).ConfigureAwait(false);

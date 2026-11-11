@@ -99,10 +99,9 @@ void CNewUICastleWindow::InitButton(CNewUIButton* pNewUIButton, int iPos_x, int 
 
 void CNewUICastleWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -827,11 +826,11 @@ void CNewUICastleWindow::RenderTaxManagingTab()
     g_pRenderText->SetTextColor(0xFF947BBB);
 
     ptOrigin.y += 20;
-    mu_swprintf(szTemp, I18N::Game::DuringTrucePeriod);
+    swprintf_s(szTemp, _countof(szTemp), L"%ls", I18N::Game::DuringTrucePeriod);
     g_pRenderText->RenderText(ptOrigin.x + 15, ptOrigin.y, szTemp, 160, 0, RT3_SORT_CENTER);
 
     ptOrigin.y += 12;
-    mu_swprintf(szTemp, I18N::Game::MaximumTaxRates3);
+    swprintf_s(szTemp, _countof(szTemp), L"%ls", I18N::Game::MaximumTaxRates3);
     g_pRenderText->RenderText(ptOrigin.x + 15, ptOrigin.y, szTemp, 160, 0, RT3_SORT_CENTER);
 
     ptOrigin.y += 12;
@@ -851,14 +850,14 @@ void CNewUICastleWindow::RenderTaxManagingTab()
     ptOrigin.y += 18;
     RenderImage(IMAGE_CASTLEWINDOW_MONEY, ptOrigin.x + 10, ptOrigin.y, 170.f, 24.f);
 
-    mu_swprintf(szTemp, I18N::Game::Zen);
+    swprintf_s(szTemp, _countof(szTemp), L"%ls", I18N::Game::Zen);
     g_pRenderText->RenderText(ptOrigin.x + 14, ptOrigin.y + 7, szTemp);
 
     //wchar_t szGoldText[32];
     //ConvertGold(g_SenatusInfo.GetCastleMoney(),szGoldText);
 
-    mu_swprintf(szTemp, L"%I64d", g_SenatusInfo.GetCastleMoney());
-    InsertComma64(szTemp, g_SenatusInfo.GetCastleMoney());
+    swprintf_s(szTemp, _countof(szTemp), L"%I64d", g_SenatusInfo.GetCastleMoney());
+    InsertComma64(szTemp, g_SenatusInfo.GetCastleMoney(), _countof(szTemp));
     g_pRenderText->RenderText(ptOrigin.x + 90, ptOrigin.y + 7, szTemp, 80, 0, RT3_SORT_RIGHT);
 
     m_BtnWithdraw.Render();
@@ -944,34 +943,63 @@ void CNewUICastleWindow::RenderCastleItem(int nPosX, int nPosY, LPPMSG_NPCDBLIST
     EnableAlphaTest();
 }
 
-void CNewUICastleWindow::InsertComma(wchar_t* pszText, DWORD dwNumber)
+void CNewUICastleWindow::InsertComma(wchar_t* pszText, DWORD dwNumber, size_t cchText)
 {
-    wchar_t szNumber[32];
-    mu_swprintf(szNumber, L"%d", dwNumber);
+    if (pszText == nullptr || cchText == 0)
+    {
+        return;
+    }
 
-    wchar_t szTemp[256];
-    wcscpy_s(szTemp, 256, pszText);
-    wchar_t* pszTextBegin = szTemp;
+    wchar_t szTemp[256] = {};
+    wcsncpy_s(szTemp, _countof(szTemp), pszText, _TRUNCATE);
+
+    wchar_t szNumber[32] = {};
+    swprintf_s(szNumber, _countof(szNumber), L"%u", dwNumber);
     wchar_t* pszTextFound = wcsstr(szTemp, szNumber);
-    wchar_t* pszTextNext  = pszTextFound + wcslen(szNumber);
-    *pszTextFound         = '\0';
-    ConvertGold(dwNumber, szNumber);
+    if (pszTextFound == nullptr)
+    {
+        swprintf_s(szNumber, _countof(szNumber), L"%d", static_cast<int>(dwNumber));
+        pszTextFound = wcsstr(szTemp, szNumber);
+    }
+    if (pszTextFound == nullptr)
+    {
+        return;
+    }
 
-    mu_swprintf(pszText, L"%ls%ls%ls", pszTextBegin, szNumber, pszTextNext);
+    wchar_t* pszTextBegin = szTemp;
+    wchar_t* pszTextNext  = pszTextFound + wcslen(szNumber);
+    *pszTextFound         = L'\0';
+
+    wchar_t szFormatted[64] = {};
+    ConvertGold(dwNumber, szFormatted);
+
+    _snwprintf_s(pszText, cchText, _TRUNCATE, L"%ls%ls%ls", pszTextBegin, szFormatted, pszTextNext);
 }
 
-void CNewUICastleWindow::InsertComma64(wchar_t* pszText, __int64 iNumber)
+void CNewUICastleWindow::InsertComma64(wchar_t* pszText, __int64 iNumber, size_t cchText)
 {
-    wchar_t szNumber[32];
-    mu_swprintf(szNumber, L"%I64d", iNumber);
+    if (pszText == nullptr || cchText == 0)
+    {
+        return;
+    }
 
-    wchar_t szTemp[256];
-    wcscpy_s(szTemp, 256, pszText);
-    wchar_t* pszTextBegin = szTemp;
+    wchar_t szNumber[32] = {};
+    swprintf_s(szNumber, _countof(szNumber), L"%I64d", iNumber);
+
+    wchar_t szTemp[256] = {};
+    wcsncpy_s(szTemp, _countof(szTemp), pszText, _TRUNCATE);
     wchar_t* pszTextFound = wcsstr(szTemp, szNumber);
-    wchar_t* pszTextNext  = pszTextFound + wcslen(szNumber);
-    *pszTextFound         = '\0';
-    ConvertGold64(iNumber, szNumber);
+    if (pszTextFound == nullptr)
+    {
+        return;
+    }
 
-    mu_swprintf(pszText, L"%ls%ls%ls", pszTextBegin, szNumber, pszTextNext);
+    wchar_t* pszTextBegin = szTemp;
+    wchar_t* pszTextNext  = pszTextFound + wcslen(szNumber);
+    *pszTextFound         = L'\0';
+
+    wchar_t szFormatted[64] = {};
+    ConvertGold64(iNumber, szFormatted);
+
+    _snwprintf_s(pszText, cchText, _TRUNCATE, L"%ls%ls%ls", pszTextBegin, szFormatted, pszTextNext);
 }

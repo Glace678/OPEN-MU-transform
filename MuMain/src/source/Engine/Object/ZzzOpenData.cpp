@@ -1831,6 +1831,9 @@ void DeleteNpcs()
 
 void OpenNpc(int Type)
 {
+    if (!Models || Type < 0 || Type >= MAX_MODELS)
+        return;
+
     BMD* b = &Models[Type];
     if (b->NumActions > 0)
         return;
@@ -2134,20 +2137,19 @@ void OpenNpc(int Type)
         case MODEL_LITTLESANTA + 7: {
             gLoadData.AccessModel(MODEL_LITTLESANTA + (Type - MODEL_LITTLESANTA), L"Data\\Npc\\", L"xmassanta");
 
-            int _index     = 9;
-            int _index_end = 14;
-
-            Models[Type].Textures->FileName[_index_end] = 0;
-            for (int i = _index_end - 1; i > _index; i--)
+            if (Models[Type].NumMeshs > 0 && Models[Type].Textures != nullptr)
             {
-                Models[Type].Textures->FileName[i] = Models[Type].Textures->FileName[i - 1];
+                int _index     = 9;
+                int _index_end = 14;
+
+                Models[Type].Textures->FileName[_index_end] = 0;
+                for (int i = _index_end - 1; i > _index; i--)
+                {
+                    Models[Type].Textures->FileName[i] = Models[Type].Textures->FileName[i - 1];
+                }
+                int _temp                               = (Type - MODEL_LITTLESANTA) + 1;
+                Models[Type].Textures->FileName[_index] = static_cast<char>('0' + _temp);
             }
-            int     _temp      = (Type - MODEL_LITTLESANTA) + 1;
-            wchar_t _temp2[10] = {
-                0,
-            };
-            _itow(_temp, _temp2, 10);
-            Models[Type].Textures->FileName[_index] = _temp2[0];
 
             gLoadData.OpenTexture(MODEL_LITTLESANTA + (Type - MODEL_LITTLESANTA), L"Npc\\");
         }
@@ -5004,7 +5006,11 @@ bool OpenFont()
 
 void SaveMacro(const wchar_t* FileName)
 {
+    if (FileName == nullptr)
+        return;
     FILE* fp = _wfopen(FileName, L"wt");
+    if (fp == NULL)
+        return;
     for (int i = 0; i < 10; i++)
     {
         fwprintf(fp, L"%ls\n", MacroText[i]);
@@ -5014,12 +5020,29 @@ void SaveMacro(const wchar_t* FileName)
 
 void OpenMacro(const wchar_t* FileName)
 {
+    if (FileName == nullptr)
+        return;
     FILE* fp = _wfopen(FileName, L"rt");
     if (fp == NULL)
         return;
     for (int i = 0; i < 10; i++)
     {
-        fwscanf(fp, L"%ls", MacroText[i]);
+        MacroText[i][0] = L'\0';
+        if (fgetws(MacroText[i], static_cast<int>(std::size(MacroText[i])), fp) != NULL)
+        {
+            size_t len = wcslen(MacroText[i]);
+            if (len == std::size(MacroText[i]) - 1 && MacroText[i][len - 1] != L'\n')
+            {
+                wint_t ch;
+                while ((ch = fgetwc(fp)) != WEOF && ch != L'\n')
+                {
+                }
+            }
+            while (len > 0 && (MacroText[i][len - 1] == L'\n' || MacroText[i][len - 1] == L'\r'))
+            {
+                MacroText[i][--len] = L'\0';
+            }
+        }
     }
     fclose(fp);
 }

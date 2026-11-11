@@ -31,6 +31,11 @@ internal class TargetedSkillHandlerPlugIn095 : TargetedSkillHandlerPlugIn
     /// </remarks>
     public override async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < TargetedSkill095.Length)
+        {
+            return;
+        }
+
         TargetedSkill095 message = packet;
         var skill = player.ViewPlugIns.GetPlugIn<ISkillListViewPlugIn>()?.GetSkillByIndex(message.SkillIndex);
         if (skill is null)

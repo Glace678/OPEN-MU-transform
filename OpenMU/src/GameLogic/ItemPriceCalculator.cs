@@ -480,7 +480,7 @@ public class ItemPriceCalculator
         }
 
         long price = 0;
-        int dropLevel = definition.DropLevel + (item.Level * 3);
+        long dropLevel = definition.DropLevel + (item.Level * 3);
         if (item.ItemOptions.Any(o => o.ItemOption?.OptionType == ItemOptionTypes.Excellent))
         {
             // increased drop level of excellent item
@@ -493,7 +493,7 @@ public class ItemPriceCalculator
         }
         else if (definition.Value > 0)
         {
-            price += definition.Value * definition.Value * 10 / 12;
+            price += (long)definition.Value * definition.Value * 10 / 12;
             if (item.Definition.Group == 14 && (item.Definition.Number <= 8))
             {
                 // Potions + Antidote

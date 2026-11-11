@@ -104,7 +104,8 @@ private:
     POINT                  m_WndPos{};
     SIZE                   m_WndSize{};
 
-    CUITextInputBox *m_pChatInputBox, *m_pWhsprIDInputBox;
+    CUITextInputBox* m_pChatInputBox    = nullptr;
+    CUITextInputBox* m_pWhsprIDInputBox = nullptr;
     type_vec_history m_vecChatHistory, m_vecWhsprIDHistory;
 
     int m_iCurChatHistory, m_iCurWhisperIDHistory;

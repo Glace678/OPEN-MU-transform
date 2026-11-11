@@ -23,6 +23,8 @@ public class GameServerContext : GameContext, IGameServerContext
 
     private readonly ConcurrentDictionary<uint, LockableList<Player>> _playersByGuild = new();
 
+    private readonly ConcurrentDictionary<Player, uint> _guildIdByPlayer = new();
+
     /// <summary>
     /// A set of normalized (lower, higher) guild ID pairs that are rivals.
     /// Normalized so that we can look up both directions with a single entry.
@@ -138,8 +140,13 @@ public class GameServerContext : GameContext, IGameServerContext
             return;
         }
 
-        using var readLock = await playerList.Lock.ReaderLockAsync();
-        await playerList.Select(action).WhenAll().ConfigureAwait(false);
+        Player[] snapshot;
+        using (await playerList.Lock.ReaderLockAsync().ConfigureAwait(false))
+        {
+            snapshot = playerList.ToArray();
+        }
+
+        await snapshot.Select(action).WhenAll().ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -155,8 +162,13 @@ public class GameServerContext : GameContext, IGameServerContext
                 continue;
             }
 
-            using var readLock = await playerList.Lock.ReaderLockAsync();
-            await playerList.Select(action).WhenAll().ConfigureAwait(false);
+            Player[] snapshot;
+            using (await playerList.Lock.ReaderLockAsync().ConfigureAwait(false))
+            {
+                snapshot = playerList.ToArray();
+            }
+
+            await snapshot.Select(action).WhenAll().ConfigureAwait(false);
         }
     }
 
@@ -173,13 +185,28 @@ public class GameServerContext : GameContext, IGameServerContext
     {
         player.PlayerEnteredWorld -= this.PlayerEnteredWorldAsync;
         player.PlayerLeftWorld -= this.PlayerLeftWorldAsync;
+        await this.UnregisterGuildMemberAsync(player).ConfigureAwait(false);
         await base.RemovePlayerAsync(player).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public async ValueTask RemoveGuildAsync(uint guildId)
     {
-        this._playersByGuild.Remove(guildId, out _);
+        if (this._playersByGuild.TryRemove(guildId, out var playerList))
+        {
+            Player[] snapshot;
+            using (await playerList.Lock.WriterLockAsync().ConfigureAwait(false))
+            {
+                snapshot = playerList.ToArray();
+                playerList.Clear();
+            }
+
+            foreach (var member in snapshot)
+            {
+                this._guildIdByPlayer.TryRemove(new KeyValuePair<Player, uint>(member, guildId));
+            }
+        }
+
         this.GuildDeleted?.Invoke(this, new GuildEventArgs(guildId));
     }
 
@@ -220,27 +247,48 @@ public class GameServerContext : GameContext, IGameServerContext
         }
 
         var guildId = guildMember.GuildStatus.GuildId;
-        var guildList = this._playersByGuild.GetOrAdd(guildId, id => new LockableList<Player>());
-        using var writeLock = await guildList.Lock.WriterLockAsync();
-        guildList.Add(guildMember);
+        if (this._guildIdByPlayer.TryGetValue(guildMember, out var previousGuildId)
+            && previousGuildId != guildId
+            && this._playersByGuild.TryGetValue(previousGuildId, out var previousGuildList))
+        {
+            using (await previousGuildList.Lock.WriterLockAsync().ConfigureAwait(false))
+            {
+                previousGuildList.Remove(guildMember);
+            }
+        }
+
+        this._guildIdByPlayer[guildMember] = guildId;
+        var guildList = this._playersByGuild.GetOrAdd(guildId, _ => new LockableList<Player>());
+        using var writeLock = await guildList.Lock.WriterLockAsync().ConfigureAwait(false);
+        if (!guildList.Contains(guildMember))
+        {
+            guildList.Add(guildMember);
+        }
     }
 
     /// <inheritdoc />
     public async ValueTask UnregisterGuildMemberAsync(Player guildMember)
     {
-        if (guildMember.GuildStatus is null)
+        var hasMappedGuild = this._guildIdByPlayer.TryRemove(guildMember, out var mappedGuildId);
+        var currentGuildId = guildMember.GuildStatus?.GuildId;
+
+        if (hasMappedGuild && this._playersByGuild.TryGetValue(mappedGuildId, out var mappedGuildList))
         {
-            return;
+            using (await mappedGuildList.Lock.WriterLockAsync().ConfigureAwait(false))
+            {
+                mappedGuildList.Remove(guildMember);
+            }
         }
 
-        var guildId = guildMember.GuildStatus.GuildId;
-        if (!this._playersByGuild.TryGetValue(guildId, out var guildList))
+        if (currentGuildId is { } guildId
+            && (!hasMappedGuild || guildId != mappedGuildId)
+            && this._playersByGuild.TryGetValue(guildId, out var guildList))
         {
-            return;
+            using (await guildList.Lock.WriterLockAsync().ConfigureAwait(false))
+            {
+                guildList.Remove(guildMember);
+            }
         }
-
-        using var writeLock = await guildList.Lock.WriterLockAsync();
-        guildList.Remove(guildMember);
     }
 
     private async ValueTask PlayerEnteredWorldAsync(Player player)

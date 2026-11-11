@@ -37,7 +37,8 @@ public class EnterMiniGameAction
             .FirstOrDefault(def => def.Type == miniGameType && def.GameLevel == gameLevel);
         if (miniGameDefinition is null
             || (miniGameDefinition.RequiresMasterClass && !player.SelectedCharacter.CharacterClass.IsMasterClass)
-            || player.CurrentMiniGame is not null)
+            || player.CurrentMiniGame is not null
+            || !player.IsAlive)
         {
             await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.Failed)).ConfigureAwait(false);
             return;
@@ -106,33 +107,78 @@ public class EnterMiniGameAction
         var enterResult = await miniGame.TryEnterAsync(player).ConfigureAwait(false);
         if (enterResult == EnterResult.Success)
         {
-            if (entranceFee > 0)
+            var feePaid = false;
+            try
             {
-                player.TryRemoveMoney(entranceFee);
+                if (miniGameDefinition.TicketItem is { } requiredTicket
+                    && (!this.IsValidTicket(ticketItem, requiredTicket, miniGameDefinition)
+                        || !(player.Inventory?.Items.Contains(ticketItem!) ?? false)))
+                {
+                    await miniGame.CancelEntryAsync(player).ConfigureAwait(false);
+                    await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.Failed)).ConfigureAwait(false);
+                    return;
+                }
+
+                if (entranceFee > 0)
+                {
+                    if (!player.TryRemoveMoney(entranceFee))
+                    {
+                        await miniGame.CancelEntryAsync(player).ConfigureAwait(false);
+                        await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.NotEnoughMoney)).ConfigureAwait(false);
+                        return;
+                    }
+
+                    feePaid = true;
+                }
+
+                if (!miniGameDefinition.AllowParty && player.Party is { } party)
+                {
+                    await party.KickMySelfAsync(player).ConfigureAwait(false);
+                }
+
+                if (player.ShopStorage?.StoreOpen ?? false)
+                {
+                    var storeCloseAction = new CloseStoreAction();
+                    await storeCloseAction.CloseStoreAsync(player).ConfigureAwait(false);
+                }
+
+                await player.RemoveSummonAsync().ConfigureAwait(false);
+                await player.MagicEffectList.ClearEffectsAfterDeathAsync().ConfigureAwait(false);
+
+                if (!await player.TryWarpToAsync(entrance).ConfigureAwait(false))
+                {
+                    if (feePaid)
+                    {
+                        player.TryAddMoney(entranceFee);
+                        feePaid = false;
+                    }
+
+                    await miniGame.CancelEntryAsync(player).ConfigureAwait(false);
+                    await player.InvokeViewPlugInAsync<IShowMiniGameEnterResultPlugIn>(p => p.ShowResultAsync(miniGameType, EnterResult.Failed)).ConfigureAwait(false);
+                    return;
+                }
+
+                await this.ConsumeTicketItemAsync(ticketItem, player).ConfigureAwait(false);
+                if (feePaid)
+                {
+                    await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+                }
+
+                // The bots of the entering party leader follow them in (each checked against the same
+                // entry restrictions, no ticket needed - the leader's own ticket legitimizes the visit).
+                Bots.BotMiniGameHandler.BringPartyBotsAlong(player, partyBots, miniGameDefinition, miniGame);
             }
-
-            await this.ConsumeTicketItemAsync(ticketItem, player).ConfigureAwait(false);
-
-            if (!miniGameDefinition.AllowParty && player.Party is { } party)
+            catch
             {
-                await party.KickMySelfAsync(player).ConfigureAwait(false);
+                if (feePaid)
+                {
+                    player.TryAddMoney(entranceFee);
+                    await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+                }
+
+                await miniGame.CancelEntryAsync(player).ConfigureAwait(false);
+                throw;
             }
-
-            await player.MagicEffectList.ClearEffectsAfterDeathAsync().ConfigureAwait(false);
-
-            if (player.ShopStorage?.StoreOpen ?? false)
-            {
-                var storeCloseAction = new CloseStoreAction();
-                await storeCloseAction.CloseStoreAsync(player).ConfigureAwait(false);
-            }
-
-            await player.RemoveSummonAsync().ConfigureAwait(false);
-            await player.MagicEffectList.ClearEffectsAfterDeathAsync().ConfigureAwait(false);
-            await player.WarpToAsync(entrance).ConfigureAwait(false);
-
-            // The bots of the entering party leader follow them in (each checked against the same
-            // entry restrictions, no ticket needed - the leader's own ticket legitimizes the visit).
-            Bots.BotMiniGameHandler.BringPartyBotsAlong(player, partyBots, miniGameDefinition, miniGame);
         }
         else
         {
@@ -164,11 +210,6 @@ public class EnterMiniGameAction
 
         if (ticketItem.Durability == 0)
         {
-            if (player.Inventory is { } inventory)
-            {
-                await inventory.RemoveItemAsync(ticketItem).ConfigureAwait(false);
-            }
-
             await player.DestroyInventoryItemAsync(ticketItem).ConfigureAwait(false);
         }
         else

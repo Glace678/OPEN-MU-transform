@@ -10,31 +10,35 @@ class TestX03StorePricingAndEconomyDeduction(unittest.TestCase):
     """
 
     def test_high_value_jewel_store_listing_and_purchase(self):
-        # 1. Calculate price for PackedBless level 2 using 64-bit: (2+1)*9M*10 = 270,000,000
+        # 1. Calculate price for PackedBless level 2 using 64-bit: (2+1)*1,480*10 = 44,400
         jewel_price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedBless", level=2)
-        self.assertEqual(jewel_price, 270_000_000)
+        self.assertEqual(jewel_price, 44_400)
 
         # 2. Validate price for player store listing
-        valid, _ = EconomyEngine.validate_player_store_price(jewel_price)
+        valid, _ = EconomyEngine.validate_player_store_price(
+            jewel_price, max_inventory_money=EconomyEngine.MAX_SHOP_PRICE
+        )
         self.assertTrue(valid)
 
         # 3. Buyer purchases from store
-        buyer_start = 500_000_000
-        seller_start = 100_000_000
+        buyer_start = 500_000
+        seller_start = 100_000
         ok, buyer_end, seller_end, _ = EconomyEngine.process_store_purchase(
             buyer_gold=buyer_start, seller_gold=seller_start, price=jewel_price, inventory_has_space=True
         )
         self.assertTrue(ok)
-        self.assertEqual(buyer_end, 230_000_000)
-        self.assertEqual(seller_end, 370_000_000)
+        self.assertEqual(buyer_end, 455_600)
+        self.assertEqual(seller_end, 144_400)
 
     def test_overflow_jewel_price_store_listing_guard(self):
-        # PackedGuardian level 5: 3,600,000,000 -> clamped to 2,000,000,000
-        jewel_price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedGuardian", level=5)
+        # PackedGuardian adversarial level 60,000: > int32.MaxValue -> clamped to 2,000,000,000
+        jewel_price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedGuardian", level=60_000)
         self.assertEqual(jewel_price, EconomyEngine.MAX_GOLD)
 
-        # Store validates max price
-        valid, _ = EconomyEngine.validate_player_store_price(jewel_price)
+        # Store validates max price against configured MaximumInventoryMoney
+        valid, _ = EconomyEngine.validate_player_store_price(
+            jewel_price, max_inventory_money=EconomyEngine.MAX_SHOP_PRICE
+        )
         self.assertTrue(valid)
 
     def test_negative_store_price_blocks_purchase_initiation(self):
@@ -49,9 +53,9 @@ class TestX03StorePricingAndEconomyDeduction(unittest.TestCase):
         self.assertEqual(b_gold, 100_000)
 
     def test_purchase_failure_with_high_value_jewel_refund(self):
-        # High value jewel priced at 270,000,000
-        jewel_price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedBless", level=2)
-        buyer_start = 300_000_000
+        # PackedGemstone level 2 priced at 558,000
+        jewel_price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedGemstone", level=2)
+        buyer_start = 1_000_000
 
         # Purchase fails due to inventory full
         ok, buyer_end, seller_end, msg = EconomyEngine.process_store_purchase(
@@ -59,12 +63,12 @@ class TestX03StorePricingAndEconomyDeduction(unittest.TestCase):
         )
         self.assertFalse(ok)
         # Buyer must receive 100% refund without double deduction!
-        self.assertEqual(buyer_end, 300_000_000)
+        self.assertEqual(buyer_end, 1_000_000)
         self.assertIn("refunded", msg)
 
     def test_store_price_bounds_and_buyer_insufficient_funds(self):
-        jewel_price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedLife", level=1) # 900M
-        buyer_start = 500_000_000 # 500M < 900M
+        jewel_price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedGemstone", level=2)  # 558,000
+        buyer_start = 500_000  # 500,000 < 558,000
 
         ok, b_gold, s_gold, _ = EconomyEngine.process_store_purchase(buyer_start, 0, jewel_price, True)
         self.assertFalse(ok)

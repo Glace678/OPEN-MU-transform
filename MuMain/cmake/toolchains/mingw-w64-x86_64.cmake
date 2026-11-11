@@ -3,9 +3,17 @@
 set(CMAKE_SYSTEM_NAME Windows)
 set(CMAKE_SYSTEM_PROCESSOR x86_64)
 
-# Compilers
-set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
-set(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)
+# Compilers (prefer -posix thread model so C++20 <mutex>/<thread> are available on Debian/Ubuntu)
+find_program(MINGW_X86_64_C_COMPILER NAMES x86_64-w64-mingw32-gcc-posix x86_64-w64-mingw32-gcc)
+find_program(MINGW_X86_64_CXX_COMPILER NAMES x86_64-w64-mingw32-g++-posix x86_64-w64-mingw32-g++)
+set(CMAKE_C_COMPILER "${MINGW_X86_64_C_COMPILER}")
+set(CMAKE_CXX_COMPILER "${MINGW_X86_64_CXX_COMPILER}")
+if(NOT CMAKE_C_COMPILER)
+  set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)
+endif()
+if(NOT CMAKE_CXX_COMPILER)
+  set(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)
+endif()
 set(CMAKE_RC_COMPILER x86_64-w64-mingw32-windres)
 
 set(CMAKE_FIND_ROOT_PATH /usr/x86_64-w64-mingw32)

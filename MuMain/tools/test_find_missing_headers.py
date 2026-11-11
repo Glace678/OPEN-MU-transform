@@ -57,6 +57,33 @@ class IncludeRegexTests(unittest.TestCase):
         )
         self.assertEqual(_headers(text), ["indented.h", "plain.h"])
 
+    def test_msvc_and_external_include_flags_and_out_of_repo_source(self):
+        import tempfile
+        mod = _load_module()
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = pathlib.Path(tmp)
+            inc_a = tmp_path / "inc with spaces"
+            inc_b = tmp_path / "ext_inc"
+            inc_a.mkdir()
+            inc_b.mkdir()
+            (inc_a / "found_msvc.h").write_text("#pragma once\n", encoding="utf-8")
+            (inc_b / "found_ext.h").write_text("#pragma once\n", encoding="utf-8")
+            tu = tmp_path / "out_of_repo.cpp"
+            tu.write_text(
+                '#include "found_msvc.h"\n'
+                '#include "found_ext.h"\n'
+                '#include "truly_missing.h"\n',
+                encoding="utf-8",
+            )
+            data = [{
+                "directory": str(tmp_path),
+                "file": str(tu),
+                "command": f'cl.exe /c /I"{inc_a}" /external:I "{inc_b}" "{tu}"',
+            }]
+            missing, checked = mod.scan_missing(data)
+            self.assertEqual(checked, 1)
+            self.assertEqual(set(missing.keys()), {"truly_missing.h"})
+
 
 if __name__ == "__main__":
     unittest.main()

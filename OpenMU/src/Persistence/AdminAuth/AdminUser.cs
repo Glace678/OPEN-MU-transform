@@ -17,6 +17,8 @@ namespace MUnique.OpenMU.Persistence.AdminAuth;
 /// </remarks>
 public class AdminUser
 {
+    private (string SecurityStamp, string? RecoveryCodeHashes, long LastAcceptedTotpStep, bool IsDisabled)? _concurrencySnapshot;
+
     /// <summary>
     /// Gets or sets the identifier of this user.
     /// </summary>
@@ -105,6 +107,46 @@ public class AdminUser
     /// </summary>
     public DateTime? LastLoginAt { get; set; }
 
+    /// <summary>
+    /// Captures the current security-critical properties as the baseline for optimistic concurrency checks.
+    /// </summary>
+    public void CaptureConcurrencySnapshot()
+    {
+        this._concurrencySnapshot = (this.SecurityStamp, this.RecoveryCodeHashes, this.LastAcceptedTotpStep, this.IsDisabled);
+    }
+
+    /// <summary>
+    /// Tries to retrieve the captured baseline for optimistic concurrency checks.
+    /// </summary>
+    /// <param name="snapshot">The captured snapshot if available.</param>
+    /// <returns><c>true</c> if a snapshot was previously captured; otherwise, <c>false</c>.</returns>
+    public bool TryGetConcurrencySnapshot(out (string SecurityStamp, string? RecoveryCodeHashes, long LastAcceptedTotpStep, bool IsDisabled) snapshot)
+    {
+        if (this._concurrencySnapshot is { } captured)
+        {
+            snapshot = captured;
+            return true;
+        }
+
+        snapshot = default;
+        return false;
+    }
+
     /// <inheritdoc />
     public override string ToString() => this.LoginName;
+}
+
+/// <summary>
+/// Thrown when updating an <see cref="AdminUser"/> fails due to a concurrent modification.
+/// </summary>
+public sealed class AdminUserConcurrencyException : InvalidOperationException
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AdminUserConcurrencyException"/> class.
+    /// </summary>
+    /// <param name="innerException">The underlying concurrency exception.</param>
+    public AdminUserConcurrencyException(Exception innerException)
+        : base("The admin user was modified concurrently by another operation.", innerException)
+    {
+    }
 }

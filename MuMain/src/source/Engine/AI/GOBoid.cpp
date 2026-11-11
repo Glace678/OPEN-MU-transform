@@ -813,6 +813,8 @@ void RenderSkillEarthQuake(CHARACTER* c, OBJECT* o, BMD* b, int iMaxSkill)
         return;
     if (b == NULL)
         return;
+    if (c->TargetCharacter < 0 || c->TargetCharacter >= MAX_CHARACTERS_CLIENT)
+        return;
 
     float   Matrix[3][4];
     vec3_t  Angle, p, Position;
@@ -1834,7 +1836,7 @@ void MoveFishs()
         }
         if (o->Live)
         {
-            if (o->Type != -1)
+            if (o->Type >= 0 && o->Type < MAX_MODELS)
             {
                 BMD* b           = &Models[o->Type];
                 b->CurrentAction = o->CurrentAction;
@@ -1860,7 +1862,7 @@ void MoveFishs()
                 Vector(o->Velocity * (float)(rand() % 4 + 6), 0.f, 0.f, Position);
                 VectorRotate(Position, o->Matrix, Direction);
                 VectorAddScaled(o->Position, Direction, o->Position, FPS_ANIMATION_FACTOR);
-                if (gMapManager.WorldActive != 7 || gMapManager.InHellas() == false ||
+                if (gMapManager.WorldActive != WD_7ATLANSE && gMapManager.InHellas() == false &&
                     gMapManager.WorldActive != WD_67DOPPLEGANGER3)
                 {
                     o->Position[2] = RequestTerrainHeight(o->Position[0], o->Position[1]);

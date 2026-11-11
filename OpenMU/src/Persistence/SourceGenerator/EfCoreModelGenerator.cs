@@ -224,7 +224,8 @@ using Mapster;
 /// </summary>
 public static class MapsterConfigurator
 {{
-    private static bool isConfigured;
+    private static readonly object SyncRoot = new();
+    private static volatile bool isConfigured;
 
     /// <summary>
     /// Ensures that Mapster is configured to properly map these EF-Core persistence classes to the Persistence.BasicModel.
@@ -236,11 +237,19 @@ public static class MapsterConfigurator
             return;
         }}
 
-        Mapster.TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
-        Mapster.TypeAdapterConfig.GlobalSettings.Default.IgnoreMember((member, side) => member.Name.StartsWith(""Raw""));
+        lock (SyncRoot)
+        {{
+            if (isConfigured)
+            {{
+                return;
+            }}
+
+            Mapster.TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
+            Mapster.TypeAdapterConfig.GlobalSettings.Default.IgnoreMember((member, side) => member.Name.StartsWith(""Raw""));
 
 {configs}
-        isConfigured = true;
+            isConfigured = true;
+        }}
     }}
 }}
 ";

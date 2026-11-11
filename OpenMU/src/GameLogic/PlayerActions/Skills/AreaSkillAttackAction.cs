@@ -364,12 +364,28 @@ public class AreaSkillAttackAction
                         }
 
                         var deferredTarget = target;
+                        var expectedMap = player.CurrentMap;
                         _ = Task.Run(async () =>
                         {
-                            await Task.Delay(attackDelay).ConfigureAwait(false);
-                            if (!deferredTarget.IsAtSafezone() && deferredTarget.IsActive() && deferredTarget.IsAlive)
+                            try
                             {
-                                await this.ApplySkillAsync(player, skillEntry, deferredTarget, targetAreaCenter, isCombo).ConfigureAwait(false);
+                                await Task.Delay(attackDelay).ConfigureAwait(false);
+                                if (player.IsAlive
+                                    && player.IsActive()
+                                    && !player.IsAtSafezone()
+                                    && expectedMap is not null
+                                    && player.CurrentMap == expectedMap
+                                    && deferredTarget.CurrentMap == expectedMap
+                                    && !deferredTarget.IsAtSafezone()
+                                    && deferredTarget.IsActive()
+                                    && deferredTarget.IsAlive)
+                                {
+                                    await this.ApplySkillAsync(player, skillEntry, deferredTarget, targetAreaCenter, isCombo).ConfigureAwait(false);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                player.Logger.LogError(ex, "Unexpected error during deferred area skill hit for {Player}.", player);
                             }
                         });
                     }

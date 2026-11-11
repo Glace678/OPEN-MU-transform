@@ -120,7 +120,7 @@ public class AdminUserRepository : IAdminUserRepository
         }
         finally
         {
-            if (!this._isStorageReady)
+            if (!this._isStorageReady && !cancellationToken.IsCancellationRequested)
             {
                 this._nextProbeAt = DateTime.UtcNow + RetryDelay;
             }
@@ -178,11 +178,17 @@ public class AdminUserRepository : IAdminUserRepository
         }
 
         await using var context = new AdminPanelContext();
-        return await context.AdminUsers
+        var users = await context.AdminUsers
             .AsNoTracking()
             .OrderBy(u => u.LoginName)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
+        foreach (var user in users)
+        {
+            user.CaptureConcurrencySnapshot();
+        }
+
+        return users;
     }
 
     /// <inheritdoc />
@@ -194,10 +200,12 @@ public class AdminUserRepository : IAdminUserRepository
         }
 
         await using var context = new AdminPanelContext();
-        return await context.AdminUsers
+        var user = await context.AdminUsers
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken)
             .ConfigureAwait(false);
+        user?.CaptureConcurrencySnapshot();
+        return user;
     }
 
     /// <inheritdoc />
@@ -209,10 +217,12 @@ public class AdminUserRepository : IAdminUserRepository
         }
 
         await using var context = new AdminPanelContext();
-        return await context.AdminUsers
+        var user = await context.AdminUsers
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.NormalizedLoginName == normalizedLoginName, cancellationToken)
             .ConfigureAwait(false);
+        user?.CaptureConcurrencySnapshot();
+        return user;
     }
 
     /// <inheritdoc />
@@ -223,6 +233,7 @@ public class AdminUserRepository : IAdminUserRepository
         await using var context = new AdminPanelContext();
         context.AdminUsers.Add(user);
         await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        user.CaptureConcurrencySnapshot();
     }
 
     /// <inheritdoc />
@@ -231,8 +242,24 @@ public class AdminUserRepository : IAdminUserRepository
         await this.EnsureAvailableStorageAsync(cancellationToken).ConfigureAwait(false);
 
         await using var context = new AdminPanelContext();
-        context.AdminUsers.Update(user);
-        await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        var entry = context.AdminUsers.Update(user);
+        if (user.TryGetConcurrencySnapshot(out var snapshot))
+        {
+            entry.Property(u => u.SecurityStamp).OriginalValue = snapshot.SecurityStamp;
+            entry.Property(u => u.RecoveryCodeHashes).OriginalValue = snapshot.RecoveryCodeHashes;
+            entry.Property(u => u.LastAcceptedTotpStep).OriginalValue = snapshot.LastAcceptedTotpStep;
+            entry.Property(u => u.IsDisabled).OriginalValue = snapshot.IsDisabled;
+        }
+
+        try
+        {
+            await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            user.CaptureConcurrencySnapshot();
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            throw new AdminUserConcurrencyException(ex);
+        }
     }
 
     /// <inheritdoc />

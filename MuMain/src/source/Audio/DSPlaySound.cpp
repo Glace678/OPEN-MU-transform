@@ -456,7 +456,7 @@ void DirectSoundManager::SetMasterVolume(long volume)
 
 void DirectSoundManager::Update3DPositions()
 {
-    if (!IsEnabled() || !Is3DEnabled())
+    if (!IsEnabled() || !Is3DEnabled() || Hero == nullptr)
     {
         return;
     }

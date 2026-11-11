@@ -74,10 +74,9 @@ void CNewUIGatemanWindow::InitButton(CNewUIButton* pNewUIButton, int iPos_x, int
 
 void CNewUIGatemanWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -91,17 +90,20 @@ void CNewUIGatemanWindow::SetPos(int x, int y)
 
 bool CNewUIGatemanWindow::UpdateMouseEvent()
 {
-    switch (g_pUIGateKeeper->GetType())
+    if (g_pUIGateKeeper)
     {
-        case TOUCH_TYPE_PERSON:
-            UpdateGuestMode();
-            break;
-        case TOUCH_TYPE_GUILD_STAFF:
-            UpdateGuildMemeberMode();
-            break;
-        case TOUCH_TYPE_GUILD_MASTER:
-            UpdateGuildMasterMode();
-            break;
+        switch (g_pUIGateKeeper->GetType())
+        {
+            case TOUCH_TYPE_PERSON:
+                UpdateGuestMode();
+                break;
+            case TOUCH_TYPE_GUILD_STAFF:
+                UpdateGuildMemeberMode();
+                break;
+            case TOUCH_TYPE_GUILD_MASTER:
+                UpdateGuildMasterMode();
+                break;
+        }
     }
 
     if (true == BtnProcess())
@@ -141,17 +143,20 @@ bool CNewUIGatemanWindow::Render()
 
     RenderFrame();
 
-    switch (g_pUIGateKeeper->GetType())
+    if (g_pUIGateKeeper)
     {
-        case TOUCH_TYPE_PERSON:
-            RenderGuestMode();
-            break;
-        case TOUCH_TYPE_GUILD_STAFF:
-            RenderGuildMemeberMode();
-            break;
-        case TOUCH_TYPE_GUILD_MASTER:
-            RenderGuildMasterMode();
-            break;
+        switch (g_pUIGateKeeper->GetType())
+        {
+            case TOUCH_TYPE_PERSON:
+                RenderGuestMode();
+                break;
+            case TOUCH_TYPE_GUILD_STAFF:
+                RenderGuildMemeberMode();
+                break;
+            case TOUCH_TYPE_GUILD_MASTER:
+                RenderGuildMasterMode();
+                break;
+        }
     }
 
     m_BtnExit.Render();

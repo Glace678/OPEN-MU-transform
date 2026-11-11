@@ -360,6 +360,8 @@ bool RequiresOwnerForLegacyCreation(int type, int subtype)
         case MODEL_FENRIR_THUNDER:
         case MODEL_EFFECT_SAPITRES_ATTACK_1:
         case MODEL_EFFECT_FLAME_STRIKE:
+        case MODEL_INFINITY_ARROW:
+        case MODEL_SHIELD_CRASH:
             return subtype == 0;
         case MODEL_SUMMONER_SUMMON_LAGUL:
         case MODEL_DEATH_SPI_SKILL:
@@ -610,7 +612,7 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
                 case MODEL_WARP:
                 case MODEL_WARP5:
                 case MODEL_WARP4: {
-                    Vector(0.0f, 0.0f, 0.0f, Light);
+                    Vector(0.0f, 0.0f, 0.0f, o->Light);
                     o->BlendMesh = -2;
                     o->LifeTime  = 0xffffff;
                     o->Scale     = 1.3f + (float)(rand() % 50) / 100.f;
@@ -861,10 +863,15 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
                     }
                     else if (o->SubType == 1)
                     {
-                        o->LifeTime                = 160;
-                        o->Alpha                   = 0.0f;
-                        ((JOINT*)o->Owner)->Target = o;
-                        o->Owner                   = NULL;
+                        o->LifeTime = 160;
+                        o->Alpha    = 0.0f;
+                        if (o->Owner != nullptr &&
+                            reinterpret_cast<uintptr_t>(o->Owner) >= reinterpret_cast<uintptr_t>(&Joints[0]) &&
+                            reinterpret_cast<uintptr_t>(o->Owner) < reinterpret_cast<uintptr_t>(&Joints[MAX_JOINTS]))
+                        {
+                            reinterpret_cast<JOINT*>(o->Owner)->Target = o;
+                        }
+                        o->Owner = NULL;
 
                         for (int i = 48; i <= 53; ++i)
                         {
@@ -3363,7 +3370,7 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
 
                         vec3_t v3PosModify02;
                         float  fTotalDist = 1700.0f, fFirstDist = 0.0f, fRateFirstDist = 0.0f;
-                        VectorCopy(o->Owner->Position, v3PosModify02);
+                        VectorCopy(o->Owner != nullptr ? o->Owner->Position : o->Position, v3PosModify02);
                         VectorCopy(o->Position, v3PosModify);
 
                         v3PosModify02[2] = o->Light[2];
@@ -3555,16 +3562,23 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
                     int TargetX = (int)(o->Position[0] / TERRAIN_SCALE);
                     int TargetY = (int)(o->Position[1] / TERRAIN_SCALE);
 
-                    WORD wall = TerrainWall[TERRAIN_INDEX(TargetX, TargetY)];
-
-                    if ((wall & TW_NOMOVE) != TW_NOMOVE && (wall & TW_NOGROUND) != TW_NOGROUND &&
-                        (wall & TW_WATER) != TW_WATER)
+                    if (TargetX >= 0 && TargetX < TERRAIN_SIZE && TargetY >= 0 && TargetY < TERRAIN_SIZE)
                     {
-                        o->LifeTime = 40;
-                        o->Scale    = 1.2f + rand() % 30 / 100.f;
-                        o->Velocity = 0.3f;
-                        o->Angle[2] = (float)(rand() % 360);
-                        SetAction(o, 0);
+                        WORD wall = TerrainWall[TERRAIN_INDEX(TargetX, TargetY)];
+
+                        if ((wall & TW_NOMOVE) != TW_NOMOVE && (wall & TW_NOGROUND) != TW_NOGROUND &&
+                            (wall & TW_WATER) != TW_WATER)
+                        {
+                            o->LifeTime = 40;
+                            o->Scale    = 1.2f + rand() % 30 / 100.f;
+                            o->Velocity = 0.3f;
+                            o->Angle[2] = (float)(rand() % 360);
+                            SetAction(o, 0);
+                        }
+                        else
+                        {
+                            o->Live = false;
+                        }
                     }
                     else
                     {
@@ -3576,16 +3590,23 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
                     int TargetX = (int)(o->Position[0] / TERRAIN_SCALE);
                     int TargetY = (int)(o->Position[1] / TERRAIN_SCALE);
 
-                    WORD wall = TerrainWall[TERRAIN_INDEX(TargetX, TargetY)];
-
-                    if ((wall & TW_NOMOVE) != TW_NOMOVE && (wall & TW_NOGROUND) != TW_NOGROUND &&
-                        (wall & TW_WATER) != TW_WATER)
+                    if (TargetX >= 0 && TargetX < TERRAIN_SIZE && TargetY >= 0 && TargetY < TERRAIN_SIZE)
                     {
-                        o->LifeTime = 40;
-                        o->Scale    = 1.f + rand() % 30 / 100.f;
-                        o->Velocity = 0.3f;
-                        o->Angle[2] = (float)(rand() % 360);
-                        SetAction(o, 0);
+                        WORD wall = TerrainWall[TERRAIN_INDEX(TargetX, TargetY)];
+
+                        if ((wall & TW_NOMOVE) != TW_NOMOVE && (wall & TW_NOGROUND) != TW_NOGROUND &&
+                            (wall & TW_WATER) != TW_WATER)
+                        {
+                            o->LifeTime = 40;
+                            o->Scale    = 1.f + rand() % 30 / 100.f;
+                            o->Velocity = 0.3f;
+                            o->Angle[2] = (float)(rand() % 360);
+                            SetAction(o, 0);
+                        }
+                        else
+                        {
+                            o->Live = false;
+                        }
                     }
                     else
                     {
@@ -5083,10 +5104,13 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
                 case MODEL_SWORDLEFT02_EMPIREGUARDIAN_BOSS_GAION_:
                 case MODEL_SWORDMAIN01_EMPIREGUARDIAN_BOSS_GAION_:
                 case MODEL_EMPIREGUARDIANBOSS_FRAMESTRIKE: {
-                    OBJECT* O = &(Hero->Object);
-                    for (int i = 113; i <= 155; ++i)
+                    OBJECT* blurOwner = o->Owner != nullptr ? o->Owner : (Hero != nullptr ? &Hero->Object : nullptr);
+                    if (blurOwner != nullptr)
                     {
-                        RemoveObjectBlurs(O, i);
+                        for (int i = 113; i <= 155; ++i)
+                        {
+                            RemoveObjectBlurs(blurOwner, i);
+                        }
                     }
 
                     if (o->SubType == 0)
@@ -5308,7 +5332,7 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
                                     vec3_t v3DirResult;
                                     vec3_t v3PosModify02;
                                     float  fTotalDist = 1700.0f, fFirstDist = 0.0f, fRateFirstDist = 0.0f;
-                                    VectorCopy(o->Owner->Position, v3PosModify02);
+                                    VectorCopy(o->Owner != nullptr ? o->Owner->Position : o->Position, v3PosModify02);
                                     VectorCopy(o->Position, v3PosModify);
 
                                     v3PosModify02[2] = o->Light[2];
@@ -5394,7 +5418,7 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
 
                                     vec3_t v3PosModify02;
                                     float  fTotalDist = 1700.0f, fFirstDist = 0.0f, fRateFirstDist = 0.0f;
-                                    VectorCopy(o->Owner->Position, v3PosModify02);
+                                    VectorCopy(o->Owner != nullptr ? o->Owner->Position : o->Position, v3PosModify02);
                                     VectorCopy(o->Position, v3PosModify);
 
                                     v3PosModify02[2] = o->Light[2];
@@ -5700,7 +5724,7 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
 
                                     VectorDivFSelf(o->Direction, o->Distance);
 
-                                    VectorCopy(o->Owner->Position, v3PosModify);
+                                    VectorCopy(o->Owner != nullptr ? o->Owner->Position : o->Position, v3PosModify);
                                     v3PosModify[2] = o->Light[2];
                                     VectorCopy(o->Light, v3PosTargetModify);
 
@@ -6294,7 +6318,7 @@ void CreateBomb(vec3_t p, bool Exp, int SubType)
     vec3_t Position, Light;
     VectorCopy(p, Position);
     Position[2] += 80.f;
-    vec3_t Angle;
+    vec3_t Angle = {0.f, 0.f, 0.f};
 
     Vector(1.f, 1.f, 1.f, Light);
 
@@ -6391,6 +6415,7 @@ void CreateBomb2(vec3_t p, bool Exp, int SubType, float Scale)
 void CreateBomb3(vec3_t vPos, int iSubType, float fScale)
 {
     vec3_t vBombPos, vAngle, vLight;
+    VectorCopy(vPos, vBombPos);
     Vector((float)(rand() % 60 + 60 + 90), 0.f, (float)(rand() % 30), vAngle);
     Vector(1.0f, 1.0f, 1.0f, vLight);
     for (int i = 0; i < 2; ++i)
@@ -6701,6 +6726,11 @@ void MoveEffect(OBJECT* o, int iIndex)
 
             case MODEL_SUMMONER_EQUIP_HEAD_LAGUL: {
                 OBJECT* pObject = o->Owner;
+                if (pObject == nullptr)
+                {
+                    o->Live = false;
+                    break;
+                }
                 o->Position[0]  = pObject->Position[0] + cosf(WorldTime * 0.003f + o->Skill * 0.024f) * 60.0f;
                 o->Position[1]  = pObject->Position[1] + sinf(WorldTime * 0.003f + o->Skill * 0.024f) * 60.0f;
                 o->Position[2] =
@@ -6724,7 +6754,7 @@ void MoveEffect(OBJECT* o, int iIndex)
                 }
                 else
                 {
-                    if (Hero->SafeZone || sinf(WorldTime * 0.0004f + o->Skill * 0.024f) < 0.3f)
+                    if ((Hero != nullptr && Hero->SafeZone) || sinf(WorldTime * 0.0004f + o->Skill * 0.024f) < 0.3f)
                         o->Kind = 1;
                     if (o->Alpha < 1.0f)
                         o->Alpha += 0.03f * FPS_ANIMATION_FACTOR;
@@ -6775,7 +6805,17 @@ void MoveEffect(OBJECT* o, int iIndex)
 #endif  // ENABLE_POTION_EFFECT
                 else if (o->SubType == 6)
                 {
+                    if (o->Owner == nullptr || !o->Owner->Live || o->Owner->BoneTransform == nullptr ||
+                        o->Owner->Type < 0 || o->Owner->Type >= MAX_MODELS)
+                    {
+                        o->Live = false;
+                        break;
+                    }
                     BMD* b = &Models[o->Owner->Type];
+                    if (b->NumBones <= 0 || b->Bones == nullptr)
+                    {
+                        break;
+                    }
                     Vector(1, 1, 1, Light);
                     VectorCopy(o->StartPosition, b->BodyOrigin);
                     o->BlendMeshLight = (float)(rand() % 10) * 0.1f;
@@ -6812,12 +6852,15 @@ void MoveEffect(OBJECT* o, int iIndex)
                         break;
                     case 1:
                     case 2:
-                        if (o->Owner == NULL || o->Owner->Live == false)
+                        if (o->Owner == NULL || o->Owner->Live == false || o->Owner->BoneTransform == nullptr ||
+                            o->Owner->Type < 0 || o->Owner->Type >= MAX_MODELS)
                             o->Live = false;
                         else
                         {
                             o->LifeTime   = 100;
                             BMD*   pModel = &Models[o->Owner->Type];
+                            if (pModel->NumBones <= 0 || pModel->Bones == nullptr)
+                                break;
                             int    iBone  = rand() % pModel->NumBones;
                             vec3_t vRelativePos, vWorldPos;
                             Vector(0.f, 0.f, 100.f, vRelativePos);
@@ -6836,11 +6879,20 @@ void MoveEffect(OBJECT* o, int iIndex)
                         }
                         break;
                     case 3: {
+                        if (o->Owner == nullptr || !o->Owner->Live || o->Owner->Type < 0 || o->Owner->Type >= MAX_MODELS)
+                        {
+                            o->Live = false;
+                            break;
+                        }
+                        int iNumBones = Models[o->Owner->Type].NumBones;
+                        if (iNumBones <= 0)
+                        {
+                            break;
+                        }
                         vec3_t Position, P, dp;
                         vec3_t vFirePosition;
 
                         float Matrix[3][4];
-                        int   iNumBones = Models[o->Owner->Type].NumBones;
                         Models[o->Owner->Type].TransformByObjectBone(vFirePosition, o->Owner, rand() % iNumBones);
                         Vector(0.f, -20.f, 0.f, P);
                         AngleMatrix(o->Owner->Angle, Matrix);
@@ -7280,6 +7332,11 @@ void MoveEffect(OBJECT* o, int iIndex)
             case MODEL_STONE2:
                 if (o->SubType == 5)
                 {
+                    if (o->Owner == nullptr || !o->Owner->Live)
+                    {
+                        o->Live = false;
+                        break;
+                    }
                     VectorAdd(o->Owner->Position, o->StartPosition, o->Position);
                     break;
                 }
@@ -7326,8 +7383,11 @@ void MoveEffect(OBJECT* o, int iIndex)
             case MODEL_BIG_STONE2:
                 if (o->SubType == 5)
                 {
-                    if (o->Owner->Live == 0)
-                        o->Live = 0;
+                    if (o->Owner == nullptr || !o->Owner->Live)
+                    {
+                        o->Live = false;
+                        break;
+                    }
                     VectorAddScaled(o->Owner->Position, o->StartPosition, o->Position, FPS_ANIMATION_FACTOR);
                     break;
                 }
@@ -8144,6 +8204,7 @@ void MoveEffect(OBJECT* o, int iIndex)
                         CreateJointFpsChecked(BITMAP_JOINT_THUNDER + 1, Position, Position, o->Angle, 6, o, 80.f);
                     }
                 }
+                break;
 
             case MODEL_EFFECT_SAPITRES_ATTACK_1: {
                 if (o->SubType == 0)
@@ -8172,7 +8233,7 @@ void MoveEffect(OBJECT* o, int iIndex)
             case MODEL_SWELL_OF_MAGICPOWER: {
                 if (o->SubType == 0)
                 {
-                    if (o->Owner->Type != MODEL_PLAYER)
+                    if (o->Owner == nullptr || !o->Owner->Live || o->Owner->Type != MODEL_PLAYER)
                         break;
 
                     BMD* pModel = &Models[o->Owner->Type];
@@ -8205,7 +8266,7 @@ void MoveEffect(OBJECT* o, int iIndex)
                     }
 
                     Vector(0.2f, 0.2f, 0.9f, vLight);
-                    if ((int)o->LifeTime == 45)
+                    if ((int)o->LifeTime == 45 && pModel->NumBones > 37)
                     {
                         pModel->TransformByObjectBone(vPos, o->Owner, 28);
                         CreateEffectFpsChecked(MODEL_ARROWSRE06, vPos, o->Angle, vLight, 1, o->Owner, 28);
@@ -8228,10 +8289,12 @@ void MoveEffect(OBJECT* o, int iIndex)
             case MODEL_ARROWSRE06: {
                 if (o->SubType == 0)
                 {
-                    if (o->Owner->Type != MODEL_PLAYER)
+                    if (o->Owner == nullptr || !o->Owner->Live || o->Owner->Type != MODEL_PLAYER)
                         break;
 
-                    BMD*   pModel = &Models[o->Owner->Type];
+                    BMD* pModel = &Models[o->Owner->Type];
+                    if (o->PKKey < 0 || o->PKKey >= pModel->NumBones)
+                        break;
                     vec3_t vPos;
                     pModel->TransformByObjectBone(vPos, o->Owner, o->PKKey);
                     VectorCopy(vPos, o->Position);
@@ -8243,10 +8306,12 @@ void MoveEffect(OBJECT* o, int iIndex)
                 }
                 else if (o->SubType == 1)
                 {
-                    if (o->Owner->Type != MODEL_PLAYER)
+                    if (o->Owner == nullptr || !o->Owner->Live || o->Owner->Type != MODEL_PLAYER)
                         break;
 
-                    BMD*   pModel = &Models[o->Owner->Type];
+                    BMD* pModel = &Models[o->Owner->Type];
+                    if (o->PKKey < 0 || o->PKKey >= pModel->NumBones)
+                        break;
                     vec3_t vPos;
                     pModel->TransformByObjectBone(vPos, o->Owner, o->PKKey);
                     VectorCopy(vPos, o->Position);
@@ -8271,9 +8336,13 @@ void MoveEffect(OBJECT* o, int iIndex)
 #ifdef PJH_ADD_PANDA_CHANGERING
                 else if (o->SubType == 2)
                 {
+                    if (o->Owner == nullptr || !o->Owner->Live || o->Owner->Type != MODEL_PLAYER ||
+                        o->Owner->BoneTransform == nullptr)
+                        break;
+
                     vec3_t vRelativePos;
                     BMD*   b = &Models[o->Owner->Type];
-                    if (o->Owner->Type != MODEL_PLAYER)
+                    if (b->NumBones <= 20)
                         break;
 
                     if (o->LifeTime > 15)
@@ -8316,6 +8385,11 @@ void MoveEffect(OBJECT* o, int iIndex)
             case MODEL_SWELL_OF_MAGICPOWER_BUFF_EFF: {
                 if (o->SubType == 0)
                 {
+                    if (o->Owner == nullptr || !o->Owner->Live)
+                    {
+                        o->Live = false;
+                        break;
+                    }
                     VectorCopy(o->Owner->Position, o->Position);
 
                     int iPastTime = WorldTime - o->Timer;
@@ -8480,8 +8554,9 @@ void MoveEffect(OBJECT* o, int iIndex)
                     {
                         vec3_t vLight;
                         Vector(1.0f, 0.2f, 0.5f, vLight);
-                        CreateEffectFpsChecked(BITMAP_RING_OF_GRADATION, o->Owner->Position, o->Angle, vLight, 0,
-                                               o->Owner, 0, 0, 0, 0, 1.2f);
+                        CreateEffectFpsChecked(BITMAP_RING_OF_GRADATION,
+                                               o->Owner != nullptr ? o->Owner->Position : o->Position, o->Angle, vLight,
+                                               0, o->Owner, 0, 0, 0, 0, 1.2f);
                     }
                 }
             }
@@ -8630,6 +8705,13 @@ void MoveEffects()
 
 void RenderWheelWeapon(OBJECT* o)
 {
+    if (o->Owner == nullptr || Hero == nullptr)
+        return;
+
+    int Type = o->Owner->Weapon + MODEL_SWORD;
+    if (Type < 0 || Type >= MAX_MODELS)
+        return;
+
     vec3_t TempPosition, TempAngle;
     VectorCopy(o->Position, TempPosition);
     VectorCopy(o->Angle, TempAngle);
@@ -8641,7 +8723,6 @@ void RenderWheelWeapon(OBJECT* o)
 
     float Alpha = o->Alpha;
 
-    int  Type        = o->Owner->Weapon + MODEL_SWORD;
     BMD* b           = &Models[Type];
     b->CurrentAction = 0;
     b->Skin          = gCharacterManager.GetBaseClass(Hero->Class);
@@ -8667,12 +8748,18 @@ void RenderFuryStrike(OBJECT* o)
 {
     if (o->LifeTime > 10.f && o->Kind == 0)
     {
+        if (o->Owner == nullptr || Hero == nullptr)
+            return;
+
+        int Type = o->Owner->Weapon + MODEL_SWORD;
+        if (Type < 0 || Type >= MAX_MODELS)
+            return;
+
         vec3_t p, Light, Angle;
         float  Alpha = o->Alpha;
 
         Vector(0.f, 100.f, 0.f, p);
 
-        int  Type        = o->Owner->Weapon + MODEL_SWORD;
         BMD* b           = &Models[Type];
         b->CurrentAction = 0;
         b->Skin          = gCharacterManager.GetBaseClass(Hero->Class);
@@ -8746,8 +8833,10 @@ void RenderEffects(bool bRenderBlendMesh)
                 {
                     if (o->BlendMesh == -1 || o->BlendMesh < -2)
                         continue;
+                    if (o->Type < 0 || o->Type >= MAX_MODELS)
+                        continue;
                     const BMD& b = Models[o->Type];
-                    if (b.NumMeshs < o->BlendMesh)
+                    if (b.NumMeshs <= o->BlendMesh)
                         continue;
                     //if ( (o->Position[2]+o->BoundingBoxMax[2])<350.f ) continue;
                 }
@@ -8960,11 +9049,14 @@ void RenderEffects(bool bRenderBlendMesh)
                                 if (rand_fps_check(5))
                                 {
                                     int nBones = Models[o->Type].NumBones;
-                                    pModel->TransformByObjectBone(vPos, o, rand() % nBones);
-                                    Vector(0.6f, 0.5f, 0.9f, vLight);
-                                    CreateParticle(BITMAP_SMOKE, vPos, o->Angle, vLight, 57, 2.0f);
-                                    Vector(0.7f, 0.7f, 1.f, vLight);
-                                    CreateParticle(BITMAP_TWINTAIL_WATER, vPos, o->Angle, vLight, 1);
+                                    if (nBones > 0)
+                                    {
+                                        pModel->TransformByObjectBone(vPos, o, rand() % nBones);
+                                        Vector(0.6f, 0.5f, 0.9f, vLight);
+                                        CreateParticle(BITMAP_SMOKE, vPos, o->Angle, vLight, 57, 2.0f);
+                                        Vector(0.7f, 0.7f, 1.f, vLight);
+                                        CreateParticle(BITMAP_TWINTAIL_WATER, vPos, o->Angle, vLight, 1);
+                                    }
                                 }
                                 RenderObject(o);
                             }
@@ -9280,10 +9372,19 @@ void RenderEffects(bool bRenderBlendMesh)
                         case MODEL_EFFECT_FLAME_STRIKE: {
                             if (o->SubType == 0)
                             {
-                                OBJECT* pObject     = o;
-                                BMD*    pModel      = &Models[pObject->Type];
-                                OBJECT* pOwner      = pObject->Owner;
-                                BMD*    pOwnerModel = &Models[pOwner->Type];
+                                OBJECT* pObject = o;
+                                OBJECT* pOwner  = pObject->Owner;
+                                if (pOwner == nullptr || pOwner->BoneTransform == nullptr || pOwner->Type < 0 ||
+                                    pOwner->Type >= MAX_MODELS)
+                                {
+                                    break;
+                                }
+                                BMD* pOwnerModel = &Models[pOwner->Type];
+                                if (pOwnerModel->NumBones <= 33)
+                                {
+                                    break;
+                                }
+                                BMD* pModel = &Models[pObject->Type];
 
                                 vec3_t vPos, p;
                                 Vector(0.0f, 0.0f, 0.0f, p);
@@ -9322,6 +9423,10 @@ void RenderEffects(bool bRenderBlendMesh)
                                 o->Light[1] *= pow(fLight, FPS_ANIMATION_FACTOR);
                                 o->Light[2] *= pow(fLight, FPS_ANIMATION_FACTOR);
                             }
+                            if (o->Owner == nullptr || o->Owner->Type < 0 || o->Owner->Type >= MAX_MODELS)
+                            {
+                                break;
+                            }
                             BMD*      pModel = &Models[o->Owner->Type];
                             vec3_t    vPos;
                             const int nBoneCount         = 14;
@@ -9330,18 +9435,22 @@ void RenderEffects(bool bRenderBlendMesh)
                                                             0.6f, 0.8f, 0.8f, 0.8f, 0.8f, 0.7f, 0.7f};
                             for (int i = 0; i < nBoneCount; ++i)
                             {
-                                pModel->TransformByObjectBone(vPos, o->Owner, nBone[i]);
-                                CreateSprite(o->Type, vPos, o->Scale * fScale[i], o->Light, o->Owner);
+                                if (nBone[i] >= 0 && nBone[i] < pModel->NumBones)
+                                {
+                                    pModel->TransformByObjectBone(vPos, o->Owner, nBone[i]);
+                                    CreateSprite(o->Type, vPos, o->Scale * fScale[i], o->Light, o->Owner);
+                                }
                             }
                         }
                         break;
                         case MODEL_SWELL_OF_MAGICPOWER_BUFF_EFF: {
                             if (o->SubType == 0)
                             {
+                                if (o->Owner == nullptr || o->Owner->Type != MODEL_PLAYER)
+                                    break;
+
                                 BMD*   pModel = &Models[o->Owner->Type];
                                 vec3_t vPos, vDLight;
-                                if (o->Owner->Type != MODEL_PLAYER)
-                                    break;
 
                                 float fLumi = (absf((sinf(WorldTime * 0.001f))) + 0.2f) * 0.5f;
                                 // 							if( fLumi >= 0.5f)
@@ -9390,12 +9499,17 @@ void RenderEffects(bool bRenderBlendMesh)
                         case MODEL_SWORDRIGHT02_EMPIREGUARDIAN_BOSS_GAION_:
                         case MODEL_SWORDMAIN01_EMPIREGUARDIAN_BOSS_GAION_: {
                             BMD* pBMDSwordModel = &Models[o->Type];
+                            if (pBMDSwordModel->NumBones <= 0)
+                                break;
 
                             vec3_t* arrEachBoneTranslations;
                             vec3_t  v3CurrentHighHierarchyNodePos;
 
                             if (true == o->ChromeEnable)
                             {
+                                if (o->Owner == nullptr || o->Owner->Type < 0 || o->Owner->Type >= MAX_MODELS)
+                                    break;
+
                                 arrEachBoneTranslations = new vec3_t[pBMDSwordModel->NumBones];
 
                                 BMD* pOwnerModel = &Models[o->Owner->Type];
@@ -9440,7 +9554,7 @@ void RenderEffects(bool bRenderBlendMesh)
                                                        o->BlendMeshLight, o->BlendMeshTexCoordU, o->BlendMeshTexCoordV);
                             o->Alpha = 1.0f;
 
-                            if (o->SubType != 20)
+                            if (o->SubType != 20 && pBMDSwordModel->NumBones > 13)
                             {
                                 vec3_t vRelative, vLight;
                                 vec3_t vPos_SwordEffectRed01, vPos_SwordEffectRed02, vPos_SwordEffectEdge01,
@@ -9637,6 +9751,12 @@ void RenderEffects(bool bRenderBlendMesh)
                             }
                             VectorScale(vLight, fFadeInOut, vLight);
 
+                            if ((o->SubType == 0 || o->SubType == 3) &&
+                                (o->Owner == nullptr || o->Owner->Type < 0 || o->Owner->Type >= MAX_MODELS))
+                            {
+                                break;
+                            }
+
                             if (o->SubType == 0)
                             {
                                 EnableAlphaBlend();
@@ -9750,8 +9870,10 @@ void RenderAfterEffects(bool bRenderBlendMesh)
                 {
                     if (o->BlendMesh == -1 || o->BlendMesh < -2)
                         continue;
+                    if (o->Type < 0 || o->Type >= MAX_MODELS)
+                        continue;
                     const BMD& b = Models[o->Type];
-                    if (b.NumMeshs < o->BlendMesh)
+                    if (b.NumMeshs <= o->BlendMesh)
                         continue;
                 }
 

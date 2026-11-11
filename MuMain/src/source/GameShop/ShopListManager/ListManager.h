@@ -6,6 +6,7 @@
 **************************************************************************************************/
 
 #pragma once
+#include <mutex>
 #include "Include.h"
 #include "FTPFileDownLoader.h"
 
@@ -40,5 +41,6 @@ protected:
     CListManagerInfo          m_ListManagerInfo;
     std::vector<std::wstring> m_vScriptFiles;
     WZResult                  m_Result;
+    std::mutex                m_DownloaderMutex;
     CFTPFileDownLoader*       m_pFTPDownLoader;
 };

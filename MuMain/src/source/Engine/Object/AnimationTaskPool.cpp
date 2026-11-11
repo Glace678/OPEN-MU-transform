@@ -28,6 +28,7 @@ void AnimationTaskPool::Initialize(size_t threadCount)
 
     m_running        = true;
     m_remainingTasks = 0;
+    m_queuedTasks    = 0;
 
     m_queues.reserve(m_workerCount);
     for (size_t i = 0; i < m_workerCount; ++i)
@@ -44,10 +45,12 @@ void AnimationTaskPool::Initialize(size_t threadCount)
 
 void AnimationTaskPool::Shutdown()
 {
-    if (!m_running)
-        return;
-
-    m_running = false;
+    {
+        std::lock_guard<std::mutex> lock(m_cvMutex);
+        if (!m_running)
+            return;
+        m_running = false;
+    }
     m_workerCV.notify_all();
 
     for (std::thread& worker : m_workers)
@@ -60,7 +63,9 @@ void AnimationTaskPool::Shutdown()
 
     m_workers.clear();
     m_queues.clear();
-    m_workerCount = 0;
+    m_queuedTasks    = 0;
+    m_remainingTasks = 0;
+    m_workerCount    = 0;
 }
 
 bool AnimationTaskPool::PopTaskLocal(size_t workerIndex, Task& task)
@@ -75,6 +80,7 @@ bool AnimationTaskPool::PopTaskLocal(size_t workerIndex, Task& task)
 
     task = std::move(q.queue.front());
     q.queue.pop_front();
+    m_queuedTasks.fetch_sub(1, std::memory_order_acq_rel);
     return true;
 }
 
@@ -95,6 +101,7 @@ bool AnimationTaskPool::StealTask(size_t thiefIndex, Task& task)
             {
                 task = std::move(targetQ.queue.back());
                 targetQ.queue.pop_back();
+                m_queuedTasks.fetch_sub(1, std::memory_order_acq_rel);
                 targetQ.mutex.unlock();
                 return true;
             }
@@ -123,7 +130,7 @@ void AnimationTaskPool::WorkerLoop(size_t workerIndex)
         {
             std::unique_lock<std::mutex> lock(m_cvMutex);
             m_workerCV.wait(lock,
-                            [this]() { return !m_running || m_remainingTasks.load(std::memory_order_relaxed) > 0; });
+                            [this]() { return !m_running || m_queuedTasks.load(std::memory_order_acquire) > 0; });
         }
     }
 }
@@ -159,8 +166,10 @@ void AnimationTaskPool::DispatchCharacters(std::span<CHARACTER* const> activeCha
             for (size_t i = 0; i < chunk.count; ++i)
             {
                 CHARACTER* c = chunk.chars[i];
-                OBJECT*    o = &c->Object;
-                if (!o->Live || !o->Visible)
+                if (!c)
+                    continue;
+                OBJECT* o = &c->Object;
+                if (!o->Live || !o->Visible || !o->BoneTransform || o->Type < 0 || o->Type >= MAX_MODELS)
                     continue;
 
                 BMD* model = &Models[o->Type];
@@ -168,7 +177,7 @@ void AnimationTaskPool::DispatchCharacters(std::span<CHARACTER* const> activeCha
                     continue;
 
                 model->Animation(o->BoneTransform, o->AnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
-                                 o->HeadAngle, false, true, nullptr, o->CurrentAction);
+                                 o->HeadAngle, false, false, nullptr, o->CurrentAction);
                 o->EnableBoneMatrix = true;
             }
         };
@@ -178,9 +187,13 @@ void AnimationTaskPool::DispatchCharacters(std::span<CHARACTER* const> activeCha
         {
             std::lock_guard<std::mutex> lock(q.mutex);
             q.queue.push_back(std::move(chunkTask));
+            m_queuedTasks.fetch_add(1, std::memory_order_release);
         }
     }
 
+    {
+        std::lock_guard<std::mutex> lock(m_cvMutex);
+    }
     m_workerCV.notify_all();
 }
 
@@ -190,5 +203,5 @@ void AnimationTaskPool::Wait()
         return;
 
     std::unique_lock<std::mutex> lock(m_cvMutex);
-    m_waiterCV.wait(lock, [this]() { return m_remainingTasks.load(std::memory_order_relaxed) <= 0; });
+    m_waiterCV.wait(lock, [this]() { return m_remainingTasks.load(std::memory_order_acquire) <= 0; });
 }

@@ -99,18 +99,33 @@ public class FenrirUpgradeCraftingGold : BaseItemCraftingHandler
         }
 
         var hornOfFenrir = inputItems.FirstOrDefault(item => item.Definition?.Name.ValueInNeutralLanguage == "Horn of Fenrir");
-        var chaos = inputItems.FirstOrDefault(item => item.Definition?.Name.ValueInNeutralLanguage == "Jewel of Chaos");
-        var jewelsOfLife = inputItems.Where(item => item.Definition?.Name.ValueInNeutralLanguage == "Jewel of Life").Take(5).ToList();
+        var chaosItems = inputItems.Where(item => item.Definition?.Name.ValueInNeutralLanguage == "Jewel of Chaos").ToList();
+        var chaosCount = chaosItems.Sum(item => item.IsStackable() ? (int)item.Durability : 1);
+        var jewelsOfLife = inputItems.Where(item => item.Definition?.Name.ValueInNeutralLanguage == "Jewel of Life").ToList();
+        var jewelsOfLifeCount = jewelsOfLife.Sum(item => item.IsStackable() ? (int)item.Durability : 1);
 
         if (hornOfFenrir is null
-            || chaos is null
-            || jewelsOfLife.Count < 5)
+            || chaosCount < 1
+            || jewelsOfLifeCount < 5)
         {
             return CraftingResult.LackingMixItems;
         }
 
+        if (hornOfFenrir.ItemOptions.Any(o => o.ItemOption?.OptionType is { } optionType
+            && (optionType == ItemOptionTypes.BlackFenrir
+                || optionType == ItemOptionTypes.BlueFenrir
+                || optionType == ItemOptionTypes.GoldFenrir)))
+        {
+            return CraftingResult.IncorrectMixItems;
+        }
+
+        if (chaosCount > 1 || jewelsOfLifeCount > 5)
+        {
+            return CraftingResult.TooManyItems;
+        }
+
         inputItems.Remove(hornOfFenrir);
-        inputItems.Remove(chaos);
+        chaosItems.ForEach(item => inputItems.Remove(item));
         jewelsOfLife.ForEach(item => inputItems.Remove(item));
         randomWeapons.ForEach(item => inputItems.Remove(item));
         randomArmors.ForEach(item => inputItems.Remove(item));
@@ -123,7 +138,7 @@ public class FenrirUpgradeCraftingGold : BaseItemCraftingHandler
         }
 
         items.Add(new CraftingRequiredItemLink(hornOfFenrir.GetAsEnumerable(), new TransientItemCraftingRequiredItem { PossibleItems = { hornOfFenrir.Definition! }, MinimumAmount = 1, MaximumAmount = 1, Reference = 1, SuccessResult = MixResult.StaysAsIs }));
-        items.Add(new CraftingRequiredItemLink(chaos.GetAsEnumerable(), new TransientItemCraftingRequiredItem { PossibleItems = { chaos.Definition! }, MinimumAmount = 1, MaximumAmount = 1 }));
+        items.Add(new CraftingRequiredItemLink(chaosItems, new TransientItemCraftingRequiredItem { PossibleItems = { chaosItems.First().Definition! }, MinimumAmount = 1, MaximumAmount = 1 }));
         items.Add(new CraftingRequiredItemLink(jewelsOfLife, new TransientItemCraftingRequiredItem { PossibleItems = { jewelsOfLife.First().Definition! }, MinimumAmount = 5, MaximumAmount = 5 }));
         if (randomWeapons.Any())
         {

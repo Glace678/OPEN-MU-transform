@@ -43,8 +43,8 @@ foreach (var (cfg, tag) in new[]{ (stockCfg,"STOCK-live"), (soloCfg,"SOLO-applie
   }
 }
 var sb = new System.Text.StringBuilder();
-sb.AppendLine("tag`tcls`tmon`tmonNum`thp`tdef`tdefrate`tlevel`tatkRate`twiz`tbaseMin`tbaseMax`thit`teffMin`teffMax`texpHits`texpSwings`ttk1s");
-foreach (dynamic r in report) sb.AppendLine($"{r.tag}`t{r.cls}`t{r.mon}`t{r.monNum}`t{r.monHp}`t{r.monDef}`t{r.monDefRate}`t{r.level}`t{r.atkRate}`t{r.wiz}`t{r.baseMin}`t{r.baseMax}`t{r.hit}`t{r.effMin}`t{r.effMax}`t{r.expHits}`t{r.expSwings}`t{r.ttk1s}");
+sb.AppendLine("tag\tcls\tmon\tmonNum\thp\tdef\tdefrate\tlevel\tatkRate\twiz\tbaseMin\tbaseMax\thit\teffMin\teffMax\texpHits\texpSwings\tttk1s");
+foreach (dynamic r in report) sb.AppendLine($"{r.tag}\t{r.cls}\t{r.mon}\t{r.monNum}\t{r.monHp}\t{r.monDef}\t{r.monDefRate}\t{r.level}\t{r.atkRate}\t{r.wiz}\t{r.baseMin}\t{r.baseMax}\t{r.hit}\t{r.effMin}\t{r.effMax}\t{r.expHits}\t{r.expSwings}\t{r.ttk1s}");
 File.WriteAllText(Path.Combine(output,"ttk-report.tsv"), sb.ToString());
 
 Console.WriteLine();

@@ -29,6 +29,13 @@ public class StartBloodCastleEventChatCommandPlugIn : IChatCommandPlugIn
     public async ValueTask HandleCommandAsync(Player player, string command)
     {
         var bloodCastle = player.GameContext.PlugInManager.GetStrategy<MiniGameType, IPeriodicMiniGameStartPlugIn>(MiniGameType.BloodCastle);
-        bloodCastle?.ForceStart();
+        if (bloodCastle is IContextScopedPeriodicTaskPlugIn scoped)
+        {
+            scoped.ForceStart(player.GameContext);
+        }
+        else
+        {
+            bloodCastle?.ForceStart();
+        }
     }
 }

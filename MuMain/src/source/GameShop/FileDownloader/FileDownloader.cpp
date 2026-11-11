@@ -15,16 +15,20 @@
 #include "FTPConnecter.h"
 #include <GameShop/ShopListManager/interface/PathMethod/Path.h>
 
+#include <cerrno>
 #include <process.h>
 
 FileDownloader::FileDownloader(IDownloaderStateEvent* pStateEvent, DownloadServerInfo* pServerInfo,
                                DownloadFileInfo* pFileInfo)  // OK
 {
-    this->m_bBreak      = 0;
+    this->m_bBreak      = false;
     this->m_pStateEvent = pStateEvent;
     this->m_pServerInfo = pServerInfo;
     this->m_pFileInfo   = pFileInfo;
     this->m_pConnecter  = 0;
+    this->m_hSession    = 0;
+    this->m_hConnection = 0;
+    this->m_hRemoteFile = 0;
     this->m_hLocalFile  = INVALID_HANDLE_VALUE;
     this->m_nFileLength = 0;
 }
@@ -36,14 +40,17 @@ FileDownloader::~FileDownloader()  // OK
 
 void FileDownloader::Break()
 {
-    this->m_bBreak = 1;
+    this->m_bBreak = true;
 }
 
 WZResult FileDownloader::DownloadFile()  // OK
 {
-    this->m_bBreak      = 0;
     this->m_nFileLength = 0;
     this->Release();
+    this->m_Result.SetSuccessResult();
+    if (!this->CanBeContinue())
+        goto JUMP_END;
+
     this->m_pConnecter = this->CreateConnecter();
     this->m_Result     = this->m_pConnecter->CreateSession(this->m_hSession);
 
@@ -124,20 +131,25 @@ WZResult FileDownloader::CreateConnection()
     {
         unsigned int ThreadID = 0;
 
-        auto hHandle = (HANDLE)_beginthreadex(0, 0, FileDownloader::RunConnectThread, this, 0, &ThreadID);
+        uintptr_t uThread = _beginthreadex(0, 0, FileDownloader::RunConnectThread, this, 0, &ThreadID);
 
-        if (hHandle == INVALID_HANDLE_VALUE)
+        if (uThread == 0)
         {
-            this->m_Result.SetResult(DL_BEGIN_THREAD_CONNECTION, GetLastError(),
+            this->m_Result.SetResult(DL_BEGIN_THREAD_CONNECTION, errno,
                                      L"[FileDownloader::CreateConnection] Fail : _beginthreadex, FileName = %ls",
                                      this->m_pFileInfo->GetRemoteFilePath());
         }
         else
         {
-            if (WaitForSingleObject(hHandle, dwMilliseconds) == WAIT_TIMEOUT)
+            HANDLE hHandle = reinterpret_cast<HANDLE>(uThread);
+            DWORD  dwWait  = WaitForSingleObject(hHandle, dwMilliseconds);
+            if (dwWait == WAIT_TIMEOUT)
             {
-                InternetCloseHandle(this->m_hSession);
-                this->m_hSession = 0;
+                if (this->m_hSession)
+                {
+                    InternetCloseHandle(this->m_hSession);
+                    this->m_hSession = 0;
+                }
 
                 WaitForSingleObject(hHandle, INFINITE);
 
@@ -145,6 +157,23 @@ WZResult FileDownloader::CreateConnection()
 
                 this->m_Result.SetResult(DL_CONNECTION_TIMEOUT, 0,
                                          L"[FileDownloader::CreateConnection] Fail : WAIT_TIMEOUT, FileName = %ls",
+                                         this->m_pFileInfo->GetRemoteFilePath());
+            }
+            else if (dwWait != WAIT_OBJECT_0)
+            {
+                DWORD dwErr = GetLastError();
+                if (this->m_hSession)
+                {
+                    InternetCloseHandle(this->m_hSession);
+                    this->m_hSession = 0;
+                }
+
+                WaitForSingleObject(hHandle, INFINITE);
+
+                CloseHandle(hHandle);
+
+                this->m_Result.SetResult(DL_BEGIN_THREAD_CONNECTION, dwErr,
+                                         L"[FileDownloader::CreateConnection] Fail : WaitForSingleObject, FileName = %ls",
                                          this->m_pFileInfo->GetRemoteFilePath());
             }
             else
@@ -183,51 +212,55 @@ WZResult FileDownloader::Connection()
 WZResult FileDownloader::TransferRemoteFile()
 {
     DWORD CbSize = this->m_pServerInfo->GetReadBufferSize();
+    if (CbSize == 0)
+    {
+        CbSize = DL_DEFAULT_BUFFER_SIZE;
+    }
 
     BYTE* buffer = new BYTE[CbSize];
 
-    DWORD TotalSize = 0;
-    DWORD ReadSize  = 0;
+    ULONGLONG TotalSize = 0;
+    DWORD     ReadSize  = 0;
 
     this->SendStartedDownloadFileEvent(this->m_nFileLength);
 
-    ReadSize       = 0;
-    this->m_Result = this->m_pConnecter->ReadRemoteFile(this->m_hRemoteFile, buffer, &ReadSize);
-
-    if (this->CanBeContinue())
+    while (this->CanBeContinue())
     {
-        while (true)
+        ReadSize       = 0;
+        this->m_Result = this->ReadRemoteFile(buffer, &ReadSize);
+
+        if (!this->CanBeContinue())
+            break;
+
+        if (ReadSize > 0)
         {
-            if (ReadSize > 0)
-            {
-                this->m_Result = this->WriteLocalFile(buffer, ReadSize);
+            this->m_Result = this->WriteLocalFile(buffer, ReadSize);
 
-                if (!this->CanBeContinue())
-                    break;
-
-                TotalSize += ReadSize;
-                this->SendProgressDownloadFileEvent(TotalSize);
-            }
-
-            if (ReadSize == 0 || this->m_bBreak)
-            {
-                if (this->CanBeContinue())
-                {
-                    if (TotalSize >= this->m_nFileLength)
-                    {
-                        this->m_Result.SetSuccessResult();
-                    }
-                    else
-                    {
-                        this->m_Result.SetResult(
-                            DL_DIFFERENT_FILE_LENGTH, 0,
-                            L"[FileDownloader::TransferRemoteFile] Fail : Different Down File Size, FileName = %ls",
-                            this->m_pFileInfo->GetRemoteFilePath());
-                    }
-                }
-
+            if (!this->CanBeContinue())
                 break;
+
+            TotalSize += ReadSize;
+            this->SendProgressDownloadFileEvent(TotalSize);
+        }
+
+        if (ReadSize == 0 || this->m_bBreak)
+        {
+            if (this->CanBeContinue())
+            {
+                if (TotalSize >= this->m_nFileLength)
+                {
+                    this->m_Result.SetSuccessResult();
+                }
+                else
+                {
+                    this->m_Result.SetResult(
+                        DL_DIFFERENT_FILE_LENGTH, 0,
+                        L"[FileDownloader::TransferRemoteFile] Fail : Different Down File Size, FileName = %ls",
+                        this->m_pFileInfo->GetRemoteFilePath());
+                }
             }
+
+            break;
         }
     }
 

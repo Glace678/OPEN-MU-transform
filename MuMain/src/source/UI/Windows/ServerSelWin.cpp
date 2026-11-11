@@ -20,6 +20,8 @@
 #include "Network/Login/LocalAutoLogin.h"
 #include "Audio/DSPlaySound.h"
 
+#include <algorithm>
+
 #define SSW_GAP_WIDTH  28
 #define SSW_GAP_HEIGHT 5
 #define SSW_GB_POS_X   16
@@ -27,7 +29,17 @@
 
 using namespace SEASON3A;
 
-CServerSelWin::CServerSelWin() {}
+CServerSelWin::CServerSelWin()
+    : m_icntServerGroup(0),
+      m_icntLeftServerGroup(0),
+      m_icntRightServerGroup(0),
+      m_icntServer(0),
+      m_bTestServerBtn(false),
+      m_iSelectServerBtnIndex(-1),
+      m_pSelectServerGroup(NULL)
+{
+    ::memset(m_szDescription, 0, sizeof(m_szDescription));
+}
 
 CServerSelWin::~CServerSelWin() {}
 
@@ -174,7 +186,9 @@ void CServerSelWin::SetServerBtnPosition()
                                    ? nLServerGBtnTop
                                    : nLServerGBtnTop - (nServerBtnHeightSum - nLServerGBtnHeightSum);
 
-    for (int i = 0; i < m_pSelectServerGroup->GetServerSize(); i++)
+    const int serverCount =
+        std::clamp(m_pSelectServerGroup ? m_pSelectServerGroup->GetServerSize() : 0, 0, SSW_SERVER_MAX);
+    for (int i = 0; i < serverCount; i++)
     {
         m_aServerBtn[i].SetPositionArt(nServerBtnPosX, nServerBtnBasePosY + nServerBtnHeight * i);
         m_aServerGauge[i].SetPositionArt(m_aServerBtn[i].GetXPos() / rateX + SSW_GB_POS_X,
@@ -270,7 +284,7 @@ void CServerSelWin::UpdateDisplay()
     ShowServerGBtns();
     ShowDecoSprite();
 
-    memset(m_szDescription, 0, sizeof(char) * SSW_DESC_LINE_MAX * SSW_DESC_ROW_MAX);
+    memset(m_szDescription, 0, sizeof(m_szDescription));
 
     if (m_iSelectServerBtnIndex != -1)
     {
@@ -282,7 +296,7 @@ void CServerSelWin::UpdateDisplay()
         return;
     }
 
-    m_icntServer = m_pSelectServerGroup->GetServerSize();
+    m_icntServer = std::clamp(m_pSelectServerGroup->GetServerSize(), 0, SSW_SERVER_MAX);
 
     if (m_icntServer < 1)
         return;
@@ -292,12 +306,16 @@ void CServerSelWin::UpdateDisplay()
     m_pSelectServerGroup->SetFirst();
 
     int icntServer = 0;
-    while (m_pSelectServerGroup->GetNext(pServerInfo))
+    while (icntServer < SSW_SERVER_MAX && m_pSelectServerGroup->GetNext(pServerInfo))
     {
-        m_aServerBtn[icntServer].SetText(pServerInfo->m_bName, adwServerBtnClr[pServerInfo->m_byNonPvP]);
+        if (pServerInfo == NULL)
+            continue;
+        const int clrIdx = (pServerInfo->m_byNonPvP < 4) ? pServerInfo->m_byNonPvP : 0;
+        m_aServerBtn[icntServer].SetText(pServerInfo->m_bName, adwServerBtnClr[clrIdx]);
         m_aServerGauge[icntServer].SetValue(pServerInfo->m_iPercent, 100);
         icntServer++;
     }
+    m_icntServer = icntServer;
 
     ::SeparateTextIntoLines(m_pSelectServerGroup->m_szDescription, m_szDescription[0], SSW_DESC_LINE_MAX,
                             SSW_DESC_ROW_MAX);
@@ -327,16 +345,18 @@ void CServerSelWin::ShowServerGBtns()
         m_aServerGroupBtn[0].Show(false);
     }
 
-    for (i = 1; i < m_icntLeftServerGroup + 1; i++)
+    const int leftEnd = 1 + std::clamp(m_icntLeftServerGroup, 0, SSW_LEFT_SERVER_G_MAX);
+    for (i = 1; i < leftEnd; i++)
     {
         m_aServerGroupBtn[i].Show(CWin::m_bShow);
     }
-    for (; i < SSW_LEFT_SERVER_G_MAX; ++i)
+    for (; i <= SSW_LEFT_SERVER_G_MAX; ++i)
     {
         m_aServerGroupBtn[i].Show(false);
     }
 
-    for (i = SSW_LEFT_SERVER_G_MAX + 1; i < SSW_RIGHT_SERVER_G_MAX + 1 + m_icntRightServerGroup; i++)
+    const int rightEnd = SSW_LEFT_SERVER_G_MAX + 1 + std::clamp(m_icntRightServerGroup, 0, SSW_RIGHT_SERVER_G_MAX);
+    for (i = SSW_LEFT_SERVER_G_MAX + 1; i < rightEnd; i++)
     {
         m_aServerGroupBtn[i].Show(CWin::m_bShow);
     }
@@ -394,8 +414,9 @@ void CServerSelWin::ShowServerBtns()
         return;
     }
 
-    int i;
-    for (i = 0; i < m_icntServer; i++)
+    int       i;
+    const int serverCount = std::clamp(m_icntServer, 0, SSW_SERVER_MAX);
+    for (i = 0; i < serverCount; i++)
     {
         m_aServerBtn[i].Show(CWin::m_bShow);
         m_aServerGauge[i].Show(CWin::m_bShow);
@@ -438,7 +459,7 @@ void CServerSelWin::UpdateWhileActive(double dDeltaTick)
     {
         if (m_aServerGroupBtn[i].IsClick())
         {
-            if (m_iSelectServerBtnIndex != -1)
+            if (m_iSelectServerBtnIndex >= 0 && m_iSelectServerBtnIndex < SSW_SERVER_G_MAX)
             {
                 m_aServerGroupBtn[m_iSelectServerBtnIndex].SetCheck(false);
             }
@@ -454,7 +475,8 @@ void CServerSelWin::UpdateWhileActive(double dDeltaTick)
         return;
 
     CServerInfo* pServerInfo = NULL;
-    for (i = 0; i < m_icntServer; i++)
+    const int    serverCount = std::clamp(m_icntServer, 0, SSW_SERVER_MAX);
+    for (i = 0; i < serverCount; i++)
     {
         if (m_aServerBtn[i].IsClick())
         {
@@ -506,7 +528,8 @@ void CServerSelWin::RenderControls()
 
     if (m_pSelectServerGroup != NULL)
     {
-        for (i = 0; i < m_icntServer; i++)
+        const int serverCount = std::clamp(m_icntServer, 0, SSW_SERVER_MAX);
+        for (i = 0; i < serverCount; i++)
         {
             m_aServerGauge[i].Render();
         }

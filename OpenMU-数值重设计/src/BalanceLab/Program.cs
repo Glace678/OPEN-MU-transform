@@ -131,7 +131,7 @@ if (bestNormal.Max() / bestNormal.Min() > 1.25) tuningFailures.Add("Best normal 
 if (bestMaster.Max() / bestMaster.Min() > 1.25) tuningFailures.Add("Best master build per class spread exceeds 25%.");
 if (normalRange.Max / normalRange.Min > 1.45 || masterRange.Max / masterRange.Min > 1.45)
     tuningFailures.Add("All-build progression spread exceeds 45%.");
-var accepted = checks.Failures.Count == 0 && bossFailures.Count == 0 && tuningFailures.Count == 0 && coverage?.Errors.Length == 0;
+var accepted = checks.Failures.Count == 0 && bossFailures.Count == 0 && tuningFailures.Count == 0 && (coverage is null || coverage.Errors.Length == 0);
 WriteJson("acceptance.json", new
 {
     acceptedAsIndependentCandidate = accepted, deployableToExistingServer = false,
@@ -153,7 +153,7 @@ report.AppendLine("| 职业 | 流派 | 普通小时 | 大师小时 | 合计小�
 foreach (var p in progression)
     report.AppendLine($"| {p.ClassId} | {p.BuildId} | {p.NormalHours:F1} | {p.MasterHours:F1} | {p.NormalHours + p.MasterHours:F1} |");
 report.AppendLine("\n## 未通过项目\n");
-if (checks.Failures.Count + bossFailures.Count == 0) report.AppendLine("本轮已执行检查没有未通过项。下面的接入限制仍然存在。\n");
+if (checks.Failures.Count + bossFailures.Count + tuningFailures.Count + (coverage?.Errors.Length ?? 0) == 0) report.AppendLine("本轮已执行检查没有未通过项。下面的接入限制仍然存在。\n");
 foreach (var fail in checks.Failures.Concat(bossFailures)) report.AppendLine("- " + fail);
 foreach (var fail in tuningFailures) report.AppendLine("- " + fail);
 foreach (var fail in coverage?.Errors ?? []) report.AppendLine("- " + fail);

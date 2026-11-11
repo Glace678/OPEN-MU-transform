@@ -68,7 +68,9 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
 
     private readonly Lazy<MuHelper.MuHelper> _muHelperLazy;
 
-    private readonly PotionCooldownTracker _balanceV1PotionCooldownTracker = new();
+    private readonly PotionCooldownTracker _balanceV1PotionCooldownTracker;
+
+    private readonly object _moneyLock = new();
 
     private CancellationTokenSource? _respawnAfterDeathCts;
 
@@ -108,10 +110,21 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
 
         this.MagicEffectList = new MagicEffectsList(this);
         this._appearanceData = new PlayerAppearanceData(this);
-        this.PlayerState.StateChanged += async args => await (this.GameContext.PlugInManager.GetPlugInPoint<IPlayerStateChangedPlugIn>()?.PlayerStateChangedAsync(this, args.PreviousState, args.CurrentState) ?? ValueTask.CompletedTask).ConfigureAwait(false);
+        this.PlayerState.StateChanged += async args =>
+        {
+            if (args.PreviousState == GameLogic.PlayerState.NpcDialogOpened
+                && args.CurrentState != GameLogic.PlayerState.NpcDialogOpened)
+            {
+                this.OpenedNpc = null;
+                this.Vault = null;
+            }
+
+            await (this.GameContext.PlugInManager.GetPlugInPoint<IPlayerStateChangedPlugIn>()?.PlayerStateChangedAsync(this, args.PreviousState, args.CurrentState) ?? ValueTask.CompletedTask).ConfigureAwait(false);
+        };
         this.PlayerState.StateChanges += async args => await (this.GameContext.PlugInManager.GetPlugInPoint<IPlayerStateChangingPlugIn>()?.PlayerStateChangingAsync(this, args) ?? ValueTask.CompletedTask).ConfigureAwait(false);
         this._observerToWorldViewAdapter = new ObserverToWorldViewAdapter(this, this.InfoRange);
         this._muHelperLazy = new Lazy<MuHelper.MuHelper>(() => new MuHelper.MuHelper(this));
+        this._balanceV1PotionCooldownTracker = new PotionCooldownTracker(() => this.SelectedCharacter?.Id);
         this.Culture = CultureInfo.CurrentCulture;
     }
 
@@ -189,20 +202,35 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// <inheritdoc/>
     public int Money
     {
-        get => this.SelectedCharacter?.Inventory?.Money ?? 0;
+        get
+        {
+            lock (this._moneyLock)
+            {
+                return this.SelectedCharacter?.Inventory?.Money ?? 0;
+            }
+        }
 
         set
         {
-            if (this.SelectedCharacter is null)
+            var changed = false;
+            lock (this._moneyLock)
             {
-                return;
+                if (this.SelectedCharacter is null)
+                {
+                    return;
+                }
+
+                this.SelectedCharacter.ThrowNotInitializedProperty(this.SelectedCharacter.Inventory is null, nameof(this.SelectedCharacter.Inventory));
+
+                if (this.SelectedCharacter.Inventory.Money != value)
+                {
+                    this.SelectedCharacter.Inventory.Money = value;
+                    changed = true;
+                }
             }
 
-            this.SelectedCharacter.ThrowNotInitializedProperty(this.SelectedCharacter.Inventory is null, nameof(this.SelectedCharacter.Inventory));
-
-            if (this.SelectedCharacter != null && this.SelectedCharacter.Inventory.Money != value)
+            if (changed)
             {
-                this.SelectedCharacter.Inventory.Money = value;
                 _ = this.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync());
             }
         }
@@ -212,6 +240,16 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// Gets the persistence context.
     /// </summary>
     public IPlayerContext PersistenceContext { get; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether an in-memory economy compensation or committed purchase
+    /// failed to persist immediately and must be retried on subsequent save opportunities.
+    /// </summary>
+    public bool IsEconomyPersistencePending
+    {
+        get => this._persistence.IsEconomyPersistencePending;
+        internal set => this._persistence.IsEconomyPersistencePending = value;
+    }
 
     /// <inheritdoc/>
     public ushort Id { get; set; }
@@ -584,7 +622,35 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// <summary>
     /// Gets or sets the cancellation token source for the targeted skills with channeling.
     /// </summary>
-    public SkillCancellationTokenSource? SkillCancelTokenSource { get; set; }
+    public SkillCancellationTokenSource? SkillCancelTokenSource
+    {
+        get => Volatile.Read(ref this._skillCancelTokenSource);
+        set => Volatile.Write(ref this._skillCancelTokenSource, value);
+    }
+
+    private SkillCancellationTokenSource? _skillCancelTokenSource;
+
+    /// <summary>
+    /// Atomically claims the channeled skill slot if no channeled skill is currently active.
+    /// </summary>
+    /// <param name="cancellationTokenSource">The token source for the new skill.</param>
+    /// <returns><see langword="true"/> if the slot was claimed; otherwise, <see langword="false"/>.</returns>
+    internal bool TryClaimSkillCancelTokenSource(SkillCancellationTokenSource cancellationTokenSource)
+    {
+        return Interlocked.CompareExchange(ref this._skillCancelTokenSource, cancellationTokenSource, null) is null;
+    }
+
+    /// <summary>
+    /// Atomically releases and disposes the channeled skill token source if it still matches <paramref name="expected"/>.
+    /// </summary>
+    /// <param name="expected">The expected token source owned by the caller.</param>
+    internal void ReleaseSkillCancelTokenSource(SkillCancellationTokenSource expected)
+    {
+        if (ReferenceEquals(Interlocked.CompareExchange(ref this._skillCancelTokenSource, null, expected), expected))
+        {
+            expected.Dispose();
+        }
+    }
 
     /// <summary>
     /// Gets the mu helper.
@@ -836,6 +902,172 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// </summary>
     /// <param name="gate">The gate to which the player should be moved.</param>
     public ValueTask WarpToAsync(ExitGate gate) => this._mapTransitions.WarpToAsync(gate);
+
+    /// <summary>
+    /// Tries to move the player to the specified gate, returning whether the map transition started.
+    /// </summary>
+    /// <param name="gate">The gate to which the player should be moved.</param>
+    /// <returns><c>True</c>, if the warp succeeded; otherwise, <c>false</c>.</returns>
+    public ValueTask<bool> TryWarpToAsync(ExitGate gate) => this._mapTransitions.TryWarpToAsync(gate);
+
+    /// <summary>
+    /// Atomically tries to add money to the character inventory.
+    /// </summary>
+    /// <param name="value">The amount of money to add.</param>
+    /// <returns><c>True</c>, if the money was added; otherwise, <c>false</c>.</returns>
+    internal bool TryAddInventoryMoney(int value)
+    {
+        if (value < 0)
+        {
+            return false;
+        }
+
+        var changed = false;
+        lock (this._moneyLock)
+        {
+            var currentMoney = this.SelectedCharacter?.Inventory?.Money ?? 0;
+            var maxMoney = this.GameContext?.Configuration?.MaximumInventoryMoney ?? int.MaxValue;
+            var newTotal = (long)currentMoney + value;
+            if (newTotal < 0 || newTotal > maxMoney)
+            {
+                return false;
+            }
+
+            if (value == 0)
+            {
+                return true;
+            }
+
+            if (this.SelectedCharacter is null)
+            {
+                return false;
+            }
+
+            this.SelectedCharacter.ThrowNotInitializedProperty(this.SelectedCharacter.Inventory is null, nameof(this.SelectedCharacter.Inventory));
+            if (this.SelectedCharacter.Inventory.Money != (int)newTotal)
+            {
+                this.SelectedCharacter.Inventory.Money = (int)newTotal;
+                changed = true;
+            }
+        }
+
+        if (changed)
+        {
+            _ = this.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync());
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Atomically tries to remove money from the character inventory.
+    /// </summary>
+    /// <param name="value">The amount of money to remove.</param>
+    /// <returns><c>True</c>, if the money was removed; otherwise, <c>false</c>.</returns>
+    internal bool TryRemoveInventoryMoney(int value)
+    {
+        if (value < 0)
+        {
+            return false;
+        }
+
+        var changed = false;
+        lock (this._moneyLock)
+        {
+            var currentMoney = this.SelectedCharacter?.Inventory?.Money ?? 0;
+            var newTotal = (long)currentMoney - value;
+            if (newTotal < 0)
+            {
+                return false;
+            }
+
+            if (value == 0)
+            {
+                return true;
+            }
+
+            if (this.SelectedCharacter is null)
+            {
+                return false;
+            }
+
+            this.SelectedCharacter.ThrowNotInitializedProperty(this.SelectedCharacter.Inventory is null, nameof(this.SelectedCharacter.Inventory));
+            if (this.SelectedCharacter.Inventory.Money != (int)newTotal)
+            {
+                this.SelectedCharacter.Inventory.Money = (int)newTotal;
+                changed = true;
+            }
+        }
+
+        if (changed)
+        {
+            _ = this.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync());
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Atomically transfers money between the inventory and an opened vault.
+    /// </summary>
+    /// <param name="value">The amount of money to transfer.</param>
+    /// <param name="depositToVault"><c>True</c> to deposit into vault; <c>false</c> to withdraw from vault.</param>
+    /// <returns><c>True</c>, if the transfer succeeded; otherwise, <c>false</c>.</returns>
+    internal bool TryTransferVaultMoney(int value, bool depositToVault)
+    {
+        if (value < 0)
+        {
+            return false;
+        }
+
+        var changed = false;
+        lock (this._moneyLock)
+        {
+            if (this.Vault is not { } vault || this.SelectedCharacter?.Inventory is not { } inventory)
+            {
+                return false;
+            }
+
+            if (depositToVault)
+            {
+                var maxVaultMoney = this.GameContext?.Configuration?.MaximumVaultMoney ?? int.MaxValue;
+                if ((long)inventory.Money - value < 0
+                    || (long)vault.ItemStorage.Money + value > maxVaultMoney
+                    || !vault.TryAddMoney(value))
+                {
+                    return false;
+                }
+
+                if (value > 0)
+                {
+                    inventory.Money -= value;
+                    changed = true;
+                }
+            }
+            else
+            {
+                var maxInventoryMoney = this.GameContext?.Configuration?.MaximumInventoryMoney ?? int.MaxValue;
+                if ((long)inventory.Money + value > maxInventoryMoney
+                    || !vault.TryRemoveMoney(value))
+                {
+                    return false;
+                }
+
+                if (value > 0)
+                {
+                    inventory.Money += value;
+                    changed = true;
+                }
+            }
+        }
+
+        if (changed)
+        {
+            _ = this.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync());
+        }
+
+        return true;
+    }
 
     /// <summary>
     /// Moves the player to the safe zone.

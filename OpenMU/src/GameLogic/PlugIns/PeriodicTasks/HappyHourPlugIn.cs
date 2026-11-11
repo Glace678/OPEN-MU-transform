@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.GameLogic.PlugIns.PeriodicTasks;
 
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using MUnique.OpenMU.AttributeSystem;
 using MUnique.OpenMU.GameLogic.Attributes;
@@ -19,10 +20,10 @@ using MUnique.OpenMU.PlugIns;
 public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, PeriodicTaskGameServerState>, ISupportDefaultCustomConfiguration, IPlayerStateChangedPlugIn
 {
     /// <summary>
-    /// The happy hour extra multiplier which gets added to the players <see cref="Stats.ExperienceRate"/>
+    /// Per-context Happy Hour multiplier elements added to players' <see cref="Stats.ExperienceRate"/>
     /// and <see cref="Stats.MasterExperienceRate"/>.
     /// </summary>
-    private readonly SimpleElement _happyHourExtraMultiplier = new(1.0f, AggregateType.Multiplicate);
+    private readonly ConditionalWeakTable<IGameContext, SimpleElement> _multipliersByContext = new();
 
     /// <inheritdoc />
     public object CreateDefaultConfig() => HappyHourConfiguration.Default;
@@ -32,10 +33,11 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     {
         try
         {
+            var multiplier = this.GetMultiplier(player.GameContext);
             if (currentState != PlayerState.EnteredWorld)
             {
-                player.Attributes?.RemoveElement(this._happyHourExtraMultiplier, Stats.ExperienceRate);
-                player.Attributes?.RemoveElement(this._happyHourExtraMultiplier, Stats.MasterExperienceRate);
+                player.Attributes?.RemoveElement(multiplier, Stats.ExperienceRate);
+                player.Attributes?.RemoveElement(multiplier, Stats.MasterExperienceRate);
             }
 
             if (previousState != PlayerState.CharacterSelection || currentState != PlayerState.EnteredWorld)
@@ -43,12 +45,16 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
                 return;
             }
 
-            player.Attributes?.RemoveElement(this._happyHourExtraMultiplier, Stats.ExperienceRate);
-            player.Attributes?.RemoveElement(this._happyHourExtraMultiplier, Stats.MasterExperienceRate);
-
-            player.Attributes?.AddElement(this._happyHourExtraMultiplier, Stats.ExperienceRate);
-            player.Attributes?.AddElement(this._happyHourExtraMultiplier, Stats.MasterExperienceRate);
             var state = this.GetStateByGameContext(player.GameContext);
+            multiplier.Value = state.State == PeriodicTaskState.Started
+                ? (this.Configuration?.ExperienceMultiplier ?? 1.0f)
+                : 1.0f;
+
+            player.Attributes?.RemoveElement(multiplier, Stats.ExperienceRate);
+            player.Attributes?.RemoveElement(multiplier, Stats.MasterExperienceRate);
+
+            player.Attributes?.AddElement(multiplier, Stats.ExperienceRate);
+            player.Attributes?.AddElement(multiplier, Stats.MasterExperienceRate);
             var isEnabled = state.State != PeriodicTaskState.NotStarted;
             if (!isEnabled)
             {
@@ -84,7 +90,7 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     /// <inheritdoc/>
     protected override ValueTask OnStartedAsync(PeriodicTaskGameServerState state)
     {
-        this._happyHourExtraMultiplier.Value = this.Configuration?.ExperienceMultiplier ?? 1;
+        this.GetMultiplier(state.Context).Value = this.Configuration?.ExperienceMultiplier ?? 1.0f;
 
         return ValueTask.CompletedTask;
     }
@@ -92,9 +98,14 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     /// <inheritdoc/>
     protected override ValueTask OnFinishedAsync(PeriodicTaskGameServerState state)
     {
-        this._happyHourExtraMultiplier.Value = 1;
+        this.GetMultiplier(state.Context).Value = 1.0f;
 
         return ValueTask.CompletedTask;
+    }
+
+    private SimpleElement GetMultiplier(IGameContext gameContext)
+    {
+        return this._multipliersByContext.GetValue(gameContext, static _ => new SimpleElement(1.0f, AggregateType.Multiplicate));
     }
 
     /// <summary>

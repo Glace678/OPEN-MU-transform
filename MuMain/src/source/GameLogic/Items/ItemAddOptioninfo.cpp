@@ -42,9 +42,13 @@ const bool ItemAddOptioninfo::OpenItemAddOptionInfoFile(const std::wstring& file
     {
         int nSize = sizeof(ITEM_ADD_OPTION) * MAX_ITEM;
 
-        ::fread(m_ItemAddOption, nSize, 1, fp);
-        ::BuxConvert((BYTE*)m_ItemAddOption, nSize);
+        const size_t readCount = ::fread(m_ItemAddOption, nSize, 1, fp);
         ::fclose(fp);
+        if (readCount != 1)
+        {
+            return false;
+        }
+        ::BuxConvert((BYTE*)m_ItemAddOption, nSize);
 
         return true;
     }
@@ -53,13 +57,18 @@ const bool ItemAddOptioninfo::OpenItemAddOptionInfoFile(const std::wstring& file
 
 void ItemAddOptioninfo::GetItemAddOtioninfoText(std::vector<std::wstring>& outtextlist, int type)
 {
+    if (type < 0 || type >= MAX_ITEM)
+    {
+        return;
+    }
+
     int optiontype  = 0;
     int optionvalue = 0;
 
     for (int i = 0; i < 2; ++i)
     {
         std::wstring text;
-        wchar_t      TempText[100];
+        wchar_t      TempText[100]{};
 
         if (i == 0)
         {
@@ -75,29 +84,31 @@ void ItemAddOptioninfo::GetItemAddOtioninfoText(std::vector<std::wstring>& outte
         switch (optiontype)
         {
             case 1:
-                mu_swprintf(TempText, I18N::Game::AttackSucessRateIncreaseD, optionvalue);
+                mu_swprintf_s(TempText, std::size(TempText), I18N::Game::AttackSucessRateIncreaseD, optionvalue);
                 break;
             case 2:
-                mu_swprintf(TempText, I18N::Game::AdditionalDamageD, optionvalue);
+                mu_swprintf_s(TempText, std::size(TempText), I18N::Game::AdditionalDamageD, optionvalue);
                 break;
             case 3:
-                mu_swprintf(TempText, I18N::Game::DefenseSuccessRateIncreaseD, optionvalue);
+                mu_swprintf_s(TempText, std::size(TempText), I18N::Game::DefenseSuccessRateIncreaseD, optionvalue);
                 break;
             case 4:
-                mu_swprintf(TempText, I18N::Game::DefensiveSkillD, optionvalue);
+                mu_swprintf_s(TempText, std::size(TempText), I18N::Game::DefensiveSkillD, optionvalue);
                 break;
             case 5:
-                mu_swprintf(TempText, I18N::Game::MaxHPIncreaseD, optionvalue);
+                mu_swprintf_s(TempText, std::size(TempText), I18N::Game::MaxHPIncreaseD, optionvalue);
                 break;
             case 6:
-                mu_swprintf(TempText, I18N::Game::MaxSDIncreaseD, optionvalue);
+                mu_swprintf_s(TempText, std::size(TempText), I18N::Game::MaxSDIncreaseD, optionvalue);
                 break;
             case 7:
-                mu_swprintf(TempText, I18N::Game::SDAutoRecovery);
+                mu_swprintf_s(TempText, std::size(TempText), L"%ls", I18N::Game::SDAutoRecovery);
                 break;
             case 8:
-                mu_swprintf(TempText, I18N::Game::SDRecoveryRateIncreaseD, optionvalue);
+                mu_swprintf_s(TempText, std::size(TempText), I18N::Game::SDRecoveryRateIncreaseD, optionvalue);
                 break;
+            default:
+                continue;
         }
 
         text = TempText;

@@ -324,6 +324,8 @@ public sealed class OpenMuServerManager
             ["DOTNET_ENVIRONMENT"] = "Production",
             ["Database__AssumeExternallyProvisioned"] = "false",
             ["AdminPanel__Auth__DataProtectionKeyPath"] = this._paths.DataProtectionKeysDirectory,
+            ["AccountSelfService__MaintenanceTokenFile"] = Path.Combine(this._paths.KeysDirectory, "maintenance-token.txt"),
+            ["OPENMU_MOBILE_GM_LEDGER_FILE"] = Path.Combine(this._paths.KeysDirectory, "mobile-gm-operations.json"),
             ["OPENMU_LOG_DIRECTORY"] = this._paths.LogsDirectory,
             ["Serilog__WriteTo__1__Args__path"] = Path.Combine(this._paths.LogsDirectory, "openmu.log"),
             ["Serilog__MinimumLevel__Override__Microsoft.AspNetCore.Components.Server.Circuits"] = "Error",

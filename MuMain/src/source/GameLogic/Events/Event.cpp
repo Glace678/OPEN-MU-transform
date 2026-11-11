@@ -155,6 +155,11 @@ void CXmasEvent::LoadXmasEventSound()
 
 void CXmasEvent::CreateXmasEventEffect(CHARACTER* pCha, OBJECT* pObj, int iType)
 {
+    if (pCha == nullptr || pObj == nullptr)
+    {
+        return;
+    }
+
     if (pCha->m_iTempKey >= 0)
     {
         DeleteCharacter(pCha->m_iTempKey);
@@ -163,6 +168,11 @@ void CXmasEvent::CreateXmasEventEffect(CHARACTER* pCha, OBJECT* pObj, int iType)
     GenID();
 
     CHARACTER* c = CreateCharacter(m_iEffectID, MODEL_PLAYER, pCha->PositionX, pCha->PositionY, pCha->Rot);
+    if (c == nullptr)
+    {
+        pCha->m_iTempKey = -1;
+        return;
+    }
 
     pCha->m_iTempKey  = m_iEffectID;
     c->Object.Scale   = 0.30f;
@@ -385,37 +395,32 @@ bool CNewYearsDayEvent::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 
 #ifdef CSK_FIX_BLUELUCKYBAG_MOVECOMMAND
 
-const DWORD CBlueLuckyBagEvent::m_dwBlueLuckyBagCheckTime = 600000;
-
-CBlueLuckyBagEvent::CBlueLuckyBagEvent()
-{
-    m_bBlueLuckyBag      = false;
-    m_dwBlueLuckyBagTime = 0;
-}
+CBlueLuckyBagEvent::CBlueLuckyBagEvent() : m_lastActivationTick{}, m_isActive(false) {}
 
 CBlueLuckyBagEvent::~CBlueLuckyBagEvent() {}
 
 void CBlueLuckyBagEvent::StartBlueLuckyBag()
 {
-    m_bBlueLuckyBag      = true;
-    m_dwBlueLuckyBagTime = timeGetTime();
+    m_isActive           = true;
+    m_lastActivationTick = Clock::now();
 }
 
 void CBlueLuckyBagEvent::CheckTime()
 {
-    if (m_bBlueLuckyBag == true)
+    if (m_isActive)
     {
-        if (timeGetTime() - m_dwBlueLuckyBagTime > m_dwBlueLuckyBagCheckTime)
+        constexpr auto kBlueLuckyBagCheckDuration = std::chrono::milliseconds(600000);
+        if (Clock::now() - m_lastActivationTick > kBlueLuckyBagCheckDuration)
         {
-            m_bBlueLuckyBag      = false;
-            m_dwBlueLuckyBagTime = 0;
+            m_isActive           = false;
+            m_lastActivationTick = Clock::time_point{};
         }
     }
 }
 
-bool CBlueLuckyBagEvent::IsEnableBlueLuckyBag()
+bool CBlueLuckyBagEvent::IsEnableBlueLuckyBag() const
 {
-    return m_bBlueLuckyBag;
+    return m_isActive;
 }
 #endif  // CSK_FIX_BLUELUCKYBAG_MOVECOMMAND
 

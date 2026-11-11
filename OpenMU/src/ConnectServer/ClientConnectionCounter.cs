@@ -21,6 +21,7 @@ internal class ClientConnectionCounter
     /// <returns>The counted connections of the ip address.</returns>
     public int GetConnectionCount(IPAddress ipAddress)
     {
+        ipAddress = NormalizeAddress(ipAddress);
         int count;
         lock (this._syncRoot)
         {
@@ -36,6 +37,7 @@ internal class ClientConnectionCounter
     /// <param name="ipAddress">The ip address.</param>
     public void AddConnection(IPAddress ipAddress)
     {
+        ipAddress = NormalizeAddress(ipAddress);
         lock (this._syncRoot)
         {
             if (this._connections.ContainsKey(ipAddress))
@@ -55,6 +57,7 @@ internal class ClientConnectionCounter
     /// <param name="ipAddress">The ip address.</param>
     public void RemoveConnection(IPAddress ipAddress)
     {
+        ipAddress = NormalizeAddress(ipAddress);
         lock (this._syncRoot)
         {
             if (!this._connections.ContainsKey(ipAddress))
@@ -63,10 +66,15 @@ internal class ClientConnectionCounter
             }
 
             this._connections[ipAddress]--;
-            if (this._connections[ipAddress] == 0)
+            if (this._connections[ipAddress] <= 0)
             {
                 this._connections.Remove(ipAddress);
             }
         }
+    }
+
+    private static IPAddress NormalizeAddress(IPAddress ipAddress)
+    {
+        return ipAddress.IsIPv4MappedToIPv6 ? ipAddress.MapToIPv4() : ipAddress;
     }
 }

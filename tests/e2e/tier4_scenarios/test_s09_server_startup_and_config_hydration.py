@@ -31,8 +31,18 @@ class TestS09ServerStartupAndConfigHydration(unittest.TestCase):
         4. Hydrates DictionaryAdapter configuration cache.
         5. Confirms zero stale data and 100% startup configuration fidelity.
         """
-        # Step 1: Write and truncate PacketDefinitions XML
+        # Step 1: Pre-populate a longer legacy XML file so FileMode.Create truncation is exercised
         xml_path = os.path.join(self.temp_dir.name, "ServerPacketDefs.xml")
+        legacy_xml = (
+            '<?xml version="1.0" encoding="utf-8"?>\n'
+            '<PacketDefinitions xmlns="http://www.munique.net/OpenMU/PacketDefinitions">\n'
+            '  <Packets>\n'
+            + "".join(f'    <Packet Name="LegacyPacket_{i:02d}" HeaderType="C1" Length="32" />\n' for i in range(15))
+            + '  </Packets>\n'
+            '</PacketDefinitions>\n'
+        )
+        legacy_bytes = PacketDefinitionsSaveEngine.save_hardened(xml_path, legacy_xml)
+
         xml_content = (
             '<?xml version="1.0" encoding="utf-8"?>\n'
             '<PacketDefinitions xmlns="http://www.munique.net/OpenMU/PacketDefinitions">\n'
@@ -43,8 +53,10 @@ class TestS09ServerStartupAndConfigHydration(unittest.TestCase):
             '  </Packets>\n'
             '</PacketDefinitions>\n'
         )
+        self.assertGreater(legacy_bytes, len(xml_content.encode("utf-8")))
         bytes_written = PacketDefinitionsSaveEngine.save_hardened(xml_path, xml_content)
         self.assertEqual(bytes_written, len(xml_content.encode("utf-8")))
+        self.assertEqual(os.path.getsize(xml_path), bytes_written)
 
         # Step 2: Validate XML well-formedness
         valid, err = PacketDefinitionsSaveEngine.verify_xml_integrity(xml_path)

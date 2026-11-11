@@ -349,6 +349,7 @@ bool CGMDoppelGanger3::RenderObjectVisual(OBJECT* o, BMD* b)
 bool CGMDoppelGanger3::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 {
     vec3_t vPos, vLight;
+    Vector(1.0f, 1.0f, 1.0f, vLight);
 
     switch (o->Type)
     {

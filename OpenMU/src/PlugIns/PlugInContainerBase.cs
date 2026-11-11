@@ -88,6 +88,16 @@ public class PlugInContainerBase<TPlugIn> : IPlugInContainer<TPlugIn>
     }
 
     /// <summary>
+    /// Unsubscribes this container from the shared <see cref="PlugInManager"/> events.
+    /// </summary>
+    protected void DetachFromManager()
+    {
+        this.Manager.PlugInActivated -= this.OnPlugInActivated;
+        this.Manager.PlugInDeactivated -= this.OnPlugInDeactivated;
+        this.Manager.PlugInConfigurationChanged -= this.OnPlugInConfigurationChanged;
+    }
+
+    /// <summary>
     /// Activates the plug in.
     /// </summary>
     /// <param name="plugIn">The plug in.</param>
@@ -186,7 +196,11 @@ public class PlugInContainerBase<TPlugIn> : IPlugInContainer<TPlugIn>
 
         using (this.Lock.WriterLock())
         {
-            this.ActivatePlugIn(plugIn);
+            if (!this.ActivePlugIns.Contains(plugIn)
+                && !this.ActivePlugIns.Any(p => p.GetType() == e.PlugInType))
+            {
+                this.ActivatePlugIn(plugIn);
+            }
         }
     }
 

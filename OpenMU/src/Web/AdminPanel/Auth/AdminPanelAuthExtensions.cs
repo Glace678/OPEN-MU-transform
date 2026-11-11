@@ -54,11 +54,35 @@ public static class AdminPanelAuthExtensions
         services.Configure<AdminPanelAuthOptions>(options =>
         {
             options.RequireTwoFactor = authOptions.RequireTwoFactor;
+            options.CookieSecurePolicy = authOptions.CookieSecurePolicy;
             options.SessionTimeout = authOptions.SessionTimeout;
             options.MaxFailedAccessAttempts = authOptions.MaxFailedAccessAttempts;
             options.LockoutDuration = authOptions.LockoutDuration;
             options.BootstrapUser = authOptions.BootstrapUser;
             options.AnonymousSetupWindow = authOptions.AnonymousSetupWindow;
+        });
+
+        services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.AddPolicy(MobileGmAuthenticationDefaults.LoginRateLimitPolicy, context =>
+            {
+                var remoteIp = context.Connection.RemoteIpAddress;
+                if (remoteIp is { IsIPv4MappedToIPv6: true })
+                {
+                    remoteIp = remoteIp.MapToIPv4();
+                }
+
+                var partitionKey = remoteIp?.ToString() ?? "unknown";
+                return System.Threading.RateLimiting.RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey,
+                    _ => new System.Threading.RateLimiting.FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 10,
+                        Window = TimeSpan.FromMinutes(5),
+                        QueueLimit = 0,
+                    });
+            });
         });
 
         services.AddSingleton<ApiKeyRegistry>();
@@ -106,9 +130,10 @@ public static class AdminPanelAuthExtensions
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Lax;
 
-                // The panel is run behind a reverse proxy which terminates TLS; always emit
-                // the Secure flag (ForwardedHeaders makes the request appear as HTTPS).
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                // Emit Secure on every HTTPS request (including behind a reverse proxy sending
+                // X-Forwarded-Proto: https), while allowing local loopback/LAN HTTP sessions when
+                // CookieSecurePolicy is SameAsRequest.
+                options.Cookie.SecurePolicy = authOptions.CookieSecurePolicy;
                 options.ExpireTimeSpan = authOptions.SessionTimeout;
                 options.SlidingExpiration = true;
                 options.LoginPath = AdminAuthenticationDefaults.LoginPath;

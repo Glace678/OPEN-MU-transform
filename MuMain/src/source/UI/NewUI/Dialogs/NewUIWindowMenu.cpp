@@ -44,10 +44,9 @@ bool SEASON3B::CNewUIWindowMenu::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void SEASON3B::CNewUIWindowMenu::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }

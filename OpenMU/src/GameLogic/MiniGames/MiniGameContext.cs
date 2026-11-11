@@ -174,6 +174,24 @@ public class MiniGameContext : AsyncDisposable, IEventStateProvider
         return EnterResult.Success;
     }
 
+    /// <summary>
+    /// Cancels a previously reserved entry when post-reservation fee/ticket/warp steps fail.
+    /// </summary>
+    /// <param name="player">The player whose entry reservation should be rolled back.</param>
+    internal async ValueTask CancelEntryAsync(Player player)
+    {
+        using (await this._enterLock.WriterLockAsync().ConfigureAwait(false))
+        {
+            this._enteredPlayers.Remove(player);
+        }
+
+        player.PlayerPickedUpItem -= this.OnPlayerPickedUpItemAsync;
+        if (ReferenceEquals(player.CurrentMiniGame, this))
+        {
+            player.CurrentMiniGame = null;
+        }
+    }
+
     /// <inheritdoc />
     public bool IsSpawnWaveActive(byte waveNumber)
     {
@@ -521,7 +539,10 @@ public class MiniGameContext : AsyncDisposable, IEventStateProvider
                 // todo: Consider "winning", too. E.g. in Chaos Castle a player which died last, might not be the winner, but is saved with rank 1.
             }
 
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            if (!await context.SaveChangesAsync().ConfigureAwait(false))
+            {
+                this.Logger.LogWarning("{context}: Mini game ranking SaveChangesAsync returned false for instance {instanceId}.", this, instanceId);
+            }
         }
         catch (Exception ex)
         {
@@ -637,12 +658,11 @@ public class MiniGameContext : AsyncDisposable, IEventStateProvider
                 return;
             }
 
-            var droppedItem = new DroppedItem(item, player.RandomPosition, this.Map, player, player.GetAsEnumerable());
-
             var shouldDrop = drop || !(player.Inventory is not null && await player.Inventory.AddItemAsync(item).ConfigureAwait(false));
             if (shouldDrop)
             {
                 this.Logger.LogDebug("{context}: Reward {item} for {player} has been dropped by players coordinates {position}.", this, item, player, player.Position);
+                var droppedItem = new DroppedItem(item, player.RandomPosition, this.Map, player, player.GetAsEnumerable());
                 await this.Map.AddAsync(droppedItem).ConfigureAwait(false);
             }
         }

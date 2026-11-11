@@ -28,6 +28,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
     /// <inheritdoc />
     public async ValueTask<AccountCredentialSnapshot?> ReadCredentialsAsync(string loginName, CancellationToken cancellationToken = default)
     {
+        using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
         return await this.Context.Set<Account>().AsNoTracking()
             .Where(account => account.LoginName == loginName)
             .Select(account => new AccountCredentialSnapshot(account.LoginName, account.PasswordHash, account.RecoveryCodeHash))
@@ -41,6 +42,8 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
         string? newRecoveryCodeHash,
         CancellationToken cancellationToken = default)
     {
+        using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
+
         // Both values are predicates in one database statement. Concurrent recovery
         // cannot succeed twice, and ordinary gameplay saves do not acquire a new token.
         var accounts = this.Context.Set<Account>();
@@ -56,15 +59,22 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
         if (affected == 1)
         {
             // ExecuteUpdate bypasses the change tracker (and the concurrency token). If this context
-            // tracks the account (e.g. during periodic player saves), it still holds the old
-            // credentials: a later SaveChanges could overwrite them ("password change lost") or
-            // fail the concurrency check. Reload it so the tracked instance matches the database.
+            // tracks the account (e.g. during periodic player saves), synchronize only the two
+            // credential properties so unsaved gameplay fields (such as VaultPassword) are preserved.
             var trackedAccount = this.Context.ChangeTracker.Entries<Account>()
                 .FirstOrDefault(entry => entry.State != EntityState.Added
                     && entry.Entity.LoginName == expected.LoginName);
             if (trackedAccount is { })
             {
-                await trackedAccount.ReloadAsync(cancellationToken).ConfigureAwait(false);
+                var passwordProperty = trackedAccount.Property(account => account.PasswordHash);
+                passwordProperty.CurrentValue = newPasswordHash;
+                passwordProperty.OriginalValue = newPasswordHash;
+                passwordProperty.IsModified = false;
+
+                var recoveryCodeProperty = trackedAccount.Property(account => account.RecoveryCodeHash);
+                recoveryCodeProperty.CurrentValue = newRecoveryCodeHash;
+                recoveryCodeProperty.OriginalValue = newRecoveryCodeHash;
+                recoveryCodeProperty.IsModified = false;
             }
         }
 
@@ -74,6 +84,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
     /// <inheritdoc/>
     public async ValueTask<DataModel.Entities.LetterBody?> GetLetterBodyByHeaderIdAsync(Guid headerId, CancellationToken cancellationToken = default)
     {
+        using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
         using var context = this.RepositoryProvider.ContextStack.UseContext(this);
         if (this.RepositoryProvider.GetRepository<LetterBody, LetterBodyRepository>() is { } repository)
         {
@@ -91,6 +102,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
             return false;
         }
 
+        using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
         persistentHeader.Receiver = await this.Context.Set<Character>().FirstOrDefaultAsync(c => c.Name == letterHeader.ReceiverName, cancellationToken).ConfigureAwait(false);
         return persistentHeader.Receiver != null;
     }
@@ -98,6 +110,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
     /// <inheritdoc />
     public async ValueTask<DataModel.Entities.AccountState?> AuthenticateAsync(string loginName, string password, CancellationToken cancellationToken = default)
     {
+        using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
         using (this.RepositoryProvider.ContextStack.UseContext(this))
         {
             if (this.RepositoryProvider.GetRepository<Account, AccountRepository>() is { } accountRepository)
@@ -112,6 +125,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
     /// <inheritdoc />
     public async ValueTask<DataModel.Entities.Account?> GetAccountByLoginNameAsync(string loginName, string password, CancellationToken cancellationToken = default)
     {
+        using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
         using (this.RepositoryProvider.ContextStack.UseContext(this))
         {
             if (this.RepositoryProvider.GetRepository<Account, AccountRepository>() is { } accountRepository)
@@ -126,6 +140,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
     /// <inheritdoc />
     public async ValueTask<DataModel.Entities.Account?> GetAccountByLoginNameAsync(string loginName, CancellationToken cancellationToken = default)
     {
+        using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
         using (this.RepositoryProvider.ContextStack.UseContext(this))
         {
             if (this.RepositoryProvider.GetRepository<Account, AccountRepository>() is { } accountRepository)
@@ -140,6 +155,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
     /// <inheritdoc />
     public async ValueTask<IEnumerable<DataModel.Entities.Account>> GetAccountsOrderedByLoginNameAsync(int skip, int count, CancellationToken cancellationToken = default)
     {
+        using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
         using (this.RepositoryProvider.ContextStack.UseContext(this))
         {
             return await this.Context.Set<Account>().AsNoTracking().OrderBy(a => a.LoginName).Skip(skip).Take(count).ToListAsync(cancellationToken).ConfigureAwait(false);
@@ -149,6 +165,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
     /// <inheritdoc />
     public async ValueTask<IEnumerable<DataModel.Entities.Account>> SearchAccountsAsync(string searchTerm, int skip, int count, CancellationToken cancellationToken = default)
     {
+        using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
         using (this.RepositoryProvider.ContextStack.UseContext(this))
         {
             // Invariant: this one runs in .NET, so it must not depend on the server's locale - in a
@@ -169,6 +186,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
     /// <inheritdoc />
     public async ValueTask<DataModel.Entities.Account?> GetAccountByCharacterNameAsync(string characterName, CancellationToken cancellationToken = default)
     {
+        using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
         using (this.RepositoryProvider.ContextStack.UseContext(this))
         {
             if (this.RepositoryProvider.GetRepository<Account, AccountRepository>() is { } accountRepository)
@@ -185,6 +203,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
         Guid characterId,
         CancellationToken cancellationToken = default)
     {
+        using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
         using (this.RepositoryProvider.ContextStack.UseContext(this))
         {
             return await this.Context.Set<CastleSiegePendingReward>()

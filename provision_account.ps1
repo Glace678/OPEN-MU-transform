@@ -39,11 +39,15 @@ $onResolve = {
     return $null
 }
 [System.AppDomain]::CurrentDomain.add_AssemblyResolve($onResolve)
-Add-Type -Path (Join-Path $LibDir 'BCrypt.Net-Next.dll')
+try {
+    Add-Type -Path (Join-Path $LibDir 'BCrypt.Net-Next.dll')
 
-$hash = [BCrypt.Net.BCrypt]::HashPassword($Password)
-if (-not [BCrypt.Net.BCrypt]::Verify($Password, $hash)) {
-    throw 'BCrypt round-trip verification failed.'
+    $hash = [BCrypt.Net.BCrypt]::HashPassword($Password)
+    if (-not [BCrypt.Net.BCrypt]::Verify($Password, $hash)) {
+        throw 'BCrypt round-trip verification failed.'
+    }
+} finally {
+    [System.AppDomain]::CurrentDomain.remove_AssemblyResolve($onResolve)
 }
 
 # Validate against SoloAccountInitializer policy.
@@ -65,6 +69,16 @@ VALUES
 ON CONFLICT ("LoginName") DO NOTHING;
 "@
 
-[System.IO.File]::WriteAllText($OutSql, $sql, [System.Text.Encoding]::ASCII)
+[System.IO.Directory]::CreateDirectory($KeysDir) | Out-Null
+[System.IO.File]::WriteAllText($OutSql, $sql, [System.Text.UTF8Encoding]::new($false))
+$identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+icacls $OutSql /inheritance:r /grant:r "*$($identity.User.Value):(R,W)" | Out-Null
+if ($LASTEXITCODE -ne 0) {
+    icacls $OutSql /inheritance:r /grant:r "$($identity.Name):(R,W)" | Out-Null
+}
+if ($LASTEXITCODE -ne 0) {
+    Remove-Item -LiteralPath $OutSql -Force -ErrorAction SilentlyContinue
+    throw "Failed to restrict ACL on generated SQL file: $OutSql"
+}
 Write-Output ("SQL_WRITTEN=" + $OutSql)
 Write-Output ("ID=" + $id)

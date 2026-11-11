@@ -1,4 +1,4 @@
-﻿// <copyright file="ConnectionExtensions.cs" company="MUnique">
+// <copyright file="ConnectionExtensions.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -3344,7 +3344,7 @@ public static class ConnectionExtensions
 
         int WritePacket()
         {
-            var length = DeleteCharacterRef.Length;
+            var length = DeleteCharacterRef.GetRequiredSize(securityCode);
             if (length > byte.MaxValue)
             {
                 throw new ArgumentException($"The packet length {length} exceeds the single-byte header maximum ({byte.MaxValue}).");

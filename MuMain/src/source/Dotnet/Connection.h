@@ -8,11 +8,12 @@
 #include "PacketFunctions_ConnectServer.h"
 #include "PacketFunctions_ClientToServer.h"
 
+#include <atomic>
 #include <cwchar>
 
 #ifdef _WIN32
 #include "Core/Platform/WinCompat.h"
-#define symLoad GetProcAddress
+#define symLoad(handle, name) ((handle) ? ::GetProcAddress((handle), (name)) : nullptr)
 #else
 #include "dlfcn.h"
 #include <array>
@@ -23,7 +24,7 @@
 #else
 #include <unistd.h>
 #endif
-#define symLoad dlsym
+#define symLoad(handle, name) ((handle) ? ::dlsym((handle), (name)) : nullptr)
 #endif
 
 #ifdef _WIN32
@@ -110,7 +111,8 @@ template <typename T> T LoadManagedSymbol(const char* name)
         return nullptr;
     }
 
-    const auto symbol = reinterpret_cast<T>(symLoad(munique_client_library_handle, name));
+    const auto handle = munique_client_library_handle;
+    const auto symbol = reinterpret_cast<T>(symLoad(handle, name));
     if (!symbol)
     {
         ReportDotNetError(name);
@@ -118,22 +120,51 @@ template <typename T> T LoadManagedSymbol(const char* name)
 
     return symbol;
 }
+
+template <typename Fn> struct NonNullManagedSymbolHelper;
+
+template <typename... Args> struct NonNullManagedSymbolHelper<void(CORECLR_DELEGATE_CALLTYPE*)(Args...)>
+{
+    static void CORECLR_DELEGATE_CALLTYPE Fallback(Args...)
+    {
+        ReportDotNetError("missing managed packet export");
+    }
+
+    static auto Bind(const char* name) noexcept -> void(CORECLR_DELEGATE_CALLTYPE*)(Args...)
+    {
+        const auto handle = munique_client_library_handle;
+        if (handle)
+        {
+            if (const auto sym = reinterpret_cast<void(CORECLR_DELEGATE_CALLTYPE*)(Args...)>(symLoad(handle, name)))
+            {
+                return sym;
+            }
+        }
+        return &Fallback;
+    }
+};
+
+template <typename Fn> Fn BindManagedPacketSymbol(const char* name) noexcept
+{
+    return NonNullManagedSymbolHelper<Fn>::Bind(name);
+}
 }
 
+using DotNetBridge::BindManagedPacketSymbol;
 using DotNetBridge::LoadManagedSymbol;
 
 class Connection
 {
 private:
-    static void OnPacketReceivedS(int32_t handle, int32_t size, BYTE* data);
-    static void OnDisconnectedS(int32_t handle);
+    static void CORECLR_DELEGATE_CALLTYPE OnPacketReceivedS(int32_t handle, int32_t size, BYTE* data);
+    static void CORECLR_DELEGATE_CALLTYPE OnDisconnectedS(int32_t handle);
 
     PacketFunctions_ChatServer*     _chatServer    = {};
     PacketFunctions_ConnectServer*  _connectServer = {};
     PacketFunctions_ClientToServer* _gameServer    = {};
 
-    int32_t _handle;
-    void (*_packetHandler)(int32_t, const BYTE*, int32_t);
+    std::atomic<int32_t> _handle{0};
+    void (*_packetHandler)(int32_t, const BYTE*, int32_t) = nullptr;
 
     void OnDisconnected();
     void OnPacketReceived(const BYTE* data, const int32_t length);
@@ -147,7 +178,7 @@ public:
     void Send(const BYTE* data, const int32_t length);
     void Close();
 
-    int32_t GetHandle() const { return _handle; }
+    int32_t GetHandle() const { return _handle.load(std::memory_order_acquire); }
 
     PacketFunctions_ChatServer*     ToChatServer() const { return _chatServer; }
     PacketFunctions_ConnectServer*  ToConnectServer() const { return _connectServer; }

@@ -56,6 +56,17 @@ public class GuildWarRequestAction
         }
 
         var targetGuildId = await serverContext.GuildServer.GetGuildIdByNameAsync(targetGuildName).ConfigureAwait(false);
+        if (targetGuildId == 0)
+        {
+            await player.InvokeViewPlugInAsync<IShowShowGuildWarRequestResultPlugIn>(p => p.ShowResultAsync(GuildWarRequestResult.GuildNotFound)).ConfigureAwait(false);
+            return;
+        }
+
+        if (targetGuildId == guildStatus.GuildId)
+        {
+            await player.InvokeViewPlugInAsync<IShowShowGuildWarRequestResultPlugIn>(p => p.ShowResultAsync(GuildWarRequestResult.Failed)).ConfigureAwait(false);
+            return;
+        }
 
         Player? targetGuildMaster = null;
         await serverContext.ForEachGuildPlayerAsync(targetGuildId, p =>
@@ -69,9 +80,9 @@ public class GuildWarRequestAction
             return;
         }
 
-        if (targetGuildMaster.GuildWarContext is not null || player.GuildWarContext is not null)
+        if (ReferenceEquals(targetGuildMaster, player))
         {
-            await player.InvokeViewPlugInAsync<IShowShowGuildWarRequestResultPlugIn>(p => p.ShowResultAsync(GuildWarRequestResult.AlreadyInWar)).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IShowShowGuildWarRequestResultPlugIn>(p => p.ShowResultAsync(GuildWarRequestResult.Failed)).ConfigureAwait(false);
             return;
         }
 
@@ -82,8 +93,24 @@ public class GuildWarRequestAction
             MaximumScore = (byte)(guildWarType == GuildWarType.Soccer ? 100 : 20),
         };
 
-        targetGuildMaster.GuildWarContext = new GuildWarContext(guildWarType, score, GuildWarTeam.First, player);
-        player.GuildWarContext = new GuildWarContext(guildWarType, score, GuildWarTeam.Second, null);
+        var targetContext = new GuildWarContext(guildWarType, score, GuildWarTeam.First, player);
+        var requesterContext = new GuildWarContext(guildWarType, score, GuildWarTeam.Second, null);
+        bool reserved = false;
+        lock (GuildWarContext.SyncRoot)
+        {
+            if (targetGuildMaster.GuildWarContext is null && player.GuildWarContext is null)
+            {
+                targetGuildMaster.GuildWarContext = targetContext;
+                player.GuildWarContext = requesterContext;
+                reserved = true;
+            }
+        }
+
+        if (!reserved)
+        {
+            await player.InvokeViewPlugInAsync<IShowShowGuildWarRequestResultPlugIn>(p => p.ShowResultAsync(GuildWarRequestResult.AlreadyInWar)).ConfigureAwait(false);
+            return;
+        }
 
         await targetGuildMaster.InvokeViewPlugInAsync<IShowGuildWarRequestPlugIn>(p => p.ShowRequestAsync(guild.Name!, guildWarType)).ConfigureAwait(false);
         await player.InvokeViewPlugInAsync<IShowShowGuildWarRequestResultPlugIn>(p => p.ShowResultAsync(GuildWarRequestResult.RequestSentToGuildMaster)).ConfigureAwait(false);

@@ -10,6 +10,8 @@
 #include "Audio/DSPlaySound.h"
 #include "UI/NewUI/NewUISystem.h"
 
+#include <algorithm>
+
 using namespace SEASON3B;
 
 extern int     g_iNumLineMessageBoxCustom;
@@ -18,8 +20,11 @@ extern wchar_t g_lpszMessageBoxCustom[NUM_LINE_CMB][MAX_LENGTH_CMB];
 
 SEASON3B::CNewUIMyQuestInfoWindow::CNewUIMyQuestInfoWindow()
 {
-    m_pNewUIMng = NULL;
+    m_pNewUIMng       = NULL;
     m_Pos.x = m_Pos.y = 0;
+    m_eTabBtnIndex    = TAB_QUEST;
+    m_nMsgLine        = 0;
+    ::memset(m_aszMsg, 0, sizeof(m_aszMsg));
 }
 
 SEASON3B::CNewUIMyQuestInfoWindow::~CNewUIMyQuestInfoWindow()
@@ -46,10 +51,9 @@ bool SEASON3B::CNewUIMyQuestInfoWindow::Create(CNewUIManager* pNewUIMng, int x, 
 
 void SEASON3B::CNewUIMyQuestInfoWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -447,6 +451,8 @@ void CNewUIMyQuestInfoWindow::UnselectQuestList()
 void CNewUIMyQuestInfoWindow::SetCurQuestList(DWordList* pDWordList)
 {
     m_CurQuestListBox.Clear();
+    if (pDWordList == nullptr)
+        return;
 
     wchar_t szInput[64];
     wchar_t szOutput[64];
@@ -504,8 +510,15 @@ void CNewUIMyQuestInfoWindow::SetSelQuestRequestReward()
     if (NULL == pQuestRequestReward)
         return;
 
-    SRequestRewardText aRequestRewardText[13];
+    SRequestRewardText aRequestRewardText[13] = {};
     g_QuestMng.GetRequestRewardText(aRequestRewardText, 13, dwSelQuestIndex);
+
+    const int reqCount         = std::min<int>(pQuestRequestReward->m_byRequestCount, 5);
+    const int genCount         = std::min<int>(pQuestRequestReward->m_byGeneralRewardCount, 5);
+    const int totalRewardCount = std::min<int>(static_cast<int>(pQuestRequestReward->m_byGeneralRewardCount) +
+                                                   static_cast<int>(pQuestRequestReward->m_byRandRewardCount),
+                                               5);
+    const int randCount        = totalRewardCount - genCount;
 
     int i = 0;
     int j, nLoop;
@@ -514,21 +527,22 @@ void CNewUIMyQuestInfoWindow::SetSelQuestRequestReward()
         if (0 == j)
         {
             m_QuestContentsListBox.AddText(g_hFont, 0xffffffff, RT3_SORT_LEFT, L" ");
-            nLoop = 1 + pQuestRequestReward->m_byRequestCount;
+            nLoop = 1 + reqCount;
         }
-        else if (1 == j && pQuestRequestReward->m_byGeneralRewardCount)
+        else if (1 == j && genCount > 0)
         {
             m_QuestContentsListBox.AddText(g_hFont, 0xffffffff, RT3_SORT_LEFT, L" ");
-            nLoop = 1 + pQuestRequestReward->m_byGeneralRewardCount + i;
+            nLoop = 1 + genCount + i;
         }
-        else if (2 == j && pQuestRequestReward->m_byRandRewardCount)
+        else if (2 == j && randCount > 0)
         {
             m_QuestContentsListBox.AddText(g_hFont, 0xffffffff, RT3_SORT_LEFT, L" ");
-            nLoop = 1 + pQuestRequestReward->m_byRandRewardCount + i;
+            nLoop = 1 + randCount + i;
         }
         else
             nLoop = 0;
 
+        nLoop = std::min<int>(nLoop, static_cast<int>(std::size(aRequestRewardText)));
         for (; i < nLoop; ++i)
             m_QuestContentsListBox.AddText(&aRequestRewardText[i], RT3_SORT_CENTER);
     }

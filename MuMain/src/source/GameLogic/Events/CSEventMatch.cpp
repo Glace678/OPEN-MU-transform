@@ -253,7 +253,7 @@ void CSDevilSquareMatch::RenderMatchResult(void)
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->RenderText(xPos[2], yPos, I18N::Game::Congratulations);
     yPos += 16;
-    WriteWide(lpszStr, I18N::Game::SYourBraveryIsProvenInDevilSquare, Hero->ID);
+    WriteWide(lpszStr, I18N::Game::SYourBraveryIsProvenInDevilSquare, Hero ? Hero->ID : L"");
     g_pRenderText->RenderText((xPos[2]), yPos, lpszStr);
     yPos += 24;
 

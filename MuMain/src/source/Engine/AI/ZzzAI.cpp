@@ -228,9 +228,12 @@ void MoveBoid(OBJECT* o, int i, OBJECT* Boids, int MAX)
                 xdist *= FPS_ANIMATION_FACTOR;
                 ydist *= FPS_ANIMATION_FACTOR;
                 float pdist = std::sqrt(xdist * xdist + ydist * ydist);
-                TargetX += xdist / pdist;
-                TargetY += ydist / pdist;
-                NumBirds++;
+                if (pdist > 1e-5f)
+                {
+                    TargetX += xdist / pdist;
+                    TargetY += ydist / pdist;
+                    NumBirds++;
+                }
             }
         }
     }
@@ -256,6 +259,7 @@ void PushObject(vec3_t PushPosition, vec3_t Position, float Power, vec3_t Angle)
     vec3_t p1, p2;
     Vector(0.f, -Power, 0.f, p1);
     VectorRotate(p1, Matrix, p2);
+    VectorAdd(Position, p2, Position);
     Position[2] = RequestTerrainHeight(Position[0], Position[1]);
 }
 
@@ -300,7 +304,8 @@ void SetAction_Fenrir_Damage(CHARACTER* c, OBJECT* o)
     }
     else
     {
-        if (c->Weapon[0].Type != -1 && c->Weapon[1].Type != -1)
+        if (c->Weapon[0].Type != -1 && c->Weapon[1].Type != -1 && c->Weapon[0].Type != MODEL_ARROWS &&
+            c->Weapon[1].Type != MODEL_BOLT)
             SetAction(o, PLAYER_FENRIR_DAMAGE_TWO_SWORD);
         else if (c->Weapon[0].Type != -1 && c->Weapon[1].Type == -1)
             SetAction(o, PLAYER_FENRIR_DAMAGE_ONE_RIGHT);
@@ -499,7 +504,8 @@ void MoveHead(CHARACTER* c)
                         o->HeadTargetAngle[i] += 360.f;
             }
         }
-        else if (o->CurrentAction == MONSTER01_WALK && c->TargetCharacter != -1)
+        else if (o->CurrentAction == MONSTER01_WALK && c->TargetCharacter >= 0 &&
+                 c->TargetCharacter < MAX_CHARACTERS_CLIENT)
         {
             LookAtTarget(o, &CharactersClient[c->TargetCharacter]);
         }
@@ -651,8 +657,9 @@ bool PathFinding2(int sx, int sy, int tx, int ty, PATH_t* a, float fDistance, in
 
     if (M34CryWolf1st::Get_State_Only_Elf() == true && M34CryWolf1st::IsCyrWolf1st() == true)
     {
-        if ((CharactersClient[TargetNpc].Object.Type >= MODEL_CRYWOLF_ALTAR1 &&
-             CharactersClient[TargetNpc].Object.Type <= MODEL_CRYWOLF_ALTAR5))
+        if (TargetNpc >= 0 && TargetNpc < MAX_CHARACTERS_CLIENT &&
+            CharactersClient[TargetNpc].Object.Type >= MODEL_CRYWOLF_ALTAR1 &&
+            CharactersClient[TargetNpc].Object.Type <= MODEL_CRYWOLF_ALTAR5)
         {
             Value = true;
         }

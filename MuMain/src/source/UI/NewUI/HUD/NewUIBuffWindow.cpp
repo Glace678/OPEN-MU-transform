@@ -52,10 +52,9 @@ bool SEASON3B::CNewUIBuffWindow::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void SEASON3B::CNewUIBuffWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -164,6 +163,10 @@ void SEASON3B::CNewUIBuffWindow::BuffSort(std::list<eBuffState>& buffstate)
         }
 
         eBuffState base = NormalizeBuffState(buf);
+        if (base <= eBuffNone || base >= eBuff_Count)
+        {
+            continue;
+        }
         if (top[base] == eBuffNone || BuffTier(buf) > BuffTier(top[base]))
         {
             top[base] = buf;
@@ -183,7 +186,7 @@ void SEASON3B::CNewUIBuffWindow::BuffSort(std::list<eBuffState>& buffstate)
         }
 
         eBuffState base = NormalizeBuffState(buf);
-        if (buf != top[base])
+        if (base <= eBuffNone || base >= eBuff_Count || buf != top[base])
         {
             continue;
         }
@@ -372,18 +375,23 @@ void SEASON3B::CNewUIBuffWindow::RenderBuffIcon(eBuffState& eBuffType, float x, 
 void SEASON3B::CNewUIBuffWindow::RenderBuffTooltip(eBuffClass& eBuffClassType, eBuffState& eBuffType, float x, float y)
 {
     int TextNum = 0;
-    ::memset(TextList[0], 0, sizeof(char) * 30 * 100);
+    ::memset(TextList[0], 0, sizeof(wchar_t) * 30 * 100);
     ::memset(TextListColor, 0, sizeof(int) * 30);
     ::memset(TextBold, 0, sizeof(int) * 30);
 
     std::list<std::wstring> tooltipinfo;
     g_BuffToolTipString(tooltipinfo, eBuffType);
 
-    for (std::list<std::wstring>::iterator iter = tooltipinfo.begin(); iter != tooltipinfo.end(); ++iter)
+    std::wstring bufftime;
+    g_BuffStringTime(eBuffType, bufftime);
+    const int maxTooltipLines = bufftime.empty() ? 30 : 29;
+
+    for (std::list<std::wstring>::iterator iter = tooltipinfo.begin();
+         iter != tooltipinfo.end() && TextNum < maxTooltipLines; ++iter)
     {
         std::wstring& temp = *iter;
 
-        mu_swprintf(TextList[TextNum], temp.c_str());
+        wcsncpy_s(TextList[TextNum], 100, temp.c_str(), _TRUNCATE);
 
         if (TextNum == 0)
         {
@@ -399,12 +407,9 @@ void SEASON3B::CNewUIBuffWindow::RenderBuffTooltip(eBuffClass& eBuffClassType, e
         TextNum += 1;
     }
 
-    std::wstring bufftime;
-    g_BuffStringTime(eBuffType, bufftime);
-
-    if (bufftime.size() != 0)
+    if (!bufftime.empty() && TextNum < 30)
     {
-        mu_swprintf(TextList[TextNum], I18N::Game::DurationPeriodS, bufftime.c_str());
+        swprintf_s(TextList[TextNum], 100, I18N::Game::DurationPeriodS, bufftime.c_str());
         TextListColor[TextNum] = TEXT_COLOR_PURPLE;
         TextBold[TextNum]      = false;
         TextNum += 1;

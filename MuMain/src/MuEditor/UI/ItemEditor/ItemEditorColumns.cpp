@@ -11,7 +11,9 @@
 #include "Core/Globals/_define.h"
 #include "imgui.h"
 #include <algorithm>
+#include <cwchar>
 #include <sstream>
+#include <vector>
 
 #include "ItemEditorTable.h"
 #include "../Console/MuEditorConsoleUI.h"
@@ -36,7 +38,16 @@ static std::string GetItemNameUtf8(int itemIndex)
     char nameBuf[256]{};
     if (ItemAttribute && itemIndex >= 0 && itemIndex < MAX_ITEM)
     {
-        WideCharToMultiByte(CP_UTF8, 0, ItemAttribute[itemIndex].Name, -1, nameBuf, sizeof(nameBuf), NULL, NULL);
+        const size_t srcLen = wcsnlen(ItemAttribute[itemIndex].Name, MAX_ITEM_NAME);
+        if (srcLen > 0)
+        {
+            const int written = WideCharToMultiByte(CP_UTF8, 0, ItemAttribute[itemIndex].Name, static_cast<int>(srcLen),
+                                                    nameBuf, static_cast<int>(sizeof(nameBuf)) - 1, nullptr, nullptr);
+            if (written <= 0)
+                nameBuf[0] = '\0';
+            else
+                nameBuf[written] = '\0';
+        }
     }
     if (nameBuf[0] == '\0')
         return "<unnamed>";
@@ -163,20 +174,37 @@ void CItemEditorColumns::RenderBoolColumn(const char* columnName, int& colIdx, i
 void CItemEditorColumns::RenderWCharArrayColumn(const char* columnName, int& colIdx, int itemIndex, int uniqueId,
                                                 wchar_t* value, int arraySize, bool& rowInteracted, bool isVisible)
 {
-    if (!isVisible)
+    if (!isVisible || !value || arraySize <= 0)
         return;
 
     ImGui::TableSetColumnIndex(colIdx++);
     ImGui::PushID(itemIndex * 100000 + uniqueId);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
-    char editableBuffer[256];
-    WideCharToMultiByte(CP_UTF8, 0, value, -1, editableBuffer, sizeof(editableBuffer), NULL, NULL);
-
-    if (ImGui::InputText("##input", editableBuffer, sizeof(editableBuffer)))
+    const size_t      utf8Cap = std::max<size_t>(256, static_cast<size_t>(arraySize) * 4 + 1);
+    std::vector<char> editableBuffer(utf8Cap, '\0');
+    const size_t      srcLen = wcsnlen(value, static_cast<size_t>(arraySize));
+    if (srcLen > 0)
     {
-        MultiByteToWideChar(CP_UTF8, 0, editableBuffer, -1, value, arraySize);
-        LogItemFieldChange(itemIndex, columnName, std::string(editableBuffer));
+        const int written = WideCharToMultiByte(CP_UTF8, 0, value, static_cast<int>(srcLen), editableBuffer.data(),
+                                                static_cast<int>(editableBuffer.size()) - 1, nullptr, nullptr);
+        if (written <= 0)
+            editableBuffer[0] = '\0';
+        else
+            editableBuffer[static_cast<size_t>(written)] = '\0';
+    }
+
+    if (ImGui::InputText("##input", editableBuffer.data(), editableBuffer.size()))
+    {
+        std::vector<wchar_t> wideTemp(static_cast<size_t>(arraySize), L'\0');
+        const int            wideWritten =
+            MultiByteToWideChar(CP_UTF8, 0, editableBuffer.data(), -1, wideTemp.data(), arraySize);
+        if (wideWritten > 0)
+        {
+            wideTemp[static_cast<size_t>(arraySize) - 1] = L'\0';
+            std::copy(wideTemp.begin(), wideTemp.end(), value);
+            LogItemFieldChange(itemIndex, columnName, std::string(editableBuffer.data()));
+        }
     }
 
     if (ImGui::IsItemActivated())
@@ -202,12 +230,10 @@ void CItemEditorColumns::RenderIndexColumn(int& colIdx, int itemIndex, bool& row
     bool wasActive      = ImGui::IsItemActive();
     bool wasDeactivated = ImGui::IsItemDeactivatedAfterEdit();
 
-    if (wasDeactivated && newIndex >= 0 && newIndex < MAX_ITEM && newIndex != itemIndex)
+    if (wasDeactivated && ItemAttribute != nullptr && itemIndex >= 0 && itemIndex < MAX_ITEM && newIndex >= 0 &&
+        newIndex < MAX_ITEM && newIndex != itemIndex)
     {
-        char targetName[128];
-        WideCharToMultiByte(CP_UTF8, 0, ItemAttribute[newIndex].Name, -1, targetName, sizeof(targetName), NULL, NULL);
-
-        if (targetName[0] == '\0')
+        if (ItemAttribute[newIndex].Name[0] == L'\0')
         {
             ITEM_ATTRIBUTE temp      = ItemAttribute[itemIndex];
             ItemAttribute[itemIndex] = ItemAttribute[newIndex];

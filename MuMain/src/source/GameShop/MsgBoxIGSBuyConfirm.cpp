@@ -56,9 +56,9 @@ void CMsgBoxIGSBuyConfirm::Initialize(WORD wItemCode, int iPackageSeq, int iDisp
     m_iPriceSeq   = iPriceSeq;
     m_iCashType   = iCashType;
 
-    mu_swprintf(m_szItemName, I18N::Game::ItemS, pszName);
-    mu_swprintf(m_szItemPrice, I18N::Game::PriceS, pszPrice);
-    mu_swprintf(m_szItemPeriod, I18N::Game::DurationS, pszPeriod);
+    mu_swprintf_trunc(m_szItemName, I18N::Game::ItemS, pszName ? pszName : L"");
+    mu_swprintf_trunc(m_szItemPrice, I18N::Game::PriceS, pszPrice ? pszPrice : L"");
+    mu_swprintf_trunc(m_szItemPeriod, I18N::Game::DurationS, pszPeriod ? pszPeriod : L"");
 
     //int m_iNumNoticeLine = SeparateTextIntoLines( I18N::Game::BoughtItemsUsedOrTakenOutOfStorageCannotBeReturned, txtline[0], NUM_LINE_CMB, MAX_LENGTH_CMB);
     m_iNumNoticeLine =
@@ -127,9 +127,15 @@ CALLBACK_RESULT CMsgBoxIGSBuyConfirm::LButtonUp(class CNewUIMessageBoxBase* pOwn
 CALLBACK_RESULT CMsgBoxIGSBuyConfirm::OKButtonDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSBuyConfirm*>(pOwner);
-    SocketClient->ToGameServer()->SendCashShopItemBuyRequest(pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq,
-                                                             pOwnMsgBox->m_iPriceSeq, pOwnMsgBox->m_wItemCode,
-                                                             pOwnMsgBox->m_iCashType, 0);
+    if (!pOwnMsgBox)
+        return CALLBACK_CONTINUE;
+
+    if (SocketClient)
+    {
+        SocketClient->ToGameServer()->SendCashShopItemBuyRequest(pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq,
+                                                                 pOwnMsgBox->m_iPriceSeq, pOwnMsgBox->m_wItemCode,
+                                                                 pOwnMsgBox->m_iCashType, 0);
+    }
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
     return CALLBACK_BREAK;

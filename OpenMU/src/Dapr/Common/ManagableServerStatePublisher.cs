@@ -67,15 +67,25 @@ public sealed class ManagableServerStatePublisher : IHostedLifecycleService, IDi
     public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
     /// <inheritdoc />
-    public Task StartedAsync(CancellationToken cancellationToken)
+    public async Task StartedAsync(CancellationToken cancellationToken)
     {
-        this._heartbeatCancellationTokenSource = new CancellationTokenSource();
+        var cts = new CancellationTokenSource();
+        var oldCts = Interlocked.Exchange(ref this._heartbeatCancellationTokenSource, cts);
+        if (oldCts is not null)
+        {
+            await oldCts.CancelAsync().ConfigureAwait(false);
+            oldCts.Dispose();
+        }
 
         async Task RunHeartbeatTaskAsync()
         {
             try
             {
-                await this.HeartbeatLoopAsync(this._heartbeatCancellationTokenSource.Token).ConfigureAwait(false);
+                await this.HeartbeatLoopAsync(cts.Token).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (cts.IsCancellationRequested)
+            {
+                // Expected during shutdown.
             }
             catch (Exception ex)
             {
@@ -84,7 +94,6 @@ public sealed class ManagableServerStatePublisher : IHostedLifecycleService, IDi
         }
 
         this._heartbeatTask = RunHeartbeatTaskAsync();
-        return Task.CompletedTask;
     }
 
     /// <inheritdoc />
@@ -93,13 +102,18 @@ public sealed class ManagableServerStatePublisher : IHostedLifecycleService, IDi
     /// <inheritdoc />
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        await (this._heartbeatCancellationTokenSource?.CancelAsync() ?? Task.CompletedTask).ConfigureAwait(false);
-        this._heartbeatCancellationTokenSource?.Dispose();
-        if (this._heartbeatTask is { } heartbeatTask)
+        var cts = Interlocked.Exchange(ref this._heartbeatCancellationTokenSource, null);
+        if (cts is not null)
         {
-            this._heartbeatTask = null;
+            await cts.CancelAsync().ConfigureAwait(false);
+        }
+
+        if (Interlocked.Exchange(ref this._heartbeatTask, null) is { } heartbeatTask)
+        {
             await heartbeatTask.ConfigureAwait(false);
         }
+
+        cts?.Dispose();
     }
 
     /// <inheritdoc />

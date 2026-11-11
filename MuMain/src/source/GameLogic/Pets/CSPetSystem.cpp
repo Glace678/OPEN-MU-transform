@@ -228,7 +228,8 @@ void CSPetSystem::SetCommand(int Key, std::uint8_t cmd)
         const int index = FindCharacterIndex(Key);
         if (!IsValidCharacterIndex(index))
         {
-            m_PetTarget = nullptr;
+            m_PetTarget                          = nullptr;
+            m_PetCharacter.Object.m_bActionStart = false;
             return;
         }
 
@@ -415,7 +416,7 @@ void CSPetDarkSpirit::MovePet(void)
     vec3_t Range, TargetPosition;
     float  FlyRange = 150.f;
 
-    if (o->m_bActionStart == true)
+    if (o->m_bActionStart == true && m_PetTarget != nullptr)
     {
         OBJECT* to = &m_PetTarget->Object;
 
@@ -424,6 +425,7 @@ void CSPetDarkSpirit::MovePet(void)
     }
     else
     {
+        o->m_bActionStart = false;
         VectorCopy(Owner->Position, TargetPosition);
         VectorSubtract(TargetPosition, o->Position, Range);
     }
@@ -436,11 +438,13 @@ void CSPetDarkSpirit::MovePet(void)
         Vector(0.3f, 0.4f, 0.7f, Light);
         Vector(0.f, 0.f, 0.f, p);
 
-        if (!g_isCharacterBuff(Owner, eBuff_Cloaking))
+        const int petNumBones = (o->Type >= 0 && o->Type < MAX_MODELS) ? Models[o->Type].NumBones : 0;
+        if (!g_isCharacterBuff(Owner, eBuff_Cloaking) && o->BoneTransform != nullptr && petNumBones > 0)
         {
+            const int maxBoneIndex = std::min(65, petNumBones - 1);
             for (int i = 0; i < 1; ++i)
             {
-                b->TransformPosition(o->BoneTransform[Random::RangeInt(0, 65)], p, Pos);
+                b->TransformPosition(o->BoneTransform[Random::RangeInt(0, maxBoneIndex)], p, Pos);
 
                 CreateParticleFpsChecked(BITMAP_SPARK + 1, Pos, o->Angle, Light, 5, 0.8f);
             }
@@ -554,7 +558,7 @@ void CSPetDarkSpirit::MovePet(void)
     }
     else if (o->AI == PET_ATTACK_MAGIC)
     {
-        if (c->TargetCharacter != -1)
+        if (c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
         {
             CHARACTER* tc = &CharactersClient[c->TargetCharacter];
             OBJECT*    to = &tc->Object;
@@ -568,7 +572,14 @@ void CSPetDarkSpirit::MovePet(void)
         vec3_t p;
 
         Vector(-10.f, 0.f, 10.f, p);
-        b->TransformPosition(Owner->BoneTransform[37], p, o->Position, true);
+        if (Owner->BoneTransform != nullptr && 37 < b->NumBones)
+        {
+            b->TransformPosition(Owner->BoneTransform[37], p, o->Position, true);
+        }
+        else
+        {
+            VectorCopy(Owner->Position, o->Position);
+        }
         VectorCopy(Owner->Angle, o->Angle);
         o->Angle[2] -= 120.f;
     }
@@ -584,7 +595,14 @@ void CSPetDarkSpirit::MovePet(void)
             VectorAddScaled(o->Position, Pos, o->Position, FPS_ANIMATION_FACTOR);
         }
         Vector(0.f, 0.f, 0.f, p);
-        b->TransformPosition(Owner->BoneTransform[42], p, Pos, true);
+        if (Owner->BoneTransform != nullptr && 42 < b->NumBones)
+        {
+            b->TransformPosition(Owner->BoneTransform[42], p, Pos, true);
+        }
+        else
+        {
+            VectorCopy(Owner->Position, Pos);
+        }
 
         float Distance = MoveHumming(o->Position, o->Angle, Pos, o->Velocity);
         o->Velocity += FPS_ANIMATION_FACTOR;
@@ -773,7 +791,8 @@ void CSPetDarkSpirit::AttackEffect(CHARACTER* c, OBJECT* o)
             }
             if (c->AttackTime > 3 && (int)c->AttackTime % 2 && rand_fps_check(1))
             {
-                if (o->Position[2] > (m_PetOwner->Object.Position[2] + 100.f))
+                if (o->Position[2] > (m_PetOwner->Object.Position[2] + 100.f) && o->BoneTransform != nullptr &&
+                    6 < b->NumBones)
                 {
                     Vector(50.f, 0.f, 0.f, p);
                     b->TransformPosition(o->BoneTransform[6], p, Pos);
@@ -790,9 +809,9 @@ void CSPetDarkSpirit::AttackEffect(CHARACTER* c, OBJECT* o)
                 {
                     Vector(1.f, 0.6f, 0.4f, Light);
                     Vector(0.f, 0.f, 0.f, p);
-                    for (int i = Random::RangeInt(0, 1); i < 66; i += 2)
+                    for (int i = Random::RangeInt(0, 1); i < 66 && i < b->NumBones; i += 2)
                     {
-                        if (!b->Bones[i].Dummy && i < b->NumBones)
+                        if (!b->Bones[i].Dummy)
                         {
                             b->TransformPosition(o->BoneTransform[i], p, Pos);
                             CreateParticleFpsChecked(BITMAP_LIGHT, Pos, o->Angle, Light, 6, 1.3f);
@@ -802,18 +821,14 @@ void CSPetDarkSpirit::AttackEffect(CHARACTER* c, OBJECT* o)
             }
             else if (c->AttackTime >= 15)
             {
-                if (c->TargetCharacter != -1)
+                if (c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
                 {
                     CHARACTER* tc = &CharactersClient[c->TargetCharacter];
                     OBJECT*    to = &tc->Object;
 
-                    if (to != NULL)
-                    {
-                        b->RenderMeshEffect(1, BITMAP_LIGHT, 1, o->Angle, to);
-                    }
-
-                    SetAI(PET_FLYING);
+                    b->RenderMeshEffect(1, BITMAP_LIGHT, 1, o->Angle, to);
                 }
+                SetAI(PET_FLYING);
                 c->AttackTime           = 0;
                 c->LastAttackEffectTime = -1;
             }

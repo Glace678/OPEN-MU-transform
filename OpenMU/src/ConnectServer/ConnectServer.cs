@@ -98,7 +98,7 @@ public class ConnectServer : IConnectServer, OpenMU.Interfaces.IConnectServer, I
     /// <summary>
     /// Gets the current connection count.
     /// </summary>
-    public int CurrentConnections => this.ClientListener.Clients.Count;
+    public int CurrentConnections => this.ClientListener.ConnectedClientCount;
 
     /// <summary>
     /// Gets the current game server connection count.
@@ -118,7 +118,7 @@ public class ConnectServer : IConnectServer, OpenMU.Interfaces.IConnectServer, I
     /// <inheritdoc />
     public ValueTask<IReadOnlyList<ICapturedConnectionInfo>> GetConnectionsAsync()
     {
-        IReadOnlyList<ICapturedConnectionInfo> result = this.ClientListener.Clients
+        IReadOnlyList<ICapturedConnectionInfo> result = this.ClientListener.GetClientsSnapshot()
             .Select(client => new ClientConnectionInfo(client, this.Id, this.ClientVersion, this.Description))
             .ToList();
         return ValueTask.FromResult(result);
@@ -167,6 +167,18 @@ public class ConnectServer : IConnectServer, OpenMU.Interfaces.IConnectServer, I
         this._logger.LogInformation("Begin stopping");
         this.ServerState = OpenMU.Interfaces.ServerState.Stopping;
         this.ClientListener.StopListener();
+        foreach (var client in this.ClientListener.GetClientsSnapshot())
+        {
+            try
+            {
+                await client.Connection.DisconnectAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                this._logger.LogError(ex, "Error disconnecting client during shutdown.");
+            }
+        }
+
         this.ServerState = OpenMU.Interfaces.ServerState.Stopped;
         this._logger.LogInformation("Finished stopping");
     }

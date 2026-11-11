@@ -5,6 +5,7 @@ services:
     restart: unless-stopped
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
       DB_HOST: database
       # Bootstrap admin panel user. Compose refuses to start when unset/empty,
       # so the panel can never be reached anonymously (fixes 84-05 squatting).
@@ -18,6 +19,8 @@ services:
       OPENMU_DB_ACCOUNT_PASSWORD: ${OPENMU_DB_ACCOUNT_PASSWORD:-${POSTGRES_PASSWORD}}
       OPENMU_DB_FRIEND_PASSWORD: ${OPENMU_DB_FRIEND_PASSWORD:-${POSTGRES_PASSWORD}}
       OPENMU_DB_GUILD_PASSWORD: ${OPENMU_DB_GUILD_PASSWORD:-${POSTGRES_PASSWORD}}
+    volumes:
+      - adminpanel-keys:/app/data-protection-keys
     networks:
       - proxy
     ports:
@@ -42,6 +45,7 @@ services:
       # Restrict the admin panel to private source IPs (RFC1918 + loopback);
       # anonymous public squatting is impossible even before a user is created.
       - "traefik.http.routers.openmu.middlewares=admin-allowlist@file,secureHeaders@file,nofloc@file"
+      - "traefik.http.services.openmu.loadbalancer.server.port=8080"
 
   database:
     image: postgres:17-alpine
@@ -56,7 +60,7 @@ services:
       # Never expose PostgreSQL to the public internet; keep it loopback-only.
       - "127.0.0.1:5432:5432"
     volumes:
-      - dbdata:/var/lib/postgresql #store data on volume
+      - dbdata:/var/lib/postgresql/data #store data on volume
 
   socket-proxy:
     # Traefik needs read access to the container API for its docker provider (fixes R-01).
@@ -90,13 +94,13 @@ services:
     security_opt:
       - no-new-privileges:true
     command:
-      - "--providers.docker.endpoint=tcp://socket-proxy:2375"
+      - "--configFile=/etc/traefik/traefik.yml"
     ports:
       - 80:80
       - 443:443
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./data-traefik/traefik.yml:/traefik.yml:ro
+      - ./data-traefik/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./data-traefik/acme.json:/acme.json
       - ./data-traefik/configurations:/configurations:ro
     depends_on:

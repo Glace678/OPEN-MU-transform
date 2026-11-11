@@ -1295,6 +1295,9 @@ void CMapManager::LoadWorld(int Map)
             case CRYWOLF_OCCUPATION_STATE_WAR:
                 mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld * 10 + 2);
                 break;
+            default:
+                mu_swprintf(FileName, L"Data\\%ls\\EncTerrain%d.att", WorldName, iMapWorld);
+                break;
         }
     }
     else if (this->WorldActive == WD_39KANTURU_3RD)
@@ -1371,6 +1374,9 @@ void CMapManager::LoadWorld(int Map)
                 break;
             case CRYWOLF_OCCUPATION_STATE_WAR:
                 mu_swprintf(FileName, L"%ls\\TerrainLight2.jpg", WorldName);
+                break;
+            default:
+                mu_swprintf(FileName, L"%ls\\TerrainLight.jpg", WorldName);
                 break;
         }
     }
@@ -1561,7 +1567,7 @@ void CMapManager::DeleteObjects()
         }
     }
 
-    for (int i = BITMAP_MAPTILE; i <= BITMAP_RAIN_CIRCLE; i++)
+    for (int i = BITMAP_MAPTILE; i <= BITMAP_RAIN_CIRCLE_END; i++)
     {
         DeleteBitmap(i);
     }

@@ -236,7 +236,8 @@ SIZE    Size[50];
 
 int RenderTextList(int sx, int sy, int TextNum, int Tab, int iSort = RT3_SORT_CENTER)
 {
-    int   TextWidth = 0;
+    TextNum       = std::clamp(TextNum, 0, static_cast<int>(std::size(TextList)));
+    int TextWidth = 0;
     float fsy       = sy;
     for (int i = 0; i < TextNum; i++)
     {
@@ -721,7 +722,7 @@ bool IsRequireClassRenderItem(const short sType)
 
 void RequireClass(ITEM_ATTRIBUTE* pItem)
 {
-    if (pItem == NULL)
+    if (pItem == NULL || TextNum < 0 || TextNum + 3 >= static_cast<int>(std::size(TextList)))
         return;
 
     BYTE byFirstClass = gCharacterManager.GetBaseClass(Hero->Class);
@@ -747,6 +748,9 @@ void RequireClass(ITEM_ATTRIBUTE* pItem)
 
     for (int i = 0; i < MAX_CLASS; ++i)
     {
+        if (TextNum >= static_cast<int>(std::size(TextList)))
+            break;
+
         BYTE byRequireClass = pItem->RequireClass[i];
 
         if (byRequireClass == 0)
@@ -1471,9 +1475,9 @@ void RepairAllGold(void)
 
     AllRepairGold = 0;
 
-    for (int i = 0; i < MAX_EQUIPMENT; ++i)
+    for (int i = 0; CharacterMachine != nullptr && i < MAX_EQUIPMENT; ++i)
     {
-        if (CharacterMachine->Equipment[i].Type != -1)
+        if (CharacterMachine->Equipment[i].Type >= 0 && CharacterMachine->Equipment[i].Type < MAX_ITEM)
         {
             ITEM*           ip = &CharacterMachine->Equipment[i];
             ITEM_ATTRIBUTE* p  = &ItemAttribute[ip->Type];
@@ -1498,12 +1502,13 @@ void RepairAllGold(void)
         }
     }
 
-    ITEM* pItem = NULL;
-    for (int i = 0; i < (int)(g_pMyInventory->GetInventoryCtrl()->GetNumberOfItems()); ++i)
+    ITEM*                          pItem   = NULL;
+    SEASON3B::CNewUIInventoryCtrl* pInvCtl = (g_pMyInventory != nullptr) ? g_pMyInventory->GetInventoryCtrl() : nullptr;
+    for (int i = 0; pInvCtl != nullptr && i < (int)(pInvCtl->GetNumberOfItems()); ++i)
     {
-        pItem = g_pMyInventory->GetInventoryCtrl()->GetItem(i);
+        pItem = pInvCtl->GetItem(i);
 
-        if (pItem)
+        if (pItem && pItem->Type >= 0 && pItem->Type < MAX_ITEM)
         {
             ITEM_ATTRIBUTE* p = &ItemAttribute[pItem->Type];
 
@@ -2386,22 +2391,31 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
 
     if (!Sell && (ip->Type == ITEM_DARK_HORSE_ITEM || ip->Type == ITEM_DARK_RAVEN_ITEM))
     {
+        static int s_petItemType  = -1;
+        static int s_petInvenType = 0;
+        s_petItemType             = ip->Type;
+        s_petInvenType            = Inventype;
+
         static DebouncedAction debouncedPetInfoRequest(
-            [ip, Inventype]() {
-                PetType PetType = PetType::DarkRaven;
-                if (ip->Type == ITEM_DARK_HORSE_ITEM)
+            []() {
+                if (g_pMyInventory == nullptr || SocketClient == nullptr)
                 {
-                    PetType = PetType::DarkHorse;
+                    return;
+                }
+                PetType petType = PetType::DarkRaven;
+                if (s_petItemType == ITEM_DARK_HORSE_ITEM)
+                {
+                    petType = PetType::DarkHorse;
 
                     if ((g_pMyInventory->GetPointedItemIndex()) == EQUIPMENT_HELPER)
                     {
-                        SocketClient->ToGameServer()->SendPetInfoRequest(PetType, static_cast<StorageType>(Inventype),
-                                                                         EQUIPMENT_HELPER);
+                        SocketClient->ToGameServer()->SendPetInfoRequest(
+                            petType, static_cast<StorageType>(s_petInvenType), EQUIPMENT_HELPER);
                     }
                 }
                 else if ((g_pMyInventory->GetPointedItemIndex()) == EQUIPMENT_WEAPON_LEFT)
                 {
-                    SocketClient->ToGameServer()->SendPetInfoRequest(PetType, static_cast<StorageType>(Inventype),
+                    SocketClient->ToGameServer()->SendPetInfoRequest(petType, static_cast<StorageType>(s_petInvenType),
                                                                      EQUIPMENT_WEAPON_LEFT);
                 }
             },
@@ -2607,7 +2621,8 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
                 mu_swprintf(TextList[TextNum], I18N::Game::Heart);
                 break;
             case 2:
-                mu_swprintf(TextList[TextNum], L"%ls", ChaosEventName[ip->Durability]);
+                mu_swprintf(TextList[TextNum], L"%ls",
+                            (ip->Durability < std::size(ChaosEventName)) ? ChaosEventName[ip->Durability] : L"");
                 break;
         }
     }
@@ -2665,7 +2680,8 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
                 mu_swprintf(TextList[TextNum], I18N::Game::Heart);
                 break;
             case 2:
-                mu_swprintf(TextList[TextNum], L"%ls", ChaosEventName[ip->Durability]);
+                mu_swprintf(TextList[TextNum], L"%ls",
+                            (ip->Durability < std::size(ChaosEventName)) ? ChaosEventName[ip->Durability] : L"");
                 break;
         }
     }
@@ -2745,7 +2761,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
         switch (Level)
         {
             case 0:
-                mu_swprintf(TextList[TextNum], p->Name);
+                mu_swprintf(TextList[TextNum], L"%ls", p->Name);
                 break;
             case 1:
                 mu_swprintf(TextList[TextNum], I18N::Game::RingOfWarrior);
@@ -2761,7 +2777,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
     else if (ip->Type == ITEM_HELPER + 107)
     {
         Color = TEXT_COLOR_YELLOW;
-        mu_swprintf(TextList[TextNum], p->Name);
+        mu_swprintf(TextList[TextNum], L"%ls", p->Name);
     }
     else if (ip->Type == ITEM_SIEGE_POTION)
     {
@@ -2813,16 +2829,23 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
     }
     else if (ip->Type == ITEM_ORB_OF_SUMMONING)
     {
-        mu_swprintf(TextList[TextNum], L"%ls %ls", SkillAttribute[30 + Level].Name, I18N::Game::Jewel);
+        const wchar_t* skillName =
+            (SkillAttribute != nullptr && 30 + Level >= 0 && IsValidateSkillIdx(30 + Level))
+                ? SkillAttribute[30 + Level].Name
+                : p->Name;
+        mu_swprintf(TextList[TextNum], L"%ls %ls", skillName, I18N::Game::Jewel);
     }
     else if (ip->Type == ITEM_TRANSFORMATION_RING)
     {
-        for (int i = 0; i < MAX_MONSTER; i++)
+        if (Level >= 0 && Level < static_cast<int>(std::size(SommonTable)))
         {
-            if (SommonTable[Level] == MonsterScript[i].Type)
+            for (int i = 0; i < MAX_MONSTER; i++)
             {
-                mu_swprintf(TextList[TextNum], L"%ls %ls", MonsterScript[i].Name, I18N::Game::TransformationRing);
-                break;
+                if (SommonTable[Level] == MonsterScript[i].Type)
+                {
+                    mu_swprintf(TextList[TextNum], L"%ls %ls", MonsterScript[i].Name, I18N::Game::TransformationRing);
+                    break;
+                }
             }
         }
     }
@@ -4016,67 +4039,65 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
     }
     else if (ip->Type >= ITEM_TYPE_CHARM_MIXWING + EWS_BEGIN && ip->Type <= ITEM_TYPE_CHARM_MIXWING + EWS_END)
     {
-        const ITEM_ADD_OPTION& Item_data = g_pItemAddOptioninfo->GetItemAddOtioninfo(ip->Type);
-        mu_swprintf(TextList[TextNum], I18N::Game::IncreasesYourLuckToCreateWingOfYourWish);
-        TextBold[TextNum] = false;
+        mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::IncreasesYourLuckToCreateWingOfYourWish);
+        TextListColor[TextNum] = TEXT_COLOR_WHITE;
+        TextBold[TextNum]      = false;
         TextNum++;
 
+        bool wroteCharmLine = true;
         switch (ip->Type)
         {
             case ITEM_TYPE_CHARM_MIXWING + EWS_KNIGHT_1_CHARM: {
-                mu_swprintf(TextList[TextNum], I18N::Game::IncreasesYourLuckToCreateWingsOfSatan, Item_data.m_byValue1);
+                mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::IncreasesYourLuckToCreateWingsOfSatan);
             }
             break;
             case ITEM_TYPE_CHARM_MIXWING + EWS_MAGICIAN_1_CHARM: {
-                mu_swprintf(TextList[TextNum], I18N::Game::IncreasesYourLuckToCreateWingsOfHeaven,
-                            Item_data.m_byValue1);
+                mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::IncreasesYourLuckToCreateWingsOfHeaven);
             }
             break;
             case ITEM_TYPE_CHARM_MIXWING + EWS_ELF_1_CHARM: {
-                mu_swprintf(TextList[TextNum], I18N::Game::IncreasesYourLuckToCreateWingsOfElf, Item_data.m_byValue1);
+                mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::IncreasesYourLuckToCreateWingsOfElf);
             }
             break;
             case ITEM_TYPE_CHARM_MIXWING + EWS_SUMMONER_1_CHARM: {
-                mu_swprintf(TextList[TextNum], I18N::Game::IncreasesYourLuckToCreateWingOfCurse, Item_data.m_byValue1);
+                mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::IncreasesYourLuckToCreateWingOfCurse);
             }
             break;
             case ITEM_TYPE_CHARM_MIXWING + EWS_DARKLORD_1_CHARM: {
-                mu_swprintf(TextList[TextNum], I18N::Game::IncreasesYourLuckToCreateCapeOfEmperor,
-                            Item_data.m_byValue1);
+                mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::IncreasesYourLuckToCreateCapeOfEmperor);
             }
             break;
             case ITEM_TYPE_CHARM_MIXWING + EWS_KNIGHT_2_CHARM: {
-                mu_swprintf(TextList[TextNum], I18N::Game::IncreasesYourLuckToCreateWingsOfDragon,
-                            Item_data.m_byValue1);
+                mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::IncreasesYourLuckToCreateWingsOfDragon);
             }
             break;
             case ITEM_TYPE_CHARM_MIXWING + EWS_MAGICIAN_2_CHARM: {
-                mu_swprintf(TextList[TextNum], I18N::Game::IncreasesYourLuckToCreateWingsOfSoul, Item_data.m_byValue1);
+                mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::IncreasesYourLuckToCreateWingsOfSoul);
             }
             break;
             case ITEM_TYPE_CHARM_MIXWING + EWS_ELF_2_CHARM: {
-                mu_swprintf(TextList[TextNum], I18N::Game::IncreasesYourLuckToCreateWingsOfSpirits,
-                            Item_data.m_byValue1);
+                mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::IncreasesYourLuckToCreateWingsOfSpirits);
             }
             break;
             case ITEM_TYPE_CHARM_MIXWING + EWS_SUMMONER_2_CHARM: {
-                mu_swprintf(TextList[TextNum], I18N::Game::IncreasesYourLuckToCreateWingOfDespair,
-                            Item_data.m_byValue1);
+                mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::IncreasesYourLuckToCreateWingOfDespair);
             }
             break;
             case ITEM_TYPE_CHARM_MIXWING + EWS_DARKKNIGHT_2_CHARM: {
-                mu_swprintf(TextList[TextNum], I18N::Game::IncreasesYourLuckToCreateWingsOfDarkness,
-                            Item_data.m_byValue1);
+                mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::IncreasesYourLuckToCreateWingsOfDarkness);
             }
             break;
+            default:
+                wroteCharmLine = false;
+                break;
         }
 
-        mu_swprintf(TextList[TextNum], I18N::Game::Lookup(2732 + (ip->Type - (ITEM_TYPE_CHARM_MIXWING + EWS_BEGIN))),
-                    Item_data.m_byValue1);
-
-        TextListColor[TextNum] = TEXT_COLOR_BLUE;
-        TextBold[TextNum]      = false;
-        TextNum++;
+        if (wroteCharmLine)
+        {
+            TextListColor[TextNum] = TEXT_COLOR_BLUE;
+            TextBold[TextNum]      = false;
+            TextNum++;
+        }
     }
     else if (ip->Type == ITEM_POTION + 110)
     {
@@ -4359,9 +4380,6 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
         TextNum++;
     }
 
-    Color = TEXT_COLOR_YELLOW;
-    mu_swprintf(TextList[TextNum], L"%ls", p->Name);
-
     if (ip->Type == ITEM_DEVILS_INVITATION)
     {
         mu_swprintf(TextList[TextNum], I18N::Game::TheRemainingTimeIsShown);
@@ -4390,11 +4408,13 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
                 magicalindex = SC.SI_SP.SI_magicalpower;
             }
         }
-        int DamageMin = ip->DamageMin;
-        int DamageMax = ip->DamageMax;
+        int  DamageMin       = ip->DamageMin;
+        int  DamageMax       = ip->DamageMax;
+        bool wroteDamageLine = false;
         if (ip->Type >> 4 == 15)
         {
             mu_swprintf(TextList[TextNum], L"%ls: %d ~ %d", I18N::Game::Lookup(40 + 2), DamageMin, DamageMax);
+            wroteDamageLine = true;
         }
         else if (ip->Type != ITEM_SCROLL_OF_TELEPORT && ip->Type != ITEM_SCROLL_OF_TELEPORT_ALLY &&
                  ip->Type != ITEM_SCROLL_OF_SOUL_BARRIER)
@@ -4411,6 +4431,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
                 }
 
                 mu_swprintf(TextList[TextNum], L"%ls: %d ~ %d", I18N::Game::WizardryDamage, DamageMin, DamageMax);
+                wroteDamageLine = true;
             }
             else
             {
@@ -4420,14 +4441,11 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
                 else
                     mu_swprintf(TextList[TextNum], L"%ls: %d ~ %d", I18N::Game::Lookup(40 + p->TwoHand),
                                 DamageMin + minindex, DamageMax + maxindex);
+                wroteDamageLine = true;
             }
         }
-        else
-        {
-            TextNum--;
-        }
 
-        if (DamageMin > 0)
+        if (wroteDamageLine && DamageMin > 0)
         {
             if (minindex != 0 || maxindex != 0)
             {
@@ -4444,10 +4462,6 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
                 TextBold[TextNum] = false;
                 TextNum++;
             }
-        }
-        else
-        {
-            TextNum--;
         }
     }
     if (ip->Defense)
@@ -5443,7 +5457,8 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
 
     if (ip->SocketCount > 0)
     {
-        for (int i = 0; i < ip->SocketCount; ++i)
+        const int socketCount = std::min<int>(ip->SocketCount, MAX_SOCKETS);
+        for (int i = 0; i < socketCount; ++i)
         {
             if (ip->SocketSeedID[i] == 38)
             {
@@ -5773,10 +5788,15 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
 
     TextNum = g_csItemOption.RenderDefaultOptionText(ip, TextNum);
 
-    int iMana;
-    for (int i = 0; i < ip->SpecialNum; i++)
+    int       iMana        = 0;
+    const int specialCount = std::clamp<int>(ip->SpecialNum, 0, static_cast<int>(std::size(ip->Special)));
+    for (int i = 0; i < specialCount; i++)
     {
         if (ITEM_HELPER + 109 <= ip->Type && ITEM_HELPER + 115 >= ip->Type)
+        {
+            break;
+        }
+        if (TextNum < 0 || TextNum + 2 >= static_cast<int>(std::size(TextList)))
         {
             break;
         }
@@ -5960,11 +5980,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
     {
         mu_swprintf(TextList[TextNum], L"%ls", I18N::Game::EnjoyHalloweenFestival);
         TextListColor[TextNum] = TEXT_COLOR_BLUE;
-
-        mu_swprintf(TextList[TextNum], I18N::Game::UnableToEquipWithADifferentTransformationRing);
-        TextListColor[TextNum] = TEXT_COLOR_RED;
         TextBold[TextNum]      = false;
-        TextNum++;
         TextNum++;
 
         mu_swprintf(TextList[TextNum], L"\n");
@@ -6104,7 +6120,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
         TextNum++;
     }
 #ifdef LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
-    else if (g_pMyInventory->IsInvenItem(ip->Type))
+    else if (g_pMyInventory != nullptr && g_pMyInventory->IsInvenItem(ip->Type))
     {
         TextNum--;
         SkipNum--;
@@ -6251,7 +6267,7 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
             mu_swprintf(TextList[TextNum], I18N::Game::ExpiredItem);
             TextListColor[TextNum] = TEXT_COLOR_RED;
         }
-        else
+        else if (ExpireTime != nullptr)
         {
             mu_swprintf(TextList[TextNum], I18N::Game::ExpirationDay);
             TextListColor[TextNum] = TEXT_COLOR_ORANGE;
@@ -6270,9 +6286,10 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
     {
         bool bThisisEquippedItem = false;
 
-        SEASON3B::CNewUIInventoryCtrl* pNewInventoryCtrl = g_pMyInventory->GetInventoryCtrl();
-        ITEM*                          pFindItem         = pNewInventoryCtrl->FindItemByKey(ip->Key);
-        (pFindItem == NULL) ? bThisisEquippedItem = true : bThisisEquippedItem = false;
+        SEASON3B::CNewUIInventoryCtrl* pNewInventoryCtrl =
+            (g_pMyInventory != nullptr) ? g_pMyInventory->GetInventoryCtrl() : nullptr;
+        ITEM* pFindItem = (pNewInventoryCtrl != nullptr) ? pNewInventoryCtrl->FindItemByKey(ip->Key) : nullptr;
+        bThisisEquippedItem = (pNewInventoryCtrl != nullptr && pFindItem == NULL);
 
         TextNum = g_csItemOption.RenderSetOptionListInItem(ip, TextNum, bThisisEquippedItem);
 
@@ -6547,16 +6564,23 @@ void RenderRepairInfo(int sx, int sy, ITEM* ip, bool Sell)
 
     if (ip->Type == ITEM_ORB_OF_SUMMONING)
     {
-        mu_swprintf(TextList[TextNum], L"%ls %ls", SkillAttribute[30 + Level].Name, I18N::Game::Jewel);
+        const wchar_t* skillName =
+            (SkillAttribute != nullptr && 30 + Level >= 0 && IsValidateSkillIdx(30 + Level))
+                ? SkillAttribute[30 + Level].Name
+                : p->Name;
+        mu_swprintf(TextList[TextNum], L"%ls %ls", skillName, I18N::Game::Jewel);
     }
     else if (ip->Type == ITEM_TRANSFORMATION_RING)
     {
-        for (int i = 0; i < MAX_MONSTER; i++)
+        if (Level >= 0 && Level < static_cast<int>(std::size(SommonTable)))
         {
-            if (SommonTable[Level] == MonsterScript[i].Type)
+            for (int i = 0; i < MAX_MONSTER; i++)
             {
-                mu_swprintf(TextList[TextNum], L"%ls %ls", MonsterScript[i].Name, I18N::Game::TransformationRing);
-                break;
+                if (SommonTable[Level] == MonsterScript[i].Type)
+                {
+                    mu_swprintf(TextList[TextNum], L"%ls %ls", MonsterScript[i].Name, I18N::Game::TransformationRing);
+                    break;
+                }
             }
         }
     }
@@ -7885,13 +7909,23 @@ void ClearInventory()
 
 void SetItemColor(int index, ITEM* Inv, int color)
 {
+    if (Inv == nullptr || index < 0 || index >= MAX_TRADE_INVENTORY || Inv[index].Type < 0 ||
+        Inv[index].Type >= MAX_ITEM)
+    {
+        return;
+    }
+
     int Width  = ItemAttribute[Inv[index].Type].Width;
     int Height = ItemAttribute[Inv[index].Type].Height;
 
     for (int k = Inv[index].y; k < Inv[index].y + Height; k++)
     {
+        if (k < 0 || k >= ROW_TRADE_INVENTORY)
+            continue;
         for (int l = Inv[index].x; l < Inv[index].x + Width; l++)
         {
+            if (l < 0 || l >= COLUMN_TRADE_INVENTORY)
+                continue;
             int Number        = k * COLUMN_TRADE_INVENTORY + l;
             Inv[Number].Color = color;
         }
@@ -8117,7 +8151,7 @@ bool IsPersonalShopBan(ITEM* pItem)
         return false;
     }
 
-#ifdef KJH_FIX_PERSONALSHOP_BAN_CASHITEM
+#if defined(KJH_FIX_PERSONALSHOP_BAN_CASHITEM) || defined(KJH_ADD_PERIOD_ITEM_SYSTEM)
     if (pItem->bPeriodItem)
     {
         return true;
@@ -8128,7 +8162,8 @@ bool IsPersonalShopBan(ITEM* pItem)
                                 pItem->Type == ITEM_PET_PANDA || pItem->Type == ITEM_PANDA_TRANSFORMATION_RING ||
                                 pItem->Type == ITEM_SKELETON_TRANSFORMATION_RING || pItem->Type == ITEM_PET_SKELETON
 #ifdef LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
-                                || (g_pMyInventory->IsInvenItem(pItem->Type) && pItem->Durability == 255)
+                                || (g_pMyInventory != nullptr && g_pMyInventory->IsInvenItem(pItem->Type) &&
+                                    pItem->Durability == 255)
 #endif  //LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
                                 || (pItem->Type == ITEM_WIZARDS_RING && pItem->Level == 0)))
     {
@@ -8165,13 +8200,13 @@ bool IsPersonalShopBan(ITEM* pItem)
         || pItem->Type == ITEM_HELPER + 114
         || pItem->Type == ITEM_HELPER + 115
 #ifdef LDK_MOD_INGAMESHOP_WIZARD_RING_PERSONALSHOPBAN
-        || (pItem->Type == ITEM_WIZARDS_RING && (pItem->Level == 0)
+        || (pItem->Type == ITEM_WIZARDS_RING && (pItem->Level == 0))
 #endif  //LDK_MOD_INGAMESHOP_WIZARD_RING_PERSONALSHOPBAN
 #ifdef ASG_ADD_TIME_LIMIT_QUEST_ITEM
         || (pItem->Type >= ITEM_POTION + 151 && pItem->Type <= ITEM_POTION + 156)
 #endif  // ASG_ADD_TIME_LIMIT_QUEST_ITEM
 #ifdef LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
-        || g_pMyInventory->IsInvenItem(pItem->Type)
+        || (g_pMyInventory != nullptr && g_pMyInventory->IsInvenItem(pItem->Type))
 #endif  //LJH_ADD_SYSTEM_OF_EQUIPPING_ITEM_FROM_INVENTORY
         )
     {
@@ -8253,15 +8288,22 @@ bool IsStoreBan(ITEM* pItem)
 
 sItemAct Set_ItemActOption(int _nIndex, int _nOption)
 {
-    sItemAct sItem;
+    sItemAct sItem = {};
     // eITEM_PERSONALSHOP = 개인상점, eITEM_STORE = 창고, eITEM_TRADE = 거래, eITEM_DROP = 버리기, eITEM_SELL = 판매, eITEM_REPAIR = 수리
-    int nItemOption[][eITEM_END] = {0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1};
+    constexpr int nItemOption[2][eITEM_END] = {
+        {0, 1, 1, 0, 0, 0},
+        {0, 0, 0, 0, 1, 0},
+    };
 
     sItem.s_nItemIndex = _nIndex;
+    if (_nOption < 0 || _nOption >= static_cast<int>(std::size(nItemOption)))
+    {
+        return sItem;
+    }
 
     for (int i = 0; i < eITEM_END; i++)
     {
-        sItem.s_bType[i] = nItemOption[_nOption][i];
+        sItem.s_bType[i] = (nItemOption[_nOption][i] != 0);
     }
     return sItem;
 }
@@ -8399,6 +8441,7 @@ bool IsSellingBan(ITEM* pItem)
         {
             return false;
         }
+        return true;
     }
 
     if (pItem->Type == ITEM_BOX_OF_LUCK || (pItem->Type == ITEM_POTION + 21 && Level == 1) ||
@@ -11984,7 +12027,7 @@ void CreateGuildMark(int nMarkIndex, bool blend)
     {
         for (int j = 0; j < Width; j++)
         {
-            *((unsigned int*)(Buffer)) = MarkColor[MarkBuffer[0]];
+            *((unsigned int*)(Buffer)) = MarkColor[MarkBuffer[0] & 0x0F];
             Buffer += 4;
             MarkBuffer++;
         }
@@ -12090,7 +12133,7 @@ void CreateCastleMark(int Type, BYTE* buffer, bool blend)
         {
             if (j >= (Width / 2 - 16) && j < (Width / 2 + 16) && i >= (Height / 2 - 16) && i < (Height / 2 + 16))
             {
-                *((unsigned int*)(Buffer + offset)) = MarkColor[MarkBuffer[offset2]];
+                *((unsigned int*)(Buffer + offset)) = MarkColor[MarkBuffer[offset2] & 0x0F];
                 offset2++;
             }
             else if (j < 3 || j > (Width - 4) || i < 10 || i > (Height - 10))
@@ -12121,7 +12164,7 @@ void RenderGuildColor(float x, float y, int SizeX, int SizeY, int Index)
     Width               = (int)b->Width;
     Height              = (int)b->Height;
     BYTE*        Buffer = b->Buffer;
-    unsigned int Color  = MarkColor[Index];
+    unsigned int Color  = MarkColor[(Index >= 0 && Index < 16) ? Index : 0];
 
     if (Index == 0)
     {
@@ -12191,8 +12234,8 @@ void RenderGuildList(int StartX, int StartY)
     g_pRenderText->SetFont(g_hFontBold);
 
     wchar_t Text[100];
-    if (Hero->GuildMarkIndex == -1)
-        mu_swprintf(Text, I18N::Game::Guild);
+    if (Hero->GuildMarkIndex < 0 || Hero->GuildMarkIndex >= MAX_MARKS)
+        mu_swprintf(Text, L"%ls", I18N::Game::Guild);
     else
         mu_swprintf(Text, L"%ls (Score:%d)", GuildMark[Hero->GuildMarkIndex].GuildName, GuildTotalScore);
 

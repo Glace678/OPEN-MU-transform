@@ -46,6 +46,11 @@ internal sealed class PlayerSummon
             throw new InvalidOperationException("Can't add a summon for a player which isn't spawned yet.");
         }
 
+        if (this.Current is not null)
+        {
+            await this.RemoveAsync().ConfigureAwait(false);
+        }
+
         var area = new MonsterSpawnArea
         {
             GameMap = gameMap.Definition,
@@ -62,10 +67,24 @@ internal sealed class PlayerSummon
         area.MaximumHealthOverride = (int)monster.Attributes[Stats.MaximumHealth];
         area.MaximumHealthOverride += (int)(monster.Attributes[Stats.MaximumHealth] * this._player.Attributes?[Stats.SummonedMonsterHealthIncrease] ?? 0);
 
-        this.Current = (monster, intelligence);
-        monster.Initialize();
-        await gameMap.AddAsync(monster).ConfigureAwait(false);
-        monster.OnSpawn();
+        try
+        {
+            this.Current = (monster, intelligence);
+            monster.Initialize();
+            await gameMap.AddAsync(monster).ConfigureAwait(false);
+            monster.OnSpawn();
+        }
+        catch
+        {
+            if (this.Current is { } current && ReferenceEquals(current.Monster, monster))
+            {
+                this.Current = null;
+            }
+
+            await gameMap.RemoveAsync(monster).ConfigureAwait(false);
+            monster.Dispose();
+            throw;
+        }
     }
 
     /// <summary>

@@ -76,6 +76,10 @@ bool CNewUIMyInventory::Create(CNewUIManager* pNewUIMng, CNewUI3DRenderMng* pNew
                                              y + 200, 8, 8, MAX_EQUIPMENT))
     {
         SafeDelete(m_pNewInventoryCtrl);
+        m_pNewUI3DRenderMng->Remove3DRenderObj(this);
+        m_pNewUI3DRenderMng = nullptr;
+        m_pNewUIMng->RemoveUIObj(this);
+        m_pNewUIMng = nullptr;
         return false;
     }
 
@@ -97,8 +101,6 @@ void CNewUIMyInventory::Release()
     UnequipAllItems();
     DeleteAllItems();
 
-    UnloadImages();
-
     SafeDelete(m_pNewInventoryCtrl);
 
     if (m_pNewUI3DRenderMng)
@@ -108,6 +110,7 @@ void CNewUIMyInventory::Release()
     }
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = nullptr;
     }
@@ -121,7 +124,7 @@ bool CNewUIMyInventory::EquipItem(int iIndex, std::span<const BYTE> pbyItemPacke
     }
 
     ITEM* pTargetItemSlot = &CharacterMachine->Equipment[iIndex];
-    if (pTargetItemSlot->Type > 0)
+    if (pTargetItemSlot->Type != -1)
     {
         UnequipItem(iIndex);
     }
@@ -1540,7 +1543,8 @@ bool CNewUIMyInventory::EquipmentWindowProcess()
 
         const int iSourceIndex = m_iPointedSlot;
         if (GetRepairMode() != REPAIR_MODE_ON && EquipmentItem == false && pPickedItem == nullptr &&
-            iSourceIndex != -1 && !g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP))  // Don't unequip when NPC shop is open
+            iSourceIndex >= 0 && iSourceIndex < MAX_EQUIPMENT_INDEX && CharacterMachine != nullptr &&
+            !g_pNewUISystem->IsVisible(INTERFACE_NPCSHOP))  // Don't unequip when NPC shop is open
         {
             ResetMouseRButton();
 
@@ -1556,14 +1560,17 @@ bool CNewUIMyInventory::EquipmentWindowProcess()
                     // God knows what happens, when this request to the server goes wrong.
                     if (CNewUIInventoryCtrl::CreatePickedItem(nullptr, pEquippedItem))
                     {
-                        CNewUIPickedItem* pPickedItem = CNewUIInventoryCtrl::GetPickedItem();
-                        UnequipItem(iSourceIndex);
-                        pPickedItem->HidePickedItem();
+                        CNewUIPickedItem* pNewPicked = CNewUIInventoryCtrl::GetPickedItem();
+                        if (pNewPicked != nullptr && pNewPicked->GetItem() != nullptr)
+                        {
+                            UnequipItem(iSourceIndex);
+                            pNewPicked->HidePickedItem();
+                            SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, iSourceIndex, pNewPicked->GetItem(),
+                                                     STORAGE_TYPE::INVENTORY, emptySlotIndex);
+                            return true;
+                        }
+                        CNewUIInventoryCtrl::DeletePickedItem();
                     }
-
-                    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, iSourceIndex, pEquippedItem,
-                                             STORAGE_TYPE::INVENTORY, emptySlotIndex);
-                    return true;
                 }
             }
         }
@@ -1643,7 +1650,8 @@ bool CNewUIMyInventory::BtnProcess()
 
 void CNewUIMyInventory::RenderItemToolTip(int iSlotIndex) const
 {
-    if (m_iPointedSlot != -1)
+    if (m_iPointedSlot >= 0 && m_iPointedSlot < MAX_EQUIPMENT_INDEX && iSlotIndex >= 0 &&
+        iSlotIndex < MAX_EQUIPMENT_INDEX && CharacterMachine != nullptr)
     {
         ITEM* pEquipmentItemSlot = &CharacterMachine->Equipment[iSlotIndex];
         if (pEquipmentItemSlot->Type != -1)
@@ -1799,10 +1807,13 @@ bool CNewUIMyInventory::IsItem(short int siType, bool bcheckPick) const
         {
             const ITEM* pItemObj = pPickedItem->GetItem();
 
-            if (pItemObj->Type == siType)
+            if (pItemObj != nullptr && pItemObj->Type == siType)
                 return true;
         }
     }
+
+    if (m_pNewInventoryCtrl == nullptr)
+        return false;
 
     const ITEM* pholyitemObj = m_pNewInventoryCtrl->FindTypeItem(siType);
 
@@ -1814,24 +1825,29 @@ bool CNewUIMyInventory::IsItem(short int siType, bool bcheckPick) const
 
 int CNewUIMyInventory::GetNumItemByKey(DWORD dwItemKey) const
 {
-    return m_pNewInventoryCtrl->GetNumItemByKey(dwItemKey);
+    return m_pNewInventoryCtrl ? m_pNewInventoryCtrl->GetNumItemByKey(dwItemKey) : 0;
 }
 
 int CNewUIMyInventory::GetNumItemByType(short sItemType) const
 {
-    return m_pNewInventoryCtrl->GetNumItemByType(sItemType);
+    return m_pNewInventoryCtrl ? m_pNewInventoryCtrl->GetNumItemByType(sItemType) : 0;
 }
 
 BYTE CNewUIMyInventory::GetDurabilityPointedItem() const
 {
     const ITEM* pItem = nullptr;
 
-    if (m_iPointedSlot != -1)
+    if (m_iPointedSlot >= 0 && m_iPointedSlot < MAX_EQUIPMENT_INDEX && CharacterMachine != nullptr)
     {
         pItem                   = &CharacterMachine->Equipment[m_iPointedSlot];
         const BYTE byDurability = pItem->Durability;
 
         return byDurability;
+    }
+
+    if (m_pNewInventoryCtrl == nullptr)
+    {
+        return 0;
     }
 
     pItem = m_pNewInventoryCtrl->FindItemPointedSquareIndex();
@@ -1846,12 +1862,12 @@ BYTE CNewUIMyInventory::GetDurabilityPointedItem() const
 
 int CNewUIMyInventory::GetPointedItemIndex() const
 {
-    if (m_iPointedSlot != -1)
+    if (m_iPointedSlot >= 0 && m_iPointedSlot < MAX_EQUIPMENT_INDEX)
     {
         return m_iPointedSlot;
     }
 
-    return m_pNewInventoryCtrl->GetPointedSquareIndex();
+    return m_pNewInventoryCtrl ? m_pNewInventoryCtrl->GetPointedSquareIndex() : -1;
 }
 
 int CNewUIMyInventory::FindManaItemIndex() const

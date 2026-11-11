@@ -53,7 +53,7 @@ public sealed class PersistentLoginServer : ILoginServer
 
             foreach (var accountName in serverIndex)
             {
-                await this.SetAccountOfflineAsync(accountName).ConfigureAwait(false);
+                await this.SetAccountOfflineAsync(accountName, serverId).ConfigureAwait(false);
             }
 
             serverIndex.Clear();
@@ -102,15 +102,22 @@ public sealed class PersistentLoginServer : ILoginServer
                 return false;
             }
 
-            if (!await this.TryAddToIndexAsync(accountName, serverId).ConfigureAwait(false))
+            bool addedToIndex = false;
+            try
             {
-                // The state was just changed to serverId, so the original eTag is stale.
-                // Re-read the current state/eTag and roll the account back to offline.
-                await this.ResetAccountToOfflineAsync(accountName).ConfigureAwait(false);
-                return false;
+                addedToIndex = await this.TryAddToIndexAsync(accountName, serverId).ConfigureAwait(false);
+            }
+            finally
+            {
+                if (!addedToIndex)
+                {
+                    // The state was just changed to serverId, so the original eTag is stale.
+                    // Re-read the current state/eTag and roll the account back to offline.
+                    await this.ResetAccountToOfflineAsync(accountName, serverId).ConfigureAwait(false);
+                }
             }
 
-            return true;
+            return addedToIndex;
         }
         catch (Exception ex)
         {
@@ -235,24 +242,31 @@ public sealed class PersistentLoginServer : ILoginServer
         this._logger.LogError("Failed to remove account {0} from the index of server {1} after {2} attempts.", accountName, serverId, MaxAttempts);
     }
 
-    private async Task ResetAccountToOfflineAsync(string accountName)
+    private async Task ResetAccountToOfflineAsync(string accountName, byte expectedServerId)
     {
-        for (int attempt = 0; attempt < MaxAttempts; attempt++)
+        try
         {
-            var (currentServerId, currentETag) = await this._daprClient
-                .GetStateAndETagAsync<int?>(StoreName, accountName, ConsistencyMode.Strong)
-                .ConfigureAwait(false);
-
-            if (currentServerId is null || currentServerId < 0)
+            for (int attempt = 0; attempt < MaxAttempts; attempt++)
             {
-                // Already offline or not logged in; nothing to roll back.
-                return;
-            }
+                var (currentServerId, currentETag) = await this._daprClient
+                    .GetStateAndETagAsync<int?>(StoreName, accountName, ConsistencyMode.Strong)
+                    .ConfigureAwait(false);
 
-            if (await this._daprClient.TrySaveStateAsync<int?>(StoreName, accountName, OfflineServerId, currentETag).ConfigureAwait(false))
-            {
-                return;
+                if (currentServerId is null || currentServerId < 0 || currentServerId != expectedServerId)
+                {
+                    // Already offline or switched to another server; nothing to roll back.
+                    return;
+                }
+
+                if (await this._daprClient.TrySaveStateAsync<int?>(StoreName, accountName, OfflineServerId, currentETag).ConfigureAwait(false))
+                {
+                    return;
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            this._logger.LogError(ex, "Unexpected error while rolling back login state of account {0}.", accountName);
         }
 
         this._logger.LogError(
@@ -260,12 +274,12 @@ public sealed class PersistentLoginServer : ILoginServer
             accountName);
     }
 
-    private async Task SetAccountOfflineAsync(string accountName)
+    private async Task SetAccountOfflineAsync(string accountName, byte expectedServerId)
     {
         try
         {
             var (currentServerId, eTag) = await this._daprClient.GetStateAndETagAsync<int?>(StoreName, accountName, ConsistencyMode.Strong).ConfigureAwait(false);
-            if (currentServerId == OfflineServerId)
+            if (currentServerId is null || currentServerId == OfflineServerId || currentServerId != expectedServerId)
             {
                 return;
             }

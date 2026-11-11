@@ -102,5 +102,10 @@ private:
 
 inline const HARMONYJEWELOPTION& JewelHarmonyInfo::GetHarmonyJewelOptionInfo(int type, int option)
 {
+    static const HARMONYJEWELOPTION s_emptyOption{};
+    if (type < 0 || type >= MAXHARMONYJEWELOPTIONTYPE || option < 1 || option > MAXHARMONYJEWELOPTIONINDEX)
+    {
+        return s_emptyOption;
+    }
     return m_OptionData[type][option - 1];
 }

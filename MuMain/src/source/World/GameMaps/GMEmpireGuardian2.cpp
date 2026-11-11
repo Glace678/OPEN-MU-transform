@@ -300,7 +300,8 @@ bool GMEmpireGuardian2::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
                 }
                 break;
                 case MONSTER01_ATTACK3: {
-                    if (o->AnimationFrame >= 1.7f && o->AnimationFrame <= 2.3f)
+                    if (o->AnimationFrame >= 1.7f && o->AnimationFrame <= 2.3f &&
+                        c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
                     {
                         CHARACTER* chT         = &CharactersClient[c->TargetCharacter];
                         vec3_t&    v3TargetPos = chT->Object.Position;
@@ -370,6 +371,7 @@ bool GMEmpireGuardian2::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             CreateSprite(BITMAP_LIGHT, vPos, 2.0f + fLumi1, vLight, o);
 
             Vector(0.4f, 0.5f, 0.7f, vLight);
+            Vector(0.0f, 0.0f, 0.0f, v3Temp);
             b->TransformPosition(o->BoneTransform[8], v3Temp, vPos, true);
             CreateSprite(BITMAP_LIGHTMARKS, vPos, 2.0f, vLight, o);
 
@@ -671,6 +673,7 @@ bool GMEmpireGuardian2::RenderObjectVisual(OBJECT* o, BMD* b)
         }
             return true;
         case 82: {
+            Vector(1.f, 1.f, 1.f, Light);
             CreateParticleFpsChecked(BITMAP_WATERFALL_5, o->Position, o->Angle, Light, 9, o->Scale);
         }
             return true;

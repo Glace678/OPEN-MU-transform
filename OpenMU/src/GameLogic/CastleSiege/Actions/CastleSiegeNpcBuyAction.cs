@@ -88,18 +88,36 @@ public static class CastleSiegeNpcBuyAction
                 return CastleSiegeNpcOperationResult.InsufficientMoney;
             }
 
-            state.DefenseLevel = 0;
-            state.LifeLevel = 0;
-            state.RegenLevel = 0;
-            state.CurrentHp = initialHealth;
-            await context.NpcController.RespawnAsync(runtime).ConfigureAwait(false);
-            if (runtime.SpawnedInstance is CastleSiegeGate gate)
+            var oldDefense = state.DefenseLevel;
+            var oldLife = state.LifeLevel;
+            var oldRegen = state.RegenLevel;
+            var oldCurrentHp = state.CurrentHp;
+            var oldIsAlive = runtime.IsAlive;
+            try
             {
-                await gate.CloseAsync().ConfigureAwait(false);
-            }
+                state.DefenseLevel = 0;
+                state.LifeLevel = 0;
+                state.RegenLevel = 0;
+                state.CurrentHp = initialHealth;
+                await context.NpcController.RespawnAsync(runtime).ConfigureAwait(false);
+                if (runtime.SpawnedInstance is CastleSiegeGate gate)
+                {
+                    await gate.CloseAsync().ConfigureAwait(false);
+                }
 
-            await context.SaveNpcStatesAsync().ConfigureAwait(false);
-            return CastleSiegeNpcOperationResult.Success;
+                await context.SaveNpcStatesAsync().ConfigureAwait(false);
+                return CastleSiegeNpcOperationResult.Success;
+            }
+            catch
+            {
+                state.DefenseLevel = oldDefense;
+                state.LifeLevel = oldLife;
+                state.RegenLevel = oldRegen;
+                state.CurrentHp = oldCurrentHp;
+                runtime.IsAlive = oldIsAlive;
+                player.TryAddMoney(price);
+                throw;
+            }
         }
         finally
         {

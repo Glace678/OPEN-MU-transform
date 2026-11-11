@@ -95,7 +95,7 @@ public class CloneableGenerator : IIncrementalGenerator
         var sb = new StringBuilder();
         var className = annotatedClass.Identifier.Text;
         var ns = declaredClassSymbol.ContainingNamespace?.ToString() ?? string.Empty;
-        var isInheritedClonable = declaredClassSymbol.BaseType?.GetAttributes().Any(a => a.AttributeClass?.Name == CloneableAttributeName) ?? false;
+        var isInheritedClonable = HasCloneableBaseType(declaredClassSymbol);
 
         sb.AppendLine($"""
                         // <copyright file="{className}_Cloneable.cs" company="MUnique">
@@ -151,13 +151,66 @@ public class CloneableGenerator : IIncrementalGenerator
         return sb;
     }
 
+    private static bool HasCloneableAttribute(INamedTypeSymbol typeSymbol)
+    {
+        return typeSymbol.GetAttributes().Any(a => a.AttributeClass?.Name == CloneableAttributeName);
+    }
+
+    private static bool HasCloneableBaseType(INamedTypeSymbol typeSymbol)
+    {
+        var baseType = typeSymbol.BaseType;
+        while (baseType is not null && baseType.SpecialType != SpecialType.System_Object)
+        {
+            if (HasCloneableAttribute(baseType))
+            {
+                return true;
+            }
+
+            baseType = baseType.BaseType;
+        }
+
+        return false;
+    }
+
+    private static IEnumerable<IPropertySymbol> GetAssignableProperties(INamedTypeSymbol declaredClassSymbol)
+    {
+        var seenNames = new HashSet<string>(StringComparer.Ordinal);
+        var current = declaredClassSymbol;
+        while (current is not null && current.SpecialType != SpecialType.System_Object)
+        {
+            if (!SymbolEqualityComparer.Default.Equals(current, declaredClassSymbol) && HasCloneableAttribute(current))
+            {
+                // This ancestor and its own ancestors are already handled by base.AssignValuesOf(...).
+                break;
+            }
+
+            foreach (var property in current.GetMembers().OfType<IPropertySymbol>())
+            {
+                if (!seenNames.Add(property.Name))
+                {
+                    continue;
+                }
+
+                if (property.SetMethod is null || property.SetMethod.DeclaredAccessibility == Accessibility.Private)
+                {
+                    continue;
+                }
+
+                if (property.GetAttributes().Any(a => object.Equals(a.AttributeClass?.Name, IgnoreWhenCloningAttributeName)))
+                {
+                    continue;
+                }
+
+                yield return property;
+            }
+
+            current = current.BaseType;
+        }
+    }
+
     private static void GenerateAssignments(StringBuilder sb, INamedTypeSymbol declaredClassSymbol)
     {
-        var properties = declaredClassSymbol
-            .GetMembers()
-            .OfType<IPropertySymbol>()
-            .Where(p => p.SetMethod is not null)
-            .Where(p => !p.GetAttributes().Any(a => object.Equals(a.AttributeClass?.Name, IgnoreWhenCloningAttributeName)));
+        var properties = GetAssignableProperties(declaredClassSymbol);
         foreach (var property in properties)
         {
             if (property.SetMethod?.DeclaredAccessibility == Accessibility.Protected && property.IsVirtual)
@@ -176,6 +229,18 @@ public class CloneableGenerator : IIncrementalGenerator
             else if (property.IsVirtual)
             {
                 sb.AppendLine($"        this.{property.Name} = gameConfiguration.GetObjectOfConfig(other.{property.Name});");
+            }
+            else if (property.Type is IArrayTypeSymbol { Rank: 1 } arrayType && arrayType.ElementType.IsValueType)
+            {
+                var arrayTypeName = property.Type.WithNullableAnnotation(NullableAnnotation.None).ToDisplayString();
+                if (property.Type.NullableAnnotation == NullableAnnotation.Annotated)
+                {
+                    sb.AppendLine($"        this.{property.Name} = ({arrayTypeName}?)other.{property.Name}?.Clone();");
+                }
+                else
+                {
+                    sb.AppendLine($"        this.{property.Name} = (({arrayTypeName}?)other.{property.Name}?.Clone())!;");
+                }
             }
             else
             {

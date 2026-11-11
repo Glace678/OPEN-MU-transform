@@ -42,7 +42,10 @@ public static class AdminRoles
     /// </remarks>
     public static IEnumerable<string> GetEffectiveRoles(string role)
     {
-        if (!Enum.TryParse<AdminRole>(role, out var parsedRole) || !Enum.IsDefined(parsedRole))
+        if (string.IsNullOrWhiteSpace(role)
+            || !Enum.TryParse<AdminRole>(role, ignoreCase: false, out var parsedRole)
+            || !Enum.IsDefined(parsedRole)
+            || !string.Equals(parsedRole.ToString(), role, StringComparison.Ordinal))
         {
             yield break;
         }

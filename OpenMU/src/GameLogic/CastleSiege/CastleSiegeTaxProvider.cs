@@ -197,9 +197,21 @@ public sealed class CastleSiegeTaxProvider
     /// <returns><see langword="true"/> when entry is allowed and the required fee was paid.</returns>
     internal async ValueTask<bool> TryPayHuntEntryFeeAsync(Player player, CastleSiegeContext? context)
     {
+        var (success, _) = await this.TryPayHuntEntryFeeWithAmountAsync(player, context).ConfigureAwait(false);
+        return success;
+    }
+
+    /// <summary>
+    /// Pays the configured Land of Trials fee, returning whether entry is allowed and the paid amount.
+    /// </summary>
+    /// <param name="player">The entering player.</param>
+    /// <param name="context">The Castle Siege context.</param>
+    /// <returns>Whether entry is allowed and the paid fee amount.</returns>
+    internal async ValueTask<(bool Success, int PaidFee)> TryPayHuntEntryFeeWithAmountAsync(Player player, CastleSiegeContext? context)
+    {
         if (!IsEconomyActive(context))
         {
-            return false;
+            return (false, 0);
         }
 
         var persistentGuildId = await GetPersistentAllianceMasterGuildIdAsync(player).ConfigureAwait(false);
@@ -208,27 +220,65 @@ public sealed class CastleSiegeTaxProvider
         {
             if (!IsEconomyActive(context))
             {
-                return false;
+                return (false, 0);
             }
 
             var isExempt = persistentGuildId == context.SiegeData.OwnerGuildId;
             if (!isExempt && !context.SiegeData.IsHuntZoneEnabled)
             {
-                return false;
+                return (false, 0);
             }
 
             var fee = isExempt ? 0 : Math.Min(context.SiegeData.TaxHunt, MaximumHuntTax);
             if (fee < 0)
             {
-                return false;
+                return (false, 0);
             }
 
-            return this.TryPayAndCollect(player, context, 0, fee);
+            if (!this.TryPayAndCollect(player, context, 0, fee))
+            {
+                return (false, 0);
+            }
+
+            return (true, fee);
         }
         finally
         {
             context.ExecutionLock.Release();
         }
+    }
+
+    /// <summary>
+    /// Refunds a previously collected Land of Trials entry fee when warping fails.
+    /// </summary>
+    /// <param name="player">The entering player.</param>
+    /// <param name="context">The Castle Siege context.</param>
+    /// <param name="paidFee">The paid fee amount.</param>
+    internal async ValueTask RevertHuntEntryFeeAsync(Player player, CastleSiegeContext? context, int paidFee)
+    {
+        if (paidFee <= 0)
+        {
+            return;
+        }
+
+        if (context is not null)
+        {
+            await context.ExecutionLock.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                if (context.SiegeData is not null)
+                {
+                    context.SiegeData.TributeMoney = Math.Max(0, context.SiegeData.TributeMoney - paidFee);
+                    context.IsEconomyPersistencePending = true;
+                }
+            }
+            finally
+            {
+                context.ExecutionLock.Release();
+            }
+        }
+
+        player.TryAddMoney(paidFee);
     }
 
     private static bool IsEconomyActive([NotNullWhen(true)] CastleSiegeContext? context)

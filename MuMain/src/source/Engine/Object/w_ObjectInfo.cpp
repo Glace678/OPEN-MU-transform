@@ -182,6 +182,10 @@ void OBJECT::Initialize()
     Owner = NULL;
     Prior = NULL;
     Next  = NULL;
+
+    m_sTargetIndex = -1;
+    IdentityVector3D(m_v3PrePos1);
+    IdentityVector3D(m_v3PrePos2);
 }
 
 void OBJECT::Destroy()

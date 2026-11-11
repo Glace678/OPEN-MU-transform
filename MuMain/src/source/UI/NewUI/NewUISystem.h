@@ -86,6 +86,10 @@
 
 namespace SEASON3B
 {
+#ifdef PBG_MOD_STAMINA_UI
+class CNewUIStamina;
+#endif  //PBG_MOD_STAMINA_UI
+
 class CNewUISystem
 {
     CNewUIManager*     m_pNewUIMng;
@@ -223,7 +227,12 @@ private:
     CNewUIEmpireGuardianNPC*       m_pNewEmpireGuardianNPC;
     CNewUIEmpireGuardianTimer*     m_pNewEmpireGuardianTimer;
     CNewUIMiniMap*                 m_pNewMiniMap;
-    CNewUIGensRanking*             m_pNewGensRanking;
+#ifdef PBG_MOD_STAMINA_UI
+    CNewUIStamina* m_pNewUIStamina;
+#endif  //PBG_MOD_STAMINA_UI
+#ifdef PBG_ADD_GENSRANKING
+    CNewUIGensRanking* m_pNewGensRanking;
+#endif  //PBG_ADD_GENSRANKING
     CNewUIUnitedMarketPlaceWindow* m_pNewUnitedMarketPlaceWindow;
     CNewUILuckyItemWnd*            m_pNewUILuckyItemWnd;
     CNewUIMuHelper*                m_pNewUIMuHelper;
@@ -305,7 +314,12 @@ public:
     CNewUIEmpireGuardianNPC*       GetUI_pNewEmpireGuardianNPC() const;
     CNewUIEmpireGuardianTimer*     GetUI_pNewEmpireGuardianTimer() const;
     CNewUIMiniMap*                 GetUI_pNewUIMiniMap() const;
-    CNewUIGensRanking*             GetUI_NewGensRanking() const;
+#ifdef PBG_MOD_STAMINA_UI
+    CNewUIStamina* GetUI_pNewUIStamina() const;
+#endif  //PBG_MOD_STAMINA_UI
+#ifdef PBG_ADD_GENSRANKING
+    CNewUIGensRanking* GetUI_NewGensRanking() const;
+#endif  //PBG_ADD_GENSRANKING
     CNewUIUnitedMarketPlaceWindow* GetUI_pNewUnitedMarketPlaceWindow() const;
     //CNewUIUnitedMarketPlaceWindow*	GetUI_pNewUnitedMarketPlaceFrame() const;
     CNewUILuckyItemWnd*      Get_pNewUILuckyItemWnd() const;
@@ -366,7 +380,7 @@ public:
 #define g_pSetItemExplanation       SEASON3B::CNewUISystem::GetInstance()->GetUI_NewSetItemExplanation()
 #define g_pQuickCommand             SEASON3B::CNewUISystem::GetInstance()->GetUI_NewQuickCommandWindow()
 #define g_pMoveCommandWindow        SEASON3B::CNewUISystem::GetInstance()->GetUI_NewMoveCommandWindow()
-#define g_pDuelWindow               SEASON3B::CNewUISystem::GetInstance()->GetUI_NewDeulWindow()
+#define g_pDuelWindow               SEASON3B::CNewUISystem::GetInstance()->GetUI_NewDuelWindow()
 #define g_pSiegeWarfare             SEASON3B::CNewUISystem::GetInstance()->GetUI_NewSiegeWarfare()
 #define g_pItemEnduranceInfo        SEASON3B::CNewUISystem::GetInstance()->GetUI_NewItemEnduranceInfo()
 #define g_pBuffWindow               SEASON3B::CNewUISystem::GetInstance()->GetUI_NewBuffWindow()
@@ -396,7 +410,9 @@ public:
 #ifdef PBG_MOD_STAMINA_UI
 #define g_pNewUIStamina SEASON3B::CNewUISystem::GetInstance()->GetUI_pNewUIStamina()
 #endif  //PBG_MOD_STAMINA_UI
-#define g_pNewUIGensRanking       SEASON3B::CNewUISystem::GetInstance()->GetUI_NewGensRanking()
+#ifdef PBG_ADD_GENSRANKING
+#define g_pNewUIGensRanking SEASON3B::CNewUISystem::GetInstance()->GetUI_NewGensRanking()
+#endif  //PBG_ADD_GENSRANKING
 #define g_pLuckyItemWnd           SEASON3B::CNewUISystem::GetInstance()->Get_pNewUILuckyItemWnd()
 #define g_pNewUIMuHelper          SEASON3B::CNewUISystem::GetInstance()->Get_pNewUIMuHelper()
 #define g_pNewUIMuHelperExt       SEASON3B::CNewUISystem::GetInstance()->Get_pNewUIMuHelperExt()

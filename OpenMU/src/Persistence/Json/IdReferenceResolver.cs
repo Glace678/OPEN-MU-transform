@@ -13,7 +13,7 @@ public class IdReferenceResolver : ReferenceResolver
 {
     private readonly Dictionary<Guid, IIdentifiable> _objects = new();
 
-    private readonly Dictionary<object, string> _objectToReferenceIdMap = new();
+    private readonly Dictionary<object, string> _objectToReferenceIdMap = new(ReferenceEqualityComparer.Instance);
     private uint _referenceCount;
 
     /// <inheritdoc />

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RenderConfig.h"
 #include "Data/GameConfig/GameConfigConstants.h"
+#include "Core/Platform/PlatformDetect.h"
 #include "Core/Platform/WinCompat.h"
 #include "Core/Platform/WinIni.h"
 #include <cwchar>
@@ -29,8 +30,12 @@ bool g_SortParticleDraws = false;
 
 void InitRenderConfig()
 {
-    wchar_t executablePath[MAX_PATH];
-    GetModuleFileNameW(nullptr, executablePath, MAX_PATH);
+    wchar_t     executablePath[MAX_PATH] = {};
+    const DWORD pathLen                  = GetModuleFileNameW(nullptr, executablePath, MAX_PATH);
+    if (pathLen == 0 || pathLen >= MAX_PATH)
+    {
+        executablePath[0] = L'\0';
+    }
     wchar_t* lastBackslash    = wcsrchr(executablePath, L'\\');
     wchar_t* lastForwardSlash = wcsrchr(executablePath, L'/');
     wchar_t* lastSlash        = nullptr;
@@ -42,6 +47,10 @@ void InitRenderConfig()
     if (lastSlash)
     {
         *(lastSlash + 1) = L'\0';
+    }
+    else
+    {
+        executablePath[0] = L'\0';
     }
 
     std::filesystem::path configPath = executablePath;
@@ -57,8 +66,8 @@ void InitRenderConfig()
     int coreProfile = GetPrivateProfileIntW(CfgSections::CfgSectionRender, CfgKeys::CfgKeyCoreProfile,
                                             CfgDefaults::CfgDefaultCoreProfile ? 1 : 0, configPathWide.c_str());
     g_CoreProfile   = (coreProfile != 0);
-#if defined(__ANDROID__) || defined(__OHOS__)
-    // Mobile GPUs expose OpenGL ES through gl4es, never a desktop core profile.
+#if MU_PLATFORM_MOBILE || defined(SDL_PLATFORM_IOS)
+    // Mobile GPUs expose OpenGL ES 3.0, never a desktop core profile.
     g_CoreProfile = false;
 #endif
 

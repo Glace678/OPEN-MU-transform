@@ -352,7 +352,10 @@ internal static class BotShoppingHandler
             if (inventory.GetItem(slot) is { } item
                 && item.Durability() < item.GetMaximumDurabilityOfOnePiece())
             {
-                damaged.Add((slot, PriceCalculator.CalculateRepairPrice(item, true, player.GameContext.Configuration)));
+                var repairPrice = SoloBalance.ScalePrice(
+                    PriceCalculator.CalculateRepairPrice(item, true, player.GameContext.Configuration),
+                    player.GameContext.Configuration);
+                damaged.Add((slot, repairPrice));
             }
         }
 
@@ -495,7 +498,9 @@ internal static class BotShoppingHandler
     {
         return store.Items
             .Where(i => Matches(i, identifier))
-            .Where(i => PriceCalculator.CalculateFinalBuyingPrice(i, player.GameContext.Configuration) + reserve <= player.Money)
+            .Where(i => SoloBalance.ScalePrice(
+                PriceCalculator.CalculateFinalBuyingPrice(i, player.GameContext.Configuration),
+                player.GameContext.Configuration) + reserve <= player.Money)
             .OrderByDescending(i => i.Durability)
             .FirstOrDefault();
     }

@@ -163,7 +163,8 @@ void CDevEditorUI::RenderCameraModeControls()
         if (ImGui::Button(I18N::Editor::SwitchToFreeFly, ImVec2(250, 0)))
             camMgr.SetCameraMode(CameraMode::FreeFly);
         ImGui::SameLine();
-        ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "%s", camMgr.GetActiveCamera()->GetName());
+        const char* activeName = camMgr.GetActiveCamera() ? camMgr.GetActiveCamera()->GetName() : I18N::Editor::Unknown;
+        ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "%s", activeName);
         return;
     }
 
@@ -187,8 +188,8 @@ void CDevEditorUI::RenderCameraModeControls()
         {
             if (ImGui::Button(I18N::Editor::SnapToSpectated))
             {
-                auto* freeFly = static_cast<FreeFlyCamera*>(camMgr.GetActiveCamera());
-                freeFly->SnapToPosition(snapPos, snapAngle[2], snapAngle[0]);
+                if (auto* freeFly = static_cast<FreeFlyCamera*>(camMgr.GetActiveCamera()))
+                    freeFly->SnapToPosition(snapPos, snapAngle[2], snapAngle[0]);
             }
         }
     }
@@ -417,7 +418,9 @@ void CDevEditorUI::RenderOrbitalCameraOverridePanel()
         {
             const CameraConfig& cfg = cam->GetConfig();
             extern unsigned int WindowWidth, WindowHeight;
-            const float         aspect  = (float)WindowWidth / (float)WindowHeight;
+            const float         aspect  = (WindowWidth > 0 && WindowHeight > 0)
+                                              ? ((float)WindowWidth / (float)WindowHeight)
+                                              : ((float)REFERENCE_WIDTH / (float)REFERENCE_HEIGHT);
             const float         vFov    = HFovToVFov(cfg.hFov, aspect);
             const float         tanHalf = tanf(vFov * 0.5f * Q_PI / 180.0f);
             ov.farDist                  = cfg.terrainCullRange;
@@ -594,15 +597,18 @@ void CDevEditorUI::RenderGraphicsDebugInfo()
     float calculatedScaleX = 0, calculatedScaleY = 0;
     if (g_hWnd)
     {
-        RECT clientRect;
-        GetClientRect(g_hWnd, &clientRect);
-        clientWidth  = clientRect.right - clientRect.left;
-        clientHeight = clientRect.bottom - clientRect.top;
-        ImGui::Text("%s: %d x %d", I18N::Editor::ActualWindowClient, clientWidth, clientHeight);
+        RECT clientRect{};
+        if (GetClientRect(g_hWnd, &clientRect) && clientRect.right > clientRect.left &&
+            clientRect.bottom > clientRect.top)
+        {
+            clientWidth  = clientRect.right - clientRect.left;
+            clientHeight = clientRect.bottom - clientRect.top;
+            ImGui::Text("%s: %d x %d", I18N::Editor::ActualWindowClient, clientWidth, clientHeight);
 
-        calculatedScaleX = (float)clientWidth / (float)REFERENCE_WIDTH;
-        calculatedScaleY = (float)clientHeight / (float)REFERENCE_HEIGHT;
-        ImGui::Text("%s: %.2f x %.2f", I18N::Editor::CalculatedScaleFromClient, calculatedScaleX, calculatedScaleY);
+            calculatedScaleX = (float)clientWidth / (float)REFERENCE_WIDTH;
+            calculatedScaleY = (float)clientHeight / (float)REFERENCE_HEIGHT;
+            ImGui::Text("%s: %.2f x %.2f", I18N::Editor::CalculatedScaleFromClient, calculatedScaleX, calculatedScaleY);
+        }
     }
 
     if (WindowWidth != OpenglWindowWidth || WindowHeight != OpenglWindowHeight)
@@ -611,7 +617,8 @@ void CDevEditorUI::RenderGraphicsDebugInfo()
     ImGui::Spacing();
     if (ImGui::Button(I18N::Editor::CopyDebugInfoToClipboard, ImVec2(250, 0)))
     {
-        char debugInfo[1024];
+        const float aspectRatio = (WindowHeight > 0) ? ((float)WindowWidth / (float)WindowHeight) : 0.0f;
+        char        debugInfo[1024];
         sprintf_s(
             debugInfo,
             "=== Graphics Debug Info ===\n"
@@ -629,7 +636,7 @@ void CDevEditorUI::RenderGraphicsDebugInfo()
             g_bUseWindowMode ? "Windowed" : "Fullscreen", clientWidth, clientHeight, calculatedScaleX, calculatedScaleY,
             (WindowWidth != OpenglWindowWidth || WindowHeight != OpenglWindowHeight) ? "YES" : "NO", REFERENCE_WIDTH,
             REFERENCE_HEIGHT, REFERENCE_WIDTH, (float)WindowWidth / (float)REFERENCE_WIDTH, REFERENCE_HEIGHT,
-            (float)WindowHeight / (float)REFERENCE_HEIGHT, (float)WindowWidth / (float)WindowHeight);
+            (float)WindowHeight / (float)REFERENCE_HEIGHT, aspectRatio);
         ImGui::SetClipboardText(debugInfo);
         g_MuEditorConsoleUI.LogEditor(I18N::Editor::DebugInfoCopiedToClipboard);
     }

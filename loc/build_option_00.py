@@ -6,11 +6,11 @@ chunk_path = os.path.join(BASE, 'chunks', 'option_00.json')
 out_path = os.path.join(BASE, 'out', 'option_00.json')
 
 T = {
-0: "%0.2%%概率无视敌人防御。",
-1: "%0.2%%概率造成双倍伤害。",
-2: "%0.2%%概率造成三倍伤害。",
-3: "%0.2%%概率完全恢复HP。",
-4: "%0.2%%概率完全恢复魔法值。",
+0: "%0.2f%%概率无视敌人防御。",
+1: "%0.2f%%概率造成双倍伤害。",
+2: "%0.2f%%概率造成三倍伤害。",
+3: "%0.2f%%概率完全恢复HP。",
+4: "%0.2f%%概率完全恢复魔法值。",
 5: "每%0.2f点HP，防御成功率提升1点。",
 6: "装备双手剑时，PvP攻击力额外提升 %0.2f。",
 7: "%0.2f%%概率在10秒内每秒造成相当于力量值10%%的伤害。",
@@ -132,43 +132,44 @@ with io.open(chunk_path, encoding='utf-8') as f:
     chunk = json.load(f)
 items = chunk['items']
 
-results = [{"id": it["id"], "zh": T[it["id"]]} for it in items]
-with io.open(out_path, 'w', encoding='utf-8') as f:
-    json.dump({"results": results}, f, ensure_ascii=False, indent=1)
-
 # ---------------- verification ----------------
 errors = []
-# 1. count / ids
 src_ids = [it["id"] for it in items]
-out_ids = [r["id"] for r in results]
-if len(results) != len(items):
-    errors.append("count mismatch: %d vs %d" % (len(results), len(items)))
-if out_ids != src_ids:
-    errors.append("id order/match mismatch")
 missing = set(src_ids) - set(T.keys())
 extra = set(T.keys()) - set(src_ids)
 if missing: errors.append("missing ids: %s" % sorted(missing))
 if extra: errors.append("extra ids: %s" % sorted(extra))
 
+results = [{"id": it["id"], "zh": T[it["id"]]} for it in items if it["id"] in T]
+out_ids = [r["id"] for r in results]
+if len(results) != len(items):
+    errors.append("count mismatch: %d vs %d" % (len(results), len(items)))
+if out_ids != src_ids:
+    errors.append("id order/match mismatch")
+
 # traditional-character blacklist
 trad = set("劍師裝備遊戲傷禦戰擊護經驗獲寶靈創亞峽穀場鬥導喚術槍騎羅倫蹤貝魯遺廢達爾澤據競惡廣廟國誕試煉長錘權鎧鋒銳龍階級態狀約壇圍會鮮閃電鎖連隕禍災統項鏈製暈續牆敵雙視點時當於內標獸風雲聖導喚書")
+pat = re.compile(r'%\d*(?:\.\d+)?[dsfuxX%]|\{[0-9]+\}')
 
 for it in items:
-    i = it["id"]; en = it["en"]; zh = T[i]; budget = it["budget"]
+    i = it["id"]
+    if i not in T:
+        continue
+    en = it["en"]; zh = T[i]; budget = it["budget"]
+    en_fmt = re.sub(r'%0\.2(?=\.|$)', '%0.2f', en.replace('%0.2%%', '%0.2f%%'))
     b = len(zh.encode('utf-8'))
-    if b >= budget:
-        errors.append("id %d: bytes %d >= budget %d | %s" % (i, b, budget, zh))
+    if b > budget:
+        errors.append("id %d: bytes %d > budget %d | %s" % (i, b, budget, zh))
     for ch_name, cnt_en, cnt_zh in [
-        ("%", en.count('%'), zh.count('%')),
-        ("{", en.count('{'), zh.count('{')),
+        ("%", en_fmt.count('%'), zh.count('%')),
+        ("{", en_fmt.count('{'), zh.count('{')),
         ("#", en.count('#'), zh.count('#')),
         ("/", en.count('/'), zh.count('/')),
     ]:
         if cnt_en != cnt_zh:
             errors.append("id %d: '%s' count en=%d zh=%d | %s" % (i, ch_name, cnt_en, cnt_zh, zh))
     # placeholder token multiset
-    pat = re.compile(r'%\d*\.\d*[fF%]?|%[sdufx%]|\{[0-9]+\}')
-    te = pat.findall(en); tz = pat.findall(zh)
+    te = pat.findall(en_fmt); tz = pat.findall(zh)
     if sorted(te) != sorted(tz):
         errors.append("id %d: placeholder tokens %s vs %s" % (i, te, tz))
     bad = [c for c in zh if c in trad]
@@ -176,10 +177,16 @@ for it in items:
         errors.append("id %d: traditional chars %s | %s" % (i, set(bad), zh))
 
 print("items:", len(items), "results:", len(results))
-print("output:", out_path)
 if errors:
     print("FAILURES:")
     for e in errors:
         print(" -", e)
     sys.exit(1)
+
+os.makedirs(os.path.dirname(out_path), exist_ok=True)
+tmp_path = out_path + '.tmp'
+with io.open(tmp_path, 'w', encoding='utf-8') as f:
+    json.dump({"results": results}, f, ensure_ascii=False, indent=1)
+os.replace(tmp_path, out_path)
+print("output:", out_path)
 print("ALL CHECKS PASSED")

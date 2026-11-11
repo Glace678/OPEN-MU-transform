@@ -20,6 +20,9 @@ CSlider::~CSlider()
 
 void CSlider::Create(SImgInfo* piiThumb, SImgInfo* piiBack, SImgInfo* piiGauge, RECT* prcGauge, bool bVertical)
 {
+    if (piiThumb == nullptr || piiBack == nullptr)
+        return;
+
     m_btnThumb.Create(piiThumb->nWidth, piiThumb->nHeight, piiThumb->nTexID);
 
     CreateBackground(piiBack, piiGauge, prcGauge);
@@ -54,6 +57,9 @@ void CSlider::CreateBackground(SImgInfo* piiBack, SImgInfo* piiGauge, RECT* prcG
 {
     SafeDelete(m_pGaugeBar);
     SafeDelete(m_psprBack);
+
+    if (piiBack == nullptr)
+        return;
 
     if (piiGauge)
     {
@@ -124,14 +130,17 @@ void CSlider::SetSlideRange(int nSlideRange)
 
 void CSlider::LineUp()
 {
+    if (m_nSlidePos > 0)
+        --m_nSlidePos;
+
     if (m_bVertical)
     {
-        float fThumbYPos = float(m_ptPos.y) + (float)m_nThumbRange / m_nSlideRange * --m_nSlidePos;
+        float fThumbYPos = float(m_ptPos.y) + (float)m_nThumbRange / m_nSlideRange * m_nSlidePos;
         m_btnThumb.SetPositionArt((float)m_ptPos.x, fThumbYPos);
     }
     else
     {
-        float fThumbXPos = float(m_ptPos.x) + (float)m_nThumbRange / m_nSlideRange * --m_nSlidePos;
+        float fThumbXPos = float(m_ptPos.x) + (float)m_nThumbRange / m_nSlideRange * m_nSlidePos;
         m_btnThumb.SetPositionArt(fThumbXPos, (float)m_ptPos.y);
         UpdateGaugeValue();
     }
@@ -140,10 +149,12 @@ void CSlider::LineUp()
 void CSlider::LineDown()
 {
     float fThumbPos;
+    if (m_nSlidePos < m_nSlideRange)
+        ++m_nSlidePos;
 
     if (m_bVertical)
     {
-        if (++m_nSlidePos == m_nSlideRange)
+        if (m_nSlidePos == m_nSlideRange)
             fThumbPos = float(m_ptPos.y + m_nThumbRange);
         else
             fThumbPos = float(m_ptPos.y) + (float)m_nThumbRange / m_nSlideRange * m_nSlidePos;
@@ -152,7 +163,7 @@ void CSlider::LineDown()
     }
     else
     {
-        if (++m_nSlidePos == m_nSlideRange)
+        if (m_nSlidePos == m_nSlideRange)
             fThumbPos = float(m_ptPos.x + m_nThumbRange);
         else
             fThumbPos = float(m_ptPos.x) + (float)m_nThumbRange / m_nSlideRange * m_nSlidePos;

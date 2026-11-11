@@ -101,7 +101,9 @@ endif()
 # sources. Declare it as a framework-located resource and set the rpath so the
 # main executable can load it at @executable_path/Frameworks.
 set(MU_IOS_AOT_DYLIB "${CMAKE_CURRENT_LIST_DIR}/native/libMUnique.Client.Library.dylib")
-if(EXISTS "${MU_IOS_AOT_DYLIB}")
+if(MU_IOS_SIMULATOR OR CMAKE_OSX_SYSROOT STREQUAL "iphonesimulator")
+  message(STATUS "Simulator build: skipping device-only NativeAOT dylib '${MU_IOS_AOT_DYLIB}'.")
+elseif(EXISTS "${MU_IOS_AOT_DYLIB}")
   set_source_files_properties("${MU_IOS_AOT_DYLIB}"
     PROPERTIES MACOSX_PACKAGE_LOCATION Frameworks)
   target_sources(Main PRIVATE "${MU_IOS_AOT_DYLIB}")

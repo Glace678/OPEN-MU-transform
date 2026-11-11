@@ -3,7 +3,11 @@ import zlib from '@ohos.zlib';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { promptAction } from '@kit.ArkUI';
 import { MobileConfig, DEFAULT_SERVER_ADDRESS, GAME_DATA_VERSION } from '../mobile/MobileConfig';
-import { nativeStartupError } from '../entryability/EntryAbility';
+import {
+  clearNativeStartupError,
+  nativeStartupError,
+  setNativeStartupError
+} from '../entryability/EntryAbility';
 // NAPI bridge (libopenmubridge.so). EntryAbility.onCreate already called
 // setDataRoot before the data archive existed, so on a first run the chdir and
 // MU_CONFIG_FILE setup failed; we re-apply the data root here once it exists.
@@ -29,16 +33,23 @@ struct Bootstrap {
   @State handedness: string = 'right';
 
   async aboutToAppear(): Promise<void> {
-    const context = getContext(this);
-    this.serverAddress = await MobileConfig.getString(context, 'server-address', DEFAULT_SERVER_ADDRESS);
-    this.fps = await MobileConfig.getString(context, 'fps', '60');
-    this.renderScale = await MobileConfig.getNumber(context, 'render-scale', 100);
-    this.uiScale = await MobileConfig.getNumber(context, 'ui-scale', 100);
-    this.handedness = await MobileConfig.getString(context, 'handedness', 'right');
-    if (await MobileConfig.isGameDataReady(context)) {
-      this.markReady();
-    } else {
-      await this.prepareData();
+    try {
+      const context = getContext(this);
+      this.serverAddress = await MobileConfig.getString(context, 'server-address', DEFAULT_SERVER_ADDRESS);
+      this.fps = await MobileConfig.getString(context, 'fps', '60');
+      this.renderScale = await MobileConfig.getNumber(context, 'render-scale', 100);
+      this.uiScale = await MobileConfig.getNumber(context, 'ui-scale', 100);
+      this.handedness = await MobileConfig.getString(context, 'handedness', 'right');
+      if (await MobileConfig.isGameDataReady(context)) {
+        this.markReady();
+      } else {
+        await this.prepareData();
+      }
+    } catch (e) {
+      this.busy = false;
+      this.ready = false;
+      this.status = '初始化失败';
+      this.detail = ((e as Error).message ?? String(e));
     }
   }
 
@@ -49,7 +60,7 @@ struct Bootstrap {
     this.detail = '点击开始游戏，将自动登录本地账号。';
   }
 
-  // Copies the bundled rawfile/game-data.zip into the sandbox and unzips it.
+  // Copies the bundled rawfile/game-data.zip into the sandbox and unzips it via staging.
   private async prepareData(): Promise<void> {
     if (this.busy) {
       return;
@@ -58,37 +69,75 @@ struct Bootstrap {
     this.status = '正在解压游戏数据…';
     const context = getContext(this);
     const root = MobileConfig.dataRoot(context);
+    const staging = context.filesDir + '/game-data.staging';
+    const backup = context.filesDir + '/game-data.backup';
+    const zipPath = context.filesDir + '/game-data.zip';
     try {
-      fs.mkdirSync(root, true);
-      const zipPath = context.filesDir + '/game-data.zip';
+      try { fs.rmdirSync(staging); } catch (e) { /* ignore */ }
+      try { fs.rmdirSync(backup); } catch (e) { /* ignore */ }
+      fs.mkdirSync(staging, true);
       await copyRawfileTo(context, 'game-data.zip', zipPath);
-      await zlib.decompressFile(zipPath, root, { overwrite: true });
+      await zlib.decompressFile(zipPath, staging, { overwrite: true });
       try {
         fs.unlinkSync(zipPath);
       } catch (e) {
         // Best effort cleanup.
       }
+      try {
+        fs.accessSync(staging + '/Data');
+      } catch (e) {
+        try { fs.rmdirSync(staging); } catch (err) { /* ignore */ }
+        this.busy = false;
+        this.status = '解压完成但未找到 Data 目录';
+        this.detail = '请确认 game-data.zip 内含 Data 文件夹。';
+        return;
+      }
+      // Preserve an existing user config.ini across data upgrades.
+      try {
+        fs.accessSync(root + '/config.ini');
+        fs.copyFileSync(root + '/config.ini', staging + '/config.ini');
+      } catch (e) {
+        // No previous config.ini to preserve.
+      }
+      let movedOldRoot = false;
+      try {
+        fs.accessSync(root);
+        fs.renameSync(root, backup);
+        movedOldRoot = true;
+      } catch (e) {
+        movedOldRoot = false;
+      }
+      try {
+        fs.renameSync(staging, root);
+        MobileConfig.writeDataVersionMarker(context);
+      } catch (e) {
+        if (movedOldRoot) {
+          try { fs.renameSync(backup, root); } catch (restoreErr) { /* best effort */ }
+        }
+        throw e;
+      }
+      if (movedOldRoot) {
+        try { fs.rmdirSync(backup); } catch (e) { /* best effort */ }
+      }
       if (await MobileConfig.isGameDataReady(context)) {
         this.markReady();
       } else {
         this.busy = false;
-        this.status = '解压完成但未找到 Data 目录';
-        this.detail = '请确认 game-data.zip 内含 Data 文件夹。';
+        this.status = '数据校验失败';
+        this.detail = '解压后未能验证游戏数据版本标记，请重试。';
       }
     } catch (e) {
+      try { fs.unlinkSync(zipPath); } catch (err) { /* ignore */ }
+      try { fs.rmdirSync(staging); } catch (err) { /* ignore */ }
       this.busy = false;
       this.status = '解压失败';
       // If no archive was bundled, tell the user how to provide the data.
       this.detail = '未找到内置数据包。请把 game-data.zip 放入 entry/src/main/resources/rawfile/，'
-        + '或用 hdc 把 Data 目录推送到 ' + root + '。';
+        + '或用 hdc 把 Data 目录推送到 ' + root + ' 并写入 .openmu-data-version。';
     }
   }
 
   private async startGame(): Promise<void> {
-    if (nativeStartupError !== null) {
-      promptAction.showToast({ message: '原生桥初始化失败，无法进入游戏：' + nativeStartupError });
-      return;
-    }
     const context = getContext(this);
     try {
       await MobileConfig.writeConfig(context);
@@ -96,14 +145,19 @@ struct Bootstrap {
       // mkdirs it), so re-point the native process at it. onCreate's earlier
       // setDataRoot ran before first-run extraction and could not chdir there;
       // when it threw, the auto-login setEnv calls were skipped, so re-apply
-      // both the data root AND the auto-login env here.
+      // both the data root AND the auto-login env here and clear nativeStartupError.
       bridge.setDataRoot(MobileConfig.dataRoot(context));
       const env = MobileConfig.autoLoginEnv();
       Object.keys(env).forEach((name: string) => {
         bridge.setEnv(name, env[name]);
       });
+      clearNativeStartupError();
     } catch (e) {
-      promptAction.showToast({ message: '写入配置失败：' + ((e as Error).message ?? e) });
+      const detail = ((e as Error).message ?? String(e));
+      setNativeStartupError(detail);
+      promptAction.showToast({
+        message: '启动准备失败：' + (nativeStartupError ?? detail)
+      });
       return;
     }
     if (!(await MobileConfig.tutorialSeen(context))) {

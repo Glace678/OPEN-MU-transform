@@ -63,8 +63,6 @@ bool CNewUINPCQuest::Create(CNewUIManager* pNewUIMng, CNewUI3DRenderMng* pNewUI3
 
 void CNewUINPCQuest::Release()
 {
-    UnloadImages();
-
     if (m_pNewUI3DRenderMng)
     {
         m_pNewUI3DRenderMng->Remove3DRenderObj(this);
@@ -73,6 +71,7 @@ void CNewUINPCQuest::Release()
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }

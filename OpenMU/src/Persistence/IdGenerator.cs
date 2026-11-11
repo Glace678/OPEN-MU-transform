@@ -64,22 +64,30 @@ public class IdGenerator
     public int GenerateId()
     {
         if (this.ReUseSetting == ReUsePolicy.ReUseOnNextRetrieve
-            && this._givenBack.TryDequeue(out int next))
+            && this.TryDequeueGivenBack(out int next))
         {
             return next;
         }
 
-        if (this._currentValue == this._maxValue)
+        while (true)
         {
-            if (this._givenBack.TryDequeue(out next))
+            var current = Volatile.Read(ref this._currentValue);
+            if (current >= this._maxValue)
             {
-                return next;
+                if (this.TryDequeueGivenBack(out next))
+                {
+                    return next;
+                }
+
+                throw new InvalidOperationException("Maximum object id exceeded");
             }
 
-            throw new InvalidOperationException("Maximum object id exceeded");
+            var candidate = current + 1;
+            if (Interlocked.CompareExchange(ref this._currentValue, candidate, current) == current)
+            {
+                return candidate;
+            }
         }
-
-        return Interlocked.Increment(ref this._currentValue);
     }
 
     /// <summary>
@@ -108,6 +116,14 @@ public class IdGenerator
                     this._givenBack.Enqueue(id);
                 }
             }
+        }
+    }
+
+    private bool TryDequeueGivenBack(out int id)
+    {
+        lock (this._lock)
+        {
+            return this._givenBack.TryDequeue(out id);
         }
     }
 }

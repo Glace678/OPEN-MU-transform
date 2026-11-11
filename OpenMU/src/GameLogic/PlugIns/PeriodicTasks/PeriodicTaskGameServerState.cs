@@ -4,6 +4,20 @@
 
 namespace MUnique.OpenMU.GameLogic.PlugIns.PeriodicTasks;
 
+using System.Threading;
+
+/// <summary>
+/// Allows forcing a periodic task to start only on a targeted <see cref="IGameContext"/>.
+/// </summary>
+internal interface IContextScopedPeriodicTaskPlugIn
+{
+    /// <summary>
+    /// Forces the periodic task to start on the specified <paramref name="gameContext"/>.
+    /// </summary>
+    /// <param name="gameContext">The target game context.</param>
+    void ForceStart(IGameContext gameContext);
+}
+
 /// <summary>
 /// Game server state per event.
 /// </summary>
@@ -43,4 +57,19 @@ public class PeriodicTaskGameServerState
     /// Gets the description about the state.
     /// </summary>
     public virtual string Description => string.Empty;
+
+    /// <summary>
+    /// Gets the gate serializing periodic state transitions for this game context.
+    /// </summary>
+    internal SemaphoreSlim ExecutionGate { get; } = new(1, 1);
+
+    /// <summary>
+    /// Gets or sets a value indicating whether start was forced specifically for this game context.
+    /// </summary>
+    internal bool IsContextStartForced { get; set; }
+
+    /// <summary>
+    /// Gets or sets the last global force-start generation handled by this game context.
+    /// </summary>
+    internal long HandledForceStartGeneration { get; set; }
 }

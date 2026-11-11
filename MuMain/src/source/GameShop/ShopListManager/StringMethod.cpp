@@ -20,6 +20,13 @@ CStringMethod::~CStringMethod()  // OK
 
 void CStringMethod::ConvertStringToDateTime(tm& datetime, std::wstring strdata)  // OK
 {
+    datetime = {};
+
+    if (strdata.length() < 4)
+    {
+        return;
+    }
+
     if (strdata.length() >= 4)
     {
         datetime.tm_year = _wtoi(strdata.substr(0, 4).c_str()) - 1900;
@@ -33,6 +40,10 @@ void CStringMethod::ConvertStringToDateTime(tm& datetime, std::wstring strdata) 
     if (strdata.length() >= 8)
     {
         datetime.tm_mday = _wtoi(strdata.substr(6, 2).c_str());
+    }
+    else
+    {
+        datetime.tm_mday = 1;
     }
 
     if (strdata.length() >= 10)

@@ -18,14 +18,30 @@ public static class EncodingExtensions
     /// <returns>The maximum character count of the given text which fits in the specified maximum byte count.</returns>
     public static int GetCharacterCountOfMaxByteCount(this Encoding encoding, string text, int maximum)
     {
+        if (maximum <= 0 || string.IsNullOrEmpty(text))
+        {
+            return 0;
+        }
+
         if (encoding.GetByteCount(text) <= maximum)
         {
             return text.Length;
         }
 
-        var current = maximum;
-        while (encoding.GetByteCount(text, 0, current) > maximum)
+        var current = Math.Min(maximum, text.Length);
+        while (current > 0)
         {
+            if (char.IsHighSurrogate(text[current - 1]))
+            {
+                --current;
+                continue;
+            }
+
+            if (encoding.GetByteCount(text, 0, current) <= maximum)
+            {
+                break;
+            }
+
             --current;
         }
 

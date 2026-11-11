@@ -26,7 +26,7 @@
 	<string>${CMAKE_OSX_DEPLOYMENT_TARGET}</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
-		<string>arm64</string>
+		<string>${MU_IOS_DEVICE_CAPABILITIES}</string>
 	</array>
 	<!-- 游戏仅横屏；与安卓/鸿蒙版一致 -->
 	<key>UISupportedInterfaceOrientations</key>

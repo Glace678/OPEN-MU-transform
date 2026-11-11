@@ -15,6 +15,7 @@ using MUnique.OpenMU.Interfaces;
 /// <seealso cref="MUnique.OpenMU.Interfaces.IGameServerStateObserver" />
 internal class MulticastConnectionServerStateObserver : IGameServerStateObserver
 {
+    private readonly object _syncRoot = new();
     private readonly MemorizingObserver _memorizingObserver = new();
     private readonly List<IGameServerStateObserver> _observers = new();
 
@@ -30,32 +31,76 @@ internal class MulticastConnectionServerStateObserver : IGameServerStateObserver
     /// Adds the observer which wants to get notified about changes.
     /// </summary>
     /// <param name="observer">The observer.</param>
-    public void AddObserver(IGameServerStateObserver observer) => this._observers.Add(observer);
+    public void AddObserver(IGameServerStateObserver observer)
+    {
+        lock (this._syncRoot)
+        {
+            if (!this._observers.Contains(observer))
+            {
+                this._observers.Add(observer);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Removes a previously added observer.
+    /// </summary>
+    /// <param name="observer">The observer.</param>
+    public void RemoveObserver(IGameServerStateObserver observer)
+    {
+        if (ReferenceEquals(observer, this._memorizingObserver))
+        {
+            return;
+        }
+
+        lock (this._syncRoot)
+        {
+            this._observers.Remove(observer);
+        }
+    }
 
     /// <inheritdoc />
     public void RegisterGameServer(ServerInfo gameServer, IPEndPoint publicEndPoint)
     {
-        for (int i = 0; i < this._observers.Count; i++)
+        IGameServerStateObserver[] snapshot;
+        lock (this._syncRoot)
         {
-            this._observers[i].RegisterGameServer(gameServer, publicEndPoint);
+            snapshot = this._observers.ToArray();
+        }
+
+        for (int i = 0; i < snapshot.Length; i++)
+        {
+            snapshot[i].RegisterGameServer(gameServer, publicEndPoint);
         }
     }
 
     /// <inheritdoc />
     public void UnregisterGameServer(ushort gameServerId)
     {
-        for (int i = 0; i < this._observers.Count; i++)
+        IGameServerStateObserver[] snapshot;
+        lock (this._syncRoot)
         {
-            this._observers[i].UnregisterGameServer(gameServerId);
+            snapshot = this._observers.ToArray();
+        }
+
+        for (int i = 0; i < snapshot.Length; i++)
+        {
+            snapshot[i].UnregisterGameServer(gameServerId);
         }
     }
 
     /// <inheritdoc />
     public void CurrentConnectionsChanged(ushort serverId, int currentConnections)
     {
-        for (int i = 0; i < this._observers.Count; i++)
+        IGameServerStateObserver[] snapshot;
+        lock (this._syncRoot)
         {
-            this._observers[i].CurrentConnectionsChanged(serverId, currentConnections);
+            snapshot = this._observers.ToArray();
+        }
+
+        for (int i = 0; i < snapshot.Length; i++)
+        {
+            snapshot[i].CurrentConnectionsChanged(serverId, currentConnections);
         }
     }
 
@@ -77,7 +122,7 @@ internal class MulticastConnectionServerStateObserver : IGameServerStateObserver
 
         public void RegisterGameServer(ServerInfo gameServer, IPEndPoint publicEndPoint)
         {
-            this.ServerInfos.TryAdd(gameServer.Id, (gameServer, publicEndPoint));
+            this.ServerInfos[gameServer.Id] = (gameServer, publicEndPoint);
         }
 
         public void UnregisterGameServer(ushort gameServerId)

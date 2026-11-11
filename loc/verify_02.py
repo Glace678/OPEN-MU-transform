@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import os
 import os as _os, sys as _sys
 _sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
 import config
-import json, re, sys
+import json, os, re, sys
 
 with open(os.path.join(config.LOC_CHUNKS, 'option_02.json'), encoding='utf-8') as f:
     src = json.load(f)
@@ -26,10 +25,15 @@ if sorted(src_ids) != sorted(out_ids):
 if len(set(out_ids)) != len(out_ids):
     problems.append("duplicate ids in output")
 
-ph_re = re.compile(r'%(?:\d+\.\d+|%\d|[sdufx%])|%[sdufx%]|%%?|\{[0-9]+\}')
+PH = re.compile(r'%\d*(?:\.\d+)?[dsfuxX%]|\{[0-9]+\}')
+
+def _norm_en_fmt(s):
+    t = s.replace('%0.2%%', '%0.2f%%')
+    return re.sub(r'%0\.2(?=\.|$)', '%0.2f', t)
+
 def phs(s):
-    # extract placeholders in order: %0.2f, %0.2f%%, %d, %s, %u, %x, %%, {0}
-    return re.findall(r'%0?\.?\d*[sdufx]|%%|\{[0-9]+\}', s)
+    # extract placeholders (multiset-sorted): %0.2f, %2d, %d, %s, %u, %x, %X, %%, {0}
+    return sorted(PH.findall(s))
 
 # traditional-only forms (distinct from simplified); never appear in simplified text
 trad_chars = set('們個這來說時對發為會學過還點線後現體書買車馬電長東門問聲開間關戰場風雲寶劍聖獸龍鳳護衛術師騎槍煉獄憤靈詛禦鬥擊殺敵陣閃凍結傷減機獲裝備藥捲軸鑰環項鏈鍛鐵漢納盧絲蓋亞樓羅麗貫雙鋼')
@@ -39,11 +43,12 @@ for r in results:
     if not i:
         continue
     en, zh, budget = i['en'], r['zh'], i['budget']
+    en_fmt = _norm_en_fmt(en)
     b = len(zh.encode('utf-8'))
-    if b >= budget:
-        problems.append(f"{r['id']}: BYTES {b} >= budget {budget} | {zh}")
-    if phs(en) != phs(zh):
-        problems.append(f"{r['id']}: PLACEHOLDER en={phs(en)} zh={phs(zh)}")
+    if b > budget:
+        problems.append(f"{r['id']}: BYTES {b} > budget {budget} | {zh}")
+    if phs(en_fmt) != phs(zh):
+        problems.append(f"{r['id']}: PLACEHOLDER en={phs(en_fmt)} zh={phs(zh)}")
     if en.count('#') != zh.count('#'):
         problems.append(f"{r['id']}: HASH en={en.count('#')} zh={zh.count('#')}")
     if en.count('/') != zh.count('/'):

@@ -26,71 +26,90 @@ public class QuestCompletionAction
     public async ValueTask CompleteQuestAsync(Player player, short group, short number)
     {
         using var loggerScope = player.Logger.BeginScope(this.GetType());
-        var questState = player.GetQuestState(group, number);
-        var activeQuest = questState?.ActiveQuest;
-        if (activeQuest is null)
+        await player.RunPersistenceExclusiveAsync(async () =>
         {
-            player.Logger.LogDebug("Failed, no active quest");
-            return;
-        }
-
-        foreach (var requiredItem in activeQuest.RequiredItems)
-        {
-            var requiredLevel = requiredItem.DropItemGroup?.ItemLevel;
-            var itemCount = player.Inventory?.Items
-                .Count(i => Equals(i.Definition, requiredItem.Item)
-                            && (requiredLevel is null || requiredLevel == i.Level));
-
-            if (requiredItem.MinimumNumber <= itemCount)
+            var questState = player.GetQuestState(group, number);
+            var activeQuest = questState?.ActiveQuest;
+            if (activeQuest is null)
             {
-                continue;
+                player.Logger.LogDebug("Failed, no active quest");
+                return;
             }
 
-            player.Logger.LogDebug("Failed, required item not found: {0}", requiredItem.Item!.GetNameForLevel(requiredLevel ?? 0));
-            return;
-        }
-
-        foreach (var requiredKills in activeQuest.RequiredMonsterKills)
-        {
-            var currentKillCount = questState!.RequirementStates.FirstOrDefault(r => object.Equals(r.Requirement, requiredKills))?.KillCount ?? 0;
-            if (currentKillCount >= requiredKills.MinimumNumber)
+            foreach (var requiredItem in activeQuest.RequiredItems)
             {
-                continue;
+                var requiredLevel = requiredItem.DropItemGroup?.ItemLevel;
+                var itemCount = player.Inventory?.Items
+                    .Where(i => Equals(i.Definition, requiredItem.Item)
+                                && (requiredLevel is null || requiredLevel == i.Level))
+                    .Sum(i => i.IsStackable() ? Math.Max(1, (int)i.Durability) : 1) ?? 0;
+
+                if (requiredItem.MinimumNumber <= itemCount)
+                {
+                    continue;
+                }
+
+                player.Logger.LogDebug("Failed, required item not found: {0}", requiredItem.Item!.GetNameForLevel(requiredLevel ?? 0));
+                return;
             }
 
-            player.Logger.LogDebug("Failed, required kills of monster {0}: {1}/{2};", requiredKills.Monster?.Designation, currentKillCount, requiredKills.MinimumNumber);
-            return;
-        }
-
-        if (activeQuest.RequiresClientAction && !questState!.ClientActionPerformed)
-        {
-            player.Logger.LogDebug("Failed, client action not performed.");
-            return;
-        }
-
-        questState!.LastFinishedQuest = activeQuest;
-        foreach (var requiredItem in activeQuest.RequiredItems)
-        {
-            var requiredLevel = requiredItem.DropItemGroup?.ItemLevel;
-            var items = player.Inventory!.Items
-                .Where(item => Equals(item.Definition, requiredItem.Item)
-                               && (requiredLevel is null || requiredLevel == item.Level))
-                .Take(requiredItem.MinimumNumber)
-                .ToList();
-
-            foreach (var item in items)
+            foreach (var requiredKills in activeQuest.RequiredMonsterKills)
             {
-                await player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
+                var currentKillCount = questState!.RequirementStates.FirstOrDefault(r => object.Equals(r.Requirement, requiredKills))?.KillCount ?? 0;
+                if (currentKillCount >= requiredKills.MinimumNumber)
+                {
+                    continue;
+                }
+
+                player.Logger.LogDebug("Failed, required kills of monster {0}: {1}/{2};", requiredKills.Monster?.Designation, currentKillCount, requiredKills.MinimumNumber);
+                return;
             }
-        }
 
-        foreach (var reward in activeQuest.Rewards)
-        {
-            await AddRewardAsync(player, reward, activeQuest).ConfigureAwait(false);
-        }
+            if (activeQuest.RequiresClientAction && !questState!.ClientActionPerformed)
+            {
+                player.Logger.LogDebug("Failed, client action not performed.");
+                return;
+            }
 
-        await questState.ClearAsync(player.PersistenceContext).ConfigureAwait(false);
-        await player.InvokeViewPlugInAsync<IQuestCompletionResponsePlugIn>(p => p.QuestCompletedAsync(activeQuest)).ConfigureAwait(false);
+            foreach (var requiredItem in activeQuest.RequiredItems)
+            {
+                var requiredLevel = requiredItem.DropItemGroup?.ItemLevel;
+                var remainingToConsume = (int)requiredItem.MinimumNumber;
+                var matchingItems = player.Inventory!.Items
+                    .Where(item => Equals(item.Definition, requiredItem.Item)
+                                   && (requiredLevel is null || requiredLevel == item.Level))
+                    .ToList();
+
+                foreach (var item in matchingItems)
+                {
+                    if (remainingToConsume <= 0)
+                    {
+                        break;
+                    }
+
+                    if (item.IsStackable() && item.Durability > remainingToConsume)
+                    {
+                        item.Durability -= (byte)remainingToConsume;
+                        remainingToConsume = 0;
+                        await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
+                        break;
+                    }
+
+                    remainingToConsume -= item.IsStackable() ? Math.Max(1, (int)item.Durability) : 1;
+                    await player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
+                }
+            }
+
+            questState!.LastFinishedQuest = activeQuest;
+            await questState.ClearAsync(player.PersistenceContext).ConfigureAwait(false);
+
+            foreach (var reward in activeQuest.Rewards)
+            {
+                await AddRewardAsync(player, reward, activeQuest).ConfigureAwait(false);
+            }
+
+            await player.InvokeViewPlugInAsync<IQuestCompletionResponsePlugIn>(p => p.QuestCompletedAsync(activeQuest)).ConfigureAwait(false);
+        }).ConfigureAwait(false);
     }
 
     private static async ValueTask AddRewardAsync(Player player, QuestReward reward, QuestDefinition quest)
@@ -123,9 +142,9 @@ public class QuestCompletionAction
                 {
                     await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(item)).ConfigureAwait(false);
                 }
-                else
+                else if (player.CurrentMap is { } currentMap)
                 {
-                    player.CurrentMap?.AddAsync(new DroppedItem(item, player.Position, player.CurrentMap, player, player.GetAsEnumerable()));
+                    await currentMap.AddAsync(new DroppedItem(item, player.Position, currentMap, player, player.GetAsEnumerable())).ConfigureAwait(false);
                 }
 
                 break;
@@ -160,7 +179,11 @@ public class QuestCompletionAction
                 await player.AddExperienceAsync(reward.Value, null).ConfigureAwait(false);
                 break;
             case QuestRewardType.Money:
-                player.TryAddMoney(reward.Value);
+                if (!player.TryAddMoney(reward.Value) && reward.Value > 0 && player.CurrentMap is { } moneyMap)
+                {
+                    await moneyMap.AddAsync(new DroppedMoney((uint)reward.Value, player.Position, moneyMap)).ConfigureAwait(false);
+                }
+
                 await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
                 break;
             case QuestRewardType.GensAttribution:

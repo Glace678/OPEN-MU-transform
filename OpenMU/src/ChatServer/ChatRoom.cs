@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.ChatServer;
 
+using System.Collections.Immutable;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.Interfaces;
@@ -21,16 +22,16 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
     /// </summary>
     private readonly IList<ChatServerAuthenticationInfo> _registeredClients;
 
+    private readonly SemaphoreSlim _lock = new(1, 1);
+
     /// <summary>
     /// Gets the <see cref="IChatClient"/>s which are currently connected to the ChatRoom.
     /// </summary>
-    private readonly List<IChatClient> _connectedClients;
-
-    private readonly SemaphoreSlim _lock = new(1, 1);
+    private ImmutableList<IChatClient> _connectedClients = ImmutableList<IChatClient>.Empty;
 
     private int _lastUsedClientIndex = -1;
 
-    private bool _isClosing;
+    private volatile bool _isClosing;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ChatRoom" /> class.
@@ -41,7 +42,6 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
     {
         this._logger = logger;
         this._logger.LogDebug("Creating room {RoomId}", roomId);
-        this._connectedClients = new List<IChatClient>(2);
         this._registeredClients = new List<ChatServerAuthenticationInfo>(2);
         this.RoomId = roomId;
         this.AuthenticationRequiredUntil = DateTime.UtcNow.AddSeconds(10);
@@ -130,6 +130,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
     }
 
     /// <inheritdoc/>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", MessageId = "_lock", Justification = "SemaphoreSlim without AvailableWaitHandle holds no unmanaged OS handle; disposing it while concurrent callers await WaitAsync causes ObjectDisposedException.")]
     public async ValueTask DisposeAsync()
     {
         if (this._isClosing)
@@ -138,7 +139,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         }
 
         await this._lock.WaitAsync().ConfigureAwait(false);
-        List<IChatClient> connectedClients;
+        ImmutableList<IChatClient> connectedClients;
         try
         {
             if (this._isClosing)
@@ -149,8 +150,8 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
             this._isClosing = true;
             this._logger.LogDebug("Disposing room {RoomId}...", this.RoomId);
             this._registeredClients.Clear();
-            connectedClients = this._connectedClients.ToList();
-            this._connectedClients.Clear();
+            connectedClients = this._connectedClients;
+            this._connectedClients = ImmutableList<IChatClient>.Empty;
         }
         finally
         {
@@ -169,7 +170,6 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         }
         finally
         {
-            this._lock.Dispose();
             this._logger.LogDebug("Room {RoomId} disposed.", this.RoomId);
         }
     }
@@ -218,7 +218,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
                     chatClient.Index = authenticationInformation.Index;
                     this._registeredClients.Remove(authenticationInformation);
                     await this.SendChatRoomClientUpdateAsync(chatClient, ChatRoomClientUpdateType.Joined).ConfigureAwait(false);
-                    this._connectedClients.Add(chatClient);
+                    this._connectedClients = this._connectedClients.Add(chatClient);
                     await chatClient.SendChatRoomClientListAsync(this._connectedClients).ConfigureAwait(false);
                     return true;
                 }
@@ -259,7 +259,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
                 return;
             }
 
-            this._connectedClients.Remove(chatClient);
+            this._connectedClients = this._connectedClients.Remove(chatClient);
             roomIsEmpty = this._connectedClients.Count < 1;
             if (!roomIsEmpty)
             {
@@ -273,7 +273,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
 
         if (roomIsEmpty)
         {
-            this.Close();
+            await this.DisposeAsync().ConfigureAwait(false);
         }
     }
 
@@ -289,7 +289,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
             return;
         }
 
-        List<IChatClient> clients;
+        ImmutableList<IChatClient> clients;
         await this._lock.WaitAsync().ConfigureAwait(false);
         try
         {
@@ -298,7 +298,7 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
                 return;
             }
 
-            clients = this._connectedClients.ToList();
+            clients = this._connectedClients;
         }
         finally
         {

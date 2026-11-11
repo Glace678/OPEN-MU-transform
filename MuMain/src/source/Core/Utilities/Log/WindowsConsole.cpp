@@ -4,6 +4,8 @@
 
 #include "WindowsConsole.h"
 
+#include <vector>
+
 #ifdef _WIN32
 
 bool leaf::OpenConsoleWindow(const std::wstring& title)
@@ -172,41 +174,46 @@ void CConsoleWindow::ClearScreen()
     // http://support.microsoft.com/default.aspx?scid=KB;EN-US;q99261&
     /***************************************/
 
+    HANDLE hStdOut = ::GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hStdOut == NULL || hStdOut == INVALID_HANDLE_VALUE)
+        return;
+
     COORD coordScreen = {0, 0};
 
-    DWORD                      cCharsWritten;
-    CONSOLE_SCREEN_BUFFER_INFO csbi; /* to get buffer info */
-    DWORD                      dwConSize;
+    DWORD                      cCharsWritten = 0;
+    CONSOLE_SCREEN_BUFFER_INFO csbi          = {}; /* to get buffer info */
+    DWORD                      dwConSize     = 0;
 
     /* get the number of character cells in the current buffer */
-    ::GetConsoleScreenBufferInfo(::GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    if (!::GetConsoleScreenBufferInfo(hStdOut, &csbi) || csbi.dwSize.X <= 0 || csbi.dwSize.Y <= 0)
+        return;
 
-    dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
+    dwConSize = static_cast<DWORD>(csbi.dwSize.X) * static_cast<DWORD>(csbi.dwSize.Y);
 
     /* fill the entire screen with blanks */
-    ::FillConsoleOutputCharacter(::GetStdHandle(STD_OUTPUT_HANDLE), (TCHAR)' ', dwConSize, coordScreen, &cCharsWritten);
+    ::FillConsoleOutputCharacter(hStdOut, (TCHAR)' ', dwConSize, coordScreen, &cCharsWritten);
 
     /* get the current text attribute */
-    ::GetConsoleScreenBufferInfo(::GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    if (!::GetConsoleScreenBufferInfo(hStdOut, &csbi))
+        return;
 
     /* now set the buffer's attributes accordingly */
-    ::FillConsoleOutputAttribute(::GetStdHandle(STD_OUTPUT_HANDLE), csbi.wAttributes, dwConSize, coordScreen,
-                                 &cCharsWritten);
+    ::FillConsoleOutputAttribute(hStdOut, csbi.wAttributes, dwConSize, coordScreen, &cCharsWritten);
 
     /* put the cursor at (0, 0) */
-    ::SetConsoleCursorPosition(::GetStdHandle(STD_OUTPUT_HANDLE), coordScreen);
+    ::SetConsoleCursorPosition(hStdOut, coordScreen);
 }
 
 WORD CConsoleWindow::GetTextColorIndex(WORD* pwBgColorIndex)
 {
-    CONSOLE_SCREEN_BUFFER_INFO ConScreenBufInfo;
+    CONSOLE_SCREEN_BUFFER_INFO ConScreenBufInfo = {};
     if (FALSE == ::GetConsoleScreenBufferInfo(::GetStdHandle(STD_OUTPUT_HANDLE), &ConScreenBufInfo))
         return 0xFFFF;
 
     WORD wTextColorIndex = ConScreenBufInfo.wAttributes & 0x000F;
     if (pwBgColorIndex)
     {
-        *pwBgColorIndex = wTextColorIndex >> 4;
+        *pwBgColorIndex = (ConScreenBufInfo.wAttributes & 0x00F0) >> 4;
     }
     return wTextColorIndex;
 }
@@ -246,26 +253,111 @@ bool CConsoleWindow::IsActiveCloseButton() const
 
 bool CConsoleWindow::SaveScreenBuffer(const std::wstring& filename)
 {
-    CONSOLE_SCREEN_BUFFER_INFO csbi; /* to get buffer info */
-
-    /* get the number of character cells in the current buffer */
-    ::GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-
-    COORD BufferSize;
-    BufferSize.X = csbi.dwSize.X;
-    BufferSize.Y = csbi.dwCursorPosition.Y + 1;
-
-    auto* pbyCharBuffer = new CHAR_INFO[BufferSize.X * BufferSize.Y];
-
-    COORD      StartPointToWrite = {0, 0};
-    SMALL_RECT RectToRead        = {0, 0, BufferSize.X, BufferSize.Y};
-    if (ReadConsoleOutput(GetStdHandle(STD_OUTPUT_HANDLE), pbyCharBuffer, BufferSize, StartPointToWrite, &RectToRead))
+    if (filename.empty())
     {
+        return false;
     }
 
-    delete[] pbyCharBuffer;
+    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hStdOut == NULL || hStdOut == INVALID_HANDLE_VALUE)
+    {
+        return false;
+    }
 
-    return true;
+    CONSOLE_SCREEN_BUFFER_INFO csbi = {}; /* to get buffer info */
+
+    /* get the number of character cells in the current buffer */
+    if (!::GetConsoleScreenBufferInfo(hStdOut, &csbi))
+    {
+        return false;
+    }
+
+    const int width  = csbi.dwSize.X;
+    const int height = static_cast<int>(csbi.dwCursorPosition.Y) + 1;
+    if (width <= 0 || height <= 0 || width > 32767 || height > csbi.dwSize.Y)
+    {
+        return false;
+    }
+
+    COORD BufferSize;
+    BufferSize.X = static_cast<SHORT>(width);
+    BufferSize.Y = static_cast<SHORT>(height);
+
+    std::vector<CHAR_INFO> charBuffer(static_cast<size_t>(width) * static_cast<size_t>(height));
+
+    COORD      StartPointToWrite = {0, 0};
+    SMALL_RECT RectToRead        = {0, 0, static_cast<SHORT>(width - 1), static_cast<SHORT>(height - 1)};
+    if (!ReadConsoleOutputW(hStdOut, charBuffer.data(), BufferSize, StartPointToWrite, &RectToRead))
+    {
+        return false;
+    }
+
+    FILE* fp = _wfopen(filename.c_str(), L"wb");
+    if (fp == nullptr)
+    {
+        return false;
+    }
+
+    std::wstring lineBuf(static_cast<size_t>(width), L' ');
+    std::string  utf8Line;
+    bool         ok = true;
+
+    for (int row = 0; row < height && ok; ++row)
+    {
+        const CHAR_INFO* rowPtr  = &charBuffer[static_cast<size_t>(row) * static_cast<size_t>(width)];
+        int              lastCol = width;
+        while (lastCol > 0)
+        {
+            const WCHAR ch = rowPtr[lastCol - 1].Char.UnicodeChar;
+            if (ch != L'\0' && ch != L' ')
+            {
+                break;
+            }
+            --lastCol;
+        }
+
+        lineBuf.resize(static_cast<size_t>(lastCol));
+        for (int col = 0; col < lastCol; ++col)
+        {
+            const WCHAR ch = rowPtr[col].Char.UnicodeChar;
+            lineBuf[static_cast<size_t>(col)] = (ch == L'\0') ? L' ' : ch;
+        }
+
+        if (!lineBuf.empty())
+        {
+            const int utf8Len = WideCharToMultiByte(CP_UTF8, 0, lineBuf.data(), lastCol, nullptr, 0, nullptr, nullptr);
+            if (utf8Len <= 0)
+            {
+                ok = false;
+                break;
+            }
+            utf8Line.resize(static_cast<size_t>(utf8Len));
+            if (WideCharToMultiByte(CP_UTF8, 0, lineBuf.data(), lastCol, utf8Line.data(), utf8Len, nullptr, nullptr) !=
+                utf8Len)
+            {
+                ok = false;
+                break;
+            }
+            if (fwrite(utf8Line.data(), 1, utf8Line.size(), fp) != utf8Line.size())
+            {
+                ok = false;
+                break;
+            }
+        }
+
+        if (fwrite("\r\n", 1, 2, fp) != 2)
+        {
+            ok = false;
+            break;
+        }
+    }
+
+    if (fclose(fp) != 0)
+    {
+        ok = false;
+    }
+
+    return ok;
 }
 
 CConsoleWindow* CConsoleWindow::GetInstance()

@@ -15,6 +15,7 @@ public abstract class TrapIntelligenceBase : INpcIntelligence, IDisposable
 {
     private Timer? _aiTimer;
     private Trap? _trap;
+    private int _isTicking;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TrapIntelligenceBase"/> class.
@@ -107,6 +108,11 @@ public abstract class TrapIntelligenceBase : INpcIntelligence, IDisposable
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Catching all Exceptions.")]
     private async void SafeTick()
     {
+        if (this._aiTimer is null || System.Threading.Interlocked.CompareExchange(ref this._isTicking, 1, 0) != 0)
+        {
+            return;
+        }
+
         try
         {
             await this.TickAsync().ConfigureAwait(false);
@@ -114,6 +120,10 @@ public abstract class TrapIntelligenceBase : INpcIntelligence, IDisposable
         catch (Exception ex)
         {
             Debug.Fail(ex.Message, ex.StackTrace);
+        }
+        finally
+        {
+            System.Threading.Interlocked.Exchange(ref this._isTicking, 0);
         }
     }
 }

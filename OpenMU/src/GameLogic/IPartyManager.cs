@@ -31,9 +31,10 @@ public interface IPartyManager
     internal void TrackMembership(string characterName, Party party);
 
     /// <summary>
-    /// Removes the party tracking for a character. Called by <see cref="Party"/> internally
-    /// when members leave or are replaced.
+    /// Removes the party tracking for a character if it still points to <paramref name="party"/>.
+    /// Called by <see cref="Party"/> internally when members leave or are replaced.
     /// </summary>
     /// <param name="characterName">The character name.</param>
-    internal void UntrackMembership(string characterName);
+    /// <param name="party">The expected party instance.</param>
+    internal void UntrackMembership(string characterName, Party party);
 }

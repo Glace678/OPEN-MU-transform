@@ -4,6 +4,8 @@
 
 namespace MUnique.OpenMU.Pathfinding;
 
+using System.Numerics;
+
 /// <summary>
 /// Network which is built of a two-dimensional grid of nodes where
 /// each coordinate has a fixed cost to reach it from any direction.
@@ -31,6 +33,16 @@ public sealed class ScopedGridNetwork : BaseGridNetwork
     public ScopedGridNetwork(bool allowDiagonals = true, byte maximumSegmentSideLength = 16, byte minimumSegmentSideLength = 8)
     : base(allowDiagonals)
     {
+        if (minimumSegmentSideLength == 0 || !BitOperations.IsPow2(minimumSegmentSideLength))
+        {
+            throw new ArgumentOutOfRangeException(nameof(minimumSegmentSideLength), "Minimum segment side length must be a non-zero power of 2.");
+        }
+
+        if (maximumSegmentSideLength < minimumSegmentSideLength || !BitOperations.IsPow2(maximumSegmentSideLength))
+        {
+            throw new ArgumentOutOfRangeException(nameof(maximumSegmentSideLength), "Maximum segment side length must be a power of 2 and greater than or equal to minimumSegmentSideLength.");
+        }
+
         this._gridNodes = new Node[maximumSegmentSideLength * maximumSegmentSideLength];
         this._maximumSegmentSideLength = maximumSegmentSideLength;
         this._minimumSegmentSideLength = minimumSegmentSideLength;

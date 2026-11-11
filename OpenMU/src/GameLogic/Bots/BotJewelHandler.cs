@@ -196,7 +196,7 @@ internal static class BotJewelHandler
         // 2. Soul - risky: only with a spare in stock, and only where the possible loss is bearable -
         // items without luck stop at +6 -> +7 (see SoulMaxTargetLevelPlain), lucky ones may go for +9.
         if (soulLeft > 0
-            && soulStock.Count >= MinSoulStock
+            && soulStock.Sum(CountJewelUnits) >= MinSoulStock
             && equipped.Where(i => i.CanLevelBeUpgraded()
                                    && i.Level >= SoulMinTargetLevel
                                    && i.Level <= (HasLuck(i) ? SoulMaxTargetLevelLucky : SoulMaxTargetLevelPlain))
@@ -211,7 +211,7 @@ internal static class BotJewelHandler
         // the item can actually carry the option is the consume handler's call; a rejected consume
         // keeps the jewel.
         if (lifeLeft > 0
-            && lifeStock.Count >= MinLifeStock
+            && lifeStock.Sum(CountJewelUnits) >= MinLifeStock
             && equipped.Where(i => i.IsWearable() && i.Level >= LifeMinTargetLevel)
                 .OrderByDescending(i => i.Level)
                 .FirstOrDefault() is { } lifeTarget)
@@ -257,7 +257,7 @@ internal static class BotJewelHandler
                 continue;
             }
 
-            var count = counts.GetValueOrDefault(identifier) + 1;
+            var count = counts.GetValueOrDefault(identifier) + CountJewelUnits(item);
             if (count > limit)
             {
                 return true;
@@ -295,7 +295,7 @@ internal static class BotJewelHandler
 
         var identifier = new ItemIdentifier(definition.Number, definition.Group);
         return UsableJewels.Contains(identifier)
-               && CountInStock(player, identifier) < GetStockLimit(player);
+               && CountInStock(player, identifier) + CountJewelUnits(item) <= GetStockLimit(player);
     }
 
     /// <summary>
@@ -314,7 +314,9 @@ internal static class BotJewelHandler
     /// <param name="identifier">The jewel kind.</param>
     /// <returns>The number of jewels of that kind in the inventory.</returns>
     internal static int CountInStock(Player player, ItemIdentifier identifier)
-        => player.Inventory?.Items.Count(i => IsJewel(i, identifier)) ?? 0;
+        => player.Inventory?.Items.Where(i => IsJewel(i, identifier)).Sum(CountJewelUnits) ?? 0;
+
+    private static int CountJewelUnits(Item item) => Math.Max(1, (int)item.Durability);
 
     /// <summary>
     /// Applies one jewel to one equipped item the way a player does it: take the piece off into a free
@@ -344,6 +346,7 @@ internal static class BotJewelHandler
         }
 
         var jewelSlot = jewel.ItemSlot;
+        var durabilityBefore = jewel.Durability;
         var levelBefore = target.Level;
         try
         {
@@ -355,7 +358,7 @@ internal static class BotJewelHandler
             await MoveAction.MoveItemAsync(player, freeSlot, Storages.Inventory, equipSlot, Storages.Inventory).ConfigureAwait(false);
         }
 
-        var consumed = inventory.GetItem(jewelSlot) != jewel;
+        var consumed = inventory.GetItem(jewelSlot) != jewel || jewel.Durability < durabilityBefore;
         if (consumed)
         {
             player.Logger.LogDebug(

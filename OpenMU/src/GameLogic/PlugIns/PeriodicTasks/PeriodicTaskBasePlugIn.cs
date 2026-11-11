@@ -15,7 +15,7 @@ using MUnique.OpenMU.PlugIns;
 /// </summary>
 /// <typeparam name="TConfiguration">Configuration type.</typeparam>
 /// <typeparam name="TState">State type.</typeparam>
-public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodicTaskPlugIn, ISupportCustomConfiguration<TConfiguration>, IDisposable
+public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodicTaskPlugIn, IContextScopedPeriodicTaskPlugIn, ISupportCustomConfiguration<TConfiguration>, IDisposable
     where TConfiguration : PeriodicTaskConfiguration
     where TState : PeriodicTaskGameServerState
 {
@@ -27,7 +27,7 @@ public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodic
 
     private int _isDisposed;
 
-    private bool _isStartForced = false;
+    private long _forceStartGeneration;
 
     /// <summary>
     /// Gets or sets configuration for periodic invasion.
@@ -39,7 +39,17 @@ public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodic
     /// </summary>
     public void ForceStart()
     {
-        this._isStartForced = true;
+        Interlocked.Increment(ref this._forceStartGeneration);
+    }
+
+    /// <summary>
+    /// Forces to start the task on the next start check for the specified <paramref name="gameContext"/> only.
+    /// </summary>
+    /// <param name="gameContext">The target game context.</param>
+    public void ForceStart(IGameContext gameContext)
+    {
+        var state = this.GetStateByGameContext(gameContext);
+        state.IsContextStartForced = true;
     }
 
     /// <inheritdoc />
@@ -49,87 +59,102 @@ public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodic
         using var scope = logger.BeginScope(gameContext);
 
         var state = this.GetStateByGameContext(gameContext);
-
-        if (state.NextRunUtc > DateTime.UtcNow)
+        if (!await state.ExecutionGate.WaitAsync(0).ConfigureAwait(false))
         {
             return;
         }
 
-        var configuration = this.Configuration;
-
-        if (configuration is null && this is ISupportDefaultCustomConfiguration defaultConfigSupporter)
+        try
         {
-            logger.LogWarning("{description} ({gameContext}):configuration is not set. Using default configuration.", state.Description, gameContext);
-            this.Configuration = configuration = defaultConfigSupporter.CreateDefaultConfig() as TConfiguration;
+            var isForcedForState = state.IsContextStartForced || Interlocked.Read(ref this._forceStartGeneration) > state.HandledForceStartGeneration;
+            if (!isForcedForState && state.NextRunUtc > DateTime.UtcNow)
+            {
+                return;
+            }
+
+            var configuration = this.Configuration;
+
+            if (configuration is null && this is ISupportDefaultCustomConfiguration defaultConfigSupporter)
+            {
+                logger.LogWarning("{description} ({gameContext}):configuration is not set. Using default configuration.", state.Description, gameContext);
+                this.Configuration = configuration = defaultConfigSupporter.CreateDefaultConfig() as TConfiguration;
+            }
+
+            if (configuration is null)
+            {
+                logger.LogError("{description} ({gameContext}):no configuration available; can't execute task plugin.", state.Description, gameContext);
+                return;
+            }
+
+            switch (state.State)
+            {
+                case PeriodicTaskState.NotStarted:
+                    {
+                        if (!this.IsItTimeToStart(gameContext))
+                        {
+                            return;
+                        }
+
+                        var currentForceGen = Interlocked.Read(ref this._forceStartGeneration);
+                        state.IsContextStartForced = false;
+                        state.HandledForceStartGeneration = currentForceGen;
+
+                        if (this.IsPreviousEventStillRunning(state))
+                        {
+                            return;
+                        }
+
+                        await this.OnPrepareEventAsync(state).ConfigureAwait(false);
+                        state.NextRunUtc = DateTime.UtcNow.Add(configuration.PreStartMessageDelay);
+                        state.State = PeriodicTaskState.Prepared;
+                        await this.OnPreparedAsync(state).ConfigureAwait(false);
+
+                        if (!string.IsNullOrWhiteSpace(state.Description))
+                        {
+                            logger.LogDebug("{description} ({gameContext}): event prepared", state.Description, gameContext);
+                        }
+
+                        break;
+                    }
+
+                case PeriodicTaskState.Prepared:
+                    {
+                        var nowUtc = DateTime.UtcNow;
+                        state.NextRunUtc = nowUtc.Add(configuration.TaskDuration);
+                        state.State = PeriodicTaskState.Started;
+                        state.LastRunUtc = nowUtc;
+
+                        await this.OnStartedAsync(state).ConfigureAwait(false);
+
+                        if (!string.IsNullOrWhiteSpace(state.Description))
+                        {
+                            logger.LogDebug("{description} ({gameContext}): event started", state.Description, gameContext);
+                        }
+
+                        break;
+                    }
+
+                case PeriodicTaskState.Started:
+                    {
+                        state.State = PeriodicTaskState.NotStarted;
+
+                        await this.OnFinishedAsync(state).ConfigureAwait(false);
+
+                        if (!string.IsNullOrWhiteSpace(state.Description))
+                        {
+                            logger.LogDebug("{description} ({gameContext}): event finished", state.Description, gameContext);
+                        }
+
+                        break;
+                    }
+
+                default:
+                    throw new NotImplementedException("Unknown state.");
+            }
         }
-
-        if (configuration is null)
+        finally
         {
-            logger.LogError("{description} ({gameContext}):no configuration available; can't execute task plugin.", state.Description, gameContext);
-            return;
-        }
-
-        switch (state.State)
-        {
-            case PeriodicTaskState.NotStarted:
-                {
-                    if (!this.IsItTimeToStart(gameContext))
-                    {
-                        return;
-                    }
-
-                    if (this.IsPreviousEventStillRunning(state))
-                    {
-                        this._isStartForced = false;
-                        return;
-                    }
-
-                    this._isStartForced = false;
-                    state.NextRunUtc = DateTime.UtcNow.Add(configuration.PreStartMessageDelay);
-                    await this.OnPrepareEventAsync(state).ConfigureAwait(false);
-                    state.State = PeriodicTaskState.Prepared;
-                    await this.OnPreparedAsync(state).ConfigureAwait(false);
-
-                    if (!string.IsNullOrWhiteSpace(state.Description))
-                    {
-                        logger.LogDebug("{description} ({gameContext}): event prepared", state.Description, gameContext);
-                    }
-
-                    break;
-                }
-
-            case PeriodicTaskState.Prepared:
-                {
-                    state.NextRunUtc = DateTime.UtcNow.Add(configuration.TaskDuration);
-                    state.State = PeriodicTaskState.Started;
-                    state.LastRunUtc = DateTime.UtcNow;
-
-                    await this.OnStartedAsync(state).ConfigureAwait(false);
-
-                    if (!string.IsNullOrWhiteSpace(state.Description))
-                    {
-                        logger.LogDebug("{description} ({gameContext}): event started", state.Description, gameContext);
-                    }
-
-                    break;
-                }
-
-            case PeriodicTaskState.Started:
-                {
-                    state.State = PeriodicTaskState.NotStarted;
-
-                    await this.OnFinishedAsync(state).ConfigureAwait(false);
-
-                    if (!string.IsNullOrWhiteSpace(state.Description))
-                    {
-                        logger.LogDebug("{description} ({gameContext}): event finished", state.Description, gameContext);
-                    }
-
-                    break;
-                }
-
-            default:
-                throw new NotImplementedException("Unknown state.");
+            state.ExecutionGate.Release();
         }
     }
 
@@ -168,7 +193,9 @@ public abstract class PeriodicTaskBasePlugIn<TConfiguration, TState> : IPeriodic
     /// </returns>
     protected virtual bool IsItTimeToStart(IGameContext gameContext)
     {
-        return this._isStartForced || (this.Configuration?.IsItTimeToStart(gameContext.ServerTimeZone) ?? false);
+        var state = this.GetStateByGameContext(gameContext);
+        var isForced = state.IsContextStartForced || Interlocked.Read(ref this._forceStartGeneration) > state.HandledForceStartGeneration;
+        return isForced || (this.Configuration?.IsItTimeToStart(gameContext.ServerTimeZone) ?? false);
     }
 
     /// <summary>

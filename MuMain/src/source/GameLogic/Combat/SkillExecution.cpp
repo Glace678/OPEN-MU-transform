@@ -95,7 +95,10 @@ bool CanExecuteSkill(CHARACTER* c, ActionSkillType Skill, float Distance)
                 return false;
             }
         }
-        return false;
+        else
+        {
+            return false;
+        }
     }
 
     if (gMapManager.IsCursedTemple())

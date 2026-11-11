@@ -13,20 +13,23 @@ class TestS05DungeonEventProgression(unittest.TestCase):
     """
 
     def test_scenario_09_devil_square_dungeon_entry_validation(self):
-        # 1. Attacker attempts to enter with negative ticket index (-1)
+        # 1. Attacker attempts to enter with negative (-1) and equipped-slot (5) ticket indices
         bad_ok, bad_msg = EconomyEngine.validate_devil_square_ticket_index(-1)
         self.assertFalse(bad_ok)
         self.assertIn("Negative ticket index rejected", bad_msg)
+        equip_ok, equip_msg = EconomyEngine.validate_devil_square_ticket_index(5)
+        self.assertFalse(equip_ok)
+        self.assertIn("Equipped slot index rejected", equip_msg)
 
         # 2. Legitimate player enters with ticket at slot 22
         good_ok, _ = EconomyEngine.validate_devil_square_ticket_index(22)
         self.assertTrue(good_ok)
 
     def test_scenario_10_event_completion_and_bounded_ranking_dispatch(self):
-        # 1. Devil Square match finishes with 25 participants
+        # 1. Devil Square match finishes with 25 participants -> clamped to MaxMatchResults = 10
         raw_participant_count = 25
         clamped_ranks = DevilSquareRankValidator.clamp_ranks(raw_participant_count)
-        self.assertEqual(clamped_ranks, 11)  # Buffer capacity MatchResult[11]
+        self.assertEqual(clamped_ranks, 10)
 
         # 2. Server serializes DevilSquareScore packet (HeadCode 0x86, 12 bytes total: 3 header + 9 payload)
         score_payload = b"\x00" * 9

@@ -20,7 +20,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ARG APP_UID=1000
-RUN adduser -D -u ${APP_UID} appuser `\
+RUN adduser -D -u ${APP_UID} appuser \
     && chown -R appuser /app
 USER appuser
 HEALTHCHECK --interval=30s --timeout=3s --start-period=15s --retries=3 \

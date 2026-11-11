@@ -123,6 +123,8 @@ public sealed class LauncherForm : Form
         this.FormClosing += this.OnFormClosing;
         this.FormClosed += (_, _) =>
         {
+            this._manager.StatusChanged -= this.OnStatusChanged;
+            this._healthTimer.Stop();
             this._healthTimer.Dispose();
             this._trayIcon.Dispose();
         };
@@ -311,9 +313,32 @@ public sealed class LauncherForm : Form
 
     private void OnStatusChanged(LocalStackStatus status)
     {
+        if (this.IsDisposed || this.Disposing)
+        {
+            return;
+        }
+
         if (this.InvokeRequired)
         {
-            this.BeginInvoke((Action)(() => this.ApplyStatus(status)));
+            if (this.IsHandleCreated)
+            {
+                try
+                {
+                    this.BeginInvoke((Action)(() =>
+                    {
+                        if (!this.IsDisposed && !this.Disposing)
+                        {
+                            this.ApplyStatus(status);
+                        }
+                    }));
+                }
+                catch (ObjectDisposedException)
+                {
+                }
+                catch (InvalidOperationException)
+                {
+                }
+            }
         }
         else
         {

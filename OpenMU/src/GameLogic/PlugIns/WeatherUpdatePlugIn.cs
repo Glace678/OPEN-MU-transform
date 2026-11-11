@@ -5,7 +5,9 @@
 namespace MUnique.OpenMU.GameLogic.PlugIns;
 
 using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.GameLogic.Views.World;
 using MUnique.OpenMU.PlugIns;
@@ -19,20 +21,18 @@ using MUnique.OpenMU.PlugIns;
 public class WeatherUpdatePlugIn : IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn
 {
     private readonly IDictionary<GameMap, (byte, byte)> _weatherStates = new ConcurrentDictionary<GameMap, (byte, byte)>();
-
-    private DateTime _nextRunUtc = DateTime.UtcNow;
-
-    private bool _isRunning;
+    private readonly ConditionalWeakTable<GameContext, WeatherContextState> _contextStates = new();
+    private long _forceStartGeneration;
 
     /// <inheritdoc />
     public async ValueTask ExecuteTaskAsync(GameContext gameContext)
     {
-        if (this._nextRunUtc > DateTime.UtcNow || this._isRunning)
+        var contextState = this._contextStates.GetOrCreateValue(gameContext);
+        if (!contextState.TryBeginExecution(DateTime.UtcNow, Interlocked.Read(ref this._forceStartGeneration)))
         {
             return;
         }
 
-        this._isRunning = true;
         try
         {
             foreach (var map in await gameContext.GetMapsAsync().ConfigureAwait(false))
@@ -53,15 +53,52 @@ public class WeatherUpdatePlugIn : IPeriodicTaskPlugIn, IObjectAddedToMapPlugIn
         }
         finally
         {
-            this._isRunning = false;
-            this._nextRunUtc = DateTime.UtcNow.AddSeconds(Rand.NextInt(10, 20));
+            contextState.EndExecution(DateTime.UtcNow.AddSeconds(Rand.NextInt(10, 20)));
         }
     }
 
     /// <inheritdoc />
     public void ForceStart()
     {
-        this._nextRunUtc = DateTime.UtcNow;
+        Interlocked.Increment(ref this._forceStartGeneration);
+    }
+
+    private sealed class WeatherContextState
+    {
+        private readonly Lock _lock = new();
+        private DateTime _nextRunUtc = DateTime.UtcNow;
+        private long _handledForceGeneration;
+        private bool _isRunning;
+
+        public bool TryBeginExecution(DateTime nowUtc, long forceGeneration)
+        {
+            lock (this._lock)
+            {
+                if (this._isRunning)
+                {
+                    return false;
+                }
+
+                var isForced = forceGeneration > this._handledForceGeneration;
+                if (!isForced && this._nextRunUtc > nowUtc)
+                {
+                    return false;
+                }
+
+                this._handledForceGeneration = forceGeneration;
+                this._isRunning = true;
+                return true;
+            }
+        }
+
+        public void EndExecution(DateTime nextRunUtc)
+        {
+            lock (this._lock)
+            {
+                this._isRunning = false;
+                this._nextRunUtc = nextRunUtc;
+            }
+        }
     }
 
     /// <inheritdoc />

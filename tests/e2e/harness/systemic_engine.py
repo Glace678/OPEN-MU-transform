@@ -34,7 +34,8 @@ class BuffScriptValidator:
 
 class DevilSquareRankValidator:
     """Feature 03: CSEventMatch.cpp rank bounds"""
-    MAX_RANKS = 11  # MatchResult m_MatchResult[11]
+    BUFFER_CAPACITY = 11  # MatchResult m_MatchResult[11]
+    MAX_RANKS = 10        # CSEventMatch.cpp:215-217 MaxMatchResults = 10 (strictly < 11)
 
     @classmethod
     def clamp_ranks(cls, num_devil_rank: int) -> int:
@@ -69,12 +70,18 @@ class BannerBufferValidator:
 
 
 class LetterTextBufferValidator:
-    """Feature 07: WSclient.cpp FS_LETTER_TEXT bounds"""
-    SIZEOF_FS_LETTER_TEXT = 1024  # sizeof(FS_LETTER_TEXT)
+    """Feature 07: WSclient.h / WSclient.cpp FS_LETTER_TEXT bounds"""
+    SIZEOF_FS_LETTER_TEXT_HEADER = 50   # sizeof(FS_LETTER_TEXT_HEADER)
+    MAX_LETTERTEXT_LENGTH = 1000        # TextLimits.h MAX_LETTERTEXT_LENGTH
+    SIZEOF_FS_LETTER_TEXT = 1050        # sizeof(FS_LETTER_TEXT) == 50 + 1000
 
     @classmethod
     def get_safe_copy_length(cls, receive_buffer_size: int) -> int:
-        return min(receive_buffer_size, cls.SIZEOF_FS_LETTER_TEXT)
+        return max(0, min(receive_buffer_size, cls.SIZEOF_FS_LETTER_TEXT))
+
+    @classmethod
+    def get_safe_text_length(cls, receive_buffer_size: int) -> int:
+        return max(0, min(receive_buffer_size - cls.SIZEOF_FS_LETTER_TEXT_HEADER, cls.MAX_LETTERTEXT_LENGTH))
 
 
 class ServerConfigIdValidator:
@@ -97,9 +104,6 @@ class WebNumberFieldConverter:
                 return int(val)
             elif target_type == float:
                 return float(val)
-            elif target_type == int: # byte/short represented as int with bounds
-                v = int(val)
-                return v
             return target_type(val)
         except (ValueError, TypeError):
             return None

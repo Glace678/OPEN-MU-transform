@@ -42,15 +42,22 @@ public class LetterSendAction
         }
 
         LetterHeader? letter;
+        var feeCharged = false;
+        var letterCommitted = false;
         try
         {
             // Debit before persisting, so a failure leaves no unpaid letter. The pre-check above
             // only guards the UX; a balance change in between makes TryRemoveMoney fail.
-            if (sendPrice > 0 && !player.TryRemoveMoney((int)sendPrice))
+            if (sendPrice > 0)
             {
-                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NotEnoughMoneyToSendLetter)).ConfigureAwait(false);
-                await player.InvokeViewPlugInAsync<ILetterSendResultPlugIn>(p => p.LetterSendResultAsync(LetterSendSuccess.NotEnoughMoney, letterId)).ConfigureAwait(false);
-                return;
+                if (!player.TryRemoveMoney((int)sendPrice))
+                {
+                    await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NotEnoughMoneyToSendLetter)).ConfigureAwait(false);
+                    await player.InvokeViewPlugInAsync<ILetterSendResultPlugIn>(p => p.LetterSendResultAsync(LetterSendSuccess.NotEnoughMoney, letterId)).ConfigureAwait(false);
+                    return;
+                }
+
+                feeCharged = true;
             }
 
             using (var context = player.GameContext.PersistenceContextProvider.CreateNewPlayerContext(player.GameContext.Configuration))
@@ -59,27 +66,50 @@ public class LetterSendAction
                 if (!await context.CanSaveLetterAsync(letter).ConfigureAwait(false))
                 {
                     // Refund the fee: the letter was not sent.
-                    player.TryAddMoney((int)sendPrice);
+                    if (feeCharged)
+                    {
+                        player.TryAddMoney((int)sendPrice);
+                        feeCharged = false;
+                    }
+
                     await player.InvokeViewPlugInAsync<ILetterSendResultPlugIn>(p => p.LetterSendResultAsync(LetterSendSuccess.ReceiverNotExists, letterId)).ConfigureAwait(false);
                     return;
                 }
 
-                await context.SaveChangesAsync().ConfigureAwait(false);
+                if (!await context.SaveChangesAsync().ConfigureAwait(false))
+                {
+                    if (feeCharged)
+                    {
+                        player.TryAddMoney((int)sendPrice);
+                        feeCharged = false;
+                    }
+
+                    await player.InvokeViewPlugInAsync<ILetterSendResultPlugIn>(p => p.LetterSendResultAsync(LetterSendSuccess.TryAgain, letterId)).ConfigureAwait(false);
+                    await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.ErrorDuringSendingLetter)).ConfigureAwait(false);
+                    return;
+                }
+
+                letterCommitted = true;
             }
 
             await player.InvokeViewPlugInAsync<ILetterSendResultPlugIn>(p => p.LetterSendResultAsync(LetterSendSuccess.Success, letterId)).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
-            // Refund the fee on failure, otherwise the player paid for a letter that was not sent.
-            if (sendPrice > 0)
+            player.Logger.LogError(ex, "Unexpected error when trying to send a letter");
+            if (!letterCommitted)
             {
-                player.TryAddMoney((int)sendPrice);
+                // Refund the fee only when the letter was not committed to persistence.
+                if (feeCharged)
+                {
+                    player.TryAddMoney((int)sendPrice);
+                }
+
+                await player.InvokeViewPlugInAsync<ILetterSendResultPlugIn>(p => p.LetterSendResultAsync(LetterSendSuccess.TryAgain, letterId)).ConfigureAwait(false);
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.ErrorDuringSendingLetter)).ConfigureAwait(false);
+                return;
             }
 
-            player.Logger.LogError(ex, "Unexpected error when trying to send a letter");
-            await player.InvokeViewPlugInAsync<ILetterSendResultPlugIn>(p => p.LetterSendResultAsync(LetterSendSuccess.TryAgain, letterId)).ConfigureAwait(false);
-            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.ErrorDuringSendingLetter)).ConfigureAwait(false);
             return;
         }
 

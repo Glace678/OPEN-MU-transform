@@ -9,6 +9,7 @@ namespace MUnique.OpenMU.GuildServer;
 using System.Collections.Concurrent;
 using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Persistence;
+using Nito.AsyncEx;
 
 /// <summary>
 /// This is a container Class which holds a Guild object, and a list of all guild members
@@ -37,6 +38,16 @@ internal class GuildContainer
             this.Members.Add(member.Id, new GuildListEntry { PlayerName = null, ServerId = GuildServer.OfflineServerId, PlayerPosition = member.Status });
         }
     }
+
+    /// <summary>
+    /// Gets the synchronization lock guarding <see cref="DatabaseContext"/> and <see cref="Guild"/> mutations.
+    /// </summary>
+    public AsyncLock Lock { get; } = new();
+
+    /// <summary>
+    /// Gets or sets a value indicating whether this container has been removed and disposed.
+    /// </summary>
+    public bool IsRemoved { get; set; }
 
     /// <summary>
     /// Gets the database context of the guild.

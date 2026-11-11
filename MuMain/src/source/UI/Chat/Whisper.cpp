@@ -12,13 +12,16 @@ namespace
 constexpr int WHISPER_ID_SLOTS = 10;
 
 int     WhisperID_Num = 0;
-wchar_t WhisperRegistID[MAX_USERNAME_SIZE + 1][WHISPER_ID_SLOTS];
+wchar_t WhisperRegistID[WHISPER_ID_SLOTS][MAX_USERNAME_SIZE + 1] = {};
 }
 
 namespace UI::Chat::Whisper
 {
 bool CheckLevel(int requiredLevel, wchar_t* targetId)
 {
+    if (!targetId)
+        return false;
+
     int level = CharacterAttribute->Level;
 
     if (level >= requiredLevel)
@@ -39,6 +42,9 @@ bool CheckLevel(int requiredLevel, wchar_t* targetId)
 
 void Register(int requiredLevel, wchar_t* targetId)
 {
+    if (!targetId)
+        return;
+
     int level = CharacterAttribute->Level;
 
     if (level < requiredLevel)
@@ -69,7 +75,8 @@ void Register(int requiredLevel, wchar_t* targetId)
 
 void Clear()
 {
-    ZeroMemory(WhisperRegistID, sizeof(wchar_t) * (MAX_USERNAME_SIZE + 1) * WHISPER_ID_SLOTS);  // #16: wchar_t not char
+    WhisperID_Num = 0;
+    ZeroMemory(WhisperRegistID, sizeof(WhisperRegistID));  // #16: wchar_t not char
 }
 
 void RenderList()

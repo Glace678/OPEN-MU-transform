@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.Dapr.Common;
 
+using System.Collections.Concurrent;
 using System.Threading;
 using global::Dapr;
 using global::Dapr.Client;
@@ -20,8 +21,9 @@ public class SecretStoreDatabaseConnectionSettingsProvider : IDatabaseConnection
     private const string SecretStoreName = "secrets";
     private readonly DaprClient _daprClient;
     private readonly ILogger<SecretStoreDatabaseConnectionSettingsProvider> _logger;
-    private readonly Dictionary<string, ConnectionSetting> _connectionSettings = new(StringComparer.InvariantCultureIgnoreCase);
-    private bool _isInitialized;
+    private readonly ConcurrentDictionary<string, ConnectionSetting> _connectionSettings = new(StringComparer.InvariantCultureIgnoreCase);
+    private readonly object _initLock = new();
+    private volatile bool _isInitialized;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="SecretStoreDatabaseConnectionSettingsProvider" /> class.
@@ -90,10 +92,22 @@ public class SecretStoreDatabaseConnectionSettingsProvider : IDatabaseConnection
             }
         }
 
-        this.Initialization = InitializeCoreAsync();
-        ConnectionConfigurator.Initialize(this);
+        lock (this._initLock)
+        {
+            if (this._isInitialized)
+            {
+                return Task.CompletedTask;
+            }
 
-        return this.Initialization;
+            if (this.Initialization is { IsFaulted: false, IsCanceled: false } existingInit)
+            {
+                return existingInit;
+            }
+
+            this.Initialization = InitializeCoreAsync();
+            ConnectionConfigurator.Initialize(this);
+            return this.Initialization;
+        }
     }
 
     /// <inheritdoc />
@@ -106,7 +120,25 @@ public class SecretStoreDatabaseConnectionSettingsProvider : IDatabaseConnection
     /// <inheritdoc />
     public ConnectionSetting GetConnectionSetting(Type contextType)
     {
-        if (this._connectionSettings.TryGetValue(contextType.FullName ?? contextType.Name, out var result))
+        var fullName = contextType.FullName;
+        if (fullName is not null && this._connectionSettings.TryGetValue(fullName, out var result))
+        {
+            return result;
+        }
+
+        if (fullName is not null && fullName.IndexOf('`') is > 0 and var tickIndex
+            && this._connectionSettings.TryGetValue(fullName[..tickIndex], out result))
+        {
+            return result;
+        }
+
+        if (this._connectionSettings.TryGetValue(contextType.Name, out result))
+        {
+            return result;
+        }
+
+        var shortUnmangled = contextType.Name.Split('`')[0];
+        if (this._connectionSettings.TryGetValue(shortUnmangled, out result))
         {
             return result;
         }

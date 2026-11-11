@@ -181,6 +181,25 @@ extern bool    First;
 extern int     FirstTime;
 extern BOOL    g_bGameServerConnected;
 
+static bool ApplyInitialWindowMode()
+{
+#if defined(_WIN32)
+    if (g_bUseWindowMode == TRUE)
+        return true;
+
+    // Borderless fullscreen preserves the desktop display mode. Exclusive
+    // fullscreen can make the monitor renegotiate its picture mode and change
+    // the DDC/CI backlight when entering, leaving, or exiting the game.
+    if (!SDL_SetWindowFullscreenMode(g_sdlWindow, nullptr))
+        return false;
+    if (!SDL_SetWindowFullscreen(g_sdlWindow, true))
+        return false;
+    return SDL_SyncWindow(g_sdlWindow);
+#else
+    return true;
+#endif
+}
+
 void CheckHack()
 {
     if (!g_bGameServerConnected)
@@ -470,41 +489,52 @@ void ApplyFrameTimingConfiguration(bool foreground)
 
 BOOL GetFileNameOfFilePath(wchar_t* lpszFile, wchar_t* lpszPath)
 {
-    auto     iFind   = (int)'\\';
-    wchar_t* lpFound = lpszPath;
-    wchar_t* lpOld   = lpFound;
-    while (lpFound)
-    {
-        lpOld   = lpFound;
-        lpFound = wcschr(lpFound + 1, iFind);
-    }
+    if (!lpszFile || !lpszPath)
+        return FALSE;
 
-    if (wcschr(lpszPath, iFind))
+    lpszFile[0] = L'\0';
+
+    const wchar_t* p = lpszPath;
+    while (*p == L' ' || *p == L'\t')
+        ++p;
+
+    if (*p == L'\0')
+        return FALSE;
+
+    const wchar_t* tokStart = p;
+    const wchar_t* tokEnd   = p;
+    if (*p == L'"')
     {
-        wcscpy(lpszFile, lpOld + 1);
+        tokStart = ++p;
+        while (*p != L'\0' && *p != L'"')
+            ++p;
+        tokEnd = p;
     }
     else
     {
-        wcscpy(lpszFile, lpOld);
+        while (*p != L'\0' && *p != L' ' && *p != L'\t' && *p != L'"')
+            ++p;
+        tokEnd = p;
     }
 
-    BOOL bCheck = TRUE;
-    for (wchar_t* lpTemp = lpszFile; bCheck; ++lpTemp)
+    if (tokEnd <= tokStart)
+        return FALSE;
+
+    const wchar_t* nameStart = tokStart;
+    for (const wchar_t* cur = tokStart; cur < tokEnd; ++cur)
     {
-        switch (*lpTemp)
-        {
-            case '\"':
-            case '\\':
-            case '/':
-            case ' ':
-                *lpTemp = '\0';
-            case '\0':
-                bCheck = FALSE;
-                break;
-        }
+        if (*cur == L'\\' || *cur == L'/')
+            nameStart = cur + 1;
     }
 
-    return (TRUE);
+    const size_t nameLen = static_cast<size_t>(tokEnd - nameStart);
+    if (nameLen == 0)
+        return FALSE;
+
+    const size_t copyLen = (nameLen < static_cast<size_t>(MAX_PATH - 1)) ? nameLen : static_cast<size_t>(MAX_PATH - 1);
+    std::wmemcpy(lpszFile, nameStart, copyLen);
+    lpszFile[copyLen] = L'\0';
+    return TRUE;
 }
 
 WORD DecryptCheckSumKey(WORD wSource)
@@ -517,7 +547,12 @@ DWORD GenerateCheckSum(BYTE* pbyBuffer, DWORD dwSize, WORD wKey)
 {
     auto  dwKey    = (DWORD)wKey;
     DWORD dwResult = dwKey << 9;
-    for (DWORD dwChecked = 0; dwChecked <= dwSize - 4; dwChecked += 4)
+    if (pbyBuffer == nullptr || dwSize < sizeof(DWORD))
+    {
+        return (dwResult);
+    }
+
+    for (DWORD dwChecked = 0; dwChecked + sizeof(DWORD) <= dwSize; dwChecked += 4)
     {
         DWORD dwTemp;
         memcpy(&dwTemp, pbyBuffer + dwChecked, sizeof(DWORD));
@@ -549,9 +584,8 @@ DWORD GetCheckSum(WORD wKey)
 {
     wKey = DecryptCheckSumKey(wKey);
 
-    wchar_t lpszFile[MAX_PATH];
-
-    wcscpy(lpszFile, L"data\\local\\Gameguard.csr");
+    wchar_t lpszFile[MAX_PATH] = {};
+    wcsncpy_s(lpszFile, _countof(lpszFile), L"data\\local\\Gameguard.csr", _TRUNCATE);
 
     HANDLE hFile =
         CreateFile(lpszFile, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -560,13 +594,30 @@ DWORD GetCheckSum(WORD wKey)
         return (0);
     }
 
-    DWORD dwSize    = GetFileSize(hFile, nullptr);
-    auto* pbyBuffer = new BYTE[dwSize];
-    DWORD dwNumber;
-    ReadFile(hFile, pbyBuffer, dwSize, &dwNumber, nullptr);
-    CloseHandle(hFile);
+    constexpr DWORD kMaxCheckSumFileSize = 64u * 1024u * 1024u;
+    DWORD           dwSize               = GetFileSize(hFile, nullptr);
+    if (dwSize == INVALID_FILE_SIZE || dwSize > kMaxCheckSumFileSize)
+    {
+        CloseHandle(hFile);
+        return (0);
+    }
+    if (dwSize == 0)
+    {
+        CloseHandle(hFile);
+        return GenerateCheckSum(nullptr, 0, wKey);
+    }
 
-    DWORD dwCheckSum = GenerateCheckSum(pbyBuffer, dwSize, wKey);
+    auto* pbyBuffer = new BYTE[dwSize];
+    DWORD dwNumber  = 0;
+    BOOL  readOk    = ReadFile(hFile, pbyBuffer, dwSize, &dwNumber, nullptr);
+    CloseHandle(hFile);
+    if (!readOk)
+    {
+        delete[] pbyBuffer;
+        return (0);
+    }
+
+    DWORD dwCheckSum = GenerateCheckSum(pbyBuffer, dwNumber, wKey);
     delete[] pbyBuffer;
 
     return (dwCheckSum);
@@ -875,15 +926,22 @@ BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstrin
         return FALSE;
     }
 
-    // Create both lowercase and uppercase variants of the option character
-    std::wstring cOptionLower = L"/";
-    cOptionLower += static_cast<wchar_t>(towlower(static_cast<wint_t>(cOption)));
-    auto foundIndex = lpszCommandLine.find(cOptionLower);
-    if (foundIndex == std::wstring::npos)
+    const wchar_t optLower   = static_cast<wchar_t>(towlower(static_cast<wint_t>(cOption)));
+    const wchar_t optUpper   = static_cast<wchar_t>(towupper(static_cast<wint_t>(cOption)));
+    size_t        foundIndex = std::wstring::npos;
+
+    for (size_t i = 0; i + 1 < lpszCommandLine.size(); ++i)
     {
-        std::wstring cOptionUpper = L"/";
-        cOptionUpper += static_cast<wchar_t>(towupper(static_cast<wint_t>(cOption)));
-        foundIndex = lpszCommandLine.find(cOptionUpper);
+        if (lpszCommandLine[i] != L'/')
+            continue;
+        if (i > 0 && lpszCommandLine[i - 1] != L' ' && lpszCommandLine[i - 1] != L'\t')
+            continue;
+        const wchar_t ch = lpszCommandLine[i + 1];
+        if (ch == optLower || ch == optUpper)
+        {
+            foundIndex = i;
+            break;
+        }
     }
 
     if (foundIndex == std::wstring::npos)
@@ -891,13 +949,24 @@ BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstrin
         return FALSE;
     }
 
-    auto endIndex = lpszCommandLine.find(L' ', foundIndex);
+    size_t valStart = foundIndex + 2;
+    if (valStart < lpszCommandLine.size() && lpszCommandLine[valStart] == L'"')
+    {
+        ++valStart;
+        size_t valEnd = lpszCommandLine.find(L'"', valStart);
+        if (valEnd == std::wstring::npos)
+            valEnd = lpszCommandLine.size();
+        lpszString = lpszCommandLine.substr(valStart, valEnd - valStart);
+        return TRUE;
+    }
+
+    auto endIndex = lpszCommandLine.find_first_of(L" \t", valStart);
     if (endIndex == std::wstring::npos)
     {
         endIndex = lpszCommandLine.length();
     }
 
-    lpszString = lpszCommandLine.substr(foundIndex + 2, endIndex - foundIndex - 2);
+    lpszString = lpszCommandLine.substr(valStart, endIndex - valStart);
     return TRUE;
 }
 
@@ -905,26 +974,37 @@ BOOL Util_CheckOption(std::wstring lpszCommandLine, wchar_t cOption, std::wstrin
 #include <tlhelp32.h>
 #endif
 
-wchar_t g_lpszCmdURL[50];
-BOOL    GetConnectServerInfo(wchar_t* szCmdLine, wchar_t* lpszURL, WORD* pwPort)
+wchar_t g_lpszCmdURL[256] = {};
+BOOL    GetConnectServerInfo(wchar_t* szCmdLine, wchar_t* lpszURL, WORD* pwPort, size_t urlCapacity = _countof(g_lpszCmdURL))
 {
-    std::wstring lpszTemp = {
-        0,
-    };
-
-    if (!Util_CheckOption(szCmdLine, L'u', lpszTemp))
+    if (!szCmdLine || !lpszURL || !pwPort || urlCapacity == 0)
     {
         return FALSE;
     }
 
-    wcscpy(lpszURL, lpszTemp.c_str());
-    if (!Util_CheckOption(szCmdLine, L'p', lpszTemp))
+    std::wstring lpszTemp;
+    if (!Util_CheckOption(szCmdLine, L'u', lpszTemp) || lpszTemp.empty() || lpszTemp.size() >= urlCapacity)
     {
         return FALSE;
     }
 
-    *pwPort = static_cast<WORD>(std::stoi(lpszTemp));
+    wcsncpy_s(lpszURL, urlCapacity, lpszTemp.c_str(), _TRUNCATE);
+    if (!Util_CheckOption(szCmdLine, L'p', lpszTemp) || lpszTemp.empty())
+    {
+        lpszURL[0] = L'\0';
+        return FALSE;
+    }
 
+    wchar_t* endPtr = nullptr;
+    errno           = 0;
+    const unsigned long portVal = std::wcstoul(lpszTemp.c_str(), &endPtr, 10);
+    if (endPtr == lpszTemp.c_str() || *endPtr != L'\0' || errno != 0 || portVal < 1 || portVal > 65535)
+    {
+        lpszURL[0] = L'\0';
+        return FALSE;
+    }
+
+    *pwPort = static_cast<WORD>(portVal);
     return TRUE;
 }
 
@@ -2022,8 +2102,6 @@ bool SDLCALL WindowResizeEventWatch(void* /*userdata*/, SDL_Event* event)
     {
         case SDL_EVENT_WINDOW_RESIZED:
         case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:
-            HandleWindowResize(event->window.data1, event->window.data2);
-            break;
         case SDL_EVENT_WINDOW_MAXIMIZED:
         case SDL_EVENT_WINDOW_RESTORED:
         case SDL_EVENT_WINDOW_ENTER_FULLSCREEN:
@@ -2336,9 +2414,12 @@ namespace
 {
 void UpdatePortableTextInput()
 {
-    static bool textInputActive = false;
-    auto*       field           = CUITextInputBox::GetFocusedPortable();
-    const bool  requested       = CUITextInputBox::ConsumeTextInputRequest();
+    static bool     textInputActive = false;
+    static SDL_Rect lastArea        = {-1, -1, -1, -1};
+    static bool     lastPassword    = false;
+    static bool     lastMultiline   = false;
+    auto*           field           = CUITextInputBox::GetFocusedPortable();
+    const bool      requested       = CUITextInputBox::ConsumeTextInputRequest();
     if (g_sdlWindow == nullptr)
         return;
     if (field == nullptr)
@@ -2346,23 +2427,29 @@ void UpdatePortableTextInput()
         if (textInputActive)
             SDL_StopTextInput(g_sdlWindow);
         textInputActive = false;
+        lastArea        = {-1, -1, -1, -1};
+        lastPassword    = false;
+        lastMultiline   = false;
         return;
     }
 
     int cx, cy, cw, ch;
     if (field->GetCaretArea(cx, cy, cw, ch))
     {
-        const SDL_Rect  area     = {static_cast<int>(cx * g_fScreenRate_x), static_cast<int>(cy * g_fScreenRate_y),
-                                    static_cast<int>(cw * g_fScreenRate_x), static_cast<int>(ch * g_fScreenRate_y)};
-        static SDL_Rect lastArea = {};
-        if (requested || area.x != lastArea.x || area.y != lastArea.y || area.w != lastArea.w || area.h != lastArea.h)
+        const SDL_Rect area        = {static_cast<int>(cx * g_fScreenRate_x), static_cast<int>(cy * g_fScreenRate_y),
+                                      static_cast<int>(cw * g_fScreenRate_x), static_cast<int>(ch * g_fScreenRate_y)};
+        const bool     isPassword  = field->IsPassword();
+        const bool     isMultiline = (field->UseMultiline() != FALSE);
+        if (requested || area.x != lastArea.x || area.y != lastArea.y || area.w != lastArea.w || area.h != lastArea.h ||
+            isPassword != lastPassword || isMultiline != lastMultiline)
         {
             SDL_SetTextInputArea(g_sdlWindow, &area, 0);
 #if defined(__ANDROID__)
-            if (textInputActive || requested)
-                Platform::Android::Input::SynchronizeArea(area, field->IsPassword(), field->UseMultiline() != FALSE);
+            Platform::Android::Input::SynchronizeArea(area, isPassword, isMultiline);
 #endif
-            lastArea = area;
+            lastArea      = area;
+            lastPassword  = isPassword;
+            lastMultiline = isMultiline;
         }
     }
     if (textInputActive && !requested)
@@ -3018,14 +3105,25 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
 
     // Check if animation task pool should be enabled (disabled by default)
     {
-        wchar_t configPath[MAX_PATH];
-        GetModuleFileNameW(nullptr, configPath, MAX_PATH);
-        wchar_t* lastSlash = wcsrchr(configPath, L'\\');
-        if (!lastSlash)
-            lastSlash = wcsrchr(configPath, L'/');
-        if (lastSlash)
-            *(lastSlash + 1) = L'\0';
-        wcscat(configPath, L"config.ini");
+        wchar_t     configPath[MAX_PATH] = {};
+        const DWORD pathLen              = GetModuleFileNameW(nullptr, configPath, MAX_PATH);
+        if (pathLen > 0 && pathLen < MAX_PATH)
+        {
+            wchar_t* lastBackslash    = wcsrchr(configPath, L'\\');
+            wchar_t* lastForwardSlash = wcsrchr(configPath, L'/');
+            wchar_t* lastSlash        = (lastBackslash && lastForwardSlash)
+                                            ? ((lastBackslash > lastForwardSlash) ? lastBackslash : lastForwardSlash)
+                                            : (lastBackslash ? lastBackslash : lastForwardSlash);
+            if (lastSlash)
+                *(lastSlash + 1) = L'\0';
+            else
+                configPath[0] = L'\0';
+        }
+        else
+        {
+            configPath[0] = L'\0';
+        }
+        wcsncat_s(configPath, _countof(configPath), L"config.ini", _TRUNCATE);
         int enableTaskPool = GetPrivateProfileIntW(L"UI", L"EnableAnimationTaskPool", 0, configPath);
         if (enableTaskPool != 0 || wcsstr(GetCommandLineW(), L"--enable-taskpool"))
         {
@@ -3100,8 +3198,8 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     if (g_iChatInputType == 1)
         ShowCursor(FALSE);
 
-    // Fullscreen is requested via an SDL window flag below; SDL handles the
-    // display-mode change and restores it on teardown.
+    // Non-Windows platforms request fullscreen during window creation.
+    // Windows applies borderless fullscreen after the GL context exists.
     g_ErrorReport.Write(L"> Screen size = %d x %d.\r\n", WindowWidth, WindowHeight);
 
     g_hInst = hInstance;
@@ -3135,7 +3233,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     // every map/panel; compatibility (CoreProfile=0) remains available as a rollback.
     // Core additionally needs an explicit version request (compatibility takes the
     // driver's highest, and must keep doing so -- see the else branch below).
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE || defined(SDL_PLATFORM_IOS)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
@@ -3152,8 +3250,10 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 
     SDL_WindowFlags windowFlags = SDL_WINDOW_OPENGL;
+#if !defined(_WIN32)
     if (g_bUseWindowMode != TRUE)
         windowFlags |= SDL_WINDOW_FULLSCREEN;
+#endif
 #if !MU_PLATFORM_MOBILE
     // Desktop: let the player drag the window corner to resize. No-op while the
     // window is fullscreen; takes effect in windowed mode. Mobile is always
@@ -3237,6 +3337,14 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
         return 0;
     }
 
+    if (!ApplyInitialWindowMode())
+    {
+        g_ErrorReport.Write(L"> Initial borderless fullscreen setup failed: %hs.\r\n", SDL_GetError());
+        KillGLWindow();
+        MessageBox(nullptr, L"Unable to configure the game window.", L"Window Error", MB_ICONERROR);
+        return 0;
+    }
+
     g_ErrorReport.Write(L"> Start window success.\r\n");
 
     // Initialize OpenGL viewport dimensions to match window dimensions
@@ -3245,8 +3353,8 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     OpenglWindowHeight = WindowHeight;
 
 #if !MU_PLATFORM_MOBILE
-    // Desktop: the configured Width/Height is only a *request*. In fullscreen SDL
-    // switches to the real display mode, and a window may come back at a
+    // Desktop: the configured Width/Height is only a *request*. Borderless
+    // fullscreen uses the desktop size, and window creation can also produce a
     // different size before the first SDL_EVENT_WINDOW_RESIZED arrives. Sync to
     // the actual size now so fonts/UI scale correctly from the very first frame,
     // and clamp how small the player can drag a windowed corner.
@@ -3254,7 +3362,9 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
     {
         int actualWidth  = 0;
         int actualHeight = 0;
-        SDL_GetWindowSize(g_sdlWindow, &actualWidth, &actualHeight);
+        SDL_GetWindowSizeInPixels(g_sdlWindow, &actualWidth, &actualHeight);
+        if (actualWidth <= 0 || actualHeight <= 0)
+            SDL_GetWindowSize(g_sdlWindow, &actualWidth, &actualHeight);
         if (actualWidth > 0 && actualHeight > 0 &&
             (static_cast<unsigned int>(actualWidth) != WindowWidth ||
              static_cast<unsigned int>(actualHeight) != WindowHeight))
@@ -3286,7 +3396,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int nC
         return FALSE;
     }
 
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE || defined(SDL_PLATFORM_IOS)
     // These entry points are core in OpenGL ES 3.0 and are required by the
     // renderer's UBO, integer-attribute and VAO paths. Fail explicitly instead
     // of continuing into a device-specific black screen.

@@ -2,6 +2,10 @@
 # Usage: python probe_fixed.py <path> <R> <N> <keyHex|-> [dumpCount]
 import sys, bmd
 
+if len(sys.argv) < 5:
+    print("Usage: python probe_fixed.py <path> <R> <N> <keyHex|-> [dumpCount]", file=sys.stderr)
+    sys.exit(2)
+
 path = sys.argv[1]
 R = int(sys.argv[2]); N = int(sys.argv[3])
 key = None if sys.argv[4] in ('-', 'none') else int(sys.argv[4], 16)
@@ -9,7 +13,8 @@ dumpn = int(sys.argv[5]) if len(sys.argv) > 5 else 4
 
 f = bmd.FixedFile(path, R, N, key=key)
 v = f.verify()
-raw = open(path, 'rb').read()
+with open(path, 'rb') as fh:
+    raw = fh.read()
 rt = f.encode()
 print(f'{path}')
 print(f'  R={R} N={N} key={hex(key) if key else None} filesize={len(raw)} expected={R*N+4}')

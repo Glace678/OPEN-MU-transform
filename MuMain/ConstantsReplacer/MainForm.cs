@@ -11,46 +11,73 @@ namespace ConstantsReplacer
 
         private void SearchAndReplaceClick(object? sender, EventArgs e)
         {
-            this._cancellationTokenSource = new();
+            var cts = new CancellationTokenSource();
+            this._cancellationTokenSource?.Dispose();
+            this._cancellationTokenSource = cts;
+
+            var folder = this._folderTextBox.Text;
+            var fileNamePattern = this._fileNamePatternTextBox.Text;
+            var searchPattern = this._searchPatternTextBox.Text;
+            var constantsDefinitions = this._constantsDefinitionsTextBox.Text;
 
             this._progressBar.Visible = true;
             var progress = new Progress<(int Total, int Current)>(value =>
             {
-                this._progressBar.Maximum = value.Total;
-                this._progressBar.Value = value.Current;
+                if (!this.IsDisposed)
+                {
+                    this._progressBar.Maximum = Math.Max(value.Total, value.Current);
+                    this._progressBar.Value = Math.Clamp(value.Current, this._progressBar.Minimum, this._progressBar.Maximum);
+                }
             });
 
             this._cancelButton.Enabled = true;
             this._searchButton.Enabled = false;
-            Task.Run( async () =>
+            _ = Task.Run(async () =>
             {
+                Exception? failure = null;
                 try
                 {
-
                     var replacer = new Replacer();
                     await replacer.SearchAndReplaceAsync(
-                        _folderTextBox.Text,
-                        _fileNamePatternTextBox.Text,
-                        _searchPatternTextBox.Text,
-                        _constantsDefinitionsTextBox.Text,
-                        this._cancellationTokenSource.Token,
+                        folder,
+                        fileNamePattern,
+                        searchPattern,
+                        constantsDefinitions,
+                        cts.Token,
                         progress);
-
+                }
+                catch (OperationCanceledException)
+                {
+                    // Cancelled by user.
                 }
                 catch (Exception exception)
                 {
-                    this._progressBar.Text = exception.Message;
+                    failure = exception;
                 }
                 finally
                 {
-                    this.Invoke(() =>
+                    if (Interlocked.CompareExchange(ref this._cancellationTokenSource, null, cts) == cts)
                     {
-                        this._cancelButton.Enabled = false;
-                        this._searchButton.Enabled = true;
-                        this._progressBar.Visible = false;
-                    });
-                    this._cancellationTokenSource?.Dispose();
-                    this._cancellationTokenSource = null;
+                        cts.Dispose();
+                    }
+                    else
+                    {
+                        cts.Dispose();
+                    }
+
+                    if (!this.IsDisposed && this.IsHandleCreated)
+                    {
+                        this.Invoke(() =>
+                        {
+                            this._cancelButton.Enabled = false;
+                            this._searchButton.Enabled = true;
+                            this._progressBar.Visible = false;
+                            if (failure is not null)
+                            {
+                                MessageBox.Show(this, failure.Message, "ConstantsReplacer Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        });
+                    }
                 }
             });
         }

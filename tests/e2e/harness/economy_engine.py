@@ -11,8 +11,24 @@ from typing import Tuple, Optional
 class EconomyEngine:
     MAX_GOLD = 2_000_000_000
     MAX_SHOP_PRICE = 2_000_000_000
+    INT32_MAX = 2_147_483_647
     BYTE_MAX_VALUE = 255
-    INVENTORY_SIZE = 108
+    EQUIPPABLE_SLOTS_COUNT = 12
+    MAX_INVENTORY_SLOT_INDEX = 203
+    INVENTORY_SIZE = 204  # InventoryConstants.GetInventorySize(4) == 12 + 64 + 4 * 32
+
+    PACKED_JEWEL_MULTIPLIERS = {
+        "PackedBless": 1_480,
+        "PackedSoul": 1_120,
+        "PackedChaos": 385,
+        "PackedLife": 2_950,
+        "PackedCreation": 2_360,
+        "PackedGuardian": 3_900,
+        "PackedGemstone": 18_600,
+        "PackedHarmony": 18_600,
+        "PackedLowerRefineStone": 18_600,
+        "PackedHigherRefineStone": 18_600,
+    }
 
     @staticmethod
     def clamp_durability_addition(current_durability: int, added_durability: int) -> int:
@@ -28,24 +44,14 @@ class EconomyEngine:
     @staticmethod
     def calculate_packed_jewel_price_64bit(special_item_type: str, level: int) -> int:
         """
-        Feature 16: ItemPriceCalculator.cs 64-bit integer price calculation.
+        Feature 16: ItemPriceCalculator.cs:106-115 64-bit integer price calculation.
         Computes jewel pack price using 64-bit arithmetic to prevent 32-bit integer overflow.
         """
-        multipliers = {
-            "PackedBless": 9_000_000,
-            "PackedSoul": 6_000_000,
-            "PackedChaos": 810_000,
-            "PackedLife": 45_000_000,
-            "PackedCreation": 36_000_000,
-            "PackedGuardian": 60_000_000,
-            "PackedGemstone": 18_600,
-            "PackedHarmony": 18_600,
-        }
-        mult = multipliers.get(special_item_type)
+        mult = EconomyEngine.PACKED_JEWEL_MULTIPLIERS.get(special_item_type)
         if mult is None:
             raise ValueError(f"Unknown packed jewel type: {special_item_type}")
 
-        # Compute using 64-bit integer arithmetic
+        # Compute using 64-bit integer arithmetic matching (level + 1) * base * 10L
         calculated_price = (level + 1) * mult * 10
         # Result clamp to [0, MAX_GOLD]
         return min(max(0, calculated_price), EconomyEngine.MAX_GOLD)
@@ -53,28 +59,27 @@ class EconomyEngine:
     @staticmethod
     def calculate_packed_jewel_price_32bit_buggy(special_item_type: str, level: int) -> int:
         """
-        Simulates the legacy 32-bit integer overflow bug for comparison/demonstration.
+        Simulates the legacy 32-bit signed integer overflow bug on identical multipliers.
         """
-        multipliers = {
-            "PackedGuardian": 60_000_000,
-            "PackedLife": 45_000_000,
-        }
-        mult = multipliers.get(special_item_type, 1)
+        mult = EconomyEngine.PACKED_JEWEL_MULTIPLIERS.get(special_item_type)
+        if mult is None:
+            raise ValueError(f"Unknown packed jewel type: {special_item_type}")
         val = (level + 1) * mult * 10
         # Emulate 32-bit signed integer overflow
         val = (val + 2**31) % 2**32 - 2**31
         return val
 
     @staticmethod
-    def validate_player_store_price(price: int) -> Tuple[bool, str]:
+    def validate_player_store_price(price: int, max_inventory_money: Optional[int] = None) -> Tuple[bool, str]:
         """
-        Feature 15: Player store price validation.
-        Rejects negative prices and prices exceeding MaxShopPrice.
+        Feature 15: SetItemPriceAction.cs:53 player store price validation.
+        Rejects negative prices and prices exceeding MaximumInventoryMoney (defaults to int.MaxValue).
         """
+        upper_limit = EconomyEngine.INT32_MAX if max_inventory_money is None else max_inventory_money
         if price < 0:
             return False, f"Price {price} is negative (integer overflow detected)"
-        if price > EconomyEngine.MAX_SHOP_PRICE:
-            return False, f"Price {price} exceeds maximum store price {EconomyEngine.MAX_SHOP_PRICE}"
+        if price > upper_limit:
+            return False, f"Price {price} exceeds maximum store price {upper_limit}"
         return True, "Price is valid"
 
     @staticmethod
@@ -104,21 +109,25 @@ class EconomyEngine:
         return True, buyer_temp_gold, final_seller_gold, "Transaction successful"
 
     @staticmethod
-    def downgrade_wing_level(current_level: int) -> int:
+    def downgrade_wing_level(current_level: int, downgrade_steps: int = 2) -> int:
         """
-        Feature 17: BaseItemCraftingHandler.cs wing level downgrade.
-        Guarantees that 0 level wing does not underflow to byte 255.
+        Feature 17: BaseItemCraftingHandler.cs:297-312 ThirdWingsDowngradedRandom.
+        Downgrades by 2 or 3 levels randomly and clamps via Math.Max(0, item.Level - downgrade).
         """
-        return max(0, current_level - 1)
+        if downgrade_steps not in (2, 3):
+            raise ValueError(f"Third-wing downgrade steps must be 2 or 3, got {downgrade_steps}")
+        return max(0, current_level - downgrade_steps)
 
     @staticmethod
     def validate_devil_square_ticket_index(ticket_index: int) -> Tuple[bool, str]:
         """
-        Feature 18: DevilSquareEnterHandlerPlugIn.cs ticket index validation.
-        Rejects negative ticket index and out-of-bounds inventory index.
+        Feature 18: DevilSquareEnterHandlerPlugIn.cs:45-53 ticket index validation.
+        Rejects negative indices, equipped item slots (< 12), and out-of-bounds inventory indices (> 203).
         """
         if ticket_index < 0:
             return False, f"Negative ticket index rejected: {ticket_index}"
+        if ticket_index < EconomyEngine.EQUIPPABLE_SLOTS_COUNT:
+            return False, f"Equipped slot index rejected: {ticket_index} (< {EconomyEngine.EQUIPPABLE_SLOTS_COUNT})"
         if ticket_index >= EconomyEngine.INVENTORY_SIZE:
             return False, f"Ticket index {ticket_index} out of inventory bounds ({EconomyEngine.INVENTORY_SIZE})"
         return True, "Ticket index valid"

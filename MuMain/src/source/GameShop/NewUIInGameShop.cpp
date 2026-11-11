@@ -39,6 +39,7 @@ void CNewUIInGameShop::Init()
     m_ItemAngle                         = false;
     m_bLoadBanner                       = false;
     m_bBannerLink                       = false;
+    m_szBannerURL[0]                    = L'\0';
     m_iStorageTotalItemCnt              = 0;
     m_iStorageCurrentPageItemCnt        = 0;
     m_iStorageTotalPage                 = 0;
@@ -108,22 +109,25 @@ void CNewUIInGameShop::RenderFrame()
     if (iSizeCategory < 0)
         return;
 
-    // Category Deco Middle Render
-    POINT CategoryDecoMiddlePos;
-    CategoryDecoMiddlePos.x =
-        m_CategoryButton.GetPos(0).x + (IMAGE_IGS_CATEGORY_BTN_WIDTH / 2) - (IMAGE_IGS_CATEGORY_DECO_MIDDLE_WIDTH / 2);
-
-    for (int i = 0; i < iSizeCategory - 1; i++)
+    if (iSizeCategory > 0)
     {
-        CategoryDecoMiddlePos.y = m_CategoryButton.GetPos(i).y + IMAGE_IGS_CATEGORY_BTN_HEIGHT - 1;
+        // Category Deco Middle Render
+        POINT CategoryDecoMiddlePos;
+        CategoryDecoMiddlePos.x = m_CategoryButton.GetPos(0).x + (IMAGE_IGS_CATEGORY_BTN_WIDTH / 2) -
+                                  (IMAGE_IGS_CATEGORY_DECO_MIDDLE_WIDTH / 2);
 
-        RenderImage(IMAGE_IGS_CATEGORY_DECO_MIDDLE, CategoryDecoMiddlePos.x, CategoryDecoMiddlePos.y,
-                    IMAGE_IGS_CATEGORY_DECO_MIDDLE_WIDTH, IMAGE_IGS_CATEGORY_DECO_MIDDLE_HEIGHT);
+        for (int i = 0; i < iSizeCategory - 1; i++)
+        {
+            CategoryDecoMiddlePos.y = m_CategoryButton.GetPos(i).y + IMAGE_IGS_CATEGORY_BTN_HEIGHT - 1;
+
+            RenderImage(IMAGE_IGS_CATEGORY_DECO_MIDDLE, CategoryDecoMiddlePos.x, CategoryDecoMiddlePos.y,
+                        IMAGE_IGS_CATEGORY_DECO_MIDDLE_WIDTH, IMAGE_IGS_CATEGORY_DECO_MIDDLE_HEIGHT);
+        }
+
+        // Category Deco Down Render
+        RenderImage(IMAGE_IGS_CATEGORY_DECO_DOWN, m_Pos.x, m_CategoryButton.GetPos(iSizeCategory - 1).y - 10,
+                    IMAGE_IGS_CATEGORY_DECO_DOWN_WIDTH, IMAGE_IGS_CATEGORY_DECO_DOWN_HEIGHT);
     }
-
-    // Category Deco Down Render
-    RenderImage(IMAGE_IGS_CATEGORY_DECO_DOWN, m_Pos.x, m_CategoryButton.GetPos(iSizeCategory - 1).y - 10,
-                IMAGE_IGS_CATEGORY_DECO_DOWN_WIDTH, IMAGE_IGS_CATEGORY_DECO_DOWN_HEIGHT);
 
     for (int cnt = g_InGameShopSystem->GetSizePackageAsDisplayPackage(); cnt < INGAMESHOP_DISPLAY_ITEMLIST_SIZE; cnt++)
     {
@@ -151,7 +155,10 @@ void CNewUIInGameShop::RenderTexts()
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFontBold);
-    mu_swprintf(szText, Hero->ID);
+    if (Hero)
+    {
+        mu_swprintf_trunc(szText, L"%ls", Hero->ID);
+    }
     g_pRenderText->RenderText(m_Pos.x + TEXT_IGS_CHAR_NAME_POS_X, m_Pos.y + TEXT_IGS_CHAR_NAME_POS_Y, szText,
                               TEXT_IGS_CHAR_NAME_WIDTH, 0, RT3_SORT_CENTER);
     g_pRenderText->SetFont(g_hFont);
@@ -160,6 +167,8 @@ void CNewUIInGameShop::RenderTexts()
     for (int i = 0; i < g_InGameShopSystem->GetSizePackageAsDisplayPackage(); i++)
     {
         CShopPackage* pPackage = g_InGameShopSystem->GetDisplayPackage(i);
+        if (!pPackage)
+            continue;
         // Package
         g_pRenderText->SetTextColor(255, 255, 255, 255);
         g_pRenderText->RenderText(
@@ -168,7 +177,7 @@ void CNewUIInGameShop::RenderTexts()
             pPackage->PackageProductName, IGS_PACKAGE_NAME_WIDTH, 0, RT3_SORT_CENTER);
         // Package
         ConvertGold(pPackage->Price, szValue);
-        mu_swprintf(szText, L"%ls %ls", szValue, pPackage->PricUnitName);
+        mu_swprintf_trunc(szText, L"%ls %ls", szValue, pPackage->PricUnitName);
         g_pRenderText->SetTextColor(255, 238, 161, 255);
         g_pRenderText->RenderText(
             m_Pos.x + IGS_PACKAGE_NAME_POS_X + ((i % IGS_NUM_ITEMS_WIDTH) * IMAGE_IGS_VIEWDETAIL_BTN_DISTANCE_X),
@@ -298,6 +307,15 @@ bool CNewUIInGameShop::IsInGameShopRect(float _x, float _y)
 
 void CNewUIInGameShop::SetConvertInvenCoord(WORD _ItemType, float _Width, float _Height)
 {
+    if (_ItemType >= MAX_ITEM)
+    {
+        m_fRePos.x  = _Width / 2;
+        m_fRePos.y  = _Height / 2;
+        m_fReSize.x = 20.0f;
+        m_fReSize.y = 20.0f;
+        return;
+    }
+
     ITEM_ATTRIBUTE* pItemAttr   = &ItemAttribute[_ItemType];
     float           _TempWidth  = pItemAttr->Width * 20.0f;
     float           _TempHeight = pItemAttr->Height * 20.0f;
@@ -320,8 +338,14 @@ void CNewUIInGameShop::SetConvertInvenCoord(WORD _ItemType, float _Width, float 
 }
 void CNewUIInGameShop::SetRateScale(int _ItemType)
 {
-    const float     _fRate_Value = 0.703f;
-    ITEM_ATTRIBUTE* pItemAttr    = &ItemAttribute[_ItemType];
+    const float _fRate_Value = 0.703f;
+    if (_ItemType < 0 || _ItemType >= MAX_ITEM)
+    {
+        m_fRate_Scale = _fRate_Value;
+        return;
+    }
+
+    ITEM_ATTRIBUTE* pItemAttr = &ItemAttribute[_ItemType];
 
     if (_ItemType == ITEM_WING_OF_STORM)
     {
@@ -449,18 +473,22 @@ bool CNewUIInGameShop::BtnProcess()
         if (m_ViewDetailButton[i].UpdateMouseEvent())
         {
             CShopPackage* pPackage = g_InGameShopSystem->GetDisplayPackage(i);
+            if (!pPackage)
+                return true;
 
             if (pPackage->PriceCount == 1)
             {
                 CMsgBoxIGSBuyPackageItem* pMsgBox = NULL;
                 CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxBuyPackageItemLayout), &pMsgBox);
-                pMsgBox->Initialize(pPackage);
+                if (pMsgBox)
+                    pMsgBox->Initialize(pPackage);
             }
             else if (pPackage->PriceCount > 1)
             {
                 CMsgBoxIGSBuySelectItem* pMsgBox = NULL;
                 CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSBuySelectItemLayout), &pMsgBox);
-                pMsgBox->Initialize(pPackage);
+                if (pMsgBox)
+                    pMsgBox->Initialize(pPackage);
             }
 
             return true;
@@ -471,7 +499,8 @@ bool CNewUIInGameShop::BtnProcess()
     {
         CMsgBoxIGSCommon* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::RestrictedFunction, I18N::Game::ThisFunctionIsNotSupportedIn);
+        if (pMsgBox)
+            pMsgBox->Initialize(I18N::Game::RestrictedFunction, I18N::Game::ThisFunctionIsNotSupportedIn);
         return true;
     }
 
@@ -484,13 +513,15 @@ bool CNewUIInGameShop::BtnProcess()
         }
         CMsgBoxIGSCommon* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::RestrictedFunction, I18N::Game::ThisFunctionIsNotSupportedIn);
+        if (pMsgBox)
+            pMsgBox->Initialize(I18N::Game::RestrictedFunction, I18N::Game::ThisFunctionIsNotSupportedIn);
         return true;
     }
 
     if (m_CashRefreshButton.UpdateMouseEvent() == true)
     {
-        SocketClient->ToGameServer()->SendCashShopPointInfoRequest();
+        if (SocketClient)
+            SocketClient->ToGameServer()->SendCashShopPointInfoRequest();
 
         return true;
     }
@@ -501,29 +532,38 @@ bool CNewUIInGameShop::BtnProcess()
         {
             CMsgBoxIGSCommon* pMsgBox = NULL;
             CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-            pMsgBox->Initialize(I18N::Game::Error, I18N::Game::ThereIsNoUsableItem);
+            if (pMsgBox)
+                pMsgBox->Initialize(I18N::Game::Error, I18N::Game::ThereIsNoUsableItem);
             return true;
         }
 
         int iStorageIndex = m_ListBoxTabButton.GetCurButtonIndex();
 
         IGS_StorageItem* pSelectItem = m_StorageItemListBox.GetSelectedText();
+        if (!pSelectItem)
+            return true;
 
         if (iStorageIndex == IGS_SAFEKEEPING_LISTBOX)  // 보관함
         {
             CMsgBoxIGSStorageItemInfo* pMsgBox = NULL;
             CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSStorageItemInfoLayout), &pMsgBox);
-            pMsgBox->Initialize(pSelectItem->m_iStorageSeq, pSelectItem->m_iStorageItemSeq, pSelectItem->m_wItemCode,
-                                pSelectItem->m_szType, pSelectItem->m_szName, pSelectItem->m_szNum,
-                                pSelectItem->m_szPeriod);
+            if (pMsgBox)
+            {
+                pMsgBox->Initialize(pSelectItem->m_iStorageSeq, pSelectItem->m_iStorageItemSeq, pSelectItem->m_wItemCode,
+                                    pSelectItem->m_szType, pSelectItem->m_szName, pSelectItem->m_szNum,
+                                    pSelectItem->m_szPeriod);
+            }
         }
         else if (iStorageIndex == IGS_PRESENTBOX_LISTBOX)  // 선물 보관함
         {
             CMsgBoxIGSGiftStorageItemInfo* pMsgBox = NULL;
             CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSGiftStorageItemInfoLayout), &pMsgBox);
-            pMsgBox->Initialize(pSelectItem->m_iStorageSeq, pSelectItem->m_iStorageItemSeq, pSelectItem->m_wItemCode,
-                                pSelectItem->m_szType, pSelectItem->m_szSendUserName, pSelectItem->m_szMessage,
-                                pSelectItem->m_szName, pSelectItem->m_szNum, pSelectItem->m_szPeriod);
+            if (pMsgBox)
+            {
+                pMsgBox->Initialize(pSelectItem->m_iStorageSeq, pSelectItem->m_iStorageItemSeq, pSelectItem->m_wItemCode,
+                                    pSelectItem->m_szType, pSelectItem->m_szSendUserName, pSelectItem->m_szMessage,
+                                    pSelectItem->m_szName, pSelectItem->m_szNum, pSelectItem->m_szPeriod);
+            }
         }
         return true;
     }
@@ -749,13 +789,8 @@ void CNewUIInGameShop::InitBanner(wchar_t* pszFileName, wchar_t* pszBannerURL)
 {
     ReleaseBanner();
 
-    if (pszFileName == NULL)
+    if (pszFileName == NULL || pszBannerURL == NULL)
         return;
-
-    if (pszBannerURL[0] != '#')
-    {
-        m_bBannerLink = true;
-    }
 
     if (Bitmaps.Convert_Format(pszFileName) == false)
         return;
@@ -763,8 +798,10 @@ void CNewUIInGameShop::InitBanner(wchar_t* pszFileName, wchar_t* pszBannerURL)
     if (LoadBitmap(pszFileName, IMAGE_IGS_BANNER, GL_LINEAR, GL_CLAMP, true, true) == true)
     {
         m_bLoadBanner = true;
+        m_bBannerLink = (pszBannerURL[0] != L'#');
 
-        wcscpy(m_szBannerURL, pszBannerURL);
+        wcsncpy(m_szBannerURL, pszBannerURL, std::size(m_szBannerURL) - 1);
+        m_szBannerURL[std::size(m_szBannerURL) - 1] = L'\0';
     }
 }
 
@@ -793,6 +830,8 @@ bool CNewUIInGameShop::UpdateBanner()
 
 void CNewUIInGameShop::ReleaseBanner()
 {
+    m_bBannerLink     = false;
+    m_szBannerURL[0]  = L'\0';
     if (m_bLoadBanner == false)
         return;
 
@@ -878,20 +917,22 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
 
     if (pszUserName == NULL)
     {
-        Item.m_szSendUserName[0] = '\0';
+        Item.m_szSendUserName[0] = L'\0';
     }
     else
     {
-        wcscpy(Item.m_szSendUserName, pszUserName);
+        wcsncpy(Item.m_szSendUserName, pszUserName, std::size(Item.m_szSendUserName) - 1);
+        Item.m_szSendUserName[std::size(Item.m_szSendUserName) - 1] = L'\0';
     }
 
     if (pszMessage == NULL)
     {
-        Item.m_szMessage[0] = '\0';
+        Item.m_szMessage[0] = L'\0';
     }
     else
     {
-        wcscpy(Item.m_szMessage, pszMessage);
+        wcsncpy(Item.m_szMessage, pszMessage, std::size(Item.m_szMessage) - 1);
+        Item.m_szMessage[std::size(Item.m_szMessage) - 1] = L'\0';
     }
 
     if (chItemType == 'C' || chItemType == 'c')
@@ -901,14 +942,14 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
         };
         ConvertGold(iCashPoint, szValue);
         // Name
-        mu_swprintf(Item.m_szName, I18N::Game::WCoinSCoins, szValue);
+        mu_swprintf_trunc(Item.m_szName, I18N::Game::WCoinSCoins, szValue);
 
         // Num
-        mu_swprintf(Item.m_szNum, I18N::Game::SWCoin, szValue);
+        mu_swprintf_trunc(Item.m_szNum, I18N::Game::SWCoin, szValue);
         Item.m_iNum = iCashPoint;
 
         // Period
-        mu_swprintf(Item.m_szPeriod, L"-");
+        mu_swprintf_trunc(Item.m_szPeriod, L"-");
     }
     else if (chItemType == 'P' || chItemType == 'p')
     {
@@ -919,19 +960,19 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
                                                                CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_ITEMNAME, iValue,
                                                                Item.m_szName) == false)
             {
-                mu_swprintf(Item.m_szName, L"aaa");
+                mu_swprintf_trunc(Item.m_szName, L"aaa");
             }
 
             g_InGameShopSystem->GetProductInfoFromPriceSeq(iProductSeq, iPriceSeq,
                                                            CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_NUM, iValue, szText);
             if (iValue > 0)
             {
-                mu_swprintf(Item.m_szNum, L"%d %ls", iValue, szText);
+                mu_swprintf_trunc(Item.m_szNum, L"%d %ls", iValue, szText);
                 Item.m_iNum = iValue;
             }
             else
             {
-                mu_swprintf(Item.m_szNum, L"-");
+                mu_swprintf_trunc(Item.m_szNum, L"-");
             }
 
             // Period
@@ -939,11 +980,11 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
                 iProductSeq, iPriceSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_USE_LIMIT_PERIOD, iValue, szText);
             if (iValue > 0)
             {
-                mu_swprintf(Item.m_szPeriod, L"%d %ls", iValue, szText);
+                mu_swprintf_trunc(Item.m_szPeriod, L"%d %ls", iValue, szText);
             }
             else
             {
-                mu_swprintf(Item.m_szPeriod, L"-");
+                mu_swprintf_trunc(Item.m_szPeriod, L"-");
             }
 
             g_InGameShopSystem->GetProductInfoFromPriceSeq(
@@ -961,12 +1002,12 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
                                                              iValue, szText);
             if (iValue > 0)
             {
-                mu_swprintf(Item.m_szNum, L"%d %ls", iValue, szText);
+                mu_swprintf_trunc(Item.m_szNum, L"%d %ls", iValue, szText);
                 Item.m_iNum = iValue;
             }
             else
             {
-                mu_swprintf(Item.m_szNum, L"-");
+                mu_swprintf_trunc(Item.m_szNum, L"-");
             }
 
             // Period
@@ -974,11 +1015,11 @@ void CNewUIInGameShop::AddStorageItem(int iStorageSeq, int iStorageItemSeq, int 
                 iProductSeq, CInGameShopSystem::IGS_PRODUCT_ATT_TYPE_USE_LIMIT_PERIOD, iValue, szText);
             if (iValue > 0)
             {
-                mu_swprintf(Item.m_szPeriod, L"%d %ls", iValue, szText);
+                mu_swprintf_trunc(Item.m_szPeriod, L"%d %ls", iValue, szText);
             }
             else
             {
-                mu_swprintf(Item.m_szPeriod, L"-");
+                mu_swprintf_trunc(Item.m_szPeriod, L"-");
             }
 
             g_InGameShopSystem->GetProductInfoFromProductSeq(

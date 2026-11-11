@@ -237,7 +237,7 @@ public class AdversarialAntiCheatVerificationTests
     {
         var calculator = new ItemPriceCalculator();
 
-        // 1. PackedLife at Level 4: 5 * 45M * 10 = 2,250,000,000L (> int.MaxValue)
+        // 1. PackedLife under decimal balance redesign: (level + 1) * 2950 * 10
         var itemDefLife = new Mock<ItemDefinition>();
         itemDefLife.SetupAllProperties();
         itemDefLife.Object.Group = 12;
@@ -245,29 +245,57 @@ public class AdversarialAntiCheatVerificationTests
 
         var itemLifeL4 = CreateItemMock(itemDefLife.Object, level: 4);
         var priceLifeL4 = calculator.CalculateFinalBuyingPrice(itemLifeL4);
-        Assert.That(priceLifeL4, Is.EqualTo(2_250_000_000L), "Packed life level 4 must not overflow to negative integer.");
+        Assert.That(priceLifeL4, Is.EqualTo(147_500L), "Packed life level 4 must match decimal redesign without overflow.");
 
-        // Level 5: 6 * 45M * 10 = 2,700,000,000L (> int.MaxValue)
         var itemLifeL5 = CreateItemMock(itemDefLife.Object, level: 5);
-        Assert.That(calculator.CalculateFinalBuyingPrice(itemLifeL5), Is.EqualTo(2_700_000_000L));
+        Assert.That(calculator.CalculateFinalBuyingPrice(itemLifeL5), Is.EqualTo(177_000L));
 
-        // Level 10: 11 * 45M * 10 = 4,950,000,000L -> Capped at MaximumPrice (3,000,000,000L)
         var itemLifeL10 = CreateItemMock(itemDefLife.Object, level: 10);
-        Assert.That(calculator.CalculateFinalBuyingPrice(itemLifeL10), Is.EqualTo(3_000_000_000L), "Packed life level 10 capped at MaximumPrice.");
+        Assert.That(calculator.CalculateFinalBuyingPrice(itemLifeL10), Is.EqualTo(324_500L));
 
-        // 2. PackedGuardian: 60,000,000 base
+        // 2. PackedGuardian under decimal balance redesign: (level + 1) * 3900 * 10
         var itemDefGuardian = new Mock<ItemDefinition>();
         itemDefGuardian.SetupAllProperties();
         itemDefGuardian.Object.Group = 12;
         itemDefGuardian.Object.Number = 138; // PackedGuardian
 
-        // Level 4: 5 * 60M * 10 = 3,000,000,000L
         var itemGuardL4 = CreateItemMock(itemDefGuardian.Object, level: 4);
-        Assert.That(calculator.CalculateFinalBuyingPrice(itemGuardL4), Is.EqualTo(3_000_000_000L));
+        Assert.That(calculator.CalculateFinalBuyingPrice(itemGuardL4), Is.EqualTo(195_000L));
 
-        // Level 10: 11 * 60M * 10 = 6,600,000,000L -> Capped at MaximumPrice (3,000,000,000L)
         var itemGuardL10 = CreateItemMock(itemDefGuardian.Object, level: 10);
-        Assert.That(calculator.CalculateFinalBuyingPrice(itemGuardL10), Is.EqualTo(3_000_000_000L));
+        Assert.That(calculator.CalculateFinalBuyingPrice(itemGuardL10), Is.EqualTo(429_000L));
+
+        // 3. High-tier Wing (+15, DropLevel 150, Excellent) exceeding 32-bit int.MaxValue (> 2.14B)
+        // must compute in 64-bit without overflowing to a negative integer, and multi-option wings cap at MaximumPrice (3B).
+        var slotTypeMock = new Mock<ItemSlotType>();
+        slotTypeMock.Setup(s => s.ItemSlots).Returns(new List<int> { 7 });
+
+        var wingDef = new Mock<ItemDefinition>();
+        wingDef.SetupAllProperties();
+        wingDef.Setup(d => d.BasePowerUpAttributes).Returns(new List<ItemBasePowerUpDefinition>());
+        wingDef.Object.Group = 12;
+        wingDef.Object.Number = 36; // Wing of Storm
+        wingDef.Object.Width = 4;
+        wingDef.Object.Height = 3;
+        wingDef.Object.MaximumItemLevel = 15;
+        wingDef.Object.DropLevel = 150;
+        wingDef.Object.Durability = 220;
+        wingDef.Object.ItemSlot = slotTypeMock.Object;
+
+        var wingL15 = CreateItemMock(wingDef.Object, level: 15);
+        wingL15.Durability = 220;
+        wingL15.ItemOptions.Add(new ItemOptionLink
+        {
+            ItemOption = new IncreasableItemOption { OptionType = ItemOptionTypes.Excellent },
+        });
+        var wingPrice = calculator.CalculateFinalBuyingPrice(wingL15);
+        Assert.That(wingPrice, Is.GreaterThan((long)int.MaxValue), "High-level wing price must exceed int.MaxValue without signed 32-bit overflow.");
+
+        wingL15.ItemOptions.Add(new ItemOptionLink
+        {
+            ItemOption = new IncreasableItemOption { OptionType = ItemOptionTypes.Excellent },
+        });
+        Assert.That(calculator.CalculateFinalBuyingPrice(wingL15), Is.EqualTo(3_000_000_000L), "Multi-option wing price must clamp cleanly at MaximumPrice.");
     }
 
     [Test]

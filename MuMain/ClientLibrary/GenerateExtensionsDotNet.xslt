@@ -220,15 +220,11 @@ public unsafe partial class ConnectionManager
   <xsl:template match="pd:Field" mode="assignment">
     <xsl:choose>
       <xsl:when test="pd:Type='Binary'">
-        <xsl:text>                packet.</xsl:text>
-        <xsl:value-of select="pd:Name"/>
-        <xsl:text>.Clear();
-</xsl:text>
-        <xsl:text>                new Span&lt;byte&gt;(@</xsl:text>
+        <xsl:text>                CopyBinaryField(@</xsl:text>
         <xsl:call-template name="LowerCaseName" />
-        <xsl:text>, (int)</xsl:text>
+        <xsl:text>, </xsl:text>
         <xsl:call-template name="LowerCaseName" />
-        <xsl:text>ByteLength).CopyTo(packet.</xsl:text>
+        <xsl:text>ByteLength, packet.</xsl:text>
         <xsl:value-of select="pd:Name"/>
         <xsl:text>);</xsl:text>
       </xsl:when>

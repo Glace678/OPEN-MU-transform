@@ -9,12 +9,14 @@ using System.Diagnostics;
 using MUnique.OpenMU.GameLogic.GuildWar;
 using MUnique.OpenMU.GameLogic.NPC;
 using MUnique.OpenMU.Pathfinding;
+using Nito.AsyncEx;
 
 /// <summary>
 /// A game map with a battle soccer field, which requires a defined <see cref="GameMapDefinition.BattleZone"/>.
 /// </summary>
 public class SoccerGameMap : GameMap
 {
+    private readonly AsyncLock _battleLock = new();
     private GuildWarScore? _score;
     private SoccerBall? _ball;
 
@@ -47,11 +49,13 @@ public class SoccerGameMap : GameMap
     /// <param name="score">The score which will be updated.</param>
     public async ValueTask StartBattleAsync(GuildWarScore score)
     {
+        using var l = await this._battleLock.LockAsync().ConfigureAwait(false);
         this._score = score;
         this._score.PropertyChanged += this.OnScoreChanged;
 
         this.Ball.Initialize();
         await this.RespawnAsync(this.Ball).ConfigureAwait(false);
+        this.Ball.Moved -= this.OnSoccerBallMovedAsync;
         this.Ball.Moved += this.OnSoccerBallMovedAsync;
     }
 
@@ -80,6 +84,12 @@ public class SoccerGameMap : GameMap
 
     private async ValueTask FinalizeBattleAsync()
     {
+        using var l = await this._battleLock.LockAsync().ConfigureAwait(false);
+        if (!this.IsBattleOngoing && this._score is null)
+        {
+            return;
+        }
+
         if (this._score is { } finishedScore)
         {
             finishedScore.PropertyChanged -= this.OnScoreChanged;
@@ -95,19 +105,43 @@ public class SoccerGameMap : GameMap
 
     private async ValueTask OnSoccerBallMovedAsync((Point From, Point To) e)
     {
-        if (!e.From.IsWithinBoundsOf(this.Definition.BattleZone!.LeftGoal!)
-            && e.To.IsWithinBoundsOf(this.Definition.BattleZone.LeftGoal!))
+        GuildWarScore? scoreToUpdate = null;
+        var scoredFirst = false;
+        using (await this._battleLock.LockAsync().ConfigureAwait(false))
         {
-            this._score!.IncreaseSecondGuildScore(20);
-            this.Ball.Initialize();
-            await this.RespawnAsync(this.Ball).ConfigureAwait(false);
+            if (!this.IsBattleOngoing || this._score is not { HasEnded: false } activeScore)
+            {
+                return;
+            }
+
+            if (!e.From.IsWithinBoundsOf(this.Definition.BattleZone!.LeftGoal!)
+                && e.To.IsWithinBoundsOf(this.Definition.BattleZone.LeftGoal!))
+            {
+                scoreToUpdate = activeScore;
+                scoredFirst = false;
+                this.Ball.Initialize();
+                await this.RespawnAsync(this.Ball).ConfigureAwait(false);
+            }
+            else if (!e.From.IsWithinBoundsOf(this.Definition.BattleZone.RightGoal!)
+                     && e.To.IsWithinBoundsOf(this.Definition.BattleZone.RightGoal!))
+            {
+                scoreToUpdate = activeScore;
+                scoredFirst = true;
+                this.Ball.Initialize();
+                await this.RespawnAsync(this.Ball).ConfigureAwait(false);
+            }
         }
-        else if (!e.From.IsWithinBoundsOf(this.Definition.BattleZone.RightGoal!)
-                 && e.To.IsWithinBoundsOf(this.Definition.BattleZone.RightGoal!))
+
+        if (scoreToUpdate is not null)
         {
-            this._score!.IncreaseFirstGuildScore(20);
-            this.Ball.Initialize();
-            await this.RespawnAsync(this.Ball).ConfigureAwait(false);
+            if (scoredFirst)
+            {
+                scoreToUpdate.IncreaseFirstGuildScore(20);
+            }
+            else
+            {
+                scoreToUpdate.IncreaseSecondGuildScore(20);
+            }
         }
     }
 

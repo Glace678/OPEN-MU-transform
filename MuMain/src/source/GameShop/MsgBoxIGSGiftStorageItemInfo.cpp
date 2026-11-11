@@ -92,19 +92,27 @@ void CMsgBoxIGSGiftStorageItemInfo::Initialize(int iStorageSeq, int iStorageItem
     m_szItemType      = szItemType;
 
     // Name
-    wcscpy(m_szName, pszName);
+    if (pszName)
+    {
+        wcsncpy(m_szName, pszName, std::size(m_szName) - 1);
+        m_szName[std::size(m_szName) - 1] = L'\0';
+    }
+    else
+    {
+        m_szName[0] = L'\0';
+    }
 
     // Num
-    mu_swprintf(m_szNum, I18N::Game::QuantityS, pszNum);  // "���� : %ls"
+    mu_swprintf_trunc(m_szNum, I18N::Game::QuantityS, pszNum ? pszNum : L"");  // "���� : %ls"
 
     // Period
-    mu_swprintf(m_szPeriod, I18N::Game::DurationS, pszPeriod);  // "�Ⱓ : %ls"
+    mu_swprintf_trunc(m_szPeriod, I18N::Game::DurationS, pszPeriod ? pszPeriod : L"");  // "�Ⱓ : %ls"
 
     // ID Info
     // "\'%ls\' ���� ���� �����Դϴ�."
-    mu_swprintf(m_szIDInfo, I18N::Game::ItSAGiftFromS, pszID);
+    mu_swprintf_trunc(m_szIDInfo, I18N::Game::ItSAGiftFromS, pszID ? pszID : L"");
 
-    m_MessageInputBox.SetText(pszMessage);
+    m_MessageInputBox.SetText(pszMessage ? pszMessage : L"");
 }
 
 //--------------------------------------------
@@ -199,12 +207,17 @@ CALLBACK_RESULT CMsgBoxIGSGiftStorageItemInfo::OKButtonDown(class CNewUIMessageB
                                                             const leaf::xstreambuf&     xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSGiftStorageItemInfo*>(pOwner);
+    if (!pOwnMsgBox)
+        return CALLBACK_CONTINUE;
 
     // ����ϱ� Ȯ�� â
     CMsgBoxIGSUseItemConfirm* pMsgBox = NULL;
     CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSUseItemConfirmLayout), &pMsgBox);
-    pMsgBox->Initialize(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode,
-                        pOwnMsgBox->m_szItemType, pOwnMsgBox->m_szName);
+    if (pMsgBox)
+    {
+        pMsgBox->Initialize(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode,
+                            pOwnMsgBox->m_szItemType, pOwnMsgBox->m_szName);
+    }
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);

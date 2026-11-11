@@ -68,7 +68,7 @@ public static class CommandExtensions
             success = await TrySetPropertyValueAsync(instance, property, argument, player).ConfigureAwait(false) && success;
         }
 
-        return instance;
+        return success ? instance : null;
     }
 
     /// <summary>
@@ -203,22 +203,46 @@ public static class CommandExtensions
 
     private static async ValueTask<bool> TrySetPropertyValueAsync(object instance, PropertyInfo propertyInfo, string stringValue, Player? player)
     {
+        var targetType = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
         try
         {
             // Special handling of booleans; we want to allow 0 and 1 as valid values.
-            if (propertyInfo.PropertyType == typeof(bool) && int.TryParse(stringValue, out var intBool))
+            if (targetType == typeof(bool))
             {
-                stringValue = intBool == 1 ? bool.TrueString : bool.FalseString;
+                if (stringValue == "1")
+                {
+                    stringValue = bool.TrueString;
+                }
+                else if (stringValue == "0")
+                {
+                    stringValue = bool.FalseString;
+                }
             }
 
-            propertyInfo.SetValue(instance, Convert.ChangeType(stringValue, propertyInfo.PropertyType, CultureInfo.InvariantCulture));
+            object convertedValue;
+            if (targetType.IsEnum)
+            {
+                if (!Enum.TryParse(targetType, stringValue, ignoreCase: true, out var enumValue)
+                    || !Enum.IsDefined(targetType, enumValue))
+                {
+                    throw new FormatException($"Value '{stringValue}' is not valid for enum '{targetType.Name}'.");
+                }
+
+                convertedValue = enumValue;
+            }
+            else
+            {
+                convertedValue = Convert.ChangeType(stringValue, targetType, CultureInfo.InvariantCulture);
+            }
+
+            propertyInfo.SetValue(instance, convertedValue);
             return true;
         }
-        catch (Exception ex) when (ex is FormatException or InvalidCastException or OverflowException)
+        catch (Exception ex) when (ex is FormatException or InvalidCastException or OverflowException or ArgumentException)
         {
             if (player is not null)
             {
-                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.CommandExtensionsArgumentInvalidType), propertyInfo.Name, propertyInfo.PropertyType.Name).ConfigureAwait(false);
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.CommandExtensionsArgumentInvalidType), propertyInfo.Name, targetType.Name).ConfigureAwait(false);
             }
 
             return false;

@@ -27,8 +27,21 @@ public class SoulBarrierStrengSkillAction : TargetedSkillDefaultPlugin
     /// <inheritdoc/>
     public override async ValueTask PerformSkillAsync(Player player, IAttackable target, ushort skillId)
     {
-        var skillEntry = player.SkillList!.GetSkill(skillId);
+        if (!player.IsAlive || player.SkillList is not { } skillList || player.Attributes is not { } attributes)
+        {
+            return;
+        }
+
+        var skillEntry = skillList.GetSkill(skillId);
         if (skillEntry?.Skill is not { } skill)
+        {
+            return;
+        }
+
+        var strengSkillLevel = skillId == SoulBarrierProficieSkilId
+            ? skillList.GetSkill(SoulBarrierStrengSkilId)
+            : skillEntry;
+        if (strengSkillLevel is null)
         {
             return;
         }
@@ -72,21 +85,24 @@ public class SoulBarrierStrengSkillAction : TargetedSkillDefaultPlugin
             return;
         }
 
-        if (skillEntry!.PowerUps is null)
+        if (skillEntry.PowerUps is null)
         {
             player.CreateMagicEffectPowerUp(skillEntry);
+            if (skillEntry.PowerUps is { } basePowerUps)
+            {
+                var combinedPowerUps =
+                (
+                    (AttributeDefinition, IElement)[])[
+                    .. basePowerUps,
+                    (Stats.SoulBarrierManaTollPerHit, new AttributeRelationshipElement(
+                        [attributes.GetOrCreateAttribute(Stats.MaximumMana)],
+                        new ConstantElement(strengSkillLevel.Level * 0.001f), // extra 0.1% per streng skill level
+                        InputOperator.Multiply))
+                ];
 
-            var strengSkillLevel = skillId == SoulBarrierProficieSkilId ? player.SkillList!.GetSkill(SoulBarrierStrengSkilId) : skillEntry;
-            skillEntry.PowerUps =
-            [
-                .. skillEntry.PowerUps!,
-                (Stats.SoulBarrierManaTollPerHit, new AttributeRelationshipElement(
-                    [player.Attributes!.GetOrCreateAttribute(Stats.MaximumMana)],
-                    new ConstantElement(strengSkillLevel!.Level * 0.001f), // extra 0.1% per streng skill level
-                    InputOperator.Multiply))
-            ];
-
-            skillEntry.PowerUpsPvp = skillEntry.PowerUps;
+                skillEntry.PowerUps = combinedPowerUps;
+                skillEntry.PowerUpsPvp = combinedPowerUps;
+            }
         }
 
         await AttackableExtensions.ApplyMagicEffectAsync(target, player, skillEntry).ConfigureAwait(false);

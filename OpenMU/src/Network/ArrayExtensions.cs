@@ -184,14 +184,19 @@ public static class ArrayExtensions
     /// <returns>The size of a packet.</returns>
     public static int GetPacketSize(this Span<byte> packet)
     {
+        if (packet.IsEmpty)
+        {
+            return 0;
+        }
+
         switch (packet[0])
         {
             case 0xC1:
             case 0xC3:
-                return packet[1];
+                return packet.Length >= 2 ? packet[1] : 0;
             case 0xC2:
             case 0xC4:
-                return packet[1] << 8 | packet[2];
+                return packet.Length >= 3 ? (packet[1] << 8) | packet[2] : 0;
             default:
                 return 0;
         }
@@ -216,6 +221,11 @@ public static class ArrayExtensions
     public static void SetPacketSize(this Span<byte> packet)
     {
         var size = packet.Length;
+        if (size < 2)
+        {
+            throw new ArgumentException("Packet buffer is too small to contain a valid header.", nameof(packet));
+        }
+
         switch (packet[0])
         {
             case 0xC1:
@@ -224,6 +234,11 @@ public static class ArrayExtensions
                 break;
             case 0xC2:
             case 0xC4:
+                if (size < 3)
+                {
+                    throw new ArgumentException("Packet buffer is too small for a C2/C4 header.", nameof(packet));
+                }
+
                 packet[1] = (byte)((size & 0xFF00) >> 8);
                 packet[2] = (byte)(size & 0x00FF);
                 break;

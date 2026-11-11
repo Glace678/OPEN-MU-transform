@@ -24,6 +24,7 @@ void CShopCategoryList::Clear()  // OK
 {
     this->m_Categroys.clear();
     this->m_CategoryIndex.clear();
+    this->m_Categoryiter = this->m_Categroys.end();
 }
 
 int CShopCategoryList::GetSize()  // OK

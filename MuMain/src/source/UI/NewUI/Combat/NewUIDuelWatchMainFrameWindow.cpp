@@ -11,7 +11,8 @@ using namespace SEASON3B;
 
 CNewUIDuelWatchMainFrameWindow::CNewUIDuelWatchMainFrameWindow()
 {
-    m_pNewUIMng = NULL;
+    m_pNewUIMng         = NULL;
+    m_pNewUI3DRenderMng = NULL;
 
     m_bHasHPReceived   = FALSE;
     m_fPrevHPRate1     = 0;
@@ -58,8 +59,6 @@ bool CNewUIDuelWatchMainFrameWindow::Create(CNewUIManager* pNewUIMng, CNewUI3DRe
 
 void CNewUIDuelWatchMainFrameWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUI3DRenderMng)
     {
         m_pNewUI3DRenderMng->Remove3DRenderObj(this);
@@ -68,6 +67,7 @@ void CNewUIDuelWatchMainFrameWindow::Release()
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }

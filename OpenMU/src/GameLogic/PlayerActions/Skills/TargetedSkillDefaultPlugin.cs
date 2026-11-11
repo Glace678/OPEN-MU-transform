@@ -43,7 +43,7 @@ public class TargetedSkillDefaultPlugin : TargetedSkillPluginBase
     {
         using var loggerScope = player.Logger.BeginScope(this.GetType());
 
-        if (target is null)
+        if (target is null || !player.IsAlive)
         {
             return;
         }
@@ -190,7 +190,7 @@ public class TargetedSkillDefaultPlugin : TargetedSkillPluginBase
         {
             if (player.GameContext.PlugInManager.GetStrategy<short, IAreaSkillTargetFilter>(skill.Number) is { } filterPlugin)
             {
-                var rotationToTarget = (byte)(player.Position.GetAngleDegreeTo(targetedTarget.Position) / 360.0 * 255.0);
+                var rotationToTarget = (byte)((player.Position.GetAngleDegreeTo(targetedTarget.Position) / 360.0) * 256.0);
                 var attackablesInRange =
                     player.CurrentMap?
                         .GetAttackablesInRange(player.Position, skill.Range)

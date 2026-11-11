@@ -230,7 +230,7 @@ public record FrustumBasedTargetFilter
 
         for (int rotation = 0; rotation <= byte.MaxValue; rotation++)
         {
-            var degrees = (rotation * 360.0) / byte.MaxValue;
+            var degrees = (rotation * 360.0) / 256.0;
             degrees = (degrees + degreeOffset) % 360;
             var angleMatrix = CreateAngleMatrix(degrees);
             var vectorsOfAngle = new Vector2[4];

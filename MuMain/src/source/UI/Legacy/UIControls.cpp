@@ -65,27 +65,37 @@ int CutText3(const wchar_t* pszText, wchar_t* pTextOut, const int TargetWidth, c
 
 void CutText4(const wchar_t* pszSource, wchar_t* pszResult1, wchar_t* pszResult2, int iCutCount)
 {
-    if (pszSource == nullptr || pszSource[0] == '\0')
+    if (pszResult1 != nullptr)
+        pszResult1[0] = L'\0';
+    if (pszResult2 != nullptr)
+        pszResult2[0] = L'\0';
+    if (pszSource == nullptr || pszSource[0] == L'\0')
         return;
+    if (iCutCount < 0)
+        iCutCount = 0;
+
     auto sourceString = std::wstring(pszSource);
-    int  iLength      = sourceString.length();
+    int  iLength      = static_cast<int>(sourceString.length());
     int  iMove        = 2;  // might be 4, too
     int  iTextSize    = 0;
     for (int i = 0; i < iLength;)
     {
-        if (i + iMove > iCutCount)
+        int step = (i + iMove <= iLength) ? iMove : (iLength - i);
+        if (i + step > iCutCount)
             break;
-        else
-            i += iMove;
-
+        i += step;
         iTextSize = i;
     }
-    wcsncpy(pszResult1, pszSource, iTextSize);
-    pszResult1[iTextSize] = '\0';
+    if (pszResult1 != nullptr)
+    {
+        wcsncpy(pszResult1, pszSource, iTextSize);
+        pszResult1[iTextSize] = L'\0';
+    }
     if (pszResult2 != nullptr)
     {
-        wcsncpy(pszResult2, pszSource + iTextSize, iLength - iTextSize);
-        pszResult2[iLength - iTextSize] = '\0';
+        int rem = iLength - iTextSize;
+        wcsncpy(pszResult2, pszSource + iTextSize, rem);
+        pszResult2[rem] = L'\0';
     }
 }
 
@@ -631,11 +641,9 @@ template <class T> void CUITextListBox<T>::RemoveText()
 
 template <class T> void CUITextListBox<T>::MoveRenderLine()
 {
-    if (m_bUseMultiline == TRUE)
-        m_TextListIter = m_RenderTextList.begin();
-    else
-        m_TextListIter = m_TextList.begin();
-    for (int i = 0; i < m_iCurrentRenderEndLine; ++i, ++m_TextListIter)
+    auto& activeList = (m_bUseMultiline == TRUE) ? m_RenderTextList : m_TextList;
+    m_TextListIter   = activeList.begin();
+    for (int i = 0; i < m_iCurrentRenderEndLine && m_TextListIter != activeList.end(); ++i, ++m_TextListIter)
         ;
 }
 
@@ -654,9 +662,10 @@ template <class T> void CUITextListBox<T>::Render()
 
     g_pRenderText->SetFont(g_hFont);
 
+    auto& activeList = (m_bUseMultiline == TRUE) ? m_RenderTextList : m_TextList;
     for (int i = 0; i < m_iNumRenderLine; ++i)
     {
-        if (m_TextListIter == m_TextList.end())
+        if (m_TextListIter == activeList.end())
             break;
         BOOL bResult = RenderDataLine(i);
         if (bResult < 0)
@@ -667,6 +676,8 @@ template <class T> void CUITextListBox<T>::Render()
         {
             --i;
         }
+        if (m_TextListIter == activeList.end())
+            break;
         ++m_TextListIter;
     }
     RenderCoveredInterface();
@@ -1106,11 +1117,10 @@ template <class T> BOOL CUITextListBox<T>::DoMouseAction()
     MoveRenderLine();
     if (g_dwTopWindow == 0)
     {
+        auto& activeList = (m_bUseMultiline == TRUE) ? m_RenderTextList : m_TextList;
         for (int i = 0; i < m_iNumRenderLine; ++i)
         {
-            m_TextListIter = m_TextList.begin();
-
-            if (m_TextListIter == m_TextList.end())
+            if (m_TextListIter == activeList.end())
                 break;
             BOOL bResult = DoLineMouseAction(i);
             if (bResult < 0)
@@ -1121,6 +1131,8 @@ template <class T> BOOL CUITextListBox<T>::DoMouseAction()
             {
                 --i;
             }
+            if (m_TextListIter == activeList.end())
+                break;
             ++m_TextListIter;
         }
     }
@@ -1178,7 +1190,7 @@ void CUIGuildListBox::AddText(const wchar_t* pszID, BYTE Number, BYTE Server)
 
     if (GetLineNum() == 0)
     {
-        if (wcscmp(pszID, Hero->ID) == 0)
+        if (Hero != nullptr && wcscmp(pszID, Hero->ID) == 0)
             m_bIsGuildMaster = TRUE;
         else
             m_bIsGuildMaster = FALSE;
@@ -1186,7 +1198,7 @@ void CUIGuildListBox::AddText(const wchar_t* pszID, BYTE Number, BYTE Server)
 
     static GUILDLIST_TEXT text;
     text.m_bIsSelected = FALSE;
-    wcsncpy(text.m_szID, pszID, MAX_USERNAME_SIZE + 1);
+    wcsncpy_s(text.m_szID, _countof(text.m_szID), pszID, _TRUNCATE);
     //memcpy(text.m_szID, pszID, wcslen(pszID) + 1);
     text.m_Number = Number;
     text.m_Server = Server;
@@ -1375,20 +1387,22 @@ CUISimpleChatListBox::CUISimpleChatListBox()
 
 void CUISimpleChatListBox::AddText(const wchar_t* pszID, const wchar_t* pszText, int iType, int iColor)
 {
-    if (pszID[0] == '\0' && pszText[0] == '\0')
+    const wchar_t* safeID   = pszID ? pszID : L"";
+    const wchar_t* safeText = pszText ? pszText : L"";
+    if (safeID[0] == L'\0' && safeText[0] == L'\0')
     {
         return;
     }
 
     static WHISPER_TEXT text;
     text.m_bIsSelected = FALSE;
-    wcsncpy(text.m_szID, pszID, MAX_USERNAME_SIZE + 1);
+    wcsncpy_s(text.m_szID, _countof(text.m_szID), safeID, _TRUNCATE);
     //memcpy(text.m_szID, pszID, wcslen(pszID) + 1);
     text.m_iType        = iType;
     text.m_iColor       = iColor;
     text.m_uiEmptyLines = 0;
 
-    wcsncpy(text.m_szText, pszText, MAX_TEXT_LENGTH + 1);
+    wcsncpy_s(text.m_szText, _countof(text.m_szText), safeText, _TRUNCATE);
     //memcpy(text.m_szText, pszText, wcslen(pszText) + 1);
     m_TextList.push_front(text);
     CalcLineNum();
@@ -4530,8 +4544,8 @@ void CUISlideHelp::Init(BOOL bBold, BOOL bBlink)
     m_dwCurrentSecond = 10;
     m_dwTimer         = timeGetTime();
 
-    memset(m_szSlideTextA, 0, SLIDE_TEXT_LENGTH);
-    memset(m_szSlideTextB, 0, SLIDE_TEXT_LENGTH);
+    memset(m_szSlideTextA, 0, sizeof(m_szSlideTextA));
+    memset(m_szSlideTextB, 0, sizeof(m_szSlideTextB));
 
     m_fMovePosition = (float)REFERENCE_WIDTH;
     m_fMoveAccel    = 1.0f;
@@ -4650,7 +4664,7 @@ void CUISlideHelp::SlideMove()
 
     if (m_fMovePosition < m_iCutSize * -1)
     {
-        memset(m_pszSlideText, 0, SLIDE_TEXT_LENGTH);
+        memset(m_pszSlideText, 0, sizeof(wchar_t) * SLIDE_TEXT_LENGTH);
         m_fMovePosition = (float)REFERENCE_WIDTH;
         m_iCutSize      = CheckCutSize(m_pszSlideText, 4);
         m_iCutSize /= g_fScreenRate_x;
@@ -4683,12 +4697,19 @@ void CUISlideHelp::ComputeSpeed()
 
 BOOL CUISlideHelp::AddSlideText(const wchar_t* pszNewText, DWORD dwTextColor)
 {
-    if (pszNewText == nullptr || pszNewText[0] == '\0')
+    if (pszNewText == nullptr || pszNewText[0] == L'\0')
         return TRUE;
+    if (m_pszSlideText == nullptr)
+        return FALSE;
+
+    const size_t curLen = wcslen(m_pszSlideText);
+    const size_t newLen = wcslen(pszNewText);
+    if (curLen > 0 && curLen + newLen >= SLIDE_TEXT_LENGTH)
+        return FALSE;
 
     m_dwSlideTextColor = dwTextColor;
     g_pRenderText->SetFont(m_hFont);
-    wcscat(m_pszSlideText, pszNewText);
+    wcsncat_s(m_pszSlideText, SLIDE_TEXT_LENGTH, pszNewText, _TRUNCATE);
     return TRUE;
 }
 
@@ -4736,15 +4757,14 @@ void CUISlideHelp::AddSlide(int iLoopCount, int iLoopDelay, const wchar_t* pszTe
         return;
     if (pszText == nullptr || pszText[0] == '\0')
         return;
-    if (iLoopCount > 30)
+    if (iLoopCount <= 0 || iLoopCount > 30)
         return;
-    int iLength = wcslen(pszText);
+    size_t iLength = wcslen(pszText);
 
     SLIDE_QUEUE_DATA slidedata;
     slidedata.m_iType   = iType;
-    slidedata.m_pszText = new wchar_t[iLength + 1];
-    memset(slidedata.m_pszText, 0, iLength + 1);
-    wcsncpy(slidedata.m_pszText, pszText, iLength + 1);
+    slidedata.m_pszText = new wchar_t[iLength + 1]();
+    wcsncpy_s(slidedata.m_pszText, iLength + 1, pszText, _TRUNCATE);
     slidedata.m_fSpeed      = fSpeed;
     slidedata.m_dwTextColor = dwTextColor;
     slidedata.m_bLastData   = FALSE;
@@ -4903,8 +4923,12 @@ void CSlideHelpMgr::OpenSlideTextFile(const wchar_t* szFileName)
         return;
     }
 
-    SLIDEHELP SlideHelp;
-    fread(&SlideHelp, sizeof(SLIDEHELP), 1, fp);
+    SLIDEHELP SlideHelp = {};
+    if (fread(&SlideHelp, sizeof(SLIDEHELP), 1, fp) != 1)
+    {
+        fclose(fp);
+        return;
+    }
     BuxConvert((BYTE*)&SlideHelp, sizeof(SLIDEHELP));
     fclose(fp);
 
@@ -4919,9 +4943,12 @@ void CSlideHelpMgr::OpenSlideTextFile(const wchar_t* szFileName)
             m_iTextNumber[i] = 0;  // #MG-09: clamp count to szSlideHelpText[32]
         for (int j = 0; j < m_iTextNumber[i]; ++j)
         {
-            auto charText = SlideHelp.SlideHelp[i].szSlideHelpText[j];
-            int  iLength  = MultiByteToWideChar(CP_UTF8, 0, charText, -1, 0, 0);
-            auto pszText  = new wchar_t[iLength + 1];
+            auto& charText                        = SlideHelp.SlideHelp[i].szSlideHelpText[j];
+            charText[_countof(charText) - 1]      = '\0';
+            int iLength                           = MultiByteToWideChar(CP_UTF8, 0, charText, -1, 0, 0);
+            if (iLength <= 0)
+                continue;
+            auto pszText = new wchar_t[iLength + 1]();
             MultiByteToWideChar(CP_UTF8, 0, charText, -1, pszText, iLength);
             m_SlideTextList[i].push_back(pszText);
         }
@@ -5039,7 +5066,8 @@ void CUIGuildNoticeListBox::AddText(const wchar_t* szContent)
         return;
 
     static GUILDLOG_TEXT text;
-    wcscpy(text.m_szContent, szContent);
+    text.m_bIsSelected = FALSE;
+    wcsncpy_s(text.m_szContent, _countof(text.m_szContent), szContent, _TRUNCATE);
     m_TextList.push_front(text);
 
     RemoveText();
@@ -5213,7 +5241,7 @@ void CUINewGuildMemberListBox::AddText(const wchar_t* pszID, BYTE Number, BYTE S
 
     if (GetLineNum() == 0)
     {
-        if (wcscmp(pszID, Hero->ID) == 0)
+        if (Hero != nullptr && wcscmp(pszID, Hero->ID) == 0)
             m_bIsGuildMaster = TRUE;
         else
             m_bIsGuildMaster = FALSE;
@@ -5221,7 +5249,7 @@ void CUINewGuildMemberListBox::AddText(const wchar_t* pszID, BYTE Number, BYTE S
 
     static GUILDLIST_TEXT text;
     text.m_bIsSelected = FALSE;
-    wcsncpy(text.m_szID, pszID, MAX_USERNAME_SIZE + 1);
+    wcsncpy_s(text.m_szID, _countof(text.m_szID), pszID, _TRUNCATE);
     //memcpy(text.m_szID, pszID, wcslen(pszID) + 1);
     text.m_Number      = Number;
     text.m_Server      = Server;
@@ -5944,6 +5972,11 @@ int CUIBCDeclareGuildListBox::GetRenderLinePos_y(int iLineNumber)
 
 BOOL CUIBCDeclareGuildListBox::RenderDataLine(int iLineNumber)
 {
+    if (!Hero || Hero->GuildMarkIndex < 0 || Hero->GuildMarkIndex >= MAX_MARKS)
+    {
+        return FALSE;
+    }
+
     wchar_t Text[MAX_TEXT_LENGTH + 1] = {0};
 
     mu_swprintf(Text, L"%ls", m_TextListIter->szName);
@@ -6248,8 +6281,8 @@ void CUIMoveCommandListBox::AddText(int iIndex, const wchar_t* szMapName, const 
     static MOVECOMMAND_TEXT text;
     text.m_bIsSelected = FALSE;
     text.m_bCanMove    = FALSE;
-    wcsncpy(text.szMainMapName, szMapName, 32);
-    wcsncpy(text.szSubMapName, szSubMapName, 32);
+    wcsncpy_s(text.szMainMapName, _countof(text.szMainMapName), szMapName, _TRUNCATE);
+    wcsncpy_s(text.szSubMapName, _countof(text.szSubMapName), szSubMapName ? szSubMapName : L"", _TRUNCATE);
     text.iReqLevel = iReqLevel;
     text.iReqZen   = iReqZen;
     text.iGateNum  = iGateNum;
@@ -6430,30 +6463,36 @@ BOOL CUICurQuestListBox::DoLineMouseAction(int iLineNumber)
 
 void CUICurQuestListBox::DeleteText(DWORD dwQuestIndex)
 {
-    BOOL bFind = FALSE;
-    for (m_TextListIter = m_TextList.begin(); m_TextListIter != m_TextList.end(); ++m_TextListIter)
+    auto it = m_TextList.begin();
+    for (; it != m_TextList.end(); ++it)
     {
-        if (m_TextListIter->m_dwIndex == dwQuestIndex)
+        if (it->m_dwIndex == dwQuestIndex)
         {
-            bFind = TRUE;
             break;
         }
     }
 
-    if (bFind == FALSE)
+    if (it == m_TextList.end())
         return;
 
     if (m_TextList.size() == 1)
     {
-        m_TextList.erase(m_TextListIter);
+        m_TextList.erase(it);
+        m_iCurrentRenderEndLine = 0;
         SLSetSelectLine(0);
+        m_TextListIter = m_TextList.end();
         return;
     }
 
     if (SLGetSelectLineNum() != 1)
         SLSelectNextLine();
 
-    m_TextList.erase(m_TextListIter);
+    m_TextList.erase(it);
+    if (m_iCurrentRenderEndLine > 0 && m_iCurrentRenderEndLine > GetLineNum() - m_iNumRenderLine)
+    {
+        m_iCurrentRenderEndLine = std::max(0, GetLineNum() - m_iNumRenderLine);
+    }
+    m_TextListIter = m_TextList.begin();
 }
 
 CUIQuestContentsListBox::CUIQuestContentsListBox()
@@ -6487,7 +6526,7 @@ void CUIQuestContentsListBox::AddText(HFONT hFont, DWORD dwColor, int nSort, con
     sQuestContents.m_hFont   = hFont;
     sQuestContents.m_dwColor = dwColor;
     sQuestContents.m_nSort   = nSort;
-    wcsncpy(sQuestContents.m_szText, pszText, 64);
+    wcsncpy_s(sQuestContents.m_szText, _countof(sQuestContents.m_szText), pszText ? pszText : L"", _TRUNCATE);
     sQuestContents.m_dwType = 0;
     sQuestContents.m_wIndex = 0;
     sQuestContents.m_pItem  = nullptr;
@@ -6499,12 +6538,15 @@ void CUIQuestContentsListBox::AddText(HFONT hFont, DWORD dwColor, int nSort, con
 
 void CUIQuestContentsListBox::AddText(SRequestRewardText* pRequestRewardText, int nSort)
 {
+    if (!pRequestRewardText)
+        return;
+
     static SQuestContents sQuestContents;
 
     sQuestContents.m_hFont   = pRequestRewardText->m_hFont;
     sQuestContents.m_dwColor = pRequestRewardText->m_dwColor;
     sQuestContents.m_nSort   = nSort;
-    wcsncpy(sQuestContents.m_szText, pRequestRewardText->m_szText, 64);
+    wcsncpy_s(sQuestContents.m_szText, _countof(sQuestContents.m_szText), pRequestRewardText->m_szText, _TRUNCATE);
     sQuestContents.m_eRequestReward = pRequestRewardText->m_eRequestReward;
     sQuestContents.m_dwType         = pRequestRewardText->m_dwType;
     sQuestContents.m_wIndex         = pRequestRewardText->m_wIndex;
@@ -6627,12 +6669,12 @@ void CUIInGameShopListBox::AddText(IGS_StorageItem& _StorageItem)
     sItem.m_iNum              = _StorageItem.m_iNum;
     sItem.m_wItemCode         = _StorageItem.m_wItemCode;
 
-    wcsncpy(sItem.m_szName, _StorageItem.m_szName, MAX_TEXT_LENGTH);
-    wcsncpy(sItem.m_szNum, _StorageItem.m_szNum, MAX_TEXT_LENGTH);
-    wcsncpy(sItem.m_szPeriod, _StorageItem.m_szPeriod, MAX_TEXT_LENGTH);
+    wcsncpy_s(sItem.m_szName, _countof(sItem.m_szName), _StorageItem.m_szName, _TRUNCATE);
+    wcsncpy_s(sItem.m_szNum, _countof(sItem.m_szNum), _StorageItem.m_szNum, _TRUNCATE);
+    wcsncpy_s(sItem.m_szPeriod, _countof(sItem.m_szPeriod), _StorageItem.m_szPeriod, _TRUNCATE);
     sItem.m_szType = _StorageItem.m_szType;
-    wcsncpy(sItem.m_szSendUserName, _StorageItem.m_szSendUserName, MAX_USERNAME_SIZE + 1);
-    wcsncpy(sItem.m_szMessage, _StorageItem.m_szMessage, MAX_GIFT_MESSAGE_SIZE);
+    wcsncpy_s(sItem.m_szSendUserName, _countof(sItem.m_szSendUserName), _StorageItem.m_szSendUserName, _TRUNCATE);
+    wcsncpy_s(sItem.m_szMessage, _countof(sItem.m_szMessage), _StorageItem.m_szMessage, _TRUNCATE);
 
     m_TextList.push_front(sItem);
 
@@ -6699,10 +6741,10 @@ BOOL CUIInGameShopListBox::RenderDataLine(int iLineNumber)
     int iPos_x = m_iPos_x;
     int iPos_y = GetRenderLinePos_y(iLineNumber);
 
-    wchar_t szItemName[MAX_TEXT_LENGTH];
+    wchar_t szItemName[MAX_TEXT_LENGTH + 32] = {};
     if (m_TextListIter->m_iNum > 1)
     {
-        mu_swprintf(szItemName, L"%ls(%d)", m_TextListIter->m_szName, m_TextListIter->m_iNum);
+        swprintf_s(szItemName, _countof(szItemName), L"%ls(%d)", m_TextListIter->m_szName, m_TextListIter->m_iNum);
         g_pRenderText->RenderText(iPos_x, iPos_y, szItemName, 98, 0, RT3_SORT_LEFT);
     }
     else
@@ -7198,7 +7240,7 @@ void CUIExtraItemListBox::AddText(const wchar_t* pszPattern)
         return;
 
     static FILTERLIST_TEXT text;
-    wcsncpy(text.m_szPattern, pszPattern, MAX_ITEM_NAME + 1);
+    wcsncpy_s(text.m_szPattern, _countof(text.m_szPattern), pszPattern, _TRUNCATE);
     text.m_bIsSelected = FALSE;
     m_TextList.push_front(text);
 
@@ -7293,15 +7335,30 @@ void CUIExtraItemListBox::DeleteText(const wchar_t* pszPattern)
 {
     if (pszPattern == nullptr || wcslen(pszPattern) == 0)
         return;
-    for (m_TextListIter = m_TextList.begin(); m_TextListIter != m_TextList.end(); ++m_TextListIter)
+    auto it = m_TextList.begin();
+    for (; it != m_TextList.end(); ++it)
     {
-        if (wcsncmp(m_TextListIter->m_szPattern, pszPattern, MAX_ITEM_NAME) == 0)
+        if (wcsncmp(it->m_szPattern, pszPattern, MAX_ITEM_NAME) == 0)
             break;
     }
-    if (m_TextListIter == m_TextList.end())
+    if (it == m_TextList.end())
         return;
+
+    if (m_TextList.size() == 1)
+    {
+        m_TextList.erase(it);
+        m_iCurrentRenderEndLine = 0;
+        SLSetSelectLine(0);
+        m_TextListIter = m_TextList.end();
+        return;
+    }
 
     if (SLGetSelectLineNum() != 1)
         SLSelectNextLine();
-    m_TextList.erase(m_TextListIter);
+    m_TextList.erase(it);
+    if (m_iCurrentRenderEndLine > 0 && m_iCurrentRenderEndLine > GetLineNum() - m_iNumRenderLine)
+    {
+        m_iCurrentRenderEndLine = std::max(0, GetLineNum() - m_iNumRenderLine);
+    }
+    m_TextListIter = m_TextList.begin();
 }

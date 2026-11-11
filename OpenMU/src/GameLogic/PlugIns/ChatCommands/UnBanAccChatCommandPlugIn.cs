@@ -28,7 +28,10 @@ public class UnBanAccChatCommandPlugIn : ChatCommandPlugInBase<UnBanAccChatComma
     /// <inheritdoc />
     protected override async ValueTask DoHandleCommandAsync(Player gameMaster, UnBanAccChatCommandArgs arguments)
     {
-        await this.ChangeAccountStateByLoginNameAsync(gameMaster, arguments.AccountName ?? string.Empty, AccountState.Normal).ConfigureAwait(false);
+        if (!await this.ChangeAccountStateByLoginNameAsync(gameMaster, arguments.AccountName ?? string.Empty, AccountState.Normal).ConfigureAwait(false))
+        {
+            return;
+        }
 
         await gameMaster.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.UnbanAccountResult), this.Key, arguments.AccountName).ConfigureAwait(false);
     }

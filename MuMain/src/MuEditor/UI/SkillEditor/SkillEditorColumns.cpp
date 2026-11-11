@@ -11,7 +11,9 @@
 #include "Core/Globals/_define.h"
 #include "imgui.h"
 #include <algorithm>
+#include <cwchar>
 #include <sstream>
+#include <vector>
 
 extern SKILL_ATTRIBUTE* SkillAttribute;
 
@@ -22,7 +24,17 @@ static std::string GetSkillNameUtf8(int skillIndex)
     char nameBuf[256]{};
     if (SkillAttribute && skillIndex >= 0 && skillIndex < MAX_SKILLS)
     {
-        WideCharToMultiByte(CP_UTF8, 0, SkillAttribute[skillIndex].Name, -1, nameBuf, sizeof(nameBuf), NULL, NULL);
+        const size_t srcLen = wcsnlen(SkillAttribute[skillIndex].Name, MAX_SKILL_NAME);
+        if (srcLen > 0)
+        {
+            const int written =
+                WideCharToMultiByte(CP_UTF8, 0, SkillAttribute[skillIndex].Name, static_cast<int>(srcLen), nameBuf,
+                                    static_cast<int>(sizeof(nameBuf)) - 1, nullptr, nullptr);
+            if (written <= 0)
+                nameBuf[0] = '\0';
+            else
+                nameBuf[written] = '\0';
+        }
     }
     if (nameBuf[0] == '\0')
         return "<unnamed>";
@@ -160,20 +172,37 @@ void CSkillEditorColumns::RenderBoolColumn(const char* columnName, int& colIdx, 
 void CSkillEditorColumns::RenderWCharArrayColumn(const char* columnName, int& colIdx, int skillIndex, int uniqueId,
                                                  wchar_t* value, int arraySize, bool& rowInteracted, bool isVisible)
 {
-    if (!isVisible)
+    if (!isVisible || !value || arraySize <= 0)
         return;
 
     ImGui::TableSetColumnIndex(colIdx++);
     ImGui::PushID(skillIndex * 100000 + uniqueId);
     ImGui::SetNextItemWidth(-FLT_MIN);
 
-    char editableBuffer[256];
-    WideCharToMultiByte(CP_UTF8, 0, value, -1, editableBuffer, sizeof(editableBuffer), NULL, NULL);
-
-    if (ImGui::InputText("##input", editableBuffer, sizeof(editableBuffer)))
+    const size_t      utf8Cap = std::max<size_t>(256, static_cast<size_t>(arraySize) * 4 + 1);
+    std::vector<char> editableBuffer(utf8Cap, '\0');
+    const size_t      srcLen = wcsnlen(value, static_cast<size_t>(arraySize));
+    if (srcLen > 0)
     {
-        MultiByteToWideChar(CP_UTF8, 0, editableBuffer, -1, value, arraySize);
-        LogSkillFieldChange(skillIndex, columnName, std::string(editableBuffer));
+        const int written = WideCharToMultiByte(CP_UTF8, 0, value, static_cast<int>(srcLen), editableBuffer.data(),
+                                                static_cast<int>(editableBuffer.size()) - 1, nullptr, nullptr);
+        if (written <= 0)
+            editableBuffer[0] = '\0';
+        else
+            editableBuffer[static_cast<size_t>(written)] = '\0';
+    }
+
+    if (ImGui::InputText("##input", editableBuffer.data(), editableBuffer.size()))
+    {
+        std::vector<wchar_t> wideTemp(static_cast<size_t>(arraySize), L'\0');
+        const int            wideWritten =
+            MultiByteToWideChar(CP_UTF8, 0, editableBuffer.data(), -1, wideTemp.data(), arraySize);
+        if (wideWritten > 0)
+        {
+            wideTemp[static_cast<size_t>(arraySize) - 1] = L'\0';
+            std::copy(wideTemp.begin(), wideTemp.end(), value);
+            LogSkillFieldChange(skillIndex, columnName, std::string(editableBuffer.data()));
+        }
     }
 
     if (ImGui::IsItemActivated())
@@ -199,12 +228,10 @@ void CSkillEditorColumns::RenderIndexColumn(int& colIdx, int skillIndex, bool& r
     bool wasActive      = ImGui::IsItemActive();
     bool wasDeactivated = ImGui::IsItemDeactivatedAfterEdit();
 
-    if (wasDeactivated && newIndex >= 0 && newIndex < MAX_SKILLS && newIndex != skillIndex)
+    if (wasDeactivated && SkillAttribute != nullptr && skillIndex >= 0 && skillIndex < MAX_SKILLS && newIndex >= 0 &&
+        newIndex < MAX_SKILLS && newIndex != skillIndex)
     {
-        char targetName[128];
-        WideCharToMultiByte(CP_UTF8, 0, SkillAttribute[newIndex].Name, -1, targetName, sizeof(targetName), NULL, NULL);
-
-        if (targetName[0] == '\0')
+        if (SkillAttribute[newIndex].Name[0] == L'\0')
         {
             SKILL_ATTRIBUTE temp       = SkillAttribute[skillIndex];
             SkillAttribute[skillIndex] = SkillAttribute[newIndex];

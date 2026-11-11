@@ -55,10 +55,9 @@ bool SEASON3B::CNewUICommandWindow::Create(CNewUIManager* pNewUIMng, int x, int 
 
 void SEASON3B::CNewUICommandWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -67,7 +66,7 @@ void SEASON3B::CNewUICommandWindow::Release()
 void SEASON3B::CNewUICommandWindow::InitButtons()
 {
     wchar_t szText[256] = {};
-    mu_swprintf(szText, I18N::Game::CloseS, L"D");
+    swprintf_s(szText, I18N::Game::CloseS, L"D");
 
     m_BtnExit.ChangeButtonImgState(true, IMAGE_COMMAND_BASE_WINDOW_BTN_EXIT);
     m_BtnExit.ChangeButtonInfo(m_Pos.x + 13, m_Pos.y + 392, 36, 29);
@@ -224,8 +223,8 @@ bool SEASON3B::CNewUICommandWindow::Render()
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->RenderText(m_Pos.x + 60, m_Pos.y + 12, I18N::Game::CommandWindow, 72, 0, RT3_SORT_CENTER);
 
-    if ((m_iCurMouseCursor == CURSOR_IDSELECT) && (m_bSelectedChar == true))
-
+    if ((m_iCurMouseCursor == CURSOR_IDSELECT) && (m_bSelectedChar == true) &&
+        SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
     {
         CHARACTER* c = &CharactersClient[SelectedCharacter];
         if (c != NULL && c->Object.Kind == KIND_PLAYER && c != Hero && (c->Object.Type == MODEL_PLAYER || c->Change))
@@ -310,7 +309,7 @@ void SEASON3B::CNewUICommandWindow::RunCommand()
     m_bSelectedChar = false;
     m_bCanCommand   = false;
 
-    if (SelectedCharacter >= 0)
+    if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
     {
         pSelectedCha    = &CharactersClient[SelectedCharacter];
         m_bSelectedChar = true;
@@ -630,11 +629,16 @@ bool SEASON3B::CNewUICommandWindow::CommandFollow(int iSelectedChaIndex)
 
 int SEASON3B::CNewUICommandWindow::CommandDual(CHARACTER* pSelectedCha)
 {
+    if (pSelectedCha == nullptr)
+    {
+        return 0;
+    }
+
     int iLevel = CharacterAttribute->Level;
     if (iLevel < 30)
     {
-        wchar_t szError[48] = L"";
-        mu_swprintf(szError, I18N::Game::OpenOnlyForLevelDOrHigher, 30);
+        wchar_t szError[128] = L"";
+        swprintf_s(szError, I18N::Game::OpenOnlyForLevelDOrHigher, 30);
         g_pSystemLogBox->AddText(szError, SEASON3B::TYPE_ERROR_MESSAGE);
         return 3;
     }

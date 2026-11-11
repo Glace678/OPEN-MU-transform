@@ -193,4 +193,70 @@ public class GuildServerController : ControllerBase
     {
         return this._guildServer.IncreaseGuildScoreAsync(scoreIncrease.GuildId, scoreIncrease.Amount);
     }
+
+    /// <summary>
+    /// Creates an alliance between a master guild and a target guild.
+    /// </summary>
+    /// <param name="data">The alliance arguments.</param>
+    /// <returns>The alliance creation result.</returns>
+    [HttpPost(nameof(IGuildServer.CreateAllianceAsync))]
+    public ValueTask<AllianceCreationResult> CreateAllianceAsync([FromBody] AllianceArguments data)
+    {
+        return this._guildServer.CreateAllianceAsync(data.MasterGuildId, data.MemberGuildId);
+    }
+
+    /// <summary>
+    /// Removes a guild from its alliance.
+    /// </summary>
+    /// <param name="targetGuildId">The target guild identifier.</param>
+    /// <returns>True, if removed; False, otherwise.</returns>
+    [HttpPost(nameof(IGuildServer.RemoveAllianceAsync))]
+    public ValueTask<bool> RemoveAllianceAsync([FromBody] uint targetGuildId)
+    {
+        return this._guildServer.RemoveAllianceAsync(targetGuildId);
+    }
+
+    /// <summary>
+    /// Gets the guilds in the alliance of the specified guild.
+    /// </summary>
+    /// <param name="guildId">The guild identifier.</param>
+    /// <returns>The alliance guilds.</returns>
+    [HttpPost(nameof(IGuildServer.GetAllianceGuildsAsync))]
+    public ValueTask<IImmutableList<AllianceGuildEntry>> GetAllianceGuildsAsync([FromBody] uint guildId)
+    {
+        return this._guildServer.GetAllianceGuildsAsync(guildId);
+    }
+
+    /// <summary>
+    /// Checks whether the specified guild is the master of an alliance.
+    /// </summary>
+    /// <param name="guildId">The guild identifier.</param>
+    /// <returns>True, if alliance master; False, otherwise.</returns>
+    [HttpPost(nameof(IGuildServer.IsAllianceMasterAsync))]
+    public ValueTask<bool> IsAllianceMasterAsync([FromBody] uint guildId)
+    {
+        return this._guildServer.IsAllianceMasterAsync(guildId);
+    }
+
+    /// <summary>
+    /// Sets or clears hostility between two guilds.
+    /// </summary>
+    /// <param name="data">The hostility arguments.</param>
+    /// <returns>True, if changed; False, otherwise.</returns>
+    [HttpPost(nameof(IGuildServer.SetHostilityAsync))]
+    public ValueTask<bool> SetHostilityAsync([FromBody] GuildHostilityArguments data)
+    {
+        return this._guildServer.SetHostilityAsync(data.GuildIdA, data.GuildIdB, data.Created);
+    }
+
+    /// <summary>
+    /// Gets the relationship between two guilds.
+    /// </summary>
+    /// <param name="data">The guild pair arguments.</param>
+    /// <returns>The guild relationship.</returns>
+    [HttpPost(nameof(IGuildServer.GetGuildRelationshipAsync))]
+    public ValueTask<GuildRelationship> GetGuildRelationshipAsync([FromBody] GuildPairArguments data)
+    {
+        return this._guildServer.GetGuildRelationshipAsync(data.GuildId1, data.GuildId2);
+    }
 }

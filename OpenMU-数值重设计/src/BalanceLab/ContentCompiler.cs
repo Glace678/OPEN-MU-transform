@@ -84,7 +84,9 @@ public static class ContentCompiler
         var skillPolicy = skills.Select(s =>
         {
             var id = s.GetProperty("id").GetInt32();
-            var template = d.Skills.SingleOrDefault(t => t.EngineIds.Contains(id));
+            var matchingTemplates = d.Skills.Where(t => t.EngineIds.Contains(id)).ToArray();
+            if (matchingTemplates.Length > 1) errors.Add($"Duplicate skill template for engine ID: {id}");
+            var template = matchingTemplates.FirstOrDefault();
             var type = s.GetProperty("type").GetString()!;
             var utility = utilities.FirstOrDefault(u => u.GetProperty("engineIds").EnumerateArray().Any(i => i.GetInt32() == id));
             if (!typeBudgets.TryGetProperty(type, out var typeBudget)) errors.Add($"Unbudgeted skill type: {type}/{id}");
@@ -103,16 +105,24 @@ public static class ContentCompiler
                 utilityBudget = utility.ValueKind == JsonValueKind.Undefined ? (JsonElement?)null : utility,
             };
         }).ToArray();
-        var itemPolicy = items.Select(i => new
+        var itemPolicy = items.Select(i =>
         {
-            group = i.GetProperty("group").GetInt32(), id = i.GetProperty("id").GetInt32(),
-            name = i.GetProperty("name").GetString(),
-            potion = d.Economy.Potions.SingleOrDefault(p => p.Group == i.GetProperty("group").GetInt32() && p.Number == i.GetProperty("id").GetInt32()),
-            familyBudget = i.GetProperty("group").GetInt32() <= 11 ? policies.RootElement.GetProperty("equipment") : (JsonElement?)null,
-            status = d.Economy.Potions.Any(p => p.Group == i.GetProperty("group").GetInt32() && p.Number == i.GetProperty("id").GetInt32())
-                ? "explicit-price-and-recovery-override"
-                : "family-budget-defined-item-requirements-affixes-and-client-mirror-need-review",
-        });
+            var itemGroup = i.GetProperty("group").GetInt32();
+            var itemId = i.GetProperty("id").GetInt32();
+            var matchingPotions = d.Economy.Potions.Where(p => p.Group == itemGroup && p.Number == itemId).ToArray();
+            if (matchingPotions.Length > 1) errors.Add($"Duplicate potion override: {itemGroup}:{itemId}");
+            var potion = matchingPotions.FirstOrDefault();
+            return new
+            {
+                group = itemGroup, id = itemId,
+                name = i.GetProperty("name").GetString(),
+                potion,
+                familyBudget = itemGroup <= 11 ? policies.RootElement.GetProperty("equipment") : (JsonElement?)null,
+                status = potion is not null
+                    ? "explicit-price-and-recovery-override"
+                    : "family-budget-defined-item-requirements-affixes-and-client-mirror-need-review",
+            };
+        }).ToArray();
         var report = new CoverageReport(monsters.Count, maps.Length, skills.Length, items.Length,
             result.Count, excluded.Count, explicitSkills.Count, skills.Length - explicitSkills.Count, errors.ToArray());
         Write("content-monsters.json", result);

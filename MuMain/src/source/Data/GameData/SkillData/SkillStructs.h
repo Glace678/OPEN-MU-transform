@@ -63,7 +63,7 @@ typedef struct
 // Requires: #include "Data/Translation/MultiLanguage.h"
 template <typename TSource> inline void CopySkillAttributeFromSource(SKILL_ATTRIBUTE& dest, const TSource& source)
 {
-    CMultiLanguage::ConvertFromUtf8(dest.Name, source.Name, MAX_SKILL_NAME);
+    CMultiLanguage::ConvertFromUtf8(dest.Name, source.Name, static_cast<int>(sizeof(source.Name)));
     COPY_SKILL_ATTRIBUTE_FIELDS(dest, source);
 }
 

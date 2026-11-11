@@ -20,6 +20,7 @@ using namespace SEASON3B;
 SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::CCatapultGroupButton()
 {
     m_pButton = NULL;
+    m_iBtnNum = 0;
 
     Initialize();
 }
@@ -33,8 +34,9 @@ void SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::Initialize()
 {
     SafeDeleteArray(m_pButton);
 
-    m_iType  = 0;
-    m_iIndex = -1;
+    m_iBtnNum = 0;
+    m_iType   = 0;
+    m_iIndex  = -1;
 }
 
 void SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::Create(int iType, POINT ptWindow)
@@ -99,6 +101,9 @@ void SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::Create(int iType, POI
 
 void SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::AllUnLock()
 {
+    if (!m_pButton)
+        return;
+
     for (int i = 0; i < m_iBtnNum; ++i)
     {
         m_pButton[i].ChangeImgColor(BUTTON_STATE_UP, RGBA(255, 255, 255, 255));
@@ -109,7 +114,7 @@ void SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::AllUnLock()
 
 void SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::BtnSelected(int iIndex)
 {
-    if (iIndex < 0 || iIndex > m_iBtnNum)
+    if (!m_pButton || iIndex < 0 || iIndex >= m_iBtnNum)
     {
         return;
     }
@@ -128,6 +133,9 @@ int SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::GetIndex()
 
 int SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::UpdateMouseEvent()
 {
+    if (!m_pButton)
+        return -1;
+
     int iResult = -1;
 
     for (int i = 0; i < m_iBtnNum; ++i)
@@ -146,6 +154,9 @@ int SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::UpdateMouseEvent()
 
 void SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::Render()
 {
+    if (!m_pButton)
+        return;
+
     int iCount = 0;
 
     if (m_iType == CATAPULT_ATTACK)
@@ -156,6 +167,9 @@ void SEASON3B::CNewUICatapultWindow::CCatapultGroupButton::Render()
     {
         iCount = 3;
     }
+
+    if (iCount > m_iBtnNum)
+        iCount = m_iBtnNum;
 
     for (int i = 0; i < iCount; ++i)
     {
@@ -197,10 +211,9 @@ bool SEASON3B::CNewUICatapultWindow::Create(CNewUIManager* pNewUIMng, int x, int
 
 void SEASON3B::CNewUICatapultWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -371,9 +384,12 @@ void SEASON3B::CNewUICatapultWindow::Init(int iKey, int iType)
 
 void SEASON3B::CNewUICatapultWindow::DoFire(int iKey, int iResult, int iType, int iPositionX, int iPositionY)
 {
-    int        iIndex = FindCharacterIndex(iKey);
-    CHARACTER* c      = &CharactersClient[iIndex];
-    OBJECT*    o      = &c->Object;
+    int iIndex = FindCharacterIndex(iKey);
+    if (iIndex < 0 || iIndex >= MAX_CHARACTERS_CLIENT)
+        return;
+
+    CHARACTER* c = &CharactersClient[iIndex];
+    OBJECT*    o = &c->Object;
 
     SetAction(o, 1);
 

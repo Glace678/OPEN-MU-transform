@@ -37,13 +37,26 @@ function(mu_ensure_submodule rel_path)
 
   message(STATUS "Initializing submodule ${rel_path}...")
 
+  execute_process(
+    COMMAND ${GIT_EXECUTABLE} rev-parse --show-toplevel
+    WORKING_DIRECTORY ${REPO_ROOT}
+    RESULT_VARIABLE toplevel_rc
+    OUTPUT_VARIABLE git_toplevel
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
+  )
+
+  if (NOT toplevel_rc EQUAL 0 OR git_toplevel STREQUAL "")
+    set(git_toplevel "${REPO_ROOT}")
+  endif()
+
   cmake_path(RELATIVE_PATH submodule_dir
-    BASE_DIRECTORY "${REPO_ROOT}"
-    OUTPUT_VARIABLE submodule_repo_rel)
+    BASE_DIRECTORY "${git_toplevel}"
+    OUTPUT_VARIABLE submodule_git_rel)
 
   execute_process(
-    COMMAND ${GIT_EXECUTABLE} ls-files -s "${submodule_repo_rel}"
-    WORKING_DIRECTORY ${REPO_ROOT}
+    COMMAND ${GIT_EXECUTABLE} ls-files -s "${submodule_git_rel}"
+    WORKING_DIRECTORY ${git_toplevel}
     OUTPUT_VARIABLE in_index
     OUTPUT_STRIP_TRAILING_WHITESPACE
   )
@@ -64,7 +77,7 @@ function(mu_ensure_submodule rel_path)
       "the vendored tree rather than running an automatic recovery.")
   endif()
 
-  if (is_gitlink AND IS_DIRECTORY "${submodule_dir}")
+  if (IS_DIRECTORY "${submodule_dir}" AND (is_gitlink OR in_index STREQUAL ""))
     file(GLOB remaining_files LIST_DIRECTORIES true
       "${submodule_dir}/*")
     list(LENGTH remaining_files file_count)
@@ -73,11 +86,23 @@ function(mu_ensure_submodule rel_path)
     endif()
   endif()
 
-  if (in_index STREQUAL "")
+  if (NOT EXISTS "${git_toplevel}/.gitmodules" AND NOT is_gitlink)
+    message(STATUS "Top-level .gitmodules absent; cloning ${MES_URL} into ${rel_path}...")
+    execute_process(
+      COMMAND ${GIT_EXECUTABLE} clone --depth 1 "${MES_URL}" "${submodule_dir}"
+      WORKING_DIRECTORY ${git_toplevel}
+      RESULT_VARIABLE rc
+      ERROR_VARIABLE err
+      OUTPUT_VARIABLE out
+    )
+    if (NOT rc EQUAL 0)
+      message(FATAL_ERROR "Clone fallback for ${rel_path} failed:\n${err}${out}")
+    endif()
+  elseif (in_index STREQUAL "")
     message(STATUS "Submodule ${rel_path} not in index, adding ${MES_URL}...")
     execute_process(
-      COMMAND ${GIT_EXECUTABLE} submodule add --force "${MES_URL}" "${submodule_repo_rel}"
-      WORKING_DIRECTORY ${REPO_ROOT}
+      COMMAND ${GIT_EXECUTABLE} submodule add --force "${MES_URL}" "${submodule_git_rel}"
+      WORKING_DIRECTORY ${git_toplevel}
       RESULT_VARIABLE rc
       ERROR_VARIABLE err
       OUTPUT_VARIABLE out
@@ -87,13 +112,13 @@ function(mu_ensure_submodule rel_path)
     endif()
   else()
     execute_process(
-      COMMAND ${GIT_EXECUTABLE} submodule sync -- "${submodule_repo_rel}"
-      WORKING_DIRECTORY ${REPO_ROOT}
+      COMMAND ${GIT_EXECUTABLE} submodule sync -- "${submodule_git_rel}"
+      WORKING_DIRECTORY ${git_toplevel}
       OUTPUT_QUIET ERROR_QUIET
     )
     execute_process(
-      COMMAND ${GIT_EXECUTABLE} submodule update --init -- "${submodule_repo_rel}"
-      WORKING_DIRECTORY ${REPO_ROOT}
+      COMMAND ${GIT_EXECUTABLE} submodule update --init -- "${submodule_git_rel}"
+      WORKING_DIRECTORY ${git_toplevel}
       RESULT_VARIABLE rc
       ERROR_VARIABLE err
       OUTPUT_VARIABLE out

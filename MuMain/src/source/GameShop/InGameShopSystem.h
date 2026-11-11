@@ -120,11 +120,13 @@ public:
     void SetIsRequestShopOpenning(bool bIsRequestShopOpenning);
     bool GetIsRequestShopOpenning();
 
-    bool GetPackageInfo(int iPackageSeq, int iPackageAttrType, OUT int& iValue, OUT wchar_t* pszText);
+    bool GetPackageInfo(int iPackageSeq, int iPackageAttrType, OUT int& iValue, OUT wchar_t* pszText,
+                        size_t cchText = MAX_TEXT_LENGTH);
 
     bool GetProductInfoFromPriceSeq(int iProductSeq, int iPriceSeq, int iAttrType, OUT int& iValue,
-                                    OUT wchar_t* pszUnitName);
-    bool GetProductInfoFromProductSeq(int iProductSeq, int iAttrType, OUT int& iValue, OUT wchar_t* pszUnitName);
+                                    OUT wchar_t* pszUnitName, size_t cchUnitName = MAX_TEXT_LENGTH);
+    bool GetProductInfoFromProductSeq(int iProductSeq, int iAttrType, OUT int& iValue, OUT wchar_t* pszUnitName,
+                                      size_t cchUnitName = MAX_TEXT_LENGTH);
 
     void SetNormalPackage();
     void InitEventPackage(int iTotalEventPackage);
@@ -165,7 +167,8 @@ protected:
     void ShopOpenUnLock();
 #endif  // KJH_MOD_SHOP_SCRIPT_DOWNLOAD
 
-    bool GetProductInfo(CShopProduct* pProduct, int iAttrType, OUT int& iValue, OUT wchar_t* pszUnitName);
+    bool GetProductInfo(CShopProduct* pProduct, int iAttrType, OUT int& iValue, OUT wchar_t* pszUnitName,
+                        size_t cchUnitName = MAX_TEXT_LENGTH);
 
 protected:
     CShopListManager   m_ShopManager;

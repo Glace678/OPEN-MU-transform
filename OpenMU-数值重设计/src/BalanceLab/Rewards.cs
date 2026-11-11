@@ -50,7 +50,7 @@ public sealed class Rewards(Rules rules)
         var tokens = Math.Min(requestedTokens, Math.Max(0, D.Loot.EventTokenCapPerDay - earned));
         var claims = new HashSet<string>(state.ClaimedRewardIds, StringComparer.Ordinal) { rewardId };
         var lastBoss = new Dictionary<string, DateTimeOffset>(state.LastBossClaim, StringComparer.Ordinal);
-        if (boss) lastBoss[sourceKey] = now;
+        if (boss && tokens > 0) lastBoss[sourceKey] = now;
         var next = new TokenState(today, earned + tokens, checked(state.Balance + tokens), lastBoss, claims);
         return new TokenClaim(tokens > 0, tokens, tokens > 0 ? "granted" : "daily-cap", next);
     }

@@ -1219,7 +1219,7 @@ void UpdateTexture(TextureHandle handle, int x, int y, int w, int h, const void*
 
 void DestroyTexture(TextureHandle handle)
 {
-    if (!handle.IsValid())
+    if (!g_Initialized || !handle.IsValid())
         return;
     GLuint id = handle.id;
     glDeleteTextures(1, &id);
@@ -1252,8 +1252,18 @@ bool ReadColorFramebuffer(int x, int y, int w, int h, void* outRGB)
     // glReadPixels is bottom-up; the RHI contract is top-down (RHI.h's ReadColorFramebuffer
     // comment) so every caller gets the same row order on both backends. Read directly into
     // outRGB, then flip rows in place -- one extra row-sized temp buffer, no second full-image copy.
-    unsigned char* rows = static_cast<unsigned char*>(outRGB);
+    unsigned char* rows          = static_cast<unsigned char*>(outRGB);
+    GLint          prevAlignment = 4;
+    glGetIntegerv(GL_PACK_ALIGNMENT, &prevAlignment);
+    if (prevAlignment != 1)
+    {
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    }
     glReadPixels(x, y, w, h, GL_RGB, GL_UNSIGNED_BYTE, rows);
+    if (prevAlignment != 1)
+    {
+        glPixelStorei(GL_PACK_ALIGNMENT, prevAlignment);
+    }
 
     const size_t               rowBytes = (size_t)w * 3;
     std::vector<unsigned char> temp(rowBytes);

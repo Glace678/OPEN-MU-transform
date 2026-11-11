@@ -148,6 +148,7 @@ public class RemotePlayer : Player, IClientVersionProvider, IHasIpAddress
             }
         }
 
+        this.MainPacketHandler.Dispose();
         await base.DisposeAsyncCore().ConfigureAwait(false);
     }
 

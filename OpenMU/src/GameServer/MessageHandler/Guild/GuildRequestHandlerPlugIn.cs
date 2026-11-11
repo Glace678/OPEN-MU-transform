@@ -29,6 +29,11 @@ internal class GuildRequestHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < GuildJoinRequest.Length)
+        {
+            return;
+        }
+
         GuildJoinRequest request = packet;
         await this._requestAction.RequestGuildAsync(player, request.GuildMasterPlayerId).ConfigureAwait(false);
     }

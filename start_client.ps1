@@ -47,11 +47,18 @@ try
     [System.IO.File]::WriteAllLines($credentialPath, $sidecar, [Text.UTF8Encoding]::new($false))
 
     # Lock down ACL to current user identity, avoiding domain/username parsing ambiguity
-    $currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
-    icacls $credentialPath /inheritance:r /grant:r "${currentUser}:(R,W)" | Out-Null
+    $identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+    $currentUser = $identity.Name
+    $currentUserSid = $identity.User.Value
+    icacls $credentialPath /inheritance:r /grant:r "*${currentUserSid}:(R,W)" | Out-Null
     if ($LASTEXITCODE -ne 0)
     {
-        icacls $credentialPath /inheritance:r /grant:r "$($env:USERNAME):(R,W)" | Out-Null
+        icacls $credentialPath /inheritance:r /grant:r "${currentUser}:(R,W)" | Out-Null
+    }
+    if ($LASTEXITCODE -ne 0)
+    {
+        Remove-Item -LiteralPath $credentialPath -Force -ErrorAction SilentlyContinue
+        throw "Failed to restrict ACL on temporary sidecar credential file: $credentialPath"
     }
 
     $psi = New-Object System.Diagnostics.ProcessStartInfo
@@ -79,8 +86,9 @@ try
     else
     {
         # Detached watcher survives calling PowerShell script exit
-        $watcherCmd = "try { `$proc = Get-Process -Id $($p.Id) -ErrorAction Stop; `$proc.WaitForExit(); } finally { Remove-Item -LiteralPath '$credentialPath' -Force -ErrorAction SilentlyContinue }"
-        Start-Process -FilePath 'powershell.exe' -ArgumentList '-NoProfile', '-NonInteractive', '-WindowStyle', 'Hidden', '-Command', $watcherCmd -WindowStyle Hidden -ErrorAction SilentlyContinue | Out-Null
+        $escapedCredentialPath = $credentialPath.Replace("'", "''")
+        $watcherCmd = "try { `$proc = Get-Process -Id $($p.Id) -ErrorAction Stop; `$proc.WaitForExit(); } finally { Remove-Item -LiteralPath '$escapedCredentialPath' -Force -ErrorAction SilentlyContinue }"
+        Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoProfile', '-NonInteractive', '-WindowStyle', 'Hidden', '-Command', $watcherCmd) -WindowStyle Hidden -ErrorAction SilentlyContinue | Out-Null
 
         # Also register the in-session event in case this host stays open
         Register-ObjectEvent -InputObject $p -EventName Exited -MessageData $credentialPath -Action {
@@ -92,7 +100,7 @@ try
 }
 finally
 {
-    if ($p -and $p.HasExited)
+    if (-not $p -or $p.HasExited)
     {
         Remove-Item -LiteralPath $credentialPath -Force -ErrorAction SilentlyContinue
     }

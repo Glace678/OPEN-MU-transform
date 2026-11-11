@@ -29,6 +29,13 @@ public class StartChaosCastleEventChatCommandPlugIn : IChatCommandPlugIn
     public async ValueTask HandleCommandAsync(Player player, string command)
     {
         var chaosCastle = player.GameContext.PlugInManager.GetStrategy<MiniGameType, IPeriodicMiniGameStartPlugIn>(MiniGameType.ChaosCastle);
-        chaosCastle?.ForceStart();
+        if (chaosCastle is IContextScopedPeriodicTaskPlugIn scoped)
+        {
+            scoped.ForceStart(player.GameContext);
+        }
+        else
+        {
+            chaosCastle?.ForceStart();
+        }
     }
 }

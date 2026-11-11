@@ -15,18 +15,30 @@ void TextureScript::setScript(const TextureScript& rhs)
 
 bool TextureScriptParsing::parsingTScriptA(char* filename)
 {
+    if (filename == nullptr)
+    {
+        m_bBeScript = false;
+        return false;
+    }
+
     int   ch    = '_';
     char  str[] = "RHSN";
     char* strDest;
     char* strTokenFile;
     char  strFileName[32];
 
-    memcpy(strFileName, filename, 32);
-    strTokenFile = strchr(strFileName, ch);
+    strncpy(strFileName, filename, sizeof(strFileName) - 1);
+    strFileName[sizeof(strFileName) - 1] = '\0';
+    strTokenFile                         = strchr(strFileName, ch);
     if (strTokenFile != NULL)
     {
-        strDest    = strtok(strTokenFile, ".");
-        int length = std::min<int>(5, strlen(strDest));
+        strDest = strtok(strTokenFile, ".");
+        if (strDest == NULL)
+        {
+            m_bBeScript = false;
+            return false;
+        }
+        int length = std::min<int>(5, static_cast<int>(strlen(strDest)));
 
         int result = strcspn(strDest, str);
         if (result)  //if ( m_strDest!=NULL )

@@ -10,6 +10,10 @@
 #include "Network/Server/SocketSystem.h"
 #include "GameLogic/Skills/SkillManager.h"
 
+#include <algorithm>
+#include <cstring>
+#include <iterator>
+
 using namespace SEASON3A;
 
 CMixRecipeMgr g_MixRecipeMgr;
@@ -44,21 +48,27 @@ void CMixItem::Reset()
         m_bySocketSeedID[i]   = SOCKET_EMPTY;
         m_bySocketSphereLv[i] = 0;
     }
-    m_bCanStack  = FALSE;
-    m_dwMixValue = 0;
-    m_iCount     = 0;
-    m_iTestCount = 0;
+    m_bCanStack      = FALSE;
+    m_dwMixValue     = 0;
+    m_iCount         = 0;
+    m_iTestCount     = 0;
+    m_bySeedSphereID = SOCKET_EMPTY;
 }
 
 void CMixItem::SetItem(ITEM* pItem, DWORD dwMixValue)
 {
     Reset();
+    if (pItem == NULL)
+    {
+        return;
+    }
 
     m_sType  = pItem->Type;
     m_iLevel = pItem->Level;
 
-    m_iDurability = pItem->Durability;
-    for (int i = 0; i < pItem->SpecialNum; i++)
+    m_iDurability          = pItem->Durability;
+    const int specialCount = std::clamp<int>(pItem->SpecialNum, 0, MAX_ITEM_SPECIAL);
+    for (int i = 0; i < specialCount; i++)
     {
         switch (pItem->Special[i])
         {
@@ -104,7 +114,7 @@ void CMixItem::SetItem(ITEM* pItem, DWORD dwMixValue)
         pItem->Type == ITEM_JEWEL_OF_HARMONY)
         m_bIsJewelItem = TRUE;
 
-    m_bySocketCount = pItem->SocketCount;
+    m_bySocketCount = std::min<BYTE>(pItem->SocketCount, MAX_SOCKETS);
     if (m_bySocketCount > 0)
     {
         m_dwSpecialItem |= RCP_SP_SOCKETITEM;
@@ -113,7 +123,7 @@ void CMixItem::SetItem(ITEM* pItem, DWORD dwMixValue)
             m_bySocketSeedID[i]   = pItem->SocketSeedID[i];
             m_bySocketSphereLv[i] = pItem->SocketSphereLv[i];
         }
-        m_dwSpecialItem ^= RCP_SP_ADD380ITEM;
+        m_dwSpecialItem &= ~static_cast<DWORD>(RCP_SP_ADD380ITEM);
     }
     m_bySeedSphereID = g_SocketItemMgr.GetSeedShpereSeedID(pItem);
 
@@ -179,6 +189,11 @@ void CMixItem::SetItem(ITEM* pItem, DWORD dwMixValue)
 
 int CMixItemInventory::AddItem(ITEM* pItem)
 {
+    if (pItem == NULL)
+    {
+        return 0;
+    }
+
     BOOL bFind = FALSE;
 
     for (int i = 0; i < m_iNumMixItems; ++i)
@@ -200,6 +215,10 @@ int CMixItemInventory::AddItem(ITEM* pItem)
     }
     if (bFind == FALSE)
     {
+        if (m_iNumMixItems >= static_cast<int>(std::size(m_MixItems)))
+        {
+            return -1;
+        }
         m_MixItems[m_iNumMixItems++].SetItem(pItem, EvaluateMixItemValue(pItem));
     }
 
@@ -283,7 +302,8 @@ BOOL CMixRecipes::IsMixSource(ITEM* pItem)
 
     for (std::vector<MIX_RECIPE*>::iterator iter = m_Recipes.begin(); iter != m_Recipes.end(); ++iter)
     {
-        for (int j = 0; j < (*iter)->m_iNumMixSoruces; ++j)
+        const int numSources = std::clamp<int>((*iter)->m_iNumMixSoruces, 0, MAX_MIX_SOURCES);
+        for (int j = 0; j < numSources; ++j)
         {
             if (m_wTotalCharmBonus > 0 && (*iter)->m_bCharmOption != 'A')
             {
@@ -324,12 +344,21 @@ void CMixRecipes::ClearCheckRecipeResult()
         m_byFirstItemSocketSeedID[i]   = SOCKET_EMPTY;
         m_byFirstItemSocketSphereLv[i] = 0;
     }
-    m_wTotalCharmBonus = 0;
+    m_wTotalCharmBonus      = 0;
+    m_wTotalChaosCharmCount = 0;
+    std::memset(m_iMixSourceTest, 0, sizeof(m_iMixSourceTest));
+    std::memset(m_iMostSimilarMixSourceTest, 0, sizeof(m_iMostSimilarMixSourceTest));
+    m_iMixRateIter = 0;
+    m_pMixRates    = NULL;
 }
 
 int CMixRecipes::CheckRecipe(int iNumMixItems, CMixItem* pMixItems)
 {
     m_iCurMixIndex = 0;
+    if (iNumMixItems < 0 || (iNumMixItems > 0 && pMixItems == NULL))
+    {
+        return (-1);
+    }
 
     std::vector<MIX_RECIPE*>::iterator iter;
     for (iter = m_Recipes.begin(); iter != m_Recipes.end(); ++iter)
@@ -340,12 +369,12 @@ int CMixRecipes::CheckRecipe(int iNumMixItems, CMixItem* pMixItems)
         }
         if (CheckRecipeSub(iter, iNumMixItems, pMixItems) == TRUE)
         {
-            m_iCurMixIndex = (*iter)->m_iMixIndex + 1;
+            m_iCurMixIndex = static_cast<int>(std::distance(m_Recipes.begin(), iter)) + 1;
             EvaluateMixItems(iNumMixItems, pMixItems);
             CalcCharmBonusRate(iNumMixItems, pMixItems);
             CalcMixRate(iNumMixItems, pMixItems);
             CalcMixReqZen(iNumMixItems, pMixItems);
-            return GetCurRecipe()->m_iMixID;
+            return (*iter)->m_iMixID;
         }
         else
         {
@@ -362,10 +391,10 @@ BOOL CMixRecipes::CheckRecipeSub(std::vector<MIX_RECIPE*>::iterator iter, int iN
     int  iMixRecipeTest[MAX_MIX_SOURCES];
     memset(iMixRecipeTest, 0, sizeof(int) * MAX_MIX_SOURCES);
 
-    for (int j = 0; j < (*iter)->m_iNumMixSoruces; ++j)
+    const int numSources = std::clamp<int>((*iter)->m_iNumMixSoruces, 0, MAX_MIX_SOURCES);
+    for (int j = 0; j < numSources; ++j)
     {
-        if (!IsOptionItem((*iter)->m_MixSources[j]))
-            bFind = FALSE;
+        bFind = IsOptionItem((*iter)->m_MixSources[j]) ? TRUE : FALSE;
         for (int i = 0; i < iNumMixItems; ++i)
         {
             if (CheckItem((*iter)->m_MixSources[j], pMixItems[i]) && pMixItems[i].m_iTestCount > 0 &&
@@ -388,7 +417,7 @@ BOOL CMixRecipes::CheckRecipeSub(std::vector<MIX_RECIPE*>::iterator iter, int iN
                 {
                     m_iFirstItemLevel        = pMixItems[i].m_iLevel;
                     m_iFirstItemType         = pMixItems[i].m_sType;
-                    m_byFirstItemSocketCount = pMixItems[i].m_bySocketCount;
+                    m_byFirstItemSocketCount = std::min<BYTE>(pMixItems[i].m_bySocketCount, MAX_SOCKETS);
                     if (m_byFirstItemSocketCount > 0)
                     {
                         for (int k = 0; k < MAX_SOCKETS; ++k)
@@ -423,12 +452,20 @@ BOOL CMixRecipes::CheckRecipeSub(std::vector<MIX_RECIPE*>::iterator iter, int iN
 
 int CMixRecipes::CheckRecipeSimilarity(int iNumMixItems, CMixItem* pMixItems)
 {
+    if (iNumMixItems < 0 || (iNumMixItems > 0 && pMixItems == NULL))
+    {
+        m_iMostSimilarMixIndex = 0;
+        return 0;
+    }
+
     if (iNumMixItems == 0 && m_Recipes.size() == 1)
     {
         m_iMostSimilarMixIndex = 1;
-        for (int i = 0; i < (*m_Recipes.begin())->m_iNumMixSoruces; ++i)
+        memset(m_iMostSimilarMixSourceTest, 0, sizeof(int) * MAX_MIX_SOURCES);
+        const int numSources = std::clamp<int>((*m_Recipes.begin())->m_iNumMixSoruces, 0, MAX_MIX_SOURCES);
+        for (int i = 0; i < numSources; ++i)
         {
-            m_iMostSimilarMixSourceTest[i] = (*m_Recipes.begin())->m_MixSources[0].m_iCountMax;
+            m_iMostSimilarMixSourceTest[i] = (*m_Recipes.begin())->m_MixSources[i].m_iCountMax;
         }
         return m_iMostSimilarMixIndex;
     }
@@ -441,8 +478,10 @@ int CMixRecipes::CheckRecipeSimilarity(int iNumMixItems, CMixItem* pMixItems)
     int iSimilarityPoint;
     for (auto iter = m_Recipes.begin(); iter != m_Recipes.end(); ++iter)
     {
+        const int numSources   = std::clamp<int>((*iter)->m_iNumMixSoruces, 0, MAX_MIX_SOURCES);
+        const int recipeIdx1   = static_cast<int>(std::distance(m_Recipes.begin(), iter)) + 1;
         memset(m_iMixSourceTest, 0, sizeof(int) * MAX_MIX_SOURCES);
-        for (int i = 0; i < (*iter)->m_iNumMixSoruces; ++i)
+        for (int i = 0; i < numSources; ++i)
             m_iMixSourceTest[i] = (*iter)->m_MixSources[i].m_iCountMax;
 
         for (int i = 0; i < iNumMixItems; ++i)
@@ -452,13 +491,12 @@ int CMixRecipes::CheckRecipeSimilarity(int iNumMixItems, CMixItem* pMixItems)
         if (iSimilarityPoint == 1 && m_Recipes.size() > 1)
             iSimilarityPoint = 0;
         if (iSimilarityPoint > iMostSimiliarityPoint ||
-            (iSimilarityPoint == iMostSimiliarityPoint && iSimilarityPoint > 0 &&
-             m_iCurMixIndex == (*iter)->m_iMixIndex + 1))
+            (iSimilarityPoint == iMostSimiliarityPoint && iSimilarityPoint > 0 && m_iCurMixIndex == recipeIdx1))
         {
             iMostSimiliarityPoint = iSimilarityPoint;
-            iMostSimiliarRecipe   = (*iter)->m_iMixIndex + 1;
+            iMostSimiliarRecipe   = recipeIdx1;
             memset(m_iMostSimilarMixSourceTest, 0, sizeof(int) * MAX_MIX_SOURCES);
-            for (int i = 0; i < (*iter)->m_iNumMixSoruces; ++i)
+            for (int i = 0; i < numSources; ++i)
             {
                 m_iMostSimilarMixSourceTest[i] = m_iMixSourceTest[i];
             }
@@ -474,7 +512,8 @@ int CMixRecipes::CheckRecipeSimilaritySub(std::vector<MIX_RECIPE*>::iterator ite
     int iFindTotalPoint = 0;
     int iFindPoint      = 0;
 
-    for (int j = 0; j < (*iter)->m_iNumMixSoruces; ++j)
+    const int numSources = std::clamp<int>((*iter)->m_iNumMixSoruces, 0, MAX_MIX_SOURCES);
+    for (int j = 0; j < numSources; ++j)
     {
         for (int i = 0; i < iNumMixItems; ++i)
         {
@@ -537,27 +576,31 @@ bool CMixRecipes::CheckItem(MIX_RECIPE_ITEM& rItem, CMixItem& rSource)
 
 MIX_RECIPE* CMixRecipes::GetCurRecipe()
 {
-    if (m_iCurMixIndex == 0)
+    if (m_iCurMixIndex <= 0 || static_cast<size_t>(m_iCurMixIndex - 1) >= m_Recipes.size())
         return NULL;
     return m_Recipes[m_iCurMixIndex - 1];
 }
 
 MIX_RECIPE* CMixRecipes::GetMostSimilarRecipe()
 {
-    if (m_iMostSimilarMixIndex == 0)
+    if (m_iMostSimilarMixIndex <= 0 || static_cast<size_t>(m_iMostSimilarMixIndex - 1) >= m_Recipes.size())
         return NULL;
     return m_Recipes[m_iMostSimilarMixIndex - 1];
 }
 
 int CMixRecipes::GetCurMixID()
 {
-    if (m_iCurMixIndex == 0)
+    MIX_RECIPE* pRecipe = GetCurRecipe();
+    if (pRecipe == NULL)
         return 0;
-    return m_Recipes[m_iCurMixIndex - 1]->m_iMixID;
+    return pRecipe->m_iMixID;
 }
 
 BOOL CMixRecipes::GetCurRecipeName(wchar_t* pszNameOut, int iNameLine)
 {
+    if (pszNameOut == NULL)
+        return FALSE;
+
     if (!IsReadyToMix())
     {
         if (iNameLine == 1)
@@ -590,15 +633,17 @@ BOOL CMixRecipes::GetCurRecipeName(wchar_t* pszNameOut, int iNameLine)
 
 BOOL CMixRecipes::GetRecipeName(MIX_RECIPE* pRecipe, wchar_t* pszNameOut, int iNameLine, BOOL bSimilarRecipe)
 {
-    if (pRecipe == NULL)
+    if (pRecipe == NULL || pszNameOut == NULL)
         return FALSE;
     if (iNameLine > 2 || iNameLine < 1)
         return FALSE;
     if (pRecipe->m_bMixOption == 'C')
     {
         std::vector<std::wstring> optionTextlist;
-
-        g_pItemAddOptioninfo->GetItemAddOtioninfoText(optionTextlist, m_iFirstItemType);
+        if (g_pItemAddOptioninfo != nullptr)
+        {
+            g_pItemAddOptioninfo->GetItemAddOtioninfoText(optionTextlist, m_iFirstItemType);
+        }
         if (optionTextlist.empty() || bSimilarRecipe)
         {
             if (iNameLine == 1)
@@ -608,13 +653,12 @@ BOOL CMixRecipes::GetRecipeName(MIX_RECIPE* pRecipe, wchar_t* pszNameOut, int iN
             }
             return FALSE;
         }
-        assert(optionTextlist.size() == 2 && L"옵션은 2개여야 함");
-        if (iNameLine == 1)
+        if (iNameLine == 1 && optionTextlist.size() >= 1)
         {
             wcscpy(pszNameOut, optionTextlist[0].c_str());
             return TRUE;
         }
-        else if (iNameLine == 2)
+        else if (iNameLine == 2 && optionTextlist.size() >= 2)
         {
             wcscpy(pszNameOut, optionTextlist[1].c_str());
             return TRUE;
@@ -673,20 +717,29 @@ BOOL CMixRecipes::GetRecipeAdvice(wchar_t* pszAdviceOut, int iAdivceLine)
 
 int CMixRecipes::GetSourceName(int iItemNum, wchar_t* pszNameOut, int iNumMixItems, CMixItem* pMixItems)
 {
-    if (iNumMixItems < 0)
+    if (iNumMixItems < 0 || pszNameOut == NULL)
         return MIX_SOURCE_ERROR;
-    if (pMixItems == NULL)
-        return MIX_SOURCE_ERROR;
-
-    if (GetMostSimilarRecipe() == NULL)
-        return MIX_SOURCE_ERROR;
-    if (iItemNum >= GetMostSimilarRecipe()->m_iNumMixSoruces)
+    if (iNumMixItems > 0 && pMixItems == NULL)
         return MIX_SOURCE_ERROR;
 
-    MIX_RECIPE_ITEM* pMixRecipeItem = &GetMostSimilarRecipe()->m_MixSources[iItemNum];
+    MIX_RECIPE* pSimilarRecipe = GetMostSimilarRecipe();
+    if (pSimilarRecipe == NULL)
+        return MIX_SOURCE_ERROR;
+    const int numSources = std::clamp<int>(pSimilarRecipe->m_iNumMixSoruces, 0, MAX_MIX_SOURCES);
+    if (iItemNum < 0 || iItemNum >= numSources)
+        return MIX_SOURCE_ERROR;
 
-    wchar_t szTempName[100];
+    MIX_RECIPE_ITEM* pMixRecipeItem = &pSimilarRecipe->m_MixSources[iItemNum];
+
+    wchar_t szTempName[100]{};
     GetItemName(pMixRecipeItem->m_sTypeMin, pMixRecipeItem->m_iLevelMin, szTempName);
+
+    auto appendTempFormatted = [&szTempName](const wchar_t* fmt, auto... args)
+    {
+        wchar_t szFormatted[100]{};
+        mu_swprintf_s(szFormatted, std::size(szFormatted), fmt, szTempName, args...);
+        std::memcpy(szTempName, szFormatted, sizeof(szTempName));
+    };
 
     if (pMixRecipeItem->m_sTypeMin == pMixRecipeItem->m_sTypeMax &&
         (pMixRecipeItem->m_iLevelMin == pMixRecipeItem->m_iLevelMax ||
@@ -695,49 +748,51 @@ int CMixRecipes::GetSourceName(int iItemNum, wchar_t* pszNameOut, int iNumMixIte
          (pMixRecipeItem->m_iOptionMin == 0 && pMixRecipeItem->m_iOptionMax == 255)))
     {
         if (pMixRecipeItem->m_iDurabilityMin == pMixRecipeItem->m_iDurabilityMax)
-            mu_swprintf(szTempName, L"%ls(%d)", szTempName, pMixRecipeItem->m_iDurabilityMin);
+            appendTempFormatted(L"%ls(%d)", pMixRecipeItem->m_iDurabilityMin);
     }
     else
     {
         if (pMixRecipeItem->m_dwSpecialItem & RCP_SP_ADD380ITEM)
-            mu_swprintf(szTempName, I18N::Game::_380LevelItem);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::_380LevelItem);
         else if (pMixRecipeItem->m_sTypeMin == 0 && pMixRecipeItem->m_sTypeMax == ITEM_BOOTS + MAX_ITEM_INDEX - 1)
-            mu_swprintf(szTempName, I18N::Game::EquipmentItem);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::EquipmentItem);
         else if (pMixRecipeItem->m_sTypeMin == 0 && pMixRecipeItem->m_sTypeMax == ITEM_HELPER + MAX_ITEM_INDEX - 1)
-            mu_swprintf(szTempName, I18N::Game::EquipmentItem);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::EquipmentItem);
         else if (pMixRecipeItem->m_sTypeMin == 0 && pMixRecipeItem->m_sTypeMax == ITEM_STAFF + MAX_ITEM_INDEX - 1)
-            mu_swprintf(szTempName, I18N::Game::WeaponItem);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::WeaponItem);
         else if (pMixRecipeItem->m_sTypeMin == ITEM_SHIELD &&
                  pMixRecipeItem->m_sTypeMax == ITEM_BOOTS + MAX_ITEM_INDEX - 1)
-            mu_swprintf(szTempName, I18N::Game::DefenseItem);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::DefenseItem);
         else if (pMixRecipeItem->m_sTypeMin == ITEM_WING && pMixRecipeItem->m_sTypeMax == ITEM_WINGS_OF_SATAN)
-            mu_swprintf(szTempName, I18N::Game::BasicWing);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::BasicWing);
         else if (pMixRecipeItem->m_sTypeMin == ITEM_WINGS_OF_SPIRITS &&
                  pMixRecipeItem->m_sTypeMax == ITEM_WINGS_OF_DARKNESS)
-            mu_swprintf(szTempName, I18N::Game::_2ndWing);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::_2ndWing);
         else if (pMixRecipeItem->m_sTypeMin == ITEM_WING_OF_CURSE && pMixRecipeItem->m_sTypeMax == ITEM_WING_OF_CURSE)
-            mu_swprintf(szTempName, I18N::Game::BasicWing);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::BasicWing);
         else if (pMixRecipeItem->m_sTypeMin == ITEM_WINGS_OF_DESPAIR &&
                  pMixRecipeItem->m_sTypeMax == ITEM_WINGS_OF_DESPAIR)
-            mu_swprintf(szTempName, I18N::Game::_2ndWing);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::_2ndWing);
         else if (pMixRecipeItem->m_sTypeMin == pMixRecipeItem->m_sTypeMax &&
                  (pMixRecipeItem->m_sTypeMin == ITEM_CHAOS_DRAGON_AXE ||
                   pMixRecipeItem->m_sTypeMin == ITEM_CHAOS_NATURE_BOW ||
                   pMixRecipeItem->m_sTypeMin == ITEM_CHAOS_LIGHTNING_STAFF))
-            mu_swprintf(szTempName, I18N::Game::ChaosWeapon);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::ChaosWeapon);
         else if (pMixRecipeItem->m_sTypeMin == ITEM_SEED_FIRE && pMixRecipeItem->m_sTypeMax == ITEM_SEED_EARTH)
-            mu_swprintf(szTempName, I18N::Game::Seed);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::Seed);
         else if (pMixRecipeItem->m_sTypeMin == ITEM_SPHERE_MONO && pMixRecipeItem->m_sTypeMax == ITEM_SPHERE_5)
-            mu_swprintf(szTempName, I18N::Game::Sphere);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::Sphere);
         else if (pMixRecipeItem->m_sTypeMin == ITEM_SEED_SPHERE_FIRE_1 &&
                  pMixRecipeItem->m_sTypeMax == ITEM_SEED_SPHERE_EARTH_5)
-            mu_swprintf(szTempName, I18N::Game::SeedSphere);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls", I18N::Game::SeedSphere);
         else if (pMixRecipeItem->m_sTypeMin == ITEM_SEED_SPHERE_FIRE_1 &&
                  pMixRecipeItem->m_sTypeMax == ITEM_SEED_SPHERE_LIGHTNING_5)
-            mu_swprintf(szTempName, L"%ls (%ls)", I18N::Game::SeedSphere, I18N::Game::FireIceLightning);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls (%ls)", I18N::Game::SeedSphere,
+                          I18N::Game::FireIceLightning);
         else if (pMixRecipeItem->m_sTypeMin == ITEM_SEED_SPHERE_WATER_1 &&
                  pMixRecipeItem->m_sTypeMax == ITEM_SEED_SPHERE_EARTH_5)
-            mu_swprintf(szTempName, L"%ls (%ls)", I18N::Game::SeedSphere, I18N::Game::WaterWindEarth);
+            mu_swprintf_s(szTempName, std::size(szTempName), L"%ls (%ls)", I18N::Game::SeedSphere,
+                          I18N::Game::WaterWindEarth);
         else
         {
             int iNameLen = wcslen(szTempName);
@@ -746,48 +801,45 @@ int CMixRecipes::GetSourceName(int iItemNum, wchar_t* pszNameOut, int iNumMixIte
                     szTempName[iNameLen - j - 1] = '\0';
         }
         if (pMixRecipeItem->m_iDurabilityMin == pMixRecipeItem->m_iDurabilityMax)
-            mu_swprintf(szTempName, L"%ls(%d)", szTempName, pMixRecipeItem->m_iDurabilityMin);
+            appendTempFormatted(L"%ls(%d)", pMixRecipeItem->m_iDurabilityMin);
 
         if (pMixRecipeItem->m_iLevelMin == 0 && pMixRecipeItem->m_iLevelMax == 255)
             ;
         else if (pMixRecipeItem->m_iLevelMin == pMixRecipeItem->m_iLevelMax)
-            mu_swprintf(szTempName, L"%ls +%d", szTempName, pMixRecipeItem->m_iLevelMin);
+            appendTempFormatted(L"%ls +%d", pMixRecipeItem->m_iLevelMin);
         else if (pMixRecipeItem->m_iLevelMin == 0)
-            mu_swprintf(szTempName, L"%ls +%d%ls", szTempName, pMixRecipeItem->m_iLevelMax, I18N::Game::Maximum);
+            appendTempFormatted(L"%ls +%d%ls", pMixRecipeItem->m_iLevelMax, I18N::Game::Maximum);
         else if (pMixRecipeItem->m_iLevelMax == 255)
-            mu_swprintf(szTempName, L"%ls +%d%ls", szTempName, pMixRecipeItem->m_iLevelMin, I18N::Game::Minimum);
+            appendTempFormatted(L"%ls +%d%ls", pMixRecipeItem->m_iLevelMin, I18N::Game::Minimum);
         else
-            mu_swprintf(szTempName, L"%ls +%d~%d", szTempName, pMixRecipeItem->m_iLevelMin,
-                        pMixRecipeItem->m_iLevelMax);
+            appendTempFormatted(L"%ls +%d~%d", pMixRecipeItem->m_iLevelMin, pMixRecipeItem->m_iLevelMax);
 
         if (pMixRecipeItem->m_iOptionMin == 0 && pMixRecipeItem->m_iOptionMax == 255)
             ;
         else if (pMixRecipeItem->m_iOptionMin == pMixRecipeItem->m_iOptionMax)
-            mu_swprintf(szTempName, L"%ls +%d%ls", szTempName, pMixRecipeItem->m_iOptionMin, I18N::Game::Option385);
+            appendTempFormatted(L"%ls +%d%ls", pMixRecipeItem->m_iOptionMin, I18N::Game::Option385);
         else if (pMixRecipeItem->m_iOptionMin == 0)
-            mu_swprintf(szTempName, L"%ls +%d%ls%ls", szTempName, pMixRecipeItem->m_iOptionMax, I18N::Game::Option385,
-                        I18N::Game::Maximum);
+            appendTempFormatted(L"%ls +%d%ls%ls", pMixRecipeItem->m_iOptionMax, I18N::Game::Option385,
+                                I18N::Game::Maximum);
         else if (pMixRecipeItem->m_iOptionMax == 255)
-            mu_swprintf(szTempName, L"%ls +%d%ls%ls", szTempName, pMixRecipeItem->m_iOptionMin, I18N::Game::Option385,
-                        I18N::Game::Minimum);
+            appendTempFormatted(L"%ls +%d%ls%ls", pMixRecipeItem->m_iOptionMin, I18N::Game::Option385,
+                                I18N::Game::Minimum);
         else
-            mu_swprintf(szTempName, L"%ls +%d~%d%ls", szTempName, pMixRecipeItem->m_iOptionMin,
-                        pMixRecipeItem->m_iOptionMax, I18N::Game::Option385);
+            appendTempFormatted(L"%ls +%d~%d%ls", pMixRecipeItem->m_iOptionMin, pMixRecipeItem->m_iOptionMax,
+                                I18N::Game::Option385);
     }
 
     if (pMixRecipeItem->m_iCountMin == 0 && pMixRecipeItem->m_iCountMax == 255)
-        mu_swprintf(szTempName, L"%ls (%ls)", szTempName, I18N::Game::RateIncrease);
+        appendTempFormatted(L"%ls (%ls)", I18N::Game::RateIncrease);
     else if (pMixRecipeItem->m_iCountMin == pMixRecipeItem->m_iCountMax)
-        mu_swprintf(szTempName, L"%ls %d%ls", szTempName, pMixRecipeItem->m_iCountMin, I18N::Game::Quantity);
+        appendTempFormatted(L"%ls %d%ls", pMixRecipeItem->m_iCountMin, I18N::Game::Quantity);
     else if (pMixRecipeItem->m_iCountMin == 0)
-        mu_swprintf(szTempName, L"%ls %d%ls %ls", szTempName, pMixRecipeItem->m_iCountMax, I18N::Game::Quantity,
-                    I18N::Game::Maximum);
+        appendTempFormatted(L"%ls %d%ls %ls", pMixRecipeItem->m_iCountMax, I18N::Game::Quantity, I18N::Game::Maximum);
     else if (pMixRecipeItem->m_iCountMax == 255)
-        mu_swprintf(szTempName, L"%ls %d%ls %ls", szTempName, pMixRecipeItem->m_iCountMin, I18N::Game::Quantity,
-                    I18N::Game::Minimum);
+        appendTempFormatted(L"%ls %d%ls %ls", pMixRecipeItem->m_iCountMin, I18N::Game::Quantity, I18N::Game::Minimum);
     else
-        mu_swprintf(szTempName, L"%ls %d~%d%ls", szTempName, pMixRecipeItem->m_iCountMin, pMixRecipeItem->m_iCountMax,
-                    I18N::Game::Quantity);
+        appendTempFormatted(L"%ls %d~%d%ls", pMixRecipeItem->m_iCountMin, pMixRecipeItem->m_iCountMax,
+                            I18N::Game::Quantity);
 
     BOOL bPreName = FALSE;
     if (pMixRecipeItem->m_dwSpecialItem & RCP_SP_EXCELLENT)
@@ -926,10 +978,13 @@ void CMixRecipes::CalcMixRate(int iNumMixItems, CMixItem* pMixItems)
 
 float CMixRecipes::MixrateAddSub()
 {
-    float fLvalue = 0;
+    const MIX_RECIPE* pRecipe       = GetCurRecipe();
+    const int         maxRateTokens = (pRecipe != NULL) ? std::clamp<int>(pRecipe->m_iNumRateData, 0, MAX_MIX_RATE_TOKEN) : 0;
+    float             fLvalue       = 0;
     while (1)
     {
-        if (m_iMixRateIter >= GetCurRecipe()->m_iNumRateData || m_pMixRates[m_iMixRateIter].op == MRCP_RP)
+        if (m_pMixRates == NULL || m_iMixRateIter < 0 || m_iMixRateIter >= maxRateTokens ||
+            m_pMixRates[m_iMixRateIter].op == MRCP_RP)
         {
             return fLvalue;
         }
@@ -952,10 +1007,13 @@ float CMixRecipes::MixrateAddSub()
 
 float CMixRecipes::MixrateMulDiv()
 {
-    float fLvalue = 0;
+    const MIX_RECIPE* pRecipe       = GetCurRecipe();
+    const int         maxRateTokens = (pRecipe != NULL) ? std::clamp<int>(pRecipe->m_iNumRateData, 0, MAX_MIX_RATE_TOKEN) : 0;
+    float             fLvalue       = 0;
     while (1)
     {
-        if (m_iMixRateIter >= GetCurRecipe()->m_iNumRateData || m_pMixRates[m_iMixRateIter].op == MRCP_RP)
+        if (m_pMixRates == NULL || m_iMixRateIter < 0 || m_iMixRateIter >= maxRateTokens ||
+            m_pMixRates[m_iMixRateIter].op == MRCP_RP)
         {
             return fLvalue;
         }
@@ -968,10 +1026,12 @@ float CMixRecipes::MixrateMulDiv()
                 ++m_iMixRateIter;
                 fLvalue *= MixrateFactor();
                 break;
-            case MRCP_DIV:
+            case MRCP_DIV: {
                 ++m_iMixRateIter;
-                fLvalue /= MixrateFactor();
-                break;
+                const float denom = MixrateFactor();
+                fLvalue           = (denom != 0.0f) ? (fLvalue / denom) : 0.0f;
+            }
+            break;
             default:
                 fLvalue = MixrateFactor();
                 break;
@@ -981,6 +1041,13 @@ float CMixRecipes::MixrateMulDiv()
 
 float CMixRecipes::MixrateFactor()
 {
+    const MIX_RECIPE* pRecipe       = GetCurRecipe();
+    const int         maxRateTokens = (pRecipe != NULL) ? std::clamp<int>(pRecipe->m_iNumRateData, 0, MAX_MIX_RATE_TOKEN) : 0;
+    if (m_pMixRates == NULL || m_iMixRateIter < 0 || m_iMixRateIter >= maxRateTokens)
+    {
+        return 0;
+    }
+
     float fValue = 0;
     switch (m_pMixRates[m_iMixRateIter].op)
     {
@@ -990,8 +1057,11 @@ float CMixRecipes::MixrateFactor()
             break;
         case MRCP_INT:
             ++m_iMixRateIter;
-            if (m_pMixRates[m_iMixRateIter].op != MRCP_LP)
+            if (m_iMixRateIter >= maxRateTokens || m_pMixRates[m_iMixRateIter].op != MRCP_LP)
+            {
                 assert(!"m_pMixRates error");
+                return 0;
+            }
             ++m_iMixRateIter;
             fValue = int(MixrateAddSub());
             break;
@@ -999,7 +1069,7 @@ float CMixRecipes::MixrateFactor()
             fValue = (float)m_pMixRates[m_iMixRateIter].value;
             break;
         case MRCP_MAXRATE:
-            fValue = GetCurRecipe()->m_iSuccessRate;
+            fValue = pRecipe->m_iSuccessRate;
             break;
         case MRCP_ITEM:
             fValue = m_dwTotalItemValue;
@@ -1029,7 +1099,10 @@ float CMixRecipes::MixrateFactor()
             fValue = m_dwTotalNonJewelItemValue;
             break;
     }
-    ++m_iMixRateIter;
+    if (m_iMixRateIter < maxRateTokens)
+    {
+        ++m_iMixRateIter;
+    }
     return fValue;
 }
 
@@ -1037,23 +1110,27 @@ void CMixRecipes::CalcMixReqZen(int iNumMixItems, CMixItem* pMixItems)
 {
     if (iNumMixItems < 0)
         return;
-    if (pMixItems == NULL)
+    if (iNumMixItems > 0 && pMixItems == NULL)
         return;
 
-    m_dwRequiredZen = 0;
-    if (GetCurRecipe() == NULL)
+    m_dwRequiredZen     = 0;
+    MIX_RECIPE* pRecipe = GetCurRecipe();
+    if (pRecipe == NULL)
         return;
-    switch (GetCurRecipe()->m_bRequiredZenType)
+    switch (pRecipe->m_bRequiredZenType)
     {
         case 'A':
         case 'C':
-            m_dwRequiredZen = GetCurRecipe()->m_dwRequiredZen;
+            m_dwRequiredZen = pRecipe->m_dwRequiredZen;
             break;
         case 'B':
-            m_dwRequiredZen = m_iSuccessRate * GetCurRecipe()->m_dwRequiredZen;
+            m_dwRequiredZen = m_iSuccessRate * pRecipe->m_dwRequiredZen;
             break;
         case 'D': {
-            int iItemType = 0;
+            if (iNumMixItems <= 0 || g_pUIJewelHarmonyinfo == NULL)
+                break;
+
+            int iItemType = SI_None;
             if (ITEM_SWORD <= pMixItems[0].m_sType && ITEM_STAFF > pMixItems[0].m_sType)
             {
                 iItemType = SI_Weapon;
@@ -1066,8 +1143,15 @@ void CMixRecipes::CalcMixReqZen(int iNumMixItems, CMixItem* pMixItems)
             {
                 iItemType = SI_Defense;
             }
-            m_dwRequiredZen = g_pUIJewelHarmonyinfo->GetHarmonyJewelOptionInfo(iItemType, pMixItems[0].m_wHarmonyOption)
-                                  .Zen[pMixItems[0].m_wHarmonyOptionLevel];
+            if (iItemType != SI_None && pMixItems[0].m_wHarmonyOption >= 1 &&
+                pMixItems[0].m_wHarmonyOption <= MAXHARMONYJEWELOPTIONINDEX &&
+                pMixItems[0].m_wHarmonyOptionLevel < 14)
+            {
+                const int harmonyZen =
+                    g_pUIJewelHarmonyinfo->GetHarmonyJewelOptionInfo(iItemType, pMixItems[0].m_wHarmonyOption)
+                        .Zen[pMixItems[0].m_wHarmonyOptionLevel];
+                m_dwRequiredZen = (harmonyZen > 0) ? static_cast<DWORD>(harmonyZen) : 0;
+            }
         }
         break;
         default:
@@ -1260,15 +1344,19 @@ void CMixRecipeMgr::OpenRecipeFile(const wchar_t* szFileName)
         exit(0);
     }
 
-    int iNumMixRecipes[MAX_MIX_TYPES];
+    int iNumMixRecipes[MAX_MIX_TYPES]{};
     int iSize = sizeof(int) * MAX_MIX_TYPES;
-    fread(iNumMixRecipes, iSize, 1, fp);
+    if (fread(iNumMixRecipes, iSize, 1, fp) != 1)
+    {
+        fclose(fp);
+        return;
+    }
     BuxConvert((BYTE*)iNumMixRecipes, iSize);
 
     iSize = sizeof(MIX_RECIPE);
     for (j = 0; j < MAX_MIX_TYPES; ++j)
     {
-        if (feof(fp) || iNumMixRecipes[j] > 1000)
+        if (feof(fp) || iNumMixRecipes[j] < 0 || iNumMixRecipes[j] > 1000)
         {
             wchar_t Text[256];
             mu_swprintf(Text, L"%ls - Version not matched.", szFileName);
@@ -1280,9 +1368,16 @@ void CMixRecipeMgr::OpenRecipeFile(const wchar_t* szFileName)
         }
         for (i = 0; i < iNumMixRecipes[j]; ++i)
         {
-            auto* pMixRecipe = new MIX_RECIPE;
-            fread(pMixRecipe, iSize, 1, fp);
+            auto* pMixRecipe = new MIX_RECIPE{};
+            if (fread(pMixRecipe, iSize, 1, fp) != 1)
+            {
+                delete pMixRecipe;
+                fclose(fp);
+                return;
+            }
             BuxConvert((BYTE*)pMixRecipe, iSize);
+            pMixRecipe->m_iNumMixSoruces = std::clamp<int>(pMixRecipe->m_iNumMixSoruces, 0, MAX_MIX_SOURCES);
+            pMixRecipe->m_iNumRateData   = std::clamp<int>(pMixRecipe->m_iNumRateData, 0, MAX_MIX_RATE_TOKEN);
             m_MixRecipe[j].AddRecipe(pMixRecipe);
         }
     }
@@ -1292,6 +1387,10 @@ void CMixRecipeMgr::OpenRecipeFile(const wchar_t* szFileName)
 int CMixRecipeMgr::GetMixInventoryType()
 {
     assert(m_iMixType >= MIXTYPE_GOBLIN_NORMAL && m_iMixType < MAX_MIX_TYPES && "Undefined combination");
+    if (m_iMixType < MIXTYPE_GOBLIN_NORMAL || m_iMixType >= MAX_MIX_TYPES)
+    {
+        return MIXTYPE_GOBLIN_NORMAL;
+    }
     return m_iMixType;
 }
 

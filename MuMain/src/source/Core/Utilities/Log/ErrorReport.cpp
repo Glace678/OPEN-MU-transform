@@ -48,6 +48,12 @@ void CErrorReport::Create(const wchar_t* lpszFileName)
         return;
     }
 
+    if (m_hFile != INVALID_HANDLE_VALUE)
+    {
+        CloseHandle(m_hFile);
+        m_hFile = INVALID_HANDLE_VALUE;
+    }
+
     wcsncpy(m_lpszFileName, lpszFileName, MAX_PATH - 1);
     m_lpszFileName[MAX_PATH - 1] = L'\0';
 
@@ -55,26 +61,44 @@ void CErrorReport::Create(const wchar_t* lpszFileName)
     m_iKey  = 0;
     m_hFile = CreateFile(m_lpszFileName, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS,
                          FILE_ATTRIBUTE_NORMAL, NULL);
+    if (m_hFile == INVALID_HANDLE_VALUE)
+    {
+        return;
+    }
 
     CutHead();
-    SetFilePointer(m_hFile, 0, NULL, FILE_END);
+    if (m_hFile != INVALID_HANDLE_VALUE)
+    {
+        SetFilePointer(m_hFile, 0, NULL, FILE_END);
+    }
 }
 
 void CErrorReport::Destroy(void)
 {
-    CloseHandle(m_hFile);
+    if (m_hFile != INVALID_HANDLE_VALUE)
+    {
+        CloseHandle(m_hFile);
+    }
     Clear();
 }
 
 void CErrorReport::CutHead(void)
 {
+    if (m_hFile == INVALID_HANDLE_VALUE)
+    {
+        return;
+    }
+
     // Log file is UTF-8. The "###### Log Begin ######" marker is pure ASCII, and UTF-8
     // preserves ASCII bytes verbatim (no multi-byte sequence starts with a byte < 0x80),
     // so byte-level strchr/strncmp on '#' reliably locates the marker even if other lines
     // contain multi-byte sequences.
-    DWORD dwNumber;
+    DWORD dwNumber = 0;
     char  lpszBuffer[128 * 1024];
-    ReadFile(m_hFile, lpszBuffer, sizeof(lpszBuffer) - 1, &dwNumber, NULL);
+    if (!ReadFile(m_hFile, lpszBuffer, sizeof(lpszBuffer) - 1, &dwNumber, NULL) || dwNumber >= sizeof(lpszBuffer))
+    {
+        return;
+    }
     //m_iKey = Xor_ConvertBuffer( lpszBuffer, dwNumber);
     lpszBuffer[dwNumber] = '\0';
     char* lpCut          = CheckHeadToCut(lpszBuffer, dwNumber);
@@ -85,12 +109,17 @@ void CErrorReport::CutHead(void)
     if (lpCut != lpszBuffer)
     {
         CloseHandle(m_hFile);
+        m_hFile = INVALID_HANDLE_VALUE;
         DeleteFile(m_lpszFileName);
-        m_hFile      = CreateFile(m_lpszFileName, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS,
-                                  FILE_ATTRIBUTE_NORMAL, NULL);
-        DWORD dwSize = dwNumber - static_cast<DWORD>(lpCut - lpszBuffer);
-        m_iKey       = 0;
-        WriteFile(m_hFile, lpCut, dwSize, &dwNumber, NULL);
+        m_hFile = CreateFile(m_lpszFileName, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ, NULL, OPEN_ALWAYS,
+                             FILE_ATTRIBUTE_NORMAL, NULL);
+        if (m_hFile != INVALID_HANDLE_VALUE)
+        {
+            DWORD dwSize    = dwNumber - static_cast<DWORD>(lpCut - lpszBuffer);
+            DWORD dwWritten = 0;
+            m_iKey          = 0;
+            WriteFile(m_hFile, lpCut, dwSize, &dwWritten, NULL);
+        }
     }
 }
 
@@ -154,17 +183,22 @@ void CErrorReport::WriteDebugInfoStr(wchar_t* lpszToWrite)
     if (len <= 1)
         return;
 
-    DWORD dwNumber;
-    WriteFile(m_hFile, narrowBuf, len - 1, &dwNumber, NULL);
-    if (dwNumber == 0)
+    DWORD dwNumber = 0;
+    if (!WriteFile(m_hFile, narrowBuf, len - 1, &dwNumber, NULL) || dwNumber == 0)
     {
         CloseHandle(m_hFile);
+        m_hFile = INVALID_HANDLE_VALUE;
         Create(m_lpszFileName);
     }
 }
 
 void CErrorReport::Write(const wchar_t* lpszFormat, ...)
 {
+    if (lpszFormat == nullptr)
+    {
+        return;
+    }
+
     wchar_t lpszBuffer[1024] = {
         0,
     };
@@ -172,12 +206,17 @@ void CErrorReport::Write(const wchar_t* lpszFormat, ...)
     va_start(va, lpszFormat);
     vswprintf(lpszBuffer, 1024, lpszFormat, va);
     va_end(va);
+    lpszBuffer[1023] = L'\0';
 
     WriteDebugInfoStr(lpszBuffer);
 }
 
 void CErrorReport::HexWrite(void* pBuffer, int iSize)
 {
+    if (m_hFile == INVALID_HANDLE_VALUE || pBuffer == nullptr || iSize <= 0)
+    {
+        return;
+    }
     DWORD   dwWritten   = 0;
     wchar_t szLine[256] = {
         0,
@@ -314,20 +353,26 @@ void CErrorReport::WriteFontInfo(void)
 
 void CErrorReport::WriteImeInfo(HWND hWnd)
 {
-    wchar_t lpszTemp[256];
+    wchar_t lpszTemp[256] = {};
     Write(L"<IME information>\r\n");
 
     HIMC hImc = ImmGetContext(hWnd);
     if (hImc)
     {
         HKL hKl = GetKeyboardLayout(0);
+        lpszTemp[0] = L'\0';
         ImmGetDescription(hKl, lpszTemp, 256);
+        lpszTemp[255] = L'\0';
         Write(L"IME Name\t\t: %ls\r\n", lpszTemp);
+        lpszTemp[0] = L'\0';
         ImmGetIMEFileName(hKl, lpszTemp, 256);
+        lpszTemp[255] = L'\0';
         Write(L"IME File Name\t\t: %ls\r\n", lpszTemp);
         ImmReleaseContext(hWnd, hImc);
     }
+    lpszTemp[0] = L'\0';
     GetKeyboardLayoutName(lpszTemp);
+    lpszTemp[255] = L'\0';
     Write(L"Keyboard type\t\t: %ls\r\n", lpszTemp);
 }
 
@@ -344,21 +389,39 @@ typedef struct tagSOUNDDEVICEENUM
     {
         MAX_DEVICENUM = 20
     };
-    tagSOUNDDEVICEENUM() { nDeivceCount = 0; }
+    tagSOUNDDEVICEENUM() : infoSoundDevice{}, nDeivceCount(0) {}
     ER_SOUNDDEVICEINFO infoSoundDevice[MAX_DEVICENUM];
     size_t             nDeivceCount;
 
-    tagER_SOUNDDEVICE& operator[](size_t p) { return infoSoundDevice[p]; }
-    tagER_SOUNDDEVICE& GetNextDevice() { return infoSoundDevice[nDeivceCount]; }
+    tagER_SOUNDDEVICE& operator[](size_t p) { return infoSoundDevice[p < MAX_DEVICENUM ? p : (MAX_DEVICENUM - 1)]; }
+    tagER_SOUNDDEVICE& GetNextDevice()
+    {
+        return infoSoundDevice[nDeivceCount < MAX_DEVICENUM ? nDeivceCount : (MAX_DEVICENUM - 1)];
+    }
 } ER_SOUNDDEVICEENUMINFO;
 
 INT_PTR CALLBACK DSoundEnumCallback(GUID* pGUID, LPWSTR strDesc, LPWSTR strDrvName, VOID* pContext)
 {
+    if (pContext == nullptr)
+    {
+        return FALSE;
+    }
+
+    auto* pSoundDeviceEnumInfo = static_cast<ER_SOUNDDEVICEENUMINFO*>(pContext);
+    if (pSoundDeviceEnumInfo->nDeivceCount >= ER_SOUNDDEVICEENUMINFO::MAX_DEVICENUM)
+    {
+        return FALSE;
+    }
+
     if (pGUID)
     {
-        auto* pSoundDeviceEnumInfo = (ER_SOUNDDEVICEENUMINFO*)pContext;
-        wcscpy(pSoundDeviceEnumInfo->GetNextDevice().szDeviceName, strDesc);
-        wcscpy(pSoundDeviceEnumInfo->GetNextDevice().szDriverName, strDrvName);
+        auto& dev = pSoundDeviceEnumInfo->GetNextDevice();
+        constexpr size_t deviceNameCap = sizeof(dev.szDeviceName) / sizeof(dev.szDeviceName[0]);
+        constexpr size_t driverNameCap = sizeof(dev.szDriverName) / sizeof(dev.szDriverName[0]);
+        wcsncpy(dev.szDeviceName, strDesc ? strDesc : L"", deviceNameCap - 1);
+        dev.szDeviceName[deviceNameCap - 1] = L'\0';
+        wcsncpy(dev.szDriverName, strDrvName ? strDrvName : L"", driverNameCap - 1);
+        dev.szDriverName[driverNameCap - 1] = L'\0';
         pSoundDeviceEnumInfo->nDeivceCount++;
     }
     return TRUE;
@@ -381,15 +444,21 @@ void CErrorReport::WriteSoundCardInfo(void)
         return;
     }
 
-    for (unsigned int i = 0; i < sdi.nDeivceCount; ++i)
+    const size_t deviceLimit = (sdi.nDeivceCount < ER_SOUNDDEVICEENUMINFO::MAX_DEVICENUM)
+                                   ? sdi.nDeivceCount
+                                   : ER_SOUNDDEVICEENUMINFO::MAX_DEVICENUM;
+    for (size_t i = 0; i < deviceLimit; ++i)
     {
         Write(L"Sound Card \t\t: %ls\r\n", sdi.infoSoundDevice[i].szDeviceName);
 
-        wchar_t lpszBuffer[MAX_PATH];
-        GetSystemDirectory(lpszBuffer, MAX_PATH);
-        wcscat(lpszBuffer, L"\\drivers\\");
-        wcscat(lpszBuffer, sdi.infoSoundDevice[i].szDriverName);
-        WORD wVersion[4];
+        wchar_t sysDir[MAX_PATH]         = {};
+        wchar_t lpszBuffer[MAX_PATH * 2] = {};
+        GetSystemDirectory(sysDir, MAX_PATH);
+        sysDir[MAX_PATH - 1] = L'\0';
+        swprintf(lpszBuffer, sizeof(lpszBuffer) / sizeof(lpszBuffer[0]), L"%ls\\drivers\\%ls", sysDir,
+                 sdi.infoSoundDevice[i].szDriverName);
+        lpszBuffer[(sizeof(lpszBuffer) / sizeof(lpszBuffer[0])) - 1] = L'\0';
+        WORD wVersion[4] = {0, 0, 0, 0};
         GetFileVersion(lpszBuffer, wVersion);
 
         Write(L"Sound Card Driver\t: %ls (%d.%d.%d.%d)\r\n", sdi.infoSoundDevice[i].szDriverName, wVersion[0],
@@ -401,15 +470,34 @@ void CErrorReport::WriteSoundCardInfo(void)
 
 void GetOSVersion(ER_SystemInfo* si)
 {
-    const wchar_t* lpszUnknown = L"Unknown";
-    wchar_t        lpszTemp[256];
+    if (si == nullptr)
+    {
+        return;
+    }
 
-    OSVERSIONINFO osiOne;
+    const wchar_t* lpszUnknown = L"Unknown";
+    wchar_t        lpszTemp[256] = {};
+
+    OSVERSIONINFO osiOne = {};
     osiOne.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx(&osiOne);
 
+    auto appendOsText = [si](const wchar_t* suffix) {
+        if (suffix == nullptr)
+        {
+            return;
+        }
+        const size_t curLen = wcsnlen(si->m_lpszOS, MAX_LENGTH_OSINFO - 1);
+        if (curLen < MAX_LENGTH_OSINFO - 1)
+        {
+            wcsncpy(si->m_lpszOS + curLen, suffix, MAX_LENGTH_OSINFO - 1 - curLen);
+            si->m_lpszOS[MAX_LENGTH_OSINFO - 1] = L'\0';
+        }
+    };
+
     int iBuildNumberType = 0;
     mu_swprintf(si->m_lpszOS, L"%ls %d.%d ", lpszUnknown, osiOne.dwMajorVersion, osiOne.dwMinorVersion);
+    si->m_lpszOS[MAX_LENGTH_OSINFO - 1] = L'\0';
 
     switch (osiOne.dwMajorVersion)
     {
@@ -431,7 +519,7 @@ void GetOSVersion(ER_SystemInfo* si)
                             wcscpy(si->m_lpszOS, L"Windows 95 ");
                             if (osiOne.szCSDVersion[1] == 'C' || osiOne.szCSDVersion[1] == 'B')
                             {
-                                wcscat(si->m_lpszOS, L"OSR2");
+                                appendOsText(L"OSR2");
                             }
                             iBuildNumberType = 1;
                             break;
@@ -444,7 +532,7 @@ void GetOSVersion(ER_SystemInfo* si)
                     wcscpy(si->m_lpszOS, L"Windows 98 ");
                     if (osiOne.szCSDVersion[1] == 'A')
                     {
-                        wcscat(si->m_lpszOS, L"SE ");
+                        appendOsText(L"SE ");
                     }
                     iBuildNumberType = 1;
                     break;
@@ -460,26 +548,30 @@ void GetOSVersion(ER_SystemInfo* si)
                 case 0:
                     wcscpy(si->m_lpszOS, L"Windows 2000 ");
                     {
-                        HKEY  hKey;
-                        DWORD dwBufLen;
+                        HKEY  hKey     = NULL;
+                        DWORD dwType   = 0;
+                        DWORD dwBufLen = sizeof(lpszTemp) - sizeof(wchar_t);
                         if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                                           L"SYSTEM\\CurrentControlSet\\Control\\ProductOptions", 0,
                                                           KEY_QUERY_VALUE, &hKey))
                         {
+                            ZeroMemory(lpszTemp, sizeof(lpszTemp));
                             if (ERROR_SUCCESS ==
-                                RegQueryValueEx(hKey, L"ProductType", NULL, NULL, (LPBYTE)lpszTemp, &dwBufLen))
+                                    RegQueryValueEx(hKey, L"ProductType", NULL, &dwType, (LPBYTE)lpszTemp, &dwBufLen) &&
+                                (dwType == REG_SZ || dwType == REG_EXPAND_SZ))
                             {
+                                lpszTemp[(sizeof(lpszTemp) / sizeof(lpszTemp[0])) - 1] = L'\0';
                                 if (0 == lstrcmpi(L"WINNT", lpszTemp))
                                 {
-                                    wcscat(si->m_lpszOS, L"Professional ");
+                                    appendOsText(L"Professional ");
                                 }
                                 if (0 == lstrcmpi(L"LANMANNT", lpszTemp))
                                 {
-                                    wcscat(si->m_lpszOS, L"Server ");
+                                    appendOsText(L"Server ");
                                 }
                                 if (0 == lstrcmpi(L"SERVERNT", lpszTemp))
                                 {
-                                    wcscat(si->m_lpszOS, L"Advanced Server ");
+                                    appendOsText(L"Advanced Server ");
                                 }
                             }
 
@@ -506,9 +598,11 @@ void GetOSVersion(ER_SystemInfo* si)
                         LOBYTE(HIWORD(osiOne.dwBuildNumber)), LOWORD(osiOne.dwBuildNumber));
             break;
     }
-    wcscat(si->m_lpszOS, lpszTemp);
-    mu_swprintf(lpszTemp, L"(%ls)", osiOne.szCSDVersion);
-    wcscat(si->m_lpszOS, lpszTemp);
+    appendOsText(lpszTemp);
+    osiOne.szCSDVersion[(sizeof(osiOne.szCSDVersion) / sizeof(osiOne.szCSDVersion[0])) - 1] = L'\0';
+    swprintf(lpszTemp, sizeof(lpszTemp) / sizeof(lpszTemp[0]), L"(%ls)", osiOne.szCSDVersion);
+    lpszTemp[(sizeof(lpszTemp) / sizeof(lpszTemp[0])) - 1] = L'\0';
+    appendOsText(lpszTemp);
 }
 
 // NOTE:
@@ -614,6 +708,7 @@ DWORD GetDXVersion()
         // No DInput... must not be DX3
         __TraceF(TEXT("===> Couldn't LoadLibrary DInput\r\n"));
         pDDraw->Release();
+        FreeLibrary(hDDrawDLL);
         return dwDXVersion;
     }
 
@@ -621,9 +716,9 @@ DWORD GetDXVersion()
     if (DirectInputCreate == NULL)
     {
         // No DInput... must be DX2
+        pDDraw->Release();
         FreeLibrary(hDInputDLL);
         FreeLibrary(hDDrawDLL);
-        pDDraw->Release();
         __TraceF(TEXT("===> Couldn't GetProcAddress DInputCreate\r\n"));
         return dwDXVersion;
     }
@@ -671,6 +766,7 @@ DWORD GetDXVersion()
     // Query for the IDirectDrawSurface3 interface
     if (FAILED(pSurf->QueryInterface(IID_IDirectDrawSurface3, (VOID**)&pSurf3)))
     {
+        pSurf->Release();
         pDDraw->Release();
         FreeLibrary(hDDrawDLL);
         return dwDXVersion;
@@ -678,6 +774,8 @@ DWORD GetDXVersion()
 
     // QI for IDirectDrawSurface3 succeeded. We must be at least DX5
     dwDXVersion = 0x500;
+    pSurf3->Release();
+    pSurf3 = NULL;
 
     //-------------------------------------------------------------------------
     // DirectX 6.0 Checks
@@ -686,6 +784,7 @@ DWORD GetDXVersion()
     // The IDirectDrawSurface4 interface was introduced with DX 6.0
     if (FAILED(pSurf->QueryInterface(IID_IDirectDrawSurface4, (VOID**)&pSurf4)))
     {
+        pSurf->Release();
         pDDraw->Release();
         FreeLibrary(hDDrawDLL);
         return dwDXVersion;
@@ -693,19 +792,27 @@ DWORD GetDXVersion()
 
     // IDirectDrawSurface4 was create successfully. We must be at least DX6
     dwDXVersion = 0x600;
+    pSurf4->Release();
+    pSurf4 = NULL;
     pSurf->Release();
+    pSurf = NULL;
     pDDraw->Release();
+    pDDraw = NULL;
 
     //-------------------------------------------------------------------------
     // DirectX 6.1 Checks
     //-------------------------------------------------------------------------
 
     // Check for DMusic, which was introduced with DX6.1
-    LPDIRECTMUSIC pDMusic = NULL;
-    CoInitialize(NULL);
+    LPDIRECTMUSIC pDMusic  = NULL;
+    const HRESULT hrCoInit = CoInitialize(NULL);
     hr = CoCreateInstance(CLSID_DirectMusic, NULL, CLSCTX_INPROC_SERVER, IID_IDirectMusic, (VOID**)&pDMusic);
     if (FAILED(hr))
     {
+        if (SUCCEEDED(hrCoInit))
+        {
+            CoUninitialize();
+        }
         __TraceF(TEXT("===> Couldn't create CLSID_DirectMusic\r\n"));
         FreeLibrary(hDDrawDLL);
         return dwDXVersion;
@@ -714,14 +821,17 @@ DWORD GetDXVersion()
     // DirectMusic was created successfully. We must be at least DX6.1
     dwDXVersion = 0x601;
     pDMusic->Release();
-    CoUninitialize();
+    if (SUCCEEDED(hrCoInit))
+    {
+        CoUninitialize();
+    }
 
     //-------------------------------------------------------------------------
     // DirectX 7.0 Checks
     //-------------------------------------------------------------------------
 
     // Check for DirectX 7 by creating a DDraw7 object
-    LPDIRECTDRAW7 pDD7;
+    LPDIRECTDRAW7 pDD7 = NULL;
     DirectDrawCreateEx = (DIRECTDRAWCREATEEX)GetProcAddress(hDDrawDLL, "DirectDrawCreateEx");
     if (NULL == DirectDrawCreateEx)
     {

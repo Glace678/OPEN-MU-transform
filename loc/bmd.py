@@ -51,8 +51,11 @@ def gen_checksum2(data: bytes, wkey: int) -> int:
 
 class FixedFile:
     def __init__(self, path, R, N, key=None, has_checksum=True):
+        if R <= 0 or N < 0:
+            raise ValueError(f"invalid record geometry R={R}, N={N}")
         self.path = path; self.R = R; self.N = N; self.key = key
-        self.raw = open(path, 'rb').read()
+        with open(path, 'rb') as fh:
+            self.raw = fh.read()
         body = self.raw
         self.stored_checksum = None
         expected = R * N
@@ -73,7 +76,8 @@ class FixedFile:
             if len(self.raw) < expected:
                 raise ValueError(f"size {len(self.raw)} < {expected}")
             body = self.raw[:expected]
-        assert len(body) == expected, f"body {len(body)} != {expected}"
+        if len(body) != expected:
+            raise ValueError(f"body {len(body)} != {expected}")
         # decrypt per record
         self.recs = []
         enc = bytearray(body)
@@ -90,6 +94,10 @@ class FixedFile:
         return calc == self.stored_checksum, calc, self.stored_checksum
 
     def get_str(self, i, off, maxlen):
+        if not (0 <= i < len(self.recs)):
+            raise IndexError(f"record index {i} out of range [0, {len(self.recs)})")
+        if off < 0 or maxlen < 0 or off + maxlen > self.R:
+            raise ValueError(f"field slice [{off}:{off + maxlen}] exceeds record size {self.R}")
         rec = self.recs[i]
         end = rec.find(b'\x00', off, off+maxlen)
         if end < 0: end = off+maxlen
@@ -106,6 +114,10 @@ class FixedFile:
 
     def set_str(self, i, off, maxlen, text):
         """Write UTF-8 text into fixed field, NUL-padded. Raises if too long."""
+        if not (0 <= i < len(self.recs)):
+            raise IndexError(f"record index {i} out of range [0, {len(self.recs)})")
+        if off < 0 or maxlen <= 0 or off + maxlen > self.R:
+            raise ValueError(f"field slice [{off}:{off + maxlen}] invalid for record size {self.R}")
         b = text.encode('utf-8')
         if len(b) >= maxlen:
             raise ValueError(f"text too long: {len(b)} >= {maxlen} for {text!r}")
@@ -126,13 +138,21 @@ class FixedFile:
 
 # ---------- QuestWords variable records ----------
 def read_questwords(path):
-    data = open(path,'rb').read()
+    with open(path, 'rb') as fh:
+        data = fh.read()
     recs = []
     pos = 0
     while pos < len(data):
+        if pos + 6 > len(data):
+            raise ValueError(f"{path}: truncated QuestWords header at offset {pos} (size {len(data)})")
         hdr = bytearray(data[pos:pos+6]); bux(hdr)
         index, wlen = struct.unpack('<ih', bytes(hdr))
         pos += 6
+        if wlen < 0 or pos + wlen > len(data):
+            raise ValueError(
+                f"{path}: invalid QuestWords record length {wlen} for index {index} "
+                f"at offset {pos - 6} (size {len(data)})"
+            )
         txt = bytearray(data[pos:pos+wlen]); bux(txt)
         pos += wlen
         recs.append((index, bytes(txt)))
@@ -142,10 +162,15 @@ def write_questwords(path, recs):
     out = bytearray()
     for index, txt in recs:
         if isinstance(txt, str): txt = txt.encode('utf-8')
+        if len(txt) > 32767:
+            raise ValueError(f"QuestWords record {index} length {len(txt)} exceeds int16 max 32767")
         hdr = bytearray(struct.pack('<ih', index, len(txt))); bux(hdr)
         body = bytearray(txt); bux(body)
         out += hdr + body
-    open(path,'wb').write(bytes(out))
+    tmp_path = f"{path}.tmp"
+    with open(tmp_path, 'wb') as fh:
+        fh.write(bytes(out))
+    os.replace(tmp_path, path)
     return len(out)
 
 if __name__ == '__main__':

@@ -2,6 +2,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
+#include <stdexcept>
 #include "World/MapInfra/w_MapProcess.h"
 #include "World/MapInfra/w_MapHeaders.h"
 
@@ -143,16 +144,22 @@ BaseMap& MapProcess::FindBaseMap(ENUM_WORLD type)
         }
     }
     assert(0);
-    throw;
+    throw std::out_of_range("MapProcess::FindBaseMap: requested world type is not registered");
 }
 
 void MapProcess::Register(std::shared_ptr<BaseMap> pMap)
 {
+    if (!pMap)
+    {
+        assert(0);
+        throw std::invalid_argument("MapProcess::Register: pMap must not be null");
+    }
+
     ENUM_WORLD type = pMap->FindMapIndex();
     if (type == NUM_WD)
     {
         assert(0);
-        throw;
+        throw std::invalid_argument("MapProcess::Register: map has no valid map index");
     }
 
     if (FindMap(type) == false)

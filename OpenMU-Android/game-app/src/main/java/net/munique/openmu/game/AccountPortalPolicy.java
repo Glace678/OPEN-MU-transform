@@ -93,6 +93,9 @@ final class AccountPortalPolicy {
     }
 
     static String localeFromIni(String source, String deviceLocale) {
+        if (source == null) {
+            return normalizeLocale(deviceLocale);
+        }
         String section = "";
         for (String line : source.split("\r?\n")) {
             String trimmed = line.trim();

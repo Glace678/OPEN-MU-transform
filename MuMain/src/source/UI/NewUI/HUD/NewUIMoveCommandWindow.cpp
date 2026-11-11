@@ -95,10 +95,9 @@ bool SEASON3B::CNewUIMoveCommandWindow::Create(CNewUIManager* pNewUIMng, int x, 
 
 void SEASON3B::CNewUIMoveCommandWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -116,7 +115,8 @@ void SEASON3B::CNewUIMoveCommandWindow::SetPos(int x, int y)
     m_ReqZenPos.x     = m_Pos.x + 186;
 
     m_listMoveInfoData = CMoveCommandData::GetInstance()->GetMoveCommandDatalist();
-    m_iRealFontHeight  = FontHeight * REFERENCE_HEIGHT / WindowHeight + 2;
+    const int safeWinH = (WindowHeight > 0) ? WindowHeight : REFERENCE_HEIGHT;
+    m_iRealFontHeight  = FontHeight * REFERENCE_HEIGHT / safeWinH + 2;
 
     m_MapNameUISize.y = 60 + (m_iRealFontHeight * MOVECOMMAND_MAX_RENDER_TEXTLINE);
 
@@ -150,17 +150,30 @@ void SEASON3B::CNewUIMoveCommandWindow::SetPos(int x, int y)
 
     m_iCurPage = 1;
 
-    m_iTotalMoveScrBtnperStep    = m_listMoveInfoData.size() - MOVECOMMAND_MAX_RENDER_TEXTLINE;
-    m_iRemainMoveScrBtnperStep   = m_iTotalMoveScrBtnperStep;
-    m_iTotalMoveScrBtnPixel      = m_iScrollBarHeightPixel - MOVECOMMAND_SCROLLBTN_HEIGHT;
-    m_iRemainMoveScrBtnPixel     = m_iTotalMoveScrBtnPixel;
-    m_iMinMoveScrBtnPixelperStep = m_iTotalMoveScrBtnPixel / m_iTotalMoveScrBtnperStep;
-    m_iMaxMoveScrBtnPixelperStep = m_iMinMoveScrBtnPixelperStep + 1;
-    m_iTotalNumMaxMoveScrBtnperStep =
-        m_iTotalMoveScrBtnPixel - (m_iTotalMoveScrBtnperStep * m_iMinMoveScrBtnPixelperStep);
-    m_iTotalNumMinMoveScrBtnperStep = m_iTotalMoveScrBtnperStep - m_iTotalNumMaxMoveScrBtnperStep;
-    m_icurMoveScrBtnPixelperStep    = m_iMaxMoveScrBtnPixelperStep;
-    m_iAcumMoveMouseScrollPixel     = 0;
+    const int listCount         = static_cast<int>(m_listMoveInfoData.size());
+    m_iTotalMoveScrBtnperStep   = (listCount > MOVECOMMAND_MAX_RENDER_TEXTLINE)
+                                      ? (listCount - MOVECOMMAND_MAX_RENDER_TEXTLINE)
+                                      : 0;
+    m_iRemainMoveScrBtnperStep  = m_iTotalMoveScrBtnperStep;
+    m_iTotalMoveScrBtnPixel     = m_iScrollBarHeightPixel - MOVECOMMAND_SCROLLBTN_HEIGHT;
+    m_iRemainMoveScrBtnPixel    = m_iTotalMoveScrBtnPixel;
+    if (m_iTotalMoveScrBtnperStep > 0)
+    {
+        m_iMinMoveScrBtnPixelperStep = m_iTotalMoveScrBtnPixel / m_iTotalMoveScrBtnperStep;
+        m_iMaxMoveScrBtnPixelperStep = m_iMinMoveScrBtnPixelperStep + 1;
+        m_iTotalNumMaxMoveScrBtnperStep =
+            m_iTotalMoveScrBtnPixel - (m_iTotalMoveScrBtnperStep * m_iMinMoveScrBtnPixelperStep);
+        m_iTotalNumMinMoveScrBtnperStep = m_iTotalMoveScrBtnperStep - m_iTotalNumMaxMoveScrBtnperStep;
+    }
+    else
+    {
+        m_iMinMoveScrBtnPixelperStep    = 0;
+        m_iMaxMoveScrBtnPixelperStep    = 0;
+        m_iTotalNumMaxMoveScrBtnperStep = 0;
+        m_iTotalNumMinMoveScrBtnperStep = 0;
+    }
+    m_icurMoveScrBtnPixelperStep = m_iMaxMoveScrBtnPixelperStep;
+    m_iAcumMoveMouseScrollPixel  = 0;
 
     if (m_iNumPage > 1)
     {
@@ -207,23 +220,32 @@ bool SEASON3B::CNewUIMoveCommandWindow::IsMapMove(const std::wstring& src)
 
     if (IsLuckySealBuff() == false)
     {
-        wchar_t  lpszStr1[1024];
-        wchar_t* lpszStr2 = NULL;
+        auto extractMapArgument = [](const std::wstring& input, const wchar_t* cmdWord) -> std::wstring {
+            if (cmdWord == nullptr || cmdWord[0] == L'\0')
+                return L"";
+            std::wstring prefix = cmdWord;
+            prefix += L' ';
+            const size_t pos = input.find(prefix);
+            if (pos == std::wstring::npos)
+                return L"";
+            size_t start = input.find_first_not_of(L' ', pos + prefix.size());
+            if (start == std::wstring::npos)
+                return L"";
+            size_t end = input.find_last_not_of(L' ');
+            return input.substr(start, end - start + 1);
+        };
+
         if (src.find(I18N::Game::Warp) != std::wstring::npos)
         {
-            std::wstring temp = I18N::Game::Warp;
-            temp += ' ';
-            mu_swprintf(lpszStr1, src.c_str());
-            wchar_t* context = nullptr;
-            lpszStr2         = wcstok_s(lpszStr1, temp.c_str(), &context);
-            if (lpszStr2 == NULL)
+            const std::wstring mapArg = extractMapArgument(src, I18N::Game::Warp);
+            if (mapArg.empty())
                 return false;
 
             SettingCanMoveMap();
             auto li = m_listMoveInfoData.begin();
-            for (int i = 0; i < m_iRenderEndTextIndex; i++, li++)
+            for (int i = 0; i < m_iRenderEndTextIndex && li != m_listMoveInfoData.end(); i++, li++)
             {
-                if (!wcscmp(lpszStr2, (*li)->_ReqInfo.szMainMapName))
+                if (*li != nullptr && !wcscmp(mapArg.c_str(), (*li)->_ReqInfo.szMainMapName))
                 {
                     if ((*li)->_bCanMove == true)
                     {
@@ -235,19 +257,15 @@ bool SEASON3B::CNewUIMoveCommandWindow::IsMapMove(const std::wstring& src)
         }
         else if (src.find(L"/move") != std::wstring::npos)
         {
-            std::wstring temp = L"/move";
-            temp += ' ';
-            mu_swprintf(lpszStr1, src.c_str());
-            wchar_t* context = nullptr;
-            lpszStr2         = wcstok_s(lpszStr1, temp.c_str(), &context);
-            if (lpszStr2 == NULL)
+            const std::wstring mapArg = extractMapArgument(src, L"/move");
+            if (mapArg.empty())
                 return false;
 
             SettingCanMoveMap();
             auto li = m_listMoveInfoData.begin();
-            for (int i = 0; i < m_iRenderEndTextIndex; i++, li++)
+            for (int i = 0; i < m_iRenderEndTextIndex && li != m_listMoveInfoData.end(); i++, li++)
             {
-                if (!wcsicmp(lpszStr2, (*li)->_ReqInfo.szMainMapName))
+                if (*li != nullptr && !wcsicmp(mapArg.c_str(), (*li)->_ReqInfo.szMainMapName))
                 {
                     if ((*li)->_bCanMove == true)
                     {

@@ -33,6 +33,11 @@ public class QuestStateSetLegacyRequestHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc />
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < LegacyQuestStateSetRequest.Length)
+        {
+            return;
+        }
+
         LegacyQuestStateSetRequest request = packet;
         switch (request.NewState)
         {

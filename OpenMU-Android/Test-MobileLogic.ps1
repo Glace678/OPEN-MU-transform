@@ -23,7 +23,11 @@ function Test-MobileResources {
             throw "Unexpected app brand in $directory"
         }
     }
-    Write-Host 'Mobile resources: default + 15 cultures + Filipino alias, 884 strings and 34 arrays validated.'
+    $stringsPerLocale = @($reference.Values | Where-Object { $_.LocalName -eq 'string' }).Count
+    $arraysPerLocale = @($reference.Values | Where-Object { $_.LocalName -eq 'string-array' }).Count
+    $totalStrings = $stringsPerLocale * $directories.Count
+    $totalArrays = $arraysPerLocale * $directories.Count
+    Write-Host "Mobile resources: $($directories.Count) resource directories ($stringsPerLocale strings, $arraysPerLocale arrays per directory; $totalStrings strings and $totalArrays arrays total) validated."
 }
 
 function Get-MobileJUnitRuntime {
@@ -35,8 +39,13 @@ function Get-MobileJUnitRuntime {
         -Recurse -Filter 'junit-4.13.2.jar' | Select-Object -First 1 -ExpandProperty FullName
     $hamcrest = Get-ChildItem (Join-Path $dependencyCache 'org.hamcrest/hamcrest-core/1.3') `
         -Recurse -Filter 'hamcrest-core-1.3.jar' | Select-Object -First 1 -ExpandProperty FullName
+    $orgJson = Get-ChildItem (Join-Path $dependencyCache 'org.json/json/20240303') `
+        -Recurse -Filter 'json-20240303.jar' -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty FullName
     if (!$junit -or !$hamcrest) {
         throw 'JUnit runtime is unavailable; run the complete mobile logic test script to resolve it with Gradle'
+    }
+    if ($orgJson) {
+        return @($junit, $hamcrest, $orgJson)
     }
     return @($junit, $hamcrest)
 }

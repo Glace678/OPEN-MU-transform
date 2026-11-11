@@ -5,11 +5,11 @@
 namespace MUnique.OpenMU.Persistence.EntityFramework;
 
 using System.Text.RegularExpressions;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Nito.AsyncEx.Synchronous;
 
 /// <summary>
 /// The database roles.
@@ -48,14 +48,15 @@ public enum DatabaseRole
 /// </summary>
 public static class ConnectionConfigurator
 {
+    private static readonly object InitLock = new();
     private static IDatabaseConnectionSettingProvider? _provider;
 
     /// <summary>
     /// Gets a value indicating whether this instance is initialized.
     /// </summary>
-    public static bool IsInitialized => _provider is not null;
+    public static bool IsInitialized => Volatile.Read(ref _provider) is not null;
 
-    private static IDatabaseConnectionSettingProvider Provider => _provider ?? throw new InvalidOperationException("Call Initialize before.");
+    private static IDatabaseConnectionSettingProvider Provider => Volatile.Read(ref _provider) ?? throw new InvalidOperationException("Call Initialize before.");
 
     /// <summary>
     /// Initializes this instance.
@@ -63,12 +64,21 @@ public static class ConnectionConfigurator
     /// <param name="provider">The <see cref="IDatabaseConnectionSettingProvider"/> which provides the required connection settings.</param>
     public static void Initialize(IDatabaseConnectionSettingProvider provider)
     {
-        if (_provider is not null)
+        ArgumentNullException.ThrowIfNull(provider);
+        lock (InitLock)
         {
-            throw new InvalidOperationException("provider is initialized already");
-        }
+            if (_provider is not null)
+            {
+                if (ReferenceEquals(_provider, provider) || _provider.GetType() == provider.GetType())
+                {
+                    return;
+                }
 
-        _provider = provider;
+                throw new InvalidOperationException("provider is initialized already");
+            }
+
+            Volatile.Write(ref _provider, provider);
+        }
     }
 
     /// <summary>
@@ -78,7 +88,7 @@ public static class ConnectionConfigurator
     /// <returns>The name of the role from the configured connection string.</returns>
     public static string GetRoleName(DatabaseRole role)
     {
-        Provider.Initialization?.WaitWithoutException();
+        Provider.Initialization?.GetAwaiter().GetResult();
         var settings = Provider.GetConnectionSetting(GetContextTypeOfRole(role));
         return new Npgsql.NpgsqlConnectionStringBuilder(settings.ConnectionString).Username ?? string.Empty;
     }
@@ -90,7 +100,7 @@ public static class ConnectionConfigurator
     /// <returns>The password password of the role from the configured connection string.</returns>
     public static string GetRolePassword(DatabaseRole role)
     {
-        Provider.Initialization?.WaitWithoutException();
+        Provider.Initialization?.GetAwaiter().GetResult();
         var settings = Provider.GetConnectionSetting(GetContextTypeOfRole(role));
         return new Npgsql.NpgsqlConnectionStringBuilder(settings.ConnectionString).Password ?? string.Empty;
     }
@@ -103,7 +113,7 @@ public static class ConnectionConfigurator
     internal static string GetConnectionString<TContext>()
         where TContext : DbContext
     {
-        Provider.Initialization?.WaitWithoutException();
+        Provider.Initialization?.GetAwaiter().GetResult();
         return Provider.GetConnectionSetting(typeof(TContext)).ConnectionString!;
     }
 
@@ -124,7 +134,7 @@ public static class ConnectionConfigurator
             type = type.GetGenericTypeDefinition();
         }
 
-        Provider.Initialization?.WaitWithoutException();
+        Provider.Initialization?.GetAwaiter().GetResult();
         if (Provider.GetConnectionSetting(type) is { } setting)
         {
             switch (setting.DatabaseEngine)

@@ -7,6 +7,7 @@ namespace MUnique.OpenMU.Persistence.Initialization;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using MUnique.OpenMU.AttributeSystem;
 using MUnique.OpenMU.DataModel.Attributes;
 using MUnique.OpenMU.DataModel.Configuration;
@@ -21,7 +22,7 @@ using MUnique.OpenMU.Persistence.Initialization.Updates;
 /// </summary>
 internal abstract class BaseMapInitializer : IMapInitializer
 {
-    private static readonly IList<DropItemGroup> DefaultDropItemGroups = new List<DropItemGroup>();
+    private static readonly AsyncLocal<List<DropItemGroup>?> DefaultDropItemGroups = new();
 
     private GameMapDefinition? _mapDefinition;
 
@@ -137,7 +138,10 @@ internal abstract class BaseMapInitializer : IMapInitializer
             throw new InvalidOperationException("Map is not initialized yet.");
         }
 
-        var safezoneMap = this.GameConfiguration.Maps.FirstOrDefault(map => map.Number == this.SafezoneMapNumber);
+        var targetMapNumber = this.SafezoneMapNumber;
+        var targetDiscriminator = targetMapNumber == this._mapDefinition.Number ? this.Discriminator : 0;
+        var safezoneMap = this.GameConfiguration.Maps.FirstOrDefault(map => map.Number == targetMapNumber && map.Discriminator == targetDiscriminator)
+                          ?? this.GameConfiguration.Maps.FirstOrDefault(map => map.Number == targetMapNumber);
         this._mapDefinition.SafezoneMap = safezoneMap;
     }
 
@@ -147,13 +151,14 @@ internal abstract class BaseMapInitializer : IMapInitializer
     /// <param name="dropItemGroup">The drop item group.</param>
     internal static void RegisterDefaultDropItemGroup(DropItemGroup dropItemGroup)
     {
-        DefaultDropItemGroups.Add(dropItemGroup);
+        var groups = DefaultDropItemGroups.Value ??= [];
+        groups.Add(dropItemGroup);
     }
 
     /// <summary>
     /// Clears the default drop item groups.
     /// </summary>
-    internal static void ClearDefaultDropItemGroups() => DefaultDropItemGroups.Clear();
+    internal static void ClearDefaultDropItemGroups() => DefaultDropItemGroups.Value = [];
 
     /// <summary>
     /// Does additional initialization.
@@ -175,7 +180,7 @@ internal abstract class BaseMapInitializer : IMapInitializer
             throw new InvalidOperationException("MapDefiniton not set yet.");
         }
 
-        DefaultDropItemGroups.ForEach(this._mapDefinition.DropItemGroups.Add);
+        (DefaultDropItemGroups.Value ??= []).ForEach(this._mapDefinition.DropItemGroups.Add);
     }
 
     /// <summary>

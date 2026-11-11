@@ -4,7 +4,9 @@
 
 namespace MUnique.OpenMU.GameLogic.PlugIns;
 
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 using MUnique.OpenMU.PlugIns;
 
 /// <summary>
@@ -15,7 +17,8 @@ using MUnique.OpenMU.PlugIns;
 [Guid("CEBBD5BD-B0DF-4768-816D-AF8DF78888B2")]
 public class PeriodicSaveProgressPlugIn : IPeriodicTaskPlugIn, ISupportCustomConfiguration<PeriodicSaveProgressPlugInConfiguration>, ISupportDefaultCustomConfiguration
 {
-    private DateTime _nextRunUtc = DateTime.UtcNow;
+    private readonly ConditionalWeakTable<GameContext, ContextSaveState> _contextStates = new();
+    private long _forceStartGeneration;
 
     /// <inheritdoc />
     public PeriodicSaveProgressPlugInConfiguration? Configuration { get; set; }
@@ -23,13 +26,13 @@ public class PeriodicSaveProgressPlugIn : IPeriodicTaskPlugIn, ISupportCustomCon
     /// <inheritdoc />
     public async ValueTask ExecuteTaskAsync(GameContext gameContext)
     {
-        if (DateTime.UtcNow < this._nextRunUtc)
+        var contextState = this._contextStates.GetOrCreateValue(gameContext);
+        var currentForceGen = Interlocked.Read(ref this._forceStartGeneration);
+        var configuration = this.Configuration ??= CreateDefaultConfiguration();
+        if (!contextState.TryBeginExecution(DateTime.UtcNow, configuration.Interval, currentForceGen))
         {
             return;
         }
-
-        var configuration = this.Configuration ??= CreateDefaultConfiguration();
-        this._nextRunUtc = DateTime.UtcNow + configuration.Interval;
 
         var logger = gameContext.LoggerFactory.CreateLogger(this.GetType().Name);
         using var scope = logger.BeginScope(gameContext);
@@ -44,7 +47,8 @@ public class PeriodicSaveProgressPlugIn : IPeriodicTaskPlugIn, ISupportCustomCon
                     ("Character", player.SelectedCharacter?.Name ?? string.Empty));
                 try
                 {
-                    if (player.PlayerState.CurrentState == PlayerState.EnteredWorld)
+                    if (player.PlayerState.CurrentState == PlayerState.EnteredWorld
+                        || (player.IsEconomyPersistencePending && !player.PlayerState.CurrentState.IsDisconnectedOrFinished()))
                     {
                         await player.SaveProgressAsync().ConfigureAwait(false);
                     }
@@ -65,12 +69,16 @@ public class PeriodicSaveProgressPlugIn : IPeriodicTaskPlugIn, ISupportCustomCon
         {
             logger.LogError(ex, "Unexpected error when saving player data periodically.");
         }
+        finally
+        {
+            contextState.EndExecution();
+        }
     }
 
     /// <inheritdoc />
     public void ForceStart()
     {
-        this._nextRunUtc = DateTime.UtcNow;
+        Interlocked.Increment(ref this._forceStartGeneration);
     }
 
     /// <inheritdoc />
@@ -82,5 +90,43 @@ public class PeriodicSaveProgressPlugIn : IPeriodicTaskPlugIn, ISupportCustomCon
     private static PeriodicSaveProgressPlugInConfiguration CreateDefaultConfiguration()
     {
         return new PeriodicSaveProgressPlugInConfiguration();
+    }
+
+    private sealed class ContextSaveState
+    {
+        private readonly Lock _lock = new();
+        private DateTime _nextRunUtc = DateTime.UtcNow;
+        private long _handledForceGeneration;
+        private bool _isRunning;
+
+        public bool TryBeginExecution(DateTime nowUtc, TimeSpan interval, long forceGeneration)
+        {
+            lock (this._lock)
+            {
+                if (this._isRunning)
+                {
+                    return false;
+                }
+
+                var isForced = forceGeneration > this._handledForceGeneration;
+                if (!isForced && nowUtc < this._nextRunUtc)
+                {
+                    return false;
+                }
+
+                this._handledForceGeneration = forceGeneration;
+                this._nextRunUtc = nowUtc + (interval > TimeSpan.Zero ? interval : TimeSpan.Zero);
+                this._isRunning = true;
+                return true;
+            }
+        }
+
+        public void EndExecution()
+        {
+            lock (this._lock)
+            {
+                this._isRunning = false;
+            }
+        }
     }
 }

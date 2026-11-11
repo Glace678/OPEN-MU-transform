@@ -54,10 +54,10 @@ namespace UI::Chat
 {
 typedef struct
 {
-    wchar_t    ID[32];
-    wchar_t    Union[30];
-    wchar_t    Guild[30];
-    wchar_t    szShopTitle[16];
+    wchar_t    ID[MAX_MONSTER_NAME + 1];
+    wchar_t    Union[64];
+    wchar_t    Guild[64];
+    wchar_t    szShopTitle[64];
     char       Color;
     char       GuildColor;
     float      IDLifeTime;
@@ -436,56 +436,65 @@ void AddGuildName(CHAT* c, CHARACTER* Owner)
     {
         std::wstring summary;
         GetShopTitleSummary(Owner, summary);
-        wcscpy(c->szShopTitle, summary.c_str());
+        wcsncpy_s(c->szShopTitle, _countof(c->szShopTitle), summary.c_str(), _TRUNCATE);
     }
     else
     {
-        c->szShopTitle[0] = '\0';
+        c->szShopTitle[0] = L'\0';
     }
 
-    if (Owner->GuildMarkIndex >= 0 && GuildMark[Owner->GuildMarkIndex].UnionName[0])
+    const bool validGuildMark = (Owner->GuildMarkIndex >= 0 && Owner->GuildMarkIndex < MAX_MARKS);
+
+    if (validGuildMark && GuildMark[Owner->GuildMarkIndex].UnionName[0])
     {
         if (Owner->GuildRelationShip == GR_UNION)
-            mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName, I18N::Game::Alliance);
-        if (Owner->GuildRelationShip == GR_UNIONMASTER)
+            swprintf_s(c->Union, _countof(c->Union), L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
+                       I18N::Game::Alliance);
+        else if (Owner->GuildRelationShip == GR_UNIONMASTER)
         {
             if (Owner->GuildStatus == G_MASTER)
-                mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
-                            I18N::Game::AllianceMaster);
+                swprintf_s(c->Union, _countof(c->Union), L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
+                           I18N::Game::AllianceMaster);
             else
-                mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName, I18N::Game::Alliance);
+                swprintf_s(c->Union, _countof(c->Union), L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
+                           I18N::Game::Alliance);
         }
         else if (Owner->GuildRelationShip == GR_RIVAL)
         {
             if (Owner->GuildStatus == G_MASTER)
-                mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
-                            I18N::Game::OpposingMaster);
+                swprintf_s(c->Union, _countof(c->Union), L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
+                           I18N::Game::OpposingMaster);
             else
-                mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName, I18N::Game::Oppose);
+                swprintf_s(c->Union, _countof(c->Union), L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
+                           I18N::Game::Oppose);
         }
         else if (Owner->GuildRelationShip == GR_RIVALUNION)
-            mu_swprintf(c->Union, L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
-                        I18N::Game::OpposingAllianceMaster);
+            swprintf_s(c->Union, _countof(c->Union), L"<%ls> %ls", GuildMark[Owner->GuildMarkIndex].UnionName,
+                       I18N::Game::OpposingAllianceMaster);
         else
-            mu_swprintf(c->Union, L"<%ls>", GuildMark[Owner->GuildMarkIndex].UnionName);
+            swprintf_s(c->Union, _countof(c->Union), L"<%ls>", GuildMark[Owner->GuildMarkIndex].UnionName);
     }
     else
         c->Union[0] = 0;
 
-    if (Owner->GuildMarkIndex >= 0)
+    if (validGuildMark)
     {
         c->GuildColor = Owner->GuildTeam;
 
         if (Owner->GuildStatus == G_PERSON)
-            mu_swprintf(c->Guild, L"[%ls] %ls", GuildMark[Owner->GuildMarkIndex].GuildName, I18N::Game::Members);
+            swprintf_s(c->Guild, _countof(c->Guild), L"[%ls] %ls", GuildMark[Owner->GuildMarkIndex].GuildName,
+                       I18N::Game::Members);
         else if (Owner->GuildStatus == G_MASTER)
-            mu_swprintf(c->Guild, L"[%ls] %ls", GuildMark[Owner->GuildMarkIndex].GuildName, I18N::Game::Master);
+            swprintf_s(c->Guild, _countof(c->Guild), L"[%ls] %ls", GuildMark[Owner->GuildMarkIndex].GuildName,
+                       I18N::Game::Master);
         else if (Owner->GuildStatus == G_SUB_MASTER)
-            mu_swprintf(c->Guild, L"[%ls] %ls", GuildMark[Owner->GuildMarkIndex].GuildName, I18N::Game::AssistM);
+            swprintf_s(c->Guild, _countof(c->Guild), L"[%ls] %ls", GuildMark[Owner->GuildMarkIndex].GuildName,
+                       I18N::Game::AssistM);
         else if (Owner->GuildStatus == G_BATTLE_MASTER)
-            mu_swprintf(c->Guild, L"[%ls] %ls", GuildMark[Owner->GuildMarkIndex].GuildName, I18N::Game::BattleM);
+            swprintf_s(c->Guild, _countof(c->Guild), L"[%ls] %ls", GuildMark[Owner->GuildMarkIndex].GuildName,
+                       I18N::Game::BattleM);
         else
-            mu_swprintf(c->Guild, L"[%ls]", GuildMark[Owner->GuildMarkIndex].GuildName);
+            swprintf_s(c->Guild, _countof(c->Guild), L"[%ls]", GuildMark[Owner->GuildMarkIndex].GuildName);
     }
     else
     {
@@ -496,6 +505,9 @@ void AddGuildName(CHAT* c, CHARACTER* Owner)
 
 void CreateChat(wchar_t* character_name, const wchar_t* chat_text, CHARACTER* Owner, int Flag, int SetColor)
 {
+    if (!Owner || !chat_text)
+        return;
+
     OBJECT* o = &Owner->Object;
     if (!o->Live || !o->Visible)
         return;
@@ -517,7 +529,7 @@ void CreateChat(wchar_t* character_name, const wchar_t* chat_text, CHARACTER* Ow
         CHAT* c = &Chat[i];
         if (c->Owner == Owner)
         {
-            wcscpy(c->ID, character_name);
+            wcsncpy_s(c->ID, _countof(c->ID), character_name ? character_name : L"", _TRUNCATE);
             c->Color = Color;
             AddGuildName(c, Owner);
             if (wcslen(chat_text) == 0)
@@ -540,7 +552,7 @@ void CreateChat(wchar_t* character_name, const wchar_t* chat_text, CHARACTER* Ow
         if (c->IDLifeTime <= 0 && c->LifeTime[0] <= 0)
         {
             c->Owner = Owner;
-            wcscpy(c->ID, character_name);
+            wcsncpy_s(c->ID, _countof(c->ID), character_name ? character_name : L"", _TRUNCATE);
             c->Color = Color;
             // The slot is considered free only on the name and first line;
             // a stale second line could still have a positive lifetime.
@@ -562,6 +574,9 @@ void CreateChat(wchar_t* character_name, const wchar_t* chat_text, CHARACTER* Ow
 
 int CreateChat(wchar_t* character_name, const wchar_t* chat_text, OBJECT* Owner, int Flag, int SetColor)
 {
+    if (!Owner || !chat_text)
+        return 0;
+
     OBJECT* o = Owner;
     if (!o->Live || !o->Visible)
         return 0;
@@ -579,12 +594,14 @@ int CreateChat(wchar_t* character_name, const wchar_t* chat_text, OBJECT* Owner,
         if (c->IDLifeTime <= 0 && c->LifeTime[0] <= 0)
         {
             c->Owner = NULL;
-            wcscpy(c->ID, character_name);
-            c->Color       = Color;
-            c->GuildColor  = 0;
-            c->Guild[0]    = 0;
-            c->Text[1][0]  = L'\0';
-            c->LifeTime[1] = 0;
+            wcsncpy_s(c->ID, _countof(c->ID), character_name ? character_name : L"", _TRUNCATE);
+            c->Color           = Color;
+            c->GuildColor      = 0;
+            c->Union[0]        = 0;
+            c->Guild[0]        = 0;
+            c->szShopTitle[0]  = 0;
+            c->Text[1][0]      = L'\0';
+            c->LifeTime[1]     = 0;
             AddChat(c, chat_text, 0);
             c->LifeTime[0] = Flag;
 

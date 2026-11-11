@@ -231,7 +231,7 @@ public class GuildServer : IGuildServer
     {
         try
         {
-            return await this._daprClient.InvokeMethodAsync<(uint, uint), AllianceCreationResult>(this._targetAppId, nameof(this.CreateAllianceAsync), (masterGuildId, targetGuildId)).ConfigureAwait(false);
+            return await this._daprClient.InvokeMethodAsync<AllianceArguments, AllianceCreationResult>(this._targetAppId, nameof(this.CreateAllianceAsync), new AllianceArguments(masterGuildId, targetGuildId)).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -259,12 +259,13 @@ public class GuildServer : IGuildServer
     {
         try
         {
-            return await this._daprClient.InvokeMethodAsync<uint, IImmutableList<AllianceGuildEntry>>(this._targetAppId, nameof(this.GetAllianceGuildsAsync), guildId).ConfigureAwait(false);
+            var entries = await this._daprClient.InvokeMethodAsync<uint, List<AllianceGuildEntry>>(this._targetAppId, nameof(this.GetAllianceGuildsAsync), guildId).ConfigureAwait(false);
+            return entries?.ToImmutableList() ?? ImmutableList<AllianceGuildEntry>.Empty;
         }
         catch (Exception ex)
         {
             this._logger.LogError(ex, "Unexpected error when getting alliance guilds.");
-            return [];
+            return ImmutableList<AllianceGuildEntry>.Empty;
         }
     }
 
@@ -287,7 +288,7 @@ public class GuildServer : IGuildServer
     {
         try
         {
-            return await this._daprClient.InvokeMethodAsync<(uint, uint, bool), bool>(this._targetAppId, nameof(this.SetHostilityAsync), (guildIdA, guildIdB, create)).ConfigureAwait(false);
+            return await this._daprClient.InvokeMethodAsync<GuildHostilityArguments, bool>(this._targetAppId, nameof(this.SetHostilityAsync), new GuildHostilityArguments(guildIdA, guildIdB, create)).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -301,7 +302,7 @@ public class GuildServer : IGuildServer
     {
         try
         {
-            return await this._daprClient.InvokeMethodAsync<(uint, uint), GuildRelationship>(this._targetAppId, nameof(this.GetGuildRelationshipAsync), (guild1, guild2)).ConfigureAwait(false);
+            return await this._daprClient.InvokeMethodAsync<GuildPairArguments, GuildRelationship>(this._targetAppId, nameof(this.GetGuildRelationshipAsync), new GuildPairArguments(guild1, guild2)).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

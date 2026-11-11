@@ -81,7 +81,14 @@ public sealed class OfflinePlayerMuHelper : AsyncDisposable
     protected override async ValueTask DisposeAsyncCore()
     {
         this._timer.Dispose();
-        await this._cts.CancelAsync().ConfigureAwait(false);
+        try
+        {
+            await this._cts.CancelAsync().ConfigureAwait(false);
+        }
+        catch (ObjectDisposedException)
+        {
+            // Already cancelled and disposed synchronously.
+        }
 
         if (this._loopTask is { } loopTask)
         {
@@ -109,6 +116,16 @@ public sealed class OfflinePlayerMuHelper : AsyncDisposable
         if (disposing)
         {
             this._player.Died -= this._deathHandler;
+            this._timer.Dispose();
+            try
+            {
+                this._cts.Cancel();
+            }
+            catch (ObjectDisposedException)
+            {
+                // Ignore if already disposed.
+            }
+
             this._cts.Dispose();
         }
 

@@ -32,6 +32,7 @@ using namespace SEASON3B;
 CNewUIGoldBowmanWindow::CNewUIGoldBowmanWindow()
 {
     m_pNewUIMng = NULL;
+    m_EditBox   = NULL;
     m_Pos.x = m_Pos.y = 0;
     ZeroMemory(g_strGiftName, sizeof(g_strGiftName));
 }
@@ -79,10 +80,9 @@ bool CNewUIGoldBowmanWindow::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIGoldBowmanWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -104,6 +104,9 @@ void CNewUIGoldBowmanWindow::ClosingProcess()
 
 void CNewUIGoldBowmanWindow::ChangeEditBox(const UISTATES type)
 {
+    if (!m_EditBox)
+        return;
+
     m_EditBox->SetState(type);
 
     if (type == UISTATE_NORMAL)
@@ -140,16 +143,16 @@ bool CNewUIGoldBowmanWindow::UpdateMouseEvent()
 
     if (m_EditBox && m_BtnSerial.UpdateMouseEvent())
     {
-        SEASON3B::CNewUIInventoryCtrl* pNewInventoryCtrl = g_pMyInventory->GetInventoryCtrl();
-        if (pNewInventoryCtrl->FindEmptySlot(2, 4) == -1)
+        SEASON3B::CNewUIInventoryCtrl* pNewInventoryCtrl =
+            g_pMyInventory ? g_pMyInventory->GetInventoryCtrl() : NULL;
+        if (!pNewInventoryCtrl || pNewInventoryCtrl->FindEmptySlot(2, 4) == -1)
         {
             SEASON3B::CreateOkMessageBox(I18N::Game::LeaveAtLeastOneEmptySlotInYourInventory);
         }
         else
         {
-            wchar_t strSerial[12];
-            memset(&strSerial, 0, sizeof(strSerial));
-            m_EditBox->GetText(strSerial);
+            wchar_t strSerial[MAXGOLDBOWMANSESERIAL + 1] = {};
+            m_EditBox->GetText(strSerial, MAXGOLDBOWMANSESERIAL + 1);
 
             wchar_t strSerial1[5] = L"0,";
             memcpy(strSerial1, strSerial, sizeof(wchar_t) * 4);
@@ -249,37 +252,37 @@ void CNewUIGoldBowmanWindow::RenderTexts()
     RenderText(name, m_Pos.x, m_Pos.y + 15, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
     memset(&Text, 0, sizeof(Text));
-    mu_swprintf(Text, I18N::Game::EnterThe12DigitLuckyNumber);  //"100%%
+    swprintf_s(Text, _countof(Text), L"%ls", I18N::Game::EnterThe12DigitLuckyNumber);  //"100%%
     RenderText(Text, m_Pos.x, m_Pos.y + 80, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
     memset(&Text, 0, sizeof(Text));
-    mu_swprintf(Text, I18N::Game::WrittenOnThe100WinningCard);
+    swprintf_s(Text, _countof(Text), L"%ls", I18N::Game::WrittenOnThe100WinningCard);
     RenderText(Text, m_Pos.x, m_Pos.y + 95, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
     memset(&Text, 0, sizeof(Text));
-    mu_swprintf(Text, I18N::Game::LuckyNumberRegistrationPeriod);
+    swprintf_s(Text, _countof(Text), L"%ls", I18N::Game::LuckyNumberRegistrationPeriod);
     RenderText(Text, m_Pos.x, m_Pos.y + 110, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
     memset(&Text, 0, sizeof(Text));
-    mu_swprintf(Text, I18N::Game::Oct282003Nov30);
+    swprintf_s(Text, _countof(Text), L"%ls", I18N::Game::Oct282003Nov30);
     RenderText(Text, m_Pos.x, m_Pos.y + 125, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
     /////////////////////////////// bottom text /////////////////////////////////////////////////////
 
     memset(&Text, 0, sizeof(Text));
-    mu_swprintf(Text, I18N::Game::EnterTheLuckyNumber);
+    swprintf_s(Text, _countof(Text), L"%ls", I18N::Game::EnterTheLuckyNumber);
     RenderText(Text, m_Pos.x, m_Pos.y + 180, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
     memset(&Text, 0, sizeof(Text));
-    mu_swprintf(Text, I18N::Game::ExAUS919DKL2J9);
+    swprintf_s(Text, _countof(Text), L"%ls", I18N::Game::ExAUS919DKL2J9);
     RenderText(Text, m_Pos.x, m_Pos.y + 195, 190, 0, 0xFF18FF00, 0x00000000, RT3_SORT_CENTER);
 
     memset(&Text, 0, sizeof(Text));
-    mu_swprintf(Text, I18N::Game::PleaseMakeSureToDifferentiate);
+    swprintf_s(Text, _countof(Text), L"%ls", I18N::Game::PleaseMakeSureToDifferentiate);
     RenderText(Text, m_Pos.x, m_Pos.y + 210, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
     memset(&Text, 0, sizeof(Text));
-    mu_swprintf(Text, I18N::Game::AlphabetOAndNumber0AndAlphabetIAndNumber1);
+    swprintf_s(Text, _countof(Text), L"%ls", I18N::Game::AlphabetOAndNumber0AndAlphabetIAndNumber1);
     RenderText(Text, m_Pos.x, m_Pos.y + 225, 190, 0, 0xFFFFFFFF, 0x00000000, RT3_SORT_CENTER);
 
     if (wcscmp(g_strGiftName, L""))

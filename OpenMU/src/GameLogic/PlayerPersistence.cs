@@ -41,7 +41,14 @@ internal sealed class PlayerPersistence
     /// field on purpose: reentrancy must be tracked per player, so a flow holding player A's lock
     /// still acquires player B's lock (e.g. during a trade) instead of wrongly skipping it.
     /// </summary>
-    private readonly AsyncLocal<bool> _lockHeld = new();
+    private readonly AsyncLocal<LockScope?> _lockScope = new();
+
+    private int _isEconomyPersistencePending;
+
+    private sealed class LockScope
+    {
+        public bool IsActive = true;
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PlayerPersistence"/> class.
@@ -50,6 +57,15 @@ internal sealed class PlayerPersistence
     public PlayerPersistence(Player player)
     {
         this._player = player;
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether economy persistence is pending retry.
+    /// </summary>
+    public bool IsEconomyPersistencePending
+    {
+        get => Volatile.Read(ref this._isEconomyPersistencePending) != 0;
+        set => Volatile.Write(ref this._isEconomyPersistencePending, value ? 1 : 0);
     }
 
     /// <summary>
@@ -64,9 +80,15 @@ internal sealed class PlayerPersistence
             return true;
         }
 
-        return await this.RunExclusiveAsync(
+        var saved = await this.RunExclusiveAsync(
             () => this._player.PersistenceContext.SaveChangesAsync(cancellationToken),
             cancellationToken).ConfigureAwait(false);
+        if (saved)
+        {
+            this.IsEconomyPersistencePending = false;
+        }
+
+        return saved;
     }
 
     /// <summary>
@@ -79,20 +101,22 @@ internal sealed class PlayerPersistence
     /// <returns>The result of the operation.</returns>
     public async ValueTask<T> RunExclusiveAsync<T>(Func<ValueTask<T>> operation, CancellationToken cancellationToken = default)
     {
-        if (this._lockHeld.Value)
+        if (this._lockScope.Value is { } existingScope && Volatile.Read(ref existingScope.IsActive))
         {
             return await operation().ConfigureAwait(false);
         }
 
         using var l = await this._lock.LockAsync(cancellationToken).ConfigureAwait(false);
-        this._lockHeld.Value = true;
+        var scope = new LockScope();
+        this._lockScope.Value = scope;
         try
         {
             return await operation().ConfigureAwait(false);
         }
         finally
         {
-            this._lockHeld.Value = false;
+            Volatile.Write(ref scope.IsActive, false);
+            this._lockScope.Value = null;
         }
     }
 
@@ -104,21 +128,23 @@ internal sealed class PlayerPersistence
     /// <returns>A value task which completes when the operation completed.</returns>
     public async ValueTask RunExclusiveAsync(Func<ValueTask> operation, CancellationToken cancellationToken = default)
     {
-        if (this._lockHeld.Value)
+        if (this._lockScope.Value is { } existingScope && Volatile.Read(ref existingScope.IsActive))
         {
             await operation().ConfigureAwait(false);
             return;
         }
 
         using var l = await this._lock.LockAsync(cancellationToken).ConfigureAwait(false);
-        this._lockHeld.Value = true;
+        var scope = new LockScope();
+        this._lockScope.Value = scope;
         try
         {
             await operation().ConfigureAwait(false);
         }
         finally
         {
-            this._lockHeld.Value = false;
+            Volatile.Write(ref scope.IsActive, false);
+            this._lockScope.Value = null;
         }
     }
 }

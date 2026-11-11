@@ -193,8 +193,16 @@ public class SkillHitValidator
             return (false, false);
         }
 
+        var now = DateTime.UtcNow;
+        var timestampDiff = now - animationEntry.TimeStamp;
+        if (timestampDiff > MaxAnimationToHitDelay)
+        {
+            this._logger.LogWarning("Possible Hacker - Skill Hit Invalid because of too high time difference between animation and hit.");
+            return (false, true);
+        }
+
         var currentHitEntry = this._hits[hitCounter];
-        if (!currentHitEntry.IsAnimation && currentHitEntry.TimeStamp != default && currentHitEntry.TimeStamp >= DateTime.UtcNow.AddSeconds(-1))
+        if (!currentHitEntry.IsAnimation && currentHitEntry.TimeStamp != default && currentHitEntry.TimeStamp >= now.AddSeconds(-1))
         {
             // probably speed too high to allow any check
             this._hits[animationCounter] = animationEntry with
@@ -202,20 +210,13 @@ public class SkillHitValidator
                 HitCount = animationEntry.HitCount + 1,
             };
             this._logger.LogDebug($"Hits are too fast, skipping validity check.");
-            this._hits[hitCounter] = new HitEntry(skillId, DateTime.UtcNow, false, 0);
+            this._hits[hitCounter] = new HitEntry(skillId, now, false, 0);
             return (true, true);
         }
 
         var newCount = animationEntry.HitCount + 1;
         this._hits[animationCounter] = animationEntry with { HitCount = newCount };
-        this._hits[hitCounter] = new HitEntry(skillId, DateTime.UtcNow, false, 0);
-
-        var timestampDiff = DateTime.UtcNow - animationEntry.TimeStamp;
-        if (timestampDiff > MaxAnimationToHitDelay)
-        {
-            this._logger.LogWarning("Possible Hacker - Skill Hit Invalid because of too high time difference between animation and hit.");
-            return (false, true);
-        }
+        this._hits[hitCounter] = new HitEntry(skillId, now, false, 0);
 
         return (true, true);
     }

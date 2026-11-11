@@ -14,6 +14,7 @@ public class ConfigurableIpResolver : IIpAddressResolver
 {
     private readonly ILoggerFactory _loggerFactory;
     private readonly bool _allowRuntimeReconfiguration;
+    private readonly object _syncRoot = new();
 
     private IpResolverType _resolverType;
     private string? _parameter;
@@ -44,7 +45,12 @@ public class ConfigurableIpResolver : IIpAddressResolver
     /// <inheritdoc />
     public async ValueTask<IPAddress> ResolveIPv4Async()
     {
-        var resolver = this._effectiveResolver ??= this.CreateResolver();
+        IIpAddressResolver resolver;
+        lock (this._syncRoot)
+        {
+            resolver = this._effectiveResolver ??= this.CreateResolver();
+        }
+
         return await resolver.ResolveIPv4Async().ConfigureAwait(false);
     }
 
@@ -70,9 +76,12 @@ public class ConfigurableIpResolver : IIpAddressResolver
             throw new ArgumentException("When using a custom resolver type, a parameter with an IP or host name is required.", nameof(parameter));
         }
 
-        this._effectiveResolver = null;
-        this._resolverType = resolverType;
-        this._parameter = parameter;
+        lock (this._syncRoot)
+        {
+            this._effectiveResolver = null;
+            this._resolverType = resolverType;
+            this._parameter = parameter;
+        }
 
         if (raiseEvent)
         {

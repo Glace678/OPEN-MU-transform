@@ -21,6 +21,7 @@ class TestF25ScriptSecurityAndFixes(unittest.TestCase):
         audit = SecurityScanner.audit_python_script_imports(verify_py)
         self.assertTrue(audit["exists"])
         self.assertTrue(audit["syntax_valid"])
+        self.assertTrue(audit["has_os_import"])
 
     def test_start_client_script_exists(self):
         start_client_ps1 = os.path.join(self.REPO_ROOT, "start_client.ps1")
@@ -30,6 +31,7 @@ class TestF25ScriptSecurityAndFixes(unittest.TestCase):
         start_client_ps1 = os.path.join(self.REPO_ROOT, "start_client.ps1")
         audit = SecurityScanner.audit_sidecar_credentials_lifecycle(start_client_ps1)
         self.assertTrue(audit["exists"])
+        self.assertTrue(audit["has_finally_cleanup"])
 
     def test_python_ast_scanner_capability(self):
         # Verify scanner identifies import presence on mock code

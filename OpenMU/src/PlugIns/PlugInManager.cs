@@ -125,7 +125,10 @@ public class PlugInManager
     {
         if (this._knownPlugInsPerInterfaceType.TryGetValue(typeof(T), out var result))
         {
-            return result;
+            lock (result)
+            {
+                return result.ToList();
+            }
         }
 
         return this._knownPlugIns.Values.Where(p => typeof(T).IsAssignableFrom(p));
@@ -296,13 +299,12 @@ public class PlugInManager
         }
         else if (this.GetCustomPlugInPointType(typeof(TPlugInInterface)) is { } customPlugInPointType)
         {
-            if (!this._knownPlugInsPerInterfaceType.TryGetValue(customPlugInPointType, out var plugInList))
+            var plugInList = this._knownPlugInsPerInterfaceType.GetOrAdd(customPlugInPointType, static _ => new HashSet<Type>());
+            lock (plugInList)
             {
-                plugInList = new HashSet<Type>();
-                this._knownPlugInsPerInterfaceType.TryAdd(customPlugInPointType, plugInList);
+                plugInList.Add(typeof(TPlugInClass));
             }
 
-            plugInList.Add(typeof(TPlugInClass));
             this.PlugInActivated?.Invoke(this, new PlugInEventArgs(typeof(TPlugInClass)));
         }
         else
@@ -325,13 +327,8 @@ public class PlugInManager
             throw new ArgumentException($"Plugin Type {instance.GetType()} is missing a {typeof(GuidAttribute)}. It's required to identify the plugin in the configuration. Otherwise, the plugin would get a different Guid every time it gets compiled.", nameof(instance));
         }
 
-        if (!this._plugInPoints.TryGetValue(typeof(TPlugInInterface), out var point))
-        {
-            var proxy = this.CreateProxy<TPlugInInterface>();
-            proxy.AddPlugIn(instance, true);
-            this._plugInPoints.TryAdd(typeof(TPlugInInterface), proxy);
-        }
-        else if (point is IPlugInContainer<TPlugInInterface> proxy)
+        var point = this._plugInPoints.GetOrAdd(typeof(TPlugInInterface), _ => this.CreateProxy<TPlugInInterface>());
+        if (point is IPlugInContainer<TPlugInInterface> proxy)
         {
             proxy.AddPlugIn(instance, true);
         }
@@ -667,13 +664,25 @@ public class PlugInManager
                     }
                     catch (ReflectionTypeLoadException ex)
                     {
-                        return ex.Types.WhereNotNull();
+                        return ex.Types.WhereNotNull().Where(HasPlugInAttributeSafe);
                     }
                     catch (Exception)
                     {
                         return Enumerable.Empty<Type>();
                     }
                 });
+
+        static bool HasPlugInAttributeSafe(Type type)
+        {
+            try
+            {
+                return type.GetCustomAttribute<PlugInAttribute>() != null;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 
     private IEnumerable<Type> DiscoverPlugIns(Assembly assembly)

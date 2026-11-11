@@ -31,6 +31,11 @@ public class MuHelperStatusChangeRequestHandlerPlugIn : ISubPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < MuHelperStatusChangeRequest.Length)
+        {
+            return;
+        }
+
         MuHelperStatusChangeRequest message = packet;
         var status = message.PauseStatus ? MuHelperStatus.Disabled : MuHelperStatus.Enabled;
         await this._action.ChangeHelperStateAsync(player, status).ConfigureAwait(false);

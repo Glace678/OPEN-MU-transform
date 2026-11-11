@@ -403,7 +403,9 @@ CHARACTER* SEASON3A::CGM3rdChangeUp::CreateBalgasBarrackMonster(int iType, int P
         case MONSTER_BALRAM_TRAINEE:
         case MONSTER_BALRAM_TRAINEE_SOLDIER: {
             OpenMonsterModel(MONSTER_MODEL_BALRAM);
-            c                 = CreateCharacter(Key, MODEL_BALRAM, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_BALRAM, PosX, PosY);
+            if (c == NULL)
+                return NULL;
             c->Object.Scale   = 1.25f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -411,7 +413,9 @@ CHARACTER* SEASON3A::CGM3rdChangeUp::CreateBalgasBarrackMonster(int iType, int P
         break;
         case MONSTER_DEATH_SPIRIT_TRAINEE_SOLDIER: {
             OpenMonsterModel(MONSTER_MODEL_DEATH_SPIRIT);
-            c                 = CreateCharacter(Key, MODEL_DEATH_SPIRIT, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_DEATH_SPIRIT, PosX, PosY);
+            if (c == NULL)
+                return NULL;
             c->Object.Scale   = 1.25f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -423,7 +427,9 @@ CHARACTER* SEASON3A::CGM3rdChangeUp::CreateBalgasBarrackMonster(int iType, int P
         case MONSTER_SORAM_TRAINEE:
         case MONSTER_SORAM_TRAINEE_SOLDIER: {
             OpenMonsterModel(MONSTER_MODEL_SORAM);
-            c                 = CreateCharacter(Key, MODEL_SORAM, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_SORAM, PosX, PosY);
+            if (c == NULL)
+                return NULL;
             c->Object.Scale   = 1.3f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -434,6 +440,8 @@ CHARACTER* SEASON3A::CGM3rdChangeUp::CreateBalgasBarrackMonster(int iType, int P
 
             OpenMonsterModel(MONSTER_MODEL_DARK_ELF);
             c = CreateCharacter(Key, MODEL_DARK_ELF, PosX, PosY);
+            if (c == NULL)
+                return NULL;
             //			c->Object.Scale = 1.5f;
             c->Object.Scale   = 1.7f;
             c->Weapon[0].Type = -1;
@@ -517,7 +525,8 @@ bool SEASON3A::CGM3rdChangeUp::MoveBalgasBarrackMonsterVisual(CHARACTER* c, OBJE
 
             if (o->CurrentAction == MONSTER01_ATTACK1)
             {
-                if (o->AnimationFrame >= 6.5f && o->AnimationFrame < (6.5f + fActionSpeed) && rand_fps_check(1))
+                if (o->AnimationFrame >= 6.5f && o->AnimationFrame < (6.5f + fActionSpeed) && rand_fps_check(1) &&
+                    o->BoneTransform != nullptr && 27 < b->NumBones)
                 {
                     Vector(0.0f, 0.0f, 0.0f, EndRelative);
                     b->TransformPosition(o->BoneTransform[27], EndRelative, EndPos, true);
@@ -548,7 +557,7 @@ bool SEASON3A::CGM3rdChangeUp::MoveBalgasBarrackMonsterVisual(CHARACTER* c, OBJE
         }
         break;
         case MODEL_DARK_ELF:
-            if (m_nDarkElfAppearance)
+            if (m_nDarkElfAppearance && o->BoneTransform != nullptr && 27 < b->NumBones)
             {
                 m_nDarkElfAppearance = false;
 
@@ -611,7 +620,8 @@ void SEASON3A::CGM3rdChangeUp::MoveBalgasBarrackBlurEffect(CHARACTER* c, OBJECT*
                 }
                 VectorCopy(TempAngle, o->Angle);
 
-                if (o->AnimationFrame > 4.5f && o->AnimationFrame < 5.0f)
+                if (o->AnimationFrame > 4.5f && o->AnimationFrame < 5.0f && c->TargetCharacter >= 0 &&
+                    c->TargetCharacter < MAX_CHARACTERS_CLIENT && o->BoneTransform != nullptr && b->NumBones > 0)
                 {
                     CHARACTER* tc    = &CharactersClient[c->TargetCharacter];
                     OBJECT*    to    = &tc->Object;
@@ -974,10 +984,12 @@ bool SEASON3A::CGM3rdChangeUp::RenderBalgasBarrackMonsterVisual(CHARACTER* c, OB
             Vector(0.f, 0.f, 0.f, vPos);
             Vector(0.6f, 0.6f, 0.9f, vLight);
             int iBoneThunder[] = {6, 15, 27, 17, 29, 3, 34, 44, 45, 40};
-            if (rand_fps_check(2))
+            if (rand_fps_check(2) && o->BoneTransform != nullptr)
             {
                 for (int i = 0; i < 10; ++i)
                 {
+                    if (iBoneThunder[i] >= b->NumBones)
+                        continue;
                     b->TransformPosition(o->BoneTransform[iBoneThunder[i]], vRelativePos, vPos, true);
                     if (rand_fps_check(2))
                     {

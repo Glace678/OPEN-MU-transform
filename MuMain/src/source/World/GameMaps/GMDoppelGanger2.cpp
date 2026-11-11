@@ -535,6 +535,7 @@ bool CGMDoppelGanger2::RenderObjectVisual(OBJECT* o, BMD* b)
 bool CGMDoppelGanger2::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 {
     vec3_t vPos, vLight;
+    Vector(1.0f, 1.0f, 1.0f, vLight);
 
     switch (o->Type)
     {

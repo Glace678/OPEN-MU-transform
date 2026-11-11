@@ -13,13 +13,13 @@ class TestX05ClientLoaderAndEventRankings(unittest.TestCase):
     """
 
     def test_devil_square_ticket_entry_and_rank_dispatch(self):
-        # 1. Player submits valid ticket index (slot 15)
+        # 1. Player submits valid ticket index (slot 15 >= EquippableSlotsCount 12)
         ticket_ok, _ = EconomyEngine.validate_devil_square_ticket_index(15)
         self.assertTrue(ticket_ok)
 
-        # 2. Match concludes with 15 participants; client clamps to 11
+        # 2. Match concludes with 15 participants; client clamps to MaxMatchResults = 10
         clamped_ranks = DevilSquareRankValidator.clamp_ranks(15)
-        self.assertEqual(clamped_ranks, 11)
+        self.assertEqual(clamped_ranks, 10)
 
     def test_negative_ticket_blocks_entry_to_ranking(self):
         # Cheater submits negative ticket -1
@@ -40,7 +40,7 @@ class TestX05ClientLoaderAndEventRankings(unittest.TestCase):
         # Simultaneous max boundary event state
         max_ranks = DevilSquareRankValidator.clamp_ranks(DevilSquareRankValidator.MAX_RANKS)
         max_rewards = QuestRewardValidator.clamp_reward_count(QuestRewardValidator.MAX_QUEST_REWARDS)
-        self.assertEqual(max_ranks, 11)
+        self.assertEqual(max_ranks, 10)
         self.assertEqual(max_rewards, 5)
 
     def test_corrupted_bmd_and_oversized_quest_payload_isolation(self):
@@ -53,8 +53,9 @@ class TestX05ClientLoaderAndEventRankings(unittest.TestCase):
         self.assertEqual(clamped_quest, 5)
 
     def test_event_lifecycle_pipeline(self):
-        # Ticket validation -> Admission -> Scoring -> Reward
-        entry_ok, _ = EconomyEngine.validate_devil_square_ticket_index(0)
+        # Equipped slot 0 rejected; backpack slot 12 accepted -> Admission -> Scoring -> Reward
+        self.assertFalse(EconomyEngine.validate_devil_square_ticket_index(0)[0])
+        entry_ok, _ = EconomyEngine.validate_devil_square_ticket_index(12)
         self.assertTrue(entry_ok)
 
         ranks = DevilSquareRankValidator.clamp_ranks(8)

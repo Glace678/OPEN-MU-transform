@@ -107,8 +107,7 @@ public class ChatServer : IChatServer
         catch (Exception ex)
         {
             this._logger.LogError(ex, nameof(this.CreateChatRoomAsync));
+            throw;
         }
-
-        return default;
     }
 }

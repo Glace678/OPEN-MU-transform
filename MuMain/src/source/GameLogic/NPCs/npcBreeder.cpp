@@ -21,11 +21,40 @@ extern int SrcInventoryIndex;
 
 namespace npcBreeder
 {
+namespace
+{
+constexpr size_t kRecoveryTextCapacity = 256;
+
+void CopyRecoveryText(wchar_t* dest, const wchar_t* src)
+{
+    if (dest == nullptr)
+    {
+        return;
+    }
+    if (src == nullptr)
+    {
+        dest[0] = L'\0';
+        return;
+    }
+    wcsncpy(dest, src, kRecoveryTextCapacity - 1);
+    dest[kRecoveryTextCapacity - 1] = L'\0';
+}
+}  // namespace
+
 int CalcRecoveryZen(BYTE type, wchar_t* Text)
 {
+    if (Text == nullptr || CharacterMachine == nullptr)
+    {
+        return -1;
+    }
+    Text[0] = L'\0';
+
     ITEM* ip;
 
-    g_pMyInventory->SetRepairEnableLevel(false);
+    if (g_pMyInventory != nullptr)
+    {
+        g_pMyInventory->SetRepairEnableLevel(false);
+    }
 
     switch (type)
     {
@@ -33,7 +62,7 @@ int CalcRecoveryZen(BYTE type, wchar_t* Text)
             ip = &CharacterMachine->Equipment[EQUIPMENT_HELPER];
             if (ip->Type != ITEM_DARK_HORSE_ITEM)
             {
-                mu_swprintf(Text, I18N::Game::PetIsNotEquipped);
+                CopyRecoveryText(Text, I18N::Game::PetIsNotEquipped);
                 return -1;
             }
             break;
@@ -42,12 +71,12 @@ int CalcRecoveryZen(BYTE type, wchar_t* Text)
             ip = &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT];
             if (ip->Type != ITEM_DARK_RAVEN_ITEM)
             {
-                mu_swprintf(Text, I18N::Game::PetIsNotEquipped);
+                CopyRecoveryText(Text, I18N::Game::PetIsNotEquipped);
                 return -1;
             }
             break;
         default:
-            mu_swprintf(Text, I18N::Game::PetIsNotEquipped);
+            CopyRecoveryText(Text, I18N::Game::PetIsNotEquipped);
             return -1;
     }
 
@@ -67,26 +96,23 @@ int CalcRecoveryZen(BYTE type, wchar_t* Text)
     switch (Gold)
     {
         case 0:
-            mu_swprintf(Text, I18N::Game::LifeHasBeenRecovered);
+            CopyRecoveryText(Text, I18N::Game::LifeHasBeenRecovered);
             break;
 
         default: {
-            wchar_t Text2[100];
-            memset(Text2, 0, sizeof(Text2));
+            wchar_t Text2[kRecoveryTextCapacity] = {};
 
             if ((int)CharacterMachine->Gold < Gold)
             {
                 ConvertGold((double)Gold - CharacterMachine->Gold, Text);
-                mu_swprintf(Text2, I18N::Game::SZenIsLackingToRecoverLife, Text);
+                mu_swprintf_trunc(Text2, I18N::Game::SZenIsLackingToRecoverLife, Text);
             }
             else
             {
-                mu_swprintf(Text2, I18N::Game::SZenIsRequiredToRecoverLife, Text);
+                mu_swprintf_trunc(Text2, I18N::Game::SZenIsRequiredToRecoverLife, Text);
             }
 
-            int Length = wcslen(Text2);
-            memcpy(Text, Text2, sizeof(wchar_t) * Length);
-            Text[Length] = 0;
+            CopyRecoveryText(Text, Text2);
         }
         break;
     }
@@ -96,10 +122,10 @@ int CalcRecoveryZen(BYTE type, wchar_t* Text)
 
 void RecoverPet(BYTE type)
 {
-    wchar_t Text[100];
-    int     Gold = CalcRecoveryZen(type, Text);
+    wchar_t Text[kRecoveryTextCapacity] = {};
+    int     Gold                        = CalcRecoveryZen(type, Text);
 
-    if ((int)CharacterMachine->Gold >= Gold && Gold != -1)
+    if (CharacterMachine != nullptr && SocketClient != nullptr && (int)CharacterMachine->Gold >= Gold && Gold != -1)
     {
         switch (type)
         {

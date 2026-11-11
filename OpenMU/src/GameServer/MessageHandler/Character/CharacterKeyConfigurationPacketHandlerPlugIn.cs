@@ -30,6 +30,11 @@ internal class CharacterKeyConfigurationPacketHandlerPlugIn : ISubPacketHandlerP
     /// <inheritdoc />
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length <= 4 || packet.Length > byte.MaxValue)
+        {
+            return;
+        }
+
         SaveKeyConfiguration message = packet;
         this._saveKeyConfigurationAction.SaveKeyConfiguration(player, message.Configuration.ToArray());
     }

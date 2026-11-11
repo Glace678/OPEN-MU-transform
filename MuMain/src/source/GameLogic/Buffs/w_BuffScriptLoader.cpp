@@ -103,8 +103,9 @@ bool BuffScriptLoader::Load(const std::wstring& pchFileName)
         if (fileSize < static_cast<int64_t>(sizeof(DWORD) + totalBytes64 + sizeof(DWORD)))
         {
             fclose(fp);
-            wchar_t Text[256];
-            mu_swprintf(Text, L"%ls - File size smaller than declared records.", pchFileName.c_str());
+            wchar_t Text[256]{};
+            mu_swprintf_s(Text, std::size(Text), L"%ls - File size smaller than declared records.",
+                          pchFileName.c_str());
             g_ErrorReport.Write(Text);
             MessageBox(g_hWnd, Text, NULL, MB_OK);
             SendMessage(g_hWnd, WM_DESTROY, 0, 0);
@@ -130,11 +131,13 @@ bool BuffScriptLoader::Load(const std::wstring& pchFileName)
         fclose(fp);
         if (dwCheckSum != GenerateCheckSum2(Buffer, static_cast<DWORD>(totalBytes64), 0xE2F1))
         {
-            wchar_t Text[256];
-            mu_swprintf(Text, L"%ls - File corrupted.", pchFileName.c_str());
+            delete[] Buffer;
+            wchar_t Text[256]{};
+            mu_swprintf_s(Text, std::size(Text), L"%ls - File corrupted.", pchFileName.c_str());
             g_ErrorReport.Write(Text);
             MessageBox(g_hWnd, Text, NULL, MB_OK);
             SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+            return false;
         }
         else
         {
@@ -171,11 +174,12 @@ bool BuffScriptLoader::Load(const std::wstring& pchFileName)
     }
     else
     {
-        wchar_t Text[256];
-        mu_swprintf(Text, L"%ls - File not exist.", pchFileName.c_str());
+        wchar_t Text[256]{};
+        mu_swprintf_s(Text, std::size(Text), L"%ls - File not exist.", pchFileName.c_str());
         g_ErrorReport.Write(Text);
         MessageBox(g_hWnd, Text, NULL, MB_OK);
         SendMessage(g_hWnd, WM_DESTROY, 0, 0);
+        return false;
     }
 
     return true;

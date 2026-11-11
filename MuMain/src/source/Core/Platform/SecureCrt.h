@@ -123,6 +123,47 @@ template <size_t N> inline errno_t wcscat_s(wchar_t (&dst)[N], const wchar_t* sr
     return wcscat_s(dst, N, src);
 }
 
+// ---- wcsncat_s (supports _TRUNCATE) -----------------------------------------
+inline errno_t wcsncat_s(wchar_t* dst, size_t count, const wchar_t* src, size_t n)
+{
+    if (dst == nullptr || count == 0)
+        return mu__einval();
+    if (src == nullptr)
+    {
+        if (n == 0)
+            return 0;
+        dst[0] = L'\0';
+        return mu__einval();
+    }
+    const size_t dlen = wcsnlen(dst, count);
+    if (dlen == count)
+    {
+        dst[0] = L'\0';
+        return mu__einval();
+    }
+    const size_t slen   = wcslen(src);
+    size_t       tocopy = (n == _TRUNCATE) ? slen : (n < slen ? n : slen);
+    if (dlen + tocopy + 1 > count)
+    {
+        if (n == _TRUNCATE)
+        {
+            tocopy = count - dlen - 1;
+        }
+        else
+        {
+            dst[0] = L'\0';
+            return mu__erange();
+        }
+    }
+    wmemcpy(dst + dlen, src, tocopy);
+    dst[dlen + tocopy] = L'\0';
+    return 0;
+}
+template <size_t N> inline errno_t wcsncat_s(wchar_t (&dst)[N], const wchar_t* src, size_t n)
+{
+    return wcsncat_s(dst, N, src, n);
+}
+
 // va_list cores. On error or truncation they return -1 and (unless truncation
 // is explicitly allowed) empty the buffer, matching MSVC's non-aborting result.
 inline int vsprintf_s(char* buf, size_t count, const char* fmt, va_list argptr)
@@ -157,7 +198,9 @@ inline int _vsnwprintf_s(wchar_t* buf, size_t count, size_t maxcount, const wcha
     const int    r   = vswprintf(buf, lim, fmt, argptr);
     if (r < 0)
     {
-        if (maxcount != _TRUNCATE)
+        if (maxcount == _TRUNCATE)
+            buf[lim - 1] = L'\0';
+        else
             buf[0] = L'\0';
         return -1;
     }

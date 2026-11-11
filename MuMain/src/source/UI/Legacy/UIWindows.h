@@ -140,7 +140,7 @@ class CUIChatWindow : public CUIBaseWindow
 {
     static void                            HandlePacketS(int32_t handle, const BYTE* ReceiveBuffer, int32_t Size);
     inline static std::map<int32_t, DWORD> ConnectionHandleToWindowUuid = {};
-    Connection*                            _connection;
+    Connection*                            _connection                  = nullptr;
 
 public:
     CUIChatWindow();
@@ -594,12 +594,18 @@ public:
     void RefreshMainWndPalList()
     {
         if (m_dwMainWindowUIID != 0)
-            GetFriendMainWindow()->RefreshPalList();
+        {
+            if (CUIFriendWindow* pMain = GetFriendMainWindow())
+                pMain->RefreshPalList();
+        }
     }
     void RefreshMainWndLetterList()
     {
         if (m_dwMainWindowUIID != 0)
-            GetFriendMainWindow()->RefreshLetterList();
+        {
+            if (CUIFriendWindow* pMain = GetFriendMainWindow())
+                pMain->RefreshLetterList();
+        }
     }
     void RefreshMainWndChatRoomList();
 

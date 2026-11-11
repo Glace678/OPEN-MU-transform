@@ -28,6 +28,10 @@ void CNewUIInventoryExtension::Init()
 {
     m_pNewUIMng = nullptr;
     m_Pos.x = m_Pos.y = 0;
+    for (auto& extension : m_extensions)
+    {
+        extension = nullptr;
+    }
 }
 
 bool CNewUIInventoryExtension::Create(CNewUIManager* pNewUIMng, int x, int y)
@@ -49,7 +53,12 @@ bool CNewUIInventoryExtension::Create(CNewUIManager* pNewUIMng, int x, int y)
         if (false == m_extension->Create(STORAGE_TYPE::INVENTORY, g_pNewUI3DRenderMng, g_pNewItemMng, this, x + 15,
                                          y + 45 + HEIGHT_PER_EXT * i, COLUMN_INVENTORY, ROW_INVENTORY_EXT, indexOffset))
         {
-            SafeDelete(m_extension);
+            for (auto& ext : m_extensions)
+            {
+                SafeDelete(ext);
+            }
+            m_pNewUIMng->RemoveUIObj(this);
+            m_pNewUIMng = nullptr;
             return false;
         }
 
@@ -71,8 +80,6 @@ bool CNewUIInventoryExtension::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIInventoryExtension::Release()
 {
-    UnloadImages();
-
     for (auto& extension : m_extensions)
     {
         if (extension)
@@ -83,6 +90,7 @@ void CNewUIInventoryExtension::Release()
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = nullptr;
     }

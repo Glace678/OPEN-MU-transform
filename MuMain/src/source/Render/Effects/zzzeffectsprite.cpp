@@ -73,8 +73,12 @@ void RenderSprite(OBJECT* o, OBJECT* Owner)
     float Scale       = o->AnimationFrame * o->Scale;
 
     BITMAP_t* pBitmap = Bitmaps.GetTexture(o->Type);
-    float     Width   = pBitmap->Width * Scale;
-    float     Height  = pBitmap->Height * Scale;
+    if (pBitmap == nullptr)
+    {
+        return;
+    }
+    float Width  = pBitmap->Width * Scale;
+    float Height = pBitmap->Height * Scale;
 
     if (o->Type == BITMAP_FORMATION_MARK)
     {

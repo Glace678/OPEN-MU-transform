@@ -49,6 +49,16 @@ public class PeriodicTaskConfiguration
     /// <param name="endLimit">The end limit, exclusive.</param>
     public static IEnumerable<TimeOnly> GenerateTimeSequence(TimeSpan duration, TimeOnly? startLimit = null, TimeOnly? endLimit = null)
     {
+        if (duration <= TimeSpan.Zero)
+        {
+            throw new ArgumentOutOfRangeException(nameof(duration), "Duration must be greater than zero.");
+        }
+
+        return GenerateTimeSequenceCore(duration, startLimit, endLimit);
+    }
+
+    private static IEnumerable<TimeOnly> GenerateTimeSequenceCore(TimeSpan duration, TimeOnly? startLimit, TimeOnly? endLimit)
+    {
         var limit = endLimit?.ToTimeSpan() ?? TimeSpan.FromDays(1);
         var current = startLimit?.ToTimeSpan() ?? TimeSpan.Zero;
 

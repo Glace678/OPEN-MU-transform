@@ -57,34 +57,46 @@ CHARACTER* CGMDoppelGanger1::CreateMonster(int iType, int PosX, int PosY, int Ke
     {
         case MONSTER_TERRIBLE_BUTCHER:
             OpenMonsterModel(MONSTER_MODEL_TERRIBLE_BUTCHER);
-            pCharacter               = CreateCharacter(Key, MODEL_TERRIBLE_BUTCHER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_TERRIBLE_BUTCHER, PosX, PosY);
+            if (!pCharacter)
+                break;
             pCharacter->Object.Scale = 1.0f;
             break;
         case MONSTER_MAD_BUTCHER:
             OpenMonsterModel(MONSTER_MODEL_MAD_BUTCHER);
-            pCharacter               = CreateCharacter(Key, MODEL_MAD_BUTCHER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_MAD_BUTCHER, PosX, PosY);
+            if (!pCharacter)
+                break;
             pCharacter->Object.Scale = 0.8f;
             break;
         case MONSTER_ICE_WALKER2:
             OpenMonsterModel(MONSTER_MODEL_ICE_WALKER);
-            pCharacter                 = CreateCharacter(Key, MODEL_ICE_WALKER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_ICE_WALKER, PosX, PosY);
+            if (!pCharacter)
+                break;
             pCharacter->Object.Scale   = 1.2f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
             break;
         case MONSTER_LARVA2:
             OpenMonsterModel(MONSTER_MODEL_LARVA);
-            pCharacter               = CreateCharacter(Key, MODEL_LARVA, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_LARVA, PosX, PosY);
+            if (!pCharacter)
+                break;
             pCharacter->Object.Scale = 0.6f;
             break;
         case MONSTER_DOPPELGANGER:
             OpenMonsterModel(MONSTER_MODEL_DOPPELGANGER);
-            pCharacter                         = CreateCharacter(Key, MODEL_DOPPELGANGER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_DOPPELGANGER, PosX, PosY);
+            if (!pCharacter)
+                break;
             pCharacter->Object.Scale           = 1.1f;
             pCharacter->Object.m_bRenderShadow = false;
             break;
         case MONSTER_DOPPELGANGER_ELF:
-            pCharacter                                 = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            if (!pCharacter)
+                break;
             pCharacter->Object.Scale                   = 1.0f;
             pCharacter->Class                          = CLASS_ELF;
             pCharacter->BodyPart[BODYPART_HELM].Type   = MODEL_SPIRIT_HELM;
@@ -96,7 +108,9 @@ CHARACTER* CGMDoppelGanger1::CreateMonster(int iType, int PosX, int PosY, int Ke
             pCharacter->Weapon[1].Type                 = MODEL_CELESTIAL_BOW;
             break;
         case MONSTER_DOPPELGANGER_KNIGHT:
-            pCharacter                                 = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            if (!pCharacter)
+                break;
             pCharacter->Object.Scale                   = 1.0f;
             pCharacter->Class                          = CLASS_KNIGHT;
             pCharacter->BodyPart[BODYPART_HELM].Type   = MODEL_DRAGON_HELM;
@@ -108,7 +122,9 @@ CHARACTER* CGMDoppelGanger1::CreateMonster(int iType, int PosX, int PosY, int Ke
             pCharacter->Weapon[1].Type                 = -1;
             break;
         case MONSTER_DOPPELGANGER_WIZARD:
-            pCharacter                                 = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            if (!pCharacter)
+                break;
             pCharacter->Object.Scale                   = 1.0f;
             pCharacter->Class                          = CLASS_WIZARD;
             pCharacter->BodyPart[BODYPART_HELM].Type   = MODEL_GRAND_SOUL_HELM;
@@ -120,7 +136,9 @@ CHARACTER* CGMDoppelGanger1::CreateMonster(int iType, int PosX, int PosY, int Ke
             pCharacter->Weapon[1].Type                 = MODEL_GRAND_SOUL_SHIELD;
             break;
         case MONSTER_DOPPELGANGER_MG:
-            pCharacter                                 = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            if (!pCharacter)
+                break;
             pCharacter->Object.Scale                   = 1.0f;
             pCharacter->Class                          = CLASS_DARK;
             pCharacter->BodyPart[BODYPART_HELM].Type   = MODEL_BODY_HELM + 15;
@@ -132,7 +150,9 @@ CHARACTER* CGMDoppelGanger1::CreateMonster(int iType, int PosX, int PosY, int Ke
             pCharacter->Weapon[1].Type                 = -1;
             break;
         case MONSTER_DOPPELGANGER_DL:
-            pCharacter                                 = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            if (!pCharacter)
+                break;
             pCharacter->Object.Scale                   = 1.0f;
             pCharacter->Class                          = CLASS_DARK_LORD;
             pCharacter->BodyPart[BODYPART_HELM].Type   = MODEL_DARK_STEEL_MASK;
@@ -146,7 +166,9 @@ CHARACTER* CGMDoppelGanger1::CreateMonster(int iType, int PosX, int PosY, int Ke
             CreateMount(MODEL_DARK_HORSE, pCharacter->Object.Position, &pCharacter->Object, 1);
             break;
         case MONSTER_DOPPELGANGER_SUM:
-            pCharacter                                 = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_PLAYER, PosX, PosY);
+            if (!pCharacter)
+                break;
             pCharacter->Object.Scale                   = 1.0f;
             pCharacter->Class                          = CLASS_SUMMONER;
             pCharacter->BodyPart[BODYPART_HELM].Type   = MODEL_RED_WING_HELM;
@@ -484,6 +506,7 @@ bool CGMDoppelGanger1::RenderObjectVisual(OBJECT* o, BMD* b)
 bool CGMDoppelGanger1::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 {
     vec3_t vPos, vLight;
+    Vector(1.0f, 1.0f, 1.0f, vLight);
 
     switch (o->Type)
     {

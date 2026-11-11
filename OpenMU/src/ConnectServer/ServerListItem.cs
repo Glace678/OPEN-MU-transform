@@ -54,11 +54,7 @@ internal class ServerListItem : IGameServerEntry
         private set
         {
             this._serverLoadPercentage = value;
-            var cache = this._owner.Cache;
-            if (cache != null && this.LoadIndex >= 0 && this.LoadIndex < cache.Length)
-            {
-                cache[this.LoadIndex] = value;
-            }
+            this._owner.UpdateServerLoadByte(this, value);
         }
     }
 

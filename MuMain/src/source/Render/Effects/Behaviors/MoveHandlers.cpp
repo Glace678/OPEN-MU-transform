@@ -134,6 +134,12 @@ bool Move_MODEL_DRAGON(OBJECT* o, int index, float Luminosity)
 // MODEL_ARROW_AUTOLOAD
 bool Move_MODEL_ARROW_AUTOLOAD(OBJECT* o, int index, float Luminosity)
 {
+    if (o->Owner == nullptr)
+    {
+        o->LifeTime = 0;
+        o->Live     = false;
+        return true;
+    }
     {
         if (o->SubType == 0)
         {
@@ -154,6 +160,13 @@ bool Move_MODEL_ARROW_AUTOLOAD(OBJECT* o, int index, float Luminosity)
             }
 
             OBJECT* pOwner = o->Owner;
+            if (pOwner->BoneTransform == nullptr || pOwner->Type < 0 || pOwner->Type >= MAX_MODELS ||
+                Models[pOwner->Type].NumBones <= 47)
+            {
+                o->LifeTime = 0;
+                o->Live     = false;
+                return true;
+            }
             VectorTransform(tmp, pOwner->BoneTransform[47], o->Position);
             VectorScale(o->Position, pOwner->Scale, o->Position);
             VectorAddScaled(o->Position, pOwner->Position, o->Position, FPS_ANIMATION_FACTOR);
@@ -172,6 +185,13 @@ bool Move_MODEL_INFINITY_ARROW(OBJECT* o, int index, float Luminosity)
     {
         vec3_t  tmp    = {0.f, 0.f, 0.f};
         OBJECT* pOwner = o->Owner;
+        if (pOwner == nullptr || pOwner->BoneTransform == nullptr || pOwner->Type < 0 || pOwner->Type >= MAX_MODELS ||
+            Models[pOwner->Type].NumBones <= 29)
+        {
+            o->LifeTime = 0;
+            o->Live     = false;
+            return true;
+        }
         if (o->SubType == 1)
         {
             o->Light[0] *= pow(0.95f, FPS_ANIMATION_FACTOR);
@@ -189,6 +209,12 @@ bool Move_MODEL_INFINITY_ARROW(OBJECT* o, int index, float Luminosity)
 // MODEL_INFINITY_ARROW1, MODEL_INFINITY_ARROW2, MODEL_INFINITY_ARROW3
 bool Move_MODEL_INFINITY_ARROW1(OBJECT* o, int index, float Luminosity)
 {
+    if (o->Owner == nullptr)
+    {
+        o->LifeTime = 0;
+        o->Live     = false;
+        return true;
+    }
     {
         if (o->SubType == 0)
         {
@@ -229,6 +255,12 @@ bool Move_MODEL_INFINITY_ARROW1(OBJECT* o, int index, float Luminosity)
 // MODEL_SHIELD_CRASH
 bool Move_MODEL_SHIELD_CRASH(OBJECT* o, int index, float Luminosity)
 {
+    if (o->Owner == nullptr)
+    {
+        o->LifeTime = 0;
+        o->Live     = false;
+        return true;
+    }
     {
         float  ftmp = 0.f;
         vec3_t nPos, nLight;
@@ -296,6 +328,12 @@ bool Move_MODEL_SHIELD_CRASH(OBJECT* o, int index, float Luminosity)
 // MODEL_SHIELD_CRASH2
 bool Move_MODEL_SHIELD_CRASH2(OBJECT* o, int index, float Luminosity)
 {
+    if (o->Owner == nullptr)
+    {
+        o->LifeTime = 0;
+        o->Live     = false;
+        return true;
+    }
     {
         float ftmp = 0.f;
         if (o->LifeTime >= 0 && o->LifeTime < 8)
@@ -390,9 +428,20 @@ bool Move_MODEL_BLADE_SKILL(OBJECT* o, int index, float Luminosity)
 
             if (o->LifeTime >= 3 && (int)o->LifeTime % 2 == 0)
             {
+                if (o->Owner == nullptr)
+                {
+                    o->LifeTime = 0;
+                    o->Live     = false;
+                    return true;
+                }
+                const int pkIndex = static_cast<int>(o->PKKey);
+                if (pkIndex < 0 || pkIndex >= MAX_CHARACTERS_CLIENT)
+                {
+                    return true;
+                }
                 VectorCopy(o->Owner->Angle, Angle);
                 int        Ran = -1;
-                CHARACTER* c   = &CharactersClient[(int)o->PKKey];
+                CHARACTER* c   = &CharactersClient[pkIndex];
 
                 Ran = rand() % 6;
                 if (o->m_sTargetIndex > -1)
@@ -631,7 +680,7 @@ bool Move_BITMAP_SKULL(OBJECT* o, int index, float Luminosity)
     }
     else
     {
-        if (!o->Owner->Live)
+        if (o->Owner == nullptr || !o->Owner->Live)
         {
             o->LifeTime = 0;
             o->Live     = false;
@@ -879,12 +928,18 @@ bool Move_BITMAP_FIRE_CURSEDLICH(OBJECT* o, int index, float Luminosity)
     if (o->SubType == 0)
     {
         OBJECT* pObject = o->Owner;
-        if (pObject->Live == false)
+        if (pObject == nullptr || pObject->Live == false || pObject->Type < 0 || pObject->Type >= MAX_MODELS ||
+            pObject->BoneTransform == nullptr)
         {
             o->Live = false;
             return true;
         }
-        BMD*   pModel = &Models[pObject->Type];
+        BMD* pModel = &Models[pObject->Type];
+        if (o->Skill >= pModel->NumBones)
+        {
+            o->Live = false;
+            return true;
+        }
         vec3_t vPos, vRelative;
         Vector(0.0f, 0.0f, 0.0f, vRelative);
         pModel->TransformPosition(pObject->BoneTransform[o->Skill], vRelative, vPos, false);
@@ -942,7 +997,8 @@ bool Move_BITMAP_FIRE_CURSEDLICH(OBJECT* o, int index, float Luminosity)
     }
     else if (o->SubType == 2)
     {
-        if (o->Owner == NULL)
+        if (o->Owner == NULL || o->Owner->Type < 0 || o->Owner->Type >= MAX_MODELS ||
+            Models[o->Owner->Type].NumBones <= 0)
         {
             o->Live = false;
             return true;
@@ -1023,7 +1079,14 @@ bool Move_MODEL_SUMMONER_WRISTRING_EFFECT(OBJECT* o, int index, float Luminosity
 {
     {
         OBJECT* pObject = o->Owner;
-        BMD*    pModel  = &Models[pObject->Type];
+        if (pObject == nullptr || pObject->Type < 0 || pObject->Type >= MAX_MODELS ||
+            pObject->BoneTransform == nullptr || Models[pObject->Type].NumBones <= 37 || o->Type < 0 ||
+            o->Type >= MAX_MODELS)
+        {
+            o->Live = false;
+            return true;
+        }
+        BMD* pModel = &Models[pObject->Type];
         //pModel->Animation(BoneTransform, o->AnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle, o->HeadAngle);
         vec3_t vPos, vRelative;
         Vector(0.0f, 0.0f, 0.0f, vRelative);
@@ -1047,9 +1110,14 @@ bool Move_MODEL_SUMMONER_EQUIP_HEAD_SAHAMUTT(OBJECT* o, int index, float Luminos
     if (o->SubType == 0)
     {
         OBJECT* pObject = o->Owner;
-        o->Position[0]  = pObject->Position[0] + cosf(WorldTime * 0.003f + o->Skill * 0.024f) * 60.0f;
-        o->Position[1]  = pObject->Position[1] + sinf(WorldTime * 0.003f + o->Skill * 0.024f) * 60.0f;
-        o->Position[2]  = pObject->Position[2] + (sinf(WorldTime * 0.0010f + o->Skill * 0.024f) + 2.0f) * 80.0f - 60.0f;
+        if (pObject == nullptr)
+        {
+            o->Live = false;
+            return true;
+        }
+        o->Position[0] = pObject->Position[0] + cosf(WorldTime * 0.003f + o->Skill * 0.024f) * 60.0f;
+        o->Position[1] = pObject->Position[1] + sinf(WorldTime * 0.003f + o->Skill * 0.024f) * 60.0f;
+        o->Position[2] = pObject->Position[2] + (sinf(WorldTime * 0.0010f + o->Skill * 0.024f) + 2.0f) * 80.0f - 60.0f;
 
         if (o->StartPosition[0] != o->Position[0] - pObject->Position[0])
         {
@@ -1068,7 +1136,8 @@ bool Move_MODEL_SUMMONER_EQUIP_HEAD_SAHAMUTT(OBJECT* o, int index, float Luminos
         }
         else
         {
-            if (Hero->SafeZone /* || rand_fps_check(100)*/ || sinf(WorldTime * 0.0004f + o->Skill * 0.024f) < 0.3f)
+            if ((Hero != nullptr && Hero->SafeZone) /* || rand_fps_check(100)*/ ||
+                sinf(WorldTime * 0.0004f + o->Skill * 0.024f) < 0.3f)
                 o->Kind = 1;
             if (o->Alpha < 1.0f)
                 o->Alpha += 0.03f * FPS_ANIMATION_FACTOR;
@@ -1089,13 +1158,17 @@ bool Move_MODEL_SUMMONER_EQUIP_HEAD_SAHAMUTT(OBJECT* o, int index, float Luminos
         if (rand_fps_check(2))
         {
             OBJECT* pObject = o->Owner;
-            if (pObject->Live == false)
+            if (pObject == nullptr || pObject->Live == false || pObject->Type < 0 || pObject->Type >= MAX_MODELS)
             {
                 o->Live = false;
                 return true;
             }
             BMD* pModel    = &Models[pObject->Type];
             int  iNumBones = pModel->NumBones;
+            if (iNumBones <= 0)
+            {
+                return true;
+            }
             CreateEffectFpsChecked(BITMAP_FIRE_CURSEDLICH, pObject->Position, pObject->Angle, pObject->Light, 0,
                                    pObject, -1, rand() % iNumBones);
         }
@@ -1109,9 +1182,14 @@ bool Move_MODEL_SUMMONER_EQUIP_HEAD_NEIL(OBJECT* o, int index, float Luminosity)
     if (o->SubType == 0)
     {
         OBJECT* pObject = o->Owner;
-        o->Position[0]  = pObject->Position[0] + cosf(WorldTime * 0.003f + o->Skill * 0.024f) * 60.0f;
-        o->Position[1]  = pObject->Position[1] + sinf(WorldTime * 0.003f + o->Skill * 0.024f) * 60.0f;
-        o->Position[2]  = pObject->Position[2] + (sinf(WorldTime * 0.0010f + o->Skill * 0.024f) + 2.0f) * 80.0f - 60.0f;
+        if (pObject == nullptr)
+        {
+            o->Live = false;
+            return true;
+        }
+        o->Position[0] = pObject->Position[0] + cosf(WorldTime * 0.003f + o->Skill * 0.024f) * 60.0f;
+        o->Position[1] = pObject->Position[1] + sinf(WorldTime * 0.003f + o->Skill * 0.024f) * 60.0f;
+        o->Position[2] = pObject->Position[2] + (sinf(WorldTime * 0.0010f + o->Skill * 0.024f) + 2.0f) * 80.0f - 60.0f;
 
         if (o->StartPosition[0] != o->Position[0] - pObject->Position[0])
         {
@@ -1130,7 +1208,8 @@ bool Move_MODEL_SUMMONER_EQUIP_HEAD_NEIL(OBJECT* o, int index, float Luminosity)
         }
         else
         {
-            if (Hero->SafeZone /* || rand_fps_check(100)*/ || sinf(WorldTime * 0.0004f + o->Skill * 0.024f) < 0.3f)
+            if ((Hero != nullptr && Hero->SafeZone) /* || rand_fps_check(100)*/ ||
+                sinf(WorldTime * 0.0004f + o->Skill * 0.024f) < 0.3f)
                 o->Kind = 1;
             if (o->Alpha < 1.0f)
                 o->Alpha += 0.03f * FPS_ANIMATION_FACTOR;
@@ -1155,7 +1234,7 @@ bool Move_MODEL_SUMMONER_EQUIP_HEAD_NEIL(OBJECT* o, int index, float Luminosity)
     else if (o->SubType == 1)
     {
         OBJECT* pObject = o->Owner;
-        if (pObject->Live == false)
+        if (pObject == nullptr || pObject->Live == false)
         {
             o->Live = false;
             return true;
@@ -1357,7 +1436,12 @@ bool Move_MODEL_SUMMONER_SUMMON_LAGUL(OBJECT* o, int index, float Luminosity)
         if (o->SubType == 0)
         {
             int anEffectVolume[3] = {5, 4, 3};
-            if (rand() % anEffectVolume[(int)o->PKKey] == 0)
+            int volumeIndex       = static_cast<int>(o->PKKey);
+            if (volumeIndex < 0 || volumeIndex >= 3)
+            {
+                volumeIndex = 0;
+            }
+            if (rand() % anEffectVolume[volumeIndex] == 0)
             {
                 vec3_t vPos, vLight;
 
@@ -1585,7 +1669,8 @@ bool Move_BITMAP_PIN_LIGHT(OBJECT* o, int index, float Luminosity)
             break;
         case 1:
         case 2:
-            if (o->Owner == NULL || o->Owner->Live == false)
+            if (o->Owner == NULL || o->Owner->Live == false || o->Owner->Type < 0 || o->Owner->Type >= MAX_MODELS ||
+                o->Owner->BoneTransform == NULL || Models[o->Owner->Type].NumBones <= 0)
                 o->Live = false;
             else
             {
@@ -1608,7 +1693,8 @@ bool Move_BITMAP_PIN_LIGHT(OBJECT* o, int index, float Luminosity)
             }
             break;
         case 4:
-            if (o->Owner == NULL || o->Owner->Live == false || o->Alpha <= 0.0f)
+            if (o->Owner == NULL || o->Owner->Live == false || o->Alpha <= 0.0f || o->Owner->Type < 0 ||
+                o->Owner->Type >= MAX_MODELS || Models[o->Owner->Type].NumBones <= 11)
             {
                 o->Live = false;
             }
@@ -1665,6 +1751,12 @@ bool Move_BITMAP_GATHERING(OBJECT* o, int index, float Luminosity)
     vec3_t p;
     if (o->SubType == 1 || o->SubType == 2)
     {
+        if (o->Owner == nullptr || o->Owner->Type < 0 || o->Owner->Type >= MAX_MODELS ||
+            o->Owner->BoneTransform == nullptr || Models[o->Owner->Type].NumBones <= 33)
+        {
+            o->Live = false;
+            return true;
+        }
         BMD* b = &Models[o->Owner->Type];
         Vector(0.f, 0.f, 10.f * FPS_ANIMATION_FACTOR, p);
         VectorCopy(o->StartPosition, b->BodyOrigin);
@@ -1774,13 +1866,15 @@ bool Move_BITMAP_JOINT_THUNDER(OBJECT* o, int index, float Luminosity)
                 CreateEffectFpsChecked(BITMAP_CHROME_ENERGY2, vPosition, o->Angle, vLight, 0);
         }
 
-        if (o->Owner != NULL && rand_fps_check(5) && o->Owner->BoneTransform != NULL)
+        if (o->Owner != NULL && o->Owner->Type >= 0 && o->Owner->Type < MAX_MODELS && rand_fps_check(5) &&
+            o->Owner->BoneTransform != NULL)
         {
             BMD*   pTargetModel = &Models[o->Owner->Type];
             int    iNumBones    = pTargetModel->NumBones;
             float  fRandom;
             vec3_t vLight, vRelativePos, vPos, vAngle;
             Vector(0.0f, 0.0f, 0.0f, vRelativePos);
+            Vector(0.0f, 0.0f, 0.0f, vAngle);
             for (int i = 0; i < iNumBones; ++i)
             {
                 if (iNumBones > 100 && rand() % iNumBones > iNumBones / 10)
@@ -1804,6 +1898,11 @@ bool Move_BITMAP_JOINT_THUNDER(OBJECT* o, int index, float Luminosity)
 // BITMAP_IMPACT
 bool Move_BITMAP_IMPACT(OBJECT* o, int index, float Luminosity)
 {
+    if (o->Owner == nullptr)
+    {
+        o->Live = false;
+        return true;
+    }
     vec3_t Light;
     Vector(1.f, 1.f, 1.f, Light);
     {
@@ -2042,12 +2141,20 @@ bool Move_MODEL_CHAIN_LIGHTNING(OBJECT* o, int index, float Luminosity)
             case 0:
             case 1:
             case 2: {
-                OBJECT*    pSourceObj  = o->Owner;
-                CHARACTER* pTargetChar = &CharactersClient[FindCharacterIndex(o->m_sTargetIndex)];
+                OBJECT*   pSourceObj  = o->Owner;
+                const int targetIndex = FindCharacterIndex(o->m_sTargetIndex);
+                if (pSourceObj == nullptr || pSourceObj->Live == false || targetIndex < 0 ||
+                    targetIndex >= MAX_CHARACTERS_CLIENT)
+                {
+                    o->LifeTime = 0;
+                    o->Live     = false;
+                    break;
+                }
+                CHARACTER* pTargetChar = &CharactersClient[targetIndex];
                 OBJECT*    pTargetObj  = &pTargetChar->Object;
 
-                if (pSourceObj == NULL || pSourceObj->Live == false || pTargetObj == NULL ||
-                    pTargetObj->Live == false || (pTargetChar->Dead > 0) == true)
+                if (pTargetObj->Live == false || (pTargetChar->Dead > 0) == true || pSourceObj->Type < 0 ||
+                    pSourceObj->Type >= MAX_MODELS || pTargetObj->Type < 0 || pTargetObj->Type >= MAX_MODELS)
                 {
                     o->LifeTime = 0;
                     o->Live     = false;
@@ -2058,7 +2165,9 @@ bool Move_MODEL_CHAIN_LIGHTNING(OBJECT* o, int index, float Luminosity)
                 BMD* pTargetModel = &Models[pTargetObj->Type];
 
                 vec3_t vLight, vRelativePos, vPos, vAngle;
+                Vector(0.4f, 0.4f, 1.0f, vLight);
                 Vector(0.0f, 0.0f, 0.0f, vRelativePos);
+                Vector(0.0f, 0.0f, 0.0f, vAngle);
 
                 if (o->SubType == 1 || o->SubType == 2)
                 {
@@ -2068,6 +2177,12 @@ bool Move_MODEL_CHAIN_LIGHTNING(OBJECT* o, int index, float Luminosity)
 
                 if (o->SubType == 0)
                 {
+                    if (pSourceObj->BoneTransform == nullptr || pSourceModel->NumBones <= 37)
+                    {
+                        o->LifeTime = 0;
+                        o->Live     = false;
+                        break;
+                    }
                     VectorCopy(pSourceObj->Position, pSourceModel->BodyOrigin);
 
                     Vector(0.4f, 0.4f, 1.0f, vLight);
@@ -2110,7 +2225,7 @@ bool Move_MODEL_CHAIN_LIGHTNING(OBJECT* o, int index, float Luminosity)
                                           pTargetObj, 10.f, -1, 0, 0, -1, vLight);
                 }
 
-                if ((int)o->LifeTime == 15)
+                if ((int)o->LifeTime == 15 && pTargetObj->BoneTransform != nullptr)
                 {
                     int   iNumBones = pTargetModel->NumBones;
                     float fRandom;
@@ -2140,15 +2255,20 @@ bool Move_MODEL_ALICE_DRAIN_LIFE(OBJECT* o, int index, float Luminosity)
         vec3_t vSourcePos, vTargetPos, vLight, vRelativePos;
         Vector(0.0f, 0.0f, 0.0f, vRelativePos);
 
-        OBJECT* pSourceObj   = o->Owner;
-        OBJECT* pTargetObj   = pSourceObj->Owner;
-        BMD*    pSourceModel = &Models[pSourceObj->Type];
-        BMD*    pTargetModel = &Models[pTargetObj->Type];
-
-        if (pSourceObj == NULL || pTargetObj == NULL || pSourceObj->Live == false || pTargetObj->Live == false)
+        OBJECT* pSourceObj = o->Owner;
+        if (pSourceObj == nullptr || pSourceObj->Owner == nullptr || pSourceObj->Live == false ||
+            pSourceObj->Owner->Live == false)
         {
             return true;
         }
+        OBJECT* pTargetObj = pSourceObj->Owner;
+        if (pSourceObj->Type < 0 || pSourceObj->Type >= MAX_MODELS || pTargetObj->Type < 0 ||
+            pTargetObj->Type >= MAX_MODELS)
+        {
+            return true;
+        }
+        BMD* pSourceModel = &Models[pSourceObj->Type];
+        BMD* pTargetModel = &Models[pTargetObj->Type];
 
         int iRandom = rand() % 10;
         int iCnt    = 0;
@@ -3041,7 +3161,7 @@ bool Move_MODEL_SKILL_FURY_STRIKE(OBJECT* o, int index, float Luminosity)
             Vector(1.f, 1.f, 1.f, light);
             Vector(0.f, 0.f, 0.f, Angle);
 
-            if (o->Kind != 3)
+            if (o->Kind != 3 && o->Owner != nullptr)
             {
                 Vector(-25.f, -80.f, 0.f, p);
                 AngleMatrix(o->Owner->Angle, Matrix);
@@ -3119,6 +3239,10 @@ bool Move_MODEL_SKILL_FURY_STRIKE(OBJECT* o, int index, float Luminosity)
 
                 TargetX = (int)(Position[0] / TERRAIN_SCALE);
                 TargetY = (int)(Position[1] / TERRAIN_SCALE);
+                if (TargetX < 0 || TargetX >= TERRAIN_SIZE || TargetY < 0 || TargetY >= TERRAIN_SIZE)
+                {
+                    continue;
+                }
 
                 WORD wall = TerrainWall[TERRAIN_INDEX(TargetX, TargetY)];
 
@@ -3170,6 +3294,10 @@ bool Move_MODEL_SKILL_FURY_STRIKE(OBJECT* o, int index, float Luminosity)
 
                     TargetX = (int)(Pos[i][0] / TERRAIN_SCALE);
                     TargetY = (int)(Pos[i][1] / TERRAIN_SCALE);
+                    if (TargetX < 0 || TargetX >= TERRAIN_SIZE || TargetY < 0 || TargetY >= TERRAIN_SIZE)
+                    {
+                        continue;
+                    }
 
                     WORD wall = TerrainWall[TERRAIN_INDEX(TargetX, TargetY)];
 
@@ -3202,12 +3330,12 @@ bool Move_MODEL_SKILL_FURY_STRIKE(OBJECT* o, int index, float Luminosity)
                 count    = 12.5;
                 addAngle = 18.f;
                 if ((int)o->LifeTime == 15)
-                    o->Gravity *= pow(-1, FPS_ANIMATION_FACTOR);
+                    o->Gravity = -o->Gravity;
             }
 
             if (o->Kind == 0)
             {
-                if ((int)o->LifeTime == 13)
+                if ((int)o->LifeTime == 13 && o->Owner != nullptr)
                 {
                     vec3_t pos;
                     Vector(0.f, 0.f, 0.f, Angle);
@@ -3698,8 +3826,9 @@ bool Move_MODEL_STORM3(OBJECT* o, int index, float Luminosity)
                 Pos1[1] = o->StartPosition[1] + rand() % 2000 - 1000.0f;
                 Pos1[2] = o->StartPosition[2];
 
-                Pos2[0] = Pos1[1] + rand() % 200 - 100.0f;
+                Pos2[0] = Pos1[0] + rand() % 200 - 100.0f;
                 Pos2[1] = Pos1[1] + rand() % 200 - 100.0f;
+                Pos2[2] = Pos1[2];
 
                 CreateJointFpsChecked(BITMAP_JOINT_THUNDER, Pos1, Pos2, Angle, 20, o, 20.f);
             }
@@ -3846,7 +3975,7 @@ bool Move_MODEL_CIRCLE(OBJECT* o, int index, float Luminosity)
     o->BlendMeshLight = o->LifeTime * 0.1f;
     if (o->SubType == 1)
     {
-        if (o->LifeTime > (44 - o->Owner->m_bySkillCount))
+        if (o->Owner != nullptr && o->LifeTime > (44 - o->Owner->m_bySkillCount))
         {
             vec3_t Angle  = {0.0f, 0.0f, 0.0f};
             int    iCount = 36;
@@ -3892,7 +4021,7 @@ bool Move_MODEL_CIRCLE(OBJECT* o, int index, float Luminosity)
     }
     else if (o->SubType == 4)
     {
-        if (o->LifeTime > (44 - o->Owner->m_bySkillCount))
+        if (o->Owner != nullptr && o->LifeTime > (44 - o->Owner->m_bySkillCount))
         {
             vec3_t Angle, Position;
             for (int i = 0; i < 36; ++i)
@@ -4451,7 +4580,7 @@ bool Move_MODEL_PIERCING(OBJECT* o, int index, float Luminosity)
 {
     vec3_t Light;
     Vector(1.f, 1.f, 1.f, Light);
-    if (o->Owner->Live == false)
+    if (o->Owner == nullptr || o->Owner->Live == false)
     {
         o->LifeTime = -1;
         return true;
@@ -4475,7 +4604,7 @@ bool Move_MODEL_PIERCING(OBJECT* o, int index, float Luminosity)
 
     if (gMapManager.InHellas())
     {
-        if (o->Owner != NULL && o->Owner->Owner != NULL && o->Owner->Owner == (&Hero->Object))
+        if (o->Owner != NULL && o->Owner->Owner != NULL && Hero != nullptr && o->Owner->Owner == (&Hero->Object))
         {
             int PositionX = (int)(o->Position[0] / TERRAIN_SCALE);
             int PositionY = (int)(o->Position[1] / TERRAIN_SCALE);
@@ -5506,7 +5635,8 @@ bool Move_MODEL_DEASULER(OBJECT* o, int index, float Luminosity)
         vec3_t v3RotateAngleRelative;
         o->Visible = true;
 
-        float fCurrentRate = 1.0f - ((float)o->LifeTime / (float)o->ExtState);
+        const float extDenom     = (o->ExtState > 0) ? (float)o->ExtState : 1.0f;
+        float       fCurrentRate = 1.0f - ((float)o->LifeTime / extDenom);
 
         if (o->m_Interpolates.m_vecInterpolatesAngle.size() > 0)
         {
@@ -5527,7 +5657,7 @@ bool Move_MODEL_DEASULER(OBJECT* o, int index, float Luminosity)
             o->m_Interpolates.GetScaleCurrent(o->Scale, fCurrentRate);
         }
 
-        if (o->m_Interpolates.m_vecInterpolatesScale.size() > 0)
+        if (o->m_Interpolates.m_vecInterpolatesAlpha.size() > 0)
         {
             o->m_Interpolates.GetAlphaCurrent(o->Alpha, fCurrentRate);
         }
@@ -5547,12 +5677,16 @@ bool Move_MODEL_DEASULER(OBJECT* o, int index, float Luminosity)
 
         if (iTYPESWORDFORCE == 1)
         {
-            if (fCurrentRate > fRateBlurStart && fCurrentRate < fRateBlurEnd)
+            if (fCurrentRate > fRateBlurStart && fCurrentRate < fRateBlurEnd && o->Type >= 0 && o->Type < MAX_MODELS)
             {
-                BMD*   b = &Models[o->Type];
+                BMD* b = &Models[o->Type];
+                if (b->NumBones <= 5)
+                {
+                    return true;
+                }
                 vec3_t vLightBlur;
                 Vector(1.0f, 1.0f, 1.0f, vLightBlur);
-                float fPreRate = 1.0f - (float)((o->LifeTime) + 1) / (float)(o->ExtState);
+                float fPreRate = 1.0f - (float)((o->LifeTime) + 1) / extDenom;
                 SETLIMITS(fPreRate, 1.0f, 0.0f);
                 if (fPreRate < fCurrentRate)
                 {
@@ -5560,8 +5694,8 @@ bool Move_MODEL_DEASULER(OBJECT* o, int index, float Luminosity)
                     {
                         float fStartRate, fEndRate;
 
-                        fStartRate = 1.0f - (float)((o->LifeTime) + 2) / (float)(o->ExtState);
-                        fEndRate   = 1.0f - (float)((o->LifeTime) + 1) / (float)(o->ExtState);
+                        fStartRate = 1.0f - (float)((o->LifeTime) + 2) / extDenom;
+                        fEndRate   = 1.0f - (float)((o->LifeTime) + 1) / extDenom;
 
                         SETLIMITS(fStartRate, 1.0f, 0.0f);
                         SETLIMITS(fEndRate, 1.0f, 0.0f);
@@ -5759,6 +5893,11 @@ bool Move_BITMAP_TWLIGHT(OBJECT* o, int index, float Luminosity)
         }
         else if (o->SubType == 3)
         {
+            if (o->Owner == nullptr)
+            {
+                o->Live = false;
+                return true;
+            }
             VectorCopy(o->Owner->Position, o->Position);
             o->Scale -= (0.15f) * FPS_ANIMATION_FACTOR;
             o->Angle[2] += (10.f) * FPS_ANIMATION_FACTOR;
@@ -5834,11 +5973,21 @@ bool Move_BITMAP_SHOCK_WAVE(OBJECT* o, int index, float Luminosity)
     }
     else if (o->SubType == 9)
     {
+        if (o->Owner == nullptr)
+        {
+            o->Live = false;
+            return true;
+        }
         o->Scale += (0.8f) * FPS_ANIMATION_FACTOR;
         VectorCopy(o->Owner->Position, o->Position);
     }
     else if (o->SubType == 10)
     {
+        if (o->Owner == nullptr)
+        {
+            o->Live = false;
+            return true;
+        }
         o->Scale -= (0.02f) * FPS_ANIMATION_FACTOR;
         VectorCopy(o->Owner->Position, o->Position);
     }
@@ -5860,6 +6009,11 @@ bool Move_BITMAP_SHOCK_WAVE(OBJECT* o, int index, float Luminosity)
     }
     else if (o->SubType == 14)
     {
+        if (o->Owner == nullptr)
+        {
+            o->Live = false;
+            return true;
+        }
         VectorCopy(o->Owner->Position, o->Position);
         o->Scale -= (0.15f) * FPS_ANIMATION_FACTOR;
         if (o->LifeTime >= 20)
@@ -6644,6 +6798,7 @@ bool Move_MODEL_GATE_PART1(OBJECT* o, int index, float Luminosity)
 
     if (rand_fps_check(10))
     {
+        VectorCopy(o->Position, Position);
         CreateParticleFpsChecked(BITMAP_SMOKE + 1, Position, o->Angle, Light);
     }
     return true;
@@ -7482,7 +7637,7 @@ bool Move_MODEL_EFFECT_SKURA_ITEM(OBJECT* o, int index, float Luminosity)
     {
         if ((o->SubType == 0) || (o->SubType == 1))
         {
-            if (o->Owner->Live && o->Live)
+            if (o->Owner != nullptr && o->Owner->Live && o->Live)
             {
                 vec3_t vRelativePos, vtaWorldPos, vLight1, vLight2;
                 BMD*   b = &Models[MODEL_EFFECT_SKURA_ITEM];
@@ -7516,7 +7671,9 @@ bool Move_MODEL_EFFECT_SKURA_ITEM(OBJECT* o, int index, float Luminosity)
                                              rand() % 7 == 3 ? vLight2 : vLight1, 0, 0.5f);
                 }
 
-                if ((int)o->LifeTime == 30 || (int)o->LifeTime == 15 || (int)o->LifeTime == 4)
+                if (((int)o->LifeTime == 30 || (int)o->LifeTime == 15 || (int)o->LifeTime == 4) &&
+                    o->Owner->Type >= 0 && o->Owner->Type < MAX_MODELS && o->Owner->BoneTransform != nullptr &&
+                    Models[o->Owner->Type].NumBones > 20)
                 {
                     vec3_t vAngle;
 
@@ -7978,6 +8135,12 @@ bool Move_MODEL_PROJECTILE(OBJECT* o, int index, float Luminosity)
     {
         if (o->LifeTime > 38)
         {
+            if (o->Owner == nullptr || o->Owner->Type < 0 || o->Owner->Type >= MAX_MODELS ||
+                Models[o->Owner->Type].NumBones <= 9)
+            {
+                o->Live = false;
+                return true;
+            }
             BMD* b = &Models[o->Owner->Type];
             b->Animation(BoneTransform, o->Owner->AnimationFrame, o->Owner->PriorAnimationFrame, o->Owner->PriorAction,
                          o->Owner->Angle, o->Owner->HeadAngle, false, false);
@@ -8103,7 +8266,8 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
             vec3_t v3RotateAngleRelative;
             o->Visible = true;
 
-            float fCurrentRate = 1.0f - ((float)o->LifeTime / (float)o->ExtState);
+            const float extDenom     = (o->ExtState > 0) ? (float)o->ExtState : 1.0f;
+            float       fCurrentRate = 1.0f - ((float)o->LifeTime / extDenom);
 
             if (o->m_Interpolates.m_vecInterpolatesAngle.size() > 0)
             {
@@ -8127,7 +8291,7 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
             }
 
             // 9. Alpha
-            if (o->m_Interpolates.m_vecInterpolatesScale.size() > 0)
+            if (o->m_Interpolates.m_vecInterpolatesAlpha.size() > 0)
             {
                 o->m_Interpolates.GetAlphaCurrent(o->Alpha, fCurrentRate);
             }
@@ -8214,25 +8378,27 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
 
             if (iTYPESWORDFORCE == 1)
             {
-                if (fCurrentRate > fRateBlurStart && fCurrentRate < fRateBlurEnd)
+                if (fCurrentRate > fRateBlurStart && fCurrentRate < fRateBlurEnd && o->Type >= 0 &&
+                    o->Type < MAX_MODELS)
                 {
-                    BMD*   b = &Models[o->Type];
+                    BMD* b = &Models[o->Type];
+                    if (b->NumBones <= 0)
+                    {
+                        return true;
+                    }
                     vec3_t vLightBlur;
                     Vector(1.0f, 1.0f, 1.0f, vLightBlur);
-                    float fPreRate = 1.0f - (float)((o->LifeTime) + 1) / (float)(o->ExtState);
+                    float fPreRate = 1.0f - (float)((o->LifeTime) + 1) / extDenom;
                     SETLIMITS(fPreRate, 1.0f, 0.0f);
                     if (fPreRate < fCurrentRate)
                     {
                         float fStartRate, fEndRate;
 
-                        fStartRate = 1.0f - (float)((o->LifeTime) + 2) / (float)(o->ExtState);
-                        fEndRate   = 1.0f - (float)((o->LifeTime) + 1) / (float)(o->ExtState);
+                        fStartRate = 1.0f - (float)((o->LifeTime) + 2) / extDenom;
+                        fEndRate   = 1.0f - (float)((o->LifeTime) + 1) / extDenom;
 
                         SETLIMITS(fStartRate, 1.0f, 0.0f);
                         SETLIMITS(fEndRate, 1.0f, 0.0f);
-
-                        vec3_t* arrEachBonePos;
-                        arrEachBonePos = new vec3_t[b->NumBones];
 
                         vec3_t v3CurBlurAngle, v3CurBlurPos;
                         int    iAccess = 10;
@@ -8288,6 +8454,13 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
                             }
                             break;
                         }  // switch(o->Type)
+
+                        if (iBone01 >= b->NumBones || iBone02 >= b->NumBones)
+                        {
+                            return true;
+                        }
+
+                        auto* arrEachBonePos = new vec3_t[b->NumBones];
 
                         fUnit = (fEndRate - fStartRate) / (float)iAccess;
 
@@ -8468,48 +8641,52 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
                     {
                         o->Visible = true;  // MoveEffect CreateEffect
                         BMD*    b  = &Models[o->Type];
-                        vec3_t* arrEachBonePos;
                         vec3_t  v3LightModify;
-
-                        // 1. BonePosition Particle
-                        arrEachBonePos = new vec3_t[b->NumBones];
-
-                        // - APPEAR WITH FIRE EFFECT
-                        vec3_t vRelativePos, vAngle;
-                        vec3_t v3CurrentHighHierarchyNodePos;
-
-                        Vector(4.f, 0.f, 0.0f, vRelativePos);
-                        VectorCopy(o->Angle, vAngle);
-
-                        BMD* pBMDSwordModel = &Models[o->Type];
-                        BMD* pOwnerModel    = &Models[o->Owner->Type];
-
-                        int arrBoneIdxs[] = {4, 2, 8, 10, 6};
-                        int iBoneIdx      = arrBoneIdxs[o->Type - MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_];
-
-                        pBMDSwordModel->AnimationTransformWithAttachHighModel(
-                            o->Owner, pOwnerModel, iBoneIdx, v3CurrentHighHierarchyNodePos, arrEachBonePos);
-
-                        // - END EFFECT
-                        vec3_t v3LightTerrain;
-                        Vector(0.9f, 0.4f, 0.1f, v3LightTerrain);
-
-                        AddTerrainLight(o->Position[0], o->Position[1], v3LightTerrain, 2, PrimaryTerrainLight);
-
+                        int     swordOffset = o->Type - MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_;
+                        if (b->NumBones > 0 && o->Owner != nullptr && o->Owner->Type >= 0
+                            && o->Owner->Type < MAX_MODELS && swordOffset >= 0 && swordOffset < 5)
                         {
-                            Vector(1.0f, 1.0f, 1.0f, v3LightModify);
-
-                            for (int j = 0; j < 11; ++j)
+                            BMD* pBMDSwordModel = &Models[o->Type];
+                            BMD* pOwnerModel    = &Models[o->Owner->Type];
+                            int  arrBoneIdxs[]  = {4, 2, 8, 10, 6};
+                            int  iBoneIdx       = arrBoneIdxs[swordOffset];
+                            if (iBoneIdx >= 0 && iBoneIdx < pOwnerModel->NumBones)
                             {
-                                if (rand_fps_check(20))
+                                // 1. BonePosition Particle
+                                auto* arrEachBonePos = new vec3_t[b->NumBones];
+
+                                // - APPEAR WITH FIRE EFFECT
+                                vec3_t vRelativePos, vAngle;
+                                vec3_t v3CurrentHighHierarchyNodePos;
+
+                                Vector(4.f, 0.f, 0.0f, vRelativePos);
+                                VectorCopy(o->Angle, vAngle);
+
+                                pBMDSwordModel->AnimationTransformWithAttachHighModel(
+                                    o->Owner, pOwnerModel, iBoneIdx, v3CurrentHighHierarchyNodePos, arrEachBonePos);
+
+                                // - END EFFECT
+                                vec3_t v3LightTerrain;
+                                Vector(0.9f, 0.4f, 0.1f, v3LightTerrain);
+
+                                AddTerrainLight(o->Position[0], o->Position[1], v3LightTerrain, 2, PrimaryTerrainLight);
+
                                 {
-                                    CreateEffectFpsChecked(BITMAP_FIRE_CURSEDLICH, arrEachBonePos[j], vAngle,
-                                                           v3LightModify, 12, o, -1, 0, 0, 0, o->Scale);
+                                    Vector(1.0f, 1.0f, 1.0f, v3LightModify);
+
+                                    for (int j = 0; j < 11 && j < b->NumBones; ++j)
+                                    {
+                                        if (rand_fps_check(20))
+                                        {
+                                            CreateEffectFpsChecked(BITMAP_FIRE_CURSEDLICH, arrEachBonePos[j], vAngle,
+                                                                   v3LightModify, 12, o, -1, 0, 0, 0, o->Scale);
+                                        }
+                                    }
                                 }
+
+                                delete[] arrEachBonePos;
                             }
                         }
-
-                        delete[] arrEachBonePos;
                     }  // if( fCurrentRate >= 0.0f && fCurrentRate <= 0.01f )
                 }
                 break;
@@ -8521,27 +8698,30 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
                         vec3_t v3LightModify, v3PosModify;
 
                         // 1. BonePosition Particle
-                        BMD*  b              = &Models[o->Type];
-                        auto* arrEachBonePos = new vec3_t[b->NumBones];
-
-                        b->AnimationTransformOnlySelf(arrEachBonePos, o->Angle, o->Position, o->Scale, o);
-
-                        VectorCopy(o->Angle, vAngle);
-                        Vector(1.0f, 1.0f, 1.0f, v3LightModify);
-
-                        for (int i = 0; i < b->NumBones; i++)
+                        BMD* b = &Models[o->Type];
+                        if (b->NumBones > 0)
                         {
-                            v3PosModify[0] = arrEachBonePos[i][0] + (float)((rand() % 80) - 40);
-                            v3PosModify[1] = arrEachBonePos[i][1] + (float)((rand() % 80) - 40);
-                            v3PosModify[2] = arrEachBonePos[i][2] + (float)((rand() % 80) - 40);
-                            if (rand_fps_check(10))
-                            {
-                                CreateEffectFpsChecked(BITMAP_FIRE_CURSEDLICH, v3PosModify, vAngle, v3LightModify, 12,
-                                                       o, -1, 0, 0, 0, o->Scale * 1.5f);
-                            }
-                        }
+                            auto* arrEachBonePos = new vec3_t[b->NumBones];
 
-                        delete[] arrEachBonePos;
+                            b->AnimationTransformOnlySelf(arrEachBonePos, o->Angle, o->Position, o->Scale, o);
+
+                            VectorCopy(o->Angle, vAngle);
+                            Vector(1.0f, 1.0f, 1.0f, v3LightModify);
+
+                            for (int i = 0; i < b->NumBones; i++)
+                            {
+                                v3PosModify[0] = arrEachBonePos[i][0] + (float)((rand() % 80) - 40);
+                                v3PosModify[1] = arrEachBonePos[i][1] + (float)((rand() % 80) - 40);
+                                v3PosModify[2] = arrEachBonePos[i][2] + (float)((rand() % 80) - 40);
+                                if (rand_fps_check(10))
+                                {
+                                    CreateEffectFpsChecked(BITMAP_FIRE_CURSEDLICH, v3PosModify, vAngle, v3LightModify, 12,
+                                                           o, -1, 0, 0, 0, o->Scale * 1.5f);
+                                }
+                            }
+
+                            delete[] arrEachBonePos;
+                        }
                     }
 
                     vec3_t v3LightTerrain;
@@ -8623,7 +8803,8 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
             vec3_t v3RotateAngleRelative;
 
             // 2. RATE %
-            float fCurrentRate = 1.0f - ((float)o->LifeTime / (float)o->ExtState);
+            float extDenom     = (o->ExtState != 0) ? (float)o->ExtState : 1.0f;
+            float fCurrentRate = 1.0f - ((float)o->LifeTime / extDenom);
 
             // 4. Angle
             if (o->m_Interpolates.m_vecInterpolatesAngle.size() > 0)
@@ -8663,13 +8844,15 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
                     if ((int)o->LifeTime == 0)
                     {
                         OBJECT* oHighHier = o->Owner;
+                        if (oHighHier != nullptr)
+                        {
+                            vec3_t v3RelativePos, v3OwnerBonePos;
+                            Vector(0.0f, 0.0f, 0.0f, v3RelativePos);
+                            Vector(0.0f, 0.0f, 0.0f, v3OwnerBonePos);
 
-                        vec3_t v3RelativePos, v3OwnerBonePos;
-                        Vector(0.0f, 0.0f, 0.0f, v3RelativePos);
-                        Vector(0.0f, 0.0f, 0.0f, v3OwnerBonePos);
-
-                        CreateEffectFpsChecked(o->Type, oHighHier->Position, oHighHier->Angle, oHighHier->Light, 11,
-                                               o->Owner, -1, 0, 0, 0, o->Scale);
+                            CreateEffectFpsChecked(o->Type, oHighHier->Position, oHighHier->Angle, oHighHier->Light, 11,
+                                                   o->Owner, -1, 0, 0, 0, o->Scale);
+                        }
                     }
 
                     // - COLOR.
@@ -8783,9 +8966,10 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
         }
         else if (o->SubType == 11)
         {
-            float fCurrentRate = 1.0f - ((float)o->LifeTime / (float)o->ExtState);
+            float extDenom     = (o->ExtState != 0) ? (float)o->ExtState : 1.0f;
+            float fCurrentRate = 1.0f - ((float)o->LifeTime / extDenom);
 
-            if (o->m_Interpolates.m_vecInterpolatesScale.size() > 0)
+            if (o->m_Interpolates.m_vecInterpolatesAlpha.size() > 0)
             {
                 o->m_Interpolates.GetAlphaCurrent(o->Alpha, fCurrentRate);
             }
@@ -8794,83 +8978,87 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
             if (fCurrentRate >= 0.0f && fCurrentRate <= 0.5f)
             {
                 o->Visible = true;  // MoveEffect CreateEffect
-                BMD*    b  = &Models[o->Type];
-                vec3_t* arrEachBonePos;
-                vec3_t  v3LightModify;
-
-                // 1. BonePosition Particle
-                arrEachBonePos = new vec3_t[b->NumBones];
-
-                // - APPEAR WITH FIRE EFFECT
-                vec3_t vRelativePos, vAngle;
-                vec3_t v3CurrentHighHierarchyNodePos;
-
-                Vector(4.f, 0.f, 0.0f, vRelativePos);
-                VectorCopy(o->Angle, vAngle);
-
-                BMD* pBMDSwordModel = &Models[o->Type];
-                BMD* pOwnerModel    = &Models[o->Owner->Type];
-
-                int arrBoneIdxs[] = {4, 2, 8, 10, 6};  //INDEX.
-                int iBoneIdx      = arrBoneIdxs[o->Type - MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_];
-
-                pBMDSwordModel->AnimationTransformWithAttachHighModel(o->Owner, pOwnerModel, iBoneIdx,
-                                                                      v3CurrentHighHierarchyNodePos, arrEachBonePos);
-
-                vec3_t v3LightTerrain;
-                Vector(0.9f, 0.4f, 0.1f, v3LightTerrain);
-
-                AddTerrainLight(o->Position[0], o->Position[1], v3LightTerrain, 2, PrimaryTerrainLight);
-
-                switch (o->Type)
+                BMD*   b           = &Models[o->Type];
+                vec3_t v3LightModify;
+                int    swordOffset = o->Type - MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_;
+                if (b->NumBones > 0 && o->Owner != nullptr && o->Owner->Type >= 0
+                    && o->Owner->Type < MAX_MODELS && swordOffset >= 0 && swordOffset < 5)
                 {
-                    case MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_:
-                    case MODEL_SWORDRIGHT01_EMPIREGUARDIAN_BOSS_GAION_: {
-                        for (int j = 0; j < 11; ++j)
-                        {
-                            Vector(1.0f, 1.0f, 1.0f, v3LightModify);
-                            if (rand_fps_check(2))
-                            {
-                                CreateParticleFpsChecked(BITMAP_POUNDING_BALL, arrEachBonePos[j], o->Angle,
-                                                         v3LightModify, 3, 1.3f);
-                            }
-                        }
-                    }
-                    break;
-                    case MODEL_SWORDLEFT02_EMPIREGUARDIAN_BOSS_GAION_:
-                    case MODEL_SWORDRIGHT02_EMPIREGUARDIAN_BOSS_GAION_: {
-                        Vector(0.3f, 0.4f, 1.0f, v3LightModify);
+                    BMD* pBMDSwordModel = &Models[o->Type];
+                    BMD* pOwnerModel    = &Models[o->Owner->Type];
+                    int  arrBoneIdxs[]  = {4, 2, 8, 10, 6};  //INDEX.
+                    int  iBoneIdx       = arrBoneIdxs[swordOffset];
+                    if (iBoneIdx >= 0 && iBoneIdx < pOwnerModel->NumBones)
+                    {
+                        // 1. BonePosition Particle
+                        auto* arrEachBonePos = new vec3_t[b->NumBones];
 
-                        for (int j = 0; j < 11; ++j)
-                        {
-                            if (rand_fps_check(2))
-                            {
-                                CreateParticleFpsChecked(BITMAP_FIRE_HIK1_MONO, arrEachBonePos[j], o->Angle,
-                                                         v3LightModify, 10, o->Scale);
-                            }
-                        }
-                    }
-                    break;
-                    case MODEL_SWORDMAIN01_EMPIREGUARDIAN_BOSS_GAION_: {
-                        Vector(1.0f, 1.0f, 1.0f, v3LightModify);
+                        // - APPEAR WITH FIRE EFFECT
+                        vec3_t vRelativePos, vAngle;
+                        vec3_t v3CurrentHighHierarchyNodePos;
 
-                        for (int j = 0; j < 11; ++j)
+                        Vector(4.f, 0.f, 0.0f, vRelativePos);
+                        VectorCopy(o->Angle, vAngle);
+
+                        pBMDSwordModel->AnimationTransformWithAttachHighModel(
+                            o->Owner, pOwnerModel, iBoneIdx, v3CurrentHighHierarchyNodePos, arrEachBonePos);
+
+                        vec3_t v3LightTerrain;
+                        Vector(0.9f, 0.4f, 0.1f, v3LightTerrain);
+
+                        AddTerrainLight(o->Position[0], o->Position[1], v3LightTerrain, 2, PrimaryTerrainLight);
+
+                        switch (o->Type)
                         {
-                            if (rand_fps_check(20))
-                            {
-                                CreateEffectFpsChecked(BITMAP_FIRE_CURSEDLICH, arrEachBonePos[j], vAngle, v3LightModify,
-                                                       12, o, -1, 0, 0, 0, o->Scale);
+                            case MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_:
+                            case MODEL_SWORDRIGHT01_EMPIREGUARDIAN_BOSS_GAION_: {
+                                for (int j = 0; j < 11 && j < b->NumBones; ++j)
+                                {
+                                    Vector(1.0f, 1.0f, 1.0f, v3LightModify);
+                                    if (rand_fps_check(2))
+                                    {
+                                        CreateParticleFpsChecked(BITMAP_POUNDING_BALL, arrEachBonePos[j], o->Angle,
+                                                                 v3LightModify, 3, 1.3f);
+                                    }
+                                }
                             }
+                            break;
+                            case MODEL_SWORDLEFT02_EMPIREGUARDIAN_BOSS_GAION_:
+                            case MODEL_SWORDRIGHT02_EMPIREGUARDIAN_BOSS_GAION_: {
+                                Vector(0.3f, 0.4f, 1.0f, v3LightModify);
+
+                                for (int j = 0; j < 11 && j < b->NumBones; ++j)
+                                {
+                                    if (rand_fps_check(2))
+                                    {
+                                        CreateParticleFpsChecked(BITMAP_FIRE_HIK1_MONO, arrEachBonePos[j], o->Angle,
+                                                                 v3LightModify, 10, o->Scale);
+                                    }
+                                }
+                            }
+                            break;
+                            case MODEL_SWORDMAIN01_EMPIREGUARDIAN_BOSS_GAION_: {
+                                Vector(1.0f, 1.0f, 1.0f, v3LightModify);
+
+                                for (int j = 0; j < 11 && j < b->NumBones; ++j)
+                                {
+                                    if (rand_fps_check(20))
+                                    {
+                                        CreateEffectFpsChecked(BITMAP_FIRE_CURSEDLICH, arrEachBonePos[j], vAngle,
+                                                               v3LightModify, 12, o, -1, 0, 0, 0, o->Scale);
+                                    }
+                                }
+                            }
+                            break;
+                            default: {
+                            }
+                            break;
                         }
+                        // 3. APPEAR EFFECT
+
+                        delete[] arrEachBonePos;
                     }
-                    break;
-                    default: {
-                    }
-                    break;
                 }
-                // 3. APPEAR EFFECT
-
-                delete[] arrEachBonePos;
             }  // if( fCurrentRate >= 0.0f && fCurrentRate <= 0.01f )
             //
 
@@ -8883,10 +9071,11 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
         else if (o->SubType == 12)  // END EFFECT
         {
             // 2. RATE %
-            float fCurrentRate = 1.0f - ((float)o->LifeTime / (float)o->ExtState);
+            float extDenom     = (o->ExtState != 0) ? (float)o->ExtState : 1.0f;
+            float fCurrentRate = 1.0f - ((float)o->LifeTime / extDenom);
 
             // 9. (4) Alpha
-            if (o->m_Interpolates.m_vecInterpolatesScale.size() > 0)
+            if (o->m_Interpolates.m_vecInterpolatesAlpha.size() > 0)
             {
                 o->m_Interpolates.GetAlphaCurrent(o->Alpha, fCurrentRate);
             }
@@ -8895,47 +9084,51 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
             if (fCurrentRate >= 0.0f && fCurrentRate <= 0.6f)
             {
                 o->Visible = true;  // MoveEffect CreateEffect
-                BMD*    b  = &Models[o->Type];
-                vec3_t* arrEachBonePos;  // Bone
-                vec3_t  v3LightModify;
-
-                // 1. BonePosition Particle
-                arrEachBonePos = new vec3_t[b->NumBones];
-
-                // - APPEAR WITH FIRE EFFECT
-                vec3_t vRelativePos, vAngle;
-                vec3_t v3CurrentHighHierarchyNodePos;  //ATTACH
-
-                Vector(4.f, 0.f, 0.0f, vRelativePos);
-                VectorCopy(o->Angle, vAngle);
-
-                BMD* pBMDSwordModel = &Models[o->Type];
-                BMD* pOwnerModel    = &Models[o->Owner->Type];
-
-                int arrBoneIdxs[] = {4, 2, 8, 10, 6};  //INDEX.
-                int iBoneIdx      = arrBoneIdxs[o->Type - MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_];
-
-                pBMDSwordModel->AnimationTransformWithAttachHighModel(o->Owner, pOwnerModel, iBoneIdx,
-                                                                      v3CurrentHighHierarchyNodePos, arrEachBonePos);
-
-                // EFFECT
-                vec3_t v3LightTerrain;
-                Vector(0.9f, 0.4f, 0.1f, v3LightTerrain);
-
-                AddTerrainLight(o->Position[0], o->Position[1], v3LightTerrain, 2, PrimaryTerrainLight);
-
+                BMD*   b           = &Models[o->Type];
+                vec3_t v3LightModify;
+                int    swordOffset = o->Type - MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_;
+                if (b->NumBones > 0 && o->Owner != nullptr && o->Owner->Type >= 0
+                    && o->Owner->Type < MAX_MODELS && swordOffset >= 0 && swordOffset < 5)
                 {
-                    Vector(0.3f, 0.4f, 1.0f, v3LightModify);
-                    for (int j = 0; j < 11; ++j)
+                    BMD* pBMDSwordModel = &Models[o->Type];
+                    BMD* pOwnerModel    = &Models[o->Owner->Type];
+                    int  arrBoneIdxs[]  = {4, 2, 8, 10, 6};  //INDEX.
+                    int  iBoneIdx       = arrBoneIdxs[swordOffset];
+                    if (iBoneIdx >= 0 && iBoneIdx < pOwnerModel->NumBones)
                     {
-                        if (rand_fps_check(2))
+                        // 1. BonePosition Particle
+                        auto* arrEachBonePos = new vec3_t[b->NumBones];
+
+                        // - APPEAR WITH FIRE EFFECT
+                        vec3_t vRelativePos, vAngle;
+                        vec3_t v3CurrentHighHierarchyNodePos;  //ATTACH
+
+                        Vector(4.f, 0.f, 0.0f, vRelativePos);
+                        VectorCopy(o->Angle, vAngle);
+
+                        pBMDSwordModel->AnimationTransformWithAttachHighModel(
+                            o->Owner, pOwnerModel, iBoneIdx, v3CurrentHighHierarchyNodePos, arrEachBonePos);
+
+                        // EFFECT
+                        vec3_t v3LightTerrain;
+                        Vector(0.9f, 0.4f, 0.1f, v3LightTerrain);
+
+                        AddTerrainLight(o->Position[0], o->Position[1], v3LightTerrain, 2, PrimaryTerrainLight);
+
                         {
-                            CreateParticleFpsChecked(BITMAP_FIRE_HIK1_MONO, arrEachBonePos[j], o->Angle, v3LightModify,
-                                                     10, o->Scale);
+                            Vector(0.3f, 0.4f, 1.0f, v3LightModify);
+                            for (int j = 0; j < 11 && j < b->NumBones; ++j)
+                            {
+                                if (rand_fps_check(2))
+                                {
+                                    CreateParticleFpsChecked(BITMAP_FIRE_HIK1_MONO, arrEachBonePos[j], o->Angle,
+                                                             v3LightModify, 10, o->Scale);
+                                }
+                            }
                         }
+                        delete[] arrEachBonePos;
                     }
                 }
-                delete[] arrEachBonePos;
             }
 
             // 2. ALpha
@@ -8948,7 +9141,8 @@ bool Move_MODEL_SWORDLEFT01_EMPIREGUARDIAN_BOSS_GAION_(OBJECT* o, int index, flo
         {
             o->Visible = true;  // MoveEffect CreateEffect Move
             //float	fRateStatic = 0.6f;
-            float  fCurrentRate = (float)(o->LifeTime) / (float)(o->ExtState);
+            float  extDenom     = (o->ExtState != 0) ? (float)o->ExtState : 1.0f;
+            float  fCurrentRate = (float)(o->LifeTime) / extDenom;
             vec3_t v3RotateAngleRelative;
 
             if (o->m_Interpolates.m_vecInterpolatesAngle.size() > 0)
@@ -10106,11 +10300,21 @@ bool Move_MODEL_TARGETMON_EFFECT(OBJECT* o, int index, float Luminosity)
         if (o->SubType == 1 && o->Owner->m_sTargetIndex < 0)
             return true;
 
+        if (o->Owner->Type < 0 || o->Owner->Type >= MAX_MODELS)
+            return true;
+
         BMD*   pModel = &Models[o->Owner->Type];
         vec3_t MonRanPos;
         VectorCopy(o->Owner->Position, MonRanPos);
-        int BoneIndex = rand() % (pModel->NumBones - 1);
-        pModel->TransformByObjectBone(MonRanPos, o->Owner, BoneIndex);
+        if (pModel->NumBones > 1)
+        {
+            int BoneIndex = rand() % (pModel->NumBones - 1);
+            pModel->TransformByObjectBone(MonRanPos, o->Owner, BoneIndex);
+        }
+        else if (pModel->NumBones == 1)
+        {
+            pModel->TransformByObjectBone(MonRanPos, o->Owner, 0);
+        }
 
         vec3_t vLight;
         Vector(1.0f, 1.0f, 1.0f, vLight);

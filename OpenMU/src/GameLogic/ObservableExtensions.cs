@@ -85,31 +85,43 @@ public static class ObservableExtensions
     public static async ValueTask ForEachObservingAsync<T>(this IObservable observable, Func<T, ValueTask> action, bool includeThis)
         where T : class, IWorldObserver
     {
+        List<T> snapshot;
         try
         {
-            using var readerLock = await observable.ObserverLock.ReaderLockAsync();
-            foreach (var obs in observable.Observers.OfType<T>())
+            using var readerLock = await observable.ObserverLock.ReaderLockAsync().ConfigureAwait(false);
+            if (observable.Observers.Count == 0)
             {
-                if (!includeThis && obs.Equals(observable))
-                {
-                    continue;
-                }
-
-                try
-                {
-                    await action(obs).ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    if (obs is ILoggerOwner loggerOwner)
-                    {
-                        loggerOwner.Logger.LogError(ex, "Error when performing action for {0}", obs);
-                    }
-                }
+                return;
             }
+
+            snapshot = observable.Observers.OfType<T>().ToList();
         }
         catch (ObjectDisposedException)
         {
+            return;
+        }
+
+        foreach (var obs in snapshot)
+        {
+            if (!includeThis && obs.Equals(observable))
+            {
+                continue;
+            }
+
+            try
+            {
+                await action(obs).ConfigureAwait(false);
+            }
+            catch (ObjectDisposedException)
+            {
+            }
+            catch (Exception ex)
+            {
+                if (obs is ILoggerOwner loggerOwner)
+                {
+                    loggerOwner.Logger.LogError(ex, "Error when performing action for {0}", obs);
+                }
+            }
         }
     }
 }

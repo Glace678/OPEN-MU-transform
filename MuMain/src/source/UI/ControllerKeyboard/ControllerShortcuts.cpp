@@ -82,8 +82,13 @@ void ControllerShortcuts::Reset()
 {
     m_visible = false;
     m_control = m_shift = m_alt = false;
-    m_emittedKey                = 0;
-    m_direction                 = 0;
+    if (m_emittedKey != 0)
+    {
+        Core::Input::SetVirtualKeyDown(m_emittedKey, false);
+        m_emittedKey = 0;
+    }
+    m_direction = 0;
+    EmitModifiers();
 }
 
 void ControllerShortcuts::EmitModifiers() const
@@ -109,7 +114,11 @@ bool ControllerShortcuts::Update(const Core::Input::GamepadFrameState& frame, Co
         Core::Input::SetVirtualKeyDown(m_emittedKey, true);
         return true;
     }
-    m_emittedKey = 0;
+    if (m_emittedKey != 0)
+    {
+        Core::Input::SetVirtualKeyDown(m_emittedKey, false);
+        m_emittedKey = 0;
+    }
 
     const bool openChord = Action(frame, InputAction::Map).down && Action(frame, InputAction::Menu).pressed;
     const bool worldShortcut =

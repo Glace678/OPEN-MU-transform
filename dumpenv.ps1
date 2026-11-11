@@ -50,21 +50,43 @@ public static class EnvDump
     [DllImport("kernel32.dll", SetLastError = true)]
     static extern IntPtr OpenProcess(uint access, bool inherit, int pid);
     [DllImport("kernel32.dll", SetLastError = true)]
-    static extern bool ReadProcessMemory(IntPtr h, ulong addr, byte[] buf, int size, out int read);
+    static extern bool ReadProcessMemory(IntPtr h, IntPtr addr, byte[] buf, IntPtr size, out IntPtr read);
     [DllImport("kernel32.dll")]
     static extern bool CloseHandle(IntPtr h);
 
     // VM_READ | QUERY_INFORMATION | QUERY_LIMITED_INFORMATION
     const uint Access = 0x0010 | 0x0400 | 0x1000;
 
+    static bool ReadMem(IntPtr h, ulong addr, byte[] buf, out int bytesRead)
+    {
+        bytesRead = 0;
+        if (IntPtr.Size == 4 && addr > uint.MaxValue)
+            return false;
+        IntPtr readPtr;
+        IntPtr basePtr = IntPtr.Size == 4 ? new IntPtr(unchecked((int)(uint)addr)) : new IntPtr(unchecked((long)addr));
+        if (!ReadProcessMemory(h, basePtr, buf, new IntPtr(buf.Length), out readPtr))
+            return false;
+        bytesRead = (int)readPtr.ToInt64();
+        return bytesRead > 0;
+    }
+
     static string ReadEnv(IntPtr h, ulong env, int size, StringBuilder sb)
     {
-        byte[] envb = new byte[size > 0 && size <= 0x10000 ? size : 0x8000];
+        byte[] envb = new byte[size > 0 && size <= 0x10000 ? size : 0x10000];
         int read;
-        if (!ReadProcessMemory(h, env, envb, envb.Length, out read))
-            return "RPM_ENV_FAIL " + Marshal.GetLastWin32Error();
+        if (!ReadMem(h, env, envb, out read))
+        {
+            envb = new byte[0x1000];
+            if (!ReadMem(h, env, envb, out read))
+                return "RPM_ENV_FAIL " + Marshal.GetLastWin32Error();
+        }
+        int evenRead = read & ~1;
+        string decoded = Encoding.Unicode.GetString(envb, 0, evenRead);
+        int blockChars;
+        if (LooksLikeEnvBlock(decoded, out blockChars) && blockChars > 0 && blockChars <= decoded.Length)
+            decoded = decoded.Substring(0, blockChars);
         sb.AppendLine("ENVBEGIN");
-        sb.Append(Encoding.Unicode.GetString(envb, 0, read));
+        sb.Append(decoded);
         sb.AppendLine("ENVEND");
         return sb.ToString();
     }
@@ -120,52 +142,60 @@ public static class EnvDump
         sb.AppendLine("PEB64=0x" + peb.ToString("X"));
         byte[] buf = new byte[8];
         int read;
-        if (!ReadProcessMemory(h, peb + 0x20, buf, buf.Length, out read))
+        if (!ReadMem(h, peb + 0x20, buf, out read) || read < 8)
             return "RPM1_FAIL " + Marshal.GetLastWin32Error();
         ulong pp = BitConverter.ToUInt64(buf, 0);
         sb.AppendLine("ProcParams64=0x" + pp.ToString("X"));
-        byte[] ppb = new byte[0x4000];
-        if (!ReadProcessMemory(h, pp, ppb, ppb.Length, out read))
+        byte[] ppb = new byte[0x400];
+        if (!ReadMem(h, pp, ppb, out read) || read < 0xA0)
             return "RPM2_FAIL " + Marshal.GetLastWin32Error();
         for (int off = 0x70; off <= 0x98; off += 8)
         {
             ulong cand = BitConverter.ToUInt64(ppb, off);
             if (cand < 0x10000 || cand > 0x7FFFFFFFFFFF) continue;
             byte[] pb = new byte[0x10000];
-            if (!ReadProcessMemory(h, cand, pb, pb.Length, out read)) continue;
+            if (!ReadMem(h, cand, pb, out read))
+            {
+                pb = new byte[0x1000];
+                if (!ReadMem(h, cand, pb, out read)) continue;
+            }
+            int evenRead = read & ~1;
+            string decoded = Encoding.Unicode.GetString(pb, 0, evenRead);
             int blockChars;
-            if (!LooksLikeEnvBlock(Encoding.Unicode.GetString(pb, 0, read), out blockChars)) continue;
+            if (!LooksLikeEnvBlock(decoded, out blockChars)) continue;
             sb.AppendLine("ENV_CANDIDATE param_off=0x" + off.ToString("X"));
             sb.AppendLine("ENVBEGIN");
-            sb.Append(Encoding.Unicode.GetString(pb, 0, blockChars > 0 ? blockChars : read));
+            sb.Append(blockChars > 0 && blockChars <= decoded.Length ? decoded.Substring(0, blockChars) : decoded);
             sb.AppendLine("ENVEND");
             return sb.ToString();
         }
         return "NO_ENV_CANDIDATE";
     }
 
-    // x86: ProcessParameters pointer at PEB+0x20, then Environment at 0x44 and
-    // EnvironmentSize at 0x48 within RTL_USER_PROCESS_PARAMETERS.
+    // x86: ProcessParameters pointer at PEB32+0x10, then Environment pointer at 0x48
+    // within 32-bit RTL_USER_PROCESS_PARAMETERS (CommandLine UNICODE_STRING32 occupies 0x40..0x47).
     static string Dump32(IntPtr h, uint peb, StringBuilder sb)
     {
         sb.AppendLine("PEB32=0x" + peb.ToString("X"));
         byte[] buf = new byte[4];
         int read;
-        if (!ReadProcessMemory(h, peb + 0x20, buf, buf.Length, out read))
+        if (!ReadMem(h, peb + 0x10, buf, out read) || read < 4)
             return "RPM1_FAIL " + Marshal.GetLastWin32Error();
         uint pp = BitConverter.ToUInt32(buf, 0);
         sb.AppendLine("ProcParams32=0x" + pp.ToString("X"));
-        byte[] ppb = new byte[0x2000];
-        if (!ReadProcessMemory(h, pp, ppb, ppb.Length, out read))
+        byte[] ppb = new byte[0x300];
+        if (!ReadMem(h, pp, ppb, out read) || read < 0x4C)
             return "RPM2_FAIL " + Marshal.GetLastWin32Error() + " got=" + read;
-        uint env = BitConverter.ToUInt32(ppb, 0x44);
-        int envSize = (int)BitConverter.ToUInt32(ppb, 0x48);
+        uint env = BitConverter.ToUInt32(ppb, 0x48);
+        int envSize = read >= 0x294 ? (int)BitConverter.ToUInt32(ppb, 0x290) : 0;
         sb.AppendLine("Env=0x" + env.ToString("X") + " EnvSize=" + envSize);
         return ReadEnv(h, env, envSize, sb);
     }
 
     public static string Dump(int pid, int bits)
     {
+        if (IntPtr.Size * 8 != bits)
+            return "BITNESS_MISMATCH host=" + (IntPtr.Size * 8) + " target=" + bits;
         IntPtr h = OpenProcess(Access, false, pid);
         if (h == IntPtr.Zero) return "OPEN_FAIL " + Marshal.GetLastWin32Error();
         try
@@ -192,7 +222,9 @@ public static class EnvDump
     }
 }
 "@
-Add-Type -TypeDefinition $cs
+if (-not ('EnvDump' -as [type])) {
+    Add-Type -TypeDefinition $cs
+}
 
 $raw = [EnvDump]::Dump($TargetPid, [int]$Bits)
 if ($raw -match 'ENVBEGIN') {

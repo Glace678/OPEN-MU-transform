@@ -23,14 +23,14 @@ public static class DirectionExtensions
         return direction switch
         {
             Direction.Undefined => origin,
-            Direction.North => new Point((byte)(origin.X - 1), (byte)(origin.Y + 1)),
-            Direction.South => new Point((byte)(origin.X + 1), (byte)(origin.Y - 1)),
-            Direction.East => new Point((byte)(origin.X + 1), (byte)(origin.Y + 1)),
-            Direction.West => new Point((byte)(origin.X - 1), (byte)(origin.Y - 1)),
-            Direction.NorthEast => new Point(origin.X, (byte)(origin.Y + 1)),
-            Direction.NorthWest => new Point((byte)(origin.X - 1), origin.Y),
-            Direction.SouthEast => new Point((byte)(origin.X + 1), origin.Y),
-            Direction.SouthWest => new Point(origin.X, (byte)(origin.Y - 1)),
+            Direction.North => new Point((byte)Math.Clamp(origin.X - 1, byte.MinValue, byte.MaxValue), (byte)Math.Clamp(origin.Y + 1, byte.MinValue, byte.MaxValue)),
+            Direction.South => new Point((byte)Math.Clamp(origin.X + 1, byte.MinValue, byte.MaxValue), (byte)Math.Clamp(origin.Y - 1, byte.MinValue, byte.MaxValue)),
+            Direction.East => new Point((byte)Math.Clamp(origin.X + 1, byte.MinValue, byte.MaxValue), (byte)Math.Clamp(origin.Y + 1, byte.MinValue, byte.MaxValue)),
+            Direction.West => new Point((byte)Math.Clamp(origin.X - 1, byte.MinValue, byte.MaxValue), (byte)Math.Clamp(origin.Y - 1, byte.MinValue, byte.MaxValue)),
+            Direction.NorthEast => new Point(origin.X, (byte)Math.Clamp(origin.Y + 1, byte.MinValue, byte.MaxValue)),
+            Direction.NorthWest => new Point((byte)Math.Clamp(origin.X - 1, byte.MinValue, byte.MaxValue), origin.Y),
+            Direction.SouthEast => new Point((byte)Math.Clamp(origin.X + 1, byte.MinValue, byte.MaxValue), origin.Y),
+            Direction.SouthWest => new Point(origin.X, (byte)Math.Clamp(origin.Y - 1, byte.MinValue, byte.MaxValue)),
             _ => throw new ArgumentException($"Direction value {direction} is not defined", nameof(direction)),
         };
     }

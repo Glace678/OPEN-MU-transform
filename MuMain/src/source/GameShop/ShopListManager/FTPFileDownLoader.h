@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+#include <mutex>
 #include "Include.h"
 
 class CFTPFileDownLoader
@@ -17,10 +18,15 @@ public:
 
     void Break();
 
-    FileDownloader* GetFileDownloader() { return m_pFileDownloader; }
+    FileDownloader* GetFileDownloader()
+    {
+        std::lock_guard<std::mutex> lock(m_DownloaderMutex);
+        return m_pFileDownloader;
+    }
 
 private:
     BOOL              CreateFolder(std::wstring strFilePath);
     std::atomic<bool> m_Break;
+    std::mutex        m_DownloaderMutex;
     FileDownloader*   m_pFileDownloader;
 };

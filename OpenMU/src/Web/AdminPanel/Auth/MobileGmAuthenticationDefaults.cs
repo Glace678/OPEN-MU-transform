@@ -26,8 +26,17 @@ public static class MobileGmAuthenticationDefaults
     /// <summary>Gets the environment variable which contains the mobile game account name.</summary>
     public const string AccountNameEnvironmentVariable = "OPENMU_LOCAL_GAME_USERNAME";
 
+    /// <summary>Gets the custom client header required on state-changing mobile GM requests.</summary>
+    public const string ClientHeaderName = "X-OpenMU-Client";
+
+    /// <summary>Gets the expected value of <see cref="ClientHeaderName"/>.</summary>
+    public const string ClientHeaderValue = "MobileGM";
+
     /// <summary>Gets the authorization policy used exclusively by the mobile GM API.</summary>
     internal const string Policy = "OpenMU.MobileGmOnly";
+
+    /// <summary>Gets the per-IP rate limiting policy used by the mobile GM login endpoint.</summary>
+    internal const string LoginRateLimitPolicy = "OpenMU.MobileGmLogin";
 
     /// <summary>
     /// Checks whether the direct peer belongs to an explicitly trusted local network range.

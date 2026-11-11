@@ -49,6 +49,11 @@ public class ShowRageAttackRangePlugIn : IShowRageAttackRangePlugIn
             var i = 0;
             foreach (var target in targets)
             {
+                if (i >= 5)
+                {
+                    break;
+                }
+
                 var block = packet[i];
                 block.TargetId = target.GetId(this._player);
                 i++;

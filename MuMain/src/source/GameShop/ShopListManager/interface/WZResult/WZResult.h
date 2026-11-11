@@ -27,8 +27,8 @@ public:
     void SetSuccessResult();
     void SetResult(DWORD dwErrorCode, DWORD dwWindowErrorCode, const TCHAR* szFormat, ...);
 
-    static WZResult BuildSuccessResult();
-    static WZResult BuildResult(DWORD dwErrorCode, DWORD dwWindowErrorCode, const TCHAR* szFormat, ...);
+    WZResult BuildSuccessResult();
+    WZResult BuildResult(DWORD dwErrorCode, DWORD dwWindowErrorCode, const TCHAR* szFormat, ...);
 
 private:
     // Member Object

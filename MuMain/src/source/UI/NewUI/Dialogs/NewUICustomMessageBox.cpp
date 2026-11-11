@@ -503,7 +503,9 @@ SEASON3B::CNewUIKeyPadMsgBox::~CNewUIKeyPadMsgBox() {}
 
 bool SEASON3B::CNewUIKeyPadMsgBox::Create(DWORD dwType, int iInputLimit)
 {
-    m_iInputLimit = iInputLimit;
+    const int maxLimit =
+        static_cast<int>((std::min)(_countof(m_strKeyPadInput), _countof(m_strCheckKeyPadInput)) - 1);
+    m_iInputLimit = (std::max)(0, (std::min)(iInputLimit, maxLimit));
 
     AddCallbackFunc(SEASON3B::CNewUIKeyPadMsgBox::LButtonUp, MSGBOX_EVENT_MOUSE_LBUTTON_UP);
     AddCallbackFunc(SEASON3B::CNewUIKeyPadMsgBox::KeyPadBtnDown, MSGBOX_EVENT_USER_CUSTOM_KEYPAD_INPUT);
@@ -662,13 +664,25 @@ const wchar_t* SEASON3B::CNewUIKeyPadMsgBox::GetInputText()
 
 void SEASON3B::CNewUIKeyPadMsgBox::SetCheckInputText(const wchar_t* strInput)
 {
-    memcpy(m_strCheckKeyPadInput, strInput,
-           m_iInputLimit * sizeof(wchar_t));  // #MG-21: compare by wide chars, not bytes
+    ZeroMemory(m_strCheckKeyPadInput, sizeof(m_strCheckKeyPadInput));
+    if (strInput != nullptr && m_iInputLimit > 0)
+    {
+        const size_t limit =
+            (std::min)(static_cast<size_t>(m_iInputLimit), _countof(m_strCheckKeyPadInput) - 1);
+        wcsncpy_s(m_strCheckKeyPadInput, _countof(m_strCheckKeyPadInput), strInput, limit);
+    }
 }
 
 bool SEASON3B::CNewUIKeyPadMsgBox::IsCheckInput()
 {
-    return (0 == memcmp(m_strCheckKeyPadInput, m_strKeyPadInput, m_iInputLimit * sizeof(wchar_t)));  // #MG-21
+    if (m_iInputLimit <= 0)
+    {
+        return false;
+    }
+    const size_t limit =
+        (std::min)(static_cast<size_t>(m_iInputLimit), _countof(m_strCheckKeyPadInput) - 1);
+    return (GetInputSize() == static_cast<int>(limit)) &&
+           (0 == wcsncmp(m_strCheckKeyPadInput, m_strKeyPadInput, limit));
 }
 
 void SEASON3B::CNewUIKeyPadMsgBox::SetStoragePassword(WORD wPassword)
@@ -683,7 +697,8 @@ WORD SEASON3B::CNewUIKeyPadMsgBox::GetStoragePassword()
 
 bool SEASON3B::CNewUIKeyPadMsgBox::IsAllSameNumber()
 {
-    for (int i = 0; i < m_iInputLimit - 1; ++i)
+    const int limit = (std::min)(m_iInputLimit, static_cast<int>(_countof(m_strKeyPadInput) - 1));
+    for (int i = 0; i < limit - 1; ++i)
     {
         if (m_strKeyPadInput[i] != m_strKeyPadInput[i + 1])
         {
@@ -696,11 +711,11 @@ bool SEASON3B::CNewUIKeyPadMsgBox::IsAllSameNumber()
 
 void SEASON3B::CNewUIKeyPadMsgBox::KeyPadInput(int iInput)
 {
-    wchar_t strInput[4] = {
+    wchar_t strInput[16] = {
         0,
     };
-    mu_swprintf(strInput, L"%d", iInput);
-    wcscat(m_strKeyPadInput, strInput);
+    swprintf_s(strInput, _countof(strInput), L"%d", iInput);
+    wcsncat_s(m_strKeyPadInput, _countof(m_strKeyPadInput), strInput, _TRUNCATE);
 }
 
 void SEASON3B::CNewUIKeyPadMsgBox::DeleteKeyPadInput()
@@ -3195,28 +3210,28 @@ void SEASON3B::CChaosMixMenuMsgBox::RenderTexts()
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->SetTextColor(255, 128, 0, 255);
     g_pRenderText->SetFont(g_hFontBold);
-    mu_swprintf(szText, I18N::Game::SelectMethodOfCombination);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::SelectMethodOfCombination);
     g_pRenderText->RenderText(fPos_x, fPos_y, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 
     fPos_y += 15;
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFont);
 
-    mu_swprintf(szText, I18N::Game::Wings7TypesFruitDevilSInvitation);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::Wings7TypesFruitDevilSInvitation);
     g_pRenderText->RenderText(fPos_x, fPos_y + 1 * 15, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
-    mu_swprintf(szText, I18N::Game::Dinorant1015ItemsCloakOfInvisibility, Hero->ID);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::Dinorant1015ItemsCloakOfInvisibility);
     g_pRenderText->RenderText(fPos_x, fPos_y + 2 * 15, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
-    mu_swprintf(szText, I18N::Game::FenrirSHornScrollOfBloodCondorSFeather, Hero->ID);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::FenrirSHornScrollOfBloodCondorSFeather);
     g_pRenderText->RenderText(fPos_x, fPos_y + 3 * 15, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 
     fPos_y += 100;
-    mu_swprintf(szText, I18N::Game::ChaosDragonAxeChaosLightningStaff, Hero->ID);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::ChaosDragonAxeChaosLightningStaff);
     g_pRenderText->RenderText(fPos_x, fPos_y + 0 * 15, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
-    mu_swprintf(szText, I18N::Game::ChaosNatureBow, Hero->ID);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::ChaosNatureBow);
     g_pRenderText->RenderText(fPos_x, fPos_y + 1 * 15, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 
     fPos_y += 85;
-    mu_swprintf(szText, I18N::Game::Add380ItemOption, Hero->ID);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::Add380ItemOption);
     g_pRenderText->RenderText(fPos_x, fPos_y + 0 * 15, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 }
 
@@ -4391,7 +4406,7 @@ void SEASON3B::CDuelResultMsgBox::RenderFrame()
 
 void SEASON3B::CDuelResultMsgBox::RenderTexts()
 {
-    wchar_t strDuelID[256];
+    wchar_t strDuelID[256] = {};
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->SetTextColor(255, 255, 0, 255);
     g_pRenderText->SetFont(g_hFontBold);
@@ -4400,9 +4415,9 @@ void SEASON3B::CDuelResultMsgBox::RenderTexts()
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFont);
-    mu_swprintf(strDuelID, I18N::Game::SHasJustWon, m_szWinnerID);
+    swprintf_s(strDuelID, _countof(strDuelID), I18N::Game::SHasJustWon, m_szWinnerID);
     g_pRenderText->RenderText(GetPos().x, GetPos().y + 120, strDuelID, MSGBOX_WIDTH, 0, RT3_SORT_CENTER);
-    mu_swprintf(strDuelID, I18N::Game::TheDuelWithS, m_szLoserID);
+    swprintf_s(strDuelID, _countof(strDuelID), I18N::Game::TheDuelWithS, m_szLoserID);
     g_pRenderText->RenderText(GetPos().x, GetPos().y + 135, strDuelID, MSGBOX_WIDTH, 0, RT3_SORT_CENTER);
     g_pRenderText->RenderText(GetPos().x, GetPos().y + 151, I18N::Game::Lookup(2697), MSGBOX_WIDTH, 0, RT3_SORT_CENTER);
 }
@@ -4857,12 +4872,13 @@ CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::ProcessOk(class CNewUIMessage
     }
 
     int iInputZen = _wtoi(strText);
-    if (iInputZen == 0)
+    if (iInputZen <= 0)
     {
         return CALLBACK_CONTINUE;
     }
 
-    if (iInputZen <= CharacterMachine->StorageGold && CharacterMachine->Gold + iInputZen <= 2000000000)
+    if (static_cast<int64_t>(iInputZen) <= static_cast<int64_t>(CharacterMachine->StorageGold) &&
+        static_cast<int64_t>(CharacterMachine->Gold) + static_cast<int64_t>(iInputZen) <= 2000000000LL)
     {
         if (!g_pStorageInventory->IsStorageLocked() || g_pStorageInventory->IsCorrectPassword())
         {
@@ -4875,7 +4891,7 @@ CALLBACK_RESULT SEASON3B::CZenPaymentMsgBoxLayout::ProcessOk(class CNewUIMessage
             SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CPasswordKeyPadMsgBoxLayout));
         }
     }
-    else if (CharacterMachine->Gold + iInputZen > 2000000000)
+    else if (static_cast<int64_t>(CharacterMachine->Gold) + static_cast<int64_t>(iInputZen) > 2000000000LL)
     {
     }
     else
@@ -4922,6 +4938,10 @@ CALLBACK_RESULT SEASON3B::CPersonalShopItemValueMsgBoxLayout::ProcessOk(class CN
                                                                         const leaf::xstreambuf&     xParam)
 {
     auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    if (pMsgBox == nullptr)
+    {
+        return CALLBACK_CONTINUE;
+    }
 
     wchar_t strText[MAX_TEXT_LENGTH] = {
         0,
@@ -4973,7 +4993,7 @@ CALLBACK_RESULT SEASON3B::CPersonalShopItemValueMsgBoxLayout::ProcessOk(class CN
             wchar_t strText2[MAX_TEXT_LENGTH] = {
                 0,
             };
-            mu_swprintf(strText2, I18N::Game::SellingPriceSZen, strText);
+            swprintf_s(strText2, _countof(strText2), I18N::Game::SellingPriceSZen, strText);
             lpMsgBox->AddMsg(strText2, RGBA(255, 0, 0, 255), MSGBOX_FONT_BOLD);
             lpMsgBox->AddMsg(I18N::Game::DoYouWantToSellItemAtThisPrice);
             lpMsgBox->SetItemValue(iInputZen);
@@ -5080,7 +5100,11 @@ bool SEASON3B::CPersonalShopNameMsgBoxLayout::SetLayout()
 CALLBACK_RESULT SEASON3B::CPersonalShopNameMsgBoxLayout::ProcessOk(class CNewUIMessageBoxBase* pOwner,
                                                                    const leaf::xstreambuf&     xParam)
 {
-    auto*   pMsgBox                  = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    if (pMsgBox == nullptr)
+    {
+        return CALLBACK_CONTINUE;
+    }
     wchar_t strText[MAX_TEXT_LENGTH] = {
         0,
     };
@@ -5152,7 +5176,11 @@ bool SEASON3B::CCastleWithdrawMsgBoxLayout::SetLayout()
 CALLBACK_RESULT SEASON3B::CCastleWithdrawMsgBoxLayout::ReturnDown(class CNewUIMessageBoxBase* pOwner,
                                                                   const leaf::xstreambuf&     xParam)
 {
-    auto*   pMsgBox                  = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    auto* pMsgBox = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
+    if (pMsgBox == nullptr)
+    {
+        return CALLBACK_CONTINUE;
+    }
     wchar_t strText[MAX_TEXT_LENGTH] = {
         0,
     };
@@ -5179,28 +5207,7 @@ CALLBACK_RESULT SEASON3B::CCastleWithdrawMsgBoxLayout::ReturnDown(class CNewUIMe
 CALLBACK_RESULT SEASON3B::CCastleWithdrawMsgBoxLayout::OkBtnDown(class CNewUIMessageBoxBase* pOwner,
                                                                  const leaf::xstreambuf&     xParam)
 {
-    auto*   pMsgBox                  = dynamic_cast<CNewUITextInputMsgBox*>(pOwner);
-    wchar_t strText[MAX_TEXT_LENGTH] = {
-        0,
-    };
-    pMsgBox->GetInputBoxText(strText);
-    if (wcslen(strText) == 0)
-    {
-        return CALLBACK_CONTINUE;
-    }
-
-    DWORD dwInputZen = _wtoi(strText);
-    if (dwInputZen == 0)
-    {
-        return CALLBACK_CONTINUE;
-    }
-
-    g_SenatusInfo.DoWithdrawAction(dwInputZen);
-
-    PlayBuffer(SOUND_CLICK01);
-    g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
-
-    return CALLBACK_BREAK;
+    return ReturnDown(pOwner, xParam);
 }
 
 CALLBACK_RESULT SEASON3B::CCastleWithdrawMsgBoxLayout::CancelBtnDown(class CNewUIMessageBoxBase* pOwner,
@@ -7377,14 +7384,14 @@ void SEASON3B::CSeedInvestigatorMenuMsgBox::RenderTexts()
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFontBold);
-    mu_swprintf(szText, I18N::Game::SeedResearcher);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::SeedResearcher);
     g_pRenderText->RenderText(fPos_x, fPos_y, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 
     fPos_y += 15;
     g_pRenderText->SetFont(g_hFont);
-    mu_swprintf(szText, I18N::Game::EitherApplyTheSeedSphere);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::EitherApplyTheSeedSphere);
     g_pRenderText->RenderText(fPos_x, fPos_y + 1 * 18, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
-    mu_swprintf(szText, I18N::Game::OrDestroyTheSeedSphereAccordingly);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::OrDestroyTheSeedSphereAccordingly);
     g_pRenderText->RenderText(fPos_x, fPos_y + 2 * 18, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 }
 
@@ -7540,12 +7547,12 @@ void SEASON3B::CResetCharacterPointMsgBox::RenderTexts()
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFontBold);
-    mu_swprintf(szText, I18N::Game::ReInitializationHelper);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::ReInitializationHelper);
     g_pRenderText->RenderText(fPos_x, fPos_y, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 
     fPos_y += 25;
     g_pRenderText->SetFont(g_hFont);
-    mu_swprintf(szText, I18N::Game::ClickOnTheButtonToReinitializeAllStatPoints);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::ClickOnTheButtonToReinitializeAllStatPoints);
     g_pRenderText->RenderText(fPos_x, fPos_y + 1 * 18, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 }
 
@@ -7654,7 +7661,10 @@ CALLBACK_RESULT SEASON3B::CGuildBreakPasswordMsgBoxLayout::ProcessOk(class CNewU
 
     if (iInputTextSize > 0)
     {
-        SocketClient->ToGameServer()->SendGuildKickPlayerRequest(GuildList[DeleteIndex].Name, strText);
+        if (DeleteIndex >= 0 && DeleteIndex < MAX_GUILDS)
+        {
+            SocketClient->ToGameServer()->SendGuildKickPlayerRequest(GuildList[DeleteIndex].Name, strText);
+        }
     }
     else
     {
@@ -7870,10 +7880,12 @@ void SEASON3B::CGuild_ToPerson_Position::RenderButtons()
     }
     m_MsgDataList.clear();
 
-    wchar_t strText[256];
+    wchar_t        strText[256] = {};
+    const wchar_t* targetName =
+        (DeleteIndex >= 0 && DeleteIndex < MAX_GUILDS) ? GuildList[DeleteIndex].Name : L"";
     if (COMGEM::m_cGemType == COMGEM::CELE)
     {
-        mu_swprintf(strText, I18N::Game::SAsAS, GuildList[DeleteIndex].Name, I18N::Game::AssistM);
+        swprintf_s(strText, _countof(strText), I18N::Game::SAsAS, targetName, I18N::Game::AssistM);
         AppointType = SUBGUILDMASTER;
         AddMsg(strText, RGBA(255, 128, 0, 255), MSGBOX_FONT_BOLD);
         glColor4f(1.0f, 1.0f, 0.2f, 1.0f);
@@ -7887,7 +7899,7 @@ void SEASON3B::CGuild_ToPerson_Position::RenderButtons()
 
     if (COMGEM::m_cGemType == COMGEM::SOUL)
     {
-        mu_swprintf(strText, I18N::Game::SAsAS, GuildList[DeleteIndex].Name, I18N::Game::BattleM);
+        swprintf_s(strText, _countof(strText), I18N::Game::SAsAS, targetName, I18N::Game::BattleM);
         AppointType = BATTLEMASTER;
         AddMsg(strText, RGBA(255, 128, 0, 255), MSGBOX_FONT_BOLD);
         glColor4f(1.0f, 1.0f, 0.2f, 1.0f);
@@ -7955,8 +7967,11 @@ CALLBACK_RESULT SEASON3B::CGuild_ToPerson_Position::OkBtnDown(class CNewUIMessag
                                                               const leaf::xstreambuf&     xParam)
 {
     COMGEM::Exit();
-    SocketClient->ToGameServer()->SendGuildRoleAssignRequest(AppointType, GuildList[DeleteIndex].Name,
-                                                             AppointType == G_PERSON ? 0x01 : 0x02);
+    if (DeleteIndex >= 0 && DeleteIndex < MAX_GUILDS)
+    {
+        SocketClient->ToGameServer()->SendGuildRoleAssignRequest(AppointType, GuildList[DeleteIndex].Name,
+                                                                 AppointStatus == G_PERSON ? 0x01 : 0x02);
+    }
 
     SocketClient->ToGameServer()->SendGuildListRequest();
 
@@ -8179,16 +8194,16 @@ void SEASON3B::CDelgardoMainMenuMsgBox::RenderTexts()
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFontBold);
-    mu_swprintf(szText, I18N::Game::Delgado);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::Delgado);
     g_pRenderText->RenderText(fPos_x, fPos_y, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 
     fPos_y += 26;
     g_pRenderText->SetFont(g_hFont);
-    mu_swprintf(szText, I18N::Game::RegisterYourLuckyCoinsOr);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::RegisterYourLuckyCoinsOr);
     g_pRenderText->RenderText(fPos_x, fPos_y + 1 * 12, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
-    mu_swprintf(szText, I18N::Game::UseTheLuckyCoinsYouAlreadyHave);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::UseTheLuckyCoinsYouAlreadyHave);
     g_pRenderText->RenderText(fPos_x, fPos_y + 2 * 12, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
-    mu_swprintf(szText, I18N::Game::AndExchangeThemForItems);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::AndExchangeThemForItems);
     g_pRenderText->RenderText(fPos_x, fPos_y + 3 * 12, szText, MSGBOX_WIDTH - 20.0f, 0, RT3_SORT_CENTER);
 }
 

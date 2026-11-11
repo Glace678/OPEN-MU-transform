@@ -269,20 +269,53 @@ public static class Extensions
 
         if (useReverseProxy)
         {
-            // The reverse proxy runs in the private docker network, so trust the forwarded
-            // headers (scheme/proto) from private ranges instead of just from loopback.
+            // Trust scheme/host from private ranges so reverse-proxied URLs render accurately,
+            // while X-Forwarded-For is only trusted from explicitly configured OPENMU_TRUSTED_PROXIES
+            // (never arbitrary RFC1918 peers, preventing loopback spoofing).
+            var trustedProxiesRaw = Environment.GetEnvironmentVariable("OPENMU_TRUSTED_PROXIES");
             builder.Services.Configure<Microsoft.AspNetCore.Builder.ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor
-                    | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+                options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
                     | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedHost;
-                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("10.0.0.0"), 8));
-                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("172.16.0.0"), 12));
-                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("192.168.0.0"), 16));
+
+                if (!string.IsNullOrWhiteSpace(trustedProxiesRaw))
+                {
+                    options.ForwardedHeaders |= Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor;
+                    foreach (var token in trustedProxiesRaw.Split([',', ';'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                    {
+                        var slashIndex = token.IndexOf('/', StringComparison.Ordinal);
+                        if (slashIndex > 0
+                            && System.Net.IPAddress.TryParse(token.AsSpan(0, slashIndex), out var networkIp)
+                            && int.TryParse(token.AsSpan(slashIndex + 1), out var prefixLength))
+                        {
+                            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(networkIp, prefixLength));
+                        }
+                        else if (System.Net.IPAddress.TryParse(token, out var proxyIp))
+                        {
+                            options.KnownProxies.Add(proxyIp);
+                        }
+                    }
+                }
+                else
+                {
+                    options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("10.0.0.0"), 8));
+                    options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("172.16.0.0"), 12));
+                    options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(System.Net.IPAddress.Parse("192.168.0.0"), 16));
+                }
             });
         }
 
         var app = builder.Build();
+
+        app.Use(async (context, next) =>
+        {
+            if (context.Connection.RemoteIpAddress is { } rawPeerIp)
+            {
+                context.Items[DaprEndpointSecurity.RawPeerIpItemKey] = rawPeerIp;
+            }
+
+            await next().ConfigureAwait(false);
+        });
 
         if (useReverseProxy)
         {
@@ -394,10 +427,8 @@ public static class Extensions
     public static async Task WaitForDatabaseInitializationAsync(this IServiceProvider serviceProvider, CancellationToken cancellationToken = default)
     {
         var dbConnectionProvider = serviceProvider.GetRequiredService<IDatabaseConnectionSettingProvider>();
-        if (dbConnectionProvider.Initialization is { } initTask)
-        {
-            await initTask.WaitAsync(cancellationToken).ConfigureAwait(false);
-        }
+        var initTask = dbConnectionProvider.Initialization ?? dbConnectionProvider.InitializeAsync(cancellationToken);
+        await initTask.WaitAsync(cancellationToken).ConfigureAwait(false);
 
         await serviceProvider.GetRequiredService<PersistenceContextProvider>()
             .WaitForUpdatedDatabaseAsync(cancellationToken)

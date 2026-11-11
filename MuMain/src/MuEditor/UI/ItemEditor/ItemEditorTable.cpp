@@ -12,6 +12,8 @@
 #include "Core/Globals/_define.h"
 #include "imgui.h"
 #include <algorithm>
+#include <cctype>
+#include <cwchar>
 #include <sstream>
 
 extern ITEM_ATTRIBUTE* ItemAttribute;
@@ -71,7 +73,7 @@ void CItemEditorTable::Render(const std::string& searchFilter, std::map<std::str
 
     if (visibleColumnCount == 0)
     {
-        ImGui::Text(I18N::Editor::NoColumnsSelectedClickColumnsToShowColumns);
+        ImGui::Text("%s", I18N::Editor::NoColumnsSelectedClickColumnsToShowColumns);
         return;
     }
 
@@ -79,23 +81,34 @@ void CItemEditorTable::Render(const std::string& searchFilter, std::map<std::str
     if (searchFilter != m_lastSearchFilter || !m_isInitialized)
     {
         m_filteredItems.clear();
-        for (int i = 0; i < MAX_ITEM; i++)
+        if (ItemAttribute != nullptr)
         {
-            char nameBuffer[256];
-            WideCharToMultiByte(CP_UTF8, 0, ItemAttribute[i].Name, -1, nameBuffer, sizeof(nameBuffer), NULL, NULL);
-
-            if (nameBuffer[0] == '\0')
-                continue;
-
-            if (searchFilter.length() > 0)
+            for (int i = 0; i < MAX_ITEM; i++)
             {
-                std::string nameLower = nameBuffer;
-                std::transform(nameLower.begin(), nameLower.end(), nameLower.begin(), ::tolower);
-                if (nameLower.find(searchFilter) == std::string::npos)
+                const size_t srcLen = wcsnlen(ItemAttribute[i].Name, MAX_ITEM_NAME);
+                if (srcLen == 0)
                     continue;
-            }
 
-            m_filteredItems.push_back(i);
+                char      nameBuffer[256] = {};
+                const int written         = WideCharToMultiByte(CP_UTF8, 0, ItemAttribute[i].Name,
+                                                                static_cast<int>(srcLen), nameBuffer,
+                                                                static_cast<int>(sizeof(nameBuffer)) - 1, nullptr,
+                                                                nullptr);
+                if (written <= 0 || nameBuffer[0] == '\0')
+                    continue;
+                nameBuffer[written] = '\0';
+
+                if (searchFilter.length() > 0)
+                {
+                    std::string nameLower = nameBuffer;
+                    std::transform(nameLower.begin(), nameLower.end(), nameLower.begin(),
+                                   [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+                    if (nameLower.find(searchFilter) == std::string::npos)
+                        continue;
+                }
+
+                m_filteredItems.push_back(i);
+            }
         }
         m_lastSearchFilter = searchFilter;
         m_isInitialized    = true;
@@ -122,7 +135,7 @@ void CItemEditorTable::Render(const std::string& searchFilter, std::map<std::str
     {
         ImGui::TableSetupScrollFreeze(2, 1);  // Freeze first 2 columns + header row
     }
-    else if (freezeColumns && hasIndex)
+    else if (freezeColumns && (hasIndex || hasName))
     {
         ImGui::TableSetupScrollFreeze(1, 1);  // Freeze first column + header row
     }
@@ -214,7 +227,7 @@ void CItemEditorTable::Render(const std::string& searchFilter, std::map<std::str
     ImGui::PopStyleVar(2);
 
     // Handle Ctrl+C to copy selected row as CSV
-    if (selectedRow >= 0 && selectedRow < MAX_ITEM && ImGui::IsKeyDown(ImGuiKey_LeftCtrl) &&
+    if (ItemAttribute != nullptr && selectedRow >= 0 && selectedRow < MAX_ITEM && ImGui::IsKeyDown(ImGuiKey_LeftCtrl) &&
         ImGui::IsKeyPressed(ImGuiKey_C))
     {
         std::string output = CItemEditorActions::ExportItemCombined(selectedRow, ItemAttribute[selectedRow]);

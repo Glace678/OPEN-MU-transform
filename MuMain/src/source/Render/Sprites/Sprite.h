@@ -105,8 +105,8 @@ public:
     int GetWidth() const { return int((m_aScrCoord[RT].fX - m_aScrCoord[LT].fX) * m_fScaleX); }
     int GetHeight() const { return int((m_aScrCoord[LT].fY - m_aScrCoord[LB].fY) * m_fScaleY); }
     int GetTexID() { return m_nTexID; };
-    int GetTexWidth() { return -1 < m_nTexID ? (int)m_pTexture->Width : 0; }
-    int GetTexHeight() { return -1 < m_nTexID ? (int)m_pTexture->Height : 0; }
+    int GetTexWidth() { return (-1 < m_nTexID && m_pTexture != nullptr) ? (int)m_pTexture->Width : 0; }
+    int GetTexHeight() { return (-1 < m_nTexID && m_pTexture != nullptr) ? (int)m_pTexture->Height : 0; }
 
     float GetScaleX() const { return m_fScaleX; }
     float GetScaleY() const { return m_fScaleY; }

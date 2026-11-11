@@ -16,6 +16,8 @@ internal class RingBuffer<T>
 
     private int _currentStartIndex;
 
+    private int _nextWriteIndex;
+
     private int _count;
 
     /// <summary>
@@ -24,6 +26,7 @@ internal class RingBuffer<T>
     /// <param name="size">The size (capacity) of the buffer.</param>
     public RingBuffer(int size)
     {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size);
         this._array = new T[size];
     }
 
@@ -38,21 +41,20 @@ internal class RingBuffer<T>
     /// <returns>The enumerable.</returns>
     public IEnumerable<T> GetEnumerable()
     {
+        var snapshot = new List<T>(this._array.Length);
         lock (this._array)
         {
-            for (int i = 0; i < this._array.Length; i++)
+            for (int i = 0; i < this._count; i++)
             {
                 var index = (i + this._currentStartIndex) % this._array.Length;
                 if (this._array[index] is { } notNull)
                 {
-                    yield return notNull;
-                }
-                else
-                {
-                    yield break;
+                    snapshot.Add(notNull);
                 }
             }
         }
+
+        return snapshot;
     }
 
     /// <summary>
@@ -63,10 +65,16 @@ internal class RingBuffer<T>
     {
         lock (this._array)
         {
-            var nextIndex = this._count % this.Size;
-            this._currentStartIndex = this._count >= this.Size ? (nextIndex + 1) % this.Size : 0;
-            this._array[nextIndex] = item;
-            this._count++;
+            this._array[this._nextWriteIndex] = item;
+            this._nextWriteIndex = (this._nextWriteIndex + 1) % this.Size;
+            if (this._count < this.Size)
+            {
+                this._count++;
+            }
+            else
+            {
+                this._currentStartIndex = this._nextWriteIndex;
+            }
         }
     }
 
@@ -79,6 +87,7 @@ internal class RingBuffer<T>
         {
             this._array.ClearToDefaults();
             this._currentStartIndex = 0;
+            this._nextWriteIndex = 0;
             this._count = 0;
         }
     }

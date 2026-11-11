@@ -6,7 +6,7 @@
 
 using namespace SEASON3B;
 
-CNewUIGroup::CNewUIGroup()
+CNewUIGroup::CNewUIGroup() : m_fLayerDepth(0.0f), m_fKeyEventOrder(0.0f)
 {
     m_vecUI.clear();
 }

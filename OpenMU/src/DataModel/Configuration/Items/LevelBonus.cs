@@ -59,7 +59,14 @@ public partial class LevelBonus
     /// <returns>The element which represents the <see cref="AdditionalValue"/>.</returns>
     public IElement GetAdditionalValueElement(AggregateType aggregateType)
     {
-        return this._additionalValueElement ??= new ConstantElement(this.AdditionalValue, aggregateType);
+        if (this._additionalValueElement is { } element && element.AggregateType == aggregateType)
+        {
+            return element;
+        }
+
+        element = new ConstantElement(this.AdditionalValue, aggregateType);
+        this._additionalValueElement = element;
+        return element;
     }
 
     /// <inheritdoc />

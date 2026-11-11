@@ -14,6 +14,7 @@ CMsgBoxIGSCommon::CMsgBoxIGSCommon()
     memset(m_szTitle, 0, sizeof(m_szTitle));
     memset(m_szText, 0, sizeof(m_szText));
     m_iMiddleCount = 0;
+    m_iNumTextLine = 0;
 
     m_iMsgBoxWidth  = IMAGE_IGS_FRAME_WIDTH;
     m_iMsgBoxHeight = IMAGE_IGS_FRAME_HEIGHT;
@@ -43,10 +44,22 @@ bool CMsgBoxIGSCommon::Create(float fPriority)
 
 void CMsgBoxIGSCommon::Initialize(const wchar_t* pszTitle, const wchar_t* pszText)
 {
-    wcscpy(m_szTitle, pszTitle);
+    if (pszTitle)
+    {
+        wcsncpy(m_szTitle, pszTitle, std::size(m_szTitle) - 1);
+        m_szTitle[std::size(m_szTitle) - 1] = L'\0';
+    }
+    else
+    {
+        m_szTitle[0] = L'\0';
+    }
 
-    m_iNumTextLine = ::DivideStringByPixel(&m_szText[0][0], NUM_LINE_CMB, MAX_TEXT_LENGTH, pszText,
+    m_iNumTextLine = ::DivideStringByPixel(&m_szText[0][0], NUM_LINE_CMB, MAX_TEXT_LENGTH, pszText ? pszText : L"",
                                            IGS_TEXT_ITEM_INFO_WIDTH, true, '#');
+    if (m_iNumTextLine < 0)
+        m_iNumTextLine = 0;
+    else if (m_iNumTextLine > NUM_LINE_CMB)
+        m_iNumTextLine = NUM_LINE_CMB;
 
     if (m_iNumTextLine > IGS_NUM_TEXT_LIMIT_RENDER_MIDDLE_LINE)
     {

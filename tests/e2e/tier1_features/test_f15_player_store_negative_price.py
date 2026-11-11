@@ -23,13 +23,23 @@ class TestF15PlayerStoreNegativePrice(unittest.TestCase):
         self.assertFalse(valid)
 
     def test_max_shop_price_accepted(self):
-        valid, msg = EconomyEngine.validate_player_store_price(EconomyEngine.MAX_SHOP_PRICE)
-        self.assertTrue(valid)
+        # Configured MaximumInventoryMoney (2B) and default unconfigured ceiling (int.MaxValue)
+        valid_cfg, _ = EconomyEngine.validate_player_store_price(
+            EconomyEngine.MAX_SHOP_PRICE, max_inventory_money=EconomyEngine.MAX_SHOP_PRICE
+        )
+        self.assertTrue(valid_cfg)
+        valid_default, _ = EconomyEngine.validate_player_store_price(EconomyEngine.INT32_MAX)
+        self.assertTrue(valid_default)
 
     def test_exceeded_max_shop_price_rejected(self):
-        valid, msg = EconomyEngine.validate_player_store_price(EconomyEngine.MAX_SHOP_PRICE + 1)
-        self.assertFalse(valid)
-        self.assertIn("exceeds maximum", msg)
+        valid_cfg, msg_cfg = EconomyEngine.validate_player_store_price(
+            EconomyEngine.MAX_SHOP_PRICE + 1, max_inventory_money=EconomyEngine.MAX_SHOP_PRICE
+        )
+        self.assertFalse(valid_cfg)
+        self.assertIn("exceeds maximum", msg_cfg)
+        valid_default, msg_default = EconomyEngine.validate_player_store_price(EconomyEngine.INT32_MAX + 1)
+        self.assertFalse(valid_default)
+        self.assertIn("exceeds maximum", msg_default)
 
 
 if __name__ == "__main__":

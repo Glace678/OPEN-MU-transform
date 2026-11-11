@@ -334,15 +334,28 @@ public sealed class BloodCastleContext : MiniGameContext
 
     private async ValueTask TryDropQuestItemFromPlayerAsync(Player player)
     {
-        if (!player.TryGetQuestItem(out var item))
+        if (!player.TryGetQuestItem(out var item) || player.Inventory is null)
         {
             return;
         }
 
-        var dropped = new DroppedItem(item, player.Position, this.Map, player);
-        await this.Map.AddAsync(dropped).ConfigureAwait(false);
-        await player.Inventory!.RemoveItemAsync(item).ConfigureAwait(false);
-        await player.InvokeViewPlugInAsync<IItemDropResultPlugIn>(p => p.ItemDropResultAsync(item.ItemSlot, true)).ConfigureAwait(false);
+        var originalSlot = item.ItemSlot;
+        await player.Inventory.RemoveItemAsync(item).ConfigureAwait(false);
+        DroppedItem? dropped = null;
+        try
+        {
+            dropped = new DroppedItem(item, player.Position, this.Map, player);
+            await this.Map.AddAsync(dropped).ConfigureAwait(false);
+        }
+        catch
+        {
+            dropped?.Dispose();
+            _ = await player.Inventory.AddItemAsync(originalSlot, item).ConfigureAwait(false)
+                || await player.Inventory.AddItemAsync(item).ConfigureAwait(false);
+            throw;
+        }
+
+        await player.InvokeViewPlugInAsync<IItemDropResultPlugIn>(p => p.ItemDropResultAsync(originalSlot, true)).ConfigureAwait(false);
 
         this._questItemOwner = null;
     }

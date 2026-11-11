@@ -156,6 +156,11 @@ BYTE GetHellasLevel(CLASS_TYPE Class, int Level)
 
 bool EnableKalima(CLASS_TYPE Class, int Level, int ItemLevel)
 {
+    if (ItemLevel < 1 || ItemLevel > NUM_HELLAS)
+    {
+        return false;
+    }
+
     int startIndex = 0;
 
     auto baseClass = gCharacterManager.GetBaseClass(Class);
@@ -285,9 +290,9 @@ int RenderHellasItemInfo(ITEM* ip, int textNum)
 
 void AddObjectDescription(wchar_t* Text, vec3_t position)
 {
-    ObjectDescript QD;
+    ObjectDescript QD = {};
 
-    memcpy(QD.m_strName, Text, sizeof(char) * 64);
+    wcsncpy_s(QD.m_strName, _countof(QD.m_strName), Text ? Text : L"", _TRUNCATE);
     VectorCopy(position, QD.m_vPos);
 
     g_qObjDes.push(QD);
@@ -817,7 +822,7 @@ void RenderDestroy_Def(OBJECT* o, BMD* b)
 CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, int Key)
 {
     CHARACTER* c = NULL;
-    OBJECT*    o = &c->Object;
+    OBJECT*    o = NULL;
     switch (Type)
     {
         case MONSTER_DEATH_ANGEL_1:
@@ -828,7 +833,9 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
         case MONSTER_DEATH_ANGEL_6:
         case MONSTER_DEATH_ANGEL_7:
             OpenMonsterModel(MONSTER_MODEL_DEATH_ANGEL);
-            c                  = CreateCharacter(Key, MODEL_DEATH_ANGEL, PositionX, PositionY);
+            c = CreateCharacter(Key, MODEL_DEATH_ANGEL, PositionX, PositionY);
+            if (!c)
+                return nullptr;
             c->Weapon[0].Type  = -1;
             c->Weapon[0].Level = 0;
             c->Object.Scale    = 1.2f;
@@ -844,7 +851,9 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
         case MONSTER_DEATH_CENTURION_6:
         case MONSTER_DEATH_CENTURION_7:
             OpenMonsterModel(MONSTER_MODEL_DEATH_CENTURION);
-            c                  = CreateCharacter(Key, MODEL_DEATH_CENTURION, PositionX, PositionY);
+            c = CreateCharacter(Key, MODEL_DEATH_CENTURION, PositionX, PositionY);
+            if (!c)
+                return nullptr;
             c->Weapon[0].Type  = MODEL_DRAGON_SPEAR;
             c->Weapon[0].Level = 7;
             c->Object.Scale    = 1.5f;
@@ -861,7 +870,9 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
         case MONSTER_BLOOD_SOLDIER_6:
         case MONSTER_BLOOD_SOLDIER_7:
             OpenMonsterModel(MONSTER_MODEL_BLOOD_SOLDIER);
-            c                  = CreateCharacter(Key, MODEL_BLOOD_SOLDIER, PositionX, PositionY);
+            c = CreateCharacter(Key, MODEL_BLOOD_SOLDIER, PositionX, PositionY);
+            if (!c)
+                return nullptr;
             c->Weapon[0].Type  = -1;
             c->Weapon[0].Level = 0;
             c->Object.Scale    = 0.8f;
@@ -876,7 +887,9 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
         case MONSTER_AEGIS_6:
         case MONSTER_AEGIS_7:
             OpenMonsterModel(MONSTER_MODEL_AEGIS);
-            c                  = CreateCharacter(Key, MODEL_AEGIS, PositionX, PositionY);
+            c = CreateCharacter(Key, MODEL_AEGIS, PositionX, PositionY);
+            if (!c)
+                return nullptr;
             c->Weapon[0].Type  = -1;
             c->Weapon[0].Level = 0;
             c->Object.Scale    = 1.4f;
@@ -892,7 +905,9 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
         case MONSTER_ROGUE_CENTURION_6:
         case MONSTER_ROGUE_CENTURION_7:
             OpenMonsterModel(MONSTER_MODEL_DEATH_CENTURION);
-            c                  = CreateCharacter(Key, MODEL_DEATH_CENTURION, PositionX, PositionY);
+            c = CreateCharacter(Key, MODEL_DEATH_CENTURION, PositionX, PositionY);
+            if (!c)
+                return nullptr;
             c->Weapon[0].Type  = MODEL_DRAGON_SPEAR;
             c->Weapon[0].Level = 7;
             c->Object.Scale    = 1.f;
@@ -908,7 +923,9 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
         case MONSTER_NECRON_6:
         case MONSTER_NECRON_7:
             OpenMonsterModel(MONSTER_MODEL_NECRON);
-            c                  = CreateCharacter(Key, MODEL_NECRON, PositionX, PositionY);
+            c = CreateCharacter(Key, MODEL_NECRON, PositionX, PositionY);
+            if (!c)
+                return nullptr;
             c->Weapon[0].Type  = -1;
             c->Weapon[0].Level = 7;
             c->Object.Scale    = 1.2f;
@@ -924,7 +941,9 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
         case MONSTER_SCHRIKER_6:
         case MONSTER_SCHRIKER_7:
             OpenMonsterModel(MONSTER_MODEL_SHRIKER);
-            c                  = CreateCharacter(Key, MODEL_SHRIKER, PositionX, PositionY);
+            c = CreateCharacter(Key, MODEL_SHRIKER, PositionX, PositionY);
+            if (!c)
+                return nullptr;
             c->Weapon[0].Type  = MODEL_DOUBLE_BLADE;
             c->Weapon[0].Level = 0;
             c->Weapon[1].Type  = MODEL_DOUBLE_BLADE;
@@ -940,7 +959,9 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
         case MONSTER_ILLUSION_OF_KUNDUN_5:
         case MONSTER_ILLUSION_OF_KUNDUN_6:
             OpenMonsterModel(MONSTER_MODEL_SHRIKER);
-            c                  = CreateCharacter(Key, MODEL_SHRIKER, PositionX, PositionY);
+            c = CreateCharacter(Key, MODEL_SHRIKER, PositionX, PositionY);
+            if (!c)
+                return nullptr;
             c->Weapon[0].Type  = MODEL_DOUBLE_BLADE;
             c->Weapon[0].Level = 0;
             c->Weapon[1].Type  = MODEL_DOUBLE_BLADE;
@@ -953,7 +974,9 @@ CHARACTER* CreateHellasMonster(EMonsterType Type, int PositionX, int PositionY, 
 
         case MONSTER_ILLUSION_OF_KUNDUN_7:
             OpenMonsterModel(MONSTER_MODEL_ILLUSION_OF_KUNDUN);
-            c                  = CreateCharacter(Key, MODEL_ILLUSION_OF_KUNDUN, PositionX, PositionY);
+            c = CreateCharacter(Key, MODEL_ILLUSION_OF_KUNDUN, PositionX, PositionY);
+            if (!c)
+                return nullptr;
             c->Weapon[1].Type  = MODEL_STAFF_OF_KUNDUN;
             c->Weapon[1].Level = 0;
             c->Object.Scale    = 2.0f;

@@ -91,11 +91,11 @@ struct SET_SEARCH_RESULT_OPT : SET_SEARCH_RESULT
 class CSItemOption : public Singleton<CSItemOption>
 {
 private:
-    ITEM_SET_TYPE   m_ItemSetType[MAX_ITEM];
-    ITEM_SET_OPTION m_ItemSetOption[MAX_SET_OPTION];
+    ITEM_SET_TYPE   m_ItemSetType[MAX_ITEM]{};
+    ITEM_SET_OPTION m_ItemSetOption[MAX_SET_OPTION]{};
 
-    int                   m_SetSearchResultCount;
-    SET_SEARCH_RESULT_OPT m_SetSearchResult[MAX_EQUIPPED_SETS];
+    int                   m_SetSearchResultCount = 0;
+    SET_SEARCH_RESULT_OPT m_SetSearchResult[MAX_EQUIPPED_SETS]{};
 
     bool         m_bViewOptionList;
     std::uint8_t m_byRenderOptionList;
@@ -137,6 +137,7 @@ public:
 
     void init(void)
     {
+        m_SetSearchResultCount = 0;
         m_bViewOptionList      = false;
         m_byRenderOptionList   = 0;
         m_bySelectedItemOption = 0;

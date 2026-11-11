@@ -484,12 +484,17 @@ void CCharMakeWin::RenderCreateCharacter()
 
     o->Scale = params.scale;
 
+    const float baseX = CharacterView.Object.Position[0];
+    const float baseZ = CharacterView.Object.Position[2];
     if (params.positionOffsetX != 0.0f)
-        CharacterView.Object.Position[0] += params.positionOffsetX;
+        CharacterView.Object.Position[0] = baseX + params.positionOffsetX;
     if (params.positionOffsetZ != 0.0f)
-        CharacterView.Object.Position[2] += params.positionOffsetZ;
+        CharacterView.Object.Position[2] = baseZ + params.positionOffsetZ;
 
     RenderCharacter(&CharacterView, o);
+
+    CharacterView.Object.Position[0] = baseX;
+    CharacterView.Object.Position[2] = baseZ;
 
     glViewport2(0, 0, WindowWidth, WindowHeight);
 

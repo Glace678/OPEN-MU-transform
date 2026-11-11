@@ -43,10 +43,9 @@ bool SEASON3B::CNewUIBattleSoccerScore::Create(CNewUIManager* pNewUIMng, int x, 
 
 void SEASON3B::CNewUIBattleSoccerScore::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -101,7 +100,7 @@ void SEASON3B::CNewUIBattleSoccerScore::RenderContents()
     g_pRenderText->SetFont(g_hFontBold);
     g_pRenderText->SetBgColor(0, 0, 0, 128);
 
-    if (EnableGuildWar && Hero->GuildMarkIndex != -1)
+    if (EnableGuildWar && Hero != NULL && Hero->GuildMarkIndex >= 0 && Hero->GuildMarkIndex < MARK_EDIT)
     {
         if (HeroSoccerTeam == 0)
             g_pRenderText->SetTextColor(255, 60, 0, 255);
@@ -145,6 +144,9 @@ void SEASON3B::CNewUIBattleSoccerScore::RenderContents()
 
 int SEASON3B::CNewUIBattleSoccerScore::FindGuildMark(wchar_t* pszGuildName)
 {
+    if (pszGuildName == NULL)
+        return 0;
+
     for (int i = 0; i < MARK_EDIT; ++i)
     {
         MARK_t* p = &GuildMark[i];

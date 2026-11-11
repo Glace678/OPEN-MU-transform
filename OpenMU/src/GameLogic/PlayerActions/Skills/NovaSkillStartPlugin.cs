@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using MUnique.OpenMU.AttributeSystem;
 using MUnique.OpenMU.GameLogic.Attributes;
+using MUnique.OpenMU.GameLogic.GuildWar;
 using MUnique.OpenMU.GameLogic.NPC;
 using MUnique.OpenMU.GameLogic.Views.World;
 using MUnique.OpenMU.PlugIns;
@@ -35,9 +36,8 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
     /// <inheritdoc />
     public override async ValueTask PerformSkillAsync(Player player, IAttackable target, ushort skillId)
     {
-        if (player.SkillCancelTokenSource is not null)
+        if (!player.IsAlive || player.IsAtSafezone() || player.Attributes is not { } attributes)
         {
-            // A nova is already ongoing.
             return;
         }
 
@@ -47,21 +47,45 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
             return;
         }
 
-        // Consume full ability points first...
-        var novaStart = player.GameContext.Configuration.Skills.First(s => s.Number == skillId);
-        if (novaStart.ConsumeRequirements.Any(r => player.GetRequiredValue(r) > player.Attributes![r.Attribute]))
+        var novaStart = player.GameContext.Configuration.Skills.FirstOrDefault(s => s.Number == skillId);
+        if (novaStart is null)
         {
             return;
         }
 
-        foreach (var requirement in novaStart.ConsumeRequirements)
+        if (novaStart.ConsumeRequirements.Any(r => player.GetRequiredValue(r) > attributes[r.Attribute]))
         {
-            player.Attributes![requirement.Attribute] -= player.GetRequiredValue(requirement);
+            return;
         }
 
-        await player.ForEachWorldObserverAsync<IShowSkillAnimationPlugIn>(p => p.ShowNovaStartAsync(player), true).ConfigureAwait(false);
         var cancellationTokenSource = new SkillCancellationTokenSource();
-        player.SkillCancelTokenSource = cancellationTokenSource;
+        if (!player.TryClaimSkillCancelTokenSource(cancellationTokenSource))
+        {
+            // A channeled skill is already ongoing.
+            cancellationTokenSource.Dispose();
+            return;
+        }
+
+        try
+        {
+            if (novaStart.ConsumeRequirements.Any(r => player.GetRequiredValue(r) > attributes[r.Attribute]))
+            {
+                player.ReleaseSkillCancelTokenSource(cancellationTokenSource);
+                return;
+            }
+
+            foreach (var requirement in novaStart.ConsumeRequirements)
+            {
+                attributes[requirement.Attribute] -= player.GetRequiredValue(requirement);
+            }
+
+            await player.ForEachWorldObserverAsync<IShowSkillAnimationPlugIn>(p => p.ShowNovaStartAsync(player), true).ConfigureAwait(false);
+        }
+        catch
+        {
+            player.ReleaseSkillCancelTokenSource(cancellationTokenSource);
+            throw;
+        }
 
         _ = Task.Run(() => this.RunNovaAsync(player, skillEntry, cancellationTokenSource));
     }
@@ -69,25 +93,26 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
     private async ValueTask RunNovaAsync(Player player, SkillEntry skillEntry, SkillCancellationTokenSource cancellationTokenSource)
     {
         var cancellationToken = cancellationTokenSource.Token;
-        if (player.Attributes is not { } playerAttributes
-            || skillEntry.Skill is null)
-        {
-            return;
-        }
-
-        byte completedSteps = 0;
-
-        var stepDamageElement = new SimpleElement(0, AggregateType.AddRaw);
-        playerAttributes.AddElement(stepDamageElement, Stats.NovaStageDamage);
+        SimpleElement? stepDamageElement = null;
         try
         {
+            if (player.Attributes is not { } playerAttributes
+                || skillEntry.Skill is null)
+            {
+                return;
+            }
+
+            byte completedSteps = 0;
+
+            stepDamageElement = new SimpleElement(0, AggregateType.AddRaw);
+            playerAttributes.AddElement(stepDamageElement, Stats.NovaStageDamage);
             try
             {
                 while (completedSteps < NovaDamageTable.Length - 1)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    if (!await player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false))
+                    if (!player.IsAlive || player.IsAtSafezone() || !await player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false))
                     {
                         break;
                     }
@@ -109,35 +134,42 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
         catch (Exception ex)
         {
             player.Logger.LogError(ex, "Unexpected error during performing nova skill");
-            player.SkillCancelTokenSource?.Dispose();
-            player.SkillCancelTokenSource = null;
         }
         finally
         {
-            player.Attributes?.RemoveElement(stepDamageElement, Stats.NovaStageDamage);
+            if (stepDamageElement is not null)
+            {
+                player.Attributes?.RemoveElement(stepDamageElement, Stats.NovaStageDamage);
+            }
+
+            player.ReleaseSkillCancelTokenSource(cancellationTokenSource);
         }
     }
 
     private async ValueTask AttackTargetsAsync(Player player, SkillEntry skillEntry, SkillCancellationTokenSource cancellationTokenSource)
     {
-        if (!player.IsAlive || player.IsAtSafezone() || skillEntry.Skill is not { } skill)
+        if (!player.IsAlive || player.IsAtSafezone() || player.CurrentMap is not { } expectedMap || skillEntry.Skill is not { } skill)
         {
             return;
         }
 
         await player.ForEachWorldObserverAsync<IShowSkillAnimationPlugIn>(p => p.ShowSkillAnimationAsync(player, player, skill.Number, true), true).ConfigureAwait(false);
         var explicitTargetId = cancellationTokenSource.ExplicitTargetId;
-        var targets = this.DetermineTargets(player, skill, explicitTargetId);
-
-        // Set cancellation token source to null, so that the next nova can be started.
-        player.SkillCancelTokenSource?.Dispose();
-        player.SkillCancelTokenSource = null;
+        var targets = this.DetermineTargets(player, skill, explicitTargetId).ToList();
 
         await Task.Delay(500, CancellationToken.None).ConfigureAwait(false);
 
+        if (!player.IsAlive || !player.IsActive() || player.IsAtSafezone() || player.CurrentMap != expectedMap)
+        {
+            return;
+        }
+
         foreach (var target in targets)
         {
-            await target.AttackByAsync(player, skillEntry, false).ConfigureAwait(false);
+            if (target.IsAlive && target.IsActive() && !target.IsAtSafezone() && target.CurrentMap == expectedMap)
+            {
+                await target.AttackByAsync(player, skillEntry, false).ConfigureAwait(false);
+            }
         }
     }
 
@@ -145,7 +177,7 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
     {
         bool FilterPlayer(Player attackable)
         {
-            if (attackable == player)
+            if (attackable == player || attackable.IsAtSafezone())
             {
                 // Don't attack yourself
                 return false;
@@ -156,8 +188,8 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
                 return true;
             }
 
-            if (player.GuildWarContext is { } attackerContext
-                && attackable.GuildWarContext is { } defenderContext
+            if (player.GuildWarContext is { State: GuildWarState.Started } attackerContext
+                && attackable.GuildWarContext is { State: GuildWarState.Started } defenderContext
                 && attackerContext.Team != defenderContext.Team
                 && attackerContext.Score == defenderContext.Score)
             {
@@ -185,11 +217,12 @@ public class NovaSkillStartPlugin : TargetedSkillPluginBase
             return FilterPlayer(summonedBy);
         }
 
-        var targets = player.CurrentMap!
+        var targets = player.CurrentMap?
             .GetAttackablesInRange(player.Position, skill.Range)
-            .Where(a => a.IsAlive)
+            .Where(a => a.IsAlive && !a.IsAtSafezone())
             .Where(a => a is not Monster || FilterMonster((Monster)a))
-            .Where(a => a is not Player || FilterPlayer((Player)a));
+            .Where(a => a is not Player || FilterPlayer((Player)a))
+            ?? [];
 
         return targets;
     }

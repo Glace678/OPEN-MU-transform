@@ -105,9 +105,39 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
     /// <param name="subscription">The subscription.</param>
     public void AddSubscription(IDisposable subscription)
     {
-        if (subscription is Unsubscriber item)
+        if (subscription is not Unsubscriber item)
         {
-            this._subscriptions.Add(item);
+            return;
+        }
+
+        if (Volatile.Read(ref this._isDisposed) != 0)
+        {
+            item.Dispose();
+            return;
+        }
+
+        var disposeImmediately = false;
+        var readerWriterLock = this._readerWriterLock;
+        readerWriterLock.EnterWriteLock();
+        try
+        {
+            if (Volatile.Read(ref this._isDisposed) != 0)
+            {
+                disposeImmediately = true;
+            }
+            else
+            {
+                this._subscriptions.Add(item);
+            }
+        }
+        finally
+        {
+            readerWriterLock.ExitWriteLock();
+        }
+
+        if (disposeImmediately)
+        {
+            item.Dispose();
         }
     }
 
@@ -116,7 +146,6 @@ public sealed class OnlineFriend : IObservable<OnlineFriend>, IObserver<OnlineFr
     /// </summary>
     public void OnCompleted()
     {
-        this._subscriptions.ForEach(subscription => subscription.Dispose());
         this.Dispose();
     }
 

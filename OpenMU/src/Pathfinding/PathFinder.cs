@@ -132,6 +132,7 @@ public class PathFinder : IPathFinder
             return null;
         }
 
+        startNode.CostUntilNow = 0;
         startNode.PredictedTotalCost = 2;
         startNode.PreviousNode = startNode;
         startNode.Status = NodeStatus.Open;
@@ -151,7 +152,7 @@ public class PathFinder : IPathFinder
                 break;
             }
 
-            if (closeNodeCounter > this.SearchLimit)
+            if (closeNodeCounter >= this.SearchLimit)
             {
                 return null;
             }

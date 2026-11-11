@@ -48,7 +48,7 @@ namespace ConstantsReplacer
     /// <param name="inputFilename">The input filename.</param>
     /// <param name="defaultIfNotDetected">The default encoding if none was detected.</param>
     /// <returns></returns>
-    public static Encoding? DetectFileEncoding(string inputFilename, Encoding defaultIfNotDetected = null)
+    public static Encoding? DetectFileEncoding(string inputFilename, Encoding? defaultIfNotDetected = null)
     {
         using (var stream = new System.IO.FileStream(inputFilename, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.ReadWrite | System.IO.FileShare.Delete, DEFAULT_BUFFER_SIZE))
         {
@@ -69,12 +69,12 @@ namespace ConstantsReplacer
     /// <param name="inputStream">The input stream.</param>
     /// <param name="defaultIfNotDetected">The default encoding if none was detected.</param>
     /// <returns></returns>
-    public static Encoding? DetectFileEncoding(Stream inputStream, Encoding defaultIfNotDetected = null)
+    public static Encoding? DetectFileEncoding(Stream inputStream, Encoding? defaultIfNotDetected = null)
     {
         var det = new FileEncoding();
         det.Detect(inputStream);
         var detected = det.Complete();
-        if (detected is null || detected == Encoding.ASCII && defaultIfNotDetected is not null)
+        if ((detected is null || detected == Encoding.ASCII) && defaultIfNotDetected is not null)
         {
             return defaultIfNotDetected;
         }
@@ -90,18 +90,18 @@ namespace ConstantsReplacer
     /// <param name="count">The count.</param>
     /// <param name="defaultIfNotDetected">The default encoding if none was detected.</param>
     /// <returns></returns>
-    public static Encoding? DetectFileEncoding(byte[] inputData, int start, int count, Encoding defaultIfNotDetected = null)
+    public static Encoding? DetectFileEncoding(byte[] inputData, int start, int count, Encoding? defaultIfNotDetected = null)
     {
         var det = new FileEncoding();
         det.Detect(inputData, start, count);
         var detected = det.Complete();
-        if (detected is null || detected == Encoding.ASCII && defaultIfNotDetected is not null)
+        if ((detected is null || detected == Encoding.ASCII) && defaultIfNotDetected is not null)
         {
             return defaultIfNotDetected;
         }
 
         return detected;
-        }
+    }
 
     /// <summary>
     /// Tries to load file content with the correct encoding.
@@ -142,7 +142,7 @@ namespace ConstantsReplacer
     /// <param name="count">The count.</param>
     public static bool CheckForTextualData(byte[] rawData, int start, int count)
     {
-        if (rawData.Length < count || count < 4 || start + 1 >= count)
+        if (rawData is null || start < 0 || count < 4 || start > rawData.Length - count)
             return true;
 
         if (CheckForByteOrderMark(rawData, start))
@@ -156,7 +156,8 @@ namespace ConstantsReplacer
         // considering only sequeces of 2 0s: "\0\0" or control characters below 10
         int nullSequences = 0;
         int controlSequences = 0;
-        for (var i = start + 1; i < count; i++)
+        int end = start + count;
+        for (var i = start + 1; i < end; i++)
         {
             if (rawData[i - 1] == 0 && rawData[i] == 0)
             {
@@ -170,7 +171,7 @@ namespace ConstantsReplacer
         }
 
         // is text if there is no null byte sequences or less than 10% of the buffer has control caracteres
-        return nullSequences == 0 && (controlSequences <= (rawData.Length / 10));
+        return nullSequences == 0 && (controlSequences <= (count / 10));
     }
 
     /// <summary>
@@ -296,9 +297,9 @@ namespace ConstantsReplacer
     /// <param name="start">The start.</param>
     /// <param name="count">The count.</param>
     /// <returns>Detected encoding name</returns>
-    public string Detect(byte[] inputData, int start, int count)
+    public string? Detect(byte[] inputData, int start, int count)
     {
-        if (Done)
+        if (Done || inputData is null || start < 0 || count <= 0 || start > inputData.Length - count)
             return EncodingName;
         if (!_started)
         {
@@ -321,18 +322,20 @@ namespace ConstantsReplacer
         {
             IncrementFrequency(ude.Charset);
             Done = true;
+            EncodingName = GetCurrentEncoding();
             return EncodingName;
         }
 
         // singular buffer detection
         var singleUde = new Ude.CharsetDetector();
         const int udeFeedSize = 4 * 1024;
-        int step = (count - start) < udeFeedSize ? (count - start) : udeFeedSize;
-        for (var pos = start; pos < count; pos += step)
+        int end = start + count;
+        int step = count < udeFeedSize ? count : udeFeedSize;
+        for (var pos = start; pos < end; pos += step)
         {
             singleUde.Reset();
-            if (pos + step > count)
-                singleUde.Feed(inputData, pos, count - pos);
+            if (pos + step > end)
+                singleUde.Feed(inputData, pos, end - pos);
             else
                 singleUde.Feed(inputData, pos, step);
             singleUde.DataEnd();
@@ -356,10 +359,19 @@ namespace ConstantsReplacer
         ude.DataEnd();
         if (ude.IsDone() && !String.IsNullOrEmpty(ude.Charset))
         {
+            if (encodingFrequency.Count == 0)
+            {
+                IncrementFrequency(ude.Charset);
+            }
+
             EncodingName = ude.Charset;
         }
-        // vote for best encoding
-        EncodingName = GetCurrentEncoding();
+        else
+        {
+            // vote for best encoding
+            EncodingName = GetCurrentEncoding();
+        }
+
         // check result
         if (!String.IsNullOrEmpty(EncodingName))
             return Encoding.GetEncoding(EncodingName);

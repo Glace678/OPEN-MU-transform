@@ -15,19 +15,21 @@ class TestF07LetterTextOverflow(unittest.TestCase):
         self.assertEqual(copy_len, 256)
 
     def test_max_fs_letter_text_capacity(self):
-        # Full buffer size
+        # Full struct size: 50-byte FS_LETTER_TEXT_HEADER + 1000-byte Memo == 1050 bytes
         copy_len = LetterTextBufferValidator.get_safe_copy_length(LetterTextBufferValidator.SIZEOF_FS_LETTER_TEXT)
-        self.assertEqual(copy_len, 1024)
+        self.assertEqual(copy_len, 1050)
+        self.assertEqual(LetterTextBufferValidator.get_safe_text_length(1050), 1000)
 
     def test_oversized_letter_clamping(self):
-        # 2048 bytes packet received -> clamped to 1024
+        # 2048 bytes packet received -> struct copy clamped to 1050, text span clamped to 1000
         copy_len = LetterTextBufferValidator.get_safe_copy_length(2048)
-        self.assertEqual(copy_len, 1024)
+        self.assertEqual(copy_len, 1050)
+        self.assertEqual(LetterTextBufferValidator.get_safe_text_length(2048), 1000)
 
     def test_exact_boundary_copy(self):
-        # 1024 bytes packet
-        copy_len = LetterTextBufferValidator.get_safe_copy_length(1024)
-        self.assertEqual(copy_len, 1024)
+        # 1050 bytes packet
+        copy_len = LetterTextBufferValidator.get_safe_copy_length(1050)
+        self.assertEqual(copy_len, 1050)
 
     def test_heap_memory_safety(self):
         # Malicious packet claiming 65535 bytes

@@ -100,10 +100,9 @@ bool CNewUIEnterBloodCastle::Create(CNewUIManager* pNewUIMng, int x, int y)
 // Release
 void CNewUIEnterBloodCastle::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -170,7 +169,7 @@ bool CNewUIEnterBloodCastle::UpdateKeyEvent()
 int CNewUIEnterBloodCastle::CheckLimitLV(int iIndex)
 {
     int iVal = 0;
-    int iRet = 0;
+    int iRet = -1;
 
     if (iIndex == 1)
     {
@@ -258,7 +257,8 @@ bool CNewUIEnterBloodCastle::BtnProcess()
         return true;
     }
 
-    if ((m_iNumActiveBtn != -1) && (m_BtnEnter[m_iNumActiveBtn].UpdateMouseEvent() == true))
+    if ((m_iNumActiveBtn >= 0) && (m_iNumActiveBtn < MAX_ENTER_GRADE) &&
+        (m_BtnEnter[m_iNumActiveBtn].UpdateMouseEvent() == true))
     {
         SocketClient->ToGameServer()->SendBloodCastleEnterRequest(m_iNumActiveBtn + 1, 0xFF);
         g_pNewUISystem->Hide(SEASON3B::INTERFACE_BLOODCASTLE);
@@ -292,8 +292,11 @@ void CNewUIEnterBloodCastle::OpenningProcess()
 
     m_iNumActiveBtn = CheckLimitLV(iLimitLVIndex);
 
-    m_BtnEnter[m_iNumActiveBtn].UnLock();
-    m_BtnEnter[m_iNumActiveBtn].ChangeTextColor(m_dwBtnTextColor[ENTERBTN_ENABLE]);
+    if (m_iNumActiveBtn >= 0 && m_iNumActiveBtn < MAX_ENTER_GRADE)
+    {
+        m_BtnEnter[m_iNumActiveBtn].UnLock();
+        m_BtnEnter[m_iNumActiveBtn].ChangeTextColor(m_dwBtnTextColor[ENTERBTN_ENABLE]);
+    }
 
     wchar_t sztext[255] = {
         0,
@@ -301,14 +304,14 @@ void CNewUIEnterBloodCastle::OpenningProcess()
 
     for (int i = 0; i < MAX_ENTER_GRADE - 1; i++)
     {
-        mu_swprintf(sztext, I18N::Game::CastleDLevelDD, i + 1,
-                    m_iBloodCastleLimitLevel[(iLimitLVIndex * MAX_ENTER_GRADE) + i][0],
-                    m_iBloodCastleLimitLevel[(iLimitLVIndex * MAX_ENTER_GRADE) + i][1]);
+        swprintf_s(sztext, _countof(sztext), I18N::Game::CastleDLevelDD, i + 1,
+                   m_iBloodCastleLimitLevel[(iLimitLVIndex * MAX_ENTER_GRADE) + i][0],
+                   m_iBloodCastleLimitLevel[(iLimitLVIndex * MAX_ENTER_GRADE) + i][1]);
         m_BtnEnter[i].SetFont(g_hFontBold);
         m_BtnEnter[i].ChangeText(sztext);
     }
 
-    mu_swprintf(sztext, I18N::Game::CastleNoDMasterLevel, 8);
+    swprintf_s(sztext, _countof(sztext), I18N::Game::CastleNoDMasterLevel, 8);
 
     m_BtnEnter[MAX_ENTER_GRADE - 1].SetFont(g_hFontBold);
     m_BtnEnter[MAX_ENTER_GRADE - 1].ChangeText(sztext);

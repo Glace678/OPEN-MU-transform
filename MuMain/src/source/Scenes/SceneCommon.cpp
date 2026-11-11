@@ -91,6 +91,11 @@ extern EGameScene SceneFlag;
 
 bool CheckAbuseFilter(wchar_t* Text, bool bCheckSlash)
 {
+    if (!Text)
+    {
+        return false;
+    }
+
     if (bCheckSlash == true)
     {
         if (Text[0] == '/')
@@ -101,8 +106,8 @@ bool CheckAbuseFilter(wchar_t* Text, bool bCheckSlash)
 
     int     icntText = 0;
     wchar_t TmpText[2048];
-    int     textLength = wcslen(Text);
-    for (int i = 0; i < textLength; ++i)
+    int     textLength = (int)wcslen(Text);
+    for (int i = 0; i < textLength && icntText < (int)_countof(TmpText) - 1; ++i)
     {
         if (Text[i] != 32)
         {
@@ -124,10 +129,15 @@ bool CheckAbuseFilter(wchar_t* Text, bool bCheckSlash)
 
 bool CheckAbuseNameFilter(wchar_t* Text)
 {
+    if (!Text)
+    {
+        return false;
+    }
+
     int     icntText = 0;
     wchar_t TmpText[256];
-    int     textLength = wcslen(Text);
-    for (int i = 0; i < textLength; ++i)
+    int     textLength = (int)wcslen(Text);
+    for (int i = 0; i < textLength && icntText < (int)_countof(TmpText) - 1; ++i)
     {
         if (Text[i] != 32)
         {
@@ -230,7 +240,7 @@ void RenderInfomation3D()
         Success = true;
     }
 
-    if (Success)
+    if (Success && WindowWidth > 0 && WindowHeight > 0)
     {
         // DXP-07d increment 1, stage 1: snapshot the pre-panel GlobalUBO proj/view (already the
         // CPU source of truth per DXP-07a/b) so the post-pop restore below can be checked for
@@ -357,9 +367,14 @@ static void SetupItemUseStateMessage(int num, int index, int message)
         swprintf_s(g_lpszMessageBoxCustom[0], MAX_LENGTH_CMB, L"( %ls )", Name);
 
     num++;
+    if (num < 1)
+        num = 1;
+    if (num > NUM_LINE_CMB)
+        num = NUM_LINE_CMB;
+    const wchar_t* line = I18N::Game::Lookup(index);
     for (int i = 1; i < num; ++i)
     {
-        swprintf_s(g_lpszMessageBoxCustom[i], MAX_LENGTH_CMB, I18N::Game::Lookup(index));
+        swprintf_s(g_lpszMessageBoxCustom[i], MAX_LENGTH_CMB, L"%ls", line ? line : L"");
     }
     g_iNumLineMessageBoxCustom = num;
 }
@@ -369,13 +384,20 @@ static void SetupItemUseStateMessage(int num, int index, int message)
  */
 static void SetupPersonalShopWarningMessage(int num, int index)
 {
+    if (num < 1)
+        num = 1;
+    if (num > NUM_LINE_CMB)
+        num = NUM_LINE_CMB;
+
     wchar_t szGold[256];
     ConvertGold(InputGold, szGold);
-    swprintf_s(g_lpszMessageBoxCustom[0], MAX_LENGTH_CMB, I18N::Game::Lookup(index), szGold);
+    const wchar_t* firstFmt = I18N::Game::Lookup(index);
+    swprintf_s(g_lpszMessageBoxCustom[0], MAX_LENGTH_CMB, firstFmt ? firstFmt : L"%ls", szGold);
 
     for (int i = 1; i < num; ++i)
     {
-        swprintf_s(g_lpszMessageBoxCustom[i], MAX_LENGTH_CMB, I18N::Game::Lookup(index + i));
+        const wchar_t* line = I18N::Game::Lookup(index + i);
+        swprintf_s(g_lpszMessageBoxCustom[i], MAX_LENGTH_CMB, L"%ls", line ? line : L"");
     }
     g_iNumLineMessageBoxCustom = num;
 }
@@ -386,11 +408,14 @@ static void SetupPersonalShopWarningMessage(int num, int index)
 static void SetupChaosCastleCheckMessage(int num, int index)
 {
     g_iNumLineMessageBoxCustom = 0;
-    for (int i = 0; i < num; ++i)
+    for (int i = 0; i < num && g_iNumLineMessageBoxCustom < NUM_LINE_CMB; ++i)
     {
+        const wchar_t* line = I18N::Game::Lookup(index + i);
+        if (!line)
+            continue;
         g_iNumLineMessageBoxCustom +=
-            SeparateTextIntoLines(I18N::Game::Lookup(index + i), g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom],
-                                  NUM_LINE_CMB, MAX_LENGTH_CMB);
+            SeparateTextIntoLines(line, g_lpszMessageBoxCustom[g_iNumLineMessageBoxCustom],
+                                  NUM_LINE_CMB - g_iNumLineMessageBoxCustom, MAX_LENGTH_CMB);
     }
 }
 
@@ -400,9 +425,7 @@ static void SetupChaosCastleCheckMessage(int num, int index)
 static void SetupGemIntegrationMessage()
 {
     wchar_t tBuf[MAX_GLOBAL_TEXT_STRING];
-    wchar_t tLines[2][30];
-    for (int t = 0; t < 2; ++t)
-        memset(tLines[t], 0, 20);
+    wchar_t tLines[2][30] = {};
     g_iNumLineMessageBoxCustom = 0;
 
     if (COMGEM::isComMode())
@@ -449,6 +472,12 @@ static void SetupGemIntegrationMessage()
  */
 static void SetupCancelSkillMessage(int index)
 {
+    if (index < 0 || index >= MAX_SKILLS)
+    {
+        g_iNumLineMessageBoxCustom = 0;
+        g_iCancelSkillTarget       = -1;
+        return;
+    }
     wchar_t tBuf[MAX_GLOBAL_TEXT_STRING];
     swprintf_s(tBuf, MAX_GLOBAL_TEXT_STRING, L"%ls%ls", SkillAttribute[index].Name, I18N::Game::WouldYouLikeToCancel);
     g_iNumLineMessageBoxCustom = SeparateTextIntoLines(tBuf, g_lpszMessageBoxCustom[0], 2, MAX_LENGTH_CMB);
@@ -460,9 +489,15 @@ static void SetupCancelSkillMessage(int index)
  */
 static void SetupGenericMessage(int num, int index)
 {
+    if (num < 0)
+        num = 0;
+    if (num > NUM_LINE_CMB)
+        num = NUM_LINE_CMB;
+
     for (int i = 0; i < num; ++i)
     {
-        wcscpy_s(g_lpszMessageBoxCustom[i], MAX_LENGTH_CMB, I18N::Game::Lookup(index + i));
+        const wchar_t* line = I18N::Game::Lookup(index + i);
+        wcscpy_s(g_lpszMessageBoxCustom[i], MAX_LENGTH_CMB, line ? line : L"");
     }
     g_iNumLineMessageBoxCustom = num;
 }

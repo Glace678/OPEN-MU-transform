@@ -58,6 +58,8 @@ internal sealed class ViewPlugInContainer : CustomPlugInContainerBase<IViewPlugI
     /// <inheritdoc />
     public void Dispose()
     {
+        this._player.ClientVersionChanged -= this.OnClientVersionChanged;
+        this.DetachFromManager();
         this._serviceContainer.Dispose();
         this.KnownPlugIns.OfType<IDisposable>().ForEach(d => d.Dispose());
     }
@@ -75,14 +77,16 @@ internal sealed class ViewPlugInContainer : CustomPlugInContainerBase<IViewPlugI
     /// <remarks>We sort by version and choose the highest one.</remarks>
     protected override IViewPlugIn? DetermineEffectivePlugIn(Type interfaceType)
     {
-        return this.ActivePlugIns.OrderByDescending(p => p.GetType().GetCustomAttribute(typeof(MinimumClientAttribute), inherit: false)).FirstOrDefault(interfaceType.IsInstanceOfType);
+        return this.ActivePlugIns
+            .OrderByDescending(p => p.GetType().GetCustomAttribute<MinimumClientAttribute>(inherit: false)?.Client ?? default)
+            .FirstOrDefault(interfaceType.IsInstanceOfType);
     }
 
     /// <inheritdoc />
     /// <remarks>We just take the plugins which have a equal or lower version than our target <see cref="Client"/>.</remarks>
     protected override void CreatePlugInIfSuitable(Type plugInType)
     {
-        if (this.Client.IsPlugInSuitable(plugInType))
+        if (this.Client.IsPlugInSuitable(plugInType) && this.FindKnownPlugin(plugInType) is null)
         {
             var plugIn = (IViewPlugIn)ActivatorUtilities.CreateInstance(this._serviceContainer, plugInType)!;
             this.AddPlugIn(plugIn, true);
@@ -92,11 +96,23 @@ internal sealed class ViewPlugInContainer : CustomPlugInContainerBase<IViewPlugI
     private void OnClientVersionChanged(object? sender, EventArgs e)
     {
         this.Client = this._player.ClientVersion;
-        foreach (var activePlugIn in this.ActivePlugIns)
+        List<IViewPlugIn> snapshot;
+        using (this.Lock.ReaderLock())
+        {
+            snapshot = this.ActivePlugIns.ToList();
+        }
+
+        foreach (var activePlugIn in snapshot)
         {
             if (!this.Client.IsPlugInSuitable(activePlugIn.GetType()))
             {
-                this.DeactivatePlugIn(activePlugIn);
+                using (this.Lock.WriterLock())
+                {
+                    this.DeactivatePlugIn(activePlugIn);
+                }
+
+                this.RemovePlugIn(activePlugIn);
+                (activePlugIn as IDisposable)?.Dispose();
             }
         }
 

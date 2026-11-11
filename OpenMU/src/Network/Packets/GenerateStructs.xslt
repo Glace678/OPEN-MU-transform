@@ -220,8 +220,9 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
       </xsl:call-template>
         <xsl:variable name="HeaderTypeNumber" select="number(substring(pd:HeaderType,2,1))"/>
         <xsl:variable name="isByteHeader" select="$HeaderTypeNumber mod 2 = 1" />
+        <xsl:variable name="hasTrailingVariableField" select="pd:Fields/pd:Field[last()][(pd:Type = 'String' or pd:Type = 'Binary' or pd:Type = 'Structure[]') and not(pd:Length)]" />
         <xsl:choose>
-          <xsl:when test="pd:Length">Math.Min(data.Length, Length);</xsl:when>
+          <xsl:when test="pd:Length and not($hasTrailingVariableField)">Math.Min(data.Length, Length);</xsl:when>
           <xsl:when test="$isByteHeader">Math.Min(data.Length, (int)byte.MaxValue);</xsl:when>
           <xsl:otherwise>Math.Min(data.Length, (int)ushort.MaxValue);</xsl:otherwise>
         </xsl:choose>
@@ -268,7 +269,7 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
   <!-- If the last field is a string or a binary without a fixed length, we want to offer a static function to calculate the required size. -->
   <xsl:template name="lengthCalculator">
     <xsl:param name="struct" />
-    <xsl:variable name="variableField" select="$struct/pd:Fields[last()]/pd:Field[(pd:Type = 'String' or pd:Type = 'Binary' or pd:Type = 'Structure[]') and not(pd:Length)]" />
+    <xsl:variable name="variableField" select="$struct/pd:Fields/pd:Field[last()][(pd:Type = 'String' or pd:Type = 'Binary' or pd:Type = 'Structure[]') and not(pd:Length)]" />
     <xsl:variable name="structTypeName" select="$variableField[pd:Type = 'Structure[]']/pd:TypeName" />
     <xsl:variable name="arrayOfVariableStruct" select="$variableField[pd:Type = 'Structure[]' 
                   and ($struct/pd:Structures/pd:Structure[pd:Name = $structTypeName and not(pd:Length)] or $struct/../../pd:Structures/pd:Structure[pd:Name = $structTypeName and not(pd:Length)])]" />
@@ -486,6 +487,7 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
     </xsl:template>
   <xsl:template match="pd:Field[pd:Type = 'Structure[]' and not(pd:UseCustomIndexer) and count(../pd:Field[pd:Type = 'Structure[]']) &gt; 1]">
     <xsl:variable name="typeName" select="pd:TypeName" />
+    <xsl:variable name="nextFieldIndex" select="following-sibling::pd:Field[1]/pd:Index" />
     <xsl:text>
     /// &lt;summary&gt;
     /// Gets the &lt;see cref="</xsl:text>
@@ -502,15 +504,26 @@ using static System.Buffers.Binary.BinaryPrimitives;</xsl:text>
     <xsl:value-of select="pd:Index"/>
     <xsl:text> + index * </xsl:text>
     <xsl:value-of select="pd:TypeName"/>
-    <xsl:text>Ref.Length + </xsl:text>
+    <xsl:text>.Length + </xsl:text>
     <xsl:value-of select="pd:TypeName"/>
-    <xsl:text>Ref.Length > this._data.Length)
+    <xsl:text>.Length > </xsl:text>
+    <xsl:choose>
+      <xsl:when test="$nextFieldIndex">
+        <xsl:text>Math.Min(this._data.Length, </xsl:text>
+        <xsl:value-of select="$nextFieldIndex"/>
+        <xsl:text>)</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>this._data.Length</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>)
             ? throw new System.ArgumentOutOfRangeException(nameof(index))
             : new (this._data.Slice(</xsl:text>
     <xsl:value-of select="pd:Index"/>
     <xsl:text> + index * </xsl:text>
     <xsl:value-of select="pd:TypeName"/>
-    <xsl:text>Ref.Length));</xsl:text>
+    <xsl:text>.Length));</xsl:text>
 
     <xsl:value-of select="$newline"/>
   </xsl:template>

@@ -22,6 +22,11 @@ public static class AssignableExtensions
     public static void AssignCollection<T>(this ICollection<T> collection, ICollection<T> other, GameConfiguration gameConfiguration)
         where T : class
     {
+        if (ReferenceEquals(collection, other))
+        {
+            return;
+        }
+
         var itemsToRemove = collection.Except(other).ToList();
         var itemsToAdd = other.Except(collection).ToList();
 
@@ -42,10 +47,15 @@ public static class AssignableExtensions
     public static void AssignCollection<T>(this ICollection<T> collection, ICollection<T> other)
         where T : struct
     {
-        var itemsToRemove = collection.Except(other).ToList();
-        var itemsToAdd = other.Except(collection).ToList();
+        if (ReferenceEquals(collection, other))
+        {
+            return;
+        }
 
-        itemsToRemove.ForEach(i => collection.Remove(i));
-        itemsToAdd.ForEach(collection.Add);
+        collection.Clear();
+        foreach (var item in other)
+        {
+            collection.Add(item);
+        }
     }
 }

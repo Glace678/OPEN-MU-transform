@@ -14,7 +14,16 @@ public class InMemoryRepositoryProvider : BaseRepositoryProvider
     /// <summary>
     /// Gets all <see cref="IMemoryRepository"/> which were added to this manager.
     /// </summary>
-    internal IEnumerable<IMemoryRepository> MemoryRepositories => base.Repositories.Values.OfType<IMemoryRepository>();
+    internal IEnumerable<IMemoryRepository> MemoryRepositories
+    {
+        get
+        {
+            lock (this.SyncRoot)
+            {
+                return base.Repositories.Values.OfType<IMemoryRepository>().ToList();
+            }
+        }
+    }
 
     /// <summary>
     /// Gets the memory repository, and creates it if it wasn't created yet.
@@ -24,7 +33,7 @@ public class InMemoryRepositoryProvider : BaseRepositoryProvider
     public new IRepository<T> GetRepository<T>()
         where T : class
     {
-        var repository = this.InternalGetRepository(typeof(T)) ?? this.CreateAndRegisterMemoryRepository(typeof(T));
+        var repository = this.GetRepository(typeof(T));
         return new InMemoryRepositoryAdapter<T>((IMemoryRepository)repository);
     }
 
@@ -35,9 +44,15 @@ public class InMemoryRepositoryProvider : BaseRepositoryProvider
     /// <returns>The repository of the specified type.</returns>
     public new IRepository GetRepository(Type objectType)
     {
-        var repository = this.InternalGetRepository(objectType) ?? this.CreateAndRegisterMemoryRepository(objectType);
+        if (this.InternalGetRepository(objectType) is { } existing)
+        {
+            return existing;
+        }
 
-        return repository;
+        lock (this.SyncRoot)
+        {
+            return this.InternalGetRepository(objectType) ?? this.CreateAndRegisterMemoryRepository(objectType);
+        }
     }
 
     private IRepository CreateAndRegisterMemoryRepository(Type type)

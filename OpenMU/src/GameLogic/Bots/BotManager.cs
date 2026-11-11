@@ -66,6 +66,13 @@ public sealed class BotManager
                 return false;
             }
 
+            if (!account.IsBot)
+            {
+                bot.Logger.LogWarning("Account '{LoginName}' is not marked as a bot account; refusing to spawn AI bot.", loginName);
+                await bot.DisposeAsync().ConfigureAwait(false);
+                return false;
+            }
+
             key = GetKey(loginName, character.CharacterSlot);
             if (!this._bots.TryAdd(key, bot))
             {
@@ -178,10 +185,12 @@ public sealed class BotManager
         var characterSlot = bot.SelectedCharacter?.CharacterSlot;
         if (loginName is null
             || characterSlot is not { } slot
-            || !this._bots.TryRemove(GetKey(loginName, slot), out var removed))
+            || !((ICollection<KeyValuePair<string, BotPlayer>>)this._bots).Remove(new KeyValuePair<string, BotPlayer>(GetKey(loginName, slot), bot)))
         {
             return false;
         }
+
+        var removed = bot;
 
         if (removed.Party is { } party)
         {
@@ -320,7 +329,7 @@ public sealed class BotManager
     /// <param name="bot">The bot to drop.</param>
     private async ValueTask RemoveAndDisposeAsync(string key, BotPlayer bot)
     {
-        this._bots.TryRemove(key, out _);
+        ((ICollection<KeyValuePair<string, BotPlayer>>)this._bots).Remove(new KeyValuePair<string, BotPlayer>(key, bot));
         await bot.DisposeAsync().ConfigureAwait(false);
     }
 }

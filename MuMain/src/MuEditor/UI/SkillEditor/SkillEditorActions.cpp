@@ -10,16 +10,57 @@
 #include "imgui.h"
 #include <string>
 #include <sstream>
+#include <cwchar>
 
 #include "Data/DataHandler/SkillData/SkillDataHandler.h"
 
 extern std::wstring g_strSelectedML;
 
+namespace
+{
+std::string EscapeCsvField(const std::string& value, bool forceQuote = false)
+{
+    const bool needsQuotes = forceQuote || value.find_first_of(",\"\r\n") != std::string::npos;
+    if (!needsQuotes)
+        return value;
+
+    std::string out;
+    out.reserve(value.size() + 2);
+    out.push_back('"');
+    for (char ch : value)
+    {
+        if (ch == '"')
+            out.push_back('"');
+        out.push_back(ch);
+    }
+    out.push_back('"');
+    return out;
+}
+}
+
 // ===== HELPER FUNCTIONS =====
 
 void CSkillEditorActions::ConvertSkillName(char* outBuffer, size_t bufferSize, const wchar_t* name)
 {
-    WideCharToMultiByte(CP_UTF8, 0, name, -1, outBuffer, (int)bufferSize, NULL, NULL);
+    if (!outBuffer || bufferSize == 0)
+        return;
+
+    outBuffer[0] = '\0';
+    if (!name)
+        return;
+
+    const size_t srcLen = wcsnlen(name, MAX_SKILL_NAME);
+    if (srcLen == 0)
+        return;
+
+    const int written = WideCharToMultiByte(CP_UTF8, 0, name, static_cast<int>(srcLen), outBuffer,
+                                            static_cast<int>(bufferSize) - 1, nullptr, nullptr);
+    if (written <= 0)
+    {
+        outBuffer[0] = '\0';
+        return;
+    }
+    outBuffer[written] = '\0';
 }
 
 std::string CSkillEditorActions::GetFieldValueAsString(const SKILL_ATTRIBUTE& skill, const SkillFieldDescriptor& desc)
@@ -53,7 +94,7 @@ std::string CSkillEditorActions::GetFieldValueAsString(const SKILL_ATTRIBUTE& sk
             break;
 
         case ESkillFieldType::WCharArray: {
-            char buffer[256];
+            char buffer[256] = {};
             ConvertSkillName(buffer, sizeof(buffer), reinterpret_cast<const wchar_t*>(fieldPtr));
             ss << buffer;
             break;
@@ -74,7 +115,7 @@ std::string CSkillEditorActions::GetCSVHeader()
     ss << "Index";
     for (int i = 0; i < fieldCount; ++i)
     {
-        ss << "," << GetSkillFieldDisplayName(fields[i]);
+        ss << "," << EscapeCsvField(GetSkillFieldDisplayName(fields[i]));
     }
 
     return ss.str();
@@ -108,7 +149,7 @@ std::string CSkillEditorActions::ExportSkillToCSV(int skillIndex, SKILL_ATTRIBUT
     for (int i = 0; i < fieldCount; ++i)
     {
         std::string value = GetFieldValueAsString(skill, fields[i]);
-        ss << "," << value;
+        ss << "," << EscapeCsvField(value, fields[i].type == ESkillFieldType::WCharArray);
     }
 
     return ss.str();
@@ -154,7 +195,7 @@ void CSkillEditorActions::RenderSaveButton()
             }
             else
             {
-                g_MuEditorConsoleUI.LogEditor(I18N::Editor::FailedToSaveItems);
+                g_MuEditorConsoleUI.LogEditor(I18N::Editor::FailedToSaveSkills);
                 ImGui::OpenPopup("Save Failed");
             }
         }

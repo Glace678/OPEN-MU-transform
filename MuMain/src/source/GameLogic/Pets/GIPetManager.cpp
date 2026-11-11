@@ -166,6 +166,7 @@ void ClearRightMouseInputState()
 
 namespace giPetManager
 {
+PET_INFO             gs_PetInfo{};
 static std::uint8_t  g_tabBar                = 0;
 static std::uint32_t g_renderItemIndexBackup = 0;
 static ITEM          g_renderItemInfoBackup{};
@@ -485,42 +486,54 @@ bool RequestPetInfo(int sx, int sy, ITEM* pItem)
 
 void SetPetInfo(std::uint8_t InvType, std::uint8_t InvPos, PET_INFO* pPetinfo)
 {
+    if (pPetinfo == nullptr)
+    {
+        return;
+    }
+
     CalcPetInfo(pPetinfo);
 
     if ((InvType == 0) || (InvType == 254) || (InvType == 255))
     {
         if ((InvPos == EQUIPMENT_HELPER) || (InvPos == EQUIPMENT_WEAPON_LEFT))
         {
-            PET_INFO* pHeroPetInfo = Hero->GetEquipedPetInfo(pPetinfo->m_dwPetType);
-            std::memcpy(pHeroPetInfo, pPetinfo, sizeof(PET_INFO));
-
-            if (pPetinfo->m_dwPetType == PET_TYPE_DARK_SPIRIT)
+            if (Hero != nullptr && CharacterMachine != nullptr && pPetinfo->m_dwPetType >= 0 &&
+                pPetinfo->m_dwPetType < PET_TYPE_END)
             {
-                if (auto* heroPetSystem = ResolvePetSystem(Hero))
+                PET_INFO* pHeroPetInfo = Hero->GetEquipedPetInfo(pPetinfo->m_dwPetType);
+                if (pHeroPetInfo != nullptr)
                 {
-                    heroPetSystem->SetPetInfo(pHeroPetInfo);
+                    std::memcpy(pHeroPetInfo, pPetinfo, sizeof(PET_INFO));
 
-                    if (InvType == 254)
+                    if (pPetinfo->m_dwPetType == PET_TYPE_DARK_SPIRIT)
                     {
-                        heroPetSystem->Eff_LevelUp();
+                        if (auto* heroPetSystem = ResolvePetSystem(Hero))
+                        {
+                            heroPetSystem->SetPetInfo(pHeroPetInfo);
+
+                            if (InvType == 254)
+                            {
+                                heroPetSystem->Eff_LevelUp();
+                            }
+                            else if (InvType == 255)
+                            {
+                                heroPetSystem->Eff_LevelDown();
+                            }
+                        }
                     }
-                    else if (InvType == 255)
+                    else if (pPetinfo->m_dwPetType == PET_TYPE_DARK_HORSE)
                     {
-                        heroPetSystem->Eff_LevelDown();
+                        if (InvType == 254 || InvType == 255)
+                        {
+                            Hero->Object.ExtState = InvType - 253;
+                        }
+
+                        SetPetItemConvert(&CharacterMachine->Equipment[EQUIPMENT_HELPER], pHeroPetInfo);
                     }
+
+                    CharacterMachine->CalculateAll();
                 }
             }
-            else if (pPetinfo->m_dwPetType == PET_TYPE_DARK_HORSE)
-            {
-                if (InvType == 254 || InvType == 255)
-                {
-                    Hero->Object.ExtState = InvType - 253;
-                }
-
-                SetPetItemConvert(&CharacterMachine->Equipment[EQUIPMENT_HELPER], pHeroPetInfo);
-            }
-
-            CharacterMachine->CalculateAll();
 
             //return;
         }
@@ -531,19 +544,27 @@ void SetPetInfo(std::uint8_t InvType, std::uint8_t InvPos, PET_INFO* pPetinfo)
 
 PET_INFO* GetPetInfo(ITEM* pItem)
 {
-    if (pItem == &CharacterMachine->Equipment[EQUIPMENT_HELPER])
+    if (Hero != nullptr && CharacterMachine != nullptr)
     {
-        return Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE);
-    }
-    else if (pItem == &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT])
-    {
-        return Hero->GetEquipedPetInfo(PET_TYPE_DARK_SPIRIT);
+        if (pItem == &CharacterMachine->Equipment[EQUIPMENT_HELPER])
+        {
+            return Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE);
+        }
+        else if (pItem == &CharacterMachine->Equipment[EQUIPMENT_WEAPON_LEFT])
+        {
+            return Hero->GetEquipedPetInfo(PET_TYPE_DARK_SPIRIT);
+        }
     }
     return &gs_PetInfo;
 }
 
 void CalcPetInfo(PET_INFO* pPetInfo)
 {
+    if (pPetInfo == nullptr || CharacterAttribute == nullptr)
+    {
+        return;
+    }
+
     int Charisma = CharacterAttribute->Charisma + CharacterAttribute->AddCharisma;
     int Strength = CharacterAttribute->Strength + CharacterAttribute->AddStrength;
 
@@ -571,10 +592,18 @@ void CalcPetInfo(PET_INFO* pPetInfo)
 
 void SetPetItemConvert(ITEM* ip, PET_INFO* pPetInfo)
 {
+    if (ip == nullptr || pPetInfo == nullptr || CharacterAttribute == nullptr)
+    {
+        return;
+    }
+
     if (ip->Type == ITEM_DARK_HORSE_ITEM)
     {
-        int Index = 0;
-        for (int i = 0; i < ip->SpecialNum; ++i)
+        const int specialCount = std::clamp<int>(ip->SpecialNum, 0, MAX_ITEM_SPECIAL);
+        ip->SpecialNum         = static_cast<std::uint8_t>(specialCount);
+
+        int Index = -1;
+        for (int i = 0; i < specialCount; ++i)
         {
             if (ip->Special[i] == AT_SET_OPTION_IMPROVE_DEFENCE)
             {
@@ -583,18 +612,21 @@ void SetPetItemConvert(ITEM* ip, PET_INFO* pPetInfo)
             }
         }
 
-        if (Index == 0)
+        const auto defenceVal =
+            static_cast<std::uint8_t>((5 + (CharacterAttribute->Dexterity / 20) + pPetInfo->m_wLevel * 2) & 0xFF);
+        if (Index < 0)
         {
-            ip->SpecialValue[ip->SpecialNum] =
-                static_cast<std::uint8_t>((5 + (CharacterAttribute->Dexterity / 20) + pPetInfo->m_wLevel * 2) & 0xFF);
-            ip->Special[ip->SpecialNum] = AT_SET_OPTION_IMPROVE_DEFENCE;
-            ip->SpecialNum++;
+            if (specialCount < MAX_ITEM_SPECIAL)
+            {
+                ip->SpecialValue[specialCount] = defenceVal;
+                ip->Special[specialCount]      = AT_SET_OPTION_IMPROVE_DEFENCE;
+                ip->SpecialNum                 = static_cast<std::uint8_t>(specialCount + 1);
+            }
         }
         else
         {
-            ip->SpecialValue[Index] =
-                static_cast<std::uint8_t>((5 + (CharacterAttribute->Dexterity / 20) + pPetInfo->m_wLevel * 2) & 0xFF);
-            ip->Special[Index] = AT_SET_OPTION_IMPROVE_DEFENCE;
+            ip->SpecialValue[Index] = defenceVal;
+            ip->Special[Index]      = AT_SET_OPTION_IMPROVE_DEFENCE;
         }
     }
 }
@@ -603,7 +635,7 @@ std::uint32_t GetPetItemValue(PET_INFO* pPetInfo)
 {
     std::uint32_t gold = 0;
 
-    if (pPetInfo->m_dwPetType == PET_TYPE_NONE)
+    if (pPetInfo == nullptr || pPetInfo->m_dwPetType == PET_TYPE_NONE)
     {
         return gold;
     }
@@ -624,9 +656,14 @@ std::uint32_t GetPetItemValue(PET_INFO* pPetInfo)
 
 bool RenderPetItemInfo(int sx, int sy, ITEM* pItem, int iInvenType)
 {
+    if (pItem == nullptr || Hero == nullptr || CharacterAttribute == nullptr || CharacterMachine == nullptr)
+    {
+        return false;
+    }
+
     PET_INFO* pPetInfo = GetPetInfo(pItem);
 
-    if (pPetInfo->m_dwPetType == PET_TYPE_NONE)
+    if (pPetInfo == nullptr || pPetInfo->m_dwPetType == PET_TYPE_NONE)
     {
         return false;
     }
@@ -699,13 +736,13 @@ bool RenderPetItemInfo(int sx, int sy, ITEM* pItem, int iInvenType)
             if ((static_cast<std::int64_t>(heroGold) < static_cast<std::int64_t>(price)) &&
                 (g_IsPurchaseShop == PSHOPWNDTYPE_PURCHASE))
             {
-                appendLine(TEXT_COLOR_RED, true, false, I18N::Game::YouAreShortOfZen);
+                appendLine(TEXT_COLOR_RED, true, false, L"%ls", I18N::Game::YouAreShortOfZen);
                 appendEmptyLine();
             }
         }
         else if (g_IsPurchaseShop == PSHOPWNDTYPE_SALE)
         {
-            appendLine(TEXT_COLOR_RED, true, false, I18N::Game::RightClickForPriceSetting);
+            appendLine(TEXT_COLOR_RED, true, false, L"%ls", I18N::Game::RightClickForPriceSetting);
             appendEmptyLine();
         }
     }
@@ -713,12 +750,12 @@ bool RenderPetItemInfo(int sx, int sy, ITEM* pItem, int iInvenType)
     if (pItem->Type == ITEM_DARK_HORSE_ITEM)
     {
         RequireLevel = (218 + (pPetInfo->m_wLevel * 2));
-        appendLine(TEXT_COLOR_BLUE, true, true, I18N::Game::DarkHorse);
+        appendLine(TEXT_COLOR_BLUE, true, true, L"%ls", I18N::Game::DarkHorse);
     }
     else if (pItem->Type == ITEM_DARK_RAVEN_ITEM)
     {
         RequireCharisma = (185 + (pPetInfo->m_wLevel * 15));
-        appendLine(TEXT_COLOR_BLUE, true, true, I18N::Game::DarkRaven);
+        appendLine(TEXT_COLOR_BLUE, true, true, L"%ls", I18N::Game::DarkRaven);
     }
 
     appendEmptyLine();
@@ -766,19 +803,20 @@ bool RenderPetItemInfo(int sx, int sy, ITEM* pItem, int iInvenType)
         (gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD) ? TEXT_COLOR_WHITE : TEXT_COLOR_DARKRED;
     appendLine(ownershipColor, false, true, ownershipFormat.c_str(), I18N::Game::DarkLord);
 
-    for (int i = 0; i < pItem->SpecialNum; ++i)
+    SetPetItemConvert(pItem, pPetInfo);
+    const int specialCount = std::clamp<int>(pItem->SpecialNum, 0, MAX_ITEM_SPECIAL);
+    for (int i = 0; i < specialCount; ++i)
     {
-        SetPetItemConvert(pItem, &gs_PetInfo);
+        if (TextNum >= kTooltipLineLimit)
+        {
+            break;
+        }
+
         GetSpecialOptionText(pItem->Type, TextList[TextNum], pItem->Special[i], pItem->SpecialValue[i], 0);
         TextListColor[TextNum] = TEXT_COLOR_BLUE;
         TextBold[TextNum]      = false;
         ++TextNum;
         ++SkipNum;
-
-        if (TextNum >= kTooltipLineLimit)
-        {
-            break;
-        }
     }
 
     if (pItem->Type == ITEM_DARK_HORSE_ITEM)

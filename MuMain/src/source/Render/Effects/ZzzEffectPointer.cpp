@@ -19,8 +19,8 @@ PARTICLE Pointers[MAX_POINTERS];
 
 void CreatePointer(int Type, vec3_t Position, float Angle, vec3_t Light, float Scale)
 {
-    PARTICLE* Select      = NULL;
-    int       MinLifeTime = 9999;
+    PARTICLE* Select      = nullptr;
+    float     MinLifeTime = 1e9f;
     for (int i = 0; i < MAX_POINTERS; i++)
     {
         PARTICLE* o = &Pointers[i];
@@ -45,14 +45,17 @@ void CreatePointer(int Type, vec3_t Position, float Angle, vec3_t Light, float S
         }
         else
         {
-            if (MinLifeTime > o->LifeTime)
+            if (Select == nullptr || MinLifeTime > o->LifeTime)
             {
                 MinLifeTime = o->LifeTime;
                 Select      = o;
             }
         }
     }
-    Select->Live = false;
+    if (Select != nullptr)
+    {
+        Select->Live = false;
+    }
 }
 
 void MovePointers()
@@ -96,7 +99,12 @@ void RenderPointers()
         PARTICLE* o = &Pointers[i];
         if (o->Live)
         {
-            if (Bitmaps[o->Type].Components == 3)
+            const BITMAP_t* pBitmap = Bitmaps.GetTexture(o->Type);
+            if (pBitmap == nullptr)
+            {
+                continue;
+            }
+            if (pBitmap->Components == 3)
                 EnableAlphaBlend();
             else
                 EnableAlphaTest();

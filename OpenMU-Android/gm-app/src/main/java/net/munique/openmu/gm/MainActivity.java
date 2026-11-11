@@ -317,6 +317,7 @@ public final class MainActivity extends Activity {
                     updateGrantAvailability();
                 });
             } catch (MobileGmApiClient.NotAuthorizedException error) {
+                GmTokenStore.clear(MainActivity.this);
                 showLoginDialog(generation);
             } catch (MobileGmApiClient.ApiException error) {
                 showFailure(generation, error, true);
@@ -343,6 +344,14 @@ public final class MainActivity extends Activity {
                     resultText.setText(found.isEmpty() ? getString(R.string.no_items_found)
                         : getResources().getQuantityString(R.plurals.items_found, found.size(), found.size()));
                 });
+            } catch (MobileGmApiClient.NotAuthorizedException error) {
+                GmTokenStore.clear(MainActivity.this);
+                runOnUiThread(() -> {
+                    if (!accept(generation)) return;
+                    searchButton.setEnabled(true);
+                    resultText.setText(getString(R.string.request_failed, error.getMessage()));
+                });
+                showLoginDialog(generation);
             } catch (MobileGmApiClient.ApiException error) {
                 showFailure(generation, error, false);
             }
@@ -372,6 +381,10 @@ public final class MainActivity extends Activity {
                 MobileGmApiClient client = client();
                 MobileGmApiClient.GrantResult result = client.grantItem(request);
                 finishGrantSuccess(generation, result.message, false);
+            } catch (MobileGmApiClient.NotAuthorizedException error) {
+                GmTokenStore.clear(MainActivity.this);
+                finishGrantFailure(generation, error);
+                showLoginDialog(generation);
             } catch (MobileGmApiClient.ApiException error) {
                 finishGrantFailure(generation, error);
             }
@@ -404,6 +417,10 @@ public final class MainActivity extends Activity {
                 MobileGmApiClient client = client();
                 MobileGmApiClient.GrantResult result = client.grantZen(request);
                 finishGrantSuccess(generation, result.message, true);
+            } catch (MobileGmApiClient.NotAuthorizedException error) {
+                GmTokenStore.clear(MainActivity.this);
+                finishGrantFailure(generation, error);
+                showLoginDialog(generation);
             } catch (MobileGmApiClient.ApiException error) {
                 finishGrantFailure(generation, error);
             }
@@ -536,14 +553,18 @@ public final class MainActivity extends Activity {
                         pass.setError(getString(R.string.login_required));
                         return;
                     }
+                    final String targetUrl = serverUrl;
                     dialog.dismiss();
                     setBusy(true);
                     networkExecutor.execute(() -> {
                         try {
-                            MobileGmApiClient loginClient = new MobileGmApiClient(serverUrl, "");
+                            MobileGmApiClient loginClient = new MobileGmApiClient(targetUrl, "");
                             String cookie = loginClient.login(u, p, c);
-                            GmTokenStore.setSessionCookie(MainActivity.this, cookie);
-                            runOnUiThread(() -> loadStatus());
+                            GmTokenStore.setSessionCookie(MainActivity.this, targetUrl, cookie);
+                            runOnUiThread(() -> {
+                                if (!accept(generation)) return;
+                                loadStatus();
+                            });
                         } catch (MobileGmApiClient.TwoFactorRequiredException tf) {
                             runOnUiThread(() -> {
                                 if (!accept(generation)) return;
@@ -670,7 +691,7 @@ public final class MainActivity extends Activity {
     }
 
     private MobileGmApiClient client() throws MobileGmApiClient.ApiException {
-        return new MobileGmApiClient(serverUrl, GmTokenStore.getSessionCookie(this));
+        return new MobileGmApiClient(serverUrl, GmTokenStore.getSessionCookie(this, serverUrl));
     }
 
     private boolean accept(int generation) {
@@ -713,6 +734,13 @@ public final class MainActivity extends Activity {
     }
 
     private void applyServerUrl(String candidate, AlertDialog dialog) {
+        if (!GmTokenStore.canonicalOrigin(candidate).equals(GmTokenStore.canonicalOrigin(serverUrl))) {
+            GmTokenStore.clear(this);
+            pendingGrantId = null;
+            grantFormSignature = null;
+            pendingZenId = null;
+            zenFormSignature = null;
+        }
         serverUrl = candidate;
         getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
             .putString(KEY_SERVER_URL, serverUrl).apply();

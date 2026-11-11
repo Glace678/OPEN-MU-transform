@@ -63,7 +63,7 @@ typedef struct
 // Requires: #include "Data/Translation/MultiLanguage.h"
 template <typename TSource> inline void CopyItemAttributeFromSource(ITEM_ATTRIBUTE& dest, const TSource& source)
 {
-    CMultiLanguage::ConvertFromUtf8(dest.Name, source.Name, MAX_ITEM_NAME);
+    CMultiLanguage::ConvertFromUtf8(dest.Name, source.Name, static_cast<int>(sizeof(source.Name)));
     COPY_ITEM_ATTRIBUTE_FIELDS(dest, source);
 }
 

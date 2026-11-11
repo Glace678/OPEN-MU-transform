@@ -131,6 +131,18 @@ public class GuildRelationshipChangeAction
             }
 
             targetGuildId = await serverContext.GuildServer.GetGuildIdByNameAsync(targetGuildName!).ConfigureAwait(false);
+            if (targetGuildId == 0)
+            {
+                await player.InvokeViewPlugInAsync<IGuildRelationshipChangeResultPlugIn>(p => p.ShowResultAsync(GuildRelationshipType.Alliance, GuildRelationshipRequestType.Leave, GuildRelationshipChangeResultType.GuildNotFound, null)).ConfigureAwait(false);
+                return;
+            }
+
+            var allianceGuilds = await serverContext.GuildServer.GetAllianceGuildsAsync(sourceGuildId).ConfigureAwait(false);
+            if (allianceGuilds.All(g => g.Id != targetGuildId))
+            {
+                await player.InvokeViewPlugInAsync<IGuildRelationshipChangeResultPlugIn>(p => p.ShowResultAsync(GuildRelationshipType.Alliance, GuildRelationshipRequestType.Leave, GuildRelationshipChangeResultType.NoAuthorization, null)).ConfigureAwait(false);
+                return;
+            }
         }
 
         var removeSuccess = await serverContext.GuildServer.RemoveAllianceAsync(targetGuildId).ConfigureAwait(false);

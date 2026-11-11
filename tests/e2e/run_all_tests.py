@@ -147,7 +147,7 @@ def main():
     print(f"  TOTAL TESTS RUN:                  {total_run:3d} tests (Formula threshold >= 357)")
     print(f"  TOTAL EXECUTION TIME:             {total_elapsed:.3f} seconds (Quality gate < 60s)")
 
-    print("\n" + ColoredText.bold("FEATURE VERIFICATION CHECKLIST (All 31 Features Covered across Tiers 1-4):"))
+    print("\n" + ColoredText.bold(f"FEATURE VERIFICATION CHECKLIST (All {len(FEATURE_CHECKLIST)} Features Covered across Tiers 1-4):"))
     for fid, name, ms in FEATURE_CHECKLIST:
         print(f"  [{ColoredText.green('OK')}] {fid}: {name:<45} [{ms}]")
 

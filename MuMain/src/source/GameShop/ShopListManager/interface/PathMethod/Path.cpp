@@ -12,8 +12,10 @@
 #ifdef KJH_ADD_INGAMESHOP_UI_SYSTEM
 #include "Path.h"
 
+#include <cwchar>
 #include <filesystem>
 #include <fstream>
+#include <string>
 #include "Core/Platform/CrtDbg.h"
 #include "Core/Platform/StrSafe.h"
 
@@ -64,10 +66,14 @@ TCHAR* Path::SetDirString(TCHAR* szPath)
     if ((*szPath))
     {
         std::size_t len = 0;
-        StringCchLength(szPath, MAX_PATH, &len);
+        if (FAILED(StringCchLength(szPath, MAX_PATH, &len)))
+            return 0;
 
-        if (szPath[len - 1] != '\\')
+        if (len > 0 && szPath[len - 1] != '\\' && szPath[len - 1] != '/')
         {
+            if (len + 1 >= MAX_PATH)
+                return 0;
+
             szPath[len]     = '\\';
             szPath[len + 1] = 0;
         }
@@ -87,7 +93,8 @@ TCHAR* Path::ClearDirString(TCHAR* szPath)
         return szPath;
 
     std::size_t len = 0;
-    StringCchLength(szPath, MAX_PATH, &len);
+    if (FAILED(StringCchLength(szPath, MAX_PATH, &len)))
+        return szPath;
 
     if (len > 0 && (szPath[len - 1] == '\\' || szPath[len - 1] == '/' || szPath[len - 1] == '"'))
     {
@@ -101,7 +108,8 @@ TCHAR* Path::ClearDirString(TCHAR* szPath)
 
     if (szPath[0] == '"')
     {
-        StringCchCopy(szPath, MAX_PATH, szPath + 1);
+        const std::size_t rem = wcslen(szPath + 1);
+        wmemmove(szPath, szPath + 1, rem + 1);
     }
 
     return szPath;
@@ -112,10 +120,9 @@ TCHAR* Path::GetDirectory(TCHAR* szPath)
     if (!szPath || !(*szPath))
         return szPath;
 
-    wchar_t* chr = wcsrchr(szPath, '\\');
-
-    if (!chr)
-        chr = wcsrchr(szPath, L'/');
+    wchar_t* chrBs = wcsrchr(szPath, '\\');
+    wchar_t* chrFs = wcsrchr(szPath, L'/');
+    wchar_t* chr   = (chrBs && chrFs) ? ((chrBs > chrFs) ? chrBs : chrFs) : (chrBs ? chrBs : chrFs);
 
     if (chr)
         (*chr) = 0;
@@ -130,13 +137,15 @@ TCHAR* Path::GetFileName(TCHAR* szPath)
     if (!szPath || !(*szPath))
         return szPath;
 
-    wchar_t* chr = wcsrchr(szPath, L'\\');
-
-    if (!chr)
-        chr = wcsrchr(szPath, L'/');
+    wchar_t* chrBs = wcsrchr(szPath, L'\\');
+    wchar_t* chrFs = wcsrchr(szPath, L'/');
+    wchar_t* chr   = (chrBs && chrFs) ? ((chrBs > chrFs) ? chrBs : chrFs) : (chrBs ? chrBs : chrFs);
 
     if (chr)
-        StringCchCopy(szPath, MAX_PATH, szPath + 1);
+    {
+        const std::size_t rem = wcslen(chr + 1);
+        wmemmove(szPath, chr + 1, rem + 1);
+    }
 
     return szPath;
 }
@@ -147,7 +156,8 @@ TCHAR* Path::ChangeSlashToBackSlash(TCHAR* szPath)
         return szPath;
 
     std::size_t len = 0;
-    StringCchLength(szPath, MAX_PATH, &len);
+    if (FAILED(StringCchLength(szPath, MAX_PATH, &len)))
+        return szPath;
 
     for (std::size_t n = 0; n < len; n++)
     {
@@ -164,7 +174,8 @@ TCHAR* Path::ChangeBackSlashToSlash(TCHAR* szPath)
         return szPath;
 
     std::size_t len = 0;
-    StringCchLength(szPath, MAX_PATH, &len);
+    if (FAILED(StringCchLength(szPath, MAX_PATH, &len)))
+        return szPath;
 
     for (std::size_t n = 0; n < len; n++)
     {
@@ -177,38 +188,73 @@ TCHAR* Path::ChangeBackSlashToSlash(TCHAR* szPath)
 
 BOOL Path::ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine)
 {
-    std::ifstream ifs(std::filesystem::path(szFile), std::ifstream::in | std::ifstream::binary);
-
-    char buff[1024] = {0};
-
-    if (szFile && szLastLine && *szFile && ifs.is_open())
+    if (!szFile || !szLastLine || !*szFile)
     {
-        std::size_t len = 0;
+        return 0;
+    }
 
-        while (!ifs.eof())
+    szLastLine[0] = 0;
+
+    std::ifstream ifs(std::filesystem::path(szFile), std::ifstream::in | std::ifstream::binary);
+    if (!ifs.is_open())
+    {
+        return 0;
+    }
+
+    std::string line;
+    std::string lastLine;
+    while (std::getline(ifs, line))
+    {
+        while (!line.empty() && (line.back() == '\r' || line.back() == '\n'))
         {
-            ifs.getline(buff, sizeof(buff));
-
-            len = 0;
-            StringCchLengthA(buff, sizeof(buff), &len);
-
-            // TODO convert buff to utf8
-            //if (len > 1)
-            //    StringCchCopy(szLastLine, sizeof(buff), buff);
+            line.pop_back();
         }
-
-        ifs.close();
-
-        len = 0;
-        StringCchLength(szLastLine, 1024, &len);
-
-        if (len > 1)
+        if (!line.empty())
         {
-            return 1;
+            lastLine = line;
         }
     }
 
-    return 0;
+    ifs.close();
+
+    if (lastLine.empty())
+    {
+        return 0;
+    }
+
+    const char* src = lastLine.c_str();
+    if (lastLine.size() >= 3 && static_cast<unsigned char>(src[0]) == 0xEF &&
+        static_cast<unsigned char>(src[1]) == 0xBB && static_cast<unsigned char>(src[2]) == 0xBF)
+    {
+        src += 3;
+    }
+
+    int cchWide = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, src, -1, NULL, 0);
+    UINT codePage = CP_UTF8;
+    DWORD flags = MB_ERR_INVALID_CHARS;
+    if (cchWide <= 0)
+    {
+        codePage = CP_ACP;
+        flags = 0;
+        cchWide = MultiByteToWideChar(codePage, flags, src, -1, NULL, 0);
+    }
+
+    if (cchWide <= 0)
+    {
+        return 0;
+    }
+
+    std::wstring wideLine(static_cast<std::size_t>(cchWide), L'\0');
+    MultiByteToWideChar(codePage, flags, src, -1, wideLine.data(), cchWide);
+    StringCchCopy(szLastLine, MAX_PATH, wideLine.c_str());
+
+    std::size_t len = 0;
+    if (FAILED(StringCchLength(szLastLine, MAX_PATH, &len)))
+    {
+        return 0;
+    }
+
+    return (len > 1) ? 1 : 0;
 }
 
 BOOL Path::WriteNewFile(TCHAR* szFile, TCHAR* szText, INT nTextSize)
@@ -244,24 +290,24 @@ BOOL Path::CreateDirectorys(TCHAR* szFilePath, BOOL bIsFile)
     if (bIsFile)
         Path::GetDirectory(PathName);
 
-    if (CreateDirectory(PathName, 0) == 0)
+    if (CreateDirectory(PathName, 0) != 0 || GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        StringCchCopy(buff2, std::size(buff2), PathName);
-
-        wchar_t* chr1 = wcsrchr(buff2, L'\\');
-        wchar_t* chr2 = wcschr(buff2, L'\\');
-
-        if (!chr1 || !chr2 || chr1 == chr2)
-            return 0;
-
-        (*chr1) = 0;
-
-        if (!Path::CreateDirectorys(buff2, 0))
-            return 0;
-
-        return CreateDirectory(PathName, 0);
+        return 1;
     }
 
-    return 0;
+    StringCchCopy(buff2, std::size(buff2), PathName);
+
+    wchar_t* chr1 = wcsrchr(buff2, L'\\');
+    wchar_t* chr2 = wcschr(buff2, L'\\');
+
+    if (!chr1 || !chr2 || chr1 == chr2)
+        return 0;
+
+    (*chr1) = 0;
+
+    if (!Path::CreateDirectorys(buff2, 0))
+        return 0;
+
+    return (CreateDirectory(PathName, 0) != 0 || GetLastError() == ERROR_ALREADY_EXISTS) ? 1 : 0;
 }
 #endif

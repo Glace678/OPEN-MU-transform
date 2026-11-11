@@ -1,11 +1,13 @@
 #pragma once
+#include <utility>
 #define MIN(a, b)        (((a) < (b)) ? (a) : (b))
 #define MAX(a, b)        (((a) > (b)) ? (a) : (b))
 #define LIMIT(val, l, h) ((val) < (l) ? (l) : (val) > (h) ? (h) : (val))
 #define SWAP(a, b) \
+    do \
     { \
-        (a) ^= (b) ^= (a) ^= (b); \
-    }
+        std::swap((a), (b)); \
+    } while (0)
 #define ARGB(a, r, g, b) (((DWORD)(a)) << 24 | (DWORD)(r) | ((DWORD)(g)) << 8 | ((DWORD)(b)) << 16)
 
 bool        ReduceStringByPixel(LPTSTR lpszDst, int nDstSize, LPCTSTR lpszSrc, int nPixel);

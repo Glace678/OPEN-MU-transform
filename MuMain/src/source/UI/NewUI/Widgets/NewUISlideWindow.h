@@ -26,12 +26,21 @@ public:
     float GetLayerDepth();  // 1.91f
 
     // wrapping
-    void Init() { m_pSlideMgr->Init(); }
-    void CreateSlideText() { m_pSlideMgr->CreateSlideText(); }
+    void Init()
+    {
+        if (m_pSlideMgr)
+            m_pSlideMgr->Init();
+    }
+    void CreateSlideText()
+    {
+        if (m_pSlideMgr)
+            m_pSlideMgr->CreateSlideText();
+    }
     void AddSlide(int iLoopCount, int iLoopDelay, const wchar_t* strText, int iType, float fSpeed,
                   DWORD dwTextColor = (255 << 24) + (200 << 16) + (220 << 8) + (230))
     {
-        m_pSlideMgr->AddSlide(iLoopCount, iLoopDelay, strText, iType, fSpeed, dwTextColor);
+        if (m_pSlideMgr)
+            m_pSlideMgr->AddSlide(iLoopCount, iLoopDelay, strText, iType, fSpeed, dwTextColor);
     }
 
 private:

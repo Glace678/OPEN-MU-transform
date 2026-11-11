@@ -1,4 +1,4 @@
-﻿[*.cs]
+[*.cs]
 
 dotnet_diagnostic.CS1998.severity = suggestion
 

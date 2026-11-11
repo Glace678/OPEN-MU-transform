@@ -10,6 +10,8 @@
 #include <iomanip>
 #include <mutex>
 #include <cstdarg>
+#include <cstdio>
+#include <cwchar>
 #include <filesystem>
 #include <vector>
 #include <algorithm>
@@ -19,51 +21,97 @@
 // Mutex for thread-safe console access
 static std::mutex g_consoleMutex;
 
-// Replacement console output functions
-extern "C" {
-int editor_wprintf(const wchar_t* format, ...)
+namespace
 {
-    wchar_t buffer[4096];
-    va_list args;
-    va_start(args, format);
-    int result = vswprintf_s(buffer, _countof(buffer), format, args);
-    va_end(args);
+int FormatWideLog(wchar_t* buffer, std::size_t bufferCount, const wchar_t* format, va_list args)
+{
+    if (!buffer || bufferCount == 0 || !format)
+    {
+        if (buffer && bufferCount > 0)
+            buffer[0] = L'\0';
+        return -1;
+    }
 
-    // Send to ImGui console
-    char utf8Buffer[8192];
-    WideCharToMultiByte(CP_UTF8, 0, buffer, -1, utf8Buffer, sizeof(utf8Buffer), NULL, NULL);
+#ifdef _MSC_VER
+    int result = _vsnwprintf_s(buffer, bufferCount, _TRUNCATE, format, args);
+#else
+    int result = std::vswprintf(buffer, bufferCount, format, args);
+#endif
+    buffer[bufferCount - 1] = L'\0';
+    return result;
+}
 
-    // Remove trailing newline
+void ForwardFormattedWideToConsole(const wchar_t* buffer)
+{
+    if (!buffer || buffer[0] == L'\0')
+        return;
+
+    // 4096 UTF-16 code units expand to at most 12,288 UTF-8 bytes (+1 NUL)
+    char      utf8Buffer[16384] = {};
+    const int written           = WideCharToMultiByte(CP_UTF8, 0, buffer, -1, utf8Buffer,
+                                                      static_cast<int>(sizeof(utf8Buffer)), nullptr, nullptr);
+    if (written <= 0)
+        return;
+
+    utf8Buffer[sizeof(utf8Buffer) - 1] = '\0';
     std::string str(utf8Buffer);
     while (!str.empty() && (str.back() == '\n' || str.back() == '\r'))
         str.pop_back();
 
     if (!str.empty())
         g_MuEditorConsoleUI.LogGame(str);
+}
+}
 
+// Replacement console output functions
+extern "C" {
+int editor_wprintf(const wchar_t* format, ...)
+{
+    if (!format)
+        return -1;
+
+    wchar_t buffer[4096] = {};
+    va_list args;
+    va_start(args, format);
+    int result = FormatWideLog(buffer, _countof(buffer), format, args);
+    va_end(args);
+
+    if (stdout != nullptr && buffer[0] != L'\0')
+    {
+        std::fputws(buffer, stdout);
+    }
+
+    ForwardFormattedWideToConsole(buffer);
     return result;
 }
 
 int editor_fwprintf(FILE* stream, const wchar_t* format, ...)
 {
-    wchar_t buffer[4096];
+    if (!format)
+        return -1;
+
+    // Preserve real file output for non-console FILE* streams
+    if (stream != nullptr && stream != stdout && stream != stderr)
+    {
+        va_list fileArgs;
+        va_start(fileArgs, format);
+        int fileResult = std::vfwprintf(stream, format, fileArgs);
+        va_end(fileArgs);
+        return fileResult;
+    }
+
+    wchar_t buffer[4096] = {};
     va_list args;
     va_start(args, format);
-    int result = vswprintf_s(buffer, _countof(buffer), format, args);
+    int result = FormatWideLog(buffer, _countof(buffer), format, args);
     va_end(args);
 
-    // Send to ImGui console
-    char utf8Buffer[8192];
-    WideCharToMultiByte(CP_UTF8, 0, buffer, -1, utf8Buffer, sizeof(utf8Buffer), NULL, NULL);
+    if (stream != nullptr && buffer[0] != L'\0')
+    {
+        std::fputws(buffer, stream);
+    }
 
-    // Remove trailing newline
-    std::string str(utf8Buffer);
-    while (!str.empty() && (str.back() == '\n' || str.back() == '\r'))
-        str.pop_back();
-
-    if (!str.empty())
-        g_MuEditorConsoleUI.LogGame(str);
-
+    ForwardFormattedWideToConsole(buffer);
     return result;
 }
 }
@@ -81,40 +129,52 @@ ConsoleStreamBuf::~ConsoleStreamBuf()
 
 std::streambuf::int_type ConsoleStreamBuf::overflow(int_type c)
 {
-    if (c != EOF)
+    if (traits_type::eq_int_type(c, traits_type::eof()))
     {
-        m_buffer += static_cast<char>(c);
+        return traits_type::not_eof(c);
+    }
+
+    const char  ch        = traits_type::to_char_type(c);
+    bool        flushLine = false;
+    std::string line;
+    {
+        std::lock_guard<std::mutex> lock(g_consoleMutex);
+        m_buffer.push_back(ch);
 
         // If we hit a newline, flush the buffer
-        if (c == '\n')
+        if (ch == '\n')
         {
-            std::lock_guard<std::mutex> lock(g_consoleMutex);
-
-            // Remove trailing newline for our buffer
-            std::string line = m_buffer;
-            if (!line.empty() && line.back() == '\n')
+            line = m_buffer;
+            while (!line.empty() && (line.back() == '\n' || line.back() == '\r'))
                 line.pop_back();
 
-            // Send to ImGui console
-            if (!line.empty())
+            // Also write to original stream
+            if (m_oldBuf)
             {
-                g_MuEditorConsoleUI.LogGame(line);
+                m_oldBuf->sputn(m_buffer.c_str(), static_cast<std::streamsize>(m_buffer.size()));
             }
 
-            // Also write to original stream
-            m_oldBuf->sputn(m_buffer.c_str(), m_buffer.size());
-
             m_buffer.clear();
+            flushLine = !line.empty();
         }
+    }
+
+    // Release g_consoleMutex before calling LogGame to avoid self-deadlock
+    if (flushLine)
+    {
+        g_MuEditorConsoleUI.LogGame(line);
     }
     return c;
 }
 
 std::streamsize ConsoleStreamBuf::xsputn(const char* s, std::streamsize n)
 {
+    if (!s || n <= 0)
+        return 0;
+
     for (std::streamsize i = 0; i < n; ++i)
     {
-        overflow(s[i]);
+        overflow(traits_type::to_int_type(s[i]));
     }
     return n;
 }
@@ -149,7 +209,7 @@ void CMuEditorConsoleUI::CleanupOldLogs()
         fs::path logDir = "MuEditor";
         if (!fs::exists(logDir))
         {
-            fs::create_directory(logDir);
+            fs::create_directories(logDir);
         }
 
         // Find all log files matching pattern in MuEditor folder
@@ -174,7 +234,7 @@ void CMuEditorConsoleUI::CleanupOldLogs()
                 ftime - fs::file_time_type::clock::now() + std::chrono::system_clock::now());
             time_t fileTime = std::chrono::system_clock::to_time_t(sctp);
 
-            if ((now - fileTime) > maxAge)
+            if (now > fileTime && (now - fileTime) > maxAge)
             {
                 fs::remove(logPath);
             }
@@ -188,17 +248,20 @@ void CMuEditorConsoleUI::CleanupOldLogs()
 
 void CMuEditorConsoleUI::Initialize()
 {
+    // Clean up old log files and ensure "MuEditor" directory exists BEFORE opening today's log
+    CleanupOldLogs();
+
     // Create log file with date only (one log per day)
     time_t now = time(0);
-    tm     timeinfo;
+    tm     timeinfo{};
     localtime_s(&timeinfo, &now);
 
     std::ostringstream filename;
-    filename << "MuEditor\\MuEditor_" << std::setfill('0') << std::setw(4) << (timeinfo.tm_year + 1900)
-             << std::setfill('0') << std::setw(2) << (timeinfo.tm_mon + 1) << std::setfill('0') << std::setw(2)
-             << timeinfo.tm_mday << ".log";
+    filename << "MuEditor_" << std::setfill('0') << std::setw(4) << (timeinfo.tm_year + 1900) << std::setfill('0')
+             << std::setw(2) << (timeinfo.tm_mon + 1) << std::setfill('0') << std::setw(2) << timeinfo.tm_mday
+             << ".log";
 
-    m_strLogFilePath = filename.str();
+    m_strLogFilePath = (std::filesystem::path("MuEditor") / filename.str()).string();
 
     // Open in append mode to continue writing to today's log
     m_logFile.open(m_strLogFilePath, std::ios::app);
@@ -211,9 +274,6 @@ void CMuEditorConsoleUI::Initialize()
         m_logFile.flush();
     }
 
-    // Clean up old log files (keep only last 14 days)
-    CleanupOldLogs();
-
     // Redirect stdout and stderr to capture all console output
     m_pStdoutBuf = new ConsoleStreamBuf(std::cout, true);
     m_pStderrBuf = new ConsoleStreamBuf(std::cerr, false);
@@ -221,7 +281,7 @@ void CMuEditorConsoleUI::Initialize()
 
 void CMuEditorConsoleUI::Shutdown()
 {
-    // Restore original stream buffers
+    // Restore original stream buffers first
     if (m_pStdoutBuf)
     {
         delete m_pStdoutBuf;
@@ -233,6 +293,7 @@ void CMuEditorConsoleUI::Shutdown()
         m_pStderrBuf = nullptr;
     }
 
+    std::lock_guard<std::mutex> lock(g_consoleMutex);
     if (m_logFile.is_open())
     {
         m_logFile << std::endl << "=== MU Editor Log Ended ===" << std::endl;
@@ -242,6 +303,7 @@ void CMuEditorConsoleUI::Shutdown()
 
 void CMuEditorConsoleUI::WriteToLogFile(const std::string& message)
 {
+    // Caller must hold g_consoleMutex
     if (m_logFile.is_open())
     {
         m_logFile << message << std::endl;
@@ -249,17 +311,42 @@ void CMuEditorConsoleUI::WriteToLogFile(const std::string& message)
     }
 }
 
+std::string CMuEditorConsoleUI::GetEditorLog() const
+{
+    std::lock_guard<std::mutex> lock(g_consoleMutex);
+    return m_strEditorConsole;
+}
+
+std::string CMuEditorConsoleUI::GetGameLog() const
+{
+    std::lock_guard<std::mutex> lock(g_consoleMutex);
+    return m_strGameConsole;
+}
+
+void CMuEditorConsoleUI::ClearEditorLog()
+{
+    std::lock_guard<std::mutex> lock(g_consoleMutex);
+    m_strEditorConsole.clear();
+}
+
+void CMuEditorConsoleUI::ClearGameLog()
+{
+    std::lock_guard<std::mutex> lock(g_consoleMutex);
+    m_strGameConsole.clear();
+}
+
 void CMuEditorConsoleUI::LogEditor(const std::string& message)
 {
     // Add timestamp
     time_t now = time(0);
-    tm     timeinfo;
+    tm     timeinfo{};
     localtime_s(&timeinfo, &now);
-    char timestamp[32];
+    char timestamp[32] = {};
     strftime(timestamp, sizeof(timestamp), "[%H:%M:%S]", &timeinfo);
 
     std::string fullMessage = std::string(timestamp) + " " + message;
 
+    std::lock_guard<std::mutex> lock(g_consoleMutex);
     m_strEditorConsole += fullMessage;
     m_strEditorConsole += "\n";
 
@@ -280,6 +367,14 @@ void CMuEditorConsoleUI::LogGame(const std::string& message)
 
 void CMuEditorConsoleUI::Render()
 {
+    std::string logFilePathCopy;
+    {
+        std::lock_guard<std::mutex> lock(g_consoleMutex);
+        m_renderEditorConsole = m_strEditorConsole;
+        m_renderGameConsole   = m_strGameConsole;
+        logFilePathCopy       = m_strLogFilePath;
+    }
+
     ImGuiIO& io          = ImGui::GetIO();
     ImVec2   bottom_pos  = ImVec2(0, io.DisplaySize.y - 200);
     ImVec2   bottom_size = ImVec2(io.DisplaySize.x, 200);
@@ -312,19 +407,20 @@ void CMuEditorConsoleUI::Render()
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 20);
         if (ImGui::SmallButton("Copy"))
         {
-            ImGui::SetClipboardText(m_strEditorConsole.c_str());
+            ImGui::SetClipboardText(m_renderEditorConsole.c_str());
         }
         ImGui::SameLine();
         if (ImGui::SmallButton("Clear"))
         {
             ClearEditorLog();
+            m_renderEditorConsole.clear();
         }
         ImGui::Separator();
 
         // Scrollable content area
         ImGui::BeginChild("EditorConsoleContent", ImVec2(0, 0), false);
-        ImGui::InputTextMultiline("##EditorConsoleText", const_cast<char*>(m_strEditorConsole.c_str()),
-                                  m_strEditorConsole.length() + 1, ImVec2(-1, -1), ImGuiInputTextFlags_ReadOnly);
+        ImGui::InputTextMultiline("##EditorConsoleText", m_renderEditorConsole.data(), m_renderEditorConsole.size() + 1,
+                                  ImVec2(-1, -1), ImGuiInputTextFlags_ReadOnly);
         ImGui::EndChild();
 
         ImGui::EndChild();
@@ -340,26 +436,27 @@ void CMuEditorConsoleUI::Render()
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 20);
         if (ImGui::SmallButton("Copy##Game"))
         {
-            ImGui::SetClipboardText(m_strGameConsole.c_str());
+            ImGui::SetClipboardText(m_renderGameConsole.c_str());
         }
         ImGui::SameLine();
         if (ImGui::SmallButton("Clear##Game"))
         {
             ClearGameLog();
+            m_renderGameConsole.clear();
         }
         ImGui::Separator();
 
         // Scrollable content area
         ImGui::BeginChild("GameConsoleContent", ImVec2(0, 0), false);
-        ImGui::InputTextMultiline("##GameConsoleText", const_cast<char*>(m_strGameConsole.c_str()),
-                                  m_strGameConsole.length() + 1, ImVec2(-1, -1), ImGuiInputTextFlags_ReadOnly);
+        ImGui::InputTextMultiline("##GameConsoleText", m_renderGameConsole.data(), m_renderGameConsole.size() + 1,
+                                  ImVec2(-1, -1), ImGuiInputTextFlags_ReadOnly);
         ImGui::EndChild();
 
         ImGui::EndChild();
 
         // Show log file path at bottom
         ImGui::Separator();
-        ImGui::Text("Log file: %s", m_strLogFilePath.c_str());
+        ImGui::Text("Log file: %s", logFilePathCopy.c_str());
     }
     ImGui::End();
     ImGui::PopStyleColor();

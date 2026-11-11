@@ -39,6 +39,14 @@ public class MoveItemAction
     /// <param name="toStorage">To storage.</param>
     public async ValueTask MoveItemAsync(Player player, byte fromSlot, Storages fromStorage, byte toSlot, Storages toStorage)
     {
+        await player.RunPersistenceExclusiveAsync(async () =>
+        {
+            await this.MoveItemCoreAsync(player, fromSlot, fromStorage, toSlot, toStorage).ConfigureAwait(false);
+        }).ConfigureAwait(false);
+    }
+
+    private async ValueTask MoveItemCoreAsync(Player player, byte fromSlot, Storages fromStorage, byte toSlot, Storages toStorage)
+    {
         if (!this.IsMoveAllowed(player, fromStorage, toStorage))
         {
             await player.InvokeViewPlugInAsync<IItemMoveFailedPlugIn>(p => p.ItemMoveFailedAsync(null)).ConfigureAwait(false);
@@ -122,12 +130,29 @@ public class MoveItemAction
     private async ValueTask MoveNormalAsync(Player player, Storages fromStorage, byte fromSlot, Storages toStorage, byte toSlot, IStorage fromItemStorage, Item item, IStorage toItemStorage)
     {
         await fromItemStorage.RemoveItemAsync(item).ConfigureAwait(false);
-        if (!await toItemStorage.AddItemAsync(toSlot, item).ConfigureAwait(false))
+        var addedToTarget = false;
+        try
+        {
+            addedToTarget = await toItemStorage.AddItemAsync(toSlot, item).ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            player.Logger.LogError(ex, "Unexpected exception while adding item {Item} to target storage {ToStorage} at slot {ToSlot}.", item, toStorage, toSlot);
+        }
+
+        if (!addedToTarget)
         {
             var restoredToOriginalSlot = await fromItemStorage.AddItemAsync(fromSlot, item).ConfigureAwait(false);
             if (!restoredToOriginalSlot)
             {
                 var restoredToAnySlot = await fromItemStorage.AddItemAsync(item).ConfigureAwait(false);
+                if (!restoredToAnySlot && !fromItemStorage.ItemStorage.Items.Contains(item))
+                {
+                    item.ItemSlot = fromSlot;
+                    fromItemStorage.ItemStorage.Items.Add(item);
+                    player.IsEconomyPersistencePending = true;
+                }
+
                 player.Logger.LogCritical(
                     "Inconsistent inventory state after failed item move rollback. Player: {player}, fromStorage: {fromStorage}, fromSlot: {fromSlot}, toStorage: {toStorage}, toSlot: {toSlot}, item: {item}, restoredToAnySlot: {restoredToAnySlot}",
                     player,
@@ -395,7 +420,7 @@ public class MoveItemAction
 
         // GAP-FU-03: while the personal store is open, the shop storage must not be
         // moved around out of band; buyers and sellers serialize on StoreLock.
-        if (player.ShopStorage?.StoreOpen ?? false
+        if ((player.ShopStorage?.StoreOpen ?? false)
             && (fromStorage == Storages.PersonalStore || toStorage == Storages.PersonalStore))
         {
             return false;

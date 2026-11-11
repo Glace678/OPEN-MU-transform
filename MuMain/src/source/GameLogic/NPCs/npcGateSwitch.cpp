@@ -43,9 +43,14 @@ void DoInterfaceOpen(int Key)
 {
     g_iNpcCharacterKey = Key;
 
-    int        Index = FindCharacterIndex(Key);
-    CHARACTER* c     = &CharactersClient[Index];
-    OBJECT*    o     = &c->Object;
+    int Index = FindCharacterIndex(Key);
+    if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
+    {
+        g_isCurrentGateopen = false;
+        return;
+    }
+    CHARACTER* c = &CharactersClient[Index];
+    OBJECT*    o = &c->Object;
 
     g_isCurrentGateopen = g_isCharacterBuff(o, eBuff_CastleGateIsOpen);
 }
@@ -58,11 +63,12 @@ void ProcessState(int Key, BYTE GateOnOff, BYTE State)
             break;
 
         case 1: {
-            int        Index = FindCharacterIndex(Key);
-            CHARACTER* c     = &CharactersClient[Index];
-
-            if (c == NULL)
+            int Index = FindCharacterIndex(Key);
+            if (Index < 0 || Index >= MAX_CHARACTERS_CLIENT)
                 return;
+
+            CHARACTER* c = &CharactersClient[Index];
+
             if (c->MonsterIndex != MONSTER_CASTLE_GATE1)
                 return;
 
@@ -98,7 +104,10 @@ void SendToggleGate()
         State = 1;
     }
 
-    SocketClient->ToGameServer()->SendToggleCastleGateRequest(State, g_iNpcCharacterKey);
+    if (SocketClient != nullptr)
+    {
+        SocketClient->ToGameServer()->SendToggleCastleGateRequest(State, g_iNpcCharacterKey);
+    }
     g_iNpcCharacterKey = 0;
 }
 

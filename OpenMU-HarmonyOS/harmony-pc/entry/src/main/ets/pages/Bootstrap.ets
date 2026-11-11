@@ -3,6 +3,11 @@ import zlib from '@ohos.zlib';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { promptAction } from '@kit.ArkUI';
 import { MobileConfig, DEFAULT_SERVER_ADDRESS } from '../mobile/MobileConfig';
+import {
+  clearNativeStartupError,
+  nativeStartupError,
+  setNativeStartupError
+} from '../entryability/EntryAbility';
 // Re-apply the data root after first-run extraction (see harmony-game notes).
 import bridge from 'libopenmubridge.so';
 import { copyRawfileTo } from '../mobile/RawFileCopy';
@@ -23,14 +28,21 @@ struct Bootstrap {
   @State renderScale: number = 100;
 
   async aboutToAppear(): Promise<void> {
-    const context = getContext(this);
-    this.serverAddress = await MobileConfig.getString(context, 'server-address', DEFAULT_SERVER_ADDRESS);
-    this.fps = await MobileConfig.getString(context, 'fps', '60');
-    this.renderScale = await MobileConfig.getNumber(context, 'render-scale', 100);
-    if (await MobileConfig.isGameDataReady(context)) {
-      this.markReady();
-    } else {
-      await this.prepareData();
+    try {
+      const context = getContext(this);
+      this.serverAddress = await MobileConfig.getString(context, 'server-address', DEFAULT_SERVER_ADDRESS);
+      this.fps = await MobileConfig.getString(context, 'fps', '60');
+      this.renderScale = await MobileConfig.getNumber(context, 'render-scale', 100);
+      if (await MobileConfig.isGameDataReady(context)) {
+        this.markReady();
+      } else {
+        await this.prepareData();
+      }
+    } catch (e) {
+      this.busy = false;
+      this.ready = false;
+      this.status = '初始化失败';
+      this.detail = ((e as Error).message ?? String(e));
     }
   }
 
@@ -49,27 +61,67 @@ struct Bootstrap {
     this.status = '正在解压游戏数据…';
     const context = getContext(this);
     const root = MobileConfig.dataRoot(context);
+    const staging = context.filesDir + '/game-data.staging';
+    const backup = context.filesDir + '/game-data.backup';
+    const zipPath = context.filesDir + '/game-data.zip';
     try {
-      fs.mkdirSync(root, true);
-      const zipPath = context.filesDir + '/game-data.zip';
+      try { fs.rmdirSync(staging); } catch (e) { /* ignore */ }
+      try { fs.rmdirSync(backup); } catch (e) { /* ignore */ }
+      fs.mkdirSync(staging, true);
       await copyRawfileTo(context, 'game-data.zip', zipPath);
-      await zlib.decompressFile(zipPath, root, { overwrite: true });
+      await zlib.decompressFile(zipPath, staging, { overwrite: true });
       try {
         fs.unlinkSync(zipPath);
       } catch (e) {
         // best effort
       }
+      try {
+        fs.accessSync(staging + '/Data');
+      } catch (e) {
+        try { fs.rmdirSync(staging); } catch (err) { /* ignore */ }
+        this.busy = false;
+        this.status = '解压完成但未找到 Data 目录';
+        return;
+      }
+      try {
+        fs.accessSync(root + '/config.ini');
+        fs.copyFileSync(root + '/config.ini', staging + '/config.ini');
+      } catch (e) {
+        // No previous config.ini to preserve.
+      }
+      let movedOldRoot = false;
+      try {
+        fs.accessSync(root);
+        fs.renameSync(root, backup);
+        movedOldRoot = true;
+      } catch (e) {
+        movedOldRoot = false;
+      }
+      try {
+        fs.renameSync(staging, root);
+        MobileConfig.writeDataVersionMarker(context);
+      } catch (e) {
+        if (movedOldRoot) {
+          try { fs.renameSync(backup, root); } catch (restoreErr) { /* best effort */ }
+        }
+        throw e;
+      }
+      if (movedOldRoot) {
+        try { fs.rmdirSync(backup); } catch (e) { /* best effort */ }
+      }
       if (await MobileConfig.isGameDataReady(context)) {
         this.markReady();
       } else {
         this.busy = false;
-        this.status = '解压完成但未找到 Data 目录';
+        this.status = '数据校验失败';
       }
     } catch (e) {
+      try { fs.unlinkSync(zipPath); } catch (err) { /* ignore */ }
+      try { fs.rmdirSync(staging); } catch (err) { /* ignore */ }
       this.busy = false;
       this.status = '解压失败';
       this.detail = '未找到内置数据包。请把 game-data.zip 放入 entry/src/main/resources/rawfile/，'
-        + '或用 hdc 把 Data 目录推送到 ' + root + '。';
+        + '或用 hdc 把 Data 目录推送到 ' + root + ' 并写入 .openmu-data-version。';
     }
   }
 
@@ -77,11 +129,21 @@ struct Bootstrap {
     const context = getContext(this);
     try {
       await MobileConfig.writeConfig(context);
-      // Data folder now exists; re-point the native process at it (onCreate's
-      // setDataRoot ran before first-run extraction and could not chdir there).
+      // Data folder now exists; re-point the native process at it and re-apply
+      // auto-login environment variables (onCreate's setDataRoot threw before
+      // first-run extraction, skipping autoLoginEnv).
       bridge.setDataRoot(MobileConfig.dataRoot(context));
+      const env = MobileConfig.autoLoginEnv();
+      Object.keys(env).forEach((name: string) => {
+        bridge.setEnv(name, env[name]);
+      });
+      clearNativeStartupError();
     } catch (e) {
-      promptAction.showToast({ message: '写入配置失败：' + ((e as Error).message ?? e) });
+      const detail = ((e as Error).message ?? String(e));
+      setNativeStartupError(detail);
+      promptAction.showToast({
+        message: '启动准备失败：' + (nativeStartupError ?? detail)
+      });
       return;
     }
     router.replaceUrl({ url: 'pages/Game' });

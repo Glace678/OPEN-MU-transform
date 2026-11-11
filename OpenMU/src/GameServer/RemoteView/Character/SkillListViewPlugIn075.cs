@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.GameServer.RemoteView.Character;
 
 using System.Runtime.InteropServices;
 using MUnique.OpenMU.DataModel.Configuration;
+using MUnique.OpenMU.GameLogic;
 using MUnique.OpenMU.GameLogic.Views.Character;
 using MUnique.OpenMU.Network;
 using MUnique.OpenMU.Network.Packets.ServerToClient;
@@ -31,6 +32,11 @@ public class SkillListViewPlugIn075 : SkillListViewPlugIn
     /// <inheritdoc/>
     public override async ValueTask AddSkillAsync(Skill skill)
     {
+        if (this.SkillList.Any(s => s?.GetBaseSkill() == skill))
+        {
+            return;
+        }
+
         var skillIndex = this.AddSkillToList(skill);
         await this.Player.Connection.SendSkillAdded075Async(skillIndex, this.GetSkillNumberAndLevel(skill)).ConfigureAwait(false);
     }
@@ -66,17 +72,18 @@ public class SkillListViewPlugIn075 : SkillListViewPlugIn
 
         int Write()
         {
-            var size = SkillListUpdate075Ref.GetRequiredSize(this.SkillList.Count);
+            var count = Math.Min(this.SkillList.Count, byte.MaxValue);
+            var size = SkillListUpdate075Ref.GetRequiredSize(count);
             var span = connection.Output.GetSpan(size)[..size];
             var packet = new SkillListUpdate075Ref(span)
             {
-                Count = (byte)this.SkillList.Count,
+                Count = (byte)count,
             };
 
-            for (byte i = 0; i < this.SkillList.Count; i++)
+            for (int i = 0; i < count; i++)
             {
                 var skillEntry = packet[i];
-                skillEntry.SkillIndex = i;
+                skillEntry.SkillIndex = (byte)i;
                 skillEntry.SkillNumberAndLevel = this.GetSkillNumberAndLevel(this.SkillList[i]);
             }
 

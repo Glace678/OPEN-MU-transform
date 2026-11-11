@@ -193,6 +193,7 @@ public abstract class ChatCommandPlugInBase<T> : IChatCommandPlugIn
         }
 
         player.Account.ChatBanUntil = chatBanUntil;
+        await player.SaveProgressAsync().ConfigureAwait(false);
         return true;
     }
 
@@ -244,20 +245,41 @@ public abstract class ChatCommandPlugInBase<T> : IChatCommandPlugIn
             return false;
         }
 
-        foreach (var character in account.Characters)
+        account.State = accountState;
+        if (!await context.SaveChangesAsync().ConfigureAwait(false))
         {
-            var player = gameMaster.GameContext.GetPlayerByCharacterName(character.Name ?? string.Empty);
+            return false;
+        }
 
-            // disconnect to change account
-            if (player != null)
+        if (accountState != AccountState.Normal)
+        {
+            foreach (var character in account.Characters)
             {
-                await player.DisconnectAsync().ConfigureAwait(false);
-                break;
+                var player = gameMaster.GameContext.GetPlayerByCharacterName(character.Name ?? string.Empty);
+
+                // Sync in-memory state before disconnecting so session save cannot overwrite the persisted ban.
+                if (player != null)
+                {
+                    if (player.Account is not null)
+                    {
+                        player.Account.State = accountState;
+                    }
+
+                    await player.DisconnectAsync().ConfigureAwait(false);
+                }
+            }
+        }
+        else
+        {
+            foreach (var character in account.Characters)
+            {
+                if (gameMaster.GameContext.GetPlayerByCharacterName(character.Name ?? string.Empty) is { Account: { } onlineAccount })
+                {
+                    onlineAccount.State = accountState;
+                }
             }
         }
 
-        account.State = accountState;
-        await context.SaveChangesAsync().ConfigureAwait(false);
         return true;
     }
 }

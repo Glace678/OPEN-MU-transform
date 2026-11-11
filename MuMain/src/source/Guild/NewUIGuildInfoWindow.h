@@ -116,6 +116,7 @@ private:
     ServerMessageInfo        m_MessageInfo;
 
     bool m_bRequestUnionList;
+    bool m_bImagesLoaded;
 
     wchar_t m_RivalGuildName[MAX_GUILDNAME + 1];
 

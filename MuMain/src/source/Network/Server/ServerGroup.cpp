@@ -3,14 +3,21 @@
 
 CServerGroup::CServerGroup()
 {
-    m_iSequence    = 0;
-    m_iServerIndex = 0;
-    m_iNumServer   = 0;
+    m_iSequence        = 0;
+    m_iWidthPos        = 0;
+    m_iBtnPos          = -1;
+    m_iServerIndex     = 0;
+    m_iNumServer       = 0;
+    m_bPvPServer       = false;
+    m_szName[0]        = L'\0';
+    m_szDescription[0] = L'\0';
 
     for (int i = 0; i < MAX_SERVER_PER_GROUP; i++)
     {
         m_abyNonPvpServer[i] = 0;
     }
+
+    m_iterServerList = m_listServerInfo.end();
 }
 
 CServerGroup::~CServerGroup()
@@ -27,10 +34,15 @@ void CServerGroup::Release()
     }
 
     m_listServerInfo.clear();
+    m_iterServerList = m_listServerInfo.end();
+    m_iNumServer     = 0;
 }
 
 void CServerGroup::InsertServerInfo(CServerInfo* pServerInfo)
 {
+    if (pServerInfo == NULL)
+        return;
+
     m_listServerInfo.push_back(pServerInfo);
 
     m_iterServerList = m_listServerInfo.begin();

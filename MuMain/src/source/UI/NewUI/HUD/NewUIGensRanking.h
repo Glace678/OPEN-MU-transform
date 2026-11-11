@@ -45,7 +45,7 @@ class CNewUIGensRanking : public CNewUIObj
 
     static constexpr float GENSRANKING_WIDTH       = 190.0f;
     static constexpr float GENSRANKING_HEIGHT      = 429.0f;
-    static constexpr int   TEAMNAME_LENTH          = 10;
+    static constexpr int   TEAMNAME_LENTH          = 32;
     static constexpr float GENSMARK_WIDTH          = 50.0f;
     static constexpr float GENSMARK_HEIGHT         = 69.0f;
     static constexpr float GENSRANKBACK_WIDTH      = 170.0f;

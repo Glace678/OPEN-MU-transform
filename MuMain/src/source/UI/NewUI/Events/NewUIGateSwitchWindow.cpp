@@ -58,10 +58,9 @@ void CNewUIGateSwitchWindow::InitButton(CNewUIButton* pNewUIButton, int iPos_x, 
 
 void CNewUIGateSwitchWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }

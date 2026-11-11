@@ -156,16 +156,22 @@ public class GameMap
     public async ValueTask RemoveAsync(ILocateable locateable)
     {
         await this._areaOfInterestManager.RemoveObjectAsync(locateable).ConfigureAwait(false);
-        if (this._objectsInMap.Remove(locateable.Id) && locateable.Id != 0)
+        var objectId = locateable.Id;
+        if (objectId == 0 && locateable is not (DroppedItem or DroppedMoney))
+        {
+            return;
+        }
+
+        if (this._objectsInMap.Remove(new KeyValuePair<ushort, ILocateable>(objectId, locateable)))
         {
             if (locateable is DroppedItem
                 || locateable is DroppedMoney)
             {
-                this._dropIdGenerator.GiveBack(locateable.Id);
+                this._dropIdGenerator.GiveBack(objectId);
             }
             else
             {
-                this._objectIdGenerator.GiveBack(locateable.Id);
+                this._objectIdGenerator.GiveBack(objectId);
             }
 
             if (locateable is Player player)

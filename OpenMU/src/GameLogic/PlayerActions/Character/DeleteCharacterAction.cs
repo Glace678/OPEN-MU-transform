@@ -62,9 +62,33 @@ public class DeleteCharacterAction
             return CharacterDeleteResult.Unsuccessful;
         }
 
-        player.Account.Characters.Remove(character);
-        player.GameContext.PlugInManager.GetPlugInPoint<ICharacterDeletedPlugIn>()?.CharacterDeleted(player, character);
-        await player.PersistenceContext.DeleteAsync(character).ConfigureAwait(false);
-        return CharacterDeleteResult.Successful;
+        return await player.RunPersistenceExclusiveAsync(async () =>
+        {
+            if (player.PlayerState.CurrentState != PlayerState.CharacterSelection
+                || !player.Account.Characters.Contains(character))
+            {
+                return CharacterDeleteResult.Unsuccessful;
+            }
+
+            player.Account.Characters.Remove(character);
+            try
+            {
+                await player.PersistenceContext.DeleteAsync(character).ConfigureAwait(false);
+                await player.SaveProgressAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                if (!player.Account.Characters.Contains(character))
+                {
+                    player.Account.Characters.Add(character);
+                }
+
+                player.Logger.LogError(ex, "Failed to delete character {CharacterName} of account {LoginName}.", characterName, player.Account.LoginName);
+                return CharacterDeleteResult.Unsuccessful;
+            }
+
+            player.GameContext.PlugInManager.GetPlugInPoint<ICharacterDeletedPlugIn>()?.CharacterDeleted(player, character);
+            return CharacterDeleteResult.Successful;
+        }).ConfigureAwait(false);
     }
 }

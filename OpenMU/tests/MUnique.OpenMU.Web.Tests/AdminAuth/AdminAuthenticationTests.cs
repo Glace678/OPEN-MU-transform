@@ -290,6 +290,8 @@ public class AdminAuthenticationTests
         Assert.That(AdminRoles.GetEffectiveRoles(AdminRoles.Operator), Is.EquivalentTo(new[] { AdminRoles.Viewer, AdminRoles.Operator }));
         Assert.That(AdminRoles.GetEffectiveRoles(AdminRoles.Viewer), Is.EquivalentTo(new[] { AdminRoles.Viewer }));
         Assert.That(AdminRoles.GetEffectiveRoles("Unknown"), Is.Empty);
+        Assert.That(AdminRoles.GetEffectiveRoles("2"), Is.Empty);
+        Assert.That(AdminRoles.GetEffectiveRoles("+2"), Is.Empty);
     }
 
     /// <summary>

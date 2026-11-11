@@ -55,25 +55,35 @@ BYTE CMultiLanguage::GetLanguage()
  * @note The caller must ensure @p target is large enough to hold the converted
  *       UTF-16 string plus a terminating null character.
  */
-int32_t CMultiLanguage::ConvertFromUtf8(wchar_t* target, const char* source, int maxSourceLength)
+int32_t CMultiLanguage::ConvertFromUtf8Buffer(wchar_t* target, size_t targetCapacity, const char* source,
+                                              int maxSourceLength)
 {
-    if (target == nullptr || source == nullptr)
+    if (target == nullptr)
     {
         return 0;
     }
 
+    if (source == nullptr || maxSourceLength == 0 || targetCapacity == 1)
+    {
+        target[0] = L'\0';
+        return 0;
+    }
+
+    int effectiveLength = maxSourceLength;
+
     // Fixed-size on-disk text fields are byte-windowed rather than NUL-safe:
     // if the window ends in the middle of a multi-byte UTF-8 sequence, the
     // dangling lead byte converts to U+FFFD (shown as a stray diamond glyph).
-    // When no NUL terminator lies inside the window, walk the end back to the
-    // last complete code point boundary.
-    if (maxSourceLength > 0)
+    // Stop at the first embedded NUL when present; otherwise walk the end back
+    // to the last complete code point boundary.
+    if (effectiveLength > 0)
     {
         bool terminatorInside = false;
-        for (int i = 0; i < maxSourceLength; ++i)
+        for (int i = 0; i < effectiveLength; ++i)
         {
             if (source[i] == '\0')
             {
+                effectiveLength  = i;
                 terminatorInside = true;
                 break;
             }
@@ -82,7 +92,7 @@ int32_t CMultiLanguage::ConvertFromUtf8(wchar_t* target, const char* source, int
         if (!terminatorInside)
         {
             int trailing = 0;
-            int i        = maxSourceLength - 1;
+            int i        = effectiveLength - 1;
             while (i >= 0 && (static_cast<unsigned char>(source[i]) & 0xC0) == 0x80)
             {
                 ++trailing;
@@ -102,36 +112,65 @@ int32_t CMultiLanguage::ConvertFromUtf8(wchar_t* target, const char* source, int
 
                 if (expectedContinuation > 0 && trailing < expectedContinuation)
                 {
-                    maxSourceLength = i;  // drop the whole incomplete sequence
+                    effectiveLength = i;  // drop the whole incomplete sequence
                 }
             }
         }
     }
+    else
+    {
+        effectiveLength = static_cast<int>(std::strlen(source));
+    }
 
-    // Determine how many UTF-16 characters are needed
-    const int requiredChars = MultiByteToWideChar(CP_UTF8, 0, source, maxSourceLength, nullptr, 0);
+    if (effectiveLength <= 0)
+    {
+        target[0] = L'\0';
+        return 0;
+    }
+
+    // Determine how many wide characters are needed for the non-NUL prefix
+    const int requiredChars = MultiByteToWideChar(CP_UTF8, 0, source, effectiveLength, nullptr, 0);
     if (requiredChars <= 0)
     {
         target[0] = L'\0';
         return 0;
     }
 
-    // Perform the conversion
-    int written = MultiByteToWideChar(CP_UTF8, 0, source,
-                                      maxSourceLength,  // read at most this many bytes
-                                      target,
-                                      requiredChars  // assume destination large enough
-    );
+    if (targetCapacity > 0 && static_cast<size_t>(requiredChars) >= targetCapacity)
+    {
+        std::wstring tmp(static_cast<size_t>(requiredChars), L'\0');
+        const int    writtenFull = MultiByteToWideChar(CP_UTF8, 0, source, effectiveLength, tmp.data(), requiredChars);
+        if (writtenFull <= 0)
+        {
+            target[0] = L'\0';
+            return 0;
+        }
 
+        size_t copyLen = std::min<size_t>(static_cast<size_t>(writtenFull), targetCapacity - 1);
+        if constexpr (sizeof(wchar_t) == 2)
+        {
+            if (copyLen > 0 && tmp[copyLen - 1] >= 0xD800 && tmp[copyLen - 1] <= 0xDBFF)
+            {
+                --copyLen;
+            }
+        }
+
+        if (copyLen > 0)
+        {
+            std::memcpy(target, tmp.data(), copyLen * sizeof(wchar_t));
+        }
+        target[copyLen] = L'\0';
+        return static_cast<int32_t>(copyLen);
+    }
+
+    // Perform the conversion directly when destination fits all characters + NUL
+    const int written = MultiByteToWideChar(CP_UTF8, 0, source, effectiveLength, target, requiredChars);
     if (written <= 0)
     {
         target[0] = L'\0';
         return 0;
     }
 
-    // The caller guarantees the target buffer holds the converted characters
-    // plus a terminator. Add it explicitly; when the source NUL was converted,
-    // 'written' already points at that slot.
     target[written] = L'\0';
     return written;
 }

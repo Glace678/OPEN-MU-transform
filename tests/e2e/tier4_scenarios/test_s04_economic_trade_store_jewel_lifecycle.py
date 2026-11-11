@@ -12,23 +12,25 @@ class TestS04EconomicTradeStoreJewelLifecycle(unittest.TestCase):
 
     def test_scenario_07_full_commercial_jewel_lifecycle(self):
         # 1. Player bundles 30 Chaos jewels -> PackedChaos level 2
-        # (2 + 1) * 810,000 * 10 = 24,300,000
+        # ItemPriceCalculator.cs:108: (2 + 1) * 385 * 10 = 11,550
         jewel_price = EconomyEngine.calculate_packed_jewel_price_64bit("PackedChaos", level=2)
-        self.assertEqual(jewel_price, 24_300_000)
+        self.assertEqual(jewel_price, 11_550)
 
         # 2. Seller lists item in Personal Store
-        is_valid_price, _ = EconomyEngine.validate_player_store_price(jewel_price)
+        is_valid_price, _ = EconomyEngine.validate_player_store_price(
+            jewel_price, max_inventory_money=EconomyEngine.MAX_SHOP_PRICE
+        )
         self.assertTrue(is_valid_price)
 
-        # 3. Buyer with 100,000,000 gold buys it
-        buyer_gold = 100_000_000
-        seller_gold = 5_000_000
+        # 3. Buyer with 100,000 gold buys it
+        buyer_gold = 100_000
+        seller_gold = 5_000
         ok, b_gold, s_gold, msg = EconomyEngine.process_store_purchase(
             buyer_gold=buyer_gold, seller_gold=seller_gold, price=jewel_price, inventory_has_space=True
         )
         self.assertTrue(ok)
-        self.assertEqual(b_gold, 75_700_000)
-        self.assertEqual(s_gold, 29_300_000)
+        self.assertEqual(b_gold, 88_450)
+        self.assertEqual(s_gold, 16_550)
 
     def test_scenario_08_transaction_failure_rollback_and_durability_conservation(self):
         # 1. Item has durability 250

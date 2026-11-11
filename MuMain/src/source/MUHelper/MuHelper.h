@@ -74,28 +74,28 @@ private:
     bool            IsSelfPositionSkill(ActionSkillType iSkill);
 
 private:
-    ConfigData        m_config;
-    POINT             m_posOriginal;
+    ConfigData        m_config{};
+    POINT             m_posOriginal{0, 0};
     std::thread       m_timerThread;
-    std::atomic<bool> m_bActive;
+    std::atomic<bool> m_bActive{false};
     std::set<int>     m_setTargets;
     std::set<int>     m_setTargetsAttacking;
     std::set<int>     m_setItems;
-    int               m_iCurrentItem;
-    int               m_iCurrentTarget;
-    int               m_iCurrentBuffIndex;
-    int               m_iCurrentBuffPartyIndex;
-    int               m_iCurrentHealPartyIndex;
-    int               m_iComboState;
-    ActionSkillType   m_iCurrentSkill;
-    int               m_iHuntingDistance;
-    int               m_iObtainingDistance;
-    int               m_iLoopCounter;
-    int               m_iSecondsElapsed;
-    int               m_iSecondsAway;
-    bool              m_bTimerActivatedBuffOngoing;
-    bool              m_bPetActivated;
-    int               m_iTotalCost;
+    int               m_iCurrentItem{MAX_ITEMS};
+    int               m_iCurrentTarget{-1};
+    int               m_iCurrentBuffIndex{0};
+    int               m_iCurrentBuffPartyIndex{0};
+    int               m_iCurrentHealPartyIndex{0};
+    int               m_iComboState{0};
+    ActionSkillType   m_iCurrentSkill{AT_SKILL_UNDEFINED};
+    int               m_iHuntingDistance{0};
+    int               m_iObtainingDistance{0};
+    int               m_iLoopCounter{0};
+    int               m_iSecondsElapsed{0};
+    int               m_iSecondsAway{0};
+    bool              m_bTimerActivatedBuffOngoing{false};
+    bool              m_bPetActivated{false};
+    int               m_iTotalCost{0};
 };
 
 extern CMuHelper g_MuHelper;

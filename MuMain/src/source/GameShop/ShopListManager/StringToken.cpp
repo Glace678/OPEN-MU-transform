@@ -17,7 +17,7 @@ CStringToken::CStringToken()  // OK
     this->data.clear();
     this->delimiter.clear();
     this->tokens.clear();
-    //this->index = this->tokens.begin();
+    this->index = this->tokens.begin();
 }
 
 CStringToken::~CStringToken()  // OK
@@ -82,6 +82,11 @@ void CStringToken::split()  // OK
 
 void CStringToken::IsNullString(std::wstring::size_type pos)  // OK
 {
+    if (pos == std::wstring::npos || this->delimiter.empty() || pos + 1 >= this->data.size())
+    {
+        return;
+    }
+
     std::wstring search = this->data.substr(pos + 1, this->delimiter.length());
 
     if (search == this->delimiter)

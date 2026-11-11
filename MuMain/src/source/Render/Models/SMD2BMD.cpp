@@ -1,9 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
+#include <algorithm>
+#include <cstring>
 #include <ctype.h>
 #include "ZzzBMD.h"
 #include "SMD.h"
+
+namespace
+{
+int s_ModelActionCapacity[MAX_MODELS] = {};
+}
 
 struct
 {
@@ -14,9 +21,11 @@ struct
 
 void FixupSMD()
 {
-    Skeleton_t*  s  = &NodeGroup.Skeleton;
-    NodeGroup_t* ng = &NodeGroup;
-    for (int i = 0; i < ng->NodeNum; i++)
+    Skeleton_t*  s         = &NodeGroup.Skeleton;
+    NodeGroup_t* ng        = &NodeGroup;
+    const int    nodeCount = std::clamp<int>(ng->NodeNum, 0, NODE_MAX);
+    std::memset(BoneFixup, 0, sizeof(BoneFixup));
+    for (int i = 0; i < nodeCount; i++)
     {
         Node_t* n = &ng->Node[i];
 
@@ -25,8 +34,9 @@ void FixupSMD()
         Angle[1] = s->Rotation[i][1] * (180.f / Q_PI);
         Angle[2] = s->Rotation[i][2] * (180.f / Q_PI);
 
-        if (n->Parent == -1)
+        if (n->Parent < 0 || n->Parent >= i)
         {
+            n->Parent = -1;
             AngleMatrix(Angle, BoneFixup[i].m);
             AngleIMatrix(Angle, BoneFixup[i].im);
             VectorCopy(s->Position[i], BoneFixup[i].WorldOrg);
@@ -45,19 +55,29 @@ void FixupSMD()
         }
     }
 
-    TriangleGroup_t* tg = &TriangleGroup;
+    TriangleGroup_t* tg       = &TriangleGroup;
+    const int        triCount = std::clamp<int>(tg->TriangleNum, 0, TRIANGLE_MAX);
 
-    for (int i = 0; i < tg->TriangleNum; i++)
+    for (int i = 0; i < triCount; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            SMDVertex_t* v = &tg->Vertex[i][j];
-            vec3_t       p;
-            VectorSubtract(v->Position, BoneFixup[v->Node].WorldOrg, p);
-            VectorTransform(p, BoneFixup[v->Node].im, v->Position);
+            SMDVertex_t* v       = &tg->Vertex[i][j];
+            int          nodeIdx = v->Node;
+            if (nodeIdx < 0 || nodeIdx >= nodeCount)
+            {
+                nodeIdx = 0;
+                v->Node = 0;
+            }
+            if (nodeCount > 0)
+            {
+                vec3_t p;
+                VectorSubtract(v->Position, BoneFixup[nodeIdx].WorldOrg, p);
+                VectorTransform(p, BoneFixup[nodeIdx].im, v->Position);
 
-            VectorCopy(v->Normal, p);
-            VectorTransform(p, BoneFixup[v->Node].im, v->Normal);
+                VectorCopy(v->Normal, p);
+                VectorTransform(p, BoneFixup[nodeIdx].im, v->Normal);
+            }
             VectorNormalize(v->Normal);
         }
     }
@@ -74,9 +94,9 @@ void FixupSMD()
         m->TriangleNum = 0;
     }
 
-    for (int i = 0; i < tg->TriangleNum; i++)
+    for (int i = 0; i < triCount; i++)
     {
-        int MeshNum = 0;
+        int MeshNum = -1;
         for (int k = 0; k < mg->MeshNum; k++)
         {
             if (strcmp(tg->TextureName[i], mg->Texture[k].FileName) == 0)
@@ -86,15 +106,24 @@ void FixupSMD()
             }
         }
 
-        if (MeshNum == 0)
+        if (MeshNum == -1)
         {
+            if (mg->MeshNum >= MESH_MAX || mg->MeshNum >= TEXTURE_MAX)
+            {
+                continue;
+            }
             MeshNum                   = mg->MeshNum;
             mg->Mesh[MeshNum].Texture = mg->MeshNum;
-            strcpy(mg->Texture[MeshNum].FileName, tg->TextureName[i]);
+            strncpy(mg->Texture[MeshNum].FileName, tg->TextureName[i], sizeof(mg->Texture[MeshNum].FileName) - 1);
+            mg->Texture[MeshNum].FileName[sizeof(mg->Texture[MeshNum].FileName) - 1] = '\0';
             mg->MeshNum++;
         }
 
         SMDMesh_t* m = &mg->Mesh[MeshNum];
+        if (m->TriangleNum >= TRIANGLE_MAX)
+        {
+            continue;
+        }
 
         for (int j = 0; j < 3; j++)
         {
@@ -102,7 +131,7 @@ void FixupSMD()
             int          k = m->VertexNum - 1;
             if (k >= 0)
             {
-                for (k; k >= 0; k--)
+                for (; k >= 0; k--)
                 {
                     Vertex_t* v2 = &m->Vertex[k];
                     if (v->Position[0] == v2->Position[0] && v->Position[1] == v2->Position[1] &&
@@ -115,17 +144,24 @@ void FixupSMD()
             }
             if (k == -1)
             {
-                m->VertexList[m->TriangleNum][j]    = m->VertexNum;
-                m->Vertex[m->VertexNum].Node        = tg->Vertex[i][j].Node;
-                m->Vertex[m->VertexNum].Position[0] = tg->Vertex[i][j].Position[0];
-                m->Vertex[m->VertexNum].Position[1] = tg->Vertex[i][j].Position[1];
-                m->Vertex[m->VertexNum].Position[2] = tg->Vertex[i][j].Position[2];
-                m->VertexNum++;
+                if (m->VertexNum >= VERTEX_MAX)
+                {
+                    m->VertexList[m->TriangleNum][j] = 0;
+                }
+                else
+                {
+                    m->VertexList[m->TriangleNum][j]    = m->VertexNum;
+                    m->Vertex[m->VertexNum].Node        = tg->Vertex[i][j].Node;
+                    m->Vertex[m->VertexNum].Position[0] = tg->Vertex[i][j].Position[0];
+                    m->Vertex[m->VertexNum].Position[1] = tg->Vertex[i][j].Position[1];
+                    m->Vertex[m->VertexNum].Position[2] = tg->Vertex[i][j].Position[2];
+                    m->VertexNum++;
+                }
             }
             k = m->NormalNum - 1;
             if (k >= 0)
             {
-                for (k; k >= 0; k--)
+                for (; k >= 0; k--)
                 {
                     Normal_t* n = &m->Normal[k];
                     if (v->Normal[0] == n->Normal[0] && v->Normal[1] == n->Normal[1] && v->Normal[2] == n->Normal[2])
@@ -137,18 +173,25 @@ void FixupSMD()
             }
             if (k == -1)
             {
-                m->NormalList[m->TriangleNum][j]   = m->NormalNum;
-                m->Normal[m->NormalNum].Node       = tg->Vertex[i][j].Node;
-                m->Normal[m->NormalNum].Normal[0]  = tg->Vertex[i][j].Normal[0];
-                m->Normal[m->NormalNum].Normal[1]  = tg->Vertex[i][j].Normal[1];
-                m->Normal[m->NormalNum].Normal[2]  = tg->Vertex[i][j].Normal[2];
-                m->Normal[m->NormalNum].BindVertex = m->VertexList[m->TriangleNum][j];
-                m->NormalNum++;
+                if (m->NormalNum >= VERTEX_MAX)
+                {
+                    m->NormalList[m->TriangleNum][j] = 0;
+                }
+                else
+                {
+                    m->NormalList[m->TriangleNum][j]   = m->NormalNum;
+                    m->Normal[m->NormalNum].Node       = tg->Vertex[i][j].Node;
+                    m->Normal[m->NormalNum].Normal[0]  = tg->Vertex[i][j].Normal[0];
+                    m->Normal[m->NormalNum].Normal[1]  = tg->Vertex[i][j].Normal[1];
+                    m->Normal[m->NormalNum].Normal[2]  = tg->Vertex[i][j].Normal[2];
+                    m->Normal[m->NormalNum].BindVertex = m->VertexList[m->TriangleNum][j];
+                    m->NormalNum++;
+                }
             }
             k = m->TexCoordNum - 1;
             if (k >= 0)
             {
-                for (k; k >= 0; k--)
+                for (; k >= 0; k--)
                 {
                     TexCoord_t* t = &m->TexCoord[k];
                     if (v->TexCoordU == t->TexCoordU && v->TexCoordV == t->TexCoordV)
@@ -160,10 +203,17 @@ void FixupSMD()
             }
             if (k == -1)
             {
-                m->TexCoordList[m->TriangleNum][j]    = m->TexCoordNum;
-                m->TexCoord[m->TexCoordNum].TexCoordU = tg->Vertex[i][j].TexCoordU;
-                m->TexCoord[m->TexCoordNum].TexCoordV = tg->Vertex[i][j].TexCoordV;
-                m->TexCoordNum++;
+                if (m->TexCoordNum >= VERTEX_MAX)
+                {
+                    m->TexCoordList[m->TriangleNum][j] = 0;
+                }
+                else
+                {
+                    m->TexCoordList[m->TriangleNum][j]    = m->TexCoordNum;
+                    m->TexCoord[m->TexCoordNum].TexCoordU = tg->Vertex[i][j].TexCoordU;
+                    m->TexCoord[m->TexCoordNum].TexCoordV = tg->Vertex[i][j].TexCoordV;
+                    m->TexCoordNum++;
+                }
             }
         }
 
@@ -176,10 +226,21 @@ void Triangle2Strip() {}
 
 void SMD2BMDModel(int ID, int Actions)
 {
-    BMD* bmd = &Models[ID];
+    if (ID < 0 || ID >= MAX_MODELS || Actions <= 0)
+        return;
 
-    bmd->NumBones     = NodeGroup.NodeNum;
-    bmd->NumMeshs     = MeshGroup.MeshNum;
+    BMD* bmd                  = &Models[ID];
+    s_ModelActionCapacity[ID] = 0;
+
+    const int numBones = std::clamp<int>(NodeGroup.NodeNum, 0, NODE_MAX);
+    const int numMeshs = std::clamp<int>(MeshGroup.MeshNum, 0, MESH_MAX);
+    if (numBones <= 0 || numMeshs <= 0)
+    {
+        return;
+    }
+
+    bmd->NumBones     = static_cast<short>(numBones);
+    bmd->NumMeshs     = static_cast<short>(numMeshs);
     bmd->NumActions   = 0;
     bmd->NumLightMaps = 0;
 
@@ -192,9 +253,21 @@ void SMD2BMDModel(int ID, int Actions)
     if (!bmd->Bones || !bmd->Meshs || !bmd->Textures || !bmd->IndexTexture || !bmd->Actions)
     {
         wprintf(L"[SMD2BMDModel] ERROR: Memory allocation failed.\n");
-        // TODO: implement safe cleanup if needed (Release() or delete[] manually)
+        delete[] bmd->Bones;
+        bmd->Bones = nullptr;
+        delete[] bmd->Meshs;
+        bmd->Meshs = nullptr;
+        delete[] bmd->Textures;
+        bmd->Textures = nullptr;
+        delete[] bmd->IndexTexture;
+        bmd->IndexTexture = nullptr;
+        delete[] bmd->Actions;
+        bmd->Actions  = nullptr;
+        bmd->NumBones = 0;
+        bmd->NumMeshs = 0;
         return;
     }
+    s_ModelActionCapacity[ID] = Actions;
 
     for (int i = 0; i < bmd->NumMeshs; ++i)
     {
@@ -274,24 +347,45 @@ void SMD2BMDModel(int ID, int Actions)
 
 void SMD2BMDAnimation(int ID, bool LockPosition)
 {
+    if (ID < 0 || ID >= MAX_MODELS)
+        return;
+
     int  i, j;
     BMD* bmd = &Models[ID];
+    if (bmd->Bones == nullptr || bmd->Actions == nullptr || bmd->NumBones <= 0 || bmd->NumActions < 0 ||
+        bmd->NumActions >= s_ModelActionCapacity[ID])
+    {
+        return;
+    }
+
+    const int numKeys = std::clamp<int>(SkeletonGroup.TimeNum, 0, TIME_MAX);
 
     for (i = 0; i < bmd->NumBones; i++)
     {
         Bone_t* b = &bmd->Bones[i];
-
+        if (b->BoneMatrixes == nullptr)
         {
-            BoneMatrix_t* bm = &b->BoneMatrixes[bmd->NumActions];
-            bm->Position     = new vec3_t[SkeletonGroup.TimeNum];
-            bm->Rotation     = new vec3_t[SkeletonGroup.TimeNum];
-            bm->Quaternion   = new vec4_t[SkeletonGroup.TimeNum];
-            for (j = 0; j < SkeletonGroup.TimeNum; j++)
+            continue;
+        }
+
+        BoneMatrix_t* bm = &b->BoneMatrixes[bmd->NumActions];
+        if (numKeys > 0)
+        {
+            bm->Position   = new vec3_t[numKeys];
+            bm->Rotation   = new vec3_t[numKeys];
+            bm->Quaternion = new vec4_t[numKeys];
+            for (j = 0; j < numKeys; j++)
             {
                 VectorCopy(SkeletonGroup.Skeleton[j].Position[i], bm->Position[j]);
                 VectorCopy(SkeletonGroup.Skeleton[j].Rotation[i], bm->Rotation[j]);
                 AngleQuaternion(bm->Rotation[j], bm->Quaternion[j]);
             }
+        }
+        else
+        {
+            bm->Position   = nullptr;
+            bm->Rotation   = nullptr;
+            bm->Quaternion = nullptr;
         }
     }
 
@@ -299,18 +393,26 @@ void SMD2BMDAnimation(int ID, bool LockPosition)
     Action_t* a         = &bmd->Actions[bmd->NumActions];
     a->Loop             = false;
     a->LockPositions    = LockPosition;
-    a->NumAnimationKeys = SkeletonGroup.TimeNum;
+    a->NumAnimationKeys = static_cast<short>(numKeys);
     a->PlaySpeed        = 0.3f;
 
-    a->Positions = new vec3_t[a->NumAnimationKeys];
-    Bone_t* b    = &bmd->Bones[0];
-    for (i = 0; i < a->NumAnimationKeys; i++)
+    if (a->NumAnimationKeys > 0 && bmd->Bones[0].BoneMatrixes != nullptr &&
+        bmd->Bones[0].BoneMatrixes[bmd->NumActions].Position != nullptr)
     {
+        a->Positions  = new vec3_t[a->NumAnimationKeys];
+        Bone_t*       b  = &bmd->Bones[0];
         BoneMatrix_t* bm = &b->BoneMatrixes[bmd->NumActions];
-        j                = i + 1;
-        if (j > a->NumAnimationKeys - 1)
-            j = a->NumAnimationKeys - 1;
-        VectorSubtract(bm->Position[j], bm->Position[i], a->Positions[i]);
+        for (i = 0; i < a->NumAnimationKeys; i++)
+        {
+            j = i + 1;
+            if (j > a->NumAnimationKeys - 1)
+                j = a->NumAnimationKeys - 1;
+            VectorSubtract(bm->Position[j], bm->Position[i], a->Positions[i]);
+        }
+    }
+    else
+    {
+        a->Positions = nullptr;
     }
 
     bmd->NumActions++;

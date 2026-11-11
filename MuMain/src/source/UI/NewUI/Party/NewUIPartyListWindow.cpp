@@ -13,6 +13,8 @@
 #include "Engine/Object/ZzzInterface.h"
 #include "Camera/CameraProjection.h"
 
+#include <algorithm>
+
 using namespace SEASON3B;
 
 CNewUIPartyListWindow::CNewUIPartyListWindow()
@@ -64,10 +66,9 @@ bool CNewUIPartyListWindow::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIPartyListWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -92,7 +93,7 @@ void CNewUIPartyListWindow::SetPos(int x)
 
 int CNewUIPartyListWindow::GetSelectedCharacter()
 {
-    if (m_iSelectedCharacter == -1)
+    if (m_iSelectedCharacter < 0 || m_iSelectedCharacter >= MAX_PARTYS)
         return -1;
 
     return Party[m_iSelectedCharacter].index;
@@ -100,7 +101,8 @@ int CNewUIPartyListWindow::GetSelectedCharacter()
 
 void CNewUIPartyListWindow::SetListBGColor()
 {
-    for (int i = 0; i < PartyNumber; i++)
+    const int partyCount = std::clamp(PartyNumber, 0, MAX_PARTYS);
+    for (int i = 0; i < partyCount; i++)
     {
         m_iPartyListBGColor[i] = PARTY_LIST_BGCOLOR_DEFAULT;
 
@@ -120,15 +122,19 @@ bool CNewUIPartyListWindow::BtnProcess()
 {
     m_iSelectedCharacter = -1;
 
-    for (int i = 0; i < PartyNumber; i++)
+    const int partyCount = std::clamp(PartyNumber, 0, MAX_PARTYS);
+    for (int i = 0; i < partyCount; i++)
     {
         int iVal = i * m_iVal;
 
-        if (!wcscmp(Party[0].Name, Hero->ID) || !wcscmp(Party[i].Name, Hero->ID))
+        if (Hero != nullptr && (!wcscmp(Party[0].Name, Hero->ID) || !wcscmp(Party[i].Name, Hero->ID)))
         {
             if (m_BtnPartyExit[i].UpdateMouseEvent())
             {
-                g_pPartyInfoWindow->LeaveParty(i);
+                if (g_pPartyInfoWindow != nullptr)
+                {
+                    g_pPartyInfoWindow->LeaveParty(i);
+                }
                 return true;
             }
         }
@@ -137,10 +143,10 @@ bool CNewUIPartyListWindow::BtnProcess()
         {
             m_iSelectedCharacter = i;
 
-            if (SelectedCharacter == -1)
+            if (SelectedCharacter == -1 && Party[i].index >= 0 && Party[i].index < MAX_CHARACTERS_CLIENT)
             {
                 CHARACTER* c = &CharactersClient[Party[i].index];
-                if (c && c != Hero)
+                if (c != Hero)
                 {
                     UI::Chat::CreateChat(c->ID, L"", c);
                 }
@@ -164,9 +170,10 @@ bool CNewUIPartyListWindow::UpdateMouseEvent()
     if (true == BtnProcess())
         return false;
 
-    if (PartyNumber > 0)
+    const int partyCount = std::clamp(PartyNumber, 0, MAX_PARTYS);
+    if (partyCount > 0)
     {
-        int iHeight = (PARTY_LIST_WINDOW_HEIGHT * PartyNumber) + (4 * (PartyNumber - 1));
+        int iHeight = (PARTY_LIST_WINDOW_HEIGHT * partyCount) + (4 * (partyCount - 1));
         if (CheckMouseIn(m_Pos.x, m_Pos.y, PARTY_LIST_WINDOW_WIDTH, iHeight))
         {
             return false;
@@ -191,7 +198,8 @@ bool CNewUIPartyListWindow::Update()
 
     m_bActive = true;
 
-    for (int i = 0; i < PartyNumber; i++)
+    const int partyCount = std::clamp(PartyNumber, 0, MAX_PARTYS);
+    for (int i = 0; i < partyCount; i++)
     {
         Party[i].index = -2;
     }
@@ -211,7 +219,8 @@ bool CNewUIPartyListWindow::Render()
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
 
-    for (int i = 0; i < PartyNumber; i++)
+    const int partyCount = std::clamp(PartyNumber, 0, MAX_PARTYS);
+    for (int i = 0; i < partyCount; i++)
     {
         int iVal = i * m_iVal;
 
@@ -285,7 +294,7 @@ bool CNewUIPartyListWindow::Render()
         float fLife   = ((float)iStepHP / (float)10) * (float)PARTY_LIST_HP_BAR_WIDTH;
         RenderImage(IMAGE_PARTY_LIST_HPBAR, m_Pos.x + 4, m_Pos.y + 16 + iVal, fLife, 3);
 
-        if (!wcscmp(Party[0].Name, Hero->ID) || !wcscmp(Party[i].Name, Hero->ID))
+        if (Hero != nullptr && (!wcscmp(Party[0].Name, Hero->ID) || !wcscmp(Party[i].Name, Hero->ID)))
         {
             m_BtnPartyExit[i].Render();
         }
@@ -304,11 +313,12 @@ void SEASON3B::CNewUIPartyListWindow::RenderPartyHPOnHead()
     float   Width = 38.f;
     wchar_t Text[100];
 
-    for (int j = 0; j < PartyNumber; ++j)
+    const int partyCount = std::clamp(PartyNumber, 0, MAX_PARTYS);
+    for (int j = 0; j < partyCount; ++j)
     {
         PARTY_t* p = &Party[j];
 
-        if (p->index <= -1)
+        if (p->index < 0 || p->index >= MAX_CHARACTERS_CLIENT)
             continue;
 
         CHARACTER* c = &CharactersClient[p->index];
@@ -366,6 +376,12 @@ void CNewUIPartyListWindow::ClosingProcess() {}
 
 bool CNewUIPartyListWindow::SelectCharacterInPartyList(PARTY_t* pMember)
 {
+    if (pMember == nullptr || Hero == nullptr || CharacterAttribute == nullptr || pMember->index < 0 ||
+        pMember->index >= MAX_CHARACTERS_CLIENT)
+    {
+        return false;
+    }
+
     auto HeroClass = gCharacterManager.GetBaseClass(Hero->Class);
 
     if (HeroClass == CLASS_ELF || HeroClass == CLASS_WIZARD || HeroClass == CLASS_SUMMONER)

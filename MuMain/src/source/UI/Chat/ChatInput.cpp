@@ -231,7 +231,10 @@ void CheckChatText(wchar_t* Text)
                     PlayBuffer(SOUND_XMAS_TURN);
                 }
 
-                g_XmasEvent->CreateXmasEventEffect(c, o, i);
+                if (g_XmasEvent != nullptr)
+                {
+                    g_XmasEvent->CreateXmasEventEffect(c, o, i);
+                }
             }
 
             o->m_iAnimation = 0;

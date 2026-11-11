@@ -26,9 +26,20 @@ vec3_t g_vParticleWindVelo = {0.0f, 0.0f, 0.0f};
 
 void HandPosition(PARTICLE* o)
 {
+    if (o == nullptr)
+    {
+        return;
+    }
+
     OBJECT* Owner = o->Target;
-    BMD*    b     = &Models[Owner->Type];
-    vec3_t  p;
+    if (Owner == nullptr || Owner->Type < 0 || Owner->Type >= MAX_MODELS)
+    {
+        o->Live = false;
+        return;
+    }
+
+    BMD*   b = &Models[Owner->Type];
+    vec3_t p;
     switch (o->Type)
     {
         case BITMAP_FLARE_RED:
@@ -40,7 +51,42 @@ void HandPosition(PARTICLE* o)
             break;
     }
     VectorCopy(Owner->Position, b->BodyOrigin);
-    b->TransformPosition(Owner->BoneTransform[Hero->Weapon[o->SubType % 2].LinkBone], p, o->Position, true);
+
+    const CHARACTER* ownerChar = nullptr;
+    if (Hero != nullptr && &Hero->Object == Owner)
+    {
+        ownerChar = Hero;
+    }
+    else if (&CharacterView.Object == Owner)
+    {
+        ownerChar = &CharacterView;
+    }
+    else if (CharactersClient != nullptr)
+    {
+        for (int i = 0; i < MAX_CHARACTERS_CLIENT; ++i)
+        {
+            if (&CharactersClient[i].Object == Owner)
+            {
+                ownerChar = &CharactersClient[i];
+                break;
+            }
+        }
+    }
+    if (ownerChar == nullptr)
+    {
+        ownerChar = Hero;
+    }
+
+    const int handIndex = ((o->SubType % 2) + 2) % 2;
+    const int linkBone  = (ownerChar != nullptr) ? static_cast<int>(ownerChar->Weapon[handIndex].LinkBone) : -1;
+    if (Owner->BoneTransform != nullptr && linkBone >= 0 && linkBone < b->NumBones)
+    {
+        b->TransformPosition(Owner->BoneTransform[linkBone], p, o->Position, true);
+    }
+    else
+    {
+        VectorCopy(Owner->Position, o->Position);
+    }
 }
 
 int CreateParticleFpsChecked(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int SubType, float Scale,
@@ -335,7 +381,7 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                         o->Scale    = (float)(rand() % 5 + 50) * 0.016f;
                         o->Rotation = (float)(rand() % 360);
                         o->Gravity  = (rand() % 5 + 10) * 0.01f;
-                        VectorCopy(o->Target->Position, o->StartPosition);
+                        VectorCopy(o->Target != nullptr ? o->Target->Position : o->Position, o->StartPosition);
                     }
                     else if (o->SubType == 2)
                     {
@@ -352,7 +398,7 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                         o->Scale    = (float)(rand() % 30 + 20) * 0.02f;
                         o->Rotation = (float)(rand() % 360);
                         o->Gravity  = (rand() % 15 + 15) * 0.02f;
-                        VectorCopy(o->Target->Position, o->StartPosition);
+                        VectorCopy(o->Target != nullptr ? o->Target->Position : o->Position, o->StartPosition);
                     }
                     else if (o->SubType == 4 || o->SubType == 9)
                     {
@@ -406,7 +452,7 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                         o->Alpha    = 0;
                         VectorCopy(Light, o->TurningForce);
                         Vector(0, 0, 0, o->Light);
-                        VectorCopy(o->Target->Position, o->StartPosition);
+                        VectorCopy(o->Target != nullptr ? o->Target->Position : o->Position, o->StartPosition);
                     }
                     break;
                 case BITMAP_LEAF_TOTEMGOLEM:
@@ -682,7 +728,7 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                             o->LifeTime = 5;
                             o->Scale += (float)(rand() % 32 + 32) * 0.01f * FPS_ANIMATION_FACTOR;
                             o->Gravity = 10.f;
-                            VectorCopy(o->Target->Position, o->StartPosition);
+                            VectorCopy(o->Target != nullptr ? o->Target->Position : o->Position, o->StartPosition);
 
                             Luminosity = (float)sinf(WorldTime * 0.002f) * 0.3f + 0.7f;
                             Vector(Luminosity, Luminosity * 0.5f, Luminosity * 0.5f, o->Light);
@@ -869,7 +915,7 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                         o->Scale += (float)(rand() % 32 + 48) * 0.008f * FPS_ANIMATION_FACTOR;
                         o->Angle[0] = (float)(rand() % 360);
                         o->Rotation = (float)((int)WorldTime % 360);
-                        VectorCopy(o->Target->Position, o->StartPosition);
+                        VectorCopy(o->Target != nullptr ? o->Target->Position : o->Position, o->StartPosition);
                     }
                     else if (o->SubType == 4)
                     {
@@ -881,9 +927,20 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                     else if (o->SubType == 5)
                     {
                         o->TexType = BITMAP_ADV_SMOKE;
+                        if (o->Target == nullptr || o->Target->Type < 0 || o->Target->Type >= MAX_MODELS ||
+                            o->Target->BoneTransform == nullptr)
+                        {
+                            o->Live = false;
+                            break;
+                        }
 
                         BMD* pModel    = &Models[o->Target->Type];
                         int  iNumBones = pModel->NumBones;
+                        if (iNumBones <= 0)
+                        {
+                            o->Live = false;
+                            break;
+                        }
 
                         vec3_t vRelative, p1;
                         Vector(0.0f, 0.0f, 0.0f, vRelative);
@@ -1041,7 +1098,7 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                         o->Alpha    = 0;
                         VectorCopy(Light, o->TurningForce);
                         Vector(0, 0, 0, o->Light);
-                        VectorCopy(o->Target->Position, o->StartPosition);
+                        VectorCopy(o->Target != nullptr ? o->Target->Position : o->Position, o->StartPosition);
                     }
                     else if (o->SubType == 7)
                     {
@@ -2102,7 +2159,7 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                     {
                         if (o->SubType == 5)
                         {
-                            VectorCopy(o->Target->Position, o->StartPosition);
+                            VectorCopy(o->Target != nullptr ? o->Target->Position : o->Position, o->StartPosition);
                             o->Scale    = Scale;
                             o->LifeTime = rand() % 4 + 12;
                             o->Gravity  = 0;
@@ -2132,9 +2189,16 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                             o->LifeTime = 15;
                             Vector(0.f, 0.f, 0.f, o->Angle);
                             VectorCopy(o->Position, o->StartPosition);
-                            o->Velocity[0] = (o->Target->Position[0] - o->Position[0]) / 10.f;
-                            o->Velocity[1] = (o->Target->Position[1] - o->Position[1]) / 10.f;
-                            o->Velocity[2] = (o->Target->Position[2] - o->Position[2]) / 10.f;
+                            if (o->Target != nullptr)
+                            {
+                                o->Velocity[0] = (o->Target->Position[0] - o->Position[0]) / 10.f;
+                                o->Velocity[1] = (o->Target->Position[1] - o->Position[1]) / 10.f;
+                                o->Velocity[2] = (o->Target->Position[2] - o->Position[2]) / 10.f;
+                            }
+                            else
+                            {
+                                o->Live = false;
+                            }
                             break;
                         case 3:
                             o->LifeTime = 5;
@@ -2144,9 +2208,16 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                             o->Alpha    = 0.1f;
                             Vector(0.f, 0.f, 0.f, o->Angle);
                             VectorCopy(o->Position, o->StartPosition);
-                            o->Velocity[0] = (o->Target->Position[0] - o->Position[0]) / 6.f;
-                            o->Velocity[1] = (o->Target->Position[1] - o->Position[1]) / 6.f;
-                            o->Velocity[2] = (o->Target->Position[2] - o->Position[2]) / 6.f;
+                            if (o->Target != nullptr)
+                            {
+                                o->Velocity[0] = (o->Target->Position[0] - o->Position[0]) / 6.f;
+                                o->Velocity[1] = (o->Target->Position[1] - o->Position[1]) / 6.f;
+                                o->Velocity[2] = (o->Target->Position[2] - o->Position[2]) / 6.f;
+                            }
+                            else
+                            {
+                                o->Live = false;
+                            }
                             break;
                         case 5:
                             o->LifeTime = 10;
@@ -2167,9 +2238,9 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                             break;
                         case 7:
                             o->Alpha = 1.0f;
+                            o->Position[0] += (-30.0f + (float)(rand() % 60)) * FPS_ANIMATION_FACTOR;
                             o->Position[1] += (-30.0f + (float)(rand() % 60)) * FPS_ANIMATION_FACTOR;
                             o->Position[2] += (-30.0f + (float)(rand() % 60)) * FPS_ANIMATION_FACTOR;
-                            o->Position[3] += (-30.0f + (float)(rand() % 60)) * FPS_ANIMATION_FACTOR;
                             o->LifeTime = 30;
                             o->Gravity  = 1.3f;
                             o->Scale    = (float)(rand() % 5) / 10.0f + 1.0f;
@@ -2363,9 +2434,16 @@ int CreateParticle(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Su
                             o->LifeTime = 20;
                             Vector(0.f, 0.f, 0.f, o->Angle);
                             VectorCopy(o->Position, o->StartPosition);
-                            o->Velocity[0] = (o->Target->Position[0] - o->Position[0]) / 20.f;
-                            o->Velocity[1] = (o->Target->Position[1] - o->Position[1]) / 20.f;
-                            o->Velocity[2] = (o->Target->Position[2] - o->Position[2]) / 20.f;
+                            if (o->Target != nullptr)
+                            {
+                                o->Velocity[0] = (o->Target->Position[0] - o->Position[0]) / 20.f;
+                                o->Velocity[1] = (o->Target->Position[1] - o->Position[1]) / 20.f;
+                                o->Velocity[2] = (o->Target->Position[2] - o->Position[2]) / 20.f;
+                            }
+                            else
+                            {
+                                o->Live = false;
+                            }
                             //Vector(1.f, 0.f, 0.f, o->Light);
                             break;
                         case 27: {
@@ -3917,14 +3995,15 @@ void MoveParticles()
 
                         if (o->LifeTime < 5)
                         {
-                            o->Light[0] *= 0.98f + (0.02f * 1 - FPS_ANIMATION_FACTOR);
-                            o->Light[1] *= 0.98f + (0.02f * 1 - FPS_ANIMATION_FACTOR);
-                            o->Light[2] *= 0.98f + (0.02f * 1 - FPS_ANIMATION_FACTOR);
+                            const float decay = powf(0.98f, FPS_ANIMATION_FACTOR);
+                            o->Light[0] *= decay;
+                            o->Light[1] *= decay;
+                            o->Light[2] *= decay;
                         }
                     }
                     else if (o->SubType == 1)
                     {
-                        o->Light[0] *= 0.99f + (0.01f * 1 - FPS_ANIMATION_FACTOR);
+                        o->Light[0] *= powf(0.99f, FPS_ANIMATION_FACTOR);
                         o->Light[1] *= powf(1.0f / (1.1f), FPS_ANIMATION_FACTOR);
                         o->Light[2] *= powf(1.0f / (1.1f), FPS_ANIMATION_FACTOR);
                         o->Scale += 1.5f * FPS_ANIMATION_FACTOR;
@@ -4478,8 +4557,15 @@ void MoveParticles()
                         VectorAdd(o->Position, vMoveVec, o->Position);
 
                         VectorSubtract(o->Position, o->StartPosition, o->Position);
-                        VectorCopy(o->Target->Position, o->StartPosition);
-                        VectorAdd(o->Position, o->Target->Position, o->Position);
+                        if (o->Target != nullptr)
+                        {
+                            VectorCopy(o->Target->Position, o->StartPosition);
+                            VectorAdd(o->Position, o->Target->Position, o->Position);
+                        }
+                        else
+                        {
+                            VectorAdd(o->Position, o->StartPosition, o->Position);
+                        }
 
                         o->Rotation += (5.0f) * FPS_ANIMATION_FACTOR;
                     }
@@ -4544,6 +4630,11 @@ void MoveParticles()
                         }
                         break;
                         case 9: {
+                            if (o->Target == nullptr)
+                            {
+                                o->Live = false;
+                                break;
+                            }
                             o->Gravity += (0.004f) * FPS_ANIMATION_FACTOR;
                             Luminosity     = (float)(o->LifeTime) / 24.f;
                             o->Position[0] = o->Target->Position[0] + o->StartPosition[0];
@@ -4777,6 +4868,11 @@ void MoveParticles()
                             break;
 
                         case 4:
+                            if (o->Target == nullptr)
+                            {
+                                o->Live = false;
+                                break;
+                            }
                             o->Position[0] += (o->Target->Position[0] - o->StartPosition[0]) * FPS_ANIMATION_FACTOR;
                             o->Position[1] += (o->Target->Position[1] - o->StartPosition[1]) * FPS_ANIMATION_FACTOR;
                             o->Position[2] +=
@@ -4904,19 +5000,40 @@ void MoveParticles()
                     // ChainLighting
                     else if (o->SubType == 3 || o->SubType == 4 || o->SubType == 5)
                     {
+                        if (o->Target == nullptr || !o->Target->Live || o->Target->Type < 0 ||
+                            o->Target->Type >= MAX_MODELS)
+                        {
+                            o->Live = false;
+                            break;
+                        }
+
                         BMD*   pModel = &Models[o->Target->Type];
                         vec3_t vRelativePos, vPos;
                         Vector(0.f, 0.f, 0.f, vRelativePos);
 
                         if (o->SubType == 3)
                         {
-                            pModel->TransformPosition(o->Target->BoneTransform[37], vRelativePos, vPos, true);
-                            VectorCopy(vPos, o->Position);
+                            if (o->Target->BoneTransform != nullptr && pModel->NumBones > 37)
+                            {
+                                pModel->TransformPosition(o->Target->BoneTransform[37], vRelativePos, vPos, true);
+                                VectorCopy(vPos, o->Position);
+                            }
+                            else
+                            {
+                                VectorCopy(o->Target->Position, o->Position);
+                            }
                         }
                         else if (o->SubType == 4)
                         {
-                            pModel->TransformPosition(o->Target->BoneTransform[28], vRelativePos, vPos, true);
-                            VectorCopy(vPos, o->Position);
+                            if (o->Target->BoneTransform != nullptr && pModel->NumBones > 28)
+                            {
+                                pModel->TransformPosition(o->Target->BoneTransform[28], vRelativePos, vPos, true);
+                                VectorCopy(vPos, o->Position);
+                            }
+                            else
+                            {
+                                VectorCopy(o->Target->Position, o->Position);
+                            }
                         }
                         else if (o->SubType == 5)
                         {
@@ -5026,7 +5143,7 @@ void MoveParticles()
                             o->Light[2] *= powf(1.0f / (1.1f), FPS_ANIMATION_FACTOR);
                         }
                     }
-                    if (o->SubType == 0)
+                    if (o->SubType == 0 && o->Target != nullptr)
                     {
                         if ((o->Target->CurrentAction >= PLAYER_WALK_MALE &&
                              o->Target->CurrentAction <= PLAYER_RUN_RIDE_WEAPON) ||
@@ -5119,7 +5236,10 @@ void MoveParticles()
                         }
                         o->Position[2] += o->Gravity * FPS_ANIMATION_FACTOR;
                         VectorSubtract(o->Position, o->StartPosition, o->Position);
-                        VectorCopy(o->Target->Position, o->StartPosition);
+                        if (o->Target != nullptr)
+                        {
+                            VectorCopy(o->Target->Position, o->StartPosition);
+                        }
                         VectorAdd(o->Position, o->StartPosition, o->Position);
                     }
                     else if (o->SubType == 7)
@@ -5166,8 +5286,11 @@ void MoveParticles()
                         o->Scale -= (rand() % 5 + 15) * 0.0016f * FPS_ANIMATION_FACTOR;
                         o->Position[2] += o->Gravity * 10.f * FPS_ANIMATION_FACTOR;
 
-                        if (o->Scale < 0 || !o->Target->Live)
+                        if (o->Scale < 0 || o->Target == nullptr || !o->Target->Live)
+                        {
                             o->Live = false;
+                            break;
+                        }
                         VectorSubtract(o->Position, o->StartPosition, o->Position);
                         VectorCopy(o->Target->Position, o->StartPosition);
                         VectorAdd(o->Position, o->StartPosition, o->Position);
@@ -5236,8 +5359,14 @@ void MoveParticles()
                                 o->Position[1] += (o->Gravity) * FPS_ANIMATION_FACTOR;
                                 o->Scale -= 0.08f * FPS_ANIMATION_FACTOR;
                             }
-                            else
+                            else if (o->Target != nullptr)
+                            {
                                 VectorAdd(o->Target->Position, o->StartPosition, o->Position);
+                            }
+                            else
+                            {
+                                o->Live = false;
+                            }
                             o->Rotation += (0.01f) * FPS_ANIMATION_FACTOR;
                             break;
                         case 37:
@@ -7348,10 +7477,11 @@ void MoveParticles()
                     if (o->SubType == 1)
                     {
                         float  Matrix[3][4];
-                        vec3_t p;
+                        vec3_t p, vRotated;
                         Vector(0.f, -150.f, 0.f, p);
                         AngleMatrix(o->Angle, Matrix);
-                        VectorRotate(o->Position, Matrix, o->Position);
+                        VectorRotate(p, Matrix, vRotated);
+                        VectorAddScaled(o->Position, vRotated, o->Position, 0.1f * FPS_ANIMATION_FACTOR);
                     }
                     else
                     {
@@ -7364,10 +7494,17 @@ void MoveParticles()
                 }
                 break;
                 case BITMAP_ORORA: {
+                    if (o->Target == nullptr || !o->Target->Live || o->Target->Type < 0 ||
+                        o->Target->Type >= MAX_MODELS)
+                    {
+                        o->Live = false;
+                        break;
+                    }
                     float  fScale = 0.0f, fLight = 1.0f;
                     BMD*   pModel = &Models[o->Target->Type];
                     vec3_t vRelativePos, vPos;
                     Vector(0.f, 0.f, 0.f, vRelativePos);
+                    VectorCopy(o->Position, vPos);
 
                     switch (o->SubType)
                     {
@@ -7750,6 +7887,11 @@ void MoveParticles()
                     }
                     else if (o->SubType == 18)
                     {
+                        if (o->Target == nullptr)
+                        {
+                            o->Live = false;
+                            break;
+                        }
                         Luminosity = 1.0f;
                         if (o->LifeTime > 90)
                         {
@@ -7801,8 +7943,11 @@ void MoveParticles()
 
                         if (o->LifeTime <= 0)
                         {
-                            o->Target->HiddenMesh = 0;
-                            o->Live               = false;
+                            if (o->Target != nullptr)
+                            {
+                                o->Target->HiddenMesh = 0;
+                            }
+                            o->Live = false;
                         }
                     }
                     else if (o->SubType == 20)
@@ -7897,6 +8042,11 @@ void MoveParticles()
                     }
                     else
                     {
+                        if (o->Target == nullptr)
+                        {
+                            o->Live = false;
+                            break;
+                        }
                         Luminosity = 0.6f;
                         if (o->Target->Visible == true)
                         {
@@ -8032,6 +8182,11 @@ void MoveParticles()
                     }
                     else if (3 == o->SubType)
                     {
+                        if (o->Target == nullptr || !o->Target->Live)
+                        {
+                            o->Live = false;
+                            break;
+                        }
                         VectorScale(o->Light, 0.9f, o->Light);
                         o->Scale *= powf(0.85f, FPS_ANIMATION_FACTOR);
                         o->Gravity += (5.f) * FPS_ANIMATION_FACTOR;
@@ -8044,14 +8199,21 @@ void MoveParticles()
                     }
                     else if (o->SubType == 4)
                     {
-                        if (o->Target != NULL && o->Target->Type == MODEL_PLAYER && o->Target->Kind == KIND_PLAYER)
+                        if (o->Target != NULL && o->Target->Type == MODEL_PLAYER && o->Target->Kind == KIND_PLAYER &&
+                            o->Target->BoneTransform != nullptr)
                         {
-                            OBJECT* Owner = o->Target;
-                            BMD*    b     = &Models[Owner->Type];
-
-                            b->TransformPosition(Owner->BoneTransform[(int)o->Rotation], o->Angle, o->Position, false);
-
-                            VectorAdd(o->Position, Owner->Position, o->Position);
+                            OBJECT*   Owner   = o->Target;
+                            BMD*      b       = &Models[Owner->Type];
+                            const int boneIdx = static_cast<int>(o->Rotation);
+                            if (boneIdx >= 0 && boneIdx < b->NumBones)
+                            {
+                                b->TransformPosition(Owner->BoneTransform[boneIdx], o->Angle, o->Position, false);
+                                VectorAdd(o->Position, Owner->Position, o->Position);
+                            }
+                            else
+                            {
+                                o->Live = false;
+                            }
                         }
                         else
                         {
@@ -8147,7 +8309,7 @@ void MoveParticles()
                     }
                     break;
                 case BITMAP_POUNDING_BALL:
-                    if (o->SubType == 0 && o->SubType == 1)
+                    if (o->SubType == 0 || o->SubType == 1)
                     {
                         o->Gravity += (0.004f) * FPS_ANIMATION_FACTOR;
                         o->Scale -= FPS_ANIMATION_FACTOR * 0.02f;
@@ -8164,6 +8326,11 @@ void MoveParticles()
                     }
                     else if (o->SubType == 2)
                     {
+                        if (o->Target == nullptr || !o->Target->Live)
+                        {
+                            o->Live = false;
+                            break;
+                        }
                         VectorCopy(o->Target->Angle, o->Angle);
 
                         o->Scale -= FPS_ANIMATION_FACTOR * 0.06f;
@@ -8294,16 +8461,19 @@ void MoveParticles()
                     if (o->SubType == 8)
                     {
                         vec3_t vPos, vRelativePos;
-                        if (o->Target != NULL)
+                        if (o->Target != nullptr && o->Target->Type >= 0 && o->Target->Type < MAX_MODELS &&
+                            o->Target->BoneTransform != nullptr)
                         {
                             BMD* pModel = &Models[o->Target->Type];
-                            VectorCopy(o->Target->Position, pModel->BodyOrigin);
-                            Vector(6.f, 6.f, 0.f, vRelativePos);
-                            pModel->TransformPosition(o->Target->BoneTransform[20], vRelativePos, vPos, true);
+                            if (pModel->NumBones > 20)
+                            {
+                                VectorCopy(o->Target->Position, pModel->BodyOrigin);
+                                Vector(6.f, 6.f, 0.f, vRelativePos);
+                                pModel->TransformPosition(o->Target->BoneTransform[20], vRelativePos, vPos, true);
+                                o->Position[0] = vPos[0];
+                                o->Position[1] = vPos[1];
+                            }
                         }
-
-                        o->Position[0] = vPos[0];
-                        o->Position[1] = vPos[1];
                     }
 
                     if (o->SubType == 7)
@@ -8906,8 +9076,12 @@ namespace
 void RenderParticle(PARTICLE* o, int particleIndex)
 {
     BITMAP_t* pBitmap = Bitmaps.GetTexture(o->TexType);
-    float     Width   = pBitmap->Width * o->Scale;
-    float     Height  = pBitmap->Height * o->Scale;
+    if (pBitmap == nullptr)
+    {
+        return;
+    }
+    float Width  = pBitmap->Width * o->Scale;
+    float Height = pBitmap->Height * o->Scale;
     if (pBitmap->Components == 3)
     {
         EnableAlphaBlend();
@@ -9115,9 +9289,8 @@ void RenderParticle(PARTICLE* o, int particleIndex)
         case BITMAP_FLARE:
             if (o->SubType == 11)
             {
-                BITMAP_t* pBitmap = Bitmaps.GetTexture(o->TexType);
-                Width             = pBitmap->Width * 0.5f * o->Scale;
-                Height            = pBitmap->Height * 0.4f;
+                Width  = pBitmap->Width * 0.5f * o->Scale;
+                Height = pBitmap->Height * 0.4f;
 
                 RenderSprite(o->TexType, o->Position, Width, Height, o->Light, o->Rotation);
             }
@@ -9138,9 +9311,8 @@ void RenderParticle(PARTICLE* o, int particleIndex)
             }
             else if (o->SubType == 1)
             {
-                BITMAP_t* pBitmap = Bitmaps.GetTexture(o->TexType);
-                Width             = pBitmap->Width * 0.2f * o->Scale;
-                Height            = pBitmap->Height * 0.3f;
+                Width  = pBitmap->Width * 0.2f * o->Scale;
+                Height = pBitmap->Height * 0.3f;
                 RenderSprite(o->TexType, o->Position, Width, Height, o->Light, o->Rotation);
             }
             break;
@@ -9243,8 +9415,9 @@ void RenderParticle(PARTICLE* o, int particleIndex)
         }
         break;
         case BITMAP_DAMAGE1: {
-            VectorScale(o->Light, 2.0f, o->Light);
-            RenderSprite(o->TexType, o->Position, Width, Height, o->Light, o->Rotation);
+            vec3_t vLight;
+            VectorScale(o->Light, 2.0f, vLight);
+            RenderSprite(o->TexType, o->Position, Width, Height, vLight, o->Rotation);
         }
         break;
         case BITMAP_SWORD_EFFECT_MONO: {

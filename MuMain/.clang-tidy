@@ -31,7 +31,7 @@
 #       Flagging them asks us to rename Microsoft's headers.
 #
 #   -bugprone-narrowing-conversions / -implicit-integer-sign-change /
-#       -unsigned-interger-overflow
+#       -unsigned-integer-overflow
 #       332 narrowing findings in a single legacy file. The codebase is built
 #       on C-style narrowing casts; each is individually real but collectively
 #       they are the background radiation of the port and drown the signal.
@@ -112,7 +112,7 @@ Checks: >
   -bugprone-reserved-identifier,
   -bugprone-narrowing-conversions,
   -bugprone-implicit-integer-sign-change,
-  -bugprone-unsigned-interger-overflow,
+  -bugprone-unsigned-integer-overflow,
   -bugprone-easily-swappable-parameters,
   -bugprone-branch-clone,
   -bugprone-assignment-in-if-condition,

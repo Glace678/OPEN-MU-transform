@@ -440,8 +440,9 @@ void CGlobalBitmap::UnloadImage(GLuint uiBitmapIndex, bool bForce)
     {
         BITMAP_t* pBitmap = mi->second.get();
 
-        if (--pBitmap->Ref == 0 || bForce)
+        if (bForce || pBitmap->Ref <= 1 || --pBitmap->Ref == 0)
         {
+            pBitmap->Ref = 0;
             // DXP-12: RHI::DestroyTexture invalidates BindState's texture cache internally
             // (matches BindState.h's documented contract -- see RHI_GL.cpp's DestroyTexture).
             RHI::DestroyTexture(RHI::TextureHandle{pBitmap->TextureNumber});
@@ -473,6 +474,10 @@ void CGlobalBitmap::UnloadAllImages()
     for (auto& pair : m_mapBitmap)
     {
         BITMAP_t* pBitmap = pair.second.get();
+        if (pBitmap == nullptr)
+        {
+            continue;
+        }
 
 #ifdef _DEBUG
         if (pBitmap->Ref > 1)
@@ -480,6 +485,11 @@ void CGlobalBitmap::UnloadAllImages()
             g_ErrorReport.Write(L"Bitmap %ls(RefCount= %d)\r\n", pBitmap->FileName, pBitmap->Ref);
         }
 #endif  // _DEBUG
+
+        if (pBitmap->TextureNumber != 0)
+        {
+            RHI::DestroyTexture(RHI::TextureHandle{pBitmap->TextureNumber});
+        }
     }
 
     m_mapBitmap.clear();
@@ -731,7 +741,7 @@ bool CGlobalBitmap::OpenTga(GLuint uiBitmapIndex, const std::wstring& filename, 
     std::vector<unsigned char> pakBuffer((std::istreambuf_iterator<char>(input)), std::istreambuf_iterator<char>());
     input.close();
 
-    if (pakBuffer.size() < 18)  // minimal TGA header length check for OZT payload
+    if (pakBuffer.size() < 22)  // full 22-byte OZT header length check before reading nx/ny/bit
     {
         return false;
     }

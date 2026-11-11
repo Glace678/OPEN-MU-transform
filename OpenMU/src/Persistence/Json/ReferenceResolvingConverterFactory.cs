@@ -14,9 +14,9 @@ using System.Text.Json.Serialization;
 public class ReferenceResolvingConverterFactory : JsonConverterFactory
 {
     /// <summary>
-    /// A cache for previously created converters.
+    /// A cache for previously created converters on this factory instance.
     /// </summary>
-    private static readonly ConcurrentDictionary<Type, JsonConverter> ConvertersCache = new();
+    private readonly ConcurrentDictionary<Type, JsonConverter> _convertersCache = new();
 
     /// <summary>
     /// Gets or sets the types which are ignored during deserialization.
@@ -33,7 +33,7 @@ public class ReferenceResolvingConverterFactory : JsonConverterFactory
     /// <inheritdoc />
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-        return ConvertersCache.GetOrAdd(typeToConvert, type =>
+        return this._convertersCache.GetOrAdd(typeToConvert, type =>
         {
             var converterType = typeof(ReferenceResolvingConverter<>).MakeGenericType(typeToConvert);
             return (JsonConverter)Activator.CreateInstance(converterType, new object[] { this.IgnoredTypes })!;

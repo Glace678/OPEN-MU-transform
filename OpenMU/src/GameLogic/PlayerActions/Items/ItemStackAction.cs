@@ -23,57 +23,60 @@ public class ItemStackAction
     public async ValueTask StackItemsAsync(Player player, byte stackId, byte stackSize)
     {
         using var loggerScope = player.Logger.BeginScope(this.GetType());
-        if (!this.IsCorrectNpcOpened(player))
+        await player.RunPersistenceExclusiveAsync(async () =>
         {
-            return;
-        }
-
-        if (stackSize is not (10 or 20 or 30))
-        {
-            player.Logger.LogWarning("Invalid jewel stack size {stackSize}. Player: [{characterName}]", stackSize, player.SelectedCharacter?.Name);
-            return;
-        }
-
-        var mix = this.GetJewelMix(stackId, player);
-        if (mix is null)
-        {
-            return;
-        }
-
-        if (player.Inventory is null)
-        {
-            return;
-        }
-
-        var jewels = player.Inventory.Items.Where(item => item.Definition == mix.SingleJewel).Take(stackSize).ToList();
-        if (jewels.Count == stackSize)
-        {
-            var fee = (int)SoloBalance.ScalePrice(GetCombineFee(stackSize), player.GameContext.Configuration);
-            if (!player.TryRemoveMoney(fee))
+            if (!this.IsCorrectNpcOpened(player))
             {
-                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NotEnoughMoney)).ConfigureAwait(false);
                 return;
             }
 
-            foreach (var jewel in jewels)
+            if (stackSize is not (10 or 20 or 30))
             {
-                await player.Inventory.RemoveItemAsync(jewel).ConfigureAwait(false);
-                await player.PersistenceContext.DeleteAsync(jewel).ConfigureAwait(false);
-                await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(jewel.ItemSlot)).ConfigureAwait(false);
+                player.Logger.LogWarning("Invalid jewel stack size {stackSize}. Player: [{characterName}]", stackSize, player.SelectedCharacter?.Name);
+                return;
             }
 
-            var stacked = player.PersistenceContext.CreateNew<Item>();
-            stacked.Definition = mix.MixedJewel;
-            stacked.Level = (byte)((stackSize / 10) - 1);
-            stacked.Durability = 1;
-            await player.Inventory.AddItemAsync(stacked).ConfigureAwait(false);
-            await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(stacked)).ConfigureAwait(false);
-            await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
-        }
-        else
-        {
-            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.YouLackOfJewels)).ConfigureAwait(false);
-        }
+            var mix = this.GetJewelMix(stackId, player);
+            if (mix is null)
+            {
+                return;
+            }
+
+            if (player.Inventory is null)
+            {
+                return;
+            }
+
+            var jewels = player.Inventory.Items.Where(item => item.Definition == mix.SingleJewel).Take(stackSize).ToList();
+            if (jewels.Count == stackSize)
+            {
+                var fee = (int)SoloBalance.ScalePrice(GetCombineFee(stackSize), player.GameContext.Configuration);
+                if (!player.TryRemoveMoney(fee))
+                {
+                    await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NotEnoughMoney)).ConfigureAwait(false);
+                    return;
+                }
+
+                foreach (var jewel in jewels)
+                {
+                    await player.Inventory.RemoveItemAsync(jewel).ConfigureAwait(false);
+                    await player.PersistenceContext.DeleteAsync(jewel).ConfigureAwait(false);
+                    await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(jewel.ItemSlot)).ConfigureAwait(false);
+                }
+
+                var stacked = player.PersistenceContext.CreateNew<Item>();
+                stacked.Definition = mix.MixedJewel;
+                stacked.Level = (byte)((stackSize / 10) - 1);
+                stacked.Durability = 1;
+                await player.Inventory.AddItemAsync(stacked).ConfigureAwait(false);
+                await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(stacked)).ConfigureAwait(false);
+                await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+            }
+            else
+            {
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.YouLackOfJewels)).ConfigureAwait(false);
+            }
+        }).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -84,68 +87,81 @@ public class ItemStackAction
     /// <param name="slot">The slot.</param>
     public async ValueTask UnstackItemsAsync(Player player, byte stackId, byte slot)
     {
-        if (!this.IsCorrectNpcOpened(player))
+        var shouldDisconnect = false;
+        await player.RunPersistenceExclusiveAsync(async () =>
+        {
+            if (!this.IsCorrectNpcOpened(player))
+            {
+                shouldDisconnect = true;
+                return;
+            }
+
+            var mix = this.GetJewelMix(stackId, player);
+            if (mix is null)
+            {
+                return;
+            }
+
+            var stacked = player.Inventory?.GetItem(slot);
+            if (stacked is null)
+            {
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.StackedJewelNotFound)).ConfigureAwait(false);
+                return;
+            }
+
+            if (stacked.Definition != mix.MixedJewel || stacked.Level > 2)
+            {
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.SelectedItemIsNotStackedJewel)).ConfigureAwait(false);
+                return;
+            }
+
+            byte pieces = (byte)((stacked.Level + 1) * 10);
+
+            var freeSlots = player.Inventory!.FreeSlots.Take(pieces).ToList();
+            if (freeSlots.Count < pieces)
+            {
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.InventoryNotEnoughSpace)).ConfigureAwait(false);
+                return;
+            }
+
+            var fee = (int)SoloBalance.ScalePrice(DismantleFee, player.GameContext.Configuration);
+            if (!player.TryRemoveMoney(fee))
+            {
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NotEnoughMoney)).ConfigureAwait(false);
+                return;
+            }
+
+            await player.Inventory.RemoveItemAsync(stacked).ConfigureAwait(false);
+            await player.PersistenceContext.DeleteAsync(stacked).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(slot)).ConfigureAwait(false);
+            foreach (var freeSlot in freeSlots)
+            {
+                var jewel = player.PersistenceContext.CreateNew<Item>();
+                jewel.Definition = mix.SingleJewel;
+                jewel.Durability = 1;
+                jewel.ItemSlot = freeSlot;
+                await player.Inventory.AddItemAsync(freeSlot, jewel).ConfigureAwait(false);
+                await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(jewel)).ConfigureAwait(false);
+            }
+
+            await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+        }).ConfigureAwait(false);
+
+        if (shouldDisconnect)
         {
             await player.DisconnectAsync().ConfigureAwait(false);
-            return;
         }
-
-        var mix = this.GetJewelMix(stackId, player);
-        if (mix is null)
-        {
-            return;
-        }
-
-        var stacked = player.Inventory?.GetItem(slot);
-        if (stacked is null)
-        {
-            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.StackedJewelNotFound)).ConfigureAwait(false);
-            return;
-        }
-
-        if (stacked.Definition != mix.MixedJewel)
-        {
-            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.SelectedItemIsNotStackedJewel)).ConfigureAwait(false);
-            return;
-        }
-
-        byte pieces = (byte)((stacked.Level + 1) * 10);
-
-        var freeSlots = player.Inventory!.FreeSlots.Take(pieces).ToList();
-        if (freeSlots.Count < pieces)
-        {
-            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.InventoryNotEnoughSpace)).ConfigureAwait(false);
-            return;
-        }
-
-        var fee = (int)SoloBalance.ScalePrice(DismantleFee, player.GameContext.Configuration);
-        if (!player.TryRemoveMoney(fee))
-        {
-            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NotEnoughMoney)).ConfigureAwait(false);
-            return;
-        }
-
-        await player.Inventory.RemoveItemAsync(stacked).ConfigureAwait(false);
-        await player.PersistenceContext.DeleteAsync(stacked).ConfigureAwait(false);
-        await player.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(slot)).ConfigureAwait(false);
-        foreach (var freeSlot in freeSlots)
-        {
-            var jewel = player.PersistenceContext.CreateNew<Item>();
-            jewel.Definition = mix.SingleJewel;
-            jewel.Durability = 1;
-            jewel.ItemSlot = freeSlot;
-            await player.Inventory.AddItemAsync(freeSlot, jewel).ConfigureAwait(false);
-            await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(jewel)).ConfigureAwait(false);
-        }
-
-        await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
     }
 
     private static int GetCombineFee(byte stackSize) => (stackSize / 10) * CombineFeePerTen;
 
     private bool IsCorrectNpcOpened(Player player)
     {
-        if (player.OpenedNpc is null || player.OpenedNpc.Definition.NpcWindow != NpcWindow.Lahap)
+        if (!player.IsAlive
+            || player.PlayerState.CurrentState != PlayerState.NpcDialogOpened
+            || player.OpenedNpc is not { Definition.NpcWindow: NpcWindow.Lahap } npc
+            || player.CurrentMap is not { } map
+            || (npc.CurrentMap is not null && (npc.CurrentMap != map || !player.IsInRange(npc.Position, Math.Max(8, player.InfoRange)))))
         {
             player.Logger.LogWarning("Probably Hacker tried to Combine/Dismantle Jewels without talking to Lahap. Dupe Method. Acc: [{accountName}] Character: [{characterName}]", player.Account?.LoginName, player.SelectedCharacter?.Name);
             return false;

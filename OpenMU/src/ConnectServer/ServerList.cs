@@ -99,11 +99,34 @@ internal class ServerList
         try
         {
             this._servers.Remove(item);
+            item.LoadIndex = -1;
             this.InvalidateCache();
         }
         finally
         {
             this._lock.ExitWriteLock();
+        }
+    }
+
+    /// <summary>
+    /// Updates the cached load byte of the specified server item under the list lock.
+    /// </summary>
+    /// <param name="item">The server item.</param>
+    /// <param name="loadPercentage">The updated load percentage.</param>
+    internal void UpdateServerLoadByte(ServerListItem item, byte loadPercentage)
+    {
+        this._lock.EnterReadLock();
+        try
+        {
+            var cache = this.Cache;
+            if (cache != null && item.LoadIndex >= 0 && item.LoadIndex < cache.Length)
+            {
+                cache[item.LoadIndex] = loadPercentage;
+            }
+        }
+        finally
+        {
+            this._lock.ExitReadLock();
         }
     }
 
@@ -219,6 +242,10 @@ internal class ServerList
     private void InvalidateCache()
     {
         this.Cache = null;
+        foreach (var server in this._servers)
+        {
+            server.LoadIndex = -1;
+        }
     }
 
     /// <summary>

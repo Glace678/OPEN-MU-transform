@@ -391,10 +391,11 @@ void UseSkillWarrior(CHARACTER* c, OBJECT* o)
 
         if ((gMapManager.InBloodCastle() == true) || Skill == AT_SKILL_FORCE || Skill == AT_SKILL_FORCE_WAVE ||
             Skill == AT_SKILL_FORCE_WAVE_STR || Skill == AT_SKILL_SPIRAL_SLASH || Skill == AT_SKILL_RUSH ||
-            CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_CASTLE_GATE1 ||
-            CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_GUARDIAN_STATUE ||
-            CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_LIFE_STONE ||
-            CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_CANON_TOWER)
+            (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT &&
+             (CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_CASTLE_GATE1 ||
+              CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_GUARDIAN_STATUE ||
+              CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_LIFE_STONE ||
+              CharactersClient[g_MovementSkill.m_iTarget].MonsterIndex == MONSTER_CANON_TOWER)))
         {
             int angle = abs((int)(o->Angle[2] / 45.f));
             switch (angle)
@@ -937,8 +938,11 @@ void UseSkillRagefighter(CHARACTER* pCha, OBJECT* pObj)
 
             BYTE pos =
                 CalcTargetPos(pObj->Position[0], pObj->Position[1], pCha->TargetPosition[0], pCha->TargetPosition[1]);
-            WORD TKey                  = 0xffff;
-            TKey                       = getTargetCharacterKey(pCha, g_MovementSkill.m_iTarget);
+            WORD TKey = 0xffff;
+            if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT)
+            {
+                TKey = getTargetCharacterKey(pCha, g_MovementSkill.m_iTarget);
+            }
             pCha->m_iFenrirSkillTarget = g_MovementSkill.m_iTarget;
             SendRequestMagicContinue(iSkill, (pCha->PositionX), (pCha->PositionY),
                                      (BYTE)(pObj->Angle[2] / 360.f * 256.f), 0, pos, TKey, &pObj->m_bySkillSerialNum);
@@ -996,8 +1000,11 @@ void AttackRagefighter(CHARACTER* pCha, int nSkill, float fDistance)
     else
         g_MovementSkill.m_iTarget = -1;
 
-    g_ConsoleDebug->Write(MCD_SEND, L"AttackRagefighter ID : %d, Success : %d, SelectedCharacter: %d %d | 5d", nSkill,
-                          bSuccess, SelectedCharacter, CharactersClient[SelectedCharacter].Dead, bCheckAttack);
+    const int selectedDead = (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
+                                 ? static_cast<int>(CharactersClient[SelectedCharacter].Dead)
+                                 : -1;
+    g_ConsoleDebug->Write(MCD_SEND, L"AttackRagefighter ID : %d, Success : %d, SelectedCharacter: %d %d | %d", nSkill,
+                          bSuccess, SelectedCharacter, selectedDead, bCheckAttack);
 
     if (bSuccess)
     {

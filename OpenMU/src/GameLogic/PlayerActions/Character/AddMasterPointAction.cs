@@ -46,29 +46,37 @@ public class AddMasterPointAction
             return;
         }
 
-        var learnedSkill = player.SelectedCharacter.LearnedSkills.FirstOrDefault(ls => ls.Skill?.Number == skillId);
-        if (learnedSkill is null)
+        await player.RunPersistenceExclusiveAsync(async () =>
         {
-            player.Logger.LogDebug("Trying to add master skill, skillId: {0}, player {1}", skill.Number, player);
-            if (this.CheckRequisitions(player, skill))
+            if (player.SelectedCharacter is null || player.SelectedCharacter.MasterLevelUpPoints < 1)
             {
-                player.Logger.LogDebug("Adding master skill, skillId: {0}, player {1}", skill.Number, player);
-                await player.SkillList!.AddLearnedSkillAsync(skill).ConfigureAwait(false);
-                learnedSkill = player.SkillList?.GetSkill(skillId);
-                if (learnedSkill is { })
+                return;
+            }
+
+            var learnedSkill = player.SelectedCharacter.LearnedSkills.FirstOrDefault(ls => ls.Skill?.Number == skillId);
+            if (learnedSkill is null)
+            {
+                player.Logger.LogDebug("Trying to add master skill, skillId: {0}, player {1}", skill.Number, player);
+                if (this.CheckRequisitions(player, skill))
                 {
-                    await this.AddMasterPointToLearnedSkillAsync(player, learnedSkill).ConfigureAwait(false);
-                }
-                else
-                {
-                    player.Logger.LogDebug($"Learned Skill {skillId} not found.");
+                    player.Logger.LogDebug("Adding master skill, skillId: {0}, player {1}", skill.Number, player);
+                    await player.SkillList!.AddLearnedSkillAsync(skill).ConfigureAwait(false);
+                    learnedSkill = player.SkillList?.GetSkill(skillId);
+                    if (learnedSkill is { })
+                    {
+                        await this.AddMasterPointToLearnedSkillAsync(player, learnedSkill).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        player.Logger.LogDebug($"Learned Skill {skillId} not found.");
+                    }
                 }
             }
-        }
-        else
-        {
-            await this.AddMasterPointToLearnedSkillAsync(player, learnedSkill).ConfigureAwait(false);
-        }
+            else
+            {
+                await this.AddMasterPointToLearnedSkillAsync(player, learnedSkill).ConfigureAwait(false);
+            }
+        }).ConfigureAwait(false);
     }
 
     private async ValueTask AddMasterPointToLearnedSkillAsync(Player player, SkillEntry learnedSkill)

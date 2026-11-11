@@ -105,18 +105,36 @@ public static class CastleSiegeNpcRepairAction
                 return (CastleSiegeNpcOperationResult.InsufficientMoney, currentHealth, maximumHealth);
             }
 
-            if (structure is null)
+            var oldPersistedHp = state.CurrentHp;
+            var oldIsAlive = runtime.IsAlive;
+            try
             {
-                state.CurrentHp = maximumHealth;
-                runtime.IsAlive = true;
-            }
-            else
-            {
-                structure.RestoreFullHealth();
-            }
+                if (structure is null)
+                {
+                    state.CurrentHp = maximumHealth;
+                    runtime.IsAlive = true;
+                }
+                else
+                {
+                    structure.RestoreFullHealth();
+                    state.CurrentHp = structure.Health;
+                }
 
-            await context.SaveNpcStatesAsync().ConfigureAwait(false);
-            return (CastleSiegeNpcOperationResult.Success, state.CurrentHp, maximumHealth);
+                await context.SaveNpcStatesAsync().ConfigureAwait(false);
+                return (CastleSiegeNpcOperationResult.Success, state.CurrentHp, maximumHealth);
+            }
+            catch
+            {
+                state.CurrentHp = oldPersistedHp;
+                runtime.IsAlive = oldIsAlive;
+                if (structure is not null)
+                {
+                    structure.Health = currentHealth;
+                }
+
+                player.TryAddMoney((int)cost);
+                throw;
+            }
         }
         finally
         {

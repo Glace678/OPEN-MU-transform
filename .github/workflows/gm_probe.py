@@ -9,24 +9,37 @@ azure_token = os.environ.get("AZURE_MODELS_TOKEN", "")
 API_VERSION = os.environ.get("GH_API_VERSION", "2026-03-10")
 
 
+class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+_OPENER = urllib.request.build_opener(_NoRedirectHandler)
+
+
 def call(url, data=None):
-    host = urlparse(url).hostname or ""
+    parsed = urlparse(url)
+    host = (parsed.hostname or "").lower()
+    if parsed.scheme != "https":
+        return None, f"Rejected non-HTTPS probe URL: {url}"
     headers = {"Accept": "application/json"}
-    if host.endswith(".github.ai"):
+    if host == "models.github.ai" or host.endswith(".models.github.ai"):
         headers["Authorization"] = f"Bearer {github_token}"
         headers["X-GitHub-Api-Version"] = API_VERSION
-    elif host.endswith(".azure.com"):
+    elif host == "models.inference.ai.azure.com":
         # Never send the GitHub token to the Azure inference endpoint; it needs a
         # separate credential (leave anonymous when none is configured).
         if azure_token:
             headers["Authorization"] = f"Bearer {azure_token}"
+    else:
+        return None, f"Unexpected probe host: {host}"
     body = None
     if data is not None:
         body = json.dumps(data).encode()
         headers["Content-Type"] = "application/json"
     req = urllib.request.Request(url, data=body, headers=headers)
     try:
-        with urllib.request.urlopen(req, timeout=45) as r:
+        with _OPENER.open(req, timeout=45) as r:
             return r.status, r.read().decode()
     except urllib.error.HTTPError as e:
         body = e.read().decode(errors="replace")

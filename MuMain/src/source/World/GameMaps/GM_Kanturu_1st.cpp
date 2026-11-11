@@ -370,7 +370,9 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
         case MONSTER_BERSERK:
         case MONSTER_BERSERKER: {
             OpenMonsterModel(MONSTER_MODEL_BERSERK);
-            pCharacter                 = CreateCharacter(Key, MODEL_BERSERK, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_BERSERK, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 0.95f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -381,7 +383,9 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
         case MONSTER_GIGANTIS2:
         case MONSTER_GIGANTIS: {
             OpenMonsterModel(MONSTER_MODEL_GIGANTIS);
-            pCharacter                 = CreateCharacter(Key, MODEL_GIGANTIS, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_GIGANTIS, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 1.2f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -389,7 +393,9 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_GENOCIDER: {
             OpenMonsterModel(MONSTER_MODEL_GENOCIDER);
-            pCharacter                 = CreateCharacter(Key, MODEL_GENOCIDER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_GENOCIDER, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 1.2f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -399,7 +405,9 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_SPLINTER_WOLF: {
             OpenMonsterModel(MONSTER_MODEL_SPLINTER_WOLF);
-            pCharacter                 = CreateCharacter(Key, MODEL_SPLINTER_WOLF, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_SPLINTER_WOLF, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 0.8f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -418,7 +426,9 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
 
         case MONSTER_IRON_RIDER: {
             OpenMonsterModel(MONSTER_MODEL_IRON_RIDER);
-            pCharacter                 = CreateCharacter(Key, MODEL_IRON_RIDER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_IRON_RIDER, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 1.3f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -430,7 +440,9 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_BLADE_HUNTER: {
             OpenMonsterModel(MONSTER_MODEL_BLADE_HUNTER);
-            pCharacter                  = CreateCharacter(Key, MODEL_BLADE_HUNTER, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_BLADE_HUNTER, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale    = 1.3f;
             pCharacter->Object.Gravity  = 0.0f;
             pCharacter->Object.Distance = (float)(rand() % 20) / 10.0f;
@@ -444,7 +456,9 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_SATYROS: {
             OpenMonsterModel(MONSTER_MODEL_SATYROS);
-            pCharacter                 = CreateCharacter(Key, MODEL_SATYROS, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_SATYROS, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 1.3f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -452,7 +466,9 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_KENTAUROS: {
             OpenMonsterModel(MONSTER_MODEL_KENTAUROS);
-            pCharacter                 = CreateCharacter(Key, MODEL_KENTAUROS, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_KENTAUROS, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 1.1f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -475,6 +491,8 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
         case MONSTER_BERSERKER_WARRIOR: {
             OpenMonsterModel(MONSTER_MODEL_BERSERKER_WARRIOR);
             pCharacter = CreateCharacter(Key, MODEL_BERSERKER_WARRIOR, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             //pCharacter->Object.Scale = 0.95f;
             pCharacter->Object.Scale   = 1.15f;
             pCharacter->Weapon[0].Type = -1;
@@ -485,6 +503,8 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
         case MONSTER_KENTAUROS_WARRIOR: {
             OpenMonsterModel(MONSTER_MODEL_KENTAUROS_WARRIOR);
             pCharacter = CreateCharacter(Key, MODEL_KENTAUROS_WARRIOR, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             //pCharacter->Object.Scale = 1.1f;
             pCharacter->Object.Scale   = 1.3f;
             pCharacter->Weapon[0].Type = -1;
@@ -508,6 +528,8 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
         case MONSTER_GIGANTIS_WARRIOR: {
             OpenMonsterModel(MONSTER_MODEL_GIGANTIS_WARRIOR);
             pCharacter = CreateCharacter(Key, MODEL_GIGANTIS_WARRIOR, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             //pCharacter->Object.Scale = 1.2f;
             pCharacter->Object.Scale   = 1.5f;
             pCharacter->Weapon[0].Type = -1;
@@ -517,6 +539,8 @@ CHARACTER* M37Kanturu1st::CreateKanturu1stMonster(int iType, int PosX, int PosY,
         case MONSTER_GENOCIDER_WARRIOR: {
             OpenMonsterModel(MONSTER_MODEL_SOCCERBALL);
             pCharacter = CreateCharacter(Key, MODEL_SOCCERBALL, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             //pCharacter->Object.Scale = 1.2f;
             pCharacter->Object.Scale   = 1.35f;
             pCharacter->Weapon[0].Type = -1;

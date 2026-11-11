@@ -30,6 +30,11 @@ if errorlevel 1 (
     echo error: vcvars32.bat failed to initialize the MSVC environment. 1>&2
     exit /b %errorlevel%
 )
-"%CMAKE%" -S . -B out/build/windows-x86 -DENABLE_VIRTUAL_GAMEPAD_TESTS=ON
+where ninja >nul 2>&1
+if errorlevel 1 (
+    "%CMAKE%" -S . -B out/build/windows-x86 -A Win32 -DCMAKE_TOOLCHAIN_FILE=toolchain-x86.cmake -DENABLE_VIRTUAL_GAMEPAD_TESTS=ON
+) else (
+    "%CMAKE%" -S . -B out/build/windows-x86 -G "Ninja Multi-Config" -DCMAKE_TOOLCHAIN_FILE=toolchain-x86.cmake -DENABLE_VIRTUAL_GAMEPAD_TESTS=ON
+)
 echo ===CONFIG EXIT CODE=%ERRORLEVEL%
 exit /b %ERRORLEVEL%

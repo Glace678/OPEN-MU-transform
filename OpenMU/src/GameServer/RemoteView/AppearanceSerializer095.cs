@@ -4,7 +4,7 @@
 
 namespace MUnique.OpenMU.GameServer.RemoteView;
 
-using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using MUnique.OpenMU.DataModel;
 using MUnique.OpenMU.DataModel.Configuration.Items;
@@ -24,7 +24,7 @@ public class AppearanceSerializer095 : IAppearanceSerializer
     /// <summary>
     /// A cache which holds the results of the serializer.
     /// </summary>
-    private static readonly ConcurrentDictionary<IAppearanceData, byte[]> Cache = new();
+    private static readonly ConditionalWeakTable<IAppearanceData, byte[]> Cache = new();
 
     private enum Pets
     {
@@ -48,8 +48,7 @@ public class AppearanceSerializer095 : IAppearanceSerializer
     /// <inheritdoc/>
     public void InvalidateCache(IAppearanceData appearance)
     {
-        Cache.TryRemove(appearance, out _);
-        appearance.AppearanceChanged -= this.OnAppearanceOfAppearanceChanged;
+        InvalidateCacheStatic(appearance);
     }
 
     /// <inheritdoc/>
@@ -70,15 +69,20 @@ public class AppearanceSerializer095 : IAppearanceSerializer
             if (useCache)
             {
                 var cacheEntry = target.Slice(0, this.NeededSpace).ToArray();
-                if (Cache.TryAdd(appearance, cacheEntry))
-                {
-                    appearance.AppearanceChanged += this.OnAppearanceOfAppearanceChanged;
-                }
+                appearance.AppearanceChanged -= OnAppearanceOfAppearanceChanged;
+                appearance.AppearanceChanged += OnAppearanceOfAppearanceChanged;
+                Cache.AddOrUpdate(appearance, cacheEntry);
             }
         }
     }
 
-    private void OnAppearanceOfAppearanceChanged(object? sender, EventArgs args) => this.InvalidateCache(sender as IAppearanceData ?? throw new ArgumentException($"sender must be of type {nameof(IAppearanceData)}"));
+    private static void InvalidateCacheStatic(IAppearanceData appearance)
+    {
+        Cache.Remove(appearance);
+        appearance.AppearanceChanged -= OnAppearanceOfAppearanceChanged;
+    }
+
+    private static void OnAppearanceOfAppearanceChanged(object? sender, EventArgs args) => InvalidateCacheStatic(sender as IAppearanceData ?? throw new ArgumentException($"sender must be of type {nameof(IAppearanceData)}"));
 
     /// <summary>
     /// Writes the preview character set.

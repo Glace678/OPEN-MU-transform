@@ -30,7 +30,8 @@ void RenderText(const wchar_t* text, int x, int y, int sx, int sy, DWORD color, 
 
 using namespace SEASON3B;
 
-SEASON3B::CNewUIPurchaseShopInventory::CNewUIPurchaseShopInventory() : m_pNewUIMng(NULL), m_pNewInventoryCtrl(NULL)
+SEASON3B::CNewUIPurchaseShopInventory::CNewUIPurchaseShopInventory()
+    : m_pNewUIMng(NULL), m_pNewInventoryCtrl(NULL), m_Button(NULL), m_SourceIndex(-1)
 {
     m_Pos.x = m_Pos.y    = 0;
     m_ShopCharacterIndex = -1;
@@ -46,8 +47,6 @@ bool SEASON3B::CNewUIPurchaseShopInventory::Create(CNewUIManager* pNewUIMng, int
     if (NULL == pNewUIMng || NULL == g_pNewUI3DRenderMng || NULL == g_pNewItemMng)
         return false;
 
-    LoadImages();
-
     SetPos(x, y);
 
     m_pNewUIMng = pNewUIMng;
@@ -58,8 +57,12 @@ bool SEASON3B::CNewUIPurchaseShopInventory::Create(CNewUIManager* pNewUIMng, int
                                              m_Pos.x + 16, m_Pos.y + 90, 8, 4, MAX_MY_INVENTORY_EX_INDEX))
     {
         SafeDelete(m_pNewInventoryCtrl);
+        m_pNewUIMng->RemoveUIObj(this);
+        m_pNewUIMng = NULL;
         return false;
     }
+
+    LoadImages();
 
     m_pNewInventoryCtrl->SetToolTipType(TOOLTIP_TYPE_PURCHASE_SHOP);
     m_pNewInventoryCtrl->LockInventory();
@@ -81,11 +84,10 @@ void SEASON3B::CNewUIPurchaseShopInventory::Release()
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
-
-    UnloadImages();
 }
 
 bool SEASON3B::CNewUIPurchaseShopInventory::InsertItem(int iIndex, std::span<const BYTE> pbyItemPacket)
@@ -160,7 +162,7 @@ bool SEASON3B::CNewUIPurchaseShopInventory::UpdateMouseEvent()
     {
         return false;
     }
-    if (m_Button->UpdateMouseEvent())
+    if (m_Button && m_Button->UpdateMouseEvent())
     {
         g_pNewUISystem->Hide(SEASON3B::INTERFACE_PURCHASESHOP_INVENTORY);
         return false;
@@ -244,39 +246,23 @@ void SEASON3B::CNewUIPurchaseShopInventory::RenderTextInfo()
     RenderText(I18N::Game::PersonalStore, m_Pos.x, m_Pos.y + 15, 190, 0, 0xFF49B0FF, 0x00000000, RT3_SORT_CENTER);
     RenderText(m_TitleText.c_str(), m_Pos.x, m_Pos.y + 58, 190, 0, RGBA(0, 255, 0, 255), 0x00000000, RT3_SORT_CENTER,
                g_hFontBold);
-    wchar_t Text[100];
 
-    memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, I18N::Game::Warning);
-    RenderText(Text, m_Pos.x + 30, m_Pos.y + 230, 0, 0, RGBA(255, 45, 47, 255), 0x00000000, RT3_SORT_LEFT, g_hFontBold);
-
-    memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, I18N::Game::SellingPriceWhenOpeningTheStore);
-    RenderText(Text, m_Pos.x + 30, m_Pos.y + 250, 0, 0, RGBA(247, 206, 77, 255), 0x00000000, RT3_SORT_LEFT);
-
-    memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, I18N::Game::PleaseVerify);
-    RenderText(Text, m_Pos.x + 30, m_Pos.y + 262, 0, 0, RGBA(247, 206, 77, 255), 0x00000000, RT3_SORT_LEFT);
-
-    memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, I18N::Game::AlreadyInThePersonalStore);
-    RenderText(Text, m_Pos.x + 30, m_Pos.y + 274, 0, 0, RGBA(247, 206, 77, 255), 0x00000000, RT3_SORT_LEFT);
-
-    memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, I18N::Game::CancelPurchasedItem);
-    RenderText(Text, m_Pos.x + 30, m_Pos.y + 286, 0, 0, RGBA(247, 206, 77, 255), 0x00000000, RT3_SORT_LEFT);
-
-    memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, I18N::Game::CanTBeReturned);
-    RenderText(Text, m_Pos.x + 30, m_Pos.y + 298, 0, 0, RGBA(247, 206, 77, 255), 0x00000000, RT3_SORT_LEFT);
-
-    memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, I18N::Game::AllItemTrading);
-    RenderText(Text, m_Pos.x + 30, m_Pos.y + 320, 0, 0, RGBA(255, 45, 47, 255), 0x00000000, RT3_SORT_LEFT, g_hFontBold);
-
-    memset(&Text, 0, sizeof(wchar_t) * 100);
-    mu_swprintf(Text, I18N::Game::CanOnlyBeDoneUsingZen);
-    RenderText(Text, m_Pos.x + 30, m_Pos.y + 332, 0, 0, RGBA(255, 45, 47, 255), 0x00000000, RT3_SORT_LEFT, g_hFontBold);
+    RenderText(I18N::Game::Warning, m_Pos.x + 30, m_Pos.y + 230, 0, 0, RGBA(255, 45, 47, 255), 0x00000000,
+               RT3_SORT_LEFT, g_hFontBold);
+    RenderText(I18N::Game::SellingPriceWhenOpeningTheStore, m_Pos.x + 30, m_Pos.y + 250, 0, 0, RGBA(247, 206, 77, 255),
+               0x00000000, RT3_SORT_LEFT);
+    RenderText(I18N::Game::PleaseVerify, m_Pos.x + 30, m_Pos.y + 262, 0, 0, RGBA(247, 206, 77, 255), 0x00000000,
+               RT3_SORT_LEFT);
+    RenderText(I18N::Game::AlreadyInThePersonalStore, m_Pos.x + 30, m_Pos.y + 274, 0, 0, RGBA(247, 206, 77, 255),
+               0x00000000, RT3_SORT_LEFT);
+    RenderText(I18N::Game::CancelPurchasedItem, m_Pos.x + 30, m_Pos.y + 286, 0, 0, RGBA(247, 206, 77, 255), 0x00000000,
+               RT3_SORT_LEFT);
+    RenderText(I18N::Game::CanTBeReturned, m_Pos.x + 30, m_Pos.y + 298, 0, 0, RGBA(247, 206, 77, 255), 0x00000000,
+               RT3_SORT_LEFT);
+    RenderText(I18N::Game::AllItemTrading, m_Pos.x + 30, m_Pos.y + 320, 0, 0, RGBA(255, 45, 47, 255), 0x00000000,
+               RT3_SORT_LEFT, g_hFontBold);
+    RenderText(I18N::Game::CanOnlyBeDoneUsingZen, m_Pos.x + 30, m_Pos.y + 332, 0, 0, RGBA(255, 45, 47, 255),
+               0x00000000, RT3_SORT_LEFT, g_hFontBold);
 }
 
 bool SEASON3B::CNewUIPurchaseShopInventory::Render()
@@ -293,7 +279,10 @@ bool SEASON3B::CNewUIPurchaseShopInventory::Render()
         m_pNewInventoryCtrl->Render();
     }
 
-    m_Button->Render();
+    if (m_Button)
+    {
+        m_Button->Render();
+    }
 
     DisableAlphaBlend();
 
@@ -311,10 +300,13 @@ void SEASON3B::CNewUIPurchaseShopInventory::ClosingProcess()
 
     m_ShopCharacterIndex = -1;
 
-    g_pMyInventory->ChangeMyShopButtonStateOpen();
+    if (g_pMyInventory)
+    {
+        g_pMyInventory->ChangeMyShopButtonStateOpen();
+    }
 }
 
 int SEASON3B::CNewUIPurchaseShopInventory::GetPointedItemIndex()
 {
-    return m_pNewInventoryCtrl->GetPointedSquareIndex();
+    return m_pNewInventoryCtrl ? m_pNewInventoryCtrl->GetPointedSquareIndex() : -1;
 }

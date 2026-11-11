@@ -90,9 +90,9 @@ void CMsgBoxIGSSendGift::Initialize(int iPackageSeq, int iDisplaySeq, int iPrice
     m_wItemCode   = wItemCode;
     m_iCashType   = iCashType;
 
-    mu_swprintf(m_szName, I18N::Game::ItemS, pszName);
-    mu_swprintf(m_szPrice, I18N::Game::PriceS, pszPrice);
-    mu_swprintf(m_szPeriod, I18N::Game::DurationS, pszPeriod);
+    mu_swprintf_trunc(m_szName, I18N::Game::ItemS, pszName ? pszName : L"");
+    mu_swprintf_trunc(m_szPrice, I18N::Game::PriceS, pszPrice ? pszPrice : L"");
+    mu_swprintf_trunc(m_szPeriod, I18N::Game::DurationS, pszPeriod ? pszPeriod : L"");
 
     m_iNumNoticeLine =
         ::DivideStringByPixel(&m_szNotice[0][0], NUM_LINE_CMB, MAX_TEXT_LENGTH,
@@ -176,27 +176,38 @@ CALLBACK_RESULT CMsgBoxIGSSendGift::LButtonUp(class CNewUIMessageBoxBase* pOwner
 CALLBACK_RESULT CMsgBoxIGSSendGift::OKButtonDown(class CNewUIMessageBoxBase* pOwner, const leaf::xstreambuf& xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSSendGift*>(pOwner);
+    if (!pOwnMsgBox)
+        return CALLBACK_CONTINUE;
 
     if (pOwnMsgBox->m_szID[0] == '\0')
     {
         CMsgBoxIGSCommon* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::Error, I18N::Game::GiftRecipientSIDIsMissing);
+        if (pMsgBox)
+        {
+            pMsgBox->Initialize(I18N::Game::Error, I18N::Game::GiftRecipientSIDIsMissing);
+        }
     }
-    else if (wcscmp(pOwnMsgBox->m_szID, Hero->ID) == 0)
+    else if (Hero && wcscmp(pOwnMsgBox->m_szID, Hero->ID) == 0)
     {
         CMsgBoxIGSCommon* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::Error, I18N::Game::YouCannotSendAGiftToYourself);
+        if (pMsgBox)
+        {
+            pMsgBox->Initialize(I18N::Game::Error, I18N::Game::YouCannotSendAGiftToYourself);
+        }
     }
     else
     {
         CMsgBoxIGSSendGiftConfirm* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSSendGiftConfirmLayout), &pMsgBox);
-        pMsgBox->Initialize(pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq, pOwnMsgBox->m_iPriceSeq,
-                            pOwnMsgBox->m_wItemCode, pOwnMsgBox->m_iCashType, pOwnMsgBox->m_szID,
-                            pOwnMsgBox->m_szMessage, pOwnMsgBox->m_szName, pOwnMsgBox->m_szPrice,
-                            pOwnMsgBox->m_szPeriod);
+        if (pMsgBox)
+        {
+            pMsgBox->Initialize(pOwnMsgBox->m_iPackageSeq, pOwnMsgBox->m_iDisplaySeq, pOwnMsgBox->m_iPriceSeq,
+                                pOwnMsgBox->m_wItemCode, pOwnMsgBox->m_iCashType, pOwnMsgBox->m_szID,
+                                pOwnMsgBox->m_szMessage, pOwnMsgBox->m_szName, pOwnMsgBox->m_szPrice,
+                                pOwnMsgBox->m_szPeriod);
+        }
     }
 
     PlayBuffer(SOUND_CLICK01);

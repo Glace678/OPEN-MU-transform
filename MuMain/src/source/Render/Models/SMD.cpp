@@ -1,4 +1,6 @@
 #include "stdafx.h"
+#include <algorithm>
+#include <cstring>
 #include <ctype.h>
 #include "ZzzBMD.h"
 #include "SMD.h"
@@ -32,13 +34,21 @@ void ParseNodes()
             break;
         if (Token == NUMBER)
         {
+            if (ng->NodeNum >= NODE_MAX)
+            {
+                g_ErrorReport.Write(L"SMD node limit (%d) exceeded; ignoring remaining nodes.\r\n", NODE_MAX);
+                (*GetToken)();
+                (*GetToken)();
+                continue;
+            }
             Node_t* n = &ng->Node[ng->NodeNum];
             Token     = (*GetToken)();
-            strcpy(n->Name, TokenString);
-            Token     = (*GetToken)();
-            n->Parent = (short)TokenNumber;
+            strncpy(n->Name, TokenString, sizeof(n->Name) - 1);
+            n->Name[sizeof(n->Name) - 1] = '\0';
+            Token                        = (*GetToken)();
+            n->Parent                    = (short)TokenNumber;
+            ng->NodeNum++;
         }
-        ng->NodeNum++;
     }
     while (true)
     {
@@ -59,9 +69,10 @@ void ParseNodes()
                 break;
             if (strcmp("time", TokenString) == 0)
             {
-                Token         = (*GetToken)();
-                Skeleton_t* s = &ng->Skeleton;
-                for (int i = 0; i < ng->NodeNum; i++)
+                Token               = (*GetToken)();
+                Skeleton_t* s       = &ng->Skeleton;
+                const int   nodeCnt = std::clamp<int>(ng->NodeNum, 0, NODE_MAX);
+                for (int i = 0; i < nodeCnt; i++)
                 {
                     Token             = (*GetToken)();
                     Token             = (*GetToken)();
@@ -96,6 +107,8 @@ void ParseSkeleton()
 
     SkeletonGroup_t* sg = &SkeletonGroup;
     sg->TimeNum         = 0;
+    std::memset(sg->Skeleton, 0, sizeof(sg->Skeleton));
+    const int nodeCnt = std::clamp<int>(NodeGroup.NodeNum, 0, NODE_MAX);
     while (true)
     {
         Token = (*GetToken)();
@@ -107,10 +120,23 @@ void ParseSkeleton()
                 break;
             if (strcmp("time", TokenString) == 0)
             {
-                Token               = (*GetToken)();
-                int         TimeNum = (int)TokenNumber;
-                Skeleton_t* s       = &sg->Skeleton[TimeNum];
-                for (int i = 0; i < NodeGroup.NodeNum; i++)
+                Token       = (*GetToken)();
+                int TimeNum = (int)TokenNumber;
+                if (TimeNum < 0 || TimeNum >= TIME_MAX)
+                {
+                    g_ErrorReport.Write(L"SMD skeleton time (%d) out of range [0, %d); skipping frame.\r\n", TimeNum,
+                                        TIME_MAX);
+                    for (int i = 0; i < nodeCnt; i++)
+                    {
+                        for (int tok = 0; tok < 7; ++tok)
+                        {
+                            (*GetToken)();
+                        }
+                    }
+                    continue;
+                }
+                Skeleton_t* s = &sg->Skeleton[TimeNum];
+                for (int i = 0; i < nodeCnt; i++)
                 {
                     Token             = (*GetToken)();
                     Token             = (*GetToken)();
@@ -126,7 +152,7 @@ void ParseSkeleton()
                     Token             = (*GetToken)();
                     s->Rotation[i][2] = TokenNumber;
                 }
-                sg->TimeNum++;
+                sg->TimeNum = static_cast<short>(std::min<int>(TIME_MAX, std::max<int>(sg->TimeNum + 1, TimeNum + 1)));
             }
         }
     }
@@ -260,12 +286,15 @@ void SMD2BMDAnimation(int ID, bool LockPosition);
 
 bool OpenSMDModel(int ID, wchar_t* FileName1, int Actions, bool Flip)
 {
+    if (ID < 0 || ID >= MAX_MODELS || Actions <= 0)
+        return false;
     if (Models[ID].NumMeshs > 0)
         return false;
 
     if (OpenSMDFile(FileName1, REFERENCE_FRAME, Flip))
     {
-        WideCharToMultiByte(CP_UTF8, 0, FileName1, wcslen(FileName1), Models[ID].Name, 32, 0, 0);
+        std::memset(Models[ID].Name, 0, sizeof(Models[ID].Name));
+        WideCharToMultiByte(CP_UTF8, 0, FileName1, -1, Models[ID].Name, 31, 0, 0);
         Models[ID].Version = 10;
         FixupSMD();
         SMD2BMDModel(ID, Actions);
@@ -276,6 +305,8 @@ bool OpenSMDModel(int ID, wchar_t* FileName1, int Actions, bool Flip)
 
 bool OpenSMDAnimation(int ID, wchar_t* FileName2, bool LockPosition)
 {
+    if (ID < 0 || ID >= MAX_MODELS)
+        return false;
     if (Models[ID].NumBones > 0)
     {
         if (OpenSMDFile(FileName2, SKELETAL_ANIMATION, false))

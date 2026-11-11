@@ -27,6 +27,7 @@
 #include "UI/NewUI/NewUISystem.h"
 #include "Character/CharacterManager.h"
 #include "GameLogic/Skills/SkillManager.h"
+#include "Engine/Object/MonsterScriptValidation.h"
 
 CLASS_ATTRIBUTE      ClassAttribute[MAX_CLASS];
 MONSTER_SCRIPT       MonsterScript[MAX_MONSTER];
@@ -113,14 +114,14 @@ void OpenNameFilterFile(const wchar_t* FileName)
         return;
     }
     int   Size   = 20;
-    BYTE* Buffer = new BYTE[Size * MAX_NAMEFILTERS];
+    BYTE* Buffer = new BYTE[Size * MAX_NAMEFILTERS]{};
 
-    fread(Buffer, Size * MAX_NAMEFILTERS, 1, fp);
+    const bool readOk = (fread(Buffer, Size * MAX_NAMEFILTERS, 1, fp) == 1);
 
-    DWORD dwCheckSum;
-    fread(&dwCheckSum, sizeof(DWORD), 1, fp);
+    DWORD      dwCheckSum   = 0;
+    const bool checksumRead = (fread(&dwCheckSum, sizeof(DWORD), 1, fp) == 1);
     fclose(fp);
-    if (dwCheckSum != GenerateCheckSum2(Buffer, Size * MAX_NAMEFILTERS, 0x2BC1))
+    if (!readOk || !checksumRead || dwCheckSum != GenerateCheckSum2(Buffer, Size * MAX_NAMEFILTERS, 0x2BC1))
     {
         wchar_t Text[256];
         mu_swprintf(Text, L"%ls - File corrupted.", FileName);
@@ -156,10 +157,13 @@ void OpenGateScript(const wchar_t* FileName)
     if (fp != NULL)
     {
         int   Size   = sizeof(GATE_ATTRIBUTE);
-        BYTE* Buffer = new BYTE[Size];
+        BYTE* Buffer = new BYTE[Size]{};
         for (int i = 0; i < MAX_GATES; i++)
         {
-            fread(Buffer, Size, 1, fp);
+            if (fread(Buffer, Size, 1, fp) != 1)
+            {
+                break;
+            }
             BuxConvert(Buffer, Size);
             memcpy(&GateAttribute[i], Buffer, Size);
         }
@@ -178,26 +182,36 @@ void OpenGateScript(const wchar_t* FileName)
 
 void OpenMonsterSkillScript(const wchar_t* FileName)
 {
-    memset(MonsterSkill, -1, sizeof(Script_Skill));
+    memset(MonsterSkill, -1, sizeof(Script_Skill) * MODEL_MONSTER_END);
 
     FILE* fp = _wfopen(FileName, L"rb");
     if (fp != NULL)
     {
         int   Size      = (sizeof(Script_Skill) + sizeof(int));
-        BYTE* Buffer    = new BYTE[Size];
+        BYTE* Buffer    = new BYTE[Size]{};
         int   FileCount = 0;
-        fread(&FileCount, sizeof(int), 1, fp);
-        for (int i = 0; i < FileCount; i++)
+        if (fread(&FileCount, sizeof(int), 1, fp) == 1 &&
+            MonsterScriptValidation::IsValidRecordCount(FileCount, MODEL_MONSTER_END))
         {
-            fread(Buffer, Size, 1, fp);
-            BuxConvert(Buffer, Size);
-            int dummy = -1;
-            int Seek  = 0;
-            memcpy(&dummy, Buffer + Seek, sizeof(int));
-            Seek += sizeof(int);
-            memcpy(MonsterSkill[dummy].Skill_Num, Buffer + Seek, sizeof(int) * MAX_MONSTERSKILL_NUM);
-            Seek += (sizeof(int) * MAX_MONSTERSKILL_NUM);
-            memcpy(&MonsterSkill[dummy].Slot, Buffer + Seek, sizeof(int));
+            for (int i = 0; i < FileCount; i++)
+            {
+                if (fread(Buffer, Size, 1, fp) != 1)
+                {
+                    break;
+                }
+                BuxConvert(Buffer, Size);
+                int dummy = -1;
+                int Seek  = 0;
+                memcpy(&dummy, Buffer + Seek, sizeof(int));
+                Seek += sizeof(int);
+                if (!MonsterScriptValidation::IsValidMonsterIndex(dummy, MODEL_MONSTER_END))
+                {
+                    continue;
+                }
+                memcpy(MonsterSkill[dummy].Skill_Num, Buffer + Seek, sizeof(int) * MAX_MONSTERSKILL_NUM);
+                Seek += (sizeof(int) * MAX_MONSTERSKILL_NUM);
+                memcpy(&MonsterSkill[dummy].Slot, Buffer + Seek, sizeof(int));
+            }
         }
         delete[] Buffer;
         fclose(fp);
@@ -559,7 +573,7 @@ void CalcDamageMin(ITEM* ip, ITEM_ATTRIBUTE* p, int excelAddValue)
     if (IsWing(ip))
     {
     }
-    if (ip->ExcellentFlags > 0)  // TODO: For wings, too?
+    if (ip->ExcellentFlags > 0 || ip->AncientDiscriminator > 0)  // TODO: For wings, too?
     {
         if (p->Level)
         {
@@ -590,7 +604,7 @@ void CalcDamageMax(ITEM* ip, ITEM_ATTRIBUTE* p, int excelAddValue)
         return;
     }
 
-    if (ip->ExcellentFlags > 0)
+    if (ip->ExcellentFlags > 0 || ip->AncientDiscriminator > 0)
     {
         if (p->Level)
         {
@@ -621,7 +635,7 @@ void CalcMagicPower(ITEM* ip, ITEM_ATTRIBUTE* p, int excelAddValue)
         return;
     }
 
-    if (ip->ExcellentFlags > 0)
+    if (ip->ExcellentFlags > 0 || ip->AncientDiscriminator > 0)
     {
         if (p->Level)
         {
@@ -659,7 +673,7 @@ void CalcSuccessfulBlocking(ITEM* ip, ITEM_ATTRIBUTE* p)
         return;
     }
 
-    if (ip->ExcellentFlags > 0)
+    if (ip->ExcellentFlags > 0 || ip->AncientDiscriminator > 0)
     {
         if (p->Level)
             ip->SuccessfulBlocking += p->SuccessfulBlocking * 25 / p->Level + 5;
@@ -695,7 +709,7 @@ void CalcDefense(ITEM* ip, ITEM_ATTRIBUTE* p)
 
     auto isAncientItem    = ip->AncientDiscriminator > 0;
     auto isExcellent      = ip->ExcellentFlags > 0;
-    auto setItemDropLevel = GetDropLevel(p);
+    auto setItemDropLevel = std::max(1, GetDropLevel(p));
 
     if (ip->Type >= ITEM_SHIELD && ip->Type < ITEM_SHIELD + MAX_ITEM_INDEX)
     {
@@ -708,14 +722,14 @@ void CalcDefense(ITEM* ip, ITEM_ATTRIBUTE* p)
         return;
     }
 
-    if (isExcellent && p->Level > 0)
+    if ((isExcellent || isAncientItem) && p->Level > 0)
     {
         ip->Defense += p->Defense * 12 / p->Level + 4 + p->Level / 5;
     }
 
     if (isAncientItem)
     {
-        ip->Defense += p->Defense + (ip->Defense * 3 / setItemDropLevel + 2 + setItemDropLevel / 30);
+        ip->Defense += (ip->Defense * 3 / setItemDropLevel + 2 + setItemDropLevel / 30);
     }
 
     if ((ip->Type >= ITEM_WINGS_OF_SPIRITS && ip->Type <= ITEM_WINGS_OF_DARKNESS) || ip->Type == ITEM_WINGS_OF_DESPAIR)
@@ -758,13 +772,13 @@ void CalcRequirements(ITEM* ip, ITEM_ATTRIBUTE* p)
     bool isAncientItem = ip->AncientDiscriminator > 0;
     int  ItemLevel     = p->Level;
 
-    if (isExcellent)
-    {
-        ItemLevel = p->Level + 25;
-    }
-    else if (isAncientItem)
+    if (isAncientItem)
     {
         ItemLevel = p->Level + 30;
+    }
+    else if (isExcellent)
+    {
+        ItemLevel = p->Level + 25;
     }
 
     int addValue = 4;
@@ -1426,18 +1440,18 @@ void SetItemAttributes(ITEM* ip)
             }
             else if (ip->Type == ITEM_WINGS_OF_DESPAIR)
             {
-                ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
-
                 if (ip->OptionType == 2)
                 {
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_MAGIC;
+                    ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
+                    ip->Special[ip->SpecialNum]      = AT_IMPROVE_MAGIC;
+                    ip->SpecialNum++;
                 }
-                if (ip->OptionType == 0)
+                else if (ip->OptionType == 0)
                 {
-                    ip->Special[ip->SpecialNum] = AT_IMPROVE_CURSE;
+                    ip->SpecialValue[ip->SpecialNum] = Option3 * 4;
+                    ip->Special[ip->SpecialNum]      = AT_IMPROVE_CURSE;
+                    ip->SpecialNum++;
                 }
-
-                ip->SpecialNum++;
             }
             else if (ip->Type == ITEM_WING_OF_STORM)
             {
@@ -2661,7 +2675,29 @@ const wchar_t* getMonsterName(int type)
 
 void MonsterConvert(MONSTER* m, int Level)
 {
-    MONSTER_SCRIPT*    p            = &MonsterScript[m->Type];
+    if (m == nullptr)
+    {
+        return;
+    }
+
+    MONSTER_SCRIPT* p = nullptr;
+    for (int i = 0; i < EditMonsterNumber && i < MAX_MONSTER; ++i)
+    {
+        if (MonsterScript[i].Type == m->Type)
+        {
+            p = &MonsterScript[i];
+            break;
+        }
+    }
+    if (p == nullptr)
+    {
+        if (m->Type < 0 || m->Type >= MAX_MONSTER)
+        {
+            return;
+        }
+        p = &MonsterScript[m->Type];
+    }
+
     MONSTER_ATTRIBUTE* c            = &p->Attribute;
     m->Level                        = Level;
     m->Attribute.AttackSpeed        = c->AttackSpeed;
@@ -2675,6 +2711,10 @@ void MonsterConvert(MONSTER* m, int Level)
 void CreateClassAttribute(int Class, int Strength, int Dexterity, int Vitality, int Energy, int Life, int Mana,
                           int LevelLife, int LevelMana, int VitalityToLife, int EnergyToMana)
 {
+    if (Class < 0 || Class >= MAX_CLASS)
+    {
+        return;
+    }
     CLASS_ATTRIBUTE* c = &ClassAttribute[Class];
     c->Strength        = Strength;
     c->Dexterity       = Dexterity;
@@ -2931,7 +2971,7 @@ void CHARACTER_MACHINE::CalculateDamage()
         DamageMin = DamageMin - (WORD)(DamageMin * percent);
         DamageMax = DamageMax - (WORD)(DamageMax * percent);
 
-        if (Right->Type >= ITEM_STAFF && Right->Type <= ITEM_STAFF + MAX_ITEM_INDEX)
+        if (Right->Type >= ITEM_STAFF && Right->Type < ITEM_STAFF + MAX_ITEM_INDEX)
         {
             Character.AttackDamageMinLeft += (WORD)(DamageMin);
             Character.AttackDamageMaxLeft += (WORD)(DamageMax);
@@ -2963,7 +3003,7 @@ void CHARACTER_MACHINE::CalculateDamage()
         DamageMin = DamageMin - (WORD)(DamageMin * percent);
         DamageMax = DamageMax - (WORD)(DamageMax * percent);
 
-        if (Left->Type >= ITEM_STAFF && Left->Type <= ITEM_STAFF + MAX_ITEM_INDEX)
+        if (Left->Type >= ITEM_STAFF && Left->Type < ITEM_STAFF + MAX_ITEM_INDEX)
         {
             Character.AttackDamageMinLeft += (WORD)(DamageMin);
             Character.AttackDamageMaxLeft += (WORD)(DamageMax);
@@ -3190,7 +3230,9 @@ void CHARACTER_MACHINE::CalculateMagicDamage()
 
             if (Left->Type >= ITEM_SWORD && Left->Type < ITEM_SHIELD)
             {
-                if (Left->Type == ITEM_IMPERIAL_SWORD)
+                if (Left->Type == ITEM_DARK_REIGN_BLADE || Left->Type == ITEM_RUNE_BLADE ||
+                    Left->Type == ITEM_EXPLOSION_BLADE || Left->Type == ITEM_SWORD_DANCER ||
+                    Left->Type == ITEM_IMPERIAL_SWORD)
                 {
                     PlusSpecial(&DamageMin, AT_IMPROVE_DAMAGE, Left);
                     PlusSpecial(&DamageMax, AT_IMPROVE_DAMAGE, Left);
@@ -3212,40 +3254,6 @@ void CHARACTER_MACHINE::CalculateMagicDamage()
                 PlusSpecialPercent(&Character.MagicDamageMin, AT_IMPROVE_MAGIC_PERCENT, Left, 2);
                 PlusSpecialPercent(&Character.MagicDamageMax, AT_IMPROVE_MAGIC_PERCENT, Left, 2);
             }
-        }
-    }
-
-    if (Left->Type != -1 && Left->Durability != 0)
-    {
-        if (CLASS_SUMMONER != gCharacterManager.GetBaseClass(Character.Class))
-        {
-            ITEM_ATTRIBUTE* p = &ItemAttribute[Left->Type];
-            percent   = CalcDurabilityPercent(Left->Durability, p->Durability, Left->Level, Left->ExcellentFlags,
-                                              Left->AncientDiscriminator);
-            DamageMin = 0;
-            DamageMax = 0;
-
-            if (Right->Type == ITEM_IMPERIAL_SWORD)
-            {
-                PlusSpecial(&DamageMin, AT_IMPROVE_DAMAGE, Right);
-                PlusSpecial(&DamageMax, AT_IMPROVE_DAMAGE, Right);
-            }
-            else
-            {
-                PlusSpecial(&DamageMin, AT_IMPROVE_MAGIC, Right);
-                PlusSpecial(&DamageMax, AT_IMPROVE_MAGIC, Right);
-            }
-
-            if (gCharacterManager.GetBaseClass(Character.Class) != CLASS_DARK)
-            {
-                Character.MagicDamageMin += DamageMin - (WORD)(DamageMin * percent);
-                Character.MagicDamageMax += DamageMax - (WORD)(DamageMax * percent);
-            }
-
-            PlusSpecial(&Character.MagicDamageMin, AT_IMPROVE_MAGIC_LEVEL, Left);
-            PlusSpecial(&Character.MagicDamageMax, AT_IMPROVE_MAGIC_LEVEL, Left);
-            PlusSpecialPercent(&Character.MagicDamageMin, AT_IMPROVE_MAGIC_PERCENT, Left, 2);
-            PlusSpecialPercent(&Character.MagicDamageMax, AT_IMPROVE_MAGIC_PERCENT, Left, 2);
         }
     }
 
@@ -3656,23 +3664,25 @@ void CHARACTER_MACHINE::CalculateDefense()
 
 void CHARACTER_MACHINE::CalculateMagicDefense()
 {
+    Character.MagicDefense = 0;
     for (int i = EQUIPMENT_HELM; i <= EQUIPMENT_WING; ++i)
     {
-        if (Equipment[i].Durability != 0)
+        if (Equipment[i].Type != -1 && Equipment[i].Durability != 0)
         {
-            Character.MagicDefense = ItemMagicDefense(&Equipment[i]);
+            Character.MagicDefense += ItemMagicDefense(&Equipment[i]);
         }
     }
 }
 
 void CHARACTER_MACHINE::CalculateWalkSpeed()
 {
-    if (Equipment[EQUIPMENT_BOOTS].Durability != 0)
+    Character.WalkSpeed = 0;
+    if (Equipment[EQUIPMENT_BOOTS].Type != -1 && Equipment[EQUIPMENT_BOOTS].Durability != 0)
     {
-        Character.WalkSpeed = ItemWalkSpeed(&Equipment[EQUIPMENT_BOOTS]);
+        Character.WalkSpeed += ItemWalkSpeed(&Equipment[EQUIPMENT_BOOTS]);
     }
 
-    if (Equipment[EQUIPMENT_WING].Durability != 0)
+    if (Equipment[EQUIPMENT_WING].Type != -1 && Equipment[EQUIPMENT_WING].Durability != 0)
     {
         Character.WalkSpeed += ItemWalkSpeed(&Equipment[EQUIPMENT_WING]);
     }
@@ -3711,7 +3721,7 @@ bool CHARACTER_MACHINE::IsZeroDurability()
 {
     for (int i = EQUIPMENT_WEAPON_RIGHT; i < MAX_EQUIPMENT; ++i)
     {
-        if (Equipment[i].Durability == 0)
+        if (Equipment[i].Type != -1 && Equipment[i].Durability == 0)
         {
             return true;
         }
@@ -3860,28 +3870,21 @@ void CHARACTER_MACHINE::CalculateAll()
     CalculateSuccessfulBlockingPK();
     CalculateAttackRatingPK();
 
-    MONSTER_ATTRIBUTE* c   = &Enemy.Attribute;
-    FinalAttackDamageRight = AttackDamageRight - c->Defense;
-    FinalAttackDamageLeft  = AttackDamageLeft - c->Defense;
-    int EnemyAttackDamage  = c->AttackDamageMin + rand() % (c->AttackDamageMax - c->AttackDamageMin + 1);
-    FinalHitPoint          = EnemyAttackDamage - Character.Defense;
-    FinalAttackRating      = Character.AttackRating - c->SuccessfulBlocking;
-    FinalDefenseRating     = Character.SuccessfulBlocking - c->AttackRating;
+    MONSTER_ATTRIBUTE* c         = &Enemy.Attribute;
+    const int          dmgSpan   = std::max(1, c->AttackDamageMax - c->AttackDamageMin + 1);
+    const int          enemyDmg  = c->AttackDamageMin + (rand() % dmgSpan);
+    const int          rightDmg  = std::clamp(static_cast<int>(AttackDamageRight) - c->Defense, 0, 65535);
+    const int          leftDmg   = std::clamp(static_cast<int>(AttackDamageLeft) - c->Defense, 0, 65535);
+    const int          hitPoint  = std::clamp(enemyDmg - static_cast<int>(Character.Defense), 0, 65535);
+    const int          atkRating = std::clamp(static_cast<int>(Character.AttackRating) - c->SuccessfulBlocking, 0, 100);
+    const int          defRating = std::clamp(static_cast<int>(Character.SuccessfulBlocking) - c->AttackRating, 0, 100);
 
-    if (FinalAttackDamageRight < 0)
-        FinalAttackDamageRight = 0;
-    if (FinalAttackDamageLeft < 0)
-        FinalAttackDamageLeft = 0;
-    if (FinalHitPoint < 0)
-        FinalHitPoint = 0;
-    if (FinalAttackRating < 0)
-        FinalAttackRating = 0;
-    else if (FinalAttackRating > 100)
-        FinalAttackRating = 100;
-    if (FinalDefenseRating < 0)
-        FinalDefenseRating = 0;
-    else if (FinalDefenseRating > 100)
-        FinalDefenseRating = 100;
+    FinalAttackDamageRight = static_cast<WORD>(rightDmg);
+    FinalAttackDamageLeft  = static_cast<WORD>(leftDmg);
+    FinalHitPoint          = static_cast<WORD>(hitPoint);
+    FinalAttackRating      = static_cast<WORD>(atkRating);
+    FinalDefenseRating     = static_cast<WORD>(defRating);
+
     if (rand() % 100 < FinalAttackRating)
         FinalSuccessAttack = true;
     else

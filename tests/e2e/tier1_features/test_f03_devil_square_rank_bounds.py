@@ -5,19 +5,19 @@ from tests.e2e.harness.systemic_engine import DevilSquareRankValidator
 
 class TestF03DevilSquareRankBounds(unittest.TestCase):
     """
-    Feature 03: Devil Square Rank Bounds (CSEventMatch.cpp).
-    Verifies clamping iNumDevilRank <= 11 to protect MatchResult[11] buffer.
+    Feature 03: Devil Square Rank Bounds (CSEventMatch.cpp:215-217).
+    Verifies clamping iNumDevilRank <= 10 (strictly < 11) to protect MatchResult[11] buffer.
     """
 
-    def test_valid_rank_count_under_11(self):
-        # 10 ranks is within valid bounds
+    def test_valid_rank_count_at_max_10(self):
+        # 10 ranks is the maximum allowed count (MaxMatchResults = 10)
         clamped = DevilSquareRankValidator.clamp_ranks(10)
         self.assertEqual(clamped, 10)
 
-    def test_exact_11_rank_clamping(self):
-        # 11 ranks is exactly the buffer maximum
+    def test_rank_11_clamped_to_10(self):
+        # 11 equals MatchResult[11] buffer capacity and clamps to MaxMatchResults = 10
         clamped = DevilSquareRankValidator.clamp_ranks(11)
-        self.assertEqual(clamped, 11)
+        self.assertEqual(clamped, 10)
 
     def test_single_rank_result(self):
         # 1 winner

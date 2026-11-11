@@ -7,6 +7,7 @@ namespace MUnique.OpenMU.GameLogic.CastleSiege.Actions;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.GameLogic.CastleSiege.NPC;
 using MUnique.OpenMU.GameLogic.Views.CastleSiege;
+using MUnique.OpenMU.GameLogic.Views.Inventory;
 
 /// <summary>
 /// Upgrades Castle Siege gates and Guardian Statues.
@@ -93,7 +94,6 @@ public static class CastleSiegeNpcUpgradeAction
             var jewels = player.Inventory?.Items
                 .Where(item => item.Definition is { } definition
                                && new ItemIdentifier(definition.Number, definition.Group) == ItemConstants.JewelOfGuardian)
-                .Take(upgrade.RequiredJewelOfGuardianCount)
                 .ToList()
                 ?? [];
             if (player.Money < upgrade.RequiredZen)
@@ -101,7 +101,8 @@ public static class CastleSiegeNpcUpgradeAction
                 return CastleSiegeNpcOperationResult.InsufficientMoney;
             }
 
-            if (jewels.Count < upgrade.RequiredJewelOfGuardianCount)
+            var availableJewelUnits = jewels.Sum(item => item.IsStackable() ? Math.Max(1, (int)item.Durability) : 1);
+            if (availableJewelUnits < upgrade.RequiredJewelOfGuardianCount)
             {
                 return CastleSiegeNpcOperationResult.RequirementNotMet;
             }
@@ -111,31 +112,66 @@ public static class CastleSiegeNpcUpgradeAction
                 return CastleSiegeNpcOperationResult.InsufficientMoney;
             }
 
+            var remainingJewels = upgrade.RequiredJewelOfGuardianCount;
             foreach (var jewel in jewels)
             {
-                await player.DestroyInventoryItemAsync(jewel).ConfigureAwait(false);
+                if (remainingJewels <= 0)
+                {
+                    break;
+                }
+
+                var unitCount = jewel.IsStackable() ? Math.Max(1, (int)jewel.Durability) : 1;
+                if (jewel.IsStackable() && unitCount > remainingJewels)
+                {
+                    jewel.Durability -= (byte)remainingJewels;
+                    remainingJewels = 0;
+                    await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(jewel, false)).ConfigureAwait(false);
+                }
+                else
+                {
+                    remainingJewels -= unitCount;
+                    await player.DestroyInventoryItemAsync(jewel).ConfigureAwait(false);
+                }
             }
 
             var oldMaximumHealth = context.NpcController.GetMaximumHealth(runtime);
-            SetLevel(state, upgradeType, requestedLevel);
-            if (runtime.SpawnedInstance is CastleSiegeAttackableNpc structure)
+            var oldPersistedHp = state.CurrentHp;
+            var oldStructureHealth = (runtime.SpawnedInstance as CastleSiegeAttackableNpc)?.Health ?? 0;
+            try
             {
-                structure.ApplyPersistedUpgrades(true);
-                state.CurrentHp = structure.Health;
-            }
-            else if (upgradeType == CastleSiegeUpgradeType.Life)
-            {
-                var newMaximumHealth = context.NpcController.GetMaximumHealth(runtime);
-                var adjustedHealth = (long)state.CurrentHp + newMaximumHealth - oldMaximumHealth;
-                state.CurrentHp = (int)Math.Clamp(adjustedHealth, 0L, newMaximumHealth);
-            }
-            else
-            {
-                // Defense and regeneration upgrades do not alter the persisted health of an unspawned structure.
-            }
+                SetLevel(state, upgradeType, requestedLevel);
+                if (runtime.SpawnedInstance is CastleSiegeAttackableNpc structure)
+                {
+                    structure.ApplyPersistedUpgrades(true);
+                    state.CurrentHp = structure.Health;
+                }
+                else if (upgradeType == CastleSiegeUpgradeType.Life)
+                {
+                    var newMaximumHealth = context.NpcController.GetMaximumHealth(runtime);
+                    var adjustedHealth = (long)state.CurrentHp + newMaximumHealth - oldMaximumHealth;
+                    state.CurrentHp = (int)Math.Clamp(adjustedHealth, 0L, newMaximumHealth);
+                }
+                else
+                {
+                    // Defense and regeneration upgrades do not alter the persisted health of an unspawned structure.
+                }
 
-            await context.SaveNpcStatesAsync().ConfigureAwait(false);
-            return CastleSiegeNpcOperationResult.Success;
+                await context.SaveNpcStatesAsync().ConfigureAwait(false);
+                return CastleSiegeNpcOperationResult.Success;
+            }
+            catch
+            {
+                SetLevel(state, upgradeType, currentLevel);
+                state.CurrentHp = oldPersistedHp;
+                if (runtime.SpawnedInstance is CastleSiegeAttackableNpc structure)
+                {
+                    structure.ApplyPersistedUpgrades(false);
+                    structure.Health = oldStructureHealth;
+                }
+
+                player.TryAddMoney(upgrade.RequiredZen);
+                throw;
+            }
         }
         finally
         {

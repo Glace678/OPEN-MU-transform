@@ -8,8 +8,13 @@
 #ifdef _WIN32
 #include <io.h>
 #endif
+#include <cerrno>
+#include <cmath>
+#include <cwchar>
+#include <cwctype>
 #include <fcntl.h>
 #include <iostream>
+#include <limits>
 #include "Engine/Object/ZzzInterface.h"
 #include "Render/Textures/ZzzOpenglUtil.h"
 #include "WindowsConsole.h"
@@ -115,11 +120,27 @@ bool CmuConsoleDebug::CheckCommand(const std::wstring& strCommand)
         SetShowGLStats(false);
         return true;
     }
-    else if (strCommand.compare(0, 4, L"$fps") == 0)
+    else if (strCommand.compare(L"$fps") == 0)
     {
-        auto fps_str    = strCommand.substr(5);
-        auto target_fps = std::stof(fps_str);
-        SetTargetFps(target_fps);
+        return true;
+    }
+    else if (strCommand.compare(0, 5, L"$fps ") == 0)
+    {
+        const wchar_t* arg    = strCommand.c_str() + 5;
+        wchar_t*       endPtr = nullptr;
+        errno                 = 0;
+        const float targetFps = std::wcstof(arg, &endPtr);
+        if (endPtr != arg && errno != ERANGE && std::isfinite(targetFps))
+        {
+            while (*endPtr != L'\0' && std::iswspace(static_cast<wint_t>(*endPtr)))
+            {
+                ++endPtr;
+            }
+            if (*endPtr == L'\0')
+            {
+                SetTargetFps(targetFps);
+            }
+        }
         return true;
     }
     else if (strCommand.compare(L"$vsync on") == 0)
@@ -244,11 +265,29 @@ bool CmuConsoleDebug::CheckCommand(const std::wstring& strCommand)
         SetDisableWingExtraLayers(false);
         return true;
     }
-    else if (strCommand.compare(0, 7, L"$winmsg") == 0)
+    else if (strCommand.compare(L"$winmsg") == 0)
     {
-        auto str_limit     = strCommand.substr(8);
-        auto message_limit = std::stof(str_limit);
-        SetMaxMessagePerCycle(message_limit);
+        return true;
+    }
+    else if (strCommand.compare(0, 8, L"$winmsg ") == 0)
+    {
+        const wchar_t* arg          = strCommand.c_str() + 8;
+        wchar_t*       endPtr       = nullptr;
+        errno                       = 0;
+        const float messageLimitRaw = std::wcstof(arg, &endPtr);
+        if (endPtr != arg && errno != ERANGE && std::isfinite(messageLimitRaw) &&
+            messageLimitRaw >= static_cast<float>((std::numeric_limits<int>::min)()) &&
+            messageLimitRaw <= static_cast<float>((std::numeric_limits<int>::max)()))
+        {
+            while (*endPtr != L'\0' && std::iswspace(static_cast<wint_t>(*endPtr)))
+            {
+                ++endPtr;
+            }
+            if (*endPtr == L'\0')
+            {
+                SetMaxMessagePerCycle(static_cast<int>(messageLimitRaw));
+            }
+        }
         return true;
     }
 
@@ -365,8 +404,9 @@ void CmuConsoleDebug::Write(int iType, const wchar_t* pStr, ...)
         va_start(pArgsForFile, pStr);
         // C99 4-arg vswprintf -- explicit buffer size, bounded write. The
         // 3-arg MS-extension form is unsafe (no size param, can overflow).
-        _vsnwprintf(szErrorBuffer, sizeof(szErrorBuffer) / sizeof(szErrorBuffer[0]), pStr, pArgsForFile);
+        _vsnwprintf(szErrorBuffer, (sizeof(szErrorBuffer) / sizeof(szErrorBuffer[0])) - 1, pStr, pArgsForFile);
         va_end(pArgsForFile);
+        szErrorBuffer[(sizeof(szErrorBuffer) / sizeof(szErrorBuffer[0])) - 1] = L'\0';
         g_ErrorReport.Write(L"[MCD_ERROR] %ls\r\n", szErrorBuffer);
     }
 
@@ -395,13 +435,15 @@ void CmuConsoleDebug::Write(int iType, const wchar_t* pStr, ...)
         va_start(pArguments, pStr);
         vswprintf(szBuffer, sizeof(szBuffer) / sizeof(wchar_t), pStr, pArguments);
         va_end(pArguments);
+        szBuffer[(sizeof(szBuffer) / sizeof(szBuffer[0])) - 1] = L'\0';
 
         std::wcout << szBuffer << std::endl;
 
 #ifdef _EDITOR
         // Also log to ImGui console
-        char szUtf8Buffer[512];
+        char szUtf8Buffer[512] = {};
         WideCharToMultiByte(CP_UTF8, 0, szBuffer, -1, szUtf8Buffer, sizeof(szUtf8Buffer), NULL, NULL);
+        szUtf8Buffer[sizeof(szUtf8Buffer) - 1] = '\0';
         g_MuEditorConsoleUI.LogGame(szUtf8Buffer);
 #endif
     }

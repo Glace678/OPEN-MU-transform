@@ -34,10 +34,10 @@ private:
     CNewUIInventoryCtrl* m_pNewInventoryCtrl;
     CNewUIButton         m_BtnExit;
 
-    bool m_bItemAutoMove;
-    int  m_nBackupMouseX;
-    int  m_nBackupMouseY;
-    int  m_nBackupSourceInvenIndex;
+    bool m_bItemAutoMove           = false;
+    int  m_nBackupMouseX           = 0;
+    int  m_nBackupMouseY           = 0;
+    int  m_nBackupSourceInvenIndex = -1;
 
 public:
     CNewUIStorageInventoryExt();
@@ -63,6 +63,8 @@ public:
     bool ProcessMyInvenItemAutoMove(CNewUIInventoryCtrl* sourceCtrl = nullptr);
 
     bool IsItemAutoMove() const { return m_bItemAutoMove; }
+    int  GetBackupMouseX() const { return m_nBackupMouseX; }
+    int  GetBackupMouseY() const { return m_nBackupMouseY; }
 
     void ProcessToReceiveStorageItems(int nIndex, std::span<const BYTE> pbyItemPacket);
     void ProcessStorageItemAutoMoveSuccess();

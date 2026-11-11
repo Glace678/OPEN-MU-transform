@@ -74,7 +74,7 @@ void AddBlank(Model& m)
 void AddRaw(Model& m, const wchar_t* text, LineColor color, bool bold = false)
 {
     Line& l = NextSlot(m);
-    wcsncpy(l.text, text, MAX_TOOLTIP_LINE_TEXT - 1);
+    wcsncpy(l.text, text ? text : L"", MAX_TOOLTIP_LINE_TEXT - 1);
     l.text[MAX_TOOLTIP_LINE_TEXT - 1] = L'\0';
     l.color                           = color;
     l.isBold                          = bold;
@@ -83,29 +83,35 @@ void AddRaw(Model& m, const wchar_t* text, LineColor color, bool bold = false)
 
 void AddFormatted(Model& m, int globalTextIdx, LineColor color, int v1)
 {
-    Line& l = NextSlot(m);
-    mu_swprintf(l.text, I18N::Game::Lookup(globalTextIdx), v1);
-    l.color   = color;
-    l.isBold  = false;
-    l.isBlank = false;
+    Line&          l   = NextSlot(m);
+    const wchar_t* fmt = I18N::Game::Lookup(globalTextIdx);
+    std::swprintf(l.text, MAX_TOOLTIP_LINE_TEXT, fmt ? fmt : L"", v1);
+    l.text[MAX_TOOLTIP_LINE_TEXT - 1] = L'\0';
+    l.color                           = color;
+    l.isBold                          = false;
+    l.isBlank                         = false;
 }
 
 void AddFormatted(Model& m, int globalTextIdx, LineColor color, int v1, int v2)
 {
-    Line& l = NextSlot(m);
-    mu_swprintf(l.text, I18N::Game::Lookup(globalTextIdx), v1, v2);
-    l.color   = color;
-    l.isBold  = false;
-    l.isBlank = false;
+    Line&          l   = NextSlot(m);
+    const wchar_t* fmt = I18N::Game::Lookup(globalTextIdx);
+    std::swprintf(l.text, MAX_TOOLTIP_LINE_TEXT, fmt ? fmt : L"", v1, v2);
+    l.text[MAX_TOOLTIP_LINE_TEXT - 1] = L'\0';
+    l.color                           = color;
+    l.isBold                          = false;
+    l.isBlank                         = false;
 }
 
 void AddFormattedWide(Model& m, int globalTextIdx, LineColor color, const wchar_t* arg)
 {
-    Line& l = NextSlot(m);
-    mu_swprintf(l.text, I18N::Game::Lookup(globalTextIdx), arg);
-    l.color   = color;
-    l.isBold  = false;
-    l.isBlank = false;
+    Line&          l   = NextSlot(m);
+    const wchar_t* fmt = I18N::Game::Lookup(globalTextIdx);
+    std::swprintf(l.text, MAX_TOOLTIP_LINE_TEXT, fmt ? fmt : L"", arg ? arg : L"");
+    l.text[MAX_TOOLTIP_LINE_TEXT - 1] = L'\0';
+    l.color                           = color;
+    l.isBold                          = false;
+    l.isBlank                         = false;
 }
 
 // Requirement line. In game mode, compares value vs current and colors
@@ -120,21 +126,25 @@ void AddRequirementLine(Model& m, int requiredValue, int currentValue, int reqSt
     const bool requirementMet = editorMode || (currentValue >= requiredValue);
 
     {
-        Line& l = NextSlot(m);
-        mu_swprintf(l.text, I18N::Game::Lookup(reqStringIndex), requiredValue);
-        l.color   = requirementMet ? LineColor::White : LineColor::Red;
-        l.isBold  = false;
-        l.isBlank = false;
+        Line&          l   = NextSlot(m);
+        const wchar_t* fmt = I18N::Game::Lookup(reqStringIndex);
+        std::swprintf(l.text, MAX_TOOLTIP_LINE_TEXT, fmt ? fmt : L"", requiredValue);
+        l.text[MAX_TOOLTIP_LINE_TEXT - 1] = L'\0';
+        l.color                           = requirementMet ? LineColor::White : LineColor::Red;
+        l.isBold                          = false;
+        l.isBlank                         = false;
     }
 
     if (editorMode || requirementMet)
         return;
 
-    Line& deficit = NextSlot(m);
-    mu_swprintf(deficit.text, I18N::Game::Lookup(GLOBAL_TEXT_NEED_MORE_STAT), requiredValue - currentValue);
-    deficit.color   = LineColor::Red;
-    deficit.isBold  = false;
-    deficit.isBlank = false;
+    Line&          deficit = NextSlot(m);
+    const wchar_t* fmt     = I18N::Game::Lookup(GLOBAL_TEXT_NEED_MORE_STAT);
+    std::swprintf(deficit.text, MAX_TOOLTIP_LINE_TEXT, fmt ? fmt : L"", requiredValue - currentValue);
+    deficit.text[MAX_TOOLTIP_LINE_TEXT - 1] = L'\0';
+    deficit.color                           = LineColor::Red;
+    deficit.isBold                          = false;
+    deficit.isBlank                         = false;
 }
 
 // =====================================================================
@@ -528,7 +538,7 @@ void EmitBottomBanners(Model& m, const BuildOptions& options, int skillType)
     // Skill brand / master info (both modes - data-only).
     const int BrandType    = SkillAttribute[skillType].SkillBrand;
     const int SkillUseType = SkillAttribute[skillType].SkillUseType;
-    if (SkillUseType == SKILL_USE_TYPE_BRAND)
+    if (SkillUseType == SKILL_USE_TYPE_BRAND && BrandType >= 0 && BrandType < MAX_SKILLS)
     {
         AddFormattedWide(m, 1480, LineColor::DarkRed, SkillAttribute[BrandType].Name);
         AddFormatted(m, 1481, LineColor::DarkRed, SkillAttribute[BrandType].Damage);
@@ -616,11 +626,13 @@ void BuildModel(const BuildOptions& options, Model& outModel)
     // weapon's special options).
     if (options.includeCharacterSpecific && SkillType == AT_SKILL_FORCE && Hero->Weapon[0].Type != -1)
     {
-        for (int i = 0; i < CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].SpecialNum; i++)
+        for (int i = 0;
+             i < CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].SpecialNum && i < MAX_ITEM_SPECIAL; i++)
         {
             if (CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Special[i] == AT_SKILL_FORCE_WAVE)
             {
-                mu_swprintf(lpszName, L"%ls", I18N::Game::ForceWave);
+                std::swprintf(lpszName, std::size(lpszName), L"%ls", I18N::Game::ForceWave);
+                lpszName[std::size(lpszName) - 1] = L'\0';
                 break;
             }
         }

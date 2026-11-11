@@ -8,9 +8,17 @@ import bridge from 'libopenmubridge.so';
 
 const DOMAIN = 0x4f50; // "OP"
 
-// H-05: surfaced when native bridge startup setup throws; Bootstrap refuses to
-// route into the game until this is null.
+// H-05: surfaced when native bridge startup setup throws; Bootstrap retries
+// setDataRoot + setEnv after first-run extraction and clears this on success.
 export let nativeStartupError: string | null = null;
+
+export function clearNativeStartupError(): void {
+  nativeStartupError = null;
+}
+
+export function setNativeStartupError(message: string): void {
+  nativeStartupError = message;
+}
 
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {

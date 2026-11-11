@@ -28,12 +28,16 @@ test -f "${SRC_CSPROJ}" || {
 # NEW-HARMONY-01: accept only RIDs we can place correctly, and map each to its
 # prebuilt ABI slot. linux-bionic-* is accepted as an alias for linux-ohos-*.
 case "${RID:-linux-ohos-arm64}" in
-  linux-ohos-arm64|linux-bionic-arm64)
+  linux-ohos-arm64)
     TARGET_RID="linux-ohos-arm64"; TARGET_ABI="arm64-v8a"; EXPECTED_MACHINE="AArch64" ;;
-  linux-ohos-x64|linux-bionic-x64)
+  linux-bionic-arm64)
+    TARGET_RID="linux-bionic-arm64"; TARGET_ABI="arm64-v8a"; EXPECTED_MACHINE="AArch64" ;;
+  linux-ohos-x64)
     TARGET_RID="linux-ohos-x64";    TARGET_ABI="x86_64";    EXPECTED_MACHINE="X86-64" ;;
+  linux-bionic-x64)
+    TARGET_RID="linux-bionic-x64";  TARGET_ABI="x86_64";    EXPECTED_MACHINE="X86-64" ;;
   *)
-    echo "error: unsupported RID '${RID}'. Expected linux-ohos-arm64 or linux-ohos-x64." >&2
+    echo "error: unsupported RID '${RID}'. Expected linux-ohos-arm64, linux-bionic-arm64, linux-ohos-x64, or linux-bionic-x64." >&2
     exit 2 ;;
 esac
 
@@ -49,7 +53,11 @@ echo "Restoring ${TARGET_RID} (${CONFIG}) ..."
 # deterministic, then publish without restoring.
 dotnet restore "${SRC_DIR}/MUnique.Client.Library.csproj" \
   -r "${TARGET_RID}" \
-  -c "${CONFIG}"
+  -c "${CONFIG}" \
+  -p:EnableDefaultCompileItems=false \
+  -p:CustomBeforeMicrosoftCommonProps="${SCRIPT_DIR}/ClientLibrary.OhosAot.props" \
+  -p:DisableUnsupportedError=true \
+  -p:ci=true
 
 echo "Publishing ${TARGET_RID} (${CONFIG}) ..."
 dotnet publish "${SRC_DIR}/MUnique.Client.Library.csproj" \
@@ -57,16 +65,26 @@ dotnet publish "${SRC_DIR}/MUnique.Client.Library.csproj" \
   -c "${CONFIG}" \
   --self-contained true \
   -o "${PUBLISH_DIR}" \
-  --no-restore
+  --no-restore \
+  -p:EnableDefaultCompileItems=false \
+  -p:CustomBeforeMicrosoftCommonProps="${SCRIPT_DIR}/ClientLibrary.OhosAot.props" \
+  -p:DisableUnsupportedError=true \
+  -p:PublishAotUsingRuntimePack=true \
+  -p:NativeLib=Shared \
+  -p:DebugType=None \
+  -p:DebugSymbols=false \
+  -p:ci=true
 
-SOURCES=(
-  "${PUBLISH_DIR}/libMUnique.Client.Library.so"
-)
-REFERENCE="$(cd "${PUBLISH_DIR}" && pwd)/ref/MUnique.Client.Library.dll"
-for SOURCE in "${SOURCES[@]}"; do
-  test -f "${SOURCE}" || { echo "Missing published library: ${SOURCE}" >&2; exit 1; }
-done
-test -f "${REFERENCE}" || { echo "Missing reference assembly: ${REFERENCE}" >&2; exit 1; }
+if [[ -f "${PUBLISH_DIR}/libMUnique.Client.Library.so" ]]; then
+  PUBLISHED_SO="${PUBLISH_DIR}/libMUnique.Client.Library.so"
+elif [[ -f "${PUBLISH_DIR}/MUnique.Client.Library.so" ]]; then
+  PUBLISHED_SO="${PUBLISH_DIR}/MUnique.Client.Library.so"
+else
+  echo "Missing published library in ${PUBLISH_DIR} (expected MUnique.Client.Library.so or libMUnique.Client.Library.so)" >&2
+  exit 1
+fi
+SOURCES=("${PUBLISHED_SO}")
+REFERENCE="${PUBLISH_DIR}/ref/MUnique.Client.Library.dll"
 
 # NEW-HARMONY-01: verify the produced ELF machine matches the RID's ABI slot
 # before staging it. This prevents an arm64 .so from being copied into the x86_64
@@ -83,17 +101,17 @@ if command -v llvm-readelf >/dev/null; then
 fi
 
 # NEW-HARMONY-01: stage into the ABI slot that matches the RID (prebuilt/<ABI>/),
-# not a hardcoded arm64-v8a. The phone game only ships arm64; the PC slot gets the
-# matching arch.
+# not a hardcoded arm64-v8a. Always install under the required soname
+# libMUnique.Client.Library.so even when NativeAOT emits MUnique.Client.Library.so.
 GAME_LIB_DIR="${GAME_ENTRY_DIR}/src/main/cpp/prebuilt/${TARGET_ABI}"
 PC_LIB_DIR="${PC_ENTRY_DIR}/src/main/cpp/prebuilt/${TARGET_ABI}"
 mkdir -p "${GAME_LIB_DIR}" "${PC_LIB_DIR}"
 
-for SOURCE in "${SOURCES[@]}"; do
-  install -m 0644 "${SOURCE}" "${GAME_LIB_DIR}/"
-  install -m 0644 "${SOURCE}" "${PC_LIB_DIR}/"
-done
-install -m 0644 "${REFERENCE}" "${PC_ENTRY_DIR}/src/main/cpp/"
+install -m 0644 "${PUBLISHED_SO}" "${GAME_LIB_DIR}/libMUnique.Client.Library.so"
+install -m 0644 "${PUBLISHED_SO}" "${PC_LIB_DIR}/libMUnique.Client.Library.so"
+if [[ -f "${REFERENCE}" ]]; then
+  install -m 0644 "${REFERENCE}" "${PC_ENTRY_DIR}/src/main/cpp/"
+fi
 
 echo "Copied ${TARGET_ABI} library to:"
 echo "  ${GAME_LIB_DIR}"

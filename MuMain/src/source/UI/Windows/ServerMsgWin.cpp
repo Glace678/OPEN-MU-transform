@@ -6,7 +6,10 @@
 #include "ServerMsgWin.h"
 #include "UI/Legacy/UIControls.h"
 
-CServerMsgWin::CServerMsgWin() {}
+CServerMsgWin::CServerMsgWin() : m_nMsgLine(0)
+{
+    ::memset(m_aszMsg, 0, sizeof(m_aszMsg));
+}
 
 CServerMsgWin::~CServerMsgWin() {}
 
@@ -39,16 +42,19 @@ bool CServerMsgWin::CursorInWin(int nArea)
 
 void CServerMsgWin::AddMsg(wchar_t* pszMsg)
 {
+    if (pszMsg == nullptr)
+        return;
+
     if (++m_nMsgLine > SMW_MSG_LINE_MAX)
     {
         m_nMsgLine = SMW_MSG_LINE_MAX;
         for (int i = 0; i < SMW_MSG_LINE_MAX - 1; ++i)
-            ::wcscpy(m_aszMsg[i], m_aszMsg[i + 1]);
+            wcsncpy_s(m_aszMsg[i], SMW_MSG_ROW_MAX, m_aszMsg[i + 1], _TRUNCATE);
     }
     else
         CWinEx::SetLine(m_nMsgLine * 5);
 
-    wcscpy(m_aszMsg[m_nMsgLine - 1], pszMsg);
+    wcsncpy_s(m_aszMsg[m_nMsgLine - 1], SMW_MSG_ROW_MAX, pszMsg, _TRUNCATE);
 
     CWinEx::Show(true);
 }

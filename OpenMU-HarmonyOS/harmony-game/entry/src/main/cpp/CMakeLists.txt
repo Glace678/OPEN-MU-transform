@@ -28,6 +28,13 @@ endif()
 # and the gl4es OHOS build). Drop the arm64 .so files here:
 #   prebuilt/arm64-v8a/libMUnique.Client.Library.so   (.NET NativeAOT protocol lib)
 #   prebuilt/arm64-v8a/libGL.so                       (gl4es, optional if built from source)
+if(NOT OHOS_ARCH)
+  if(CMAKE_OHOS_ARCH_ABI)
+    set(OHOS_ARCH "${CMAKE_OHOS_ARCH_ABI}")
+  else()
+    set(OHOS_ARCH "arm64-v8a")
+  endif()
+endif()
 set(MU_OHOS_PREBUILT_DIR "${CMAKE_CURRENT_LIST_DIR}/prebuilt/${OHOS_ARCH}")
 
 # Build the whole game (MuClient + libmain.so + shared SDL3) from the shared

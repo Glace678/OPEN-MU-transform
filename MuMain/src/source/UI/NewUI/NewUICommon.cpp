@@ -231,6 +231,8 @@ bool SEASON3B::CNewKeyInput::IsNone(int iVirtKey)
     if (!g_bWndActive)
         return false;
 #endif  // ASG_FIX_ACTIVATE_APP_INPUT
+    if (iVirtKey < 0 || iVirtKey >= 256)
+        return false;
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_NONE) ? true : false;
 }
 
@@ -240,6 +242,8 @@ bool SEASON3B::CNewKeyInput::IsRelease(int iVirtKey)
     if (!g_bWndActive)
         return false;
 #endif  // ASG_FIX_ACTIVATE_APP_INPUT
+    if (iVirtKey < 0 || iVirtKey >= 256)
+        return false;
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_RELEASE) ? true : false;
 }
 
@@ -249,6 +253,8 @@ bool SEASON3B::CNewKeyInput::IsPress(int iVirtKey)
     if (!g_bWndActive)
         return false;
 #endif  // ASG_FIX_ACTIVATE_APP_INPUT
+    if (iVirtKey < 0 || iVirtKey >= 256)
+        return false;
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_PRESS) ? true : false;
 }
 
@@ -258,10 +264,14 @@ bool SEASON3B::CNewKeyInput::IsRepeat(int iVirtKey)
     if (!g_bWndActive)
         return false;
 #endif  // ASG_FIX_ACTIVATE_APP_INPUT
+    if (iVirtKey < 0 || iVirtKey >= 256)
+        return false;
     return (m_pInputInfo[iVirtKey].byKeyState == KEY_REPEAT) ? true : false;
 }
 
 void SEASON3B::CNewKeyInput::SetKeyState(int iVirtKey, KEY_STATE KeyState)
 {
+    if (iVirtKey < 0 || iVirtKey >= 256)
+        return;
     m_pInputInfo[iVirtKey].byKeyState = KeyState;
 }

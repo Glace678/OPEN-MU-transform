@@ -12,6 +12,10 @@ using MUnique.OpenMU.GameLogic.Views.Login;
 /// </summary>
 public class LoginAction
 {
+    private const int MaxFailedAttemptsPerAccountIp = 5;
+    private const int MaxFailedAttemptsPerIp = 20;
+    private static readonly TimeSpan LoginLockoutDuration = TimeSpan.FromSeconds(60);
+
     private static int _templateCounter;
 
     /// <summary>
@@ -59,11 +63,38 @@ public class LoginAction
     {
         try
         {
+            string? accountIpKey = null;
+            string? ipKey = null;
+            var now = DateTime.UtcNow;
+            if (player is IHasIpAddress { IpAddress: { Length: > 0 } ipAddress })
+            {
+                var normalizedUsername = username.Trim().ToLowerInvariant();
+                accountIpKey = $"login:{normalizedUsername}@{ipAddress}";
+                ipKey = $"login-ip:{ipAddress}";
+                if (LoginThrottle.IsLockedOut(accountIpKey, now) || LoginThrottle.IsLockedOut(ipKey, now))
+                {
+                    player.Logger.LogWarning("Rejected throttled login attempt for username [{Username}] from {IpAddress}.", username, ipAddress);
+                    await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(LoginResult.InvalidPassword)).ConfigureAwait(false);
+                    return null;
+                }
+            }
+
             var state = await player.PersistenceContext.AuthenticateAsync(username, password).ConfigureAwait(false);
             if (state is null)
             {
+                if (accountIpKey is not null && ipKey is not null)
+                {
+                    var failureTime = DateTime.UtcNow;
+                    LoginThrottle.RegisterFailure(accountIpKey, failureTime, MaxFailedAttemptsPerAccountIp, LoginLockoutDuration);
+                    LoginThrottle.RegisterFailure(ipKey, failureTime, MaxFailedAttemptsPerIp, LoginLockoutDuration);
+                }
+
                 player.Logger.LogInformation("Account not found or invalid password, username: [{Username}].", username);
                 await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(LoginResult.InvalidPassword)).ConfigureAwait(false);
+            }
+            else if (accountIpKey is not null)
+            {
+                LoginThrottle.Reset(accountIpKey);
             }
 
             return state;

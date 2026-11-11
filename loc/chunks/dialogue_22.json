@@ -91,7 +91,7 @@
   },
   {
    "id": 3444,
-   "en": "The character's current coordinates are shown on the top left corner of the screen. Movement in the �� or �� direction changes the first number, and movement in the �� or �� direction the second.",
+   "en": "The character's current coordinates are shown on the top left corner of the screen. Movement in the ↖ or ↘ direction changes the first number, and movement in the ↗ or ↙ direction the second.",
    "budget": 4096,
    "kinds": [
     "questwords"

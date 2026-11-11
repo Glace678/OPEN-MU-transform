@@ -79,20 +79,20 @@ public static class ConnectionExtensions
             return;
         }
 
-        int WritePacket(</xsl:text>
-    <xsl:text>)
+        int WritePacket()
         {
             var length = </xsl:text>
+    <xsl:variable name="variableField" select="pd:Fields/pd:Field[last()][(pd:Type = 'Binary' or pd:Type = 'String') and not(pd:Length)]" />
     <xsl:choose>
+      <xsl:when test="$variableField">
+        <xsl:apply-templates select="pd:Name" />
+        <xsl:text>Ref.GetRequiredSize(</xsl:text>
+        <xsl:apply-templates select="$variableField" mode="length"/>
+        <xsl:text>)</xsl:text>
+      </xsl:when>
       <xsl:when test="pd:Length">
         <xsl:apply-templates select="pd:Name" />
         <xsl:text>Ref.Length</xsl:text>
-      </xsl:when>
-      <xsl:when test="not(pd:Length)">
-        <xsl:apply-templates select="pd:Name" />
-        <xsl:text>Ref.GetRequiredSize(</xsl:text>
-        <xsl:apply-templates select="pd:Fields/pd:Field[(pd:Type = 'Binary' or pd:Type = 'String') and not(pd:Length)]" mode="length"/>
-        <xsl:text>)</xsl:text>
       </xsl:when>
       <xsl:otherwise>
         throw new NotImplementedException()

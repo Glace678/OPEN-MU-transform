@@ -9315,7 +9315,7 @@
 			<Fields>
 				<Field>
 					<Index>3</Index>
-					<Type>ShortLittleEndian</Type>
+					<Type>ShortBigEndian</Type>
 					<Name>ObjectId</Name>
 				</Field>
 				<Field>
@@ -9417,7 +9417,7 @@
             </Field>
             <Field>
               <Index>2</Index>
-              <Type>ShortLittleEndian</Type>
+              <Type>Byte</Type>
               <Name>MapNumber</Name>
             </Field>
             <Field>

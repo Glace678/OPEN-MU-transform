@@ -115,9 +115,57 @@ internal static class MoneyDistribution
         }
 
         var received = false;
+        var unpaidAmounts = new uint[eligible.Count];
         for (int i = 0; i < eligible.Count; i++)
         {
-            received |= TryPay(eligible[i].Player, eligible[i].Amount + extra[i]);
+            unpaidAmounts[i] = eligible[i].Amount + extra[i];
+        }
+
+        var rejectedIndices = new HashSet<int>();
+        while (true)
+        {
+            uint newlyForfeited = 0;
+            for (int i = 0; i < eligible.Count; i++)
+            {
+                if (unpaidAmounts[i] == 0 || rejectedIndices.Contains(i))
+                {
+                    continue;
+                }
+
+                var toPay = unpaidAmounts[i];
+                unpaidAmounts[i] = 0;
+                if (TryPay(eligible[i].Player, toPay))
+                {
+                    received = true;
+                }
+                else
+                {
+                    rejectedIndices.Add(i);
+                    newlyForfeited += toPay;
+                }
+            }
+
+            if (newlyForfeited == 0 || rejectedIndices.Count >= eligible.Count)
+            {
+                break;
+            }
+
+            var remainingIndices = new List<int>(eligible.Count - rejectedIndices.Count);
+            var remainingWeights = new List<long>(eligible.Count - rejectedIndices.Count);
+            for (int i = 0; i < eligible.Count; i++)
+            {
+                if (!rejectedIndices.Contains(i))
+                {
+                    remainingIndices.Add(i);
+                    remainingWeights.Add(eligible[i].Amount);
+                }
+            }
+
+            var redistributed = SplitByWeight(newlyForfeited, remainingWeights);
+            for (int j = 0; j < remainingIndices.Count; j++)
+            {
+                unpaidAmounts[remainingIndices[j]] += redistributed[j];
+            }
         }
 
         return received;

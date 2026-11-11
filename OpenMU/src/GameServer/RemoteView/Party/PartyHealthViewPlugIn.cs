@@ -33,7 +33,22 @@ public class PartyHealthViewPlugIn : IPartyHealthViewPlugIn
         this._player = player;
     }
 
-    private byte[] HealthValues => this._healthValues ??= new byte[this._player.Party!.MaxPartySize];
+    private byte[] GetHealthValues(int requiredSize)
+    {
+        var capacity = Math.Max(requiredSize, this._player.Party?.MaxPartySize ?? requiredSize);
+        if (this._healthValues is null || this._healthValues.Length < capacity)
+        {
+            var resized = new byte[capacity];
+            if (this._healthValues is not null)
+            {
+                Array.Copy(this._healthValues, resized, this._healthValues.Length);
+            }
+
+            this._healthValues = resized;
+        }
+
+        return this._healthValues;
+    }
 
     /// <inheritdoc/>
     public bool IsHealthUpdateNeeded()
@@ -59,7 +74,8 @@ public class PartyHealthViewPlugIn : IPartyHealthViewPlugIn
             return;
         }
 
-        var partyListCount = partyList.Count;
+        var healthValues = this.GetHealthValues(partyList.Count);
+        var partyListCount = Math.Min(Math.Min(partyList.Count, healthValues.Length), byte.MaxValue);
         int Write()
         {
             var size = PartyHealthUpdateRef.GetRequiredSize(partyListCount);
@@ -73,7 +89,7 @@ public class PartyHealthViewPlugIn : IPartyHealthViewPlugIn
             {
                 var member = packet[i];
                 member.Index = (byte)i;
-                member.Value = this.HealthValues[i];
+                member.Value = healthValues[i];
             }
 
             return size;
@@ -92,16 +108,19 @@ public class PartyHealthViewPlugIn : IPartyHealthViewPlugIn
             return false;
         }
 
+        var healthValues = this.GetHealthValues(partyList.Count);
         bool updated = false;
-        for (int i = partyList.Count - 1; i >= 0; --i)
+        for (int i = Math.Min(partyList.Count, healthValues.Length) - 1; i >= 0; --i)
         {
             var partyMember = partyList[i];
-            double value = (double)partyMember.CurrentHealth / partyMember.MaximumHealth;
+            double value = partyMember.MaximumHealth > 0
+                ? Math.Clamp((double)partyMember.CurrentHealth / partyMember.MaximumHealth, 0.0, 1.0)
+                : 0.0;
             var newValue = (byte)(value * 10);
-            if (this.HealthValues[i] != newValue)
+            if (healthValues[i] != newValue)
             {
                 updated = true;
-                this.HealthValues[i] = newValue;
+                healthValues[i] = newValue;
             }
         }
 

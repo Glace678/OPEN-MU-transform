@@ -234,10 +234,13 @@ bool CNewUIInventoryActionController::HandleSellToNPC(CNewUIInventoryCtrl* targe
     }
 
     CNewUIPickedItem* pPickedItem = CNewUIInventoryCtrl::GetPickedItem();
-    if (pPickedItem == nullptr)
+    if (pPickedItem == nullptr || pPickedItem->GetItem() == nullptr)
     {
+        CNewUIInventoryCtrl::DeletePickedItem();
         return false;
     }
+
+    ITEM* pPickedItemObj = pPickedItem->GetItem();
 
     targetControl->RemoveItem(pItem);
     pPickedItem->HidePickedItem();
@@ -249,7 +252,7 @@ bool CNewUIInventoryActionController::HandleSellToNPC(CNewUIInventoryCtrl* targe
         return false;
     }
 
-    if (IsHighValueItem(pItem))
+    if (IsHighValueItem(pPickedItemObj))
     {
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CHighValueItemCheckMsgBoxLayout));
         return true;
@@ -319,6 +322,11 @@ bool CNewUIInventoryActionController::HandleInventoryRightClickActions(CNewUIInv
 
 int CNewUIInventoryActionController::FindAlternateEquipSlot(int nOriginalSlot, ITEM* pItem) const
 {
+    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEMS)
+    {
+        return -1;
+    }
+
     if (nOriginalSlot == EQUIPMENT_WEAPON_RIGHT)
     {
         const auto baseClass = gCharacterManager.GetBaseClass(Hero->Class);
@@ -352,6 +360,12 @@ bool CNewUIInventoryActionController::IsSlotOccupied(int nSlot) const
 
 bool CNewUIInventoryActionController::TryEquipItem(CNewUIInventoryCtrl* targetControl, ITEM* pItem, int iSrcIndex) const
 {
+    if (targetControl == nullptr || m_pContext == nullptr || pItem == nullptr || pItem->Type < 0 ||
+        pItem->Type >= MAX_ITEMS)
+    {
+        return false;
+    }
+
     const ITEM_ATTRIBUTE* pItemAttr = &ItemAttribute[pItem->Type];
     int                   nDstIndex = pItemAttr->m_byItemSlot;
 
@@ -390,15 +404,18 @@ bool CNewUIInventoryActionController::TryEquipItem(CNewUIInventoryCtrl* targetCo
     }
 
     CNewUIPickedItem* pPickedItem = CNewUIInventoryCtrl::GetPickedItem();
-    if (pPickedItem == nullptr)
+    if (pPickedItem == nullptr || pPickedItem->GetItem() == nullptr)
     {
+        CNewUIInventoryCtrl::DeletePickedItem();
         return false;
     }
+
+    ITEM* pPickedItemObj = pPickedItem->GetItem();
 
     targetControl->RemoveItem(pItem);
     pPickedItem->HidePickedItem();
 
-    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, iSrcIndex, pItem, STORAGE_TYPE::INVENTORY, nDstIndex);
+    SendRequestEquipmentItem(STORAGE_TYPE::INVENTORY, iSrcIndex, pPickedItemObj, STORAGE_TYPE::INVENTORY, nDstIndex);
     return true;
 }
 
@@ -520,7 +537,10 @@ bool CNewUIInventoryActionController::ApplyJewels(CNewUIInventoryCtrl* targetCon
     if (pPickItem->Type == ITEM_JEWEL_OF_BLESS && iType == ITEM_HORN_OF_FENRIR && iDurability != 255)
     {
         CFenrirRepairMsgBox* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CFenrirRepairMsgBoxLayout), &pMsgBox);
+        if (!CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CFenrirRepairMsgBoxLayout), &pMsgBox) || pMsgBox == nullptr)
+        {
+            return false;
+        }
         pMsgBox->SetSourceIndex(iSourceIndex);
 
         const int iIndex = targetControl->GetIndex(pItem->x, pItem->y);
@@ -661,20 +681,20 @@ bool CNewUIInventoryActionController::TryConsumeItem(CNewUIInventoryCtrl* target
         }
 
         CreateOkMessageBox(I18N::Game::YouCannotUseThisItemWhileThePotionEffectsRemainActive, RGBA(255, 30, 0, 255));
-        return false;
+        return true;
     }
 
     if ((pItem->Type >= ITEM_HELPER + 54 && pItem->Type <= ITEM_HELPER + 57) ||
         (pItem->Type == ITEM_HELPER + 58 && gCharacterManager.GetBaseClass(Hero->Class) == CLASS_DARK_LORD))
     {
-        WORD point[5] = {
+        int point[5] = {
             0,
         };
-        point[0] = CharacterAttribute->Strength + CharacterAttribute->AddStrength;
-        point[1] = CharacterAttribute->Dexterity + CharacterAttribute->AddDexterity;
-        point[2] = CharacterAttribute->Vitality + CharacterAttribute->AddVitality;
-        point[3] = CharacterAttribute->Energy + CharacterAttribute->AddEnergy;
-        point[4] = CharacterAttribute->Charisma + CharacterAttribute->AddCharisma;
+        point[0] = static_cast<int>(CharacterAttribute->Strength) + static_cast<int>(CharacterAttribute->AddStrength);
+        point[1] = static_cast<int>(CharacterAttribute->Dexterity) + static_cast<int>(CharacterAttribute->AddDexterity);
+        point[2] = static_cast<int>(CharacterAttribute->Vitality) + static_cast<int>(CharacterAttribute->AddVitality);
+        point[3] = static_cast<int>(CharacterAttribute->Energy) + static_cast<int>(CharacterAttribute->AddEnergy);
+        point[4] = static_cast<int>(CharacterAttribute->Charisma) + static_cast<int>(CharacterAttribute->AddCharisma);
 
         const unsigned char nStat[MAX_CLASS][5] = {
             18, 18, 15, 30, 0,  28, 20, 25, 10, 0,  22, 25, 20, 15, 0,  26, 26, 26,
@@ -683,13 +703,17 @@ bool CNewUIInventoryActionController::TryConsumeItem(CNewUIInventoryCtrl* target
 
         const int attributeType  = pItem->Type - (ITEM_HELPER + 54);
         const int characterClass = gCharacterManager.GetBaseClass(Hero->Class);
-        point[attributeType] -= nStat[characterClass][attributeType];
+        if (characterClass < 0 || characterClass >= MAX_CLASS)
+        {
+            return true;
+        }
+        point[attributeType] -= static_cast<int>(nStat[characterClass][attributeType]);
 
-        if (point[attributeType] < (pItem->Durability * 10))
+        if (point[attributeType] < (static_cast<int>(pItem->Durability) * 10))
         {
             g_pMyInventory->SetStandbyItemKey(pItem->Key);
             CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CUsePartChargeFruitMsgBoxLayout));
-            return false;
+            return true;
         }
 
         SendRequestUse(iIndex, 0);
@@ -716,7 +740,7 @@ bool CNewUIInventoryActionController::TryConsumeItem(CNewUIInventoryCtrl* target
         if (Hero->SafeZone == false)
         {
             CreateOkMessageBox(I18N::Game::YouCanOnlyUseThisInASafeZone);
-            return false;
+            return true;
         }
 
         SocketClient->ToGameServer()->SendMiniGameOpeningStateRequest(MiniGameType::ChaosCastle, pItem->Level);
@@ -728,14 +752,14 @@ bool CNewUIInventoryActionController::TryConsumeItem(CNewUIInventoryCtrl* target
     {
         const BYTE byPossibleLevel = CaculateFreeTicketLevel(FREETICKET_TYPE_DEVILSQUARE);
         SocketClient->ToGameServer()->SendMiniGameOpeningStateRequest(MiniGameType::DevilSquare, byPossibleLevel);
-        return false;
+        return true;
     }
 
     if (pItem->Type == ITEM_HELPER + 47)
     {
         const BYTE byPossibleLevel = CaculateFreeTicketLevel(FREETICKET_TYPE_BLOODCASTLE);
         SocketClient->ToGameServer()->SendMiniGameOpeningStateRequest(MiniGameType::BloodCastle, byPossibleLevel);
-        return false;
+        return true;
     }
 
     if (pItem->Type == ITEM_HELPER + 48)
@@ -743,7 +767,7 @@ bool CNewUIInventoryActionController::TryConsumeItem(CNewUIInventoryCtrl* target
         if (Hero->SafeZone || gMapManager.InHellas())
         {
             g_pSystemLogBox->AddText(I18N::Game::CanTBeUsedInTheSafeZone, TYPE_ERROR_MESSAGE);
-            return false;
+            return true;
         }
 
         SendRequestUse(iIndex, 0);
@@ -762,7 +786,7 @@ bool CNewUIInventoryActionController::TryConsumeItem(CNewUIInventoryCtrl* target
         if (Hero->SafeZone == false)
         {
             CreateOkMessageBox(I18N::Game::YouCanOnlyUseThisInASafeZone);
-            return false;
+            return true;
         }
 
         SocketClient->ToGameServer()->SendMiniGameOpeningStateRequest(MiniGameType::ChaosCastle, pItem->Level);
@@ -840,7 +864,7 @@ bool CNewUIInventoryActionController::TryConsumeItem(CNewUIInventoryCtrl* target
             return true;
         }
 
-        return false;
+        return true;
     }
 
     if (pItem->Type == ITEM_FRUITS)
@@ -901,7 +925,7 @@ bool CNewUIInventoryActionController::TryConsumeItem(CNewUIInventoryCtrl* target
             return true;
         }
 
-        return false;
+        return true;
     }
 
     if (pItem->Type == ITEM_HELPER + 69)
@@ -919,7 +943,7 @@ bool CNewUIInventoryActionController::TryConsumeItem(CNewUIInventoryCtrl* target
             }
         }
 
-        return false;
+        return true;
     }
 
     if (pItem->Type == ITEM_HELPER + 70)
@@ -949,13 +973,14 @@ bool CNewUIInventoryActionController::TryConsumeItem(CNewUIInventoryCtrl* target
             CreateOkMessageBox(I18N::Game::YouCannotUseTheItemAtCertainApplicableLocations);
         }
 
-        return false;
+        return true;
     }
 
     if (pItem->Type == ITEM_HELPER + 66)
     {
         g_pMyInventory->SetStandbyItemKey(pItem->Key);
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CUseSantaInvitationMsgBoxLayout));
+        return true;
     }
 
     return false;
@@ -963,13 +988,13 @@ bool CNewUIInventoryActionController::TryConsumeItem(CNewUIInventoryCtrl* target
 
 bool CNewUIInventoryActionController::TryTransferBetweenInventorySections(CNewUIInventoryCtrl* sourceControl) const
 {
-    if (sourceControl == nullptr || g_pMyInventoryExt == nullptr)
+    if (sourceControl == nullptr || g_pMyInventoryExt == nullptr || g_pMyInventory == nullptr || m_pContext == nullptr)
     {
         return false;
     }
 
     ITEM* pItem = sourceControl->FindItemAtPt(MouseX, MouseY);
-    if (pItem == nullptr)
+    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEMS)
     {
         return false;
     }

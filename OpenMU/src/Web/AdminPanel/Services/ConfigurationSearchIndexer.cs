@@ -33,6 +33,7 @@ internal sealed class ConfigurationSearchIndexer
 
     private readonly StringBuilder _pathBuilder = new(512);
     private readonly StringBuilder _haystackBuilder = new(1024);
+    private readonly HashSet<object> _visited = new(ReferenceEqualityComparer.Instance);
     private readonly string _rootPath;
     private readonly string _rootUrl;
     private readonly int _maxDepth;
@@ -42,13 +43,11 @@ internal sealed class ConfigurationSearchIndexer
     /// </summary>
     /// <param name="rootPath">The root path.</param>
     /// <param name="rootUrl">The root URL.</param>
-    /// <param name="sharedVisited">The shared visited dictionary.</param>
     /// <param name="maxDepth">The maximum depth.</param>
-    private ConfigurationSearchIndexer(string rootPath, string rootUrl, ConcurrentDictionary<object, byte>? sharedVisited = null, int maxDepth = MaximumTraversalDepth)
+    private ConfigurationSearchIndexer(string rootPath, string rootUrl, int maxDepth = MaximumTraversalDepth)
     {
         this._rootPath = rootPath;
         this._rootUrl = rootUrl;
-        this.Visited = sharedVisited ?? new ConcurrentDictionary<object, byte>(ReferenceEqualityComparer.Instance);
         this._maxDepth = maxDepth;
         this.Entries = new List<ConfigurationSearchEntry>(8192);
         this.CollectionProperties = GetSearchableProperties(typeof(GameConfiguration))
@@ -58,11 +57,6 @@ internal sealed class ConfigurationSearchIndexer
             .Where(p => !typeof(IEnumerable).IsAssignableFrom(p.PropertyType))
             .ToList();
     }
-
-    /// <summary>
-    /// Gets the shared visited dictionary.
-    /// </summary>
-    public ConcurrentDictionary<object, byte> Visited { get; }
 
     /// <summary>
     /// Gets the collected entries.
@@ -97,7 +91,7 @@ internal sealed class ConfigurationSearchIndexer
         var rootUrl = $"/edit-config/{fullTypeName}/{gameConfigurationId}";
 
         var mainIndexer = new ConfigurationSearchIndexer(rootPath, rootUrl);
-        mainIndexer.Visited.TryAdd(gameConfiguration, 0);
+        mainIndexer._visited.Add(gameConfiguration);
 
         // Add root entry
         mainIndexer.AddEntry(rootPath, rootPath, rootUrl, typeof(GameConfiguration).Name);
@@ -110,7 +104,8 @@ internal sealed class ConfigurationSearchIndexer
             mainIndexer.AddEntry(caption, rootPath, propertyUrl, property.Name, property.PropertyType.Name, typeof(GameConfiguration).Name);
         }
 
-        // Process collections in parallel
+        // Process collections in parallel with per-branch cycle sets so traversal
+        // results never depend on thread scheduling order.
         var collectionTasks = mainIndexer.CollectionProperties.Select(property => Task.Run(() =>
         {
             var value = GetPropertyValue(property, gameConfiguration) as IEnumerable;
@@ -121,7 +116,8 @@ internal sealed class ConfigurationSearchIndexer
 
             var propertyCaption = GetPropertyCaption(typeof(GameConfiguration), property);
             var propertyPath = $"{rootPath} > {propertyCaption}";
-            var localIndexer = new ConfigurationSearchIndexer(propertyPath, rootUrl, mainIndexer.Visited);
+            var localIndexer = new ConfigurationSearchIndexer(propertyPath, rootUrl);
+            localIndexer._visited.Add(gameConfiguration);
 
             localIndexer.TraverseCollection(value, 1);
             return (List<ConfigurationSearchEntry>?)localIndexer.Entries;
@@ -339,7 +335,7 @@ internal sealed class ConfigurationSearchIndexer
 
     private void TraverseObject(object current, string currentUrl, string currentPath, int depth)
     {
-        if (depth > this._maxDepth || !this.Visited.TryAdd(current, 0))
+        if (depth > this._maxDepth || !this._visited.Add(current))
         {
             return;
         }

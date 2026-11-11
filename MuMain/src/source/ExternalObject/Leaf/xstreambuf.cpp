@@ -26,7 +26,14 @@ xstreambuf::xstreambuf(unsigned int size)
 xstreambuf::xstreambuf(const xstreambuf& xbuf)
 {
     init();
-    write(xbuf.data(), xbuf.size());
+    if (xbuf.size() > 0 && xbuf.data() != nullptr)
+    {
+        if (xbuf.size() > static_cast<size_t>((std::numeric_limits<unsigned int>::max)()))
+        {
+            throw std::length_error("xstreambuf copy exceeds maximum length");
+        }
+        write(xbuf.data(), static_cast<unsigned int>(xbuf.size()));
+    }
 }
 xstreambuf::~xstreambuf()
 {
@@ -44,31 +51,48 @@ void xstreambuf::seek(unsigned int n, XBUF_POS pos)
         m_offset = n < size() ? static_cast<unsigned int>(size() - n) : 0;
     }
     if (m_offset > size())
-        m_offset = size();
+        m_offset = static_cast<unsigned int>(size());
 }
 xstreambuf& xstreambuf::write(const void* src, unsigned int n)
 {
-    unsigned int s = m_offset + n;
+    if (n == 0 || src == nullptr)
+    {
+        return *this;
+    }
+
+    if (n > (std::numeric_limits<unsigned int>::max)() - m_offset)
+    {
+        throw std::length_error("xstreambuf write offset overflow");
+    }
+
+    const unsigned int s = m_offset + n;
     if (size() < s)
         resize(s);
 
-    memcpy((BYTE*)(m_pBuffer) + m_offset, src, n);
+    memcpy(static_cast<BYTE*>(m_pBuffer) + m_offset, src, n);
     m_offset += n;
 
     return *this;
 }
 xstreambuf& xstreambuf::read(void* dest, unsigned int n)
 {
-    const unsigned int available = m_offset < size() ? static_cast<unsigned int>(size() - m_offset) : 0;
-    if (n > available)
+    if (n == 0 || dest == nullptr)
     {
-        n = available;
+        return *this;
     }
 
-    if (n > 0)
+    const unsigned int available =
+        (m_pBuffer != nullptr && m_offset < size()) ? static_cast<unsigned int>(size() - m_offset) : 0;
+    const unsigned int toCopy = (n > available) ? available : n;
+
+    if (toCopy > 0)
     {
-        memcpy(dest, static_cast<const BYTE*>(m_pBuffer) + m_offset, n);
-        m_offset += n;
+        memcpy(dest, static_cast<const BYTE*>(m_pBuffer) + m_offset, toCopy);
+        m_offset += toCopy;
+    }
+    if (toCopy < n)
+    {
+        memset(static_cast<BYTE*>(dest) + toCopy, 0, n - toCopy);
     }
 
     return *this;
@@ -104,28 +128,44 @@ size_t xstreambuf::size() const
 }
 void xstreambuf::resize(size_t s)
 {
+    if (s > static_cast<size_t>((std::numeric_limits<unsigned int>::max)()))
+    {
+        throw std::length_error("xstreambuf resize exceeds maximum unsigned int offset");
+    }
+
     if (m_capacity < s)
     {
-        unsigned int buf_size = m_chunksize + (unsigned int)((float)s / 4 + 0.99f) * 4;
-        BYTE*        temp     = new BYTE[buf_size];
-        memset(temp, 0, buf_size);
+        if (s > (std::numeric_limits<size_t>::max)() - 3u)
+        {
+            throw std::length_error("xstreambuf resize alignment overflow");
+        }
+        const size_t aligned = ((s + 3u) / 4u) * 4u;
+        if (m_chunksize > (std::numeric_limits<size_t>::max)() - aligned)
+        {
+            throw std::length_error("xstreambuf resize capacity overflow");
+        }
+        const size_t buf_size = m_chunksize + aligned;
+        BYTE*        temp     = new BYTE[buf_size]();
         if (m_pBuffer)
         {
-            unsigned int cpysize = 0;
-            if (s < size())
-                cpysize = s;
-            else
-                cpysize = size();
-
-            memcpy(temp, m_pBuffer, cpysize);
+            const size_t cpysize = (s < size()) ? s : size();
+            if (cpysize > 0)
+            {
+                memcpy(temp, m_pBuffer, cpysize);
+            }
             delete[] static_cast<BYTE*>(m_pBuffer);
         }
         m_pBuffer  = temp;
         m_capacity = buf_size;
     }
+    else if (s > m_size && m_pBuffer != nullptr)
+    {
+        memset(static_cast<BYTE*>(m_pBuffer) + m_size, 0, s - m_size);
+    }
+
     m_size = s;
     if (m_offset > m_size)
-        m_offset = size();
+        m_offset = static_cast<unsigned int>(size());
 }
 size_t xstreambuf::capacity() const
 {

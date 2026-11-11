@@ -82,4 +82,15 @@ public class LoginServerController : ControllerBase
     {
         return this._registry.UpdateRegistrationAsync(data.ServerInfo.Id, data.UpTime);
     }
+
+    /// <summary>
+    /// Gets a snapshot of currently online accounts mapped to their server identifier.
+    /// </summary>
+    /// <returns>The snapshot dictionary.</returns>
+    [HttpGet(nameof(ILoginServer.GetSnapshotAsync))]
+    [HttpPost(nameof(ILoginServer.GetSnapshotAsync))]
+    public ValueTask<Dictionary<string, byte>> GetSnapshotAsync()
+    {
+        return this._loginServer.GetSnapshotAsync();
+    }
 }

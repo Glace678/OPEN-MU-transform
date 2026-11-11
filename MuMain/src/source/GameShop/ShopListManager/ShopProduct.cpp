@@ -16,7 +16,25 @@
 #include <iterator>
 
 CShopProduct::CShopProduct()  // OK
-{}
+{
+    this->ProductSeq = 0;
+    memset(this->ProductName, 0, sizeof(this->ProductName));
+    memset(this->PropertyName, 0, sizeof(this->PropertyName));
+    memset(this->Value, 0, sizeof(this->Value));
+    memset(this->UnitName, 0, sizeof(this->UnitName));
+    this->Price        = 0;
+    this->PriceSeq     = 0;
+    this->PropertyType = 0;
+    this->MustFlag     = 0;
+    this->vOrder       = 0;
+    this->DeleteFlag   = 0;
+    this->StorageGroup = 0;
+    this->ShareFlag    = 0;
+    memset(this->InGamePackageID, 0, sizeof(this->InGamePackageID));
+    this->PropertySeq = 0;
+    this->ProductType = 0;
+    this->UnitType    = 0;
+}
 CShopProduct::~CShopProduct()  // OK
 {}
 
@@ -27,7 +45,7 @@ bool CShopProduct::SetProduct(std::wstring strdata)  // OK
 
     CStringToken token(strdata, L"@");
 
-    if (token.hasMoreTokens() == 0)
+    if (token.countTokens() < 17)
         return 0;
 
     this->ProductSeq = _wtoi(token.nextToken().c_str());

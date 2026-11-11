@@ -267,8 +267,25 @@ public sealed class SoloCashShopService
         player.SelectedCharacter.Inventory.Money = previousGold;
         if (addedItem is not null)
         {
-            await player.Inventory!.RemoveItemAsync(addedItem).ConfigureAwait(false);
-            player.PersistenceContext.Detach(addedItem);
+            try
+            {
+                await player.Inventory!.RemoveItemAsync(addedItem).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                player.Logger.LogError(exception, "Failed to remove uncommitted solo cash shop item from inventory during rollback.");
+            }
+            finally
+            {
+                try
+                {
+                    player.PersistenceContext.Detach(addedItem);
+                }
+                catch (Exception exception)
+                {
+                    player.Logger.LogError(exception, "Failed to detach uncommitted solo cash shop item during rollback.");
+                }
+            }
         }
 
         return SoloCashShopResult.InternalError;

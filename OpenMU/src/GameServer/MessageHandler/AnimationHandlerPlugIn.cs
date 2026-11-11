@@ -48,10 +48,7 @@ internal class AnimationHandlerPlugIn : IPacketHandlerPlugIn
             _ => default,
         };
 
-        if (player.Pose > CharacterPose.Standing)
-        {
-            player.Attributes?.SetStatAttribute(Stats.IsResting, 1.0f);
-        }
+        player.Attributes?.SetStatAttribute(Stats.IsResting, player.Pose > CharacterPose.Standing ? 1.0f : 0.0f);
 
         await player.ForEachWorldObserverAsync<IShowAnimationPlugIn>(p => p.ShowAnimationAsync(player, animation, null, rotation), false).ConfigureAwait(false);
     }

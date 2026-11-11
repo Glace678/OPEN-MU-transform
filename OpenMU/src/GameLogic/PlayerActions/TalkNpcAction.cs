@@ -91,7 +91,11 @@ public class TalkNpcAction
         {
             case NpcWindow.Undefined:
                 var eventArgs = new NpcTalkEventArgs();
-                player.GameContext.PlugInManager.GetPlugInPoint<IPlayerTalkToNpcPlugIn>()?.PlayerTalksToNpcAsync(player, player.OpenedNpc, eventArgs);
+                if (player.GameContext.PlugInManager.GetPlugInPoint<IPlayerTalkToNpcPlugIn>() is { } talkPlugIn)
+                {
+                    await talkPlugIn.PlayerTalksToNpcAsync(player, player.OpenedNpc, eventArgs).ConfigureAwait(false);
+                }
+
                 if (!eventArgs.HasBeenHandled)
                 {
                     if (player.CurrentMiniGame is BloodCastleContext bloodCastle && player.OpenedNpc.Definition.Number == 232)
@@ -142,10 +146,17 @@ public class TalkNpcAction
                 await player.InvokeViewPlugInAsync<IOpenNpcWindowPlugIn>(p => p.OpenNpcWindowAsync(npcStats.NpcWindow)).ConfigureAwait(false);
                 _ = Task.Run(async () =>
                 {
-                    while (player.IsActive() && player.OpenedNpc?.Definition.NpcWindow == NpcWindow.DoorkeeperTitusDuelWatch)
+                    try
                     {
-                        await player.GameContext.DuelRoomManager.ShowRoomsAsync(player).ConfigureAwait(false);
-                        await Task.Delay(5000).ConfigureAwait(false);
+                        while (player.IsActive() && player.OpenedNpc?.Definition.NpcWindow == NpcWindow.DoorkeeperTitusDuelWatch)
+                        {
+                            await player.GameContext.DuelRoomManager.ShowRoomsAsync(player).ConfigureAwait(false);
+                            await Task.Delay(5000).ConfigureAwait(false);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        player.Logger.LogDebug(ex, "Error while updating duel watch rooms for {Player}.", player);
                     }
                 });
 

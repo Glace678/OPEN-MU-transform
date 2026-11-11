@@ -5,6 +5,8 @@
 namespace MUnique.OpenMU.Web.AdminPanel.API;
 
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,6 +52,8 @@ public sealed class MobileGmService
 
     private const string LedgerFullMessage = "幂等请求记录已满，请重启本地服务器后重试。";
 
+    private const string LedgerFileEnvironmentVariable = "OPENMU_MOBILE_GM_LEDGER_FILE";
+
     private static readonly string DefaultOperationLedgerPath = Path.Combine(
         AppContext.BaseDirectory,
         "Data",
@@ -79,7 +83,9 @@ public sealed class MobileGmService
     {
         this._services = services;
         this._logger = logger;
-        this._operationLedgerPath = operationLedgerPath ?? DefaultOperationLedgerPath;
+        var configuredLedgerPath = Environment.GetEnvironmentVariable(LedgerFileEnvironmentVariable);
+        this._operationLedgerPath = operationLedgerPath
+            ?? (!string.IsNullOrWhiteSpace(configuredLedgerPath) ? Path.GetFullPath(configuredLedgerPath) : DefaultOperationLedgerPath);
         this._persistedOperations = LoadOperationLedger(this._operationLedgerPath, this._logger);
     }
 
@@ -150,10 +156,11 @@ public sealed class MobileGmService
                 return Task.FromResult(new MobileGmGrantResponse(false, LedgerFullMessage));
             }
 
+            var fingerprint = ComputeRequestFingerprint(request);
             var task = Task.Run(async () =>
             {
                 var result = await this.GrantItemCoreAsync(request, characterId).ConfigureAwait(false);
-                return this.PersistOperation(requestId, result)
+                return this.PersistOperation(requestId, result, fingerprint)
                     ? result
                     : BuildLedgerWriteFailureResponse(result);
             });
@@ -188,10 +195,11 @@ public sealed class MobileGmService
                 return Task.FromResult(new MobileGmGrantResponse(false, LedgerFullMessage));
             }
 
+            var fingerprint = ComputeRequestFingerprint(request);
             var task = Task.Run(async () =>
             {
                 var result = await this.GrantZenCoreAsync(characterId, amount).ConfigureAwait(false);
-                return this.PersistOperation(requestId, result)
+                return this.PersistOperation(requestId, result, fingerprint)
                     ? result
                     : BuildLedgerWriteFailureResponse(result);
             });
@@ -305,6 +313,12 @@ public sealed class MobileGmService
 
         if (this._persistedOperations.TryGetValue(requestId, out var persisted))
         {
+            if (!string.IsNullOrEmpty(persisted.RequestFingerprint)
+                && !string.Equals(persisted.RequestFingerprint, ComputeRequestFingerprint(request), StringComparison.Ordinal))
+            {
+                return Task.FromResult(new MobileGmGrantResponse(false, "requestId 已被其他请求使用。"));
+            }
+
             return Task.FromResult(new MobileGmGrantResponse(persisted.Success, persisted.Message));
         }
 
@@ -549,21 +563,24 @@ public sealed class MobileGmService
         }
     }
 
-    private bool PersistOperation(Guid requestId, MobileGmGrantResponse result)
+    private bool PersistOperation(Guid requestId, MobileGmGrantResponse result, string requestFingerprint)
     {
         lock (this._grantOperationsLock)
         {
+            var now = DateTimeOffset.UtcNow;
+            PrunePersistedOperationsLocked(this._persistedOperations, now);
+
             // Keep the in-memory entry regardless of disk outcome: it protects
             // against same-process replays (XC-11).
-            this._persistedOperations[requestId] = new PersistedOperation(result.Success, result.Message);
+            this._persistedOperations[requestId] = new PersistedOperation(result.Success, result.Message, requestFingerprint, now);
+            var tempPath = $"{this._operationLedgerPath}.{Guid.NewGuid():N}{TemporaryLedgerSuffix}";
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(this._operationLedgerPath)!);
 
                 // Serialize into a temp file and atomically replace the ledger
                 // so a crash mid-write cannot leave a half-written JSON file.
-                var tempPath = this._operationLedgerPath + TemporaryLedgerSuffix;
-                using (var file = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                using (var file = new FileStream(tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
                 {
                     JsonSerializer.Serialize(file, this._persistedOperations);
                 }
@@ -573,6 +590,18 @@ public sealed class MobileGmService
             }
             catch (Exception ex)
             {
+                try
+                {
+                    if (File.Exists(tempPath))
+                    {
+                        File.Delete(tempPath);
+                    }
+                }
+                catch
+                {
+                    // Best-effort cleanup of failed temp ledger file.
+                }
+
                 // XC-11: this is a data-integrity event, not a warning: after a
                 // process restart the missing entry would let the same requestId
                 // be replayed and grant twice. The in-memory entry still covers
@@ -586,6 +615,64 @@ public sealed class MobileGmService
         }
     }
 
+    private static string ComputeRequestFingerprint(object request)
+    {
+        var canonical = request switch
+        {
+            MobileGmGrantRequest g => $"item|{Guid.Parse(g.RequestId!):D}|{Guid.Parse(g.CharacterId!):D}|{g.Group}|{g.Number}|{g.Level}|{g.Quantity}|{g.HasSkill}|{g.HasLuck}|{g.AdditionalOptionLevel}|{g.ExcellentMask}",
+            MobileGmZenRequest z => $"zen|{Guid.Parse(z.RequestId!):D}|{Guid.Parse(z.CharacterId!):D}|{z.Amount}",
+            _ => JsonSerializer.Serialize(request),
+        };
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(canonical)));
+    }
+
+    private static void PrunePersistedOperationsLocked(Dictionary<Guid, PersistedOperation> operations, DateTimeOffset now)
+    {
+        if (operations.Count == 0)
+        {
+            return;
+        }
+
+        List<Guid>? expired = null;
+        foreach (var (key, entry) in operations)
+        {
+            if (entry.CompletedAt is { } completedAt && now - completedAt > CompletedOperationRetention)
+            {
+                (expired ??= new List<Guid>()).Add(key);
+            }
+        }
+
+        if (expired is not null)
+        {
+            foreach (var key in expired)
+            {
+                operations.Remove(key);
+            }
+        }
+
+        while (operations.Count >= MaximumRememberedGrantOperations)
+        {
+            Guid? oldestKey = null;
+            var oldestTime = DateTimeOffset.MaxValue;
+            foreach (var (key, entry) in operations)
+            {
+                var completed = entry.CompletedAt ?? DateTimeOffset.MinValue;
+                if (completed < oldestTime)
+                {
+                    oldestTime = completed;
+                    oldestKey = key;
+                }
+            }
+
+            if (oldestKey is null)
+            {
+                break;
+            }
+
+            operations.Remove(oldestKey.Value);
+        }
+    }
+
     private static Dictionary<Guid, PersistedOperation> LoadOperationLedger(string ledgerPath, ILogger logger)
     {
         try
@@ -596,8 +683,10 @@ public sealed class MobileGmService
             }
 
             using var file = File.OpenRead(ledgerPath);
-            return JsonSerializer.Deserialize<Dictionary<Guid, PersistedOperation>>(file)
-                   ?? new Dictionary<Guid, PersistedOperation>();
+            var loaded = JsonSerializer.Deserialize<Dictionary<Guid, PersistedOperation>>(file)
+                         ?? new Dictionary<Guid, PersistedOperation>();
+            PrunePersistedOperationsLocked(loaded, DateTimeOffset.UtcNow);
+            return loaded;
         }
         catch (Exception ex)
         {
@@ -627,7 +716,11 @@ public sealed class MobileGmService
         }
     }
 
-    private sealed record PersistedOperation(bool Success, string Message);
+    private sealed record PersistedOperation(
+        bool Success,
+        string Message,
+        string? RequestFingerprint = null,
+        DateTimeOffset? CompletedAt = null);
 
     private string GetAccountName() =>
         Environment.GetEnvironmentVariable(MobileGmAuthenticationDefaults.AccountNameEnvironmentVariable) ?? string.Empty;

@@ -131,8 +131,8 @@ private:
     bool BtnProcess();
 
     void SetCurrMsgBoxRequest(int iMsgBoxRequest) { m_iCurrMsgBoxRequest = iMsgBoxRequest; }
-    void InsertComma(wchar_t* pszText, DWORD dwNumber);
-    void InsertComma64(wchar_t* pszText, __int64 iNumber);
+    void InsertComma(wchar_t* pszText, DWORD dwNumber, size_t cchText = 256);
+    void InsertComma64(wchar_t* pszText, __int64 iNumber, size_t cchText = 256);
 
     void UpdateGateManagingTab();
     void UpdateStatueManagingTab();

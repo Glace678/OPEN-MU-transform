@@ -77,27 +77,30 @@ public class BaseRepositoryProvider : IRepositoryProvider
     protected IRepository? InternalGetRepository(Type objectType)
     {
         this.EnsureInitialized();
-        Type? currentSearchType = objectType;
-        do
+        lock (this.SyncRoot)
         {
-            if (currentSearchType is null)
+            Type? currentSearchType = objectType;
+            do
             {
-                break;
-            }
+                if (currentSearchType is null)
+                {
+                    break;
+                }
 
-            if (this.Repositories.TryGetValue(currentSearchType, out var repository))
-            {
-                return repository as IRepository;
-            }
+                if (this.Repositories.TryGetValue(currentSearchType, out var repository))
+                {
+                    return repository as IRepository;
+                }
 
-            if (currentSearchType.Name != currentSearchType.BaseType?.Name)
-            {
-                break;
-            }
+                if (currentSearchType.Name != currentSearchType.BaseType?.Name)
+                {
+                    break;
+                }
 
-            currentSearchType = currentSearchType.BaseType;
+                currentSearchType = currentSearchType.BaseType;
+            }
+            while (currentSearchType != typeof(object));
         }
-        while (currentSearchType != typeof(object));
 
         return null;
     }
@@ -120,7 +123,10 @@ public class BaseRepositoryProvider : IRepositoryProvider
     /// <param name="repository">The repository.</param>
     protected virtual void RegisterRepository(Type type, IRepository repository)
     {
-        this.Repositories.Add(type, repository);
+        lock (this.SyncRoot)
+        {
+            this.Repositories.Add(type, repository);
+        }
     }
 
     private void EnsureInitialized()
@@ -133,7 +139,7 @@ public class BaseRepositoryProvider : IRepositoryProvider
             return;
         }
 
-        lock (this._initializationLock)
+        lock (this.SyncRoot)
         {
             if (!this._isInitialized)
             {
@@ -143,5 +149,8 @@ public class BaseRepositoryProvider : IRepositoryProvider
         }
     }
 
-    private readonly object _initializationLock = new();
+    /// <summary>
+    /// Gets the synchronization root for repository registration and lookup.
+    /// </summary>
+    protected object SyncRoot { get; } = new();
 }

@@ -69,62 +69,80 @@ public class DuelActions
             return;
         }
 
-        if (duelRoom != target.DuelRoom || duelRoom.Requester != target)
+        DuelStartResult? failureResult = null;
+        ExitGate? firstGate = null;
+        ExitGate? secondGate = null;
+        using (await duelRoom.Lock.LockAsync().ConfigureAwait(false))
         {
-            player.Logger.LogWarning($"Player {player.Name} sent duel response, but the duel contexts didn't match.");
+            if (player.DuelRoom != duelRoom || target.DuelRoom != duelRoom || duelRoom.Requester != target)
+            {
+                player.Logger.LogWarning($"Player {player.Name} sent duel response, but the duel contexts didn't match.");
+                return;
+            }
+
+            if (duelRoom.State is not DuelState.DuelRequested)
+            {
+                // A repeated response packet (e.g. duplicate "accept") must not deduct the entrance
+                // fee again or start a second duel loop.
+                player.Logger.LogWarning($"Player {player.Name} sent duel response in an invalid state {duelRoom.State}.");
+                return;
+            }
+
+            if (!accepted)
+            {
+                duelRoom.State = DuelState.DuelRefused;
+                failureResult = DuelStartResult.Refused;
+            }
+            else if (!await CheckIfDuelCanBeStartedAsync(player, target).ConfigureAwait(false))
+            {
+                duelRoom.State = DuelState.DuelStartFailed;
+                failureResult = DuelStartResult.FailedByError;
+            }
+            else if (player.GameContext.Configuration.DuelConfiguration is not { } duelConfig)
+            {
+                player.Logger.LogError("Duel configuration is not set.");
+                duelRoom.State = DuelState.DuelStartFailed;
+                failureResult = DuelStartResult.FailedByError;
+            }
+            else if (duelConfig.DuelAreas.FirstOrDefault(area => area.Index == duelRoom.Index) is not { } duelArea)
+            {
+                player.Logger.LogError("Duel area with index {index} was not found.", duelRoom.Index);
+                duelRoom.State = DuelState.DuelStartFailed;
+                failureResult = DuelStartResult.FailedByError;
+            }
+            else if (duelArea.FirstPlayerGate is null || duelArea.SecondPlayerGate is null)
+            {
+                player.Logger.LogError("Duel area with index {index} has missing exit gates.", duelRoom.Index);
+                duelRoom.State = DuelState.DuelStartFailed;
+                failureResult = DuelStartResult.FailedByError;
+            }
+            else if (duelConfig.EntranceFee > 0 && !player.TryRemoveMoney(duelConfig.EntranceFee))
+            {
+                duelRoom.State = DuelState.DuelStartFailed;
+                failureResult = DuelStartResult.FailedByNotEnoughMoney;
+            }
+            else if (duelConfig.EntranceFee > 0 && !target.TryRemoveMoney(duelConfig.EntranceFee))
+            {
+                player.TryAddMoney(duelConfig.EntranceFee);
+                duelRoom.State = DuelState.DuelStartFailed;
+                failureResult = DuelStartResult.FailedByNotEnoughMoney;
+            }
+            else
+            {
+                duelRoom.State = DuelState.DuelAccepted;
+                firstGate = duelArea.FirstPlayerGate;
+                secondGate = duelArea.SecondPlayerGate;
+            }
+        }
+
+        if (failureResult is { } fail)
+        {
+            await duelRoom.ResetAndDisposeAsync(fail).ConfigureAwait(false);
             return;
         }
 
-        if (duelRoom.State is not DuelState.DuelRequested)
-        {
-            // A repeated response packet (e.g. duplicate "accept") must not deduct the entrance
-            // fee again or start a second duel loop.
-            player.Logger.LogWarning($"Player {player.Name} sent duel response in an invalid state {duelRoom.State}.");
-            return;
-        }
-
-        if (!await CheckIfDuelCanBeStartedAsync(player, target).ConfigureAwait(false))
-        {
-            await duelRoom.ResetAndDisposeAsync(DuelStartResult.FailedByError).ConfigureAwait(false);
-            return;
-        }
-
-        if (!accepted)
-        {
-            await duelRoom.ResetAndDisposeAsync(DuelStartResult.Refused).ConfigureAwait(false);
-            return;
-        }
-
-        var duelConfig = player.GameContext.Configuration.DuelConfiguration;
-        if (duelConfig is null)
-        {
-            player.Logger.LogError("Duel configuration is not set.");
-            await duelRoom.ResetAndDisposeAsync(DuelStartResult.FailedByError).ConfigureAwait(false);
-            return;
-        }
-
-        if (duelConfig.DuelAreas.FirstOrDefault(area => area.Index == duelRoom.Index) is not { } duelArea)
-        {
-            player.Logger.LogError("Duel area with index {index} was not found.", duelRoom.Index);
-            await duelRoom.ResetAndDisposeAsync(DuelStartResult.FailedByError).ConfigureAwait(false);
-            return;
-        }
-
-        if (duelArea.FirstPlayerGate is null || duelArea.SecondPlayerGate is null)
-        {
-            player.Logger.LogError("Duel area with index {index} has missing exit gates.", duelRoom.Index);
-            await duelRoom.ResetAndDisposeAsync(DuelStartResult.FailedByError).ConfigureAwait(false);
-            return;
-        }
-
-        // we risk that the money is not sufficient anymore,
-        // but we don't care anymore if it fails.
-        player.TryRemoveMoney(duelConfig.EntranceFee);
-        target.TryRemoveMoney(duelConfig.EntranceFee);
-        duelRoom.State = DuelState.DuelAccepted;
-
-        await duelRoom.Requester.WarpToAsync(duelArea.FirstPlayerGate).ConfigureAwait(false);
-        await duelRoom.Opponent.WarpToAsync(duelArea.SecondPlayerGate).ConfigureAwait(false);
+        await duelRoom.Requester.WarpToAsync(firstGate!).ConfigureAwait(false);
+        await duelRoom.Opponent.WarpToAsync(secondGate!).ConfigureAwait(false);
 
         _ = Task.Run(duelRoom.RunDuelAsync);
     }

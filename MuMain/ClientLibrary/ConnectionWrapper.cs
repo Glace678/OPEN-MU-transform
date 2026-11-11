@@ -116,16 +116,27 @@ public sealed class ConnectionWrapper : IDisposable
     /// </summary>
     public void DisconnectAndDispose()
     {
+        if (Interlocked.Exchange(ref this._disposed, 1) != 0)
+        {
+            return;
+        }
+
+        this._connection.PacketReceived -= this.OnPacketReceivedAsync;
+        this._connection.Disconnected -= this.OnDisconnectedAsync;
+
         _ = Task.Run(async () =>
         {
             try
             {
-                await this._connection.DisconnectAsync();
-                this._connection.Dispose();
+                await this._connection.DisconnectAsync().ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
+            }
+            finally
+            {
+                this._connection.Dispose();
             }
         });
     }
@@ -134,12 +145,13 @@ public sealed class ConnectionWrapper : IDisposable
     /// Sends the specified bytes.
     /// </summary>
     /// <param name="bytes">The bytes.</param>
-    public void Send(Span<byte> bytes)
+    public void Send(ReadOnlySpan<byte> bytes)
     {
         using var l = this._connection.OutputLock.Lock();
-        var targetSpan = this._connection.Output.GetSpan(bytes.Length);
+        var targetSpan = this._connection.Output.GetSpan(bytes.Length)[..bytes.Length];
 
         bytes.CopyTo(targetSpan);
+        targetSpan.SetPacketSize();
         this._connection.Output.Advance(bytes.Length);
         this._connection.Output.FlushAsync().AsTask().WaitAndUnwrapException();
     }
@@ -158,6 +170,11 @@ public sealed class ConnectionWrapper : IDisposable
 
     private unsafe ValueTask OnPacketReceivedAsync(ReadOnlySequence<byte> args)
     {
+        if (Volatile.Read(ref this._disposed) != 0)
+        {
+            return ValueTask.CompletedTask;
+        }
+
         // PROTO-4: a callback buffer may contain multiple concatenated frames (or,
         // for a corrupted pipe, trailing bytes). Hand the native side exactly the
         // frames declared by their headers -- never a multi-packet blob, and never
@@ -169,6 +186,11 @@ public sealed class ConnectionWrapper : IDisposable
         var remaining = args;
         while (remaining.Length >= 2)
         {
+            if (Volatile.Read(ref this._disposed) != 0)
+            {
+                return ValueTask.CompletedTask;
+            }
+
             // C1/C3 headers are only 2 bytes (type + size); C2/C4 are 3 bytes.
             // Peek the type byte first, then pull exactly the number of bytes the
             // header needs -- otherwise a 2-byte short control frame left at the
@@ -224,14 +246,22 @@ public sealed class ConnectionWrapper : IDisposable
 
     private unsafe ValueTask OnDisconnectedAsync()
     {
+        if (Volatile.Read(ref this._disposed) != 0)
+        {
+            return ValueTask.CompletedTask;
+        }
+
         try
         {
             this._onDisconnected(this._handle);
-            this.Dispose();
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
+        }
+        finally
+        {
+            this.Dispose();
         }
 
         return ValueTask.CompletedTask;

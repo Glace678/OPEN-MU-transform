@@ -30,6 +30,7 @@ build-linux/
 
 # .NET build outputs
 **/bin/**
+tests/**/*.exe
 !**/bin/Translations/
 !**/bin/Translations/**
 # Bundled UI fonts (curated, shipped with the client) are source-controlled.

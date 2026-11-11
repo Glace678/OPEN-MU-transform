@@ -18,13 +18,15 @@ public static class ResetProgressionCalculator
     /// <returns>The calculated progression.</returns>
     public static ResetProgression Calculate(int currentResetCount, int pointsPerResetOverride, ResetConfiguration configuration)
     {
-        var nextResetCount = currentResetCount + 1;
-        var requiredZen = Math.Max(0, configuration.RequiredMoney);
+        var sanitizedCurrentResets = Math.Max(0, currentResetCount);
+        var nextResetCount = (int)Math.Min(int.MaxValue, (long)sanitizedCurrentResets + 1);
+        long requiredZenLong = Math.Max(0, configuration.RequiredMoney);
         if (configuration.MultiplyRequiredMoneyByResetCount)
         {
-            requiredZen *= nextResetCount;
+            requiredZenLong *= nextResetCount;
         }
 
+        var requiredZen = (int)Math.Min(int.MaxValue, requiredZenLong);
         var pointsForReset = GetPointsForReset(configuration, pointsPerResetOverride, nextResetCount);
         var totalPointsAfterReset = GetTotalPointsAfterReset(configuration, pointsPerResetOverride, nextResetCount, pointsForReset);
         var requiredItemAmount = GetRequiredItemAmount(configuration, nextResetCount);
@@ -39,13 +41,13 @@ public static class ResetProgressionCalculator
             return Math.Max(0, tier.PointsGranted);
         }
 
-        var pointsPerReset = pointsPerResetOverride == 0 ? configuration.PointsPerReset : pointsPerResetOverride;
+        long pointsPerReset = Math.Max(0, pointsPerResetOverride == 0 ? configuration.PointsPerReset : pointsPerResetOverride);
         if (configuration.MultiplyPointsByResetCount)
         {
             pointsPerReset *= nextResetCount;
         }
 
-        return Math.Max(0, pointsPerReset);
+        return (int)Math.Min(int.MaxValue, pointsPerReset);
     }
 
     private static int GetRequiredItemAmount(ResetConfiguration configuration, int nextResetCount)

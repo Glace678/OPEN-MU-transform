@@ -69,8 +69,7 @@ void CHARACTER::Initialize()
     m_byFriend           = 0;
     MonsterSkill         = 0;
 
-    for (int i = 0; i < 32; ++i)
-        ID[i] = 0;
+    std::fill_n(ID, std::size(ID), L'\0');
 
     Movement        = 0;
     MovementType    = 0;
@@ -84,6 +83,8 @@ void CHARACTER::Initialize()
     Damage       = 0;
     Hit          = 0;
     MoveSpeed    = 0;
+    AttackSpeed  = 0;
+    MagicSpeed   = 0;
 
     Action               = 0;
     ExtendStateTime      = 0;
@@ -104,6 +105,8 @@ void CHARACTER::Initialize()
     Freeze                    = 0.0f;
     Duplication               = 0.0f;
     Rot                       = 0.0f;
+    HealthStatus              = 0.0f;
+    ShieldStatus              = 0.0f;
 
     IdentityVector3D(TargetPosition);
     IdentityVector3D(Light);
@@ -114,9 +117,9 @@ void CHARACTER::Initialize()
     InitPetInfo(PET_TYPE_DARK_HORSE);
     InitPetInfo(PET_TYPE_DARK_SPIRIT);
 
-    for (int i = 0; i < 32; ++i)
-        OwnerID[i] = 0;
+    std::fill_n(OwnerID, std::size(OwnerID), L'\0');
 
+    delete m_pPostMoveProcess;
     m_pPostMoveProcess = NULL;
 
     m_pTempParts                 = NULL;
@@ -127,15 +130,27 @@ void CHARACTER::Initialize()
     GensContributionPoints       = 0;
 }
 
-void CHARACTER::Destroy() {}
+void CHARACTER::Destroy()
+{
+    delete m_pPostMoveProcess;
+    m_pPostMoveProcess = NULL;
+}
 
 void CHARACTER::InitPetInfo(int iPetType)
 {
+    if (iPetType < 0 || iPetType >= PET_TYPE_END)
+    {
+        return;
+    }
     m_PetInfo[iPetType].m_dwPetType = PET_TYPE_NONE;
 }
 
 PET_INFO* CHARACTER::GetEquipedPetInfo(int iPetType)
 {
+    if (iPetType < 0 || iPetType >= PET_TYPE_END)
+    {
+        return &m_PetInfo[0];
+    }
     return &(m_PetInfo[iPetType]);
 }
 
@@ -154,17 +169,16 @@ void CHARACTER::PostMoveProcess_Active(unsigned int uiLimitCount)
 
 unsigned int CHARACTER::PostMoveProcess_GetCurProcessCount()
 {
+    if (m_pPostMoveProcess == NULL)
+    {
+        return 0;
+    }
     return m_pPostMoveProcess->uiProcessingCount_PostMoveEvent;
 }
 
 bool CHARACTER::PostMoveProcess_IsProcessing()
 {
-    if (m_pPostMoveProcess == NULL)
-    {
-        return false;
-    }
-
-    return (0 <= m_pPostMoveProcess->uiProcessingCount_PostMoveEvent);
+    return m_pPostMoveProcess != NULL;
 }
 
 bool CHARACTER::PostMoveProcess_Process()

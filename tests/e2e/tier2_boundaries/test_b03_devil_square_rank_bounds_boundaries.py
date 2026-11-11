@@ -14,19 +14,20 @@ class TestB03DevilSquareRankBoundsBoundaries(unittest.TestCase):
         self.assertEqual(DevilSquareRankValidator.clamp_ranks(-1), 0)
         self.assertEqual(DevilSquareRankValidator.clamp_ranks(-100), 0)
 
-    def test_rank_count_12_clamped_to_11(self):
-        # 12 is buffer_capacity + 1
-        self.assertEqual(DevilSquareRankValidator.clamp_ranks(12), 11)
+    def test_rank_count_12_clamped_to_10(self):
+        # 11 and 12 exceed MaxMatchResults (10)
+        self.assertEqual(DevilSquareRankValidator.clamp_ranks(11), 10)
+        self.assertEqual(DevilSquareRankValidator.clamp_ranks(12), 10)
 
-    def test_rank_count_199_clamped_to_11(self):
+    def test_rank_count_199_clamped_to_10(self):
         # 199 was the legacy flawed guard threshold (iNumDevilRank >= 200)
-        self.assertEqual(DevilSquareRankValidator.clamp_ranks(199), 11)
+        self.assertEqual(DevilSquareRankValidator.clamp_ranks(199), 10)
 
-    def test_rank_count_200_clamped_to_11(self):
-        self.assertEqual(DevilSquareRankValidator.clamp_ranks(200), 11)
+    def test_rank_count_200_clamped_to_10(self):
+        self.assertEqual(DevilSquareRankValidator.clamp_ranks(200), 10)
 
-    def test_extreme_rank_count_clamped_to_11(self):
-        self.assertEqual(DevilSquareRankValidator.clamp_ranks(65535), 11)
+    def test_extreme_rank_count_clamped_to_10(self):
+        self.assertEqual(DevilSquareRankValidator.clamp_ranks(65535), 10)
 
 
 if __name__ == "__main__":

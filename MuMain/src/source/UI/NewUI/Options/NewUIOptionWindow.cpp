@@ -986,9 +986,6 @@ void SEASON3B::CNewUIOptionWindow::RegisterRestartPromptFocusNodes()
                            static_cast<float>(m_Pos.y + target.yLocal), static_cast<float>(target.width),
                            static_cast<float>(target.height));
     }
-    // Land on "Yes" the first frame the prompt is up.
-    navigator.SetCurrent(this, FocusId(OptionFocusId::RestartYes));
-    FocusOptionControl(FocusId(OptionFocusId::RestartYes));
 }
 
 void SEASON3B::CNewUIOptionWindow::RegisterDisplayConfirmationFocusNodes()
@@ -2345,6 +2342,7 @@ void SEASON3B::CNewUIOptionWindow::ApplyLanguage()
         // Show the in-game, controller-navigable restart prompt; Yes re-execs
         // the client (AcceptRestartForLanguage), No keeps the session.
         m_bRestartPromptPending = true;
+        Core::Input::FocusNavigator::Instance().Clear();
         FocusOptionControl(FocusId(OptionFocusId::RestartYes));
     }
 }

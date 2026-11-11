@@ -77,21 +77,24 @@ float RequestTerrainHeight(float xf, float yf);
 
 BOOL CSummonSystem::SendRequestSummonSkill(int iSkill, CHARACTER* pCharacter, OBJECT* pObject)
 {
-    if (iSkill < AT_SKILL_SUMMON_EXPLOSION || iSkill > AT_SKILL_SUMMON_POLLUTION)
+    if (pCharacter == nullptr || pObject == nullptr || iSkill < AT_SKILL_SUMMON_EXPLOSION ||
+        iSkill > AT_SKILL_SUMMON_POLLUTION)
         return FALSE;
 
     extern int           TargetX, TargetY;
     extern MovementSkill g_MovementSkill;
     extern int           SelectedCharacter;
 
-    GameLogic::Combat::CheckTarget(pCharacter);
+    if (!GameLogic::Combat::CheckTarget(pCharacter))
+        return FALSE;
 
-    int iTargetKey = -1;
-    if (CheckAttack())
+    int        iTargetKey       = -1;
+    const bool hasValidSelected = (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT);
+    if (CheckAttack() && hasValidSelected)
     {
         iTargetKey = CharactersClient[SelectedCharacter].Key;
     }
-    if (iTargetKey != -1)
+    if (iTargetKey != -1 && hasValidSelected)
     {
         CHARACTER* pTargetCharacter = &CharactersClient[SelectedCharacter];
         TargetX                     = (int)(pTargetCharacter->Object.Position[0] / TERRAIN_SCALE);
@@ -100,7 +103,7 @@ BOOL CSummonSystem::SendRequestSummonSkill(int iSkill, CHARACTER* pCharacter, OB
 
     g_MovementSkill.m_bMagic  = FALSE;
     g_MovementSkill.m_iSkill  = iSkill;
-    g_MovementSkill.m_iTarget = SelectedCharacter;
+    g_MovementSkill.m_iTarget = (iTargetKey != -1 && hasValidSelected) ? SelectedCharacter : -1;
 
     float fDistance = gSkillManager.GetSkillDistance(iSkill, pCharacter);
 
@@ -274,12 +277,23 @@ void CSummonSystem::CreateCastingEffect(vec3_t vPosition, vec3_t vAngle, int iSu
 
 void CSummonSystem::CreateEquipEffect_WristRing(CHARACTER* pCharacter, int iItemType, int iItemLevel, int iItemOption1)
 {
+    if (pCharacter == nullptr)
+        return;
+
     OBJECT* pObject = &pCharacter->Object;
     BMD*    pModel  = &Models[pObject->Type];
 
     vec3_t vPos, vRelative, vLight;
     Vector(0.0f, 0.0f, 0.0f, vRelative);
-    pModel->TransformPosition(pObject->BoneTransform[37], vRelative, vPos, true);
+    Vector(1.0f, 1.0f, 0.0f, vLight);
+    if (pObject->BoneTransform != nullptr && 37 < pModel->NumBones)
+    {
+        pModel->TransformPosition(pObject->BoneTransform[37], vRelative, vPos, true);
+    }
+    else
+    {
+        VectorCopy(pObject->Position, vPos);
+    }
 
     switch (iItemLevel)
     {
@@ -308,6 +322,16 @@ void CSummonSystem::CreateEquipEffect_WristRing(CHARACTER* pCharacter, int iItem
         case 12:
         case 13:
             Vector(0.3f, 0.5f, 1.0f, vLight);
+            break;
+        default:
+            if (iItemLevel >= 11)
+            {
+                Vector(0.3f, 0.5f, 1.0f, vLight);
+            }
+            else
+            {
+                Vector(1.0f, 1.0f, 0.0f, vLight);
+            }
             break;
     }
 

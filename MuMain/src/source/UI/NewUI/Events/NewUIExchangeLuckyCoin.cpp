@@ -64,10 +64,9 @@ bool CNewUIExchangeLuckyCoin::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIExchangeLuckyCoin::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -234,14 +233,16 @@ void CNewUIExchangeLuckyCoin::OpenningProcess()
 {
     g_pNewUISystem->Show(SEASON3B::INTERFACE_INVENTORY);
     UnLockExchangeBtn();
-    g_pMyInventory->GetInventoryCtrl()->LockInventory();
+    if (g_pMyInventory && g_pMyInventory->GetInventoryCtrl())
+        g_pMyInventory->GetInventoryCtrl()->LockInventory();
     PlayBuffer(SOUND_CLICK01);
 }
 
 void CNewUIExchangeLuckyCoin::ClosingProcess()
 {
     PlayBuffer(SOUND_CLICK01);
-    g_pMyInventory->GetInventoryCtrl()->UnlockInventory();
+    if (g_pMyInventory && g_pMyInventory->GetInventoryCtrl())
+        g_pMyInventory->GetInventoryCtrl()->UnlockInventory();
     SocketClient->ToGameServer()->SendCraftingDialogCloseRequest();
 }
 

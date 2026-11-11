@@ -121,17 +121,16 @@ bool CursedTemple::GetInterfaceState(int type, int subtype)
 
 bool CursedTemple::IsPartyMember(DWORD selectcharacterindex)
 {
-    if (PartyNumber == 0)
+    if (PartyNumber <= 0 || selectcharacterindex >= MAX_CHARACTERS_CLIENT)
         return false;
 
-    CHARACTER* c = &CharactersClient[selectcharacterindex];
-    if (c == NULL)
-        return false;
+    CHARACTER* c          = &CharactersClient[selectcharacterindex];
+    const int  partyCount = std::min<int>(PartyNumber, MAX_PARTYS);
 
-    for (int i = 0; i < PartyNumber; ++i)
+    for (int i = 0; i < partyCount; ++i)
     {
         PARTY_t* p      = &Party[i];
-        int      length = std::max<int>(1, wcslen(c->ID));
+        int      length = std::max<int>(1, static_cast<int>(wcslen(c->ID)));
         if (!wcsncmp(p->Name, c->ID, length))
             return true;
     }
@@ -165,46 +164,63 @@ CHARACTER* CursedTemple::CreateCharacters(EMonsterType iType, int iPosX, int iPo
     {
         case MONSTER_STONE_STATUE: {
             OpenNpc(MODEL_CURSEDTEMPLE_STATUE);
-            pCharacter                         = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_STATUE, iPosX, iPosY);
-            pCharacter->Object.EnableShadow    = false;
-            pCharacter->Object.m_bRenderShadow = false;
-            pCharacter->Object.m_fEdgeScale    = 1.03f;
-            pCharacter->Object.PKKey           = 0;
+            pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_STATUE, iPosX, iPosY);
+            if (pCharacter != nullptr)
+            {
+                pCharacter->Object.EnableShadow    = false;
+                pCharacter->Object.m_bRenderShadow = false;
+                pCharacter->Object.m_fEdgeScale    = 1.03f;
+                pCharacter->Object.PKKey           = 0;
+            }
         }
         break;
         case MONSTER_MU_ALLIES_GENERAL: {
             OpenNpc(MODEL_CURSEDTEMPLE_ALLIED_NPC);
-            pCharacter               = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ALLIED_NPC, iPosX, iPosY);
-            pCharacter->Object.Scale = 1.2f;
+            pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ALLIED_NPC, iPosX, iPosY);
+            if (pCharacter != nullptr)
+            {
+                pCharacter->Object.Scale = 1.2f;
+            }
         }
         break;
         case MONSTER_ILLUSION_ELDER: {
             OpenNpc(MODEL_CURSEDTEMPLE_ILLUSION_NPC);
-            pCharacter               = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ILLUSION_NPC, iPosX, iPosY);
-            pCharacter->Object.Scale = 1.2f;
+            pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ILLUSION_NPC, iPosX, iPosY);
+            if (pCharacter != nullptr)
+            {
+                pCharacter->Object.Scale = 1.2f;
+            }
         }
         break;
         case MONSTER_ALLIANCE_ITEM_STORAGE: {
             OpenNpc(MODEL_CURSEDTEMPLE_ALLIED_BASKET);
-            pCharacter                      = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ALLIED_BASKET, iPosX, iPosY);
-            pCharacter->Object.Scale        = 1.8f;
-            pCharacter->Object.m_fEdgeScale = 1.03f;
-            m_ShowAlliedPointEffect         = false;
+            pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ALLIED_BASKET, iPosX, iPosY);
+            if (pCharacter != nullptr)
+            {
+                pCharacter->Object.Scale        = 1.8f;
+                pCharacter->Object.m_fEdgeScale = 1.03f;
+            }
+            m_ShowAlliedPointEffect = false;
         }
         break;
         case MONSTER_ILLUSION_ITEM_STORAGE: {
             OpenNpc(MODEL_CURSEDTEMPLE_ILLUSION__BASKET);
             pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ILLUSION__BASKET, iPosX, iPosY);
-
-            pCharacter->Object.Scale        = 1.5f;
-            pCharacter->Object.m_fEdgeScale = 1.03f;
-            m_ShowIllusionPointEffect       = false;
+            if (pCharacter != nullptr)
+            {
+                pCharacter->Object.Scale        = 1.5f;
+                pCharacter->Object.m_fEdgeScale = 1.03f;
+            }
+            m_ShowIllusionPointEffect = false;
         }
         break;
         case MONSTER_MIRAGE: {
             OpenNpc(MODEL_CURSEDTEMPLE_ENTER_NPC);
-            pCharacter               = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ENTER_NPC, iPosX, iPosY);
-            pCharacter->Object.Scale = 0.95f;
+            pCharacter = CreateCharacter(iKey, MODEL_CURSEDTEMPLE_ENTER_NPC, iPosX, iPosY);
+            if (pCharacter != nullptr)
+            {
+                pCharacter->Object.Scale = 0.95f;
+            }
         }
         break;
         case MONSTER_ILLUSION_SORCERER_SPIRIT1_LIGHTNING:
@@ -214,10 +230,13 @@ CHARACTER* CursedTemple::CreateCharacters(EMonsterType iType, int iPosX, int iPo
         case MONSTER_ILLUSION_SORCERER_SPIRIT5_LIGHTNING:
         case MONSTER_ILLUSION_SORCERER_SPIRIT6_LIGHTNING: {
             OpenMonsterModel(MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING);
-            pCharacter                 = CreateCharacter(iKey, MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING, iPosX, iPosY);
-            pCharacter->Object.Scale   = 1.0f;
-            pCharacter->Weapon[0].Type = -1;
-            pCharacter->Weapon[1].Type = -1;
+            pCharacter = CreateCharacter(iKey, MODEL_ILLUSION_SORCERER_SPIRIT_LIGHTNING, iPosX, iPosY);
+            if (pCharacter != nullptr)
+            {
+                pCharacter->Object.Scale   = 1.0f;
+                pCharacter->Weapon[0].Type = -1;
+                pCharacter->Weapon[1].Type = -1;
+            }
         }
         break;
         case MONSTER_ILLUSION_SORCERER_SPIRIT1_ICE:
@@ -227,10 +246,13 @@ CHARACTER* CursedTemple::CreateCharacters(EMonsterType iType, int iPosX, int iPo
         case MONSTER_ILLUSION_SORCERER_SPIRIT5_ICE:
         case MONSTER_ILLUSION_SORCERER_SPIRIT6_ICE: {
             OpenMonsterModel(MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_ICE);
-            pCharacter                 = CreateCharacter(iKey, MODEL_ILLUSION_SORCERER_SPIRIT_ICE, iPosX, iPosY);
-            pCharacter->Object.Scale   = 1.0f;
-            pCharacter->Weapon[0].Type = -1;
-            pCharacter->Weapon[1].Type = -1;
+            pCharacter = CreateCharacter(iKey, MODEL_ILLUSION_SORCERER_SPIRIT_ICE, iPosX, iPosY);
+            if (pCharacter != nullptr)
+            {
+                pCharacter->Object.Scale   = 1.0f;
+                pCharacter->Weapon[0].Type = -1;
+                pCharacter->Weapon[1].Type = -1;
+            }
         }
         break;
         case MONSTER_ILLUSION_SORCERER_SPIRIT1_POISON:
@@ -240,22 +262,31 @@ CHARACTER* CursedTemple::CreateCharacters(EMonsterType iType, int iPosX, int iPo
         case MONSTER_ILLUSION_SORCERER_SPIRIT5_POISON:
         case MONSTER_ILLUSION_SORCERER_SPIRIT6_POISON: {
             OpenMonsterModel(MONSTER_MODEL_ILLUSION_SORCERER_SPIRIT_POISON);
-            pCharacter                 = CreateCharacter(iKey, MODEL_ILLUSION_SORCERER_SPIRIT_POISON, iPosX, iPosY);
-            pCharacter->Object.Scale   = 1.0f;
-            pCharacter->Weapon[0].Type = -1;
-            pCharacter->Weapon[1].Type = -1;
+            pCharacter = CreateCharacter(iKey, MODEL_ILLUSION_SORCERER_SPIRIT_POISON, iPosX, iPosY);
+            if (pCharacter != nullptr)
+            {
+                pCharacter->Object.Scale   = 1.0f;
+                pCharacter->Weapon[0].Type = -1;
+                pCharacter->Weapon[1].Type = -1;
+            }
         }
         break;
         case MONSTER_MU_ALLIES: {
-            pCharacter                 = CreateCharacter(iKey, MODEL_PLAYER, iPosX, iPosY);
-            pCharacter->Object.Scale   = 1.f;
-            pCharacter->Object.SubType = MODEL_CURSEDTEMPLE_ALLIED_PLAYER;
+            pCharacter = CreateCharacter(iKey, MODEL_PLAYER, iPosX, iPosY);
+            if (pCharacter != nullptr)
+            {
+                pCharacter->Object.Scale   = 1.f;
+                pCharacter->Object.SubType = MODEL_CURSEDTEMPLE_ALLIED_PLAYER;
+            }
         }
         break;
         case MONSTER_ILLUSION_SORCERER: {
-            pCharacter                 = CreateCharacter(iKey, MODEL_PLAYER, iPosX, iPosY);
-            pCharacter->Object.Scale   = 1.f;
-            pCharacter->Object.SubType = MODEL_CURSEDTEMPLE_ILLUSION_PLAYER;
+            pCharacter = CreateCharacter(iKey, MODEL_PLAYER, iPosX, iPosY);
+            if (pCharacter != nullptr)
+            {
+                pCharacter->Object.Scale   = 1.f;
+                pCharacter->Object.SubType = MODEL_CURSEDTEMPLE_ILLUSION_PLAYER;
+            }
         }
         break;
     }
@@ -281,7 +312,7 @@ bool CursedTemple::AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b)
         case MONSTER_ILLUSION_SORCERER_SPIRIT6_POISON: {
             if (o->CurrentAction == MONSTER01_ATTACK1)
             {
-                if (c->TargetCharacter != -1)
+                if (c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT)
                 {
                     CHARACTER* tc = &CharactersClient[c->TargetCharacter];
                     OBJECT*    to = &tc->Object;
@@ -694,6 +725,7 @@ bool CursedTemple::RenderObject_AfterCharacter(OBJECT* o, BMD* b)
 bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 {
     vec3_t Light;
+    Vector(1.0f, 1.0f, 1.0f, Light);
 
     MoveMonsterSoundVisual(o, b);
 
@@ -775,6 +807,7 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
         case MODEL_ILLUSION_SORCERER_SPIRIT_POISON: {
             vec3_t vRelativePos, vWorldPos;
             Vector(0.f, 0.f, 0.f, vRelativePos);
+            Vector(0.3f, 0.8f, 0.3f, Light);
             if (o->CurrentAction == MONSTER01_DIE)
             {
                 int boneindex[6] = {6, 2, 19, 25, 35, 40};
@@ -957,10 +990,14 @@ bool CursedTemple::RenderMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
 
 void CursedTemple::UpdateTempleSystemMsg(int _Value)
 {
+    if (!g_pSystemLogBox)
+    {
+        return;
+    }
+
     wchar_t szText[256] = {
         0,
     };
-    mu_swprintf(szText, I18N::Game::TheAdmissionAndScrollLevelsDoNotMatch);
     switch (_Value)
     {
         case 0:
@@ -977,7 +1014,7 @@ void CursedTemple::UpdateTempleSystemMsg(int _Value)
                                      SEASON3B::TYPE_ERROR_MESSAGE);
             break;
         case 5:
-            mu_swprintf(szText, I18N::Game::YouMayEnterOnlyDTimesPerDay, 6);
+            mu_swprintf_s(szText, std::size(szText), I18N::Game::YouMayEnterOnlyDTimesPerDay, 6);
             g_pSystemLogBox->AddText(szText, SEASON3B::TYPE_ERROR_MESSAGE);
             break;
         case 6:

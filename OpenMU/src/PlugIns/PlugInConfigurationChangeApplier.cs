@@ -61,6 +61,7 @@ public static class PlugInConfigurationChangeApplier
         else if (!currentlyActive && plugInConfiguration.IsActive)
         {
             plugInManager.ActivatePlugIn(id);
+            plugInManager.ConfigurePlugIn(id, plugInConfiguration);
         }
         else
         {

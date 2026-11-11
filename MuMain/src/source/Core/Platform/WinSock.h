@@ -80,10 +80,20 @@ inline int GetAddrInfoW(const wchar_t* node, const wchar_t* service, const addri
 {
     char n[256] = {0};
     char sv[64] = {0};
-    if (node && wcstombs(n, node, sizeof(n) - 1) == static_cast<size_t>(-1))
-        return EAI_FAIL;
-    if (service && wcstombs(sv, service, sizeof(sv) - 1) == static_cast<size_t>(-1))
-        return EAI_FAIL;
+    if (node)
+    {
+        const size_t needed = wcstombs(nullptr, node, 0);
+        if (needed == static_cast<size_t>(-1) || needed >= sizeof(n))
+            return EAI_FAIL;
+        wcstombs(n, node, sizeof(n));
+    }
+    if (service)
+    {
+        const size_t needed = wcstombs(nullptr, service, 0);
+        if (needed == static_cast<size_t>(-1) || needed >= sizeof(sv))
+            return EAI_FAIL;
+        wcstombs(sv, service, sizeof(sv));
+    }
     return ::getaddrinfo(node ? n : nullptr, service ? sv : nullptr, hints, result);
 }
 inline void FreeAddrInfoW(addrinfo* p)

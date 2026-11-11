@@ -115,19 +115,30 @@ final class MobilePreferences {
             moveDirectory(backup, root);
         }
         if (hasCurrentDataVersion(root)) {
-            deleteTree(backup);
+            try {
+                deleteTree(backup);
+            } catch (IOException ignored) {
+                // Keep ready state even if an obsolete backup could not be removed immediately.
+            }
             listener.onProgress(100, "");
             return;
         }
 
+        deleteTree(staging);
+        if (root.exists() && backup.exists()) {
+            deleteTree(backup);
+        }
+
         long expandedSize = calculateExpandedSize(context);
+        File existingConfig = new File(root, "config.ini");
+        long upgradeConfigAllowance = existingConfig.isFile() ? Math.max(4096L, existingConfig.length()) : 0L;
+        long requiredBytes = expandedSize + EXTRA_STORAGE_ALLOWANCE + upgradeConfigAllowance;
         long available = new StatFs(context.getFilesDir().getAbsolutePath()).getAvailableBytes();
-        if (expandedSize > 0 && available < expandedSize + EXTRA_STORAGE_ALLOWANCE) {
-            long shortfall = expandedSize + EXTRA_STORAGE_ALLOWANCE - available;
+        if (expandedSize > 0 && available < requiredBytes) {
+            long shortfall = requiredBytes - available;
             throw new IOException(context.getString(R.string.storage_low, humanBytes(shortfall)));
         }
 
-        deleteTree(staging);
         if (!staging.mkdirs()) {
             throw new IOException("Unable to create " + staging);
         }
@@ -174,7 +185,6 @@ final class MobilePreferences {
                 }
             }
 
-            File existingConfig = new File(root, "config.ini");
             if (existingConfig.isFile()) {
                 Files.copy(existingConfig.toPath(), new File(staging, "config.ini").toPath(),
                     StandardCopyOption.REPLACE_EXISTING);
@@ -202,13 +212,28 @@ final class MobilePreferences {
                 }
                 throw promotionFailure;
             }
-            deleteTree(backup);
+            try {
+                deleteTree(backup);
+            } catch (IOException ignored) {
+                // Promotion already succeeded; stale backup will be cleaned on next check.
+            }
             listener.onProgress(100, "");
         } catch (java.io.FileNotFoundException missing) {
             throw new IOException(context.getString(R.string.game_data_missing), missing);
         } finally {
             if (!promoted) {
-                deleteTree(staging);
+                if (!root.exists() && backup.exists()) {
+                    try {
+                        moveDirectory(backup, root);
+                    } catch (IOException ignored) {
+                        // Best-effort rollback on unexpected non-IOException abort.
+                    }
+                }
+                try {
+                    deleteTree(staging);
+                } catch (IOException ignored) {
+                    // Preserve original extraction exception if cleanup also fails.
+                }
             }
         }
     }

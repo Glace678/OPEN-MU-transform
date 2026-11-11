@@ -56,8 +56,11 @@ public class AdminPanelContext : DbContext
             entity.Property(u => u.NormalizedLoginName).IsRequired().HasMaxLength(100);
             entity.HasIndex(u => u.NormalizedLoginName).IsUnique();
             entity.Property(u => u.PasswordHash).IsRequired();
-            entity.Property(u => u.SecurityStamp).IsRequired();
+            entity.Property(u => u.SecurityStamp).IsRequired().IsConcurrencyToken();
             entity.Property(u => u.Roles).IsRequired().HasMaxLength(200);
+            entity.Property(u => u.RecoveryCodeHashes).IsConcurrencyToken();
+            entity.Property(u => u.LastAcceptedTotpStep).IsConcurrencyToken();
+            entity.Property(u => u.IsDisabled).IsConcurrencyToken();
         });
 
         modelBuilder.Entity<ApiKey>(entity =>

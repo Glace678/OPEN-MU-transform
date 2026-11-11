@@ -192,4 +192,42 @@ public class GameServerController : ControllerBase
     {
         return this._gameServer.BanPlayerAsync(playerName);
     }
+
+    /// <summary>
+    /// Notifies the game server that a guild alliance was created.
+    /// </summary>
+    /// <param name="data">The alliance arguments.</param>
+    [HttpPost(nameof(IGameServer.AllianceCreatedAsync))]
+    [Topic("pubsub", nameof(IGameServer.AllianceCreatedAsync))]
+    public ValueTask AllianceCreatedAsync([FromBody] AllianceArguments data)
+    {
+        return this._gameServer.AllianceCreatedAsync(data.MasterGuildId, data.MemberGuildId);
+    }
+
+    /// <summary>
+    /// Notifies the game server that a guild alliance was disbanded.
+    /// </summary>
+    /// <param name="data">The alliance arguments.</param>
+    [HttpPost(nameof(IGameServer.AllianceDisbandedAsync))]
+    [Topic("pubsub", nameof(IGameServer.AllianceDisbandedAsync))]
+    public ValueTask AllianceDisbandedAsync([FromBody] AllianceArguments data)
+    {
+        return this._gameServer.AllianceDisbandedAsync(data.MasterGuildId, data.MemberGuildId);
+    }
+
+    /// <summary>
+    /// Notifies the game server that hostility between two guilds or alliances changed.
+    /// </summary>
+    /// <param name="data">The hostility change arguments.</param>
+    [HttpPost(nameof(IGameServer.GuildHostilityChangedAsync))]
+    [Topic("pubsub", nameof(IGameServer.GuildHostilityChangedAsync))]
+    public ValueTask GuildHostilityChangedAsync([FromBody] GuildHostilityChangedArguments data)
+    {
+        return this._gameServer.GuildHostilityChangedAsync(
+            data.GuildIdA,
+            data.AllianceGuildIdsA ?? [],
+            data.GuildIdB,
+            data.AllianceGuildIdsB ?? [],
+            data.Created);
+    }
 }

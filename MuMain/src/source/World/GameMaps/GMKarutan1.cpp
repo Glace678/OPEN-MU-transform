@@ -354,43 +354,59 @@ CHARACTER* CGMKarutan1::CreateMonster(int iType, int PosX, int PosY, int Key)
     {
         case MONSTER_VENOMOUS_CHAIN_SCORPION:
             OpenMonsterModel(MONSTER_MODEL_VENOMOUS_CHAIN_SCORPION);
-            pCharacter               = CreateCharacter(Key, MODEL_VENOMOUS_CHAIN_SCORPION, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_VENOMOUS_CHAIN_SCORPION, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale = 1.0f;
             break;
         case MONSTER_BONE_SCORPION:
             OpenMonsterModel(MONSTER_MODEL_BONE_SCORPION);
-            pCharacter               = CreateCharacter(Key, MODEL_BONE_SCORPION, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_BONE_SCORPION, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale = 0.58f;
             break;
         case MONSTER_ORCUS:
             OpenMonsterModel(MONSTER_MODEL_ORCUS);
-            pCharacter               = CreateCharacter(Key, MODEL_ORCUS, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_ORCUS, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale = 0.64f;
             break;
         case MONSTER_GOLLOCK:
             OpenMonsterModel(MONSTER_MODEL_GOLLOCK);
-            pCharacter               = CreateCharacter(Key, MODEL_GOLLOCK, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_GOLLOCK, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale = 1.5f;
             break;
         case MONSTER_CRYPTA:
             OpenMonsterModel(MONSTER_MODEL_CRYPTA);
-            pCharacter               = CreateCharacter(Key, MODEL_CRYPTA, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_CRYPTA, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale = 1.5f;
             break;
         case MONSTER_CRYPOS:
             OpenMonsterModel(MONSTER_MODEL_CRYPOS);
-            pCharacter               = CreateCharacter(Key, MODEL_CRYPOS, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_CRYPOS, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale = 1.25f;
             break;
         case MONSTER_CONDRA:
             OpenMonsterModel(MONSTER_MODEL_CONDRA);
-            pCharacter                  = CreateCharacter(Key, MODEL_CONDRA, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_CONDRA, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale    = 1.45f;
             pCharacter->Object.LifeTime = 100;
             break;
         case MONSTER_NARCONDRA:
             OpenMonsterModel(MONSTER_MODEL_NACONDRA);
-            pCharacter                  = CreateCharacter(Key, MODEL_NACONDRA, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_NACONDRA, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale    = 1.55f;
             pCharacter->Object.LifeTime = 100;
 
@@ -645,7 +661,9 @@ void CGMKarutan1::MoveBlurEffect(CHARACTER* pCharacter, OBJECT* pObject, BMD* pM
             float Start_Frame = 0.f;   //3.5f;
             float End_Frame   = 6.0f;  //6.7f;
             if ((pObject->AnimationFrame >= Start_Frame && pObject->AnimationFrame <= End_Frame &&
-                 pObject->CurrentAction == MONSTER01_ATTACK1))
+                 pObject->CurrentAction == MONSTER01_ATTACK1) &&
+                pObject->CurrentAction >= 0 && pObject->CurrentAction < pModel->NumActions &&
+                pModel->Actions != nullptr && 156 < MAX_BONES && pModel->NumBones > 156)
             {
                 vec3_t Light;
                 Vector(1.f, 0.05f, 0.0f, Light);
@@ -705,7 +723,7 @@ bool CGMKarutan1::AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b)
     {
         case MODEL_CRYPOS:
             if (o->CurrentAction == MONSTER01_ATTACK2 && (o->AnimationFrame >= 3.5f && o->AnimationFrame <= 4.5f) &&
-                rand_fps_check(1))
+                c->TargetCharacter >= 0 && c->TargetCharacter < MAX_CHARACTERS_CLIENT && rand_fps_check(1))
             {
                 CHARACTER* tc = &CharactersClient[c->TargetCharacter];
                 OBJECT*    to = &tc->Object;
@@ -727,7 +745,7 @@ bool CGMKarutan1::AttackEffectMonster(CHARACTER* c, OBJECT* o, BMD* b)
 
 bool CGMKarutan1::PlayMonsterSound(OBJECT* o)
 {
-    if (!IsKarutanMap())
+    if (!IsKarutanMap() || !Hero)
         return false;
 
     float fDis_x, fDis_y;

@@ -55,7 +55,9 @@ CHARACTER* M38Kanturu2nd::Create_Kanturu2nd_Monster(int iType, int PosX, int Pos
         case MONSTER_PERSONA_DS7:
         case MONSTER_PERSONA: {
             OpenMonsterModel(MONSTER_MODEL_PERSONA);
-            pCharacter                 = CreateCharacter(Key, MODEL_PERSONA, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_PERSONA, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale   = 1.0f;
             pCharacter->Weapon[0].Type = -1;
             pCharacter->Weapon[1].Type = -1;
@@ -67,7 +69,9 @@ CHARACTER* M38Kanturu2nd::Create_Kanturu2nd_Monster(int iType, int PosX, int Pos
         break;
         case MONSTER_TWIN_TALE: {
             OpenMonsterModel(MONSTER_MODEL_TWIN_TAIL);
-            pCharacter                  = CreateCharacter(Key, MODEL_TWIN_TAIL, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_TWIN_TAIL, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale    = 1.3f;
             pCharacter->Object.Angle[0] = 0.0f;
             pCharacter->Object.Gravity  = 0.0f;
@@ -82,7 +86,9 @@ CHARACTER* M38Kanturu2nd::Create_Kanturu2nd_Monster(int iType, int PosX, int Pos
         case MONSTER_DREADFEAR2:
         case MONSTER_DREADFEAR: {
             OpenMonsterModel(MONSTER_MODEL_DREADFEAR);
-            pCharacter                  = CreateCharacter(Key, MODEL_DREADFEAR, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_DREADFEAR, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale    = 1.3f;
             pCharacter->Object.Angle[0] = 0.0f;
             pCharacter->Object.Gravity  = 0.0f;
@@ -100,15 +106,20 @@ CHARACTER* M38Kanturu2nd::Create_Kanturu2nd_Monster(int iType, int PosX, int Pos
         break;
         case MONSTER_GATEWAY_MACHINE: {
             OpenNpc(MODEL_KANTURU2ND_ENTER_NPC);
-            pCharacter               = CreateCharacter(Key, MODEL_KANTURU2ND_ENTER_NPC, PosX, PosY);
+            pCharacter = CreateCharacter(Key, MODEL_KANTURU2ND_ENTER_NPC, PosX, PosY);
+            if (!pCharacter)
+                return nullptr;
             pCharacter->Object.Scale = 4.76f;
             pCharacter->Object.Position[0] -= 20.0f;
             pCharacter->Object.Position[1] -= 200.0f;
             pCharacter->Object.m_bRenderShadow = false;
             SetAction(&pCharacter->Object, KANTURU2ND_NPC_ANI_STOP);
 
-            g_pKanturu2ndEnterNpc->SetNpcObject(&pCharacter->Object);
-            g_pKanturu2ndEnterNpc->SetNpcAnimation(false);
+            if (g_pKanturu2ndEnterNpc)
+            {
+                g_pKanturu2ndEnterNpc->SetNpcObject(&pCharacter->Object);
+                g_pKanturu2ndEnterNpc->SetNpcAnimation(false);
+            }
 
             BoneManager::RegisterBone(pCharacter, L"KANTURU2ND_ENTER_NPC_1", 37);
             BoneManager::RegisterBone(pCharacter, L"KANTURU2ND_ENTER_NPC_2", 38);
@@ -1368,7 +1379,9 @@ CHARACTER* CTrapCanon::Create_TrapCanon(int iPosX, int iPosY, int iKey)
 {
     CHARACTER* pCha = NULL;
 
-    pCha                       = CreateCharacter(iKey, MODEL_TRAP_CANON, iPosX, iPosY);
+    pCha = CreateCharacter(iKey, MODEL_TRAP_CANON, iPosX, iPosY);
+    if (!pCha)
+        return nullptr;
     pCha->Object.Scale         = 1.0f;
     pCha->AttackTime           = 0;
     pCha->LastAttackEffectTime = -1;

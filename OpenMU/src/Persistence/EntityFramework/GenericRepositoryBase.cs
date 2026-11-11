@@ -242,27 +242,35 @@ internal abstract class GenericRepositoryBase<T> : IRepository<T>, ILoadByProper
 
         loadStatusAware.LoadingStatus = LoadingStatus.Loading;
 
-        if (this.RepositoryProvider.GetRepository(foreignKeyProperty.DeclaringType.ClrType) is ILoadByProperty repository)
+        try
         {
-            var foreignKeyValue = entityEntry.Property(navigation.ForeignKey.PrincipalKey.Properties[0].Name).CurrentValue;
-            if (foreignKeyValue is { })
+            if (this.RepositoryProvider.GetRepository(foreignKeyProperty.DeclaringType.ClrType) is ILoadByProperty repository)
             {
-                var items = await repository.LoadByPropertyAsync(foreignKeyProperty, foreignKeyValue, cancellationToken).ConfigureAwait(false);
-                foreach (var obj in items)
+                var foreignKeyValue = entityEntry.Property(navigation.ForeignKey.PrincipalKey.Properties[0].Name).CurrentValue;
+                if (foreignKeyValue is { })
                 {
-                    if (!loadStatusAware.Contains(obj))
+                    var items = await repository.LoadByPropertyAsync(foreignKeyProperty, foreignKeyValue, cancellationToken).ConfigureAwait(false);
+                    foreach (var obj in items)
                     {
-                        loadStatusAware.Add(obj);
+                        if (!loadStatusAware.Contains(obj))
+                        {
+                            loadStatusAware.Add(obj);
+                        }
                     }
                 }
-            }
 
-            loadStatusAware.LoadingStatus = LoadingStatus.Loaded;
+                loadStatusAware.LoadingStatus = LoadingStatus.Loaded;
+            }
+            else
+            {
+                this._logger.LogWarning("No repository found which supports loading by foreign key for type {ClrType}.", foreignKeyProperty.DeclaringType.ClrType);
+                loadStatusAware.LoadingStatus = LoadingStatus.Failed;
+            }
         }
-        else
+        catch
         {
-            this._logger.LogWarning("No repository found which supports loading by foreign key for type {ClrType}.", foreignKeyProperty.DeclaringType.ClrType);
-            loadStatusAware.LoadingStatus = LoadingStatus.Failed;
+            loadStatusAware.LoadingStatus = LoadingStatus.Unloaded;
+            throw;
         }
     }
 

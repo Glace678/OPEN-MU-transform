@@ -514,13 +514,23 @@ int SEASON3B::CNewUICommonMessageBox::SeparateText(const type_string& strMsg, DW
         int prev_offset = 0;
         for (int cur_offset = 0; cur_offset < (int)strRemainText.size();)
         {
-            prev_offset   = cur_offset;
-            size_t offset = _mbclen((const unsigned char*)(strRemainText.c_str() + cur_offset));
-            cur_offset += offset;
+            prev_offset     = cur_offset;
+            size_t   offset = 1;
+            wchar_t  ch     = strRemainText[cur_offset];
+            if (ch >= 0xD800 && ch <= 0xDBFF && (cur_offset + 1) < (int)strRemainText.size())
+            {
+                wchar_t low = strRemainText[cur_offset + 1];
+                if (low >= 0xDC00 && low <= 0xDFFF)
+                {
+                    offset = 2;
+                }
+            }
+            cur_offset += static_cast<int>(offset);
 
             type_string strTemp(strRemainText, 0, cur_offset /* size */);
             GetTextExtentPoint32(g_pRenderText->GetFontDC(), strTemp.c_str(), strTemp.size(), &TextSize);
-            TextExtentWidth = (size_t)(TextSize.cx / g_fScreenRate_x);
+            const float screenRateX = (g_fScreenRate_x > 0.f) ? g_fScreenRate_x : 1.f;
+            TextExtentWidth         = (size_t)(TextSize.cx / screenRateX);
 
             if (TextExtentWidth > (DWORD)_TextSize && cur_offset != 0)
             {
@@ -1485,8 +1495,8 @@ bool SEASON3B::CGuildWarMsgBoxLayout::SetLayout()
     if (false == pMsgBox->Create(MSGBOX_COMMON_TYPE_OKCANCEL, 15.f))
         return false;
 
-    wchar_t strText[128];
-    mu_swprintf(strText, I18N::Game::SGuildChallengesYou, GuildWarName);
+    wchar_t strText[128] = {};
+    swprintf_s(strText, _countof(strText), I18N::Game::SGuildChallengesYou, GuildWarName);
     pMsgBox->AddMsg(strText);
     pMsgBox->AddMsg(I18N::Game::ToAGuildWar);
 
@@ -1527,8 +1537,8 @@ bool SEASON3B::CBattleSoccerMsgBoxLayout::SetLayout()
     if (false == pMsgBox->Create(MSGBOX_COMMON_TYPE_OKCANCEL, 15.f))
         return false;
 
-    wchar_t strText[128];
-    mu_swprintf(strText, I18N::Game::SGuildChallengesYou, GuildWarName);
+    wchar_t strText[128] = {};
+    swprintf_s(strText, _countof(strText), I18N::Game::SGuildChallengesYou, GuildWarName);
     pMsgBox->AddMsg(strText);
     pMsgBox->AddMsg(I18N::Game::YouHaveBeenChallengedToBattleSoccer);
 
@@ -3039,15 +3049,18 @@ bool SEASON3B::CPersonalShopItemBuyMsgBoxLayout::SetLayout()
 CALLBACK_RESULT SEASON3B::CPersonalShopItemBuyMsgBoxLayout::OkBtnDown(class CNewUIMessageBoxBase* pOwner,
                                                                       const leaf::xstreambuf&     xParam)
 {
-    ITEM*      pItem = g_pPurchaseShopInventory->FindItem(g_pPurchaseShopInventory->GetSourceIndex());
-    CHARACTER* pCha  = &CharactersClient[g_pPurchaseShopInventory->GetShopCharacterIndex()];
-
-    if (pItem && pCha)
+    if (g_pPurchaseShopInventory != nullptr)
     {
-        int sourceIndex = g_pPurchaseShopInventory->GetItemInventoryIndex(pItem);
-        if (sourceIndex >= 0)
+        ITEM*     pItem     = g_pPurchaseShopInventory->FindItem(g_pPurchaseShopInventory->GetSourceIndex());
+        const int shopIndex = g_pPurchaseShopInventory->GetShopCharacterIndex();
+        if (pItem != nullptr && shopIndex >= 0 && shopIndex < MAX_CHARACTERS_CLIENT)
         {
-            SocketClient->ToGameServer()->SendPlayerShopItemBuyRequest(pCha->Key, pCha->ID, sourceIndex);
+            CHARACTER* pCha        = &CharactersClient[shopIndex];
+            int        sourceIndex = g_pPurchaseShopInventory->GetItemInventoryIndex(pItem);
+            if (sourceIndex >= 0)
+            {
+                SocketClient->ToGameServer()->SendPlayerShopItemBuyRequest(pCha->Key, pCha->ID, sourceIndex);
+            }
         }
     }
 
@@ -3170,8 +3183,11 @@ bool SEASON3B::CGuildPerson_Get_Out::SetLayout()
     if (false == pMsgBox->Create(MSGBOX_COMMON_TYPE_OKCANCEL))
         return false;
 
-    wchar_t Buff[300];
-    mu_swprintf(Buff, I18N::Game::CharacterS, GuildList[DeleteIndex].Name);
+    if (DeleteIndex < 0 || DeleteIndex >= MAX_GUILDS)
+        return false;
+
+    wchar_t Buff[300] = {};
+    swprintf_s(Buff, _countof(Buff), I18N::Game::CharacterS, GuildList[DeleteIndex].Name);
     pMsgBox->AddMsg(Buff, RGBA(255, 255, 255, 255), MSGBOX_FONT_BOLD);
     pMsgBox->AddMsg(I18N::Game::WouldYouLikeToRelease, RGBA(255, 255, 255, 255), MSGBOX_FONT_BOLD);
     pMsgBox->AddCallbackFunc(CGuildPerson_Get_Out::OkBtnDown, MSGBOX_EVENT_USER_COMMON_OK);
@@ -3218,7 +3234,10 @@ bool SEASON3B::CGuildPerson_Cancel_Position_MsgBoxLayout::SetLayout()
 CALLBACK_RESULT SEASON3B::CGuildPerson_Cancel_Position_MsgBoxLayout::OkBtnDown(class CNewUIMessageBoxBase* pOwner,
                                                                                const leaf::xstreambuf&     xParam)
 {
-    SocketClient->ToGameServer()->SendGuildRoleAssignRequest(G_PERSON, GuildList[DeleteIndex].Name, 0x03);
+    if (DeleteIndex >= 0 && DeleteIndex < MAX_GUILDS)
+    {
+        SocketClient->ToGameServer()->SendGuildRoleAssignRequest(G_PERSON, GuildList[DeleteIndex].Name, 0x03);
+    }
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);
@@ -3273,10 +3292,8 @@ bool SEASON3B::CCry_Wolf_Result_Set_Temple::SetLayout()
 
     if (View_Suc_Or_Fail == 1)
     {
-        mu_swprintf(Text, I18N::Game::MonsterStrengthDecreased10);
-        pMsgBox->AddMsg(Text, TextColor);
-        mu_swprintf(Text, I18N::Game::_5IncreaseInCastleAndArenaInvitationCombineRate);
-        pMsgBox->AddMsg(Text, TextColor);
+        pMsgBox->AddMsg(I18N::Game::MonsterStrengthDecreased10, TextColor);
+        pMsgBox->AddMsg(I18N::Game::_5IncreaseInCastleAndArenaInvitationCombineRate, TextColor);
     }
     else
     {
@@ -3524,10 +3541,16 @@ bool SEASON3B::CCry_Wolf_Get_Temple::SetLayout()
     if (false == pMsgBox->Create(MSGBOX_COMMON_TYPE_OKCANCEL))
         return false;
 
-    wchar_t szText[256];
-    int     Num   = CharactersClient[TargetNpc].Object.Type - MODEL_CRYWOLF_ALTAR1;
-    BYTE    State = (m_AltarState[Num] & 0x0f);
-    mu_swprintf(szText, I18N::Game::ContractCanBeMadeForDTimes, State);
+    if (TargetNpc < 0 || TargetNpc >= MAX_CHARACTERS_CLIENT)
+        return false;
+
+    int Num = CharactersClient[TargetNpc].Object.Type - MODEL_CRYWOLF_ALTAR1;
+    if (Num < 0 || Num >= 5)
+        return false;
+
+    wchar_t szText[256] = {};
+    BYTE    State       = (m_AltarState[Num] & 0x0f);
+    swprintf_s(szText, _countof(szText), I18N::Game::ContractCanBeMadeForDTimes, State);
     pMsgBox->AddMsg(szText);
     pMsgBox->AddMsg(I18N::Game::WouldYouLikeToProceedWithTheContract);
     BackUp_Key = CharactersClient[TargetNpc].Key;

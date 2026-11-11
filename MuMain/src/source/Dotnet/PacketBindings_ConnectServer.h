@@ -20,38 +20,29 @@
 #include "PacketFunctions_CommonEnums.h"
 #include "PacketFunctions_ConnectServer_Enums.h"
 
-typedef void(CORECLR_DELEGATE_CALLTYPE* SendConnectionInfoRequest075)(int32_t, BYTE);
-inline SendConnectionInfoRequest075 dotnet_SendConnectionInfoRequest075 =
-    reinterpret_cast<SendConnectionInfoRequest075>(
-        symLoad(munique_client_library_handle, "SendConnectionInfoRequest075"));
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendConnectionInfoRequest075)(int32_t, BYTE );
+inline SendConnectionInfoRequest075 dotnet_SendConnectionInfoRequest075 = BindManagedPacketSymbol<SendConnectionInfoRequest075>("SendConnectionInfoRequest075");
 
-typedef void(CORECLR_DELEGATE_CALLTYPE* SendConnectionInfoRequest)(int32_t, uint16_t);
-inline SendConnectionInfoRequest dotnet_SendConnectionInfoRequest =
-    reinterpret_cast<SendConnectionInfoRequest>(symLoad(munique_client_library_handle, "SendConnectionInfoRequest"));
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendConnectionInfoRequest)(int32_t, uint16_t );
+inline SendConnectionInfoRequest dotnet_SendConnectionInfoRequest = BindManagedPacketSymbol<SendConnectionInfoRequest>("SendConnectionInfoRequest");
 
-typedef void(CORECLR_DELEGATE_CALLTYPE* SendConnectionInfo)(int32_t, const wchar_t*, uint16_t);
-inline SendConnectionInfo dotnet_SendConnectionInfo =
-    reinterpret_cast<SendConnectionInfo>(symLoad(munique_client_library_handle, "SendConnectionInfo"));
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendConnectionInfo)(int32_t, const wchar_t* , uint16_t );
+inline SendConnectionInfo dotnet_SendConnectionInfo = BindManagedPacketSymbol<SendConnectionInfo>("SendConnectionInfo");
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendServerListRequest)(int32_t);
-inline SendServerListRequest dotnet_SendServerListRequest =
-    reinterpret_cast<SendServerListRequest>(symLoad(munique_client_library_handle, "SendServerListRequest"));
+inline SendServerListRequest dotnet_SendServerListRequest = BindManagedPacketSymbol<SendServerListRequest>("SendServerListRequest");
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendServerListRequestOld)(int32_t);
-inline SendServerListRequestOld dotnet_SendServerListRequestOld =
-    reinterpret_cast<SendServerListRequestOld>(symLoad(munique_client_library_handle, "SendServerListRequestOld"));
+inline SendServerListRequestOld dotnet_SendServerListRequestOld = BindManagedPacketSymbol<SendServerListRequestOld>("SendServerListRequestOld");
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendHello)(int32_t);
-inline SendHello dotnet_SendHello = reinterpret_cast<SendHello>(symLoad(munique_client_library_handle, "SendHello"));
+inline SendHello dotnet_SendHello = BindManagedPacketSymbol<SendHello>("SendHello");
 
-typedef void(CORECLR_DELEGATE_CALLTYPE* SendPatchCheckRequest)(int32_t, BYTE, BYTE, BYTE);
-inline SendPatchCheckRequest dotnet_SendPatchCheckRequest =
-    reinterpret_cast<SendPatchCheckRequest>(symLoad(munique_client_library_handle, "SendPatchCheckRequest"));
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendPatchCheckRequest)(int32_t, BYTE , BYTE , BYTE );
+inline SendPatchCheckRequest dotnet_SendPatchCheckRequest = BindManagedPacketSymbol<SendPatchCheckRequest>("SendPatchCheckRequest");
 
 typedef void(CORECLR_DELEGATE_CALLTYPE* SendPatchVersionOkay)(int32_t);
-inline SendPatchVersionOkay dotnet_SendPatchVersionOkay =
-    reinterpret_cast<SendPatchVersionOkay>(symLoad(munique_client_library_handle, "SendPatchVersionOkay"));
+inline SendPatchVersionOkay dotnet_SendPatchVersionOkay = BindManagedPacketSymbol<SendPatchVersionOkay>("SendPatchVersionOkay");
 
-typedef void(CORECLR_DELEGATE_CALLTYPE* SendClientNeedsPatch)(int32_t, BYTE, const wchar_t*);
-inline SendClientNeedsPatch dotnet_SendClientNeedsPatch =
-    reinterpret_cast<SendClientNeedsPatch>(symLoad(munique_client_library_handle, "SendClientNeedsPatch"));
+typedef void(CORECLR_DELEGATE_CALLTYPE* SendClientNeedsPatch)(int32_t, BYTE , const wchar_t* );
+inline SendClientNeedsPatch dotnet_SendClientNeedsPatch = BindManagedPacketSymbol<SendClientNeedsPatch>("SendClientNeedsPatch");

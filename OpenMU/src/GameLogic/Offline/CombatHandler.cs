@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.GameLogic.Offline;
 
 using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
 using MUnique.OpenMU.AttributeSystem;
 using MUnique.OpenMU.GameLogic.Attributes;
 using MUnique.OpenMU.GameLogic.Bots;
@@ -109,10 +110,10 @@ public sealed class CombatHandler
     /// <summary>
     /// Cache of the combat-relevant stats of monster definitions (config data, immutable at runtime),
     /// so the safety checks of hundreds of bots don't re-scan the attribute lists every tick. Keyed by
-    /// the monster number rather than the definition instance, so a configuration reload (which builds
-    /// new <see cref="MonsterDefinition"/> instances) reuses the entries instead of orphaning them.
+    /// the <see cref="MonsterDefinition"/> instance via <see cref="ConditionalWeakTable{TKey,TValue}"/>
+    /// so distinct configurations or reloaded definitions never share stale stats and unloaded definitions can be GC'd.
     /// </summary>
-    private static readonly ConcurrentDictionary<short, (int Level, float AverageDamage, float Defense, float Health, float AttackRate)> MonsterStatsCache = new();
+    private static readonly ConditionalWeakTable<MonsterDefinition, StrongBox<(int Level, float AverageDamage, float Defense, float Health, float AttackRate)>> MonsterStatsCache = new();
 
     private readonly OfflinePlayer _player;
     private readonly IMuHelperSettings? _config;
@@ -348,18 +349,17 @@ public sealed class CombatHandler
 
     private static (int Level, float AverageDamage, float Defense, float Health, float AttackRate) GetMonsterCombatStats(MonsterDefinition monster)
     {
-        return MonsterStatsCache.GetOrAdd(
-            monster.Number,
-            static (_, m) =>
+        return MonsterStatsCache.GetValue(
+            monster,
+            static m =>
             {
                 float GetValue(AttributeDefinition attribute)
                     => m.Attributes.FirstOrDefault(a => a.AttributeDefinition == attribute)?.Value ?? 0f;
 
                 var level = (int)GetValue(Stats.Level);
                 var averageDamage = (GetValue(Stats.MinimumPhysBaseDmg) + GetValue(Stats.MaximumPhysBaseDmg)) / 2f;
-                return (level, averageDamage, GetValue(Stats.DefenseBase), GetValue(Stats.MaximumHealth), GetValue(Stats.AttackRatePvm));
-            },
-            monster);
+                return new StrongBox<(int, float, float, float, float)>((level, averageDamage, GetValue(Stats.DefenseBase), GetValue(Stats.MaximumHealth), GetValue(Stats.AttackRatePvm)));
+            }).Value;
     }
 
     /// <summary>
@@ -646,6 +646,11 @@ public sealed class CombatHandler
 
     private async ValueTask ExecuteAreaSkillAttackAsync(IAttackable target, SkillEntry skillEntry, bool isCombo)
     {
+        if (!await this._player.TryConsumeForSkillAsync(skillEntry).ConfigureAwait(false))
+        {
+            return;
+        }
+
         var skill = skillEntry.Skill!;
 
         if (isCombo)

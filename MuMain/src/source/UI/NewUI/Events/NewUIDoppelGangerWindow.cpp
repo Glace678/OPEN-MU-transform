@@ -67,8 +67,6 @@ void CNewUIDoppelGangerWindow::InitButton(CNewUIButton* pNewUIButton, int iPos_x
 
 void CNewUIDoppelGangerWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUI3DRenderMng)
     {
         m_pNewUI3DRenderMng->Remove3DRenderObj(this);
@@ -77,6 +75,7 @@ void CNewUIDoppelGangerWindow::Release()
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -174,11 +173,11 @@ bool CNewUIDoppelGangerWindow::Render()
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 210, I18N::Game::EntryTime, 190, 0, RT3_SORT_CENTER);
     if (m_iRemainTime == 0)
     {
-        mu_swprintf(szText, I18N::Game::YouMayNowEnter);
+        swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::YouMayNowEnter);
     }
     else
     {
-        mu_swprintf(szText, I18N::Game::EnterAfterDMinutes, m_iRemainTime);
+        swprintf_s(szText, _countof(szText), I18N::Game::EnterAfterDMinutes, m_iRemainTime);
     }
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y + 230, szText, 190, 0, RT3_SORT_CENTER);
 

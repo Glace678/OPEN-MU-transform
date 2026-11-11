@@ -256,30 +256,43 @@ GameConfig& GameConfig::GetInstance()
 GameConfig::GameConfig()
 {
     // Get executable directory and construct config path
-    wchar_t exePath[MAX_PATH];
-    GetModuleFileNameW(nullptr, exePath, MAX_PATH);
+    std::wstring exePath(4096, L'\0');
+    DWORD        exeLen = 0;
+    while (true)
+    {
+        exeLen = GetModuleFileNameW(nullptr, exePath.data(), static_cast<DWORD>(exePath.size()));
+        if (exeLen == 0)
+        {
+            exePath.clear();
+            break;
+        }
+        if (exeLen < exePath.size() - 1)
+        {
+            exePath.resize(static_cast<size_t>(exeLen));
+            break;
+        }
+        if (exePath.size() >= 32768)
+        {
+            exePath.clear();
+            break;
+        }
+        exePath.resize(exePath.size() * 2, L'\0');
+    }
 
     // Find the last path separator to get the directory. GetModuleFileNameW
     // returns backslashes on Windows but forward slashes on Linux (issue #462),
     // so accept either; truncating on the wrong one leaves the whole exe path
     // glued to "config.ini", and the file is silently never found (every
     // setting then falls back to its default).
-    wchar_t* lastBackslash    = wcsrchr(exePath, L'\\');
-    wchar_t* lastForwardSlash = wcsrchr(exePath, L'/');
-    // Relational comparison of pointers into different arrays (or with null) is
-    // undefined behavior, and on Linux one of these is always null, so pick the
-    // later separator only when both exist.
-    wchar_t* lastSlash = nullptr;
-    if (lastBackslash && lastForwardSlash)
-        lastSlash = (lastBackslash > lastForwardSlash) ? lastBackslash : lastForwardSlash;
-    else
-        lastSlash = lastBackslash ? lastBackslash : lastForwardSlash;
-    if (lastSlash)
+    const size_t lastSlash = exePath.find_last_of(L"\\/");
+    if (lastSlash != std::wstring::npos)
     {
-        *(lastSlash + 1) = L'\0';  // Keep the trailing separator
+        m_configPath = exePath.substr(0, lastSlash + 1);
     }
-
-    m_configPath = exePath;
+    else
+    {
+        m_configPath.clear();
+    }
     m_configPath += L"config.ini";
 
     // Installed desktop bundles keep mutable settings in the user's data directory.

@@ -189,13 +189,13 @@ void SEASON3B::CNewUINameWindow::RenderName()
 
     if (SelectedItem != -1 || SelectedNpc != -1 || SelectedCharacter != -1)
     {
-        if (SelectedNpc != -1)
+        if (SelectedNpc >= 0 && SelectedNpc < MAX_CHARACTERS_CLIENT)
         {
             CHARACTER* c = &CharactersClient[SelectedNpc];
             OBJECT*    o = &c->Object;
             UI::Chat::CreateChat(c->ID, L"", c);
         }
-        else if (SelectedCharacter != -1)
+        else if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
         {
             CHARACTER* c = &CharactersClient[SelectedCharacter];
 

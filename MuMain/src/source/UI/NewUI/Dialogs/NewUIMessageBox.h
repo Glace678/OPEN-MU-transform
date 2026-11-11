@@ -195,13 +195,14 @@ public:
 
         TContainer<T>& operator=(const TContainer<T>& _container)
         {
-            if (_container.GetInstance())
+            if (this != &_container && _container.GetInstance())
             {
                 if (m_InstState == INSTANCE_NEW)
                     delete m_pObj;
                 m_pObj      = _container.GetInstance();
                 m_InstState = INSTANCE_REFERENCE;
             }
+            return *this;
         }
     };
     template <class T>
@@ -209,8 +210,11 @@ public:
     T* NewMessageBox(const TContainer<T>& _container)
     {
         T* pObj = _container.GetInstance();
-        m_listMsgBoxes.push_back(pObj);
-        _container.SetInstState(INSTANCE_REFERENCE);
+        if (pObj != nullptr)
+        {
+            m_listMsgBoxes.push_back(pObj);
+            _container.SetInstState(INSTANCE_REFERENCE);
+        }
         return pObj;
     }
 
@@ -340,10 +344,13 @@ public:
         T* pMsgBox = NULL;
         if (m_pMsgBoxFactory)
         {
-            pMsgBox                  = m_pMsgBoxFactory->NewMessageBox(container);
-            pMsgBox->m_inputInstance = ++m_nextInputInstance;
-            m_vecMsgBoxes.push_back(pMsgBox);
-            SynchronizePointerOwner();
+            pMsgBox = m_pMsgBoxFactory->NewMessageBox(container);
+            if (pMsgBox != nullptr)
+            {
+                pMsgBox->m_inputInstance = ++m_nextInputInstance;
+                m_vecMsgBoxes.push_back(pMsgBox);
+                SynchronizePointerOwner();
+            }
         }
         return pMsgBox;
     }

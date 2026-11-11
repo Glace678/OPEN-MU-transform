@@ -99,6 +99,7 @@ internal sealed class Program : IDisposable
         {
             if (_confirmExit)
             {
+                e.Cancel = true;
 #pragma warning disable VSTHRD103 // Call async methods when in an async method
                 exitCts.Cancel();
 #pragma warning restore VSTHRD103 // Call async methods when in an async method
@@ -107,6 +108,7 @@ internal sealed class Program : IDisposable
             }
             else
             {
+                e.Cancel = true;
                 _confirmExit = true;
                 Console.Write("\nConfirm shutdown? (y/N) ");
             }

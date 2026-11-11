@@ -62,11 +62,12 @@ export function writeTextSync(fd: number, text: string): void {
   writeRange(fd, exact, 0, exact.byteLength);
 }
 
-function writeRange(fd: number, buffer: ArrayBuffer, bufferOffset: number, length: number): void {
+function writeRange(fd: number, buffer: ArrayBuffer, fileOffset: number, length: number): void {
   let written = 0;
   while (written < length) {
-    const n = fs.writeSync(fd, buffer, {
-      offset: bufferOffset + written,
+    const chunk = written === 0 ? buffer : buffer.slice(written, length);
+    const n = fs.writeSync(fd, chunk, {
+      offset: fileOffset + written,
       length: length - written
     });
     if (n <= 0) {

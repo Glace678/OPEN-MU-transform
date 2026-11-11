@@ -42,6 +42,8 @@ public sealed class AccountSelfServiceGuard
 {
     private const int MaximumFailedAttempts = 10;
 
+    private const int MaximumTrackedFailureEntries = 16_384;
+
     private const int MaintenanceTokenEntropyBytes = 32;
 
     private const string TemporaryTokenFileSuffix = ".tmp";
@@ -123,6 +125,11 @@ public sealed class AccountSelfServiceGuard
             this.PruneFailuresLocked();
             if (!this._failedAttempts.TryGetValue(key, out var attempts))
             {
+                if (this._failedAttempts.Count >= MaximumTrackedFailureEntries)
+                {
+                    this.EvictOldestFailureEntryLocked();
+                }
+
                 attempts = FailedAttempts.None;
             }
 
@@ -239,34 +246,67 @@ public sealed class AccountSelfServiceGuard
         }
     }
 
-    private string? ReadMaintenanceToken()
+    private void EvictOldestFailureEntryLocked()
     {
-        var path = this.MaintenanceTokenPath;
-        try
+        string? oldestUnlockedKey = null;
+        var oldestUnlockedTime = DateTimeOffset.MaxValue;
+        string? oldestAnyKey = null;
+        var oldestAnyTime = DateTimeOffset.MaxValue;
+        var now = DateTimeOffset.UtcNow;
+
+        foreach (var (candidateKey, value) in this._failedAttempts)
         {
-            if (!File.Exists(path))
+            if (value.LastFailure < oldestAnyTime)
             {
-                return this.CreateMaintenanceToken(path);
+                oldestAnyTime = value.LastFailure;
+                oldestAnyKey = candidateKey;
             }
 
-            var stamp = File.GetLastWriteTimeUtc(path);
-            if (this._maintenanceToken is null || stamp != this._maintenanceTokenStamp)
+            if (value.LockedUntil <= now && value.LastFailure < oldestUnlockedTime)
             {
-                this._maintenanceToken = File.ReadAllText(path).Trim();
-                this._maintenanceTokenStamp = stamp;
+                oldestUnlockedTime = value.LastFailure;
+                oldestUnlockedKey = candidateKey;
             }
-
-            return this._maintenanceToken;
         }
-        catch
+
+        if ((oldestUnlockedKey ?? oldestAnyKey) is { } keyToRemove)
         {
-            // A missing or unreadable token file must fail closed.
-            return null;
+            this._failedAttempts.Remove(keyToRemove);
         }
     }
 
-    private string? CreateMaintenanceToken(string path)
+    private string? ReadMaintenanceToken()
     {
+        var path = this.MaintenanceTokenPath;
+        lock (this._lock)
+        {
+            try
+            {
+                if (!File.Exists(path))
+                {
+                    return this.CreateMaintenanceTokenLocked(path);
+                }
+
+                var stamp = File.GetLastWriteTimeUtc(path);
+                if (this._maintenanceToken is null || stamp != this._maintenanceTokenStamp)
+                {
+                    this._maintenanceToken = File.ReadAllText(path).Trim();
+                    this._maintenanceTokenStamp = stamp;
+                }
+
+                return this._maintenanceToken;
+            }
+            catch
+            {
+                // A missing or unreadable token file must fail closed.
+                return null;
+            }
+        }
+    }
+
+    private string? CreateMaintenanceTokenLocked(string path)
+    {
+        var temporaryPath = $"{path}.{Guid.NewGuid():N}{TemporaryTokenFileSuffix}";
         try
         {
             var directory = Path.GetDirectoryName(path);
@@ -276,11 +316,20 @@ public sealed class AccountSelfServiceGuard
             }
 
             var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(MaintenanceTokenEntropyBytes));
-            var temporaryPath = path + TemporaryTokenFileSuffix;
-            File.WriteAllText(temporaryPath, token);
+            var streamOptions = new FileStreamOptions
+            {
+                Mode = FileMode.CreateNew,
+                Access = FileAccess.Write,
+                Share = FileShare.None,
+            };
             if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
             {
-                File.SetUnixFileMode(temporaryPath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+                streamOptions.UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite;
+            }
+
+            using (var writer = new StreamWriter(temporaryPath, Encoding.UTF8, streamOptions))
+            {
+                writer.Write(token);
             }
 
             File.Move(temporaryPath, path, overwrite: true);
@@ -296,6 +345,18 @@ public sealed class AccountSelfServiceGuard
         }
         catch
         {
+            try
+            {
+                if (File.Exists(temporaryPath))
+                {
+                    File.Delete(temporaryPath);
+                }
+            }
+            catch
+            {
+                // Best-effort cleanup of failed temp token file.
+            }
+
             return null;
         }
     }

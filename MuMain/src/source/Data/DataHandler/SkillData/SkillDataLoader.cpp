@@ -40,7 +40,14 @@ bool SkillDataLoader::Load(wchar_t* fileName)
     const long expectedNewSize    = NewSize * MAX_SKILLS + sizeof(DWORD);
 
     bool isLegacyFormat = (fileSize == expectedLegacySize);
+    bool isNewFormat    = (fileSize == expectedNewSize);
     bool success        = false;
+
+    if (!isLegacyFormat && !isNewFormat)
+    {
+        fclose(fp);
+        return false;
+    }
 
 #ifdef _EDITOR
     if (isLegacyFormat)

@@ -94,12 +94,16 @@ public class MapInitializer : IMapInitializer
             .Where(m => m.SpawnTrigger is SpawnTrigger.Automatic);
         foreach (var spawnArea in automaticSpawns)
         {
+            short spawnedCount = 0;
             for (int i = 0; i < spawnArea.Quantity; i++)
             {
-                await this.InitializeSpawnAsync(i, createdMap, spawnArea).ConfigureAwait(false);
+                if (await this.InitializeSpawnAsync(i, createdMap, spawnArea).ConfigureAwait(false) is not null)
+                {
+                    spawnedCount++;
+                }
             }
 
-            this._spawnedMonsters.AddOrUpdate(spawnArea, spawnArea.Quantity, (_, _) => spawnArea.Quantity);
+            this._spawnedMonsters.AddOrUpdate(spawnArea, spawnedCount, (_, _) => spawnedCount);
         }
 
         this._configurationChangeMediator?.RegisterForNew<MonsterSpawnArea, GameMap>(createdMap, async (spawnArea, map) =>
@@ -109,12 +113,16 @@ public class MapInitializer : IMapInitializer
                 return;
             }
 
+            short spawnedCount = 0;
             for (int i = 0; i < spawnArea.Quantity; i++)
             {
-                await this.InitializeSpawnAsync(i, map, spawnArea).ConfigureAwait(false);
+                if (await this.InitializeSpawnAsync(i, map, spawnArea).ConfigureAwait(false) is not null)
+                {
+                    spawnedCount++;
+                }
             }
 
-            this._spawnedMonsters.AddOrUpdate(spawnArea, spawnArea.Quantity, (_, _) => spawnArea.Quantity);
+            this._spawnedMonsters.AddOrUpdate(spawnArea, spawnedCount, (_, _) => spawnedCount);
         });
 
         this._logger.LogDebug("Finished creating monster instances for map {createdMap}", createdMap.Definition.Name);
@@ -221,11 +229,13 @@ public class MapInitializer : IMapInitializer
             npc = new NonPlayerCharacter(spawnArea, monsterDef, createdMap);
         }
 
+        var addedToMap = false;
         try
         {
             npc.SpawnIndex = spawnIndex;
             npc.Initialize();
             await createdMap.AddAsync(npc).ConfigureAwait(false);
+            addedToMap = true;
             npc.OnSpawn();
             if (spawnArea.SpawnTrigger is SpawnTrigger.Automatic or SpawnTrigger.Wandering)
             {
@@ -237,6 +247,18 @@ public class MapInitializer : IMapInitializer
         catch (Exception ex)
         {
             this._logger.LogError(ex, $"Object {spawnArea} couldn't be initialized.", spawnArea);
+            if (addedToMap)
+            {
+                try
+                {
+                    await createdMap.RemoveAsync(npc).ConfigureAwait(false);
+                }
+                catch
+                {
+                    // Best-effort cleanup if map registration succeeded before failure.
+                }
+            }
+
             await npc.DisposeAsync().ConfigureAwait(false);
         }
 

@@ -200,7 +200,8 @@ void SEASON3B::CNewUISiegeWarCommander::RenderCharPosInMiniMap()
         {
             OBJECT* o = &c->Object;
 
-            if (g_isCharacterBuff(o, static_cast<eBuffState>(m_dwBuffState)))
+            if (m_dwBuffState != static_cast<DWORD>(-1) &&
+                g_isCharacterBuff(o, static_cast<eBuffState>(m_dwBuffState)))
             {
                 continue;
             }
@@ -335,6 +336,11 @@ void SEASON3B::CNewUISiegeWarCommander::RenderCmdBtn()
 
 void SEASON3B::CNewUISiegeWarCommander::SetBtnState(int iBtnType, bool bStateDown)
 {
+    if (iBtnType < 0 || iBtnType >= MAX_COMMANDGROUP)
+    {
+        return;
+    }
+
     if (bStateDown)
     {
         m_BtnCommandGroup[iBtnType].UnRegisterButtonState();

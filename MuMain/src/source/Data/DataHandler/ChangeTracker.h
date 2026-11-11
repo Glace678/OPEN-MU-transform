@@ -2,8 +2,10 @@
 
 #ifdef _EDITOR
 
+#include <cwchar>
 #include <sstream>
 #include <string>
+#include <type_traits>
 
 /**
  * Simple change tracking for data structures
@@ -19,14 +21,36 @@ namespace ChangeTracker
      */
 template <typename TStruct> inline std::string GetNameUtf8(int index, const TStruct& data, int maxNameLen)
 {
-    char nameBuf[256] = {0};
-    int  bufSize      = (maxNameLen > 0 && maxNameLen < 256) ? maxNameLen : sizeof(nameBuf);
-    int  result       = WideCharToMultiByte(CP_UTF8, 0, data.Name, -1, nameBuf, bufSize, NULL, NULL);
-    if (result == 0)
+    (void)index;
+    using NameFieldType       = std::remove_cv_t<std::remove_reference_t<decltype(data.Name)>>;
+    constexpr size_t arrayCap = std::is_array_v<NameFieldType> ? std::extent_v<NameFieldType> : 0;
+
+    size_t limit = (maxNameLen > 0) ? static_cast<size_t>(maxNameLen) : arrayCap;
+    if (arrayCap > 0 && (limit == 0 || limit > arrayCap))
+    {
+        limit = arrayCap;
+    }
+
+    const wchar_t* namePtr = data.Name;
+    if (namePtr == nullptr)
+    {
+        return std::string();
+    }
+
+    const size_t wcharLen = (limit > 0) ? wcsnlen(namePtr, limit) : wcslen(namePtr);
+    if (wcharLen == 0)
+    {
+        return std::string();
+    }
+
+    char      nameBuf[1024] = {0};
+    const int result        = WideCharToMultiByte(CP_UTF8, 0, namePtr, static_cast<int>(wcharLen), nameBuf,
+                                                  static_cast<int>(sizeof(nameBuf) - 1), NULL, NULL);
+    if (result <= 0)
     {
         return std::string("[UTF-8 conversion failed]");
     }
-    return std::string(nameBuf);
+    return std::string(nameBuf, static_cast<size_t>(result));
 }
 
 /**
@@ -76,17 +100,31 @@ inline void CompareField(const char* fieldName, const BYTE& oldVal, const BYTE& 
 inline void CompareWideString(const char* fieldName, const wchar_t* oldVal, const wchar_t* newVal,
                               std::stringstream& changes, bool& hasChanged, int maxLen)
 {
-    bool stringsEqual = (maxLen > 0) ? (wcsncmp(oldVal, newVal, maxLen) == 0) : (wcscmp(oldVal, newVal) == 0);
+    const wchar_t* safeOld      = oldVal ? oldVal : L"";
+    const wchar_t* safeNew      = newVal ? newVal : L"";
+    const size_t   oldLen       = (maxLen > 0) ? wcsnlen(safeOld, static_cast<size_t>(maxLen)) : wcslen(safeOld);
+    const size_t   newLen       = (maxLen > 0) ? wcsnlen(safeNew, static_cast<size_t>(maxLen)) : wcslen(safeNew);
+    const bool     stringsEqual = (oldLen == newLen) && (oldLen == 0 || wmemcmp(safeOld, safeNew, oldLen) == 0);
 
     if (!stringsEqual)
     {
-        char oldUtf8[256] = {0};
-        char newUtf8[256] = {0};
-        int  charCount    = (maxLen > 0) ? maxLen : -1;
-        int  result1      = WideCharToMultiByte(CP_UTF8, 0, oldVal, charCount, oldUtf8, sizeof(oldUtf8), NULL, NULL);
-        int  result2      = WideCharToMultiByte(CP_UTF8, 0, newVal, charCount, newUtf8, sizeof(newUtf8), NULL, NULL);
+        char oldUtf8[1024] = {0};
+        char newUtf8[1024] = {0};
+        int  result1       = 1;
+        int  result2       = 1;
 
-        if (result1 == 0 || result2 == 0)
+        if (oldLen > 0)
+        {
+            result1 = WideCharToMultiByte(CP_UTF8, 0, safeOld, static_cast<int>(oldLen), oldUtf8,
+                                          static_cast<int>(sizeof(oldUtf8) - 1), NULL, NULL);
+        }
+        if (newLen > 0)
+        {
+            result2 = WideCharToMultiByte(CP_UTF8, 0, safeNew, static_cast<int>(newLen), newUtf8,
+                                          static_cast<int>(sizeof(newUtf8) - 1), NULL, NULL);
+        }
+
+        if (result1 <= 0 || result2 <= 0)
         {
             changes << "  " << fieldName << ": [UTF-8 conversion failed]\n";
         }

@@ -162,8 +162,8 @@ public abstract class PacketPipeReaderBase
         }
         else
         {
-            // Tell the PipeReader how much of the buffer we have consumed
-            this.Source.AdvanceTo(buffer.Start);
+            // Tell the PipeReader how much of the buffer we have consumed and examined
+            this.Source.AdvanceTo(buffer.Start, buffer.End);
         }
 
         return result.IsCompleted || readingCancelledOrCompleted;

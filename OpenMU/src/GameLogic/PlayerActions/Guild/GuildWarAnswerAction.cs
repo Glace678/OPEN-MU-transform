@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.GameLogic.PlayerActions.Guild;
 
 using System.ComponentModel;
+using System.Threading;
 using MUnique.OpenMU.GameLogic.GuildWar;
 using MUnique.OpenMU.GameLogic.Views.Guild;
 
@@ -27,6 +28,11 @@ public class GuildWarAnswerAction
             return;
         }
 
+        if (guildWarContext.State != GuildWarState.Requested)
+        {
+            return;
+        }
+
         SoccerGameMap? soccerMap = null;
         if (guildWarContext.WarType == GuildWarType.Soccer
             && player.GameContext.Configuration.Maps.FirstOrDefault(m => m.BattleZone?.Type == BattleType.Soccer) is { } definition)
@@ -41,27 +47,50 @@ public class GuildWarAnswerAction
             await player.InvokeViewPlugInAsync<IShowShowGuildWarRequestResultPlugIn>(p => p.ShowResultAsync(GuildWarRequestResult.Failed)).ConfigureAwait(false);
         }
 
-        if (!isWarAccepted
-            || requester.GuildWarContext is not { } requesterGuildWarContext
-            || soccerInitFailed)
+        GuildWarContext? requesterGuildWarContext;
+        lock (GuildWarContext.SyncRoot)
         {
-            player.GuildWarContext = null;
-            requester.GuildWarContext = null;
-            return;
+            if (!ReferenceEquals(player.GuildWarContext, guildWarContext)
+                || guildWarContext.State != GuildWarState.Requested)
+            {
+                return;
+            }
+
+            requesterGuildWarContext = requester.GuildWarContext;
+            var isValidRequesterContext = requesterGuildWarContext is { State: GuildWarState.Requested }
+                && ReferenceEquals(requesterGuildWarContext.Score, guildWarContext.Score);
+            if (!isWarAccepted || !isValidRequesterContext || soccerInitFailed)
+            {
+                guildWarContext.State = GuildWarState.Ended;
+                player.GuildWarContext = null;
+                if (isValidRequesterContext)
+                {
+                    requesterGuildWarContext!.State = GuildWarState.Ended;
+                    requester.GuildWarContext = null;
+                }
+
+                return;
+            }
+
+            guildWarContext.State = GuildWarState.Started;
+            requesterGuildWarContext!.State = GuildWarState.Started;
         }
 
         soccerMap?.InitializeBattle();
-        guildWarContext.State = GuildWarState.Started;
-        requesterGuildWarContext.State = GuildWarState.Started;
         var playerTeam = this.GetTeamPlayers(player);
         var requesterTeam = this.GetTeamPlayers(requester);
         var score = guildWarContext.Score;
+        var playerGuildId = player.GuildStatus?.GuildId;
+        var requesterGuildId = requester.GuildStatus?.GuildId;
+        var playerTeamSide = guildWarContext.Team;
+        var scoreAwarded = 0;
 #pragma warning disable VSTHRD101 // Avoid unsupported async delegates
         score.PropertyChanged += async (_, args) =>
         {
             try
             {
-                if (args.PropertyName != nameof(score.HasEnded))
+                if (args.PropertyName != nameof(score.HasEnded)
+                    || Interlocked.CompareExchange(ref scoreAwarded, 1, 0) != 0)
                 {
                     return;
                 }
@@ -70,13 +99,17 @@ public class GuildWarAnswerAction
                 requesterGuildWarContext.State = GuildWarState.Ended;
                 if (player.GameContext is IGameServerContext gameContext && score.Winners.HasValue)
                 {
-                    var winner = score.Winners == player.GuildWarContext.Team ? player.GuildStatus!.GuildId : requester.GuildStatus!.GuildId;
-                    await gameContext.GuildServer.IncreaseGuildScoreAsync(winner, 1).ConfigureAwait(false);
+                    var winnerGuildId = score.Winners == playerTeamSide ? playerGuildId : requesterGuildId;
+                    if (winnerGuildId is > 0)
+                    {
+                        await gameContext.GuildServer.IncreaseGuildScoreAsync(winnerGuildId.Value, 1).ConfigureAwait(false);
+                    }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 // must be catched because it's async void.
+                player.Logger.LogError(ex, "Unexpected error while finalizing guild war score.");
             }
         };
 #pragma warning restore VSTHRD101 // Avoid unsupported async delegates
@@ -99,8 +132,8 @@ public class GuildWarAnswerAction
 
         if (guildWarContext.WarType == GuildWarType.Soccer && soccerMap is { })
         {
-            await this.MovePartyToArenaAsync(player.GuildWarContext.Team, playerTeam, soccerMap).ConfigureAwait(false);
-            await this.MovePartyToArenaAsync(requester.GuildWarContext.Team, requesterTeam, soccerMap).ConfigureAwait(false);
+            await this.MovePartyToArenaAsync(guildWarContext.Team, playerTeam, soccerMap).ConfigureAwait(false);
+            await this.MovePartyToArenaAsync(requesterGuildWarContext.Team, requesterTeam, soccerMap).ConfigureAwait(false);
             await soccerMap.StartBattleAsync(score).ConfigureAwait(false);
         }
     }

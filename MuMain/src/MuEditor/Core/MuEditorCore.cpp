@@ -53,7 +53,8 @@ bool FontFileExists(const char* path)
 // Windows cursor display counter thresholds
 // The cursor is visible when the counter is >= CURSOR_VISIBLE_THRESHOLD
 // The cursor is hidden when the counter is < CURSOR_VISIBLE_THRESHOLD
-constexpr int CURSOR_VISIBLE_THRESHOLD = 0;
+constexpr int CURSOR_VISIBLE_THRESHOLD    = 0;
+constexpr int MAX_CURSOR_SHOW_ITERATIONS  = 32;
 
 // "Open Editor" button layout constants
 constexpr float EDITOR_BTN_X_OFFSET = 110.0f;
@@ -364,26 +365,38 @@ void CMuEditorCore::Update()
     // When editor is closed, check for "Open Editor" button click (after ImGui frame started)
     if (!m_bEditorMode)
     {
-        ImGuiIO& io = ImGui::GetIO();
+        ImGuiIO& io          = ImGui::GetIO();
+        float    mouseX      = io.MousePos.x;
+        float    mouseY      = io.MousePos.y;
+        float    screenWidth = io.DisplaySize.x;
+        bool     hasMousePos = ImGui::IsMousePosValid(&io.MousePos) && screenWidth > 0.0f;
 
-        // Get mouse position
-        POINT mousePos;
-        if (GetCursorPos(&mousePos))
+#ifdef _WIN32
+        POINT       mousePos{};
+        extern HWND g_hWnd;
+        if (g_hWnd != nullptr && GetCursorPos(&mousePos) && ScreenToClient(g_hWnd, &mousePos))
         {
-            extern HWND g_hWnd;
-            ScreenToClient(g_hWnd, &mousePos);
+            RECT rect{};
+            if (GetClientRect(g_hWnd, &rect) && rect.right > rect.left)
+            {
+                mouseX      = static_cast<float>(mousePos.x);
+                mouseY      = static_cast<float>(mousePos.y);
+                screenWidth = static_cast<float>(rect.right - rect.left);
+                hasMousePos = true;
+            }
+        }
+#endif
 
+        if (hasMousePos)
+        {
             // Check if mouse is over button area (top-right corner)
-            RECT rect;
-            GetClientRect(g_hWnd, &rect);
-            float screenWidth  = (float)(rect.right - rect.left);
             float buttonX      = screenWidth - EDITOR_BTN_X_OFFSET;
             float buttonY      = EDITOR_BTN_Y;
             float buttonWidth  = EDITOR_BTN_WIDTH;
             float buttonHeight = EDITOR_BTN_HEIGHT;
 
-            if (mousePos.x >= buttonX && mousePos.x <= (buttonX + buttonWidth) && mousePos.y >= buttonY &&
-                mousePos.y <= (buttonY + buttonHeight))
+            if (mouseX >= buttonX && mouseX <= (buttonX + buttonWidth) && mouseY >= buttonY &&
+                mouseY <= (buttonY + buttonHeight))
             {
                 // Check for click
                 extern bool MouseLButtonPush;
@@ -507,14 +520,16 @@ void CMuEditorCore::Render()
         if (m_bHoveringUI)
         {
             // Force cursor visible (counter >= CURSOR_VISIBLE_THRESHOLD)
-            while (ShowCursor(TRUE) < CURSOR_VISIBLE_THRESHOLD)
-                ;
+            for (int i = 0; i < MAX_CURSOR_SHOW_ITERATIONS && ShowCursor(TRUE) < CURSOR_VISIBLE_THRESHOLD; ++i)
+            {
+            }
         }
         else
         {
             // Force cursor hidden (counter < CURSOR_VISIBLE_THRESHOLD)
-            while (ShowCursor(FALSE) >= CURSOR_VISIBLE_THRESHOLD)
-                ;
+            for (int i = 0; i < MAX_CURSOR_SHOW_ITERATIONS && ShowCursor(FALSE) >= CURSOR_VISIBLE_THRESHOLD; ++i)
+            {
+            }
         }
         lastHoveringState = m_bHoveringUI;
     }

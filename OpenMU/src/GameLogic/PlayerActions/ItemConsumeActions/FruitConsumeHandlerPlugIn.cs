@@ -82,7 +82,9 @@ public class FruitConsumeHandlerPlugIn : BaseConsumeHandlerPlugIn
             }
             else
             {
-                player.Attributes![statAttribute] -= randomPoints;
+                var removableFromBase = Math.Max(0, (int)(player.Attributes![statAttribute] - statAttributeDefinition.BaseValue));
+                randomPoints = (byte)Math.Min(randomPoints, removableFromBase);
+                player.Attributes[statAttribute] -= randomPoints;
                 player.SelectedCharacter.UsedNegFruitPoints += randomPoints;
                 await player.InvokeViewPlugInAsync<IFruitConsumptionResponsePlugIn>(p => p.ShowResponseAsync(FruitConsumptionResult.MinusSuccess, randomPoints, statAttribute)).ConfigureAwait(false);
             }

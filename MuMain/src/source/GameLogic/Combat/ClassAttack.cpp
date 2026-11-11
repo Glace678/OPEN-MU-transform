@@ -1420,6 +1420,14 @@ void AttackWizard(CHARACTER* c, int Skill, float Distance)
                                 TargetX = (PositionX - 1) + indexX;
                                 TargetY = (PositionY - 1) + indexY;
 
+                                if (TargetX < 0 || TargetX >= TERRAIN_SIZE || TargetY < 0 || TargetY >= TERRAIN_SIZE)
+                                {
+                                    count++;
+                                    if (count > 10)
+                                        return;
+                                    continue;
+                                }
+
                                 TargetIndex = TERRAIN_INDEX(TargetX, TargetY);
 
                                 Wall = TerrainWall[TargetIndex];
@@ -1571,6 +1579,7 @@ void AttackWizard(CHARACTER* c, int Skill, float Distance)
                 else if (0 == CharactersClient[SelectedCharacter].Dead &&
                          CharactersClient[SelectedCharacter].Object.Kind == KIND_PLAYER)
                 {
+                    g_MovementSkill.m_iTarget = SelectedCharacter;
                     TargetX = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[0] / TERRAIN_SCALE);
                     TargetY = (int)(CharactersClient[g_MovementSkill.m_iTarget].Object.Position[1] / TERRAIN_SCALE);
 

@@ -141,6 +141,12 @@ public class ExDbClient
     {
         try
         {
+            if (sequence.Length < 3 || sequence.Length > this._packetBuffer.Length)
+            {
+                this._logger.LogWarning("Invalid packet length received from ExDB-Server: {Length}", sequence.Length);
+                return;
+            }
+
             sequence.CopyTo(this._packetBuffer);
             var packet = this._packetBuffer.AsMemory(0, (int)sequence.Length);
             var type = packet.Span[0];
@@ -182,6 +188,12 @@ public class ExDbClient
     /// </remarks>
     private async ValueTask ReadChatRoomInvitationAsync(Memory<byte> packet)
     {
+        if (packet.Length < 20)
+        {
+            this._logger.LogWarning("ExDB chat room invitation packet is too short ({Length} bytes).", packet.Length);
+            return;
+        }
+
         ushort roomId = 0;
         string clientName = string.Empty;
         ushort clientPlayerId = 0;
@@ -220,6 +232,12 @@ public class ExDbClient
     /// </remarks>
     private async ValueTask ReadChatRoomCreationAsync(Memory<byte> packet)
     {
+        if (packet.Length < 32)
+        {
+            this._logger.LogWarning("ExDB chat room creation packet is too short ({Length} bytes).", packet.Length);
+            return;
+        }
+
         string clientName = string.Empty;
         string friendName = string.Empty;
         ushort clientPlayerId = 0;
@@ -276,7 +294,8 @@ public class ExDbClient
         int Write()
         {
             var length = 0x2C;
-            var packet = this._connection!.Output.GetSpan(length);
+            var packet = this._connection!.Output.GetSpan(length)[..length];
+            packet.Clear();
             packet[0] = 0xC1;
             packet[1] = 0x2C;
             packet[2] = 0xA0;

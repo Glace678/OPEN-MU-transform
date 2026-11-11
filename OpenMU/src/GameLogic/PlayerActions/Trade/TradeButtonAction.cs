@@ -157,7 +157,15 @@ public class TradeButtonAction : BaseTradeAction
             await RegisterWalletBalanceAsync(itemContext, trader, newTraderMoney).ConfigureAwait(false);
             await RegisterWalletBalanceAsync(itemContext, tradingPartner, newPartnerMoney).ConfigureAwait(false);
 
-            await itemContext.SaveChangesAsync().ConfigureAwait(false);
+            if (!await itemContext.SaveChangesAsync().ConfigureAwait(false))
+            {
+                await this.SendMessageAsync(trader, nameof(PlayerMessage.UnexpectedErrorDuringClosingTrade)).ConfigureAwait(false);
+                await this.SendMessageAsync(tradingPartner, nameof(PlayerMessage.UnexpectedErrorDuringClosingTrade)).ConfigureAwait(false);
+                context.Allowed = false;
+                partnerContext.Allowed = false;
+                (trader as Player)?.Logger.LogError("Trade commit SaveChangesAsync returned false for {Trader} and {Partner}.", trader.Name, tradingPartner.Name);
+                return TradeResult.Cancelled;
+            }
 
             // The item transfer AND both wallets are now durably committed in a single transaction.
             // From this point on the in-memory state must not be rolled back from the trade backups,

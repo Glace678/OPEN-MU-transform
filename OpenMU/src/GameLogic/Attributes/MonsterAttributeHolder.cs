@@ -73,19 +73,18 @@ public class MonsterAttributeHolder : IAttributeSystem
     /// <inheritdoc/>
     public float GetValueOfAttribute(AttributeDefinition attributeDefinition)
     {
-        IDictionary<AttributeDefinition, IComposableAttribute>? attributes;
+        IComposableAttribute? attribute = null;
         lock (this._attributesLock)
         {
-            attributes = this._attributes;
+            this._attributes?.TryGetValue(attributeDefinition, out attribute);
         }
 
-        if (attributes is not null
-            && attributes.TryGetValue(attributeDefinition, out var attribute))
+        if (attribute is not null)
         {
             return attribute.Value;
         }
 
-        if (this._statAttributes.TryGetValue(attributeDefinition, out float value))
+        if (System.Threading.Volatile.Read(ref this._statAttributes).TryGetValue(attributeDefinition, out float value))
         {
             return value;
         }
@@ -101,46 +100,43 @@ public class MonsterAttributeHolder : IAttributeSystem
     /// <inheritdoc/>
     public void AddElement(IElement element, AttributeDefinition targetAttribute)
     {
-        var attributeDictionary = this.GetAttributeDictionary();
-        if (!attributeDictionary.TryGetValue(targetAttribute, out var attribute))
+        lock (this._attributesLock)
         {
-            attribute = new ComposableAttribute(targetAttribute);
-            var attrValue = this.GetValueOfAttribute(targetAttribute);
-            var nullValue = element.AggregateType == AggregateType.Multiplicate ? 1 : 0;
-            attrValue = Math.Abs(attrValue) < 0.01f ? nullValue : attrValue;
-            attribute.AddElement(new SimpleElement { Value = attrValue });
-            attributeDictionary.Add(targetAttribute, attribute);
-        }
+            var attributeDictionary = this.GetAttributeDictionary();
+            if (!attributeDictionary.TryGetValue(targetAttribute, out var attribute))
+            {
+                attribute = new ComposableAttribute(targetAttribute);
+                var attrValue = this.GetValueOfAttribute(targetAttribute);
+                var nullValue = element.AggregateType == AggregateType.Multiplicate ? 1 : 0;
+                attrValue = Math.Abs(attrValue) < 0.01f ? nullValue : attrValue;
+                attribute.AddElement(new SimpleElement { Value = attrValue });
+                attributeDictionary.Add(targetAttribute, attribute);
+            }
 
-        attribute.AddElement(element);
+            attribute.AddElement(element);
+        }
     }
 
     /// <inheritdoc/>
     public void RemoveElement(IElement element, AttributeDefinition targetAttribute)
     {
-        IDictionary<AttributeDefinition, IComposableAttribute>? attributes;
         lock (this._attributesLock)
         {
-            attributes = this._attributes;
-        }
-
-        if (attributes is null)
-        {
-            return;
-        }
-
-        if (attributes.TryGetValue(targetAttribute, out var attribute))
-        {
-            attribute.RemoveElement(element);
-            if (!attribute.Elements.Skip(1).Any())
+            if (this._attributes is not { } attributes)
             {
-                attributes.Remove(targetAttribute);
+                return;
             }
-        }
 
-        if (attributes.Count == 0)
-        {
-            lock (this._attributesLock)
+            if (attributes.TryGetValue(targetAttribute, out var attribute))
+            {
+                attribute.RemoveElement(element);
+                if (!attribute.Elements.Skip(1).Any())
+                {
+                    attributes.Remove(targetAttribute);
+                }
+            }
+
+            if (attributes.Count == 0)
             {
                 this._attributes = null;
             }

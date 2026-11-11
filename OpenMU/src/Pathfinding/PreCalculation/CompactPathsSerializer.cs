@@ -53,14 +53,14 @@ internal class CompactPathsSerializer : IPathsSerializer
     {
         int diffX = end.X - start.X + 8;
         int diffY = end.Y - start.Y + 8;
-        if (diffX > 15)
+        if (diffX is < 0 or > 15)
         {
-            throw new ArgumentException($"The difference between start and end in the x value is greater than the allowed 15. start: {start}, end: {end}");
+            throw new ArgumentException($"The biased difference between start and end in the x value must be between 0 and 15. start: {start}, end: {end}");
         }
 
-        if (diffY > 15)
+        if (diffY is < 0 or > 15)
         {
-            throw new ArgumentException($"The difference between start and end in the y value is greater than the allowed 15. start: {start}, end: {end}");
+            throw new ArgumentException($"The biased difference between start and end in the y value must be between 0 and 15. start: {start}, end: {end}");
         }
 
         return (byte)(((diffX << 4) & 0xF0) | (diffY & 0x0F));

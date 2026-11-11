@@ -70,7 +70,7 @@ public sealed class PowerUpWrapper : IElement, IDisposable
         {
             foreach (var relationship in powerUpDef.Boost.RelatedValues)
             {
-                var aggregType = powerUpDef.Boost?.ConstantValue.AggregateType ?? AggregateType.AddRaw;
+                var aggregType = powerUpDef.Boost?.ConstantValue?.AggregateType ?? AggregateType.AddRaw;
                 yield return new PowerUpWrapper(
                     attributeHolder.CreateRelatedAttribute(relationship, attributeHolder, aggregType),
                     powerUpDef.TargetAttribute ?? throw Error.NotInitializedProperty(powerUpDef, nameof(PowerUpDefinition.TargetAttribute)),

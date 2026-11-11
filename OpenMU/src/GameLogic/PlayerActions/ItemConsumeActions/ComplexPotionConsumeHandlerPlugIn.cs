@@ -29,7 +29,13 @@ public abstract class ComplexPotionConsumeHandlerPlugIn : BaseConsumeHandlerPlug
         if (await base.ConsumeItemAsync(player, item, targetItem, fruitUsage).ConfigureAwait(false))
         {
             await this._healthPotionConsumeHandlerPlugIn.RecoverAsync(player, item).ConfigureAwait(false);
+            var healthCooldownUntil = player.PotionCooldownUntil;
             await this._shieldPotionConsumeHandlerPlugIn.RecoverAsync(player, item).ConfigureAwait(false);
+            if (healthCooldownUntil > player.PotionCooldownUntil)
+            {
+                player.PotionCooldownUntil = healthCooldownUntil;
+            }
+
             return true;
         }
 

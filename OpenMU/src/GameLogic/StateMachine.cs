@@ -79,22 +79,25 @@ public class StateMachine
             return false;
         }
 
-        using var l = await this._asyncLock.LockAsync();
-
-        if (this.CurrentState?.PossibleTransitions is not { } possibleTransitions)
+        State previousState;
+        using (await this._asyncLock.LockAsync().ConfigureAwait(false))
         {
-            return false;
-        }
+            if (this.CurrentState?.PossibleTransitions is not { } possibleTransitions)
+            {
+                return false;
+            }
 
-        if (possibleTransitions.Contains(nextState) && await this.OnStateChangingAsync(nextState).ConfigureAwait(false))
-        {
-            var previousState = this.CurrentState;
+            if (!possibleTransitions.Contains(nextState) || !await this.OnStateChangingAsync(nextState).ConfigureAwait(false))
+            {
+                return false;
+            }
+
+            previousState = this.CurrentState;
             this.CurrentState = nextState;
-            await this.OnStateChangedAsync(previousState, nextState).ConfigureAwait(false);
-            return true;
         }
 
-        return false;
+        await this.OnStateChangedAsync(previousState, nextState).ConfigureAwait(false);
+        return true;
     }
 
     /// <summary>
@@ -105,17 +108,34 @@ public class StateMachine
     public async ValueTask<StateChangeContext> TryBeginAdvanceToAsync(State nextState)
     {
         var lockRelease = await this._asyncLock.LockAsync().ConfigureAwait(false);
-        var context = new StateChangeContext(lockRelease, async () =>
+        try
         {
-            var previousState = this.CurrentState;
-            this.CurrentState = nextState;
-            await this.OnStateChangedAsync(previousState, nextState).ConfigureAwait(false);
-        })
+            State? previousState = null;
+            var allowed = (this.CurrentState.PossibleTransitions?.Contains(nextState) ?? false)
+                          && await this.OnStateChangingAsync(nextState).ConfigureAwait(false);
+            return new StateChangeContext(
+                lockRelease,
+                () =>
+                {
+                    previousState = this.CurrentState;
+                    this.CurrentState = nextState;
+                },
+                async () =>
+                {
+                    if (previousState is not null)
+                    {
+                        await this.OnStateChangedAsync(previousState, nextState).ConfigureAwait(false);
+                    }
+                })
+            {
+                Allowed = allowed,
+            };
+        }
+        catch
         {
-            Allowed = (this.CurrentState.PossibleTransitions?.Contains(nextState) ?? false) && await this.OnStateChangingAsync(nextState).ConfigureAwait(false),
-        };
-
-        return context;
+            lockRelease.Dispose();
+            throw;
+        }
     }
 
     /// <summary>
@@ -156,9 +176,16 @@ public class StateMachine
         private readonly IDisposable _lockRelease;
 
         /// <summary>
+        /// The synchronous action executed while holding the state machine lock.
+        /// </summary>
+        private readonly Action? _commitStateAction;
+
+        /// <summary>
         /// The action which gets executed when the state change is completed.
         /// </summary>
         private readonly Func<ValueTask> _finishAction;
+
+        private int _disposed;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StateChangeContext"/> class.
@@ -166,8 +193,20 @@ public class StateMachine
         /// <param name="lockRelease">The lock object of the state machine, which is in the locked state.</param>
         /// <param name="finishAction">The action which should get executed when the state change is completed.</param>
         public StateChangeContext(IDisposable lockRelease, Func<ValueTask> finishAction)
+            : this(lockRelease, null, finishAction)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StateChangeContext"/> class.
+        /// </summary>
+        /// <param name="lockRelease">The lock object of the state machine, which is in the locked state.</param>
+        /// <param name="commitStateAction">The synchronous state mutation executed before releasing the lock.</param>
+        /// <param name="finishAction">The async notification executed after releasing the lock.</param>
+        internal StateChangeContext(IDisposable lockRelease, Action? commitStateAction, Func<ValueTask> finishAction)
         {
             this._lockRelease = lockRelease;
+            this._commitStateAction = commitStateAction;
             this._finishAction = finishAction;
         }
 
@@ -179,16 +218,27 @@ public class StateMachine
         /// <inheritdoc/>
         public async ValueTask DisposeAsync()
         {
+            if (Interlocked.Exchange(ref this._disposed, 1) != 0)
+            {
+                return;
+            }
+
+            var allowed = this.Allowed;
             try
             {
-                if (this.Allowed)
+                if (allowed)
                 {
-                    await this._finishAction().ConfigureAwait(false);
+                    this._commitStateAction?.Invoke();
                 }
             }
             finally
             {
                 this._lockRelease.Dispose();
+            }
+
+            if (allowed)
+            {
+                await this._finishAction().ConfigureAwait(false);
             }
         }
     }

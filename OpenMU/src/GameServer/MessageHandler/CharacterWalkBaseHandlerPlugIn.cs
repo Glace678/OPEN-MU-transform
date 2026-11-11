@@ -111,7 +111,13 @@ internal abstract class CharacterWalkBaseHandlerPlugIn : IPacketHandlerPlugIn
         {
             var val = payload[i / 2];
             val = (byte)(i % 2 == 0 ? val >> 4 : val & 0x0F);
-            directions[i] = val.ParseAsDirection();
+            var direction = val.ParseAsDirection();
+            if (direction == Direction.Undefined)
+            {
+                return Span<Direction>.Empty;
+            }
+
+            directions[i] = direction;
         }
 
         return directions.AsSpan(0, directions.Length);

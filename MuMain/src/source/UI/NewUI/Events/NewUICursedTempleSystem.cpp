@@ -1224,16 +1224,7 @@ void SEASON3B::CNewUICursedTempleSystem::SetCursedTempleSkill(CHARACTER* c, OBJE
         if (CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_RESTRAINT ||
             CursedTempleCurSkillType == AT_SKILL_CURSED_TEMPLE_SUBLIMATION)
         {
-            for (int i = 0; i < m_CursedTempleMyTeamCount; ++i)
-            {
-                if (m_CursedTempleMyTeam[i].wPartyUserIndex == CharactersClient[selectcharacterindex].Key)
-                {
-                    MouseRButtonPush = false;
-                    return;
-                }
-            }
-
-            if (selectcharacterindex == -1)
+            if (selectcharacterindex == static_cast<DWORD>(-1) || selectcharacterindex >= MAX_CHARACTERS_CLIENT)
             {
                 MouseRButtonPush = false;
                 return;
@@ -1242,6 +1233,15 @@ void SEASON3B::CNewUICursedTempleSystem::SetCursedTempleSkill(CHARACTER* c, OBJE
             {
                 MouseRButtonPush = false;
                 return;
+            }
+
+            for (int i = 0; i < m_CursedTempleMyTeamCount; ++i)
+            {
+                if (m_CursedTempleMyTeam[i].wPartyUserIndex == CharactersClient[selectcharacterindex].Key)
+                {
+                    MouseRButtonPush = false;
+                    return;
+                }
             }
 
             tc = &CharactersClient[selectcharacterindex];
@@ -1408,6 +1408,16 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempUnRegisterSkill(const 
 
 void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempleInfo(const BYTE* ReceiveBuffer)
 {
+    if (ReceiveBuffer == nullptr)
+        return;
+
+    const int packetSize =
+        (ReceiveBuffer[0] == 0xC1 || ReceiveBuffer[0] == 0xC3)
+            ? static_cast<int>(ReceiveBuffer[1])
+            : ((static_cast<int>(ReceiveBuffer[1]) << 8) | static_cast<int>(ReceiveBuffer[2]));
+    if (packetSize < static_cast<int>(sizeof(PMSG_CURSED_TAMPLE_STATE)))
+        return;
+
     auto data = (LPPMSG_CURSED_TAMPLE_STATE)ReceiveBuffer;
 
     m_EventMapTime = data->wRemainSec;
@@ -1461,10 +1471,16 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempleInfo(const BYTE* Rec
     m_IllusionPoint = data->btIllusionPoint;
 
     // #14: btPartyCount is attacker-controlled; reject a malformed packet
-    // whose declared entry count exceeds the fixed array capacity.
+    // whose declared entry count exceeds the fixed array capacity or packet size.
     int partyCount = data->btPartyCount;
     if (partyCount < 0 || partyCount > MAX_PARTYS)
         return;
+    if (static_cast<int>(sizeof(PMSG_CURSED_TAMPLE_STATE)) +
+            partyCount * static_cast<int>(sizeof(PMSG_CURSED_TAMPLE_PARTY_POS)) >
+        packetSize)
+    {
+        return;
+    }
     m_CursedTempleMyTeamCount = (WORD)partyCount;
 
     int Offset = sizeof(PMSG_CURSED_TAMPLE_STATE);
@@ -1493,9 +1509,8 @@ void SEASON3B::CNewUICursedTempleSystem::ReceiveCursedTempSkillPoint(const BYTE*
 
     if (m_SkillPoint < data->btSkillPoint)
     {
-        wchar_t message[100];
-        memset(&message, 0, sizeof(char));
-        mu_swprintf(message, I18N::Game::KillPointDAchieved, data->btSkillPoint - m_SkillPoint);
+        wchar_t message[100] = {};
+        swprintf_s(message, _countof(message), I18N::Game::KillPointDAchieved, data->btSkillPoint - m_SkillPoint);
         g_pSystemLogBox->AddText(message, SEASON3B::TYPE_SYSTEM_MESSAGE);
     }
 

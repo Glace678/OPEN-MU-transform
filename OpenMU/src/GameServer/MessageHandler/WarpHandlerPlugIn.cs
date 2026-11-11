@@ -32,6 +32,11 @@ internal class WarpHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < WarpCommandRequest.Length)
+        {
+            return;
+        }
+
         WarpCommandRequest request = packet;
         ushort warpInfoIndex = request.WarpInfoIndex;
         var warpInfo = player.GameContext.Configuration.WarpList?.FirstOrDefault(info => info.Index == warpInfoIndex);

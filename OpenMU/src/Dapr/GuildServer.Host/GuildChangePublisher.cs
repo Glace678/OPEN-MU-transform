@@ -73,7 +73,7 @@ public class GuildChangePublisher : IGuildChangePublisher
     {
         try
         {
-            await this._daprClient.PublishEventAsync("pubsub", nameof(IGameServer.AllianceCreatedAsync), (masterGuildId, memberGuildId)).ConfigureAwait(false);
+            await this._daprClient.PublishEventAsync("pubsub", nameof(IGameServer.AllianceCreatedAsync), new AllianceArguments(masterGuildId, memberGuildId)).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -86,7 +86,7 @@ public class GuildChangePublisher : IGuildChangePublisher
     {
         try
         {
-            await this._daprClient.PublishEventAsync("pubsub", nameof(IGameServer.AllianceDisbandedAsync), (masterGuildId, memberGuildId)).ConfigureAwait(false);
+            await this._daprClient.PublishEventAsync("pubsub", nameof(IGameServer.AllianceDisbandedAsync), new AllianceArguments(masterGuildId, memberGuildId)).ConfigureAwait(false);
         }
         catch (Exception ex)
         {
@@ -99,7 +99,13 @@ public class GuildChangePublisher : IGuildChangePublisher
     {
         try
         {
-            await this._daprClient.PublishEventAsync("pubsub", nameof(IGameServer.GuildHostilityChangedAsync), (guildIdA, allianceGuildIdsA, guildIdB, allianceGuildIdsB, created)).ConfigureAwait(false);
+            var payload = new GuildHostilityChangedArguments(
+                guildIdA,
+                allianceGuildIdsA.ToArray(),
+                guildIdB,
+                allianceGuildIdsB.ToArray(),
+                created);
+            await this._daprClient.PublishEventAsync("pubsub", nameof(IGameServer.GuildHostilityChangedAsync), payload).ConfigureAwait(false);
         }
         catch (Exception ex)
         {

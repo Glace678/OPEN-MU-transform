@@ -28,7 +28,7 @@ public:
     const eBuffState GetBuff(int iterindex);
     const DWORD      GetBuffCount(eBuffState buffstate);
     void             ClearBuff();
-    bool             IsEqualBuffType(IN int iBuffType, OUT wchar_t* szBuffName);
+    bool             IsEqualBuffType(IN int iBuffType, OUT wchar_t* szBuffName, size_t cchBuffName = MAX_TEXT_LENGTH);
 
 public:
     BuffStateMap m_Buff;

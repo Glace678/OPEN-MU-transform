@@ -69,6 +69,16 @@ public abstract class TimeoutBasedGameServerRegistry : IDisposable
     }
 
     /// <summary>
+    /// Removes the timestamp entry of the specified game server when initial registration fails.
+    /// </summary>
+    /// <param name="gameServerId">The game server identifier.</param>
+    protected async Task RemoveEntryAsync(ushort gameServerId)
+    {
+        using var l = await this._lock.LockAsync().ConfigureAwait(false);
+        this._entries.Remove(gameServerId);
+    }
+
+    /// <summary>
     /// Called when a game server timed out and is removed from the registry.
     /// </summary>
     /// <param name="gameServerId">The game server identifier.</param>

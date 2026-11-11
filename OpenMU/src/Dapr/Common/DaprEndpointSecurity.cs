@@ -26,6 +26,11 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 internal static class DaprEndpointSecurity
 {
     /// <summary>
+    /// The HTTP context item key storing the raw peer IP address before forwarded-header processing.
+    /// </summary>
+    public const string RawPeerIpItemKey = "OpenMU.RawPeerIpAddress";
+
+    /// <summary>
     /// The name of the environment variable which configures the app API token (same as in Dapr).
     /// </summary>
     public const string TokenEnvironmentVariable = "APP_API_TOKEN";
@@ -99,7 +104,9 @@ internal static class DaprEndpointSecurity
 
     private static bool IsLoopback(HttpContext context)
     {
-        var remoteIp = context.Connection.RemoteIpAddress;
+        var remoteIp = context.Items.TryGetValue(RawPeerIpItemKey, out var rawPeer) && rawPeer is IPAddress peerIp
+            ? peerIp
+            : (!context.Request.Headers.ContainsKey("X-Forwarded-For") ? context.Connection.RemoteIpAddress : null);
         return remoteIp is { } && IPAddress.IsLoopback(remoteIp);
     }
 

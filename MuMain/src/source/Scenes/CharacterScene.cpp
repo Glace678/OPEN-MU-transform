@@ -196,7 +196,7 @@ void NewMoveCharacterScene()
         {
             ::PlayBuffer(SOUND_CLICK01);
 
-            if (SelectedCharacter >= 0)
+            if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_PER_ACCOUNT)
                 SelectedHero = SelectedCharacter;
 
             ::StartGame();
@@ -274,7 +274,7 @@ static void SetupCharacterSceneViewport(int& outWidth, int& outHeight)
  */
 static void ApplySelectedCharacterLighting()
 {
-    if (SelectedHero == -1)
+    if (SelectedHero < 0 || SelectedHero >= MAX_CHARACTERS_PER_ACCOUNT)
         return;
 
     OBJECT* o = &CharactersClient[SelectedHero].Object;

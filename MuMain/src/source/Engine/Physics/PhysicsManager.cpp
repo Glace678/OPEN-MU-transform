@@ -683,7 +683,10 @@ void CPhysicsCloth::MoveVertices(float fTime)
         }
     }
 
-    SetFixedVertices(m_oOwner->BoneTransform[m_iBone]);
+    if (m_oOwner && m_oOwner->BoneTransform && m_iBone >= 0 && m_iBone < MAX_BONES)
+    {
+        SetFixedVertices(m_oOwner->BoneTransform[m_iBone]);
+    }
     for (int iVertex = 0; iVertex < m_iNumVertices; ++iVertex)
     {
         m_pVertices[iVertex].Move(fTime);
@@ -697,6 +700,16 @@ BOOL CPhysicsCloth::PreventFromStretching(void)
     for (; pHead; pHead = m_lstCollision.GetNext(pHead))
     {
         CPhysicsCollision* pCollision = pHead->GetData();
+        if (!pCollision || !m_oOwner || !m_oOwner->BoneTransform || !Models || m_oOwner->Type < 0 ||
+            m_oOwner->Type >= MAX_MODELS)
+        {
+            continue;
+        }
+        const int collisionBone = pCollision->GetBone();
+        if (collisionBone < 0 || collisionBone >= MAX_BONES)
+        {
+            continue;
+        }
 
         vec3_t vPos;
         pCollision->GetCenterBeforeTransform(vPos);
@@ -708,7 +721,7 @@ BOOL CPhysicsCloth::PreventFromStretching(void)
             vPos[2] = vTemp[0];
         }
         vec3_t vPos2;
-        Models[m_oOwner->Type].TransformPosition(m_oOwner->BoneTransform[pCollision->GetBone()], vPos, vPos2, true);
+        Models[m_oOwner->Type].TransformPosition(m_oOwner->BoneTransform[collisionBone], vPos, vPos2, true);
         pCollision->SetPosition(vPos2[0], vPos2[1], vPos2[2]);
     }
 #endif
@@ -908,7 +921,7 @@ void CPhysicsCloth::ProcessCollision(void)
 #endif
 }
 
-CPhysicsClothMesh::CPhysicsClothMesh() {}
+CPhysicsClothMesh::CPhysicsClothMesh() : m_iMesh(0), m_iBoneForFixed(0), m_iBMDType(0) {}
 
 CPhysicsClothMesh::~CPhysicsClothMesh()
 {
@@ -924,14 +937,26 @@ extern float BoneScale;
 
 BOOL CPhysicsClothMesh::Create(OBJECT* o, int iMesh, int iBone, DWORD dwType, int iBMDType)
 {
+    if (!o || !Models)
+    {
+        return FALSE;
+    }
+
     m_oOwner = o;
     m_iMesh  = iMesh;
     m_iBone  = iBone;
     m_dwType |= dwType;
 
     m_iBMDType = (iBMDType == -1) ? m_oOwner->Type : iBMDType;
-    BMD* b     = &Models[m_iBMDType];
-    assert(iMesh < b->NumMeshs);
+    if (m_iBMDType < 0 || m_iBMDType >= MAX_MODELS)
+    {
+        return FALSE;
+    }
+    BMD* b = &Models[m_iBMDType];
+    if (iMesh < 0 || iMesh >= b->NumMeshs || !b->Meshs)
+    {
+        return FALSE;
+    }
     Mesh_t* pMesh = &b->Meshs[m_iMesh];
 
     if (m_pVertices)
@@ -1007,7 +1032,16 @@ BOOL CPhysicsClothMesh::Create(OBJECT* o, int iMesh, int iBone, float fxPos, flo
                                int iNumVer, float fWidth, float fHeight, int iTexFront, int TexBack, DWORD dwType,
                                int iBMDType)
 {
-    m_iBMDType = (iBMDType == -1) ? m_oOwner->Type : iBMDType;
+    if (!o || !Models)
+    {
+        return (FALSE);
+    }
+
+    m_iBMDType = (iBMDType == -1) ? o->Type : iBMDType;
+    if (m_iBMDType < 0 || m_iBMDType >= MAX_MODELS)
+    {
+        return (FALSE);
+    }
 
     m_iMesh = iMesh;
 
@@ -1019,7 +1053,10 @@ BOOL CPhysicsClothMesh::Create(OBJECT* o, int iMesh, int iBone, float fxPos, flo
     }
 
     BMD* b = &Models[m_iBMDType];
-    assert(iMesh < b->NumMeshs);
+    if (iMesh < 0 || iMesh >= b->NumMeshs || !b->Meshs)
+    {
+        return (FALSE);
+    }
     Mesh_t* pMesh = &b->Meshs[m_iMesh];
 
     for (int j = 0; j < pMesh->NumTriangles; j++)

@@ -159,15 +159,27 @@ internal static class BotMiniGameHandler
             return;
         }
 
-        // Mirror of the player entry flow in EnterMiniGameAction, without ticket and entrance fee.
-        if (!definition.AllowParty && bot.Party is { } noPartyEventParty)
+        try
         {
-            await noPartyEventParty.KickMySelfAsync(bot).ConfigureAwait(false);
-        }
+            // Mirror of the player entry flow in EnterMiniGameAction, without ticket and entrance fee.
+            if (!definition.AllowParty && bot.Party is { } noPartyEventParty)
+            {
+                await noPartyEventParty.KickMySelfAsync(bot).ConfigureAwait(false);
+            }
 
-        await bot.MagicEffectList.ClearEffectsAfterDeathAsync().ConfigureAwait(false);
-        await bot.RemoveSummonAsync().ConfigureAwait(false);
-        await bot.WarpToAsync(entrance).ConfigureAwait(false);
+            await bot.MagicEffectList.ClearEffectsAfterDeathAsync().ConfigureAwait(false);
+            await bot.RemoveSummonAsync().ConfigureAwait(false);
+            if (!await bot.TryWarpToAsync(entrance).ConfigureAwait(false))
+            {
+                await miniGame.CancelEntryAsync(bot).ConfigureAwait(false);
+                return;
+            }
+        }
+        catch
+        {
+            await miniGame.CancelEntryAsync(bot).ConfigureAwait(false);
+            throw;
+        }
         bot.Logger.LogDebug(
             "Bot '{Name}' follows '{Leader}' into {Event}.",
             bot.Name,

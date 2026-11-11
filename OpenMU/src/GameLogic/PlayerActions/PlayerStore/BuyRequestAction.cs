@@ -94,6 +94,15 @@ public class BuyRequestAction
                 return;
             }
 
+            // Re-check buyer inventory space inside StoreLock before touching money or shop items.
+            var lockedFreeSlot = player.Inventory?.CheckInvSpace(item);
+            if (lockedFreeSlot is null || player.Inventory is null)
+            {
+                await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.MoneyOverflowOrNotEnoughSpace, null)).ConfigureAwait(false);
+                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.InventoryNotEnoughSpace)).ConfigureAwait(false);
+                return;
+            }
+
             // Re-check the money against the price read inside the lock.
             if (player.Money < itemPrice)
             {
@@ -117,64 +126,62 @@ public class BuyRequestAction
                 return;
             }
 
-            using var itemContext = requestedPlayer.GameContext.PersistenceContextProvider.CreateNewTradeContext();
-            itemContext.Attach(item);
-            await requestedPlayer.ShopStorage.RemoveItemAsync(item).ConfigureAwait(false);
-            await requestedPlayer.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
-            await requestedPlayer.InvokeViewPlugInAsync<IItemSoldByPlayerShopPlugIn>(p => p.ItemSoldByPlayerShopAsync(slot, player)).ConfigureAwait(false);
-            await requestedPlayer.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(slot)).ConfigureAwait(false);
-
-            item.ItemSlot = (byte)freeslot;
-            item.StorePrice = null;
-
-            // The item is already removed from the seller's storage and the money has moved, so
-            // the add to the buyer's inventory must succeed. Re-check inside the lock (the free
-            // slot could have been taken by a non-packet reward) and undo the whole transfer if not.
-            if (player.Inventory is null
-                || player.Inventory.CheckInvSpace(item) is null
-                || !await player.Inventory.AddItemAsync(item).ConfigureAwait(false))
+            var addedToBuyer = false;
+            var detachedFromSeller = false;
+            var tradeCommitted = false;
+            try
             {
-                // Refund the buyer and debit the seller back, then return the item to its shop slot.
-                if (!player.TryAddMoney(itemPrice))
+                using var itemContext = requestedPlayer.GameContext.PersistenceContextProvider.CreateNewTradeContext();
+                itemContext.Attach(item);
+                await requestedPlayer.ShopStorage.RemoveItemAsync(item).ConfigureAwait(false);
+
+                item.ItemSlot = lockedFreeSlot.Value;
+                item.StorePrice = null;
+
+                addedToBuyer = await player.Inventory.AddItemAsync(item).ConfigureAwait(false);
+                if (!addedToBuyer)
                 {
-                    player.Logger.LogError("Could not refund the buyer while compensating a failed shop purchase of item {Item}.", item);
+                    await RollbackFailedPurchaseAsync(player, requestedPlayer, item, slot, itemPrice, addedToBuyer, detachedFromSeller).ConfigureAwait(false);
+                    await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.MoneyOverflowOrNotEnoughSpace, null)).ConfigureAwait(false);
+                    await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.InventoryNotEnoughSpace)).ConfigureAwait(false);
+                    return;
                 }
 
-                if (!requestedPlayer.TryRemoveMoney(itemPrice))
+                detachedFromSeller = requestedPlayer.PersistenceContext.Detach(item);
+
+                // Register both wallet balances on the trade context so the single SaveChanges below
+                // commits the item transfer AND the buyer deduction + seller credit atomically in one DB
+                // transaction.
+                await RegisterWalletBalanceAsync(itemContext, player, player.Money).ConfigureAwait(false);
+                await RegisterWalletBalanceAsync(itemContext, requestedPlayer, requestedPlayer.Money).ConfigureAwait(false);
+
+                tradeCommitted = await itemContext.SaveChangesAsync().ConfigureAwait(false);
+                if (!tradeCommitted)
                 {
-                    player.Logger.LogError("Could not debit back the seller while compensating a failed shop purchase of item {Item}; manual intervention required.", item);
+                    await RollbackFailedPurchaseAsync(player, requestedPlayer, item, slot, itemPrice, addedToBuyer, detachedFromSeller).ConfigureAwait(false);
+                    await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.ItemBlock, null)).ConfigureAwait(false);
+                    return;
                 }
-
-                await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
-                await requestedPlayer.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
-
-                item.StorePrice = itemPrice;
-                item.ItemSlot = slot;
-                await requestedPlayer.ShopStorage.AddItemAsync(slot, item).ConfigureAwait(false);
-                await requestedPlayer.InvokeViewPlugInAsync<IItemSoldByPlayerShopPlugIn>(p => p.ItemSoldByPlayerShopAsync(slot, player)).ConfigureAwait(false);
-                await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.MoneyOverflowOrNotEnoughSpace, null)).ConfigureAwait(false);
-                await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.InventoryNotEnoughSpace)).ConfigureAwait(false);
+            }
+            catch (Exception ex) when (!tradeCommitted)
+            {
+                player.Logger.LogError(ex, "Unexpected error while committing player store purchase of item {Item} from {Seller} to {Buyer}; rolling back.", item, requestedPlayer, player);
+                await RollbackFailedPurchaseAsync(player, requestedPlayer, item, slot, itemPrice, addedToBuyer, detachedFromSeller).ConfigureAwait(false);
+                await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.ItemBlock, null)).ConfigureAwait(false);
                 return;
             }
 
-            requestedPlayer.PersistenceContext.Detach(item);
-
-            // Register both wallet balances on the trade context so the single SaveChanges below
-            // commits the item transfer AND the buyer deduction + seller credit atomically in one DB
-            // transaction. Previously the money only lived in memory and was persisted by a later
-            // periodic save; a crash in that window let the buyer walk off with the item for free.
-            await RegisterWalletBalanceAsync(itemContext, player, player.Money).ConfigureAwait(false);
-            await RegisterWalletBalanceAsync(itemContext, requestedPlayer, requestedPlayer.Money).ConfigureAwait(false);
-
-            await itemContext.SaveChangesAsync().ConfigureAwait(false);
             player.PersistenceContext.Attach(item);
 
             // Explicitly persist both players' own contexts. The wallet rows were already committed
             // in the trade transaction above; this also flushes any other in-flight change and means
             // the settlement does not rely on a later periodic save.
-            await player.SaveProgressAsync().ConfigureAwait(false);
-            await requestedPlayer.SaveProgressAsync().ConfigureAwait(false);
+            await SavePlayerAfterPurchaseAsync(player).ConfigureAwait(false);
+            await SavePlayerAfterPurchaseAsync(requestedPlayer).ConfigureAwait(false);
 
+            await requestedPlayer.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+            await requestedPlayer.InvokeViewPlugInAsync<IItemSoldByPlayerShopPlugIn>(p => p.ItemSoldByPlayerShopAsync(slot, player)).ConfigureAwait(false);
+            await requestedPlayer.InvokeViewPlugInAsync<IItemRemovedPlugIn>(p => p.RemoveItemAsync(slot)).ConfigureAwait(false);
             await player.InvokeViewPlugInAsync<IPlayerShopBuyRequestResultPlugIn>(p => p.ShowResultAsync(requestedPlayer, ItemBuyResult.Success, item)).ConfigureAwait(false);
             await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
             itemSold = true;
@@ -210,5 +217,84 @@ public class BuyRequestAction
         }
 
         await itemContext.AttachMoneyBalanceAsync(storageId, newMoney).ConfigureAwait(false);
+    }
+
+    private static async ValueTask RollbackFailedPurchaseAsync(
+        Player buyer,
+        Player seller,
+        Item item,
+        byte originalSlot,
+        int itemPrice,
+        bool addedToBuyer,
+        bool detachedFromSeller)
+    {
+        if (addedToBuyer && buyer.Inventory is { } buyerInventory)
+        {
+            await buyerInventory.RemoveItemAsync(item).ConfigureAwait(false);
+        }
+
+        if (detachedFromSeller)
+        {
+            seller.PersistenceContext.Attach(item);
+        }
+
+        item.StorePrice = itemPrice;
+        item.ItemSlot = originalSlot;
+
+        if (seller.ShopStorage is { } shopStorage)
+        {
+            var restored = shopStorage is ShopStorage concreteShopStorage
+                ? await concreteShopStorage.RestoreItemInternalAsync(originalSlot, item).ConfigureAwait(false)
+                : await RestoreViaInterfaceAsync(shopStorage, originalSlot, item).ConfigureAwait(false);
+            if (!restored && !shopStorage.ItemStorage.Items.Contains(item))
+            {
+                shopStorage.ItemStorage.Items.Add(item);
+                seller.IsEconomyPersistencePending = true;
+            }
+        }
+
+        if (!buyer.TryAddMoney(itemPrice))
+        {
+            buyer.Logger.LogError("Could not refund the buyer while compensating a failed shop purchase of item {Item}.", item);
+        }
+
+        if (!seller.TryRemoveMoney(itemPrice))
+        {
+            buyer.Logger.LogError("Could not debit back the seller while compensating a failed shop purchase of item {Item}; manual intervention required.", item);
+        }
+
+        await buyer.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+        await seller.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+    }
+
+    private static async ValueTask<bool> RestoreViaInterfaceAsync(IShopStorage shopStorage, byte slot, Item item)
+    {
+        var wasOpen = shopStorage.StoreOpen;
+        try
+        {
+            shopStorage.StoreOpen = false;
+            return await shopStorage.AddItemAsync(slot, item).ConfigureAwait(false);
+        }
+        finally
+        {
+            shopStorage.StoreOpen = wasOpen;
+        }
+    }
+
+    private static async ValueTask SavePlayerAfterPurchaseAsync(Player targetPlayer)
+    {
+        try
+        {
+            if (!await targetPlayer.SaveProgressAsync().ConfigureAwait(false))
+            {
+                targetPlayer.IsEconomyPersistencePending = true;
+                targetPlayer.Logger.LogWarning("SaveProgressAsync returned false after committed store purchase for {Player}; marked economy persistence pending.", targetPlayer);
+            }
+        }
+        catch (Exception ex)
+        {
+            targetPlayer.IsEconomyPersistencePending = true;
+            targetPlayer.Logger.LogError(ex, "SaveProgressAsync failed after committed store purchase for {Player}; marked economy persistence pending.", targetPlayer);
+        }
     }
 }

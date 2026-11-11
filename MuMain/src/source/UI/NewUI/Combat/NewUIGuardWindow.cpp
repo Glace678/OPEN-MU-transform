@@ -25,8 +25,27 @@ extern DWORD g_dwActiveUIID;
 CNewUIGuardWindow::CNewUIGuardWindow()
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
-    m_iNumCurOpenTab  = TAB_SIEGE_INFO;
+    m_Pos.x = m_Pos.y   = 0;
+    m_iNumCurOpenTab    = TAB_SIEGE_INFO;
+    m_eTimeType         = CASTLESIEGE_STATE_NONE;
+    memset(m_szOwnerGuild, 0, sizeof(m_szOwnerGuild));
+    memset(m_szOwnerGuildMaster, 0, sizeof(m_szOwnerGuildMaster));
+    m_wStartYear        = 0;
+    m_byStartMonth      = 0;
+    m_byStartDay        = 0;
+    m_byStartHour       = 0;
+    m_byStartMinute     = 0;
+    m_wEndYear          = 0;
+    m_byEndMonth        = 0;
+    m_byEndDay          = 0;
+    m_byEndHour         = 0;
+    m_byEndMinute       = 0;
+    m_wSiegeStartYear   = 0;
+    m_bySiegeStartMonth = 0;
+    m_bySiegeStartDay   = 0;
+    m_bySiegeStartHour  = 0;
+    m_bySiegeStartMinute = 0;
+    m_dwStateLeftSec    = 0;
 }
 
 CNewUIGuardWindow::~CNewUIGuardWindow()
@@ -82,10 +101,9 @@ void CNewUIGuardWindow::InitButton(CNewUIButton* pNewUIButton, int iPos_x, int i
 
 void CNewUIGuardWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -288,7 +306,7 @@ void CNewUIGuardWindow::RenderFrame()
     g_pRenderText->SetTextColor(220, 220, 220, 255);
     g_pRenderText->SetBgColor(0, 0, 0, 0);
 
-    mu_swprintf(szText, L"%ls", I18N::Game::GuardNPC);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::GuardNPC);
     g_pRenderText->RenderText(fPos_x, fPos_y + fLine_y, szText, 160.0f, 0, RT3_SORT_CENTER);
 
     POINT ptOrigin = {m_Pos.x, m_Pos.y + 50};
@@ -296,22 +314,22 @@ void CNewUIGuardWindow::RenderFrame()
 
     if (m_szOwnerGuildMaster[0])
     {
-        mu_swprintf(szText, I18N::Game::OfficialSealOfKingS, m_szOwnerGuildMaster);
+        swprintf_s(szText, _countof(szText), I18N::Game::OfficialSealOfKingS, m_szOwnerGuildMaster);
     }
     else
     {
-        mu_swprintf(szText, I18N::Game::OfficialSealOfKingS, I18N::Game::None);
+        swprintf_s(szText, _countof(szText), I18N::Game::OfficialSealOfKingS, I18N::Game::None);
     }
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szText, 190, 0, RT3_SORT_CENTER);
 
     ptOrigin.y += 15;
     if (m_szOwnerGuild[0])
     {
-        mu_swprintf(szText, I18N::Game::AffiliatedGuildS, m_szOwnerGuild);
+        swprintf_s(szText, _countof(szText), I18N::Game::AffiliatedGuildS, m_szOwnerGuild);
     }
     else
     {
-        mu_swprintf(szText, I18N::Game::AffiliatedGuildS, I18N::Game::None);
+        swprintf_s(szText, _countof(szText), I18N::Game::AffiliatedGuildS, I18N::Game::None);
     }
 
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szText, 190, 0, RT3_SORT_CENTER);
@@ -320,7 +338,8 @@ void CNewUIGuardWindow::RenderFrame()
 bool CNewUIGuardWindow::BtnProcess()
 {
     // Top-right corner close "X" (shared frame): hides + swallows the click.
-    g_pNewUISystem->HandleFrameCornerClose(m_Pos, SEASON3B::INTERFACE_GUARDSMAN);
+    if (g_pNewUISystem->HandleFrameCornerClose(m_Pos, SEASON3B::INTERFACE_GUARDSMAN))
+        return true;
 
     if (m_BtnExit.UpdateMouseEvent() == true)
     {
@@ -399,15 +418,16 @@ void CNewUIGuardWindow::UpdateRegisterInfoTab()
 void CNewUIGuardWindow::RenderSeigeInfoTab()
 {
     POINT   ptOrigin = {m_Pos.x, m_Pos.y + 125};
-    wchar_t szTemp[256];
+    wchar_t szTemp[256] = {};
 
     g_pRenderText->SetFont(g_hFont);
-    mu_swprintf(szTemp, I18N::Game::StartingUUUUU, m_wStartYear, m_byStartMonth, m_byStartDay, m_byStartHour,
-                m_byStartMinute);
+    swprintf_s(szTemp, _countof(szTemp), I18N::Game::StartingUUUUU, m_wStartYear, m_byStartMonth, m_byStartDay,
+               m_byStartHour, m_byStartMinute);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szTemp, 190, 0, RT3_SORT_CENTER);
 
     ptOrigin.y += 14;
-    mu_swprintf(szTemp, I18N::Game::UntillUUUUU, m_wEndYear, m_byEndMonth, m_byEndDay, m_byEndHour, m_byEndMinute);
+    swprintf_s(szTemp, _countof(szTemp), I18N::Game::UntillUUUUU, m_wEndYear, m_byEndMonth, m_byEndDay, m_byEndHour,
+               m_byEndMinute);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szTemp, 190, 0, RT3_SORT_CENTER);
 
     ptOrigin.y += 14;
@@ -457,13 +477,13 @@ void CNewUIGuardWindow::RenderSeigeInfoTab()
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::ExpectedSiegePeriodIs, 190, 0, RT3_SORT_CENTER);
 
         ptOrigin.y += 14;
-        mu_swprintf(szTemp, I18N::Game::UUUUU, m_wSiegeStartYear, m_bySiegeStartMonth, m_bySiegeStartDay,
-                    m_bySiegeStartHour, m_bySiegeStartMinute);
+        swprintf_s(szTemp, _countof(szTemp), I18N::Game::UUUUU, m_wSiegeStartYear, m_bySiegeStartMonth,
+                   m_bySiegeStartDay, m_bySiegeStartHour, m_bySiegeStartMinute);
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szTemp, 190, 0, RT3_SORT_CENTER);
 
         ptOrigin.y += 35;
-        mu_swprintf(szTemp, I18N::Game::UUURemainedForTheNextStage, m_dwStateLeftSec / 3600,
-                    (m_dwStateLeftSec % 3600) / 60, (m_dwStateLeftSec % 3600) % 60);
+        swprintf_s(szTemp, _countof(szTemp), I18N::Game::UUURemainedForTheNextStage, m_dwStateLeftSec / 3600,
+                   (m_dwStateLeftSec % 3600) / 60, (m_dwStateLeftSec % 3600) % 60);
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szTemp, 190, 0, RT3_SORT_CENTER);
     }
 }
@@ -484,8 +504,9 @@ void CNewUIGuardWindow::RenderRegisterTab()
             {
                 if (!g_GuardsMan.HasRegistered())
                 {
-                    if (!wcscmp(GuildMark[Hero->GuildMarkIndex].UnionName, m_szOwnerGuild) ||
-                        !wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, m_szOwnerGuild))
+                    if (Hero->GuildMarkIndex >= 0 && Hero->GuildMarkIndex < MAX_MARKS &&
+                        (!wcscmp(GuildMark[Hero->GuildMarkIndex].UnionName, m_szOwnerGuild) ||
+                         !wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, m_szOwnerGuild)))
                     {
                         m_BtnProclaim.Lock();
                         m_BtnProclaim.ChangeImgColor(BUTTON_STATE_UP, RGBA(100, 100, 100, 255));
@@ -520,13 +541,13 @@ void CNewUIGuardWindow::RenderRegisterTab()
                                           RT3_SORT_CENTER);
                 ptOrigin.y += 30;
 
-                int     nMarkCount = g_GuardsMan.GetMyMarkCount();
-                wchar_t szBuffer[256];
-                mu_swprintf(szBuffer, I18N::Game::AcquiredNoOfSignU, nMarkCount);
+                int     nMarkCount    = g_GuardsMan.GetMyMarkCount();
+                wchar_t szBuffer[256] = {};
+                swprintf_s(szBuffer, _countof(szBuffer), I18N::Game::AcquiredNoOfSignU, nMarkCount);
                 g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szBuffer, 190, 0, RT3_SORT_CENTER);
 
                 ptOrigin.y += 14;
-                mu_swprintf(szBuffer, I18N::Game::RegisteredNoOfSignU, g_GuardsMan.GetRegMarkCount());
+                swprintf_s(szBuffer, _countof(szBuffer), I18N::Game::RegisteredNoOfSignU, g_GuardsMan.GetRegMarkCount());
                 g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szBuffer, 190, 0, RT3_SORT_CENTER);
 
                 if (nMarkCount > 0)

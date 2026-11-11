@@ -16,6 +16,7 @@ SEASON3B::CNewUIQuickCommandWindow::CNewUIQuickCommandWindow()
     m_Pos.x     = 0;
     m_Pos.y     = 0;
 
+    memset(m_strID, 0, sizeof(m_strID));
     m_iSelectedIndex          = -1;
     m_iSelectedCharacterIndex = -1;
 }
@@ -44,10 +45,9 @@ bool SEASON3B::CNewUIQuickCommandWindow::Create(CNewUIManager* pNewUIMng, int x,
 
 void SEASON3B::CNewUIQuickCommandWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -61,7 +61,7 @@ void SEASON3B::CNewUIQuickCommandWindow::SetPos(int x, int y)
 
 bool SEASON3B::CNewUIQuickCommandWindow::UpdateMouseEvent()
 {
-    if (m_iSelectedCharacterIndex < 0)
+    if (m_iSelectedCharacterIndex < 0 || m_iSelectedCharacterIndex >= MAX_CHARACTERS_CLIENT)
     {
         return true;
     }
@@ -162,7 +162,7 @@ bool SEASON3B::CNewUIQuickCommandWindow::UpdateKeyEvent()
 
 bool SEASON3B::CNewUIQuickCommandWindow::Update()
 {
-    if (m_iSelectedCharacterIndex >= 0)
+    if (m_iSelectedCharacterIndex >= 0 && m_iSelectedCharacterIndex < MAX_CHARACTERS_CLIENT)
     {
         CHARACTER* pCha = &CharactersClient[m_iSelectedCharacterIndex];
 
@@ -190,13 +190,13 @@ bool SEASON3B::CNewUIQuickCommandWindow::Update()
 
 bool SEASON3B::CNewUIQuickCommandWindow::Render()
 {
-    EnableAlphaTest();
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-    if (m_iSelectedCharacterIndex < 0)
+    if (m_iSelectedCharacterIndex < 0 || m_iSelectedCharacterIndex >= MAX_CHARACTERS_CLIENT)
     {
         return true;
     }
+
+    EnableAlphaTest();
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     RenderFrame();
     RenderContents();
@@ -349,7 +349,7 @@ void SEASON3B::CNewUIQuickCommandWindow::CloseQuickCommand()
 
 void SEASON3B::CNewUIQuickCommandWindow::SetID(const wchar_t* strID)
 {
-    wcscpy(m_strID, strID);
+    wcsncpy_s(m_strID, _countof(m_strID), strID ? strID : L"", _TRUNCATE);
 }
 
 void SEASON3B::CNewUIQuickCommandWindow::SetSelectedCharacterIndex(int iIndex)

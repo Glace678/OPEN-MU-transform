@@ -16,10 +16,12 @@ using namespace SEASON3B;
 CNewUIPetInfoWindow::CNewUIPetInfoWindow()
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
-    m_iNumCurOpenTab  = TAB_TYPE_DARKHORSE;
-    CalcDamage(m_iNumCurOpenTab);
-    m_EventState = EVENT_NONE;
+    m_Pos.x = m_Pos.y   = 0;
+    m_iNumCurOpenTab    = TAB_TYPE_DARKHORSE;
+    m_EventState        = EVENT_NONE;
+    m_aiDamage[0]       = 0;
+    m_aiDamage[1]       = 0;
+    m_fAddDamagePercent = 0.f;
 }
 
 CNewUIPetInfoWindow::~CNewUIPetInfoWindow()
@@ -48,10 +50,9 @@ bool CNewUIPetInfoWindow::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIPetInfoWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -141,16 +142,16 @@ bool CNewUIPetInfoWindow::Render()
     switch (m_iNumCurOpenTab)
     {
         case TAB_TYPE_DARKHORSE: {
-            pPetInfo = Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE);
+            pPetInfo = (Hero != nullptr) ? Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE) : nullptr;
 
-            if (pPetInfo->m_dwPetType == PET_TYPE_NONE)
+            if (pPetInfo == nullptr || pPetInfo->m_dwPetType == PET_TYPE_NONE)
             {
                 g_pRenderText->SetTextColor(0xFF0000FF);
                 g_pRenderText->SetFont(g_hFontBold);
                 wchar_t szText[256] = {
                     0,
                 };
-                mu_swprintf(szText, I18N::Game::NoS, I18N::Game::DarkHorse);
+                swprintf_s(szText, _countof(szText), I18N::Game::NoS, I18N::Game::DarkHorse);
                 g_pRenderText->RenderText(m_Pos.x + 15, m_Pos.y + 100, szText, 160, 30, RT3_SORT_CENTER);
             }
             else
@@ -160,9 +161,9 @@ bool CNewUIPetInfoWindow::Render()
         }
         break;
         case TAB_TYPE_DARKSPIRIT: {
-            pPetInfo = Hero->GetEquipedPetInfo(PET_TYPE_DARK_SPIRIT);
+            pPetInfo = (Hero != nullptr) ? Hero->GetEquipedPetInfo(PET_TYPE_DARK_SPIRIT) : nullptr;
 
-            if (pPetInfo->m_dwPetType == PET_TYPE_NONE)
+            if (pPetInfo == nullptr || pPetInfo->m_dwPetType == PET_TYPE_NONE)
             {
                 g_pRenderText->SetTextColor(0xFF0000FF);
                 g_pRenderText->SetFont(g_hFontBold);
@@ -339,19 +340,27 @@ void CNewUIPetInfoWindow::CalcDamage(int iNumTapButton)
     switch (iNumTapButton)
     {
         case TAB_TYPE_DARKHORSE: {
-            int iSkillDamage[2];
-            int master_boost = 0;
+            int iSkillDamage[2] = {0, 0};
+            int master_boost    = 0;
             gCharacterManager.GetSkillDamage(AT_SKILL_EARTHSHAKE, &iSkillDamage[0], &iSkillDamage[1]);
             auto masterLevelUi = SEASON3B::CNewUISystem::GetInstance()->GetUI_NewMasterLevelInterface();
-            if (masterLevelUi != nullptr)
+            if (masterLevelUi != nullptr && CharacterAttribute != nullptr)
             {
                 master_boost =
                     static_cast<int>(CharacterAttribute->MasterSkillInfo[AT_SKILL_EARTHSHAKE_STR].GetSkillValue());
             }
 
-            pPetInfo      = Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE);
-            m_aiDamage[0] = pPetInfo->m_wDamageMin + iSkillDamage[0] + master_boost;
-            m_aiDamage[1] = pPetInfo->m_wDamageMax + iSkillDamage[1] + master_boost;
+            pPetInfo = (Hero != nullptr) ? Hero->GetEquipedPetInfo(PET_TYPE_DARK_HORSE) : nullptr;
+            if (pPetInfo != nullptr)
+            {
+                m_aiDamage[0] = pPetInfo->m_wDamageMin + iSkillDamage[0] + master_boost;
+                m_aiDamage[1] = pPetInfo->m_wDamageMax + iSkillDamage[1] + master_boost;
+            }
+            else
+            {
+                m_aiDamage[0] = 0;
+                m_aiDamage[1] = 0;
+            }
         }
         break;
         case TAB_TYPE_DARKSPIRIT: {
@@ -359,16 +368,18 @@ void CNewUIPetInfoWindow::CalcDamage(int iNumTapButton)
             m_aiDamage[0]       = 0;
             m_aiDamage[1]       = 0;
 
-            if (CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type != -1)
+            if (CharacterMachine != nullptr && CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].Type != -1)
             {
                 m_fAddDamagePercent = CharacterMachine->Equipment[EQUIPMENT_WEAPON_RIGHT].MagicPower;
             }
 
-            pPetInfo = Hero->GetEquipedPetInfo(PET_TYPE_DARK_SPIRIT);
-
-            m_fAddDamagePercent /= 100.f;
-            m_aiDamage[0] = pPetInfo->m_wDamageMin + (int)(pPetInfo->m_wDamageMin * m_fAddDamagePercent);
-            m_aiDamage[1] = pPetInfo->m_wDamageMax + (int)(pPetInfo->m_wDamageMax * m_fAddDamagePercent);
+            pPetInfo = (Hero != nullptr) ? Hero->GetEquipedPetInfo(PET_TYPE_DARK_SPIRIT) : nullptr;
+            if (pPetInfo != nullptr)
+            {
+                m_fAddDamagePercent /= 100.f;
+                m_aiDamage[0] = pPetInfo->m_wDamageMin + (int)(pPetInfo->m_wDamageMin * m_fAddDamagePercent);
+                m_aiDamage[1] = pPetInfo->m_wDamageMax + (int)(pPetInfo->m_wDamageMax * m_fAddDamagePercent);
+            }
         }
         break;
     }

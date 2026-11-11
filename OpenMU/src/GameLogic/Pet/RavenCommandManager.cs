@@ -26,9 +26,11 @@ public class RavenCommandManager : Disposable, IPetCommandManager
     private readonly IAttacker _petAttackerSurrogate;
     private readonly List<IAttackable> _targetBuffer = new(MaxRangeHits);
     private readonly AsyncLock _rangeAttackLock = new();
+    private readonly AsyncLock _behaviourLock = new();
 
     private CancellationTokenSource? _attackCts;
     private PetBehaviour _currentBehaviour;
+    private long _behaviourGeneration;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RavenCommandManager" /> class.
@@ -51,34 +53,57 @@ public class RavenCommandManager : Disposable, IPetCommandManager
     /// <param name="target">The target.</param>
     public async ValueTask SetBehaviourAsync(PetBehaviour newBehaviour, IAttackable? target)
     {
-        await (this._attackCts?.CancelAsync() ?? Task.CompletedTask).ConfigureAwait(false);
-        this._attackCts?.Dispose();
-        this._attackCts = null;
-
-        if (this._pet.Durability == 0.0)
-        {
-            this._currentBehaviour = PetBehaviour.Idle;
-        }
-
-        this._currentBehaviour = newBehaviour;
-
-        await this._owner.InvokeViewPlugInAsync<IPetBehaviourChangedViewPlugIn>(p => p.PetBehaviourChangedAsync(this._pet, this._currentBehaviour, target)).ConfigureAwait(false);
-        if (newBehaviour == PetBehaviour.Idle)
+        if (this.IsDisposed)
         {
             return;
         }
 
-        this._attackCts = new();
+        CancellationToken token;
+        long generation;
+        using (await this._behaviourLock.LockAsync().ConfigureAwait(false))
+        {
+            if (this.IsDisposed)
+            {
+                return;
+            }
+
+            var previousCts = Interlocked.Exchange(ref this._attackCts, null);
+            if (previousCts is not null)
+            {
+                await previousCts.CancelAsync().ConfigureAwait(false);
+                previousCts.Dispose();
+            }
+
+            if (this._pet.Durability <= 0.0
+                || (newBehaviour == PetBehaviour.AttackTarget && target is null))
+            {
+                newBehaviour = PetBehaviour.Idle;
+            }
+
+            generation = Interlocked.Increment(ref this._behaviourGeneration);
+            this._currentBehaviour = newBehaviour;
+
+            await this._owner.InvokeViewPlugInAsync<IPetBehaviourChangedViewPlugIn>(p => p.PetBehaviourChangedAsync(this._pet, this._currentBehaviour, target)).ConfigureAwait(false);
+            if (newBehaviour == PetBehaviour.Idle)
+            {
+                return;
+            }
+
+            var cts = new CancellationTokenSource();
+            this._attackCts = cts;
+            token = cts.Token;
+        }
+
         switch (newBehaviour)
         {
             case PetBehaviour.AttackRandom:
-                _ = this.AttackRandomAsync(this._attackCts.Token);
+                _ = this.AttackRandomAsync(token);
                 break;
             case PetBehaviour.AttackTarget when target is { }:
-                _ = this.AttackTargetUntilDeathAsync(target, this._attackCts.Token);
+                _ = this.AttackTargetUntilDeathAsync(target, generation, token);
                 break;
             case PetBehaviour.AttackWithOwner:
-                _ = this.AttackSameAsOwnerAsync(this._attackCts.Token);
+                _ = this.AttackSameAsOwnerAsync(token);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newBehaviour), $"Unknown behavior: {newBehaviour}");
@@ -89,9 +114,10 @@ public class RavenCommandManager : Disposable, IPetCommandManager
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
-        this._attackCts?.Cancel();
-        this._attackCts?.Dispose();
-        this._attackCts = null;
+        Interlocked.Increment(ref this._behaviourGeneration);
+        var cts = Interlocked.Exchange(ref this._attackCts, null);
+        cts?.Cancel();
+        cts?.Dispose();
     }
 
     private async ValueTask AttackAsync(IAttackable target, CancellationToken cancellationToken)
@@ -166,7 +192,7 @@ public class RavenCommandManager : Disposable, IPetCommandManager
         }
     }
 
-    private async Task AttackTargetUntilDeathAsync(IAttackable target, CancellationToken cancellationToken)
+    private async Task AttackTargetUntilDeathAsync(IAttackable target, long generation, CancellationToken cancellationToken)
     {
         this._owner.Logger.LogDebug($"Starting to attack {target} with the pet, until it's dead.");
         try
@@ -175,7 +201,7 @@ public class RavenCommandManager : Disposable, IPetCommandManager
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                if (!target.IsAlive)
+                if (!target.IsAlive || this._pet.Durability <= 0.0)
                 {
                     break;
                 }
@@ -188,8 +214,14 @@ public class RavenCommandManager : Disposable, IPetCommandManager
                 await Task.Delay(this.AttackDelay, cancellationToken).ConfigureAwait(false);
             }
 
-            this._currentBehaviour = PetBehaviour.Idle;
-            await this._owner.InvokeViewPlugInAsync<IPetBehaviourChangedViewPlugIn>(p => p.PetBehaviourChangedAsync(this._pet, this._currentBehaviour, null)).ConfigureAwait(false);
+            using (await this._behaviourLock.LockAsync().ConfigureAwait(false))
+            {
+                if (!this.IsDisposed && Interlocked.Read(ref this._behaviourGeneration) == generation)
+                {
+                    this._currentBehaviour = PetBehaviour.Idle;
+                    await this._owner.InvokeViewPlugInAsync<IPetBehaviourChangedViewPlugIn>(p => p.PetBehaviourChangedAsync(this._pet, this._currentBehaviour, null)).ConfigureAwait(false);
+                }
+            }
         }
         catch (OperationCanceledException)
         {

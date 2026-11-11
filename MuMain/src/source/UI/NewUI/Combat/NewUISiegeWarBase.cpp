@@ -40,6 +40,16 @@ SEASON3B::CNewUISiegeWarBase::CNewUISiegeWarBase()
     memset(&m_HeroPosInWorld, 0, sizeof(POINT));
     memset(&m_HeroPosInMiniMap, 0, sizeof(POINT));
     memset(&m_MiniMapScaleOffset, 0, sizeof(POINT));
+
+    m_fMiniMapTexU = 0.f;
+    m_fMiniMapTexV = 0.f;
+    m_dwBuffState  = static_cast<DWORD>(-1);
+    memset(m_CmdBuffer, 0, sizeof(m_CmdBuffer));
+    for (int i = 0; i < MAX_COMMANDGROUP; ++i)
+    {
+        m_CmdBuffer[i].byCmd = 3;
+    }
+    m_iterCurBattleSkill = m_listBattleSkill.end();
 }
 
 SEASON3B::CNewUISiegeWarBase::~CNewUISiegeWarBase() {}
@@ -224,6 +234,10 @@ bool SEASON3B::CNewUISiegeWarBase::InitBattleSkill()
     }
 
     m_iterCurBattleSkill = m_listBattleSkill.begin();
+    if (m_iterCurBattleSkill == m_listBattleSkill.end())
+    {
+        return false;
+    }
 
     Hero->GuildSkill = (*m_iterCurBattleSkill);
 
@@ -233,13 +247,14 @@ bool SEASON3B::CNewUISiegeWarBase::InitBattleSkill()
 void SEASON3B::CNewUISiegeWarBase::ReleaseBattleSkill()
 {
     m_listBattleSkill.clear();
+    m_iterCurBattleSkill = m_listBattleSkill.end();
 
     m_bRenderSkillUI = false;
 }
 
 void SEASON3B::CNewUISiegeWarBase::SetSkillScrollUp()
 {
-    if (m_listBattleSkill.begin() == m_iterCurBattleSkill)
+    if (m_listBattleSkill.empty() || m_listBattleSkill.begin() == m_iterCurBattleSkill)
         return;
 
     m_iterCurBattleSkill--;
@@ -249,6 +264,9 @@ void SEASON3B::CNewUISiegeWarBase::SetSkillScrollUp()
 
 void SEASON3B::CNewUISiegeWarBase::SetSkillScrollDn()
 {
+    if (m_listBattleSkill.empty() || m_iterCurBattleSkill == m_listBattleSkill.end())
+        return;
+
     if (m_listBattleSkill.end() == ++m_iterCurBattleSkill)
     {
         m_iterCurBattleSkill--;
@@ -362,7 +380,7 @@ bool SEASON3B::CNewUISiegeWarBase::BtnProcess()
 
 void SEASON3B::CNewUISiegeWarBase::UpdateBuffState()
 {
-    DWORD m_dwBuffState = -1;
+    m_dwBuffState = static_cast<DWORD>(-1);
 
     OBJECT* o = &Hero->Object;
 
@@ -389,7 +407,7 @@ void SEASON3B::CNewUISiegeWarBase::UpdateHeroPos()
     m_HeroPosInWorld.x = (Hero->PositionX) / m_iMiniMapScale;
     m_HeroPosInWorld.y = (256 - (Hero->PositionY)) / m_iMiniMapScale;
 
-    m_MiniMapScaleOffset.x = std::max<int>((m_HeroPosInWorld.x - (64 * m_iMiniMapScale)), 0);
+    m_MiniMapScaleOffset.x = std::min<int>(std::max<int>((m_HeroPosInWorld.x - (64 * m_iMiniMapScale)), 0), 128);
     m_MiniMapScaleOffset.y = std::min<int>(std::max<int>((m_HeroPosInWorld.y - (64 * m_iMiniMapScale)), 0), 128);
 
     m_HeroPosInMiniMap.x = m_HeroPosInWorld.x - m_MiniMapScaleOffset.x + m_MiniMapPos.x;
@@ -546,6 +564,11 @@ void SEASON3B::CNewUISiegeWarBase::SetTime(int iHour, int iMinute)
 
 void SEASON3B::CNewUISiegeWarBase::SetMapInfo(GuildCommander& data)
 {
+    if (data.byTeam >= MAX_COMMANDGROUP)
+    {
+        return;
+    }
+
     m_CmdBuffer[data.byTeam].byCmd      = data.byCmd;
     m_CmdBuffer[data.byTeam].byTeam     = data.byTeam;
     m_CmdBuffer[data.byTeam].byX        = data.byX;

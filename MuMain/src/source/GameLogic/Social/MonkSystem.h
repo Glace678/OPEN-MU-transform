@@ -153,7 +153,7 @@ public:
     bool      SendAttackPacket(CHARACTER* _pCha, int _nMoveTarget, int _nSkill);
     bool      RageFighterEffect(OBJECT* _pObj, int _Type);
     void      SetDarksideTargetIndex(WORD* _pTargetIndex, ActionSkillType skill);
-    WORD      GetDarksideTargetIndex(int _nIndex);
+    int       GetDarksideTargetIndex(int _nIndex);
     int       GetDarksideCnt();
     void      SetDarksideCnt();
     bool      SendDarksideAtt(OBJECT* _pObj);

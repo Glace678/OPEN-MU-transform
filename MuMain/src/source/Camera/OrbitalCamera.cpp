@@ -147,7 +147,7 @@ void OrbitalCamera::LoadConfigForScene(EGameScene scene)
 void OrbitalCamera::ApplyConfigToState()
 {
     extern unsigned int WindowWidth, WindowHeight;
-    float               aspect = (float)WindowWidth / (float)WindowHeight;
+    float               aspect = (WindowHeight > 0) ? ((float)WindowWidth / (float)WindowHeight) : 1.0f;
     m_State.ViewFar            = m_Config.farPlane;
     m_State.FOV                = HFovToVFov(m_Config.hFov, aspect);
     m_State.TopViewEnable      = false;
@@ -581,6 +581,11 @@ void OrbitalCamera::GetTargetPosition(vec3_t outTarget) const
         // Priority 3: Hero exists - use Hero position as target
         VectorCopy(Hero->Object.Position, outTarget);
     }
+    else if (Hero != nullptr)
+    {
+        // Hero exists (e.g. dead/awaiting respawn) - keep Hero position as orbit pivot
+        VectorCopy(Hero->Object.Position, outTarget);
+    }
     else
     {
         // Priority 4: In CharacterScene, use CharactersClient[0] as target
@@ -595,8 +600,13 @@ void OrbitalCamera::GetTargetPosition(vec3_t outTarget) const
             }
         }
 
-        // Priority 5 (Fallback): Use current camera position as pivot
-        // This allows orbital camera to work in LoginScene when no character exists
+        // Priority 5 (Fallback): Preserve existing non-zero static pivot if already computed;
+        // otherwise seed from current camera position.
+        if (m_Target[0] != 0.0f || m_Target[1] != 0.0f || m_Target[2] != 0.0f)
+        {
+            VectorCopy(m_Target, outTarget);
+            return;
+        }
         VectorCopy(m_State.Position, outTarget);
     }
 }
@@ -618,26 +628,40 @@ void OrbitalCamera::ComputeCameraTransform()
     float relativeY = m_State.Position[1] - m_Target[1];
     float relativeZ = m_State.Position[2] - m_Target[2];
 
-    // Save initial offset on first frame
+    // Save initial offset on first frame (only latch once a non-zero offset is available)
     if (!m_bInitialOffsetSet)
     {
-        m_InitialCameraOffset[0] = relativeX;
-        m_InitialCameraOffset[1] = relativeY;
-        m_InitialCameraOffset[2] = relativeZ;
-        m_bInitialOffsetSet      = true;
+        const float relLen = sqrtf(relativeX * relativeX + relativeY * relativeY + relativeZ * relativeZ);
+        if (relLen > 0.001f)
+        {
+            m_InitialCameraOffset[0] = relativeX;
+            m_InitialCameraOffset[1] = relativeY;
+            m_InitialCameraOffset[2] = relativeZ;
+            m_bInitialOffsetSet      = true;
+        }
     }
 
     // m_Radius is the absolute camera-to-target distance in world units.
     // Normalize the captured direction and scale to m_Radius so the camera
     // sits exactly that far from m_Target — no hidden ratio.
-    float initialLen = sqrtf(m_InitialCameraOffset[0] * m_InitialCameraOffset[0] +
-                             m_InitialCameraOffset[1] * m_InitialCameraOffset[1] +
-                             m_InitialCameraOffset[2] * m_InitialCameraOffset[2]);
-    float dirScale   = (initialLen > 0.001f) ? (m_Radius / initialLen) : 1.0f;
+    float offsetX    = m_InitialCameraOffset[0];
+    float offsetY    = m_InitialCameraOffset[1];
+    float offsetZ    = m_InitialCameraOffset[2];
+    float initialLen = sqrtf(offsetX * offsetX + offsetY * offsetY + offsetZ * offsetZ);
+    if (initialLen <= 0.001f)
+    {
+        // Fallback isometric direction when camera pose initially coincided with pivot
+        constexpr float kInvSqrt2 = 0.70710678f;
+        offsetX                   = 0.0f;
+        offsetY                   = -kInvSqrt2;
+        offsetZ                   = kInvSqrt2;
+        initialLen                = 1.0f;
+    }
+    float dirScale = m_Radius / initialLen;
 
-    float scaledX = m_InitialCameraOffset[0] * dirScale;
-    float scaledY = m_InitialCameraOffset[1] * dirScale;
-    float scaledZ = m_InitialCameraOffset[2] * dirScale;
+    float scaledX = offsetX * dirScale;
+    float scaledY = offsetY * dirScale;
+    float scaledZ = offsetZ * dirScale;
 
     // Apply horizontal rotation around Z axis
     float angleRad = m_DeltaYaw * (M_PI / 180.0f);
@@ -678,7 +702,7 @@ void OrbitalCamera::ComputeCameraTransform()
     float       effectivePitchDelta = m_DeltaPitch;
 
     // Clamp to prevent looking too far down (below minimum height)
-    if (requestedZ < m_Target[2] + minCameraHeight)
+    if (totalDist > 0.001f && requestedZ < m_Target[2] + minCameraHeight)
     {
         // Calculate maximum downward elevation that keeps us above minimum height
         float maxRelativeZ = minCameraHeight - additionalOffset;

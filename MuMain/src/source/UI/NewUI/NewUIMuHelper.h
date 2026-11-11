@@ -97,20 +97,26 @@ private:
     static constexpr int WINDOW_WIDTH    = 190;
     static constexpr int WINDOW_HEIGHT   = 429;
 
-    typedef struct
+    typedef struct tagCButtonTap
     {
-        int           iNumTab;
-        BYTE          class_character[MAX_CLASS];
-        CNewUIButton* btn;
-        int           x, y, width, height;
+        int           iNumTab = 0;
+        BYTE          class_character[MAX_CLASS]{};
+        CNewUIButton* btn   = nullptr;
+        int           x     = 0;
+        int           y     = 0;
+        int           width = 0;
+        int           height = 0;
     } CButtonTap;
 
-    typedef struct
+    typedef struct tagCheckBoxTap
     {
-        int             iNumTab;
-        BYTE            class_character[MAX_CLASS];
-        CNewUICheckBox* box;
-        int             x, y, width, height;
+        int             iNumTab = 0;
+        BYTE            class_character[MAX_CLASS]{};
+        CNewUICheckBox* box   = nullptr;
+        int             x     = 0;
+        int             y     = 0;
+        int             width = 0;
+        int             height = 0;
     } CheckBoxTap;
 
     typedef struct

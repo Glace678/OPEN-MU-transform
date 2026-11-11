@@ -199,16 +199,16 @@ public:
     int         GetSuccessRate() { return m_iSuccessRate; }
     DWORD       GetReqiredZen() { return m_dwRequiredZen; }
     int         GetFirstItemSocketCount() { return m_byFirstItemSocketCount; }
-    int         GetFirstItemSocketSeedID(int iIndex)
+    int GetFirstItemSocketSeedID(int iIndex)
     {
-        if (iIndex >= m_byFirstItemSocketCount)
+        if (iIndex < 0 || iIndex >= m_byFirstItemSocketCount || iIndex >= MAX_SOCKETS)
             return SOCKET_EMPTY;
         else
             return m_byFirstItemSocketSeedID[iIndex];
     }
     int GetFirstItemSocketShpereLv(int iIndex)
     {
-        if (iIndex >= m_byFirstItemSocketCount)
+        if (iIndex < 0 || iIndex >= m_byFirstItemSocketCount || iIndex >= MAX_SOCKETS)
             return 0;
         else
             return m_byFirstItemSocketSphereLv[iIndex];
@@ -347,16 +347,16 @@ public:
     void SetPlusChaosRate(BYTE btPlusChaosRate) { m_btPlusChaosRate = btPlusChaosRate; }
     BYTE GetPlusChaosRate() { return m_btPlusChaosRate; }
     int  GetFirstItemSocketCount() { return m_MixRecipe[GetMixInventoryType()].GetFirstItemSocketCount(); }
-    int  GetFirstItemSocketSeedID(int iIndex)
+    int GetFirstItemSocketSeedID(int iIndex)
     {
-        if (iIndex >= GetFirstItemSocketCount())
+        if (iIndex < 0 || iIndex >= GetFirstItemSocketCount() || iIndex >= MAX_SOCKETS)
             return SOCKET_EMPTY;
         else
             return m_MixRecipe[GetMixInventoryType()].GetFirstItemSocketSeedID(iIndex);
     }
     int GetFirstItemSocketShpereLv(int iIndex)
     {
-        if (iIndex >= GetFirstItemSocketCount())
+        if (iIndex < 0 || iIndex >= GetFirstItemSocketCount() || iIndex >= MAX_SOCKETS)
             return 0;
         else
             return m_MixRecipe[GetMixInventoryType()].GetFirstItemSocketShpereLv(iIndex);

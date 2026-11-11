@@ -14,6 +14,7 @@ services:
       - "44405:44405"
       - "55980:55980"
     environment:
+      ASPNETCORE_URLS: http://+:8080
       DB_HOST: database
       # Bootstrap admin panel user. Compose refuses to start when it is unset or empty,
       # so the panel can never be reachable without a login (run deploy/quick-start first).
@@ -39,6 +40,7 @@ services:
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.openmu.entrypoints=web"
       - "traefik.http.routers.openmu.rule=Host(`admin.docker.localhost`)"
+      - "traefik.http.services.openmu.loadbalancer.server.port=8080"
 
   database:
     image: postgres:17-alpine
@@ -55,7 +57,7 @@ services:
       # Never expose PostgreSQL to the public internet; keep it loopback-only.
       - "127.0.0.1:5432:5432"
     volumes:
-      - dbdata:/var/lib/postgresql #store data on volume
+      - dbdata:/var/lib/postgresql/data #store data on volume
 
   socket-proxy:
     # Traefik needs read access to the container API for its docker provider. Mounting
@@ -92,7 +94,7 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
     ports:
-      - "80:80"
+      - "127.0.0.1:80:80"
     depends_on:
       - socket-proxy
     networks:

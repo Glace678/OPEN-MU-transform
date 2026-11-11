@@ -33,6 +33,12 @@ WZResult CShopList::LoadCategroy(const wchar_t* szFilePath)  // OK
 {
     WZResult result;
 
+    if (!szFilePath || !*szFilePath)
+    {
+        result.SetResult(PT_LOADLIBRARY, ERROR_INVALID_PARAMETER, L"package file open fail");
+        return result;
+    }
+
     FILE_ENCODE enc = this->IsFileEncodingUtf8(szFilePath);
 
     std::ifstream ifs;
@@ -99,6 +105,12 @@ WZResult CShopList::LoadPackage(const wchar_t* szFilePath)  // OK
 {
     WZResult result;
 
+    if (!szFilePath || !*szFilePath)
+    {
+        result.SetResult(4, ERROR_INVALID_PARAMETER, L"package file open fail");
+        return result;
+    }
+
     FILE_ENCODE enc = this->IsFileEncodingUtf8(szFilePath);
 
     std::ifstream ifs;
@@ -146,9 +158,15 @@ WZResult CShopList::LoadPackage(const wchar_t* szFilePath)  // OK
 
 WZResult CShopList::LoadProduct(const wchar_t* szFilePath)  // OK
 {
-    static WZResult result;
+    WZResult result;
 
     result.BuildSuccessResult();
+
+    if (!szFilePath || !*szFilePath)
+    {
+        result.SetResult(4, ERROR_INVALID_PARAMETER, L"package file open fail");
+        return result;
+    }
 
     FILE_ENCODE enc = this->IsFileEncodingUtf8(szFilePath);
 
@@ -215,32 +233,33 @@ void CShopList::SetProductListPtr(CShopProductList* ProductListPtr)  // OK
 
 FILE_ENCODE CShopList::IsFileEncodingUtf8(const wchar_t* szFilePath)  // OK
 {
+    if (!szFilePath || !*szFilePath)
+    {
+        return FE_ANSI;
+    }
+
     std::ifstream ifs;
 
-    ifs.open(std::filesystem::path(szFilePath), std::ifstream::in);
+    ifs.open(std::filesystem::path(szFilePath), std::ifstream::in | std::ifstream::binary);
 
     if (!ifs.is_open())
     {
         return FE_ANSI;
     }
 
-    char buff[16] = {0};
+    unsigned char bom[3] = {0};
 
-    ifs.getline(buff, sizeof(buff));
+    ifs.read(reinterpret_cast<char*>(bom), sizeof(bom));
+    const std::streamsize bytesRead = ifs.gcount();
 
     ifs.close();
 
-    if (strlen(buff) < 3)
-    {
-        return FE_ANSI;
-    }
-
-    if (buff[0] == 0xEF && buff[1] == 0xBB && buff[2] == 0xBF)
+    if (bytesRead >= 3 && bom[0] == 0xEF && bom[1] == 0xBB && bom[2] == 0xBF)
     {
         return FE_UTF8;
     }
 
-    if (buff[0] == 0xFF && buff[1] == 0xFE)
+    if (bytesRead >= 2 && bom[0] == 0xFF && bom[1] == 0xFE)
     {
         return FE_UNICODE;
     }
@@ -252,14 +271,33 @@ std::wstring CShopList::GetDecodedString(const char* buffer, FILE_ENCODE encode)
 {
     std::wstring result;
 
+    if (!buffer)
+    {
+        return result;
+    }
+
     if (encode == FE_UNICODE)
     {
+        if (static_cast<unsigned char>(buffer[0]) == 0xFF && static_cast<unsigned char>(buffer[1]) == 0xFE)
+        {
+            buffer += 2;
+        }
         // UTF-16LE input: std::ifstream::getline read the raw little-endian bytes
         // into a narrow buffer, so they already are wide characters. Reinterpret
         // is the correct decode here (catalog files are ANSI today, so this path
         // is not normally exercised, but keep it lossless rather than empty).
         result = reinterpret_cast<const wchar_t*>(buffer);
+        while (!result.empty() && (result.back() == L'\r' || result.back() == L'\n'))
+        {
+            result.pop_back();
+        }
         return result;
+    }
+
+    if (encode == FE_UTF8 && static_cast<unsigned char>(buffer[0]) == 0xEF &&
+        static_cast<unsigned char>(buffer[1]) == 0xBB && static_cast<unsigned char>(buffer[2]) == 0xBF)
+    {
+        buffer += 3;
     }
 
     // FE_ANSI -> CP_ACP, FE_UTF8 -> CP_UTF8. Convert the narrow bytes to UTF-16
@@ -282,6 +320,11 @@ std::wstring CShopList::GetDecodedString(const char* buffer, FILE_ENCODE encode)
     result = lpWideCharStr;
 
     delete[] lpWideCharStr;
+
+    while (!result.empty() && (result.back() == L'\r' || result.back() == L'\n'))
+    {
+        result.pop_back();
+    }
 
     return result;
 }

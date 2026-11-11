@@ -244,6 +244,21 @@ DWORD CUIWindowMgr::AddWindow(int iWindowType, int iPos_x, int iPos_y, const wch
                 {
                     if (iPos_y % 10 == 9)
                     {
+                        DWORD failedId = pbw->GetUIID();
+                        if (m_dwMainWindowUIID == failedId)
+                        {
+                            m_dwMainWindowUIID = 0;
+                        }
+                        else if (m_dwMainWindowUIID != 0)
+                        {
+                            if (auto* pMainWnd = GetFriendMainWindow())
+                                pMainWnd->RemoveWindow(failedId);
+                        }
+                        if (g_dwTopWindow == failedId)
+                        {
+                            g_dwTopWindow = 0;
+                        }
+                        RemoveForceTopWindowList(failedId);
                         delete pbw;
                         return 0;
                     }
@@ -377,9 +392,17 @@ void CUIWindowMgr::DoAction()
         }
     }
 
-    if (m_dwMainWindowUIID > 0 && GetFriendMainWindow()->GetState() == UISTATE_HIDE)
+    if (m_dwMainWindowUIID > 0)
     {
-        CloseMainWnd();
+        CUIFriendWindow* pMainWnd = GetFriendMainWindow();
+        if (pMainWnd == NULL)
+        {
+            m_dwMainWindowUIID = 0;
+        }
+        else if (pMainWnd->GetState() == UISTATE_HIDE)
+        {
+            CloseMainWnd();
+        }
     }
 
     for (m_WindowReverseArrangeListIter = m_WindowArrangeList.rbegin();
@@ -509,7 +532,10 @@ void CUIWindowMgr::AddWindowFinder(CUIBaseWindow* pWindow)
 void CUIWindowMgr::RemoveWindowFinder(DWORD dwUIID)
 {
     m_WindowMapIter = m_WindowFindMap.find(dwUIID);
-    m_WindowFindMap.erase(m_WindowMapIter);
+    if (m_WindowMapIter != m_WindowFindMap.end())
+    {
+        m_WindowFindMap.erase(m_WindowMapIter);
+    }
 }
 
 CUIBaseWindow* CUIWindowMgr::GetWindow(DWORD dwUIID)
@@ -581,10 +607,10 @@ void CUIWindowMgr::HandleMessage()
                 if (GetWindow(m_WorkMessage.m_iParam1)->GetState() == UISTATE_HIDE)
                     ShowHideWindow(m_WorkMessage.m_iParam1, TRUE);
 
-                m_WindowArrangeListIter = m_WindowArrangeList.end();
-                --m_WindowArrangeListIter;
-
-                if ((int)(*m_WindowArrangeListIter) != m_WorkMessage.m_iParam1 || GetFocus() == g_hWnd)
+                const bool needArrange = m_WindowArrangeList.empty() ||
+                                         (int)(*m_WindowArrangeList.rbegin()) != m_WorkMessage.m_iParam1 ||
+                                         GetFocus() == g_hWnd;
+                if (needArrange)
                 {
                     m_WindowArrangeList.remove(m_WorkMessage.m_iParam1);
                     m_WindowArrangeList.push_back(m_WorkMessage.m_iParam1);
@@ -1372,7 +1398,7 @@ void CUIBaseWindow::Maximize()
     }
 }
 
-CUIChatWindow::CUIChatWindow() : m_iShowType(1), m_dwRoomNumber(0) {}
+CUIChatWindow::CUIChatWindow() : _connection(nullptr), m_iShowType(1), m_dwRoomNumber(0) {}
 
 CUIChatWindow::~CUIChatWindow()
 {
@@ -1408,7 +1434,7 @@ void CUIChatWindow::InitControls()
 
 void CUIChatWindow::Init(const wchar_t* pszTitle, DWORD dwParentID)
 {
-    memset(m_szLastText, 0, MAX_CHATROOM_TEXT_LENGTH);
+    memset(m_szLastText, 0, sizeof(m_szLastText));
 
     SetTitle(pszTitle);
     SetParentUIID(dwParentID);
@@ -1471,21 +1497,25 @@ void TranslateChattingProtocol(DWORD dwWindowUIID, const BYTE* ReceiveBuffer, in
 
 void CUIChatWindow::HandlePacketS(int32_t handle, const BYTE* ReceiveBuffer, int32_t Size)
 {
-    if (const auto uuid = ConnectionHandleToWindowUuid.find(handle)->second)
+    auto it = ConnectionHandleToWindowUuid.find(handle);
+    if (it != ConnectionHandleToWindowUuid.end() && it->second != 0)
     {
-        TranslateChattingProtocol(uuid, ReceiveBuffer, Size);
+        TranslateChattingProtocol(it->second, ReceiveBuffer, Size);
     }
 }
 
 void CUIChatWindow::ConnectToChatServer(const wchar_t* pszIP, DWORD dwRoomNumber, DWORD dwTicket)
 {
+    DisconnectToChatServer();
+
     m_dwRoomNumber = dwRoomNumber;
 
     _connection = new Connection(pszIP, 55980, true, &HandlePacketS);
 
     if (!_connection->IsConnected())
     {
-        // todo: write message, that it failed?
+        delete _connection;
+        _connection = nullptr;
         return;
     }
 
@@ -1497,12 +1527,14 @@ void CUIChatWindow::DisconnectToChatServer()
 {
     if (_connection != nullptr)
     {
+        ConnectionHandleToWindowUuid.erase(_connection->GetHandle());
         if (_connection->IsConnected())
         {
             _connection->ToChatServer()->SendLeaveChatRoom();
             _connection->Close();
         }
 
+        delete _connection;
         _connection = nullptr;
     }
 }
@@ -1829,24 +1861,26 @@ const wchar_t* CUIChatWindow::GetChatFriend(int* piResult)
 
 void CUIChatWindow::Lock(BOOL bFlag)
 {
+    const wchar_t* curTitle   = GetTitle() ? GetTitle() : L"";
+    const size_t   offlineLen = wcslen(I18N::Game::Offline);
     if (bFlag == TRUE)
     {
         m_TextInputBox.Lock(TRUE);
         wchar_t szTitle[128] = {0};
-        if (wcsncmp(GetTitle(), I18N::Game::Offline, wcslen(I18N::Game::Offline)) != 0)
+        if (wcsncmp(curTitle, I18N::Game::Offline, offlineLen) != 0)
         {
-            wcsncpy(szTitle, I18N::Game::Offline, wcslen(I18N::Game::Offline));
+            wcsncpy_s(szTitle, _countof(szTitle), I18N::Game::Offline, _TRUNCATE);
         }
-        wcsncat(szTitle, GetTitle(), 128);
+        wcsncat_s(szTitle, _countof(szTitle), curTitle, _TRUNCATE);
         SetTitle(szTitle);
     }
     else
     {
         m_TextInputBox.Lock(FALSE);
-        if (wcsncmp(GetTitle(), I18N::Game::Offline, wcslen(I18N::Game::Offline)) == 0)
+        if (wcsncmp(curTitle, I18N::Game::Offline, offlineLen) == 0)
         {
             wchar_t szTitle[128] = {0};
-            wcsncpy(szTitle, GetTitle() + wcslen(I18N::Game::Offline), 128);
+            wcsncpy_s(szTitle, _countof(szTitle), curTitle + offlineLen, _TRUNCATE);
             SetTitle(szTitle);
         }
     }
@@ -2569,7 +2603,7 @@ void CUIPhotoViewer::SetID(const wchar_t* pszID)
 {
     if (pszID == NULL)
         return;
-    mu_swprintf(m_PhotoChar.ID, pszID);
+    wcsncpy_s(m_PhotoChar.ID, _countof(m_PhotoChar.ID), pszID, _TRUNCATE);
 }
 
 extern bool EquipmentSuccess;
@@ -2732,15 +2766,15 @@ void CUIPhotoViewer::Render()
             glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
             TextNum = 0;
-            mu_swprintf(TextList[TextNum], I18N::Game::WheelButtonZoomInOut);
+            swprintf_s(TextList[TextNum], _countof(TextList[TextNum]), L"%ls", I18N::Game::WheelButtonZoomInOut);
             TextListColor[TextNum] = 0;
             TextBold[TextNum]      = false;
             TextNum++;
-            mu_swprintf(TextList[TextNum], I18N::Game::LeftClickRotation);
+            swprintf_s(TextList[TextNum], _countof(TextList[TextNum]), L"%ls", I18N::Game::LeftClickRotation);
             TextListColor[TextNum] = 0;
             TextBold[TextNum]      = false;
             TextNum++;
-            mu_swprintf(TextList[TextNum], I18N::Game::RightClickDefault);
+            swprintf_s(TextList[TextNum], _countof(TextList[TextNum]), L"%ls", I18N::Game::RightClickDefault);
             TextListColor[TextNum] = 0;
             TextBold[TextNum]      = false;
             TextNum++;
@@ -3044,21 +3078,23 @@ BOOL CUILetterWriteWindow::HandleMessage()
                             break;
                         }
 
-                        wchar_t szText[1024] = {0};
+                        wchar_t   szText[1024] = {0};
+                        const int tempLen      = (int)wcslen(szTempText);
 
-                        for (int i = 0, j = 0; i <= (int)wcslen(szTempText); ++i, ++j)
+                        for (int i = 0, j = 0; i < tempLen && j < MAX_LETTERTEXT_LENGTH; ++i, ++j)
                         {
-                            if (j > MAX_LETTERTEXT_LENGTH || i > MAX_LETTERTEXT_LENGTH)
-                                break;
-
-                            if (szTempText[i] == '\r')
+                            if (szTempText[i] == L'\r')
                             {
-                                szText[j] = '\n';
-                                if (szTempText[i + 1] == '\n' && szTempText[i + 2] == '\r' && szTempText[i + 3] == '\n')
+                                szText[j] = L'\n';
+                                if (i + 3 < tempLen && szTempText[i + 1] == L'\n' && szTempText[i + 2] == L'\r' &&
+                                    szTempText[i + 3] == L'\n' && j + 1 < MAX_LETTERTEXT_LENGTH)
                                 {
-                                    szText[++j] = ' ';
+                                    szText[++j] = L' ';
                                 }
-                                ++i;
+                                if (i + 1 < tempLen && szTempText[i + 1] == L'\n')
+                                {
+                                    ++i;
+                                }
                             }
                             else
                             {
@@ -4038,6 +4074,10 @@ void ReceiveChatRoomUserStateChange(DWORD dwWindowUIID, const BYTE* ReceiveBuffe
 
 void ReceiveChatRoomUserList(DWORD dwWindowUIID, const BYTE* ReceiveBuffer)
 {
+    auto* pChatWindow = (CUIChatWindow*)g_pWindowMgr->GetWindow(dwWindowUIID);
+    if (pChatWindow == NULL)
+        return;
+
     auto    Header                        = (LPFS_CHAT_USERLIST_HEADER)ReceiveBuffer;
     int     iMoveOffset                   = sizeof(FS_CHAT_USERLIST_HEADER);
     wchar_t szName[MAX_USERNAME_SIZE + 1] = {0};
@@ -4046,7 +4086,7 @@ void ReceiveChatRoomUserList(DWORD dwWindowUIID, const BYTE* ReceiveBuffer)
         auto Data = (LPFS_CHAT_USERLIST_DATA)(ReceiveBuffer + iMoveOffset);
         CMultiLanguage::ConvertFromUtf8(szName, Data->Name, MAX_USERNAME_SIZE);
         szName[MAX_USERNAME_SIZE] = '\0';
-        ((CUIChatWindow*)g_pWindowMgr->GetWindow(dwWindowUIID))->AddChatPal(szName, Data->Index, 0);
+        pChatWindow->AddChatPal(szName, Data->Index, 0);
         iMoveOffset += sizeof(FS_CHAT_USERLIST_DATA);
     }
 }
@@ -4088,21 +4128,25 @@ void ReceiveChatRoomChatText(DWORD dwWindowUIID, const BYTE* ReceiveBuffer)
 
 void ReceiveChatRoomNoticeText(DWORD dwWindowUIID, const BYTE* ReceiveBuffer)
 {
-    auto Data     = (LPFS_CHAT_TEXT)ReceiveBuffer;
-    Data->Msg[99] = '\0';
-    if (Data->Msg[0] == '\0')
+    const auto* Data = reinterpret_cast<const FS_CHAT_TEXT*>(ReceiveBuffer);
+    char        rawMsg[sizeof(Data->Msg) + 1]{};
+    memcpy(rawMsg, Data->Msg, sizeof(Data->Msg) - 1);
+    if (rawMsg[0] == '\0')
     {
         return;
     }
 
-    wchar_t message[sizeof Data->Msg]{};
-    CMultiLanguage::ConvertFromUtf8(message, Data->Msg, sizeof Data->Msg);
-    g_pSystemLogBox->AddText(message, SEASON3B::TYPE_SYSTEM_MESSAGE);
+    wchar_t message[sizeof(Data->Msg)]{};
+    CMultiLanguage::ConvertFromUtf8(message, rawMsg, sizeof(message));
+    if (g_pSystemLogBox != nullptr)
+    {
+        g_pSystemLogBox->AddText(message, SEASON3B::TYPE_SYSTEM_MESSAGE);
+    }
 }
 
 void TranslateChattingProtocol(DWORD dwWindowUIID, const BYTE* ReceiveBuffer, int Size)
 {
-    if (Size < 4)
+    if (!ReceiveBuffer || Size < 4)
     {
         return;
     }
@@ -4124,6 +4168,8 @@ void TranslateChattingProtocol(DWORD dwWindowUIID, const BYTE* ReceiveBuffer, in
             ReceiveChatRoomConnectResult(dwWindowUIID, ReceiveBuffer);
             break;
         case 0x01:
+            if (Size < (int)sizeof(FS_CHAT_CHANGE_STATE))
+                break;
             ReceiveChatRoomUserStateChange(dwWindowUIID, ReceiveBuffer);
             break;
         case 0x02: {
@@ -4138,9 +4184,15 @@ void TranslateChattingProtocol(DWORD dwWindowUIID, const BYTE* ReceiveBuffer, in
         }
             ReceiveChatRoomUserList(dwWindowUIID, ReceiveBuffer);
             break;
-        case 0x04:
+        case 0x04: {
+            if (Size < (int)offsetof(FS_CHAT_TEXT, Msg))
+                break;
+            const auto* ct = reinterpret_cast<const FS_CHAT_TEXT*>(ReceiveBuffer);
+            if ((int)offsetof(FS_CHAT_TEXT, Msg) + (int)ct->MsgSize > Size || ct->MsgSize > sizeof(ct->Msg))
+                break;
             ReceiveChatRoomChatText(dwWindowUIID, ReceiveBuffer);
             break;
+        }
         case 0x0D:
             if (Size < (int)sizeof(FS_CHAT_TEXT))
                 break;  // #MG-13: reject short notice frame before writing Msg[99]
@@ -4286,20 +4338,24 @@ BOOL CUIChatRoomListTabWindow::HandleMessage()
     {
         case UI_MESSAGE_SELECTED:
             break;
-        case UI_MESSAGE_LISTDBLCLICK:
-            if (g_pWindowMgr->GetWindow(GetCurrentSelectedWindow())->GetState() == UISTATE_HIDE ||
-                g_pWindowMgr->GetTopNotMainWindowUIID() != GetCurrentSelectedWindow())
+        case UI_MESSAGE_LISTDBLCLICK: {
+            DWORD          dwSelWnd = GetCurrentSelectedWindow();
+            CUIBaseWindow* pSelWnd  = (dwSelWnd != 0) ? g_pWindowMgr->GetWindow(dwSelWnd) : nullptr;
+            if (pSelWnd == nullptr)
+                break;
+            if (pSelWnd->GetState() == UISTATE_HIDE || g_pWindowMgr->GetTopNotMainWindowUIID() != dwSelWnd)
             {
                 PlayBuffer(SOUND_CLICK01);
-                g_pWindowMgr->SendUIMessage(UI_MESSAGE_SELECT, GetCurrentSelectedWindow(), 0);
+                g_pWindowMgr->SendUIMessage(UI_MESSAGE_SELECT, dwSelWnd, 0);
                 g_pWindowMgr->HideAllWindowClear();
                 MouseLButton = false;
             }
             else
             {
-                g_pWindowMgr->SendUIMessage(UI_MESSAGE_HIDE, GetCurrentSelectedWindow(), 0);
+                g_pWindowMgr->SendUIMessage(UI_MESSAGE_HIDE, dwSelWnd, 0);
             }
             break;
+        }
         case UI_MESSAGE_BTNLCLICK: {
             if (g_dwTopWindow != 0)
                 break;
@@ -5849,30 +5905,37 @@ void CUIFriendMenu::RenderWindowList()
             g_pRenderText->SetTextColor(230, 220, 200, bAlpha);
         }
 
-        wchar_t szText[64];
+        wchar_t szText[64] = {0};
         g_pRenderText->SetBgColor(0);
-        const wchar_t* pszChatTitleOriginal = g_pWindowMgr->GetWindow(*m_WindowListIter)->GetTitle();
+        CUIBaseWindow* pChatBase            = g_pWindowMgr->GetWindow(*m_WindowListIter);
+        const wchar_t* pszChatTitleOriginal = (pChatBase != nullptr) ? pChatBase->GetTitle() : L"";
 
         wchar_t temp[MAX_TEXT_LENGTH + 1] = {0};
-        wcsncpy(temp, pszChatTitleOriginal, MAX_TEXT_LENGTH + 1);
-        wchar_t* context      = nullptr;
-        wchar_t* pszChatTitle = wcstok_s(temp, L",", &context);
+        wcsncpy_s(temp, _countof(temp), pszChatTitleOriginal ? pszChatTitleOriginal : L"", _TRUNCATE);
+        wchar_t*     context      = nullptr;
+        wchar_t*     pszChatTitle = wcstok_s(temp, L",", &context);
+        const size_t talkingLen   = wcslen(I18N::Game::Talking);
+        const size_t offlineLen   = wcslen(I18N::Game::Offline);
 
-        if (wcslen(pszChatTitle) > wcslen(I18N::Game::Talking))
+        if (pszChatTitle != nullptr && wcslen(pszChatTitle) > talkingLen)
         {
-            if (wcsncmp(pszChatTitle, I18N::Game::Offline, wcslen(I18N::Game::Offline)) == 0)
+            if (wcsncmp(pszChatTitle, I18N::Game::Offline, offlineLen) == 0 &&
+                wcslen(pszChatTitle) > offlineLen + talkingLen)
             {
-                CutText3(pszChatTitle + wcslen(I18N::Game::Offline) + wcslen(I18N::Game::Talking), szText, m_iWidth - 8,
-                         1, 64);
+                CutText3(pszChatTitle + offlineLen + talkingLen, szText, m_iWidth - 8, 1, 64);
+            }
+            else if (wcsncmp(pszChatTitle, I18N::Game::Offline, offlineLen) != 0)
+            {
+                CutText3(pszChatTitle + talkingLen, szText, m_iWidth - 8, 1, 64);
             }
             else
             {
-                CutText3(pszChatTitle + wcslen(I18N::Game::Talking), szText, m_iWidth - 8, 1, 64);
+                wcsncpy_s(szText, _countof(szText), I18N::Game::Offline, _TRUNCATE);
             }
         }
         else
         {
-            wcscpy(szText, I18N::Game::Offline);
+            wcsncpy_s(szText, _countof(szText), I18N::Game::Offline, _TRUNCATE);
         }
         g_pRenderText->RenderText(m_iPos_x + 2, m_iFriendMenuPos_y - (m_fLineHeight + 4) * i + 3, szText);
 
@@ -5992,10 +6055,16 @@ void CUIFriendMenu::SetNewMailAlert(BOOL bAlert)
 
 DWORD CUIFriendMenu::CheckChatRoomDuplication(const wchar_t* pszTargetName)
 {
+    if (pszTargetName == nullptr)
+        return 0;
+
     for (m_WindowListIter = m_WindowList.begin(); m_WindowListIter != m_WindowList.end(); ++m_WindowListIter)
     {
-        int            iResult;
-        const wchar_t* pName = ((CUIChatWindow*)g_pWindowMgr->GetWindow(*m_WindowListIter))->GetChatFriend(&iResult);
+        auto* pChatWindow = (CUIChatWindow*)g_pWindowMgr->GetWindow(*m_WindowListIter);
+        if (pChatWindow == nullptr)
+            continue;
+        int            iResult = 0;
+        const wchar_t* pName   = pChatWindow->GetChatFriend(&iResult);
         if (iResult == 2 || iResult == 0)
         {
             continue;

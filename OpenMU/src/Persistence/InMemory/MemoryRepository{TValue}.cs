@@ -24,7 +24,16 @@ public class MemoryRepository<TValue> : IRepository<TValue>, IMemoryRepository
     /// <param name="obj">The item.</param>
     public void Add(Guid key, TValue obj)
     {
-        this._values.TryAdd(key, obj);
+        if (!this._values.TryAdd(key, obj))
+        {
+            if (ReferenceEquals(this._values[key], obj))
+            {
+                return;
+            }
+
+            throw new InvalidOperationException($"Duplicate ID {key}. Existing: {this._values[key]}, Wanted to add: {obj}");
+        }
+
         this._createdObjects.Add(key);
     }
 
@@ -56,18 +65,38 @@ public class MemoryRepository<TValue> : IRepository<TValue>, IMemoryRepository
     /// <inheritdoc/>
     public void OnSaveChanges()
     {
+        var pendingMigrations = new List<(Guid OldId, Guid NewId, TValue Obj)>();
+        var migratingOldIds = new HashSet<Guid>();
         foreach (var oldObjId in this._createdObjects)
         {
             if (this._values.TryGetValue(oldObjId, out var obj)
                 && obj.GetId() is var currentId
                 && currentId != oldObjId)
             {
-                this._values.Remove(oldObjId);
-                if (!this._values.TryAdd(currentId, obj))
-                {
-                    throw new InvalidOperationException($"Duplicate ID {currentId}. Existing: {this._values[currentId]}, Wanted to add: {obj}");
-                }
+                migratingOldIds.Add(oldObjId);
+                pendingMigrations.Add((oldObjId, currentId, obj));
             }
+        }
+
+        var reservedNewIds = new HashSet<Guid>();
+        foreach (var (_, currentId, obj) in pendingMigrations)
+        {
+            if (!reservedNewIds.Add(currentId)
+                || (this._values.TryGetValue(currentId, out var existing) && !migratingOldIds.Contains(currentId) && !ReferenceEquals(existing, obj)))
+            {
+                this._values.TryGetValue(currentId, out var conflict);
+                throw new InvalidOperationException($"Duplicate ID {currentId}. Existing: {conflict}, Wanted to add: {obj}");
+            }
+        }
+
+        foreach (var (oldObjId, _, _) in pendingMigrations)
+        {
+            this._values.Remove(oldObjId);
+        }
+
+        foreach (var (_, currentId, obj) in pendingMigrations)
+        {
+            this._values[currentId] = obj;
         }
 
         this._createdObjects.Clear();

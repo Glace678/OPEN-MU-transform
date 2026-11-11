@@ -24,10 +24,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class BootstrapActivity extends Activity {
     private static final ExecutorService GAME_DATA_WORKER = Executors.newSingleThreadExecutor();
+    private static final Handler SHARED_MAIN = new Handler(Looper.getMainLooper());
 
     // Survives Activity recreation (rotation, theme change): without it every
     // recreated instance queues another 2 GB extraction into the same worker.
     private static final AtomicBoolean EXTRACTION_RUNNING = new AtomicBoolean(false);
+    private static volatile BootstrapActivity activeInstance;
+    private static volatile String lastExtractionError;
 
     private final Handler main = new Handler(Looper.getMainLooper());
     private boolean preparing;
@@ -41,6 +44,7 @@ public final class BootstrapActivity extends Activity {
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
+        activeInstance = this;
         getWindow().setStatusBarColor(Color.rgb(8, 9, 12));
         getWindow().setNavigationBarColor(Color.rgb(8, 9, 12));
         setContentView(createContent());
@@ -171,11 +175,6 @@ public final class BootstrapActivity extends Activity {
         if (preparing) {
             return;
         }
-        if (!EXTRACTION_RUNNING.compareAndSet(false, true)) {
-            // Another (recreated) instance is already extracting on the shared
-            // worker; its result updates this instance through isGameDataReady.
-            return;
-        }
         preparing = true;
         play.setEnabled(false);
         retry.setVisibility(View.GONE);
@@ -183,50 +182,75 @@ public final class BootstrapActivity extends Activity {
         progress.setProgress(0);
         status.setText(R.string.preparing_title);
         detail.setText(R.string.preparing_detail);
+        if (!EXTRACTION_RUNNING.compareAndSet(false, true)) {
+            // Another (recreated) instance is already extracting on the shared
+            // worker; activeInstance will receive live progress and completion,
+            // and we re-check once in case the worker just finished.
+            if (!EXTRACTION_RUNNING.get()) {
+                preparing = false;
+                if (MobilePreferences.isGameDataReady(this)) {
+                    showReady();
+                } else {
+                    showFailure(lastExtractionError);
+                }
+            }
+            return;
+        }
+        lastExtractionError = null;
+        final android.content.Context appContext = getApplicationContext();
         GAME_DATA_WORKER.execute(() -> {
             boolean[] succeeded = { false };
             String[] errorMessage = { null };
             try {
-                MobilePreferences.extractGameData(getApplicationContext(), (percent, file) -> postToUi(() -> {
-                    progress.setProgress(percent);
+                MobilePreferences.extractGameData(appContext, (percent, file) -> postToActiveUi(activity -> {
+                    activity.progress.setProgress(percent);
                     if (!file.isEmpty()) {
-                        detail.setText(file);
+                        activity.detail.setText(file);
                     }
                 }));
                 succeeded[0] = true;
             } catch (IOException error) {
                 errorMessage[0] = error.getMessage();
-            } catch (Exception error) {
-                // A non-IOException failure (runtime error, OOM from the 2 GB zip, ...)
+            } catch (Throwable error) {
+                if (error instanceof ThreadDeath) {
+                    throw (ThreadDeath) error;
+                }
+                // Any non-IOException failure (runtime error, OOM from the 2 GB zip, ...)
                 // must not kill the worker silently: record it so the UI shows the
                 // failure and a retry, instead of a stuck spinner. The finally below
                 // always releases the shared lock.
                 errorMessage[0] = error.getMessage();
             } finally {
+                lastExtractionError = succeeded[0] ? null : errorMessage[0];
                 // Release the shared worker lock unconditionally. If this Activity is
-                // destroyed while extracting, the UI runnable below is skipped, so
-                // releasing there would leave the lock stuck and a recreated Activity
-                // could never retry.
+                // destroyed while extracting, the UI runnable below updates the newly
+                // recreated activeInstance if present, and releasing here guarantees a
+                // recreated Activity can always retry.
                 EXTRACTION_RUNNING.set(false);
             }
 
             final boolean ok = succeeded[0];
             final String message = errorMessage[0];
-            postToUi(() -> {
-                preparing = false;
+            postToActiveUi(activity -> {
+                activity.preparing = false;
                 if (ok) {
-                    showReady();
+                    activity.showReady();
                 } else {
-                    showFailure(message);
+                    activity.showFailure(message);
                 }
             });
         });
     }
 
-    private void postToUi(Runnable action) {
-        main.post(() -> {
-            if (!destroyed && !isFinishing() && !isDestroyed()) {
-                action.run();
+    private interface UiAction {
+        void run(BootstrapActivity activity);
+    }
+
+    private static void postToActiveUi(UiAction action) {
+        SHARED_MAIN.post(() -> {
+            BootstrapActivity current = activeInstance;
+            if (current != null && !current.destroyed && !current.isFinishing() && !current.isDestroyed()) {
+                action.run(current);
             }
         });
     }
@@ -281,14 +305,24 @@ public final class BootstrapActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (play != null && MobilePreferences.isGameDataReady(this)) {
-            showReady();
+        activeInstance = this;
+        if (play != null) {
+            if (MobilePreferences.isGameDataReady(this)) {
+                preparing = false;
+                showReady();
+            } else if (!EXTRACTION_RUNNING.get() && preparing) {
+                preparing = false;
+                showFailure(lastExtractionError);
+            }
         }
     }
 
     @Override
     protected void onDestroy() {
         destroyed = true;
+        if (activeInstance == this) {
+            activeInstance = null;
+        }
         main.removeCallbacksAndMessages(null);
         super.onDestroy();
     }

@@ -79,25 +79,25 @@ void CNewUIRegistrationLuckyCoin::RenderTexts()
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->SetTextColor(255, 255, 255, 255);
     g_pRenderText->SetFont(g_hFontBold);
-    mu_swprintf(szText, I18N::Game::LuckyCoinRegistration);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::LuckyCoinRegistration);
     g_pRenderText->RenderText(_x, _y, szText, LUCKYCOIN_REG_WIDTH, 0, RT3_SORT_CENTER);
 
     g_pRenderText->SetFont(g_hFont);
-    mu_swprintf(szText, I18N::Game::Register255LuckyCoinsDuringTheEvent);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::Register255LuckyCoinsDuringTheEvent);
     g_pRenderText->RenderText(_x, _y + 40, szText, LUCKYCOIN_REG_WIDTH, 0, RT3_SORT_CENTER);
-    mu_swprintf(szText, I18N::Game::ForAChanceToGet);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::ForAChanceToGet);
     g_pRenderText->RenderText(_x, _y + 60, szText, LUCKYCOIN_REG_WIDTH, 0, RT3_SORT_CENTER);
-    mu_swprintf(szText, I18N::Game::TheAbsoluteWeapon);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::TheAbsoluteWeapon);
     g_pRenderText->RenderText(_x, _y + 80, szText, LUCKYCOIN_REG_WIDTH, 0, RT3_SORT_CENTER);
-    mu_swprintf(szText, I18N::Game::PleaseCheckTheWebPageForTheEventDetails);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::PleaseCheckTheWebPageForTheEventDetails);
     g_pRenderText->RenderText(_x, _y + 100, szText, LUCKYCOIN_REG_WIDTH, 0, RT3_SORT_CENTER);
 
     g_pRenderText->SetFont(g_hFontBold);
 
-    mu_swprintf(szText, I18N::Game::Registered);
+    swprintf_s(szText, _countof(szText), L"%ls", I18N::Game::Registered);
     g_pRenderText->RenderText(_x, _y + 120, szText, LUCKYCOIN_REG_WIDTH, 0, RT3_SORT_CENTER);
 
-    mu_swprintf(szText, I18N::Game::XDCoins, GetRegistCount());
+    swprintf_s(szText, _countof(szText), I18N::Game::XDCoins, GetRegistCount());
     g_pRenderText->RenderText(_x + 24, _y + 150, szText, LUCKYCOIN_REG_WIDTH, 0, RT3_SORT_CENTER);
 }
 
@@ -115,6 +115,9 @@ static float s_PreLuckyCoinView[16];
 
 void CNewUIRegistrationLuckyCoin::RenderLuckyCoin()
 {
+    if (m_CoinItem == NULL)
+        return;
+
     float x, y, width, height;
 
     x = GetPos().x - 20;
@@ -275,7 +278,8 @@ bool CNewUIRegistrationLuckyCoin::UpdateKeyEvent()
 
 void CNewUIRegistrationLuckyCoin::OpeningProcess()
 {
-    g_pMyInventory->GetInventoryCtrl()->LockInventory();
+    if (g_pMyInventory && g_pMyInventory->GetInventoryCtrl())
+        g_pMyInventory->GetInventoryCtrl()->LockInventory();
 
     m_RegistCount = 0;
 
@@ -283,6 +287,7 @@ void CNewUIRegistrationLuckyCoin::OpeningProcess()
 
     SocketClient->ToGameServer()->SendLuckyCoinCountRequest();
 
+    SafeDelete(m_CoinItem);
     m_CoinItem = new ITEM;
     if (m_CoinItem == NULL)
         return;
@@ -297,7 +302,8 @@ void CNewUIRegistrationLuckyCoin::OpeningProcess()
 void CNewUIRegistrationLuckyCoin::ClosingProcess()
 {
     SafeDelete(m_CoinItem);
-    g_pMyInventory->GetInventoryCtrl()->UnlockInventory();
+    if (g_pMyInventory && g_pMyInventory->GetInventoryCtrl())
+        g_pMyInventory->GetInventoryCtrl()->UnlockInventory();
     SocketClient->ToGameServer()->SendCraftingDialogCloseRequest();
 }
 
@@ -323,10 +329,11 @@ void CNewUIRegistrationLuckyCoin::UnloadImages()
 
 void CNewUIRegistrationLuckyCoin::Release()
 {
-    UnloadImages();
+    SafeDelete(m_CoinItem);
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }

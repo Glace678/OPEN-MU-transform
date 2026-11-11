@@ -338,20 +338,25 @@ public sealed class PacketAnalyzer : IDisposable
     /// </returns>
     private string ExtractFieldValue(Span<byte> data, Field field, PacketDefinition packet, PacketDefinitions definitions, int clientVersionValue)
     {
+        if (field.Index < 0 || field.Index >= data.Length)
+        {
+            return string.Empty;
+        }
+
         var fieldSize = field.GetFieldSizeInBytes();
-        if (field.Type == FieldType.String && field.Index < data.Length)
+        if (field.Type == FieldType.String)
         {
             return data.ExtractString(field.Index, fieldSize ?? int.MaxValue, Encoding.UTF8);
         }
 
-        if (field.Type == FieldType.Binary && field.Index < data.Length)
+        if (field.Type == FieldType.Binary)
         {
             return fieldSize.HasValue
-                ? data.Slice(field.Index, fieldSize.Value).AsString()
+                ? data.Slice(field.Index, Math.Min(fieldSize.Value, data.Length - field.Index)).AsString()
                 : data[field.Index..].AsString();
         }
 
-        if (data.Length < field.Index + fieldSize)
+        if (fieldSize is { } requiredSize && data.Length < field.Index + requiredSize)
         {
             return string.Empty;
         }
@@ -378,6 +383,11 @@ public sealed class PacketAnalyzer : IDisposable
 
     private string ExtractStructureArrayValues(Span<byte> data, Field arrayField, PacketDefinition packet, PacketDefinitions definitions, int clientVersionValue)
     {
+        if (arrayField.Index < 0 || arrayField.Index >= data.Length)
+        {
+            return string.Empty;
+        }
+
         var elementType = packet.Structures?.FirstOrDefault(s => s.Name == arrayField.TypeName)
                    ?? definitions.Structures?.FirstOrDefault(s => s.Name == arrayField.TypeName)
                    ?? this._commonDefinitions?.Structures?.FirstOrDefault(s => s.Name == arrayField.TypeName);
@@ -388,8 +398,9 @@ public sealed class PacketAnalyzer : IDisposable
 
         var countField = packet.Fields?.FirstOrDefault(f => f.Name == arrayField.ItemCountField)
                          ?? packet.Structures?.SelectMany(s => s.Fields ?? Enumerable.Empty<Field>()).FirstOrDefault(f => f.Name == arrayField.ItemCountField);
-        int count = countField is null ? 0 : int.Parse(this.ExtractFieldValue(data, countField, packet, definitions, clientVersionValue), CultureInfo.InvariantCulture);
-        if (count == 0)
+        if (countField is null
+            || !int.TryParse(this.ExtractFieldValue(data, countField, packet, definitions, clientVersionValue), NumberStyles.Integer, CultureInfo.InvariantCulture, out var count)
+            || count <= 0)
         {
             return string.Empty;
         }
@@ -402,7 +413,7 @@ public sealed class PacketAnalyzer : IDisposable
         for (int i = 0; i < count; i++)
         {
             var currentLength = typeLength ?? this.DetermineDynamicStructLength(restData, elementType, packet, clientVersionValue) ?? fixedLengthByCount;
-            if (currentLength is null)
+            if (currentLength is not > 0 || currentLength.Value > restData.Length)
             {
                 break;
             }
@@ -473,9 +484,14 @@ public sealed class PacketAnalyzer : IDisposable
         if (packetType.Structures is not null
             && type.Fields.FirstOrDefault(f => f.Type == FieldType.StructureArray) is { } nestedStructField)
         {
-            var countField = type.Fields.First(f => f.Name == nestedStructField.ItemCountField);
+            var countField = type.Fields.FirstOrDefault(f => f.Name == nestedStructField.ItemCountField);
+            var nestedStructType = packetType.Structures.FirstOrDefault(s => s.Name == nestedStructField.TypeName);
+            if (countField is null || nestedStructType is null || countField.Index < 0 || countField.Index >= restData.Length)
+            {
+                return null;
+            }
+
             var count = restData[countField.Index];
-            var nestedStructType = packetType.Structures.First(s => s.Name == nestedStructField.TypeName);
             return nestedStructField.Index + (count * nestedStructType.Length);
         }
 
@@ -483,7 +499,8 @@ public sealed class PacketAnalyzer : IDisposable
             && type.Fields.FirstOrDefault(f => f.Type == FieldType.Binary) is { } binaryField
             && binaryField.Name?.EndsWith("ItemData") is true)
         {
-            return binaryField.Index + this.DetermineItemSize(restData, binaryField);
+            var itemSize = this.DetermineItemSize(restData, binaryField);
+            return itemSize is { } validItemSize ? binaryField.Index + validItemSize : null;
         }
 
         if (type.Fields.MaxBy(f => f.Index) is { Type: not (FieldType.Binary or FieldType.StructureArray) } lastField)
@@ -494,8 +511,13 @@ public sealed class PacketAnalyzer : IDisposable
         return null;
     }
 
-    private int DetermineItemSize(Span<byte> restData, Field binaryField)
+    private int? DetermineItemSize(Span<byte> restData, Field binaryField)
     {
+        if (binaryField.Index < 0 || restData.Length < binaryField.Index + 5)
+        {
+            return null;
+        }
+
         var itemData = restData.Slice(binaryField.Index);
         var size = 5;
         var options = itemData[4];
@@ -527,12 +549,16 @@ public sealed class PacketAnalyzer : IDisposable
         // Sockets
         if ((options & 0x80) == 0x80)
         {
-            size++;
+            if (size >= itemData.Length)
+            {
+                return null;
+            }
+
             var socketCount = itemData[size] & 0xF;
-            size += socketCount;
+            size += 1 + socketCount;
         }
 
-        return size;
+        return size <= itemData.Length ? size : null;
     }
 
     private int FieldSize(FieldType fieldType)

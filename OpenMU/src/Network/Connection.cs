@@ -166,18 +166,52 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
         this._disconnected = true;
         ConnectionCounter.Add(-1);
         this._logger.LogDebug("Disconnecting...");
-        if (this._duplexPipe is not null)
+        try
         {
-            await this.Source.CompleteAsync().ConfigureAwait(false);
-            await this.Output.CompleteAsync().ConfigureAwait(false);
-            (this._duplexPipe as IDisposable)?.Dispose();
-            this._duplexPipe = null;
+            if (this._duplexPipe is { } duplexPipe)
+            {
+                try
+                {
+                    await this.Source.CompleteAsync().ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    this._logger.LogDebug(ex, "Error while completing source pipe during disconnect.");
+                }
+
+                try
+                {
+                    if (this._outputWriter is { } outputWriter)
+                    {
+                        await outputWriter.CompleteAsync().ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await (this._encryptionPipe?.Writer ?? duplexPipe.Output).CompleteAsync().ConfigureAwait(false);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this._logger.LogDebug(ex, "Error while completing output pipe during disconnect.");
+                }
+
+                try
+                {
+                    (duplexPipe as IDisposable)?.Dispose();
+                }
+                finally
+                {
+                    this._duplexPipe = null;
+                }
+            }
         }
+        finally
+        {
+            this._logger.LogDebug("Disconnected");
+            this._disconnected = true;
 
-        this._logger.LogDebug("Disconnected");
-        this._disconnected = true;
-
-        await this.Disconnected.SafeInvokeAsync().ConfigureAwait(false);
+            await this.Disconnected.SafeInvokeAsync().ConfigureAwait(false);
+        }
     }
 
     /// <inheritdoc />
@@ -259,7 +293,22 @@ public sealed class Connection : PacketPipeReaderBase, IConnection
             }
         }
 
-        await this.Output.CompleteAsync(exception).ConfigureAwait(false);
+        try
+        {
+            if (this._outputWriter is { } outputWriter)
+            {
+                await outputWriter.CompleteAsync(exception).ConfigureAwait(false);
+            }
+            else if (this._duplexPipe is { } duplexPipe)
+            {
+                await (this._encryptionPipe?.Writer ?? duplexPipe.Output).CompleteAsync(exception).ConfigureAwait(false);
+            }
+        }
+        catch (Exception completeEx)
+        {
+            this._logger.LogDebug(completeEx, "Error while completing output pipe on read completion.");
+        }
+
         await this.DisconnectAsync().ConfigureAwait(false);
     }
 

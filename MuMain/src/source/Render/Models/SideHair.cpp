@@ -42,13 +42,15 @@ bool HasVisibleHair(const BMD* model, const OBJECT* object)
 void CSideHair::Create(vec3_t ppVertexTransformed[MAX_MESH][MAX_VERTICES], BMD* b, OBJECT* o, bool SkipTga)
 {
     Destroy();
-    if (!HasVisibleHair(b, o))
+    if (!HasVisibleHair(b, o) || b->IndexTexture == nullptr || b->Meshs == nullptr)
         return;
-    const bool hasAlpha = Bitmaps[b->IndexTexture[HairMesh]].Components == 4;
+    const BITMAP_t* pTexture = Bitmaps.GetTexture(b->IndexTexture[HairMesh]);
+    const bool      hasAlpha = (pTexture != nullptr && pTexture->Components == 4);
     if (SkipTga && hasAlpha)
         return;
 
-    VectorSubtract(Hero->Object.Position, g_Camera.Position, m_vLight);
+    const vec3_t& refPos = (Hero != nullptr) ? Hero->Object.Position : o->Position;
+    VectorSubtract(refPos, g_Camera.Position, m_vLight);
     VectorNormalize(m_vLight);
     const auto& mesh = b->Meshs[HairMesh];
     if (mesh.NumTriangles <= 0)

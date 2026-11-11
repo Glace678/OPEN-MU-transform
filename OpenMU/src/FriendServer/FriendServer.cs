@@ -9,6 +9,7 @@ using System.Collections.Immutable;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Persistence;
+using Nito.AsyncEx;
 
 /// <summary>
 /// The friend server which manages the friend list with chat and letter system.
@@ -19,6 +20,7 @@ public class FriendServer : IFriendServer
     private readonly ILogger<FriendServer> _logger;
     private readonly IFriendNotifier _friendNotifier;
     private readonly IChatServer _chatServer;
+    private readonly AsyncLock[] _playerStateLocks = Enumerable.Range(0, 64).Select(_ => new AsyncLock()).ToArray();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FriendServer" /> class.
@@ -62,6 +64,7 @@ public class FriendServer : IFriendServer
     {
         var saveSuccess = true;
         bool friendIsNew;
+        bool shouldNotify;
         using (var context = this._persistenceContextProvider.CreateNewFriendServerContext())
         {
             var friend = await context.GetFriendByNamesAsync(playerName, friendName).ConfigureAwait(false);
@@ -73,9 +76,11 @@ public class FriendServer : IFriendServer
                 friend.RequestOpen = true;
                 saveSuccess = await context.SaveChangesAsync().ConfigureAwait(false);
             }
+
+            shouldNotify = friendIsNew || friend?.Accepted == false;
         }
 
-        if (saveSuccess && this.OnlineFriends.TryGetValue(friendName, out var onlineFriend))
+        if (saveSuccess && shouldNotify && this.OnlineFriends.TryGetValue(friendName, out var onlineFriend))
         {
             // Friend is online, so we directly send him a request.
             await this._friendNotifier.FriendRequestAsync(playerName, friendName, onlineFriend.ServerId).ConfigureAwait(false);
@@ -164,7 +169,15 @@ public class FriendServer : IFriendServer
         //       Instead of calling the chat server directly here, we could publish a request
         //       to create the chat room to an pub/sub-system. An available chat server could then
         //       process the request and notify the corresponding game servers.
-        var roomId = await this._chatServer.CreateChatRoomAsync().ConfigureAwait(false);
+        ushort roomId;
+        try
+        {
+            roomId = await this._chatServer.CreateChatRoomAsync().ConfigureAwait(false);
+        }
+        catch
+        {
+            return;
+        }
         if (await this._chatServer.RegisterClientAsync(roomId, playerName).ConfigureAwait(false) is { } authenticationInfoPlayer)
         {
             await this._friendNotifier.ChatRoomCreatedAsync(player.ServerId, authenticationInfoPlayer, friendName).ConfigureAwait(false);
@@ -213,6 +226,7 @@ public class FriendServer : IFriendServer
     /// <inheritdoc/>
     public async ValueTask PlayerEnteredGameAsync(byte serverId, Guid characterId, string characterName)
     {
+        using var stateLock = await this.GetPlayerStateLock(characterName).LockAsync().ConfigureAwait(false);
         using var context = this._persistenceContextProvider.CreateNewFriendServerContext();
         var friends = await context.GetFriendNamesAsync(characterId).ConfigureAwait(false);
         var requesters = await context.GetOpenFriendRequesterNamesAsync(characterId).ConfigureAwait(false);
@@ -243,13 +257,21 @@ public class FriendServer : IFriendServer
     /// <inheritdoc/>
     public async ValueTask PlayerLeftGameAsync(Guid characterId, string characterName)
     {
+        using var stateLock = await this.GetPlayerStateLock(characterName).LockAsync().ConfigureAwait(false);
         await this.SetOnlineStateAsync(characterId, characterName, OfflineServerId, null).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
     public async ValueTask SetPlayerVisibilityStateAsync(byte serverId, Guid characterId, string characterName, bool isVisible)
     {
+        using var stateLock = await this.GetPlayerStateLock(characterName).LockAsync().ConfigureAwait(false);
         await this.SetOnlineStateAsync(characterId, characterName, isVisible ? serverId : InvisibleServerId, null).ConfigureAwait(false);
+    }
+
+    private AsyncLock GetPlayerStateLock(string characterName)
+    {
+        var index = (StringComparer.Ordinal.GetHashCode(characterName) & 0x7FFFFFFF) % this._playerStateLocks.Length;
+        return this._playerStateLocks[index];
     }
 
     private async ValueTask SetOnlineStateAsync(Guid characterId, string characterName, int serverId, IFriendServerContext? usedContext)

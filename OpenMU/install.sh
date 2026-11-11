@@ -66,13 +66,17 @@ ensure_docker() {
   # shellcheck disable=SC1091
   . /etc/os-release
   case "${ID:-}" in
-    ubuntu|debian)
+    ubuntu|debian|linuxmint|pop)
       export DEBIAN_FRONTEND=noninteractive
       apt-get update -y
       apt-get install -y ca-certificates curl gnupg
       install -m 0755 -d /etc/apt/keyrings
-      curl -fsSL "https://download.docker.com/linux/${ID}/gpg" \
-        | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      REPO_DISTRO="${ID}"
+      if [[ "${ID}" == "linuxmint" || "${ID}" == "pop" ]]; then
+        REPO_DISTRO="ubuntu"
+      fi
+      curl -fsSL "https://download.docker.com/linux/${REPO_DISTRO}/gpg" \
+        | gpg --batch --yes --dearmor -o /etc/apt/keyrings/docker.gpg
       chmod a+r /etc/apt/keyrings/docker.gpg
 
       # Verify the key fingerprint before trusting the repository.
@@ -83,18 +87,31 @@ ensure_docker() {
         || fail "Docker GPG key fingerprint mismatch: $actual_fingerprint"
       # shellcheck disable=SC1091
       . /etc/os-release
+      CODENAME="${UBUNTU_CODENAME:-${VERSION_CODENAME:-}}"
+      if [[ "${REPO_DISTRO}" != "ubuntu" ]]; then
+        CODENAME="${VERSION_CODENAME:-}"
+      fi
+      [[ -n "$CODENAME" ]] || fail "Could not determine OS codename from /etc/os-release."
       echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-https://download.docker.com/linux/${ID} ${VERSION_CODENAME} stable" \
+https://download.docker.com/linux/${REPO_DISTRO} ${CODENAME} stable" \
         > /etc/apt/sources.list.d/docker.list
       apt-get update -y
       apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
       ;;
     centos|rhel|fedora|rocky|almalinux)
       if have dnf; then PM=dnf; else PM=yum; fi
-      $PM install -y yum-utils
-      $PM config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo || true
+      REPO_OS="centos"
+      if [[ "${ID}" == "fedora" ]]; then
+        REPO_OS="fedora"
+      fi
+      if [[ "$PM" == "dnf" ]]; then
+        $PM install -y dnf-plugins-core
+      else
+        $PM install -y yum-utils
+      fi
+      $PM config-manager --add-repo "https://download.docker.com/linux/${REPO_OS}/docker-ce.repo"
       $PM install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-      systemctl enable --now docker || true
+      systemctl enable --now docker
       ;;
     *)
       fail "Unsupported distro '${ID:-}'. Install Docker Engine + Compose plugin manually, then re-run."

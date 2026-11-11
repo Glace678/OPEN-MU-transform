@@ -231,6 +231,29 @@ int BuildExtFocusRects(int page, const POINT& pos, ExtFocusRect* rects)
     add(EXTFOCUS_CLOSE, 20, 388, 36, 29);
     return count;
 }
+
+template <typename MapT>
+SEASON3B::CNewUICheckBox* FindCheckBoxCtrl(MapT& list, int id)
+{
+    auto it = list.find(id);
+    return (it != list.end()) ? it->second.box : nullptr;
+}
+
+template <typename MapT>
+void SetCheckBoxCtrlState(MapT& list, int id, bool state)
+{
+    if (auto* box = FindCheckBoxCtrl(list, id))
+    {
+        box->RegisterBoxState(state);
+    }
+}
+
+template <typename MapT>
+bool GetCheckBoxCtrlState(MapT& list, int id)
+{
+    auto* box = FindCheckBoxCtrl(list, id);
+    return box ? (box->GetBoxState() == true) : false;
+}
 }
 
 using namespace SEASON3B;
@@ -240,10 +263,13 @@ ConfigData _TempConfig;
 CNewUIMuHelper::CNewUIMuHelper()
 {
     m_pNewUIMng = NULL;
-    m_Pos.x = m_Pos.y = 0;
+    m_Pos.x = m_Pos.y       = 0;
+    m_SubPos.x = m_SubPos.y = 0;
     m_ButtonList.clear();
 
-    m_iCurrentOpenTab = 0;
+    m_iCurrentOpenTab    = 0;
+    m_iCurrentOpenSubWin = 0;
+    m_bSubWinOpen        = false;
 
     m_iSelectedSkillSlot = 0;
     m_aiSelectedSkills.fill(-1);
@@ -283,10 +309,21 @@ bool CNewUIMuHelper::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIMuHelper::Release()
 {
-    UnloadImages();
+    for (auto& kv : m_ButtonList)
+    {
+        SafeDelete(kv.second.btn);
+    }
+    m_ButtonList.clear();
+
+    for (auto& kv : m_CheckBoxList)
+    {
+        SafeDelete(kv.second.box);
+    }
+    m_CheckBoxList.clear();
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -689,37 +726,44 @@ bool CNewUIMuHelper::UpdateMouseEvent()
         }
         else if (iButtonId == BUTTON_ID_SKILL2_CONFIG)
         {
-            m_CheckBoxList[CHECKBOX_ID_SKILL2_DELAY].box->RegisterBoxState(false);
-            m_CheckBoxList[CHECKBOX_ID_SKILL2_CONDITION].box->RegisterBoxState(true);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL2_DELAY, false);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL2_CONDITION, true);
             ApplyConfigFromCheckbox(CHECKBOX_ID_SKILL2_CONDITION, true);
-            g_pNewUIMuHelperExt->Toggle(SUB_PAGE_SKILL2_CONFIG);
+            if (g_pNewUIMuHelperExt)
+                g_pNewUIMuHelperExt->Toggle(SUB_PAGE_SKILL2_CONFIG);
         }
         else if (iButtonId == BUTTON_ID_SKILL3_CONFIG)
         {
-            m_CheckBoxList[CHECKBOX_ID_SKILL3_DELAY].box->RegisterBoxState(false);
-            m_CheckBoxList[CHECKBOX_ID_SKILL3_CONDITION].box->RegisterBoxState(true);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL3_DELAY, false);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL3_CONDITION, true);
             ApplyConfigFromCheckbox(CHECKBOX_ID_SKILL3_CONDITION, true);
-            g_pNewUIMuHelperExt->Toggle(SUB_PAGE_SKILL3_CONFIG);
+            if (g_pNewUIMuHelperExt)
+                g_pNewUIMuHelperExt->Toggle(SUB_PAGE_SKILL3_CONFIG);
         }
         else if (iButtonId == BUTTON_ID_POTION_CONFIG_ELF)
         {
-            g_pNewUIMuHelperExt->Toggle(SUB_PAGE_POTION_CONFIG_ELF);
+            if (g_pNewUIMuHelperExt)
+                g_pNewUIMuHelperExt->Toggle(SUB_PAGE_POTION_CONFIG_ELF);
         }
         else if (iButtonId == BUTTON_ID_POTION_CONFIG_SUMMY)
         {
-            g_pNewUIMuHelperExt->Toggle(SUB_PAGE_POTION_CONFIG_SUMMY);
+            if (g_pNewUIMuHelperExt)
+                g_pNewUIMuHelperExt->Toggle(SUB_PAGE_POTION_CONFIG_SUMMY);
         }
         else if (iButtonId == BUTTON_ID_POTION_CONFIG)
         {
-            g_pNewUIMuHelperExt->Toggle(SUB_PAGE_POTION_CONFIG);
+            if (g_pNewUIMuHelperExt)
+                g_pNewUIMuHelperExt->Toggle(SUB_PAGE_POTION_CONFIG);
         }
         else if (iButtonId == BUTTON_ID_PARTY_CONFIG)
         {
-            g_pNewUIMuHelperExt->Toggle(SUB_PAGE_PARTY_CONFIG);
+            if (g_pNewUIMuHelperExt)
+                g_pNewUIMuHelperExt->Toggle(SUB_PAGE_PARTY_CONFIG);
         }
         else if (iButtonId == BUTTON_ID_PARTY_CONFIG_ELF)
         {
-            g_pNewUIMuHelperExt->Toggle(SUB_PAGE_PARTY_CONFIG_ELF);
+            if (g_pNewUIMuHelperExt)
+                g_pNewUIMuHelperExt->Toggle(SUB_PAGE_PARTY_CONFIG_ELF);
         }
         else if (iButtonId == BUTTON_ID_EXIT_CONFIG)
         {
@@ -745,25 +789,22 @@ bool CNewUIMuHelper::UpdateMouseEvent()
     int iCheckboxId = UpdateMouseBoxList();
     if (iCheckboxId != -1)
     {
-        auto element = m_CheckBoxList[iCheckboxId];
-        auto state   = element.box->GetBoxState();
+        bool state = GetCheckBoxCtrlState(m_CheckBoxList, iCheckboxId);
         g_ConsoleDebug->Write(MCD_NORMAL, L"[MU Helper] Clicked checkbox [%d] state[%d]", iCheckboxId, state);
 
         if (iCheckboxId == CHECKBOX_ID_SKILL2_DELAY)
         {
-            bool bState = m_CheckBoxList[CHECKBOX_ID_SKILL2_DELAY].box->GetBoxState();
-            if (bState == true)
+            if (state == true)
             {
-                m_CheckBoxList[CHECKBOX_ID_SKILL2_CONDITION].box->RegisterBoxState(false);
+                SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL2_CONDITION, false);
                 g_pNewUISystem->Hide(INTERFACE_MUHELPER_EXT);
             }
         }
         else if (iCheckboxId == CHECKBOX_ID_SKILL2_CONDITION)
         {
-            bool bState = m_CheckBoxList[CHECKBOX_ID_SKILL2_CONDITION].box->GetBoxState();
-            if (bState == true)
+            if (state == true)
             {
-                m_CheckBoxList[CHECKBOX_ID_SKILL2_DELAY].box->RegisterBoxState(false);
+                SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL2_DELAY, false);
             }
             else
             {
@@ -772,19 +813,17 @@ bool CNewUIMuHelper::UpdateMouseEvent()
         }
         else if (iCheckboxId == CHECKBOX_ID_SKILL3_DELAY)
         {
-            bool bState = m_CheckBoxList[CHECKBOX_ID_SKILL3_DELAY].box->GetBoxState();
-            if (bState == true)
+            if (state == true)
             {
-                m_CheckBoxList[CHECKBOX_ID_SKILL3_CONDITION].box->RegisterBoxState(false);
+                SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL3_CONDITION, false);
                 g_pNewUISystem->Hide(INTERFACE_MUHELPER_EXT);
             }
         }
         else if (iCheckboxId == CHECKBOX_ID_SKILL3_CONDITION)
         {
-            bool bState = m_CheckBoxList[CHECKBOX_ID_SKILL3_CONDITION].box->GetBoxState();
-            if (bState == true)
+            if (state == true)
             {
-                m_CheckBoxList[CHECKBOX_ID_SKILL3_DELAY].box->RegisterBoxState(false);
+                SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL3_DELAY, false);
             }
             else
             {
@@ -793,21 +832,21 @@ bool CNewUIMuHelper::UpdateMouseEvent()
         }
         else if (iCheckboxId == CHECKBOX_ID_DR_ATTACK_CEASE)
         {
-            m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_CEASE].box->RegisterBoxState(true);
-            m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_AUTO].box->RegisterBoxState(false);
-            m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_TOGETHER].box->RegisterBoxState(false);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_CEASE, true);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_AUTO, false);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_TOGETHER, false);
         }
         else if (iCheckboxId == CHECKBOX_ID_DR_ATTACK_AUTO)
         {
-            m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_AUTO].box->RegisterBoxState(true);
-            m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_CEASE].box->RegisterBoxState(false);
-            m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_TOGETHER].box->RegisterBoxState(false);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_AUTO, true);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_CEASE, false);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_TOGETHER, false);
         }
         else if (iCheckboxId == CHECKBOX_ID_DR_ATTACK_TOGETHER)
         {
-            m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_TOGETHER].box->RegisterBoxState(true);
-            m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_CEASE].box->RegisterBoxState(false);
-            m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_AUTO].box->RegisterBoxState(false);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_TOGETHER, true);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_CEASE, false);
+            SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_AUTO, false);
         }
 
         ApplyConfigFromCheckbox(iCheckboxId, state);
@@ -883,11 +922,11 @@ bool CNewUIMuHelper::UpdateMouseEvent()
         {
             g_ConsoleDebug->Write(MCD_NORMAL, L"[MU Helper] Clicked slot slot [%d]", iSlotIndex);
             m_aiSelectedSkills[iSlotIndex] = -1;
+            ApplyConfigFromSkillSlot(iSlotIndex, 0);
 
-            auto cboxCombo = m_CheckBoxList[CHECKBOX_ID_COMBO];
-            if (cboxCombo.box->GetBoxState() == true)
+            if (GetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_COMBO))
             {
-                cboxCombo.box->RegisterBoxState(false);
+                SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_COMBO, false);
                 _TempConfig.bUseCombo = false;
             }
 
@@ -962,18 +1001,16 @@ void CNewUIMuHelper::ApplyConfigFromCheckbox(int iCheckboxId, bool bState)
             break;
 
         case CHECKBOX_ID_COMBO: {
-            auto cboxCombo = m_CheckBoxList[CHECKBOX_ID_COMBO];
-
             if (bState == true)
             {
                 if (m_aiSelectedSkills[0] <= 0 || m_aiSelectedSkills[1] <= 0 || m_aiSelectedSkills[2] <= 0)
                 {
                     g_pSystemLogBox->AddText(I18N::Game::InOrderToUseComboSkill, SEASON3B::TYPE_ERROR_MESSAGE);
-                    cboxCombo.box->RegisterBoxState(false);
+                    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_COMBO, false);
                 }
             }
 
-            _TempConfig.bUseCombo = cboxCombo.box->GetBoxState();
+            _TempConfig.bUseCombo = GetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_COMBO);
             break;
         }
 
@@ -1014,20 +1051,18 @@ void CNewUIMuHelper::ApplyConfigFromCheckbox(int iCheckboxId, bool bState)
             break;
 
         case CHECKBOX_ID_PICK_ALL: {
-            auto cboxPickSelected = m_CheckBoxList[CHECKBOX_ID_PICK_SELECTED];
-            if (cboxPickSelected.box->GetBoxState())
+            if (GetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_PICK_SELECTED))
             {
-                cboxPickSelected.box->RegisterBoxState(false);
+                SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_PICK_SELECTED, false);
             }
             _TempConfig.bPickAllItems = bState;
             break;
         }
 
         case CHECKBOX_ID_PICK_SELECTED: {
-            auto cboxPickAll = m_CheckBoxList[CHECKBOX_ID_PICK_ALL];
-            if (cboxPickAll.box->GetBoxState())
+            if (GetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_PICK_ALL))
             {
-                cboxPickAll.box->RegisterBoxState(false);
+                SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_PICK_ALL, false);
             }
             _TempConfig.bPickSelectItems = bState;
             break;
@@ -1076,11 +1111,11 @@ void CNewUIMuHelper::ApplyConfigFromCheckbox(int iCheckboxId, bool bState)
 
 void CNewUIMuHelper::ApplyConfigFromSkillSlot(int iSlot, int iSkill)
 {
-    if (iSlot < 3)
+    if (iSlot >= 0 && iSlot < 3)
     {
         _TempConfig.aiSkill[iSlot] = iSkill;
     }
-    else
+    else if (iSlot >= SKILL_SLOT_BUFF1 && iSlot < MAX_SKILLS_SLOT)
     {
         _TempConfig.aiBuff[iSlot - SKILL_SLOT_BUFF1] = iSkill;
     }
@@ -1230,17 +1265,19 @@ void CNewUIMuHelper::ApplyConfig()
     m_aiSelectedSkills[4] = _TempConfig.aiBuff[1] ? _TempConfig.aiBuff[1] : -1;
     m_aiSelectedSkills[5] = _TempConfig.aiBuff[2] ? _TempConfig.aiBuff[2] : -1;
 
-    m_CheckBoxList[CHECKBOX_ID_POTION].box->RegisterBoxState(_TempConfig.bUseHealPotion);
-    m_CheckBoxList[CHECKBOX_ID_AUTO_HEAL].box->RegisterBoxState(_TempConfig.bAutoHeal);
-    m_CheckBoxList[CHECKBOX_ID_DRAIN_LIFE].box->RegisterBoxState(_TempConfig.bUseDrainLife);
-    m_CheckBoxList[CHECKBOX_ID_LONG_DISTANCE].box->RegisterBoxState(_TempConfig.bLongRangeCounterAttack);
-    m_CheckBoxList[CHECKBOX_ID_ORIG_POSITION].box->RegisterBoxState(_TempConfig.bReturnToOriginalPosition);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_POTION, _TempConfig.bUseHealPotion);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_AUTO_HEAL, _TempConfig.bAutoHeal);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DRAIN_LIFE, _TempConfig.bUseDrainLife);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_LONG_DISTANCE, _TempConfig.bLongRangeCounterAttack);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_ORIG_POSITION, _TempConfig.bReturnToOriginalPosition);
 
-    m_CheckBoxList[CHECKBOX_ID_SKILL2_DELAY].box->RegisterBoxState(_TempConfig.aiSkillCondition[1] & ON_TIMER);
-    m_CheckBoxList[CHECKBOX_ID_SKILL2_CONDITION].box->RegisterBoxState(_TempConfig.aiSkillCondition[1] & ON_CONDITION);
-    m_CheckBoxList[CHECKBOX_ID_SKILL3_DELAY].box->RegisterBoxState(_TempConfig.aiSkillCondition[2] & ON_TIMER);
-    m_CheckBoxList[CHECKBOX_ID_SKILL3_CONDITION].box->RegisterBoxState(_TempConfig.aiSkillCondition[2] & ON_CONDITION);
-    m_CheckBoxList[CHECKBOX_ID_COMBO].box->RegisterBoxState(_TempConfig.bUseCombo);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL2_DELAY, (_TempConfig.aiSkillCondition[1] & ON_TIMER) != 0);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL2_CONDITION,
+                         (_TempConfig.aiSkillCondition[1] & ON_CONDITION) != 0);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL3_DELAY, (_TempConfig.aiSkillCondition[2] & ON_TIMER) != 0);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_SKILL3_CONDITION,
+                         (_TempConfig.aiSkillCondition[2] & ON_CONDITION) != 0);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_COMBO, _TempConfig.bUseCombo);
 
     wchar_t wsTempNum[MAX_NUMBER_DIGITS + 1];
     memset(wsTempNum, 0, sizeof(wsTempNum));
@@ -1255,28 +1292,28 @@ void CNewUIMuHelper::ApplyConfig()
     std::swprintf(wsTempNum, MAX_NUMBER_DIGITS + 1, L"%d", _TempConfig.aiSkillInterval[2]);
     m_Skill3DelayInput.SetText(wsTempNum);
 
-    m_CheckBoxList[CHECKBOX_ID_BUFF_DURATION].box->RegisterBoxState(_TempConfig.bBuffDuration);
-    m_CheckBoxList[CHECKBOX_ID_PARTY].box->RegisterBoxState(_TempConfig.bSupportParty);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_BUFF_DURATION, _TempConfig.bBuffDuration);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_PARTY, _TempConfig.bSupportParty);
 
-    m_CheckBoxList[CHECKBOX_ID_USE_PET].box->RegisterBoxState(_TempConfig.bUseDarkRaven);
-    m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_CEASE].box->RegisterBoxState(_TempConfig.iDarkRavenMode == PET_ATTACK_CEASE);
-    m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_AUTO].box->RegisterBoxState(_TempConfig.iDarkRavenMode == PET_ATTACK_AUTO);
-    m_CheckBoxList[CHECKBOX_ID_DR_ATTACK_TOGETHER].box->RegisterBoxState(_TempConfig.iDarkRavenMode ==
-                                                                         PET_ATTACK_TOGETHER);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_USE_PET, _TempConfig.bUseDarkRaven);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_CEASE, _TempConfig.iDarkRavenMode == PET_ATTACK_CEASE);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_AUTO, _TempConfig.iDarkRavenMode == PET_ATTACK_AUTO);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_DR_ATTACK_TOGETHER,
+                         _TempConfig.iDarkRavenMode == PET_ATTACK_TOGETHER);
 
-    m_CheckBoxList[CHECKBOX_ID_REPAIR_ITEM].box->RegisterBoxState(_TempConfig.bRepairItem);
-    m_CheckBoxList[CHECKBOX_ID_PICK_ALL].box->RegisterBoxState(_TempConfig.bPickAllItems);
-    m_CheckBoxList[CHECKBOX_ID_PICK_SELECTED].box->RegisterBoxState(_TempConfig.bPickSelectItems);
-    m_CheckBoxList[CHECKBOX_ID_PICK_JEWEL].box->RegisterBoxState(_TempConfig.bPickJewel);
-    m_CheckBoxList[CHECKBOX_ID_PICK_ZEN].box->RegisterBoxState(_TempConfig.bPickZen);
-    m_CheckBoxList[CHECKBOX_ID_PICK_EXCELLENT].box->RegisterBoxState(_TempConfig.bPickExcellent);
-    m_CheckBoxList[CHECKBOX_ID_PICK_ANCIENT].box->RegisterBoxState(_TempConfig.bPickAncient);
-    m_CheckBoxList[CHECKBOX_ID_ADD_OTHER_ITEM].box->RegisterBoxState(_TempConfig.bPickExtraItems);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_REPAIR_ITEM, _TempConfig.bRepairItem);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_PICK_ALL, _TempConfig.bPickAllItems);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_PICK_SELECTED, _TempConfig.bPickSelectItems);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_PICK_JEWEL, _TempConfig.bPickJewel);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_PICK_ZEN, _TempConfig.bPickZen);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_PICK_EXCELLENT, _TempConfig.bPickExcellent);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_PICK_ANCIENT, _TempConfig.bPickAncient);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_ADD_OTHER_ITEM, _TempConfig.bPickExtraItems);
 
-    m_CheckBoxList[CHECKBOX_ID_AUTO_ACCEPT_FRIEND].box->RegisterBoxState(_TempConfig.bAutoAcceptFriend);
-    m_CheckBoxList[CHECKBOX_ID_AUTO_ACCEPT_GUILD].box->RegisterBoxState(_TempConfig.bAutoAcceptGuild);
-    m_CheckBoxList[CHECKBOX_ID_AUTO_DEFEND].box->RegisterBoxState(_TempConfig.bUseSelfDefense);
-    m_CheckBoxList[CHECKBOX_ID_FALLBACK_BASIC_ATTACK].box->RegisterBoxState(_TempConfig.bFallbackBasicAttack);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_AUTO_ACCEPT_FRIEND, _TempConfig.bAutoAcceptFriend);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_AUTO_ACCEPT_GUILD, _TempConfig.bAutoAcceptGuild);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_AUTO_DEFEND, _TempConfig.bUseSelfDefense);
+    SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_FALLBACK_BASIC_ATTACK, _TempConfig.bFallbackBasicAttack);
 
     m_ItemFilter.Clear();
     for (const auto& item : _TempConfig.aExtraItems)
@@ -1289,7 +1326,8 @@ void CNewUIMuHelper::InitConfig()
 {
     Reset();
 
-    g_pNewUIMuHelperExt->InitConfig();
+    if (g_pNewUIMuHelperExt)
+        g_pNewUIMuHelperExt->InitConfig();
 }
 
 void CNewUIMuHelper::SaveConfig()
@@ -1608,7 +1646,16 @@ void CNewUIMuHelper::UnloadImages()
 
 void CNewUIMuHelper::RegisterButton(int Identifier, CButtonTap button)
 {
-    m_ButtonList.insert(std::pair<int, CButtonTap>(Identifier, button));
+    auto it = m_ButtonList.find(Identifier);
+    if (it != m_ButtonList.end())
+    {
+        SafeDelete(it->second.btn);
+        it->second = button;
+    }
+    else
+    {
+        m_ButtonList.emplace(Identifier, button);
+    }
 }
 
 void CNewUIMuHelper::RegisterBtnCharacter(BYTE class_character, int Identifier)
@@ -1662,13 +1709,17 @@ void CNewUIMuHelper::InsertButton(int imgindex, int x, int y, int sx, int sy, bo
 
 void CNewUIMuHelper::RenderBtnList()
 {
+    const BYTE baseClass = gCharacterManager.GetBaseClass(Hero->Class);
+    if (baseClass >= MAX_CLASS)
+        return;
+
     auto li = m_ButtonList.begin();
 
     for (; li != m_ButtonList.end(); li++)
     {
         CButtonTap* cBTN = &li->second;
 
-        if ((cBTN->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) &&
+        if (cBTN->btn && (cBTN->class_character[baseClass]) &&
             (cBTN->iNumTab == m_iCurrentOpenTab || cBTN->iNumTab == -1))
         {
             cBTN->btn->Render();
@@ -1678,13 +1729,17 @@ void CNewUIMuHelper::RenderBtnList()
 
 int CNewUIMuHelper::UpdateMouseBtnList()
 {
+    const BYTE baseClass = gCharacterManager.GetBaseClass(Hero->Class);
+    if (baseClass >= MAX_CLASS)
+        return -1;
+
     auto li = m_ButtonList.begin();
 
     for (; li != m_ButtonList.end(); li++)
     {
         CButtonTap* cBTN = &li->second;
 
-        if ((cBTN->class_character[gCharacterManager.GetBaseClass(Hero->Class)]) &&
+        if (cBTN->btn && (cBTN->class_character[baseClass]) &&
             (cBTN->iNumTab == m_iCurrentOpenTab || cBTN->iNumTab == -1))
         {
             if (cBTN->btn->UpdateMouseEvent())
@@ -1720,7 +1775,16 @@ void CNewUIMuHelper::RegisterBoxCharacter(BYTE class_character, int Identifier)
 
 void CNewUIMuHelper::RegisterCheckBox(int Identifier, CheckBoxTap button)
 {
-    m_CheckBoxList.insert(std::pair<int, CheckBoxTap>(Identifier, button));
+    auto it = m_CheckBoxList.find(Identifier);
+    if (it != m_CheckBoxList.end())
+    {
+        SafeDelete(it->second.box);
+        it->second = button;
+    }
+    else
+    {
+        m_CheckBoxList.emplace(Identifier, button);
+    }
 }
 
 void CNewUIMuHelper::InsertCheckBox(int imgindex, int x, int y, int sx, int sy, bool overflg,
@@ -1930,7 +1994,7 @@ void CNewUIMuHelper::InsertText(int x, int y, std::wstring Name, int Identifier,
 
 void CNewUIMuHelper::AssignSkill(int iSkill)
 {
-    if (m_iSelectedSkillSlot != -1 && m_iSelectedSkillSlot < MAX_SKILLS_SLOT)
+    if (m_iSelectedSkillSlot >= 0 && m_iSelectedSkillSlot < MAX_SKILLS_SLOT)
     {
         if (!IsSkillAssigned(iSkill))
         {
@@ -1942,14 +2006,18 @@ void CNewUIMuHelper::AssignSkill(int iSkill)
         }
         else
         {
-            int iPrevIndex                           = GetSkillIndex(iSkill);
-            m_aiSelectedSkills[iPrevIndex]           = -1;
-            m_aiSelectedSkills[m_iSelectedSkillSlot] = iSkill;
-
-            auto cboxCombo = m_CheckBoxList[CHECKBOX_ID_COMBO];
-            if (cboxCombo.box->GetBoxState() == true)
+            int iPrevIndex = GetSkillIndex(iSkill);
+            if (iPrevIndex >= 0 && iPrevIndex < MAX_SKILLS_SLOT)
             {
-                cboxCombo.box->RegisterBoxState(false);
+                m_aiSelectedSkills[iPrevIndex] = -1;
+                ApplyConfigFromSkillSlot(iPrevIndex, 0);
+            }
+            m_aiSelectedSkills[m_iSelectedSkillSlot] = iSkill;
+            ApplyConfigFromSkillSlot(m_iSelectedSkillSlot, iSkill);
+
+            if (GetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_COMBO))
+            {
+                SetCheckBoxCtrlState(m_CheckBoxList, CHECKBOX_ID_COMBO, false);
                 _TempConfig.bUseCombo = false;
             }
         }
@@ -1975,6 +2043,9 @@ int CNewUIMuHelper::GetSkillIndex(int iSkill)
 
 void CNewUIMuHelper::RenderSkillIcon(int skill, float x, float y, float width, float height)
 {
+    if (skill <= 0 || skill >= MAX_SKILLS)
+        return;
+
     float fU, fV;
     int   iKindofSkill = 0;
 
@@ -2144,7 +2215,10 @@ void CNewUIMuHelper::RenderSkillIcon(int skill, float x, float y, float width, f
 
 CNewUIMuHelperSkillList::CNewUIMuHelperSkillList()
 {
-    m_pNewUIMng = NULL;
+    m_pNewUIMng             = NULL;
+    m_pNewUI3DRenderMng     = NULL;
+    m_bFilterByAttackSkills = false;
+    m_bFilterByBuffSkills   = false;
     Reset();
 }
 
@@ -2175,12 +2249,12 @@ void CNewUIMuHelperSkillList::Release()
     if (m_pNewUI3DRenderMng)
     {
         m_pNewUI3DRenderMng->DeleteUI2DEffectObject(UI2DEffectCallback);
+        m_pNewUI3DRenderMng = NULL;
     }
-
-    UnloadImages();
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -2267,6 +2341,9 @@ void CNewUIMuHelperSkillList::PrepareSkillsToRender()
     m_aiSkillsToRender.clear();
     m_skillIconMap.clear();
 
+    if (!CharacterAttribute)
+        return;
+
     BYTE skillNumber = CharacterAttribute->SkillNumber;
     if (skillNumber > 0)
     {
@@ -2274,7 +2351,8 @@ void CNewUIMuHelperSkillList::PrepareSkillsToRender()
         {
             int iSkillType = CharacterAttribute->Skill[i];
 
-            if (iSkillType != 0 && (iSkillType < AT_SKILL_STUN || iSkillType > AT_SKILL_REMOVAL_BUFF))
+            if (iSkillType > 0 && iSkillType < MAX_SKILLS &&
+                (iSkillType < AT_SKILL_STUN || iSkillType > AT_SKILL_REMOVAL_BUFF))
             {
                 BYTE bySkillUseType = SkillAttribute[iSkillType].SkillUseType;
 
@@ -2393,6 +2471,9 @@ float CNewUIMuHelperSkillList::GetLayerDepth()
 
 void CNewUIMuHelperSkillList::RenderSkillIcon(int iSkillType, float x, float y, float width, float height)
 {
+    if (iSkillType <= 0 || iSkillType >= MAX_SKILLS)
+        return;
+
     float fU, fV;
     int   iKindofSkill = 0;
 
@@ -2706,10 +2787,13 @@ int CNewUIMuHelperSkillList::UpdateMouseSkillList()
 
 CNewUIMuHelperExt::CNewUIMuHelperExt()
 {
-    m_pNewUIMng    = NULL;
-    m_Pos.x        = 0;
-    m_Pos.y        = 0;
-    m_iCurrentPage = -1;
+    m_pNewUIMng                   = NULL;
+    m_Pos.x                       = 0;
+    m_Pos.y                       = 0;
+    m_iCurrentPage                = -1;
+    m_iCurrentHealThreshold       = 0;
+    m_iCurrentPartyHealThreshold  = 0;
+    m_iCurrentPotionThreshold     = 0;
 }
 
 CNewUIMuHelperExt::~CNewUIMuHelperExt()
@@ -2746,10 +2830,9 @@ bool CNewUIMuHelperExt::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIMuHelperExt::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }

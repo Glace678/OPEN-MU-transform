@@ -148,6 +148,7 @@
       "inherits": "macos-base",
       "toolchainFile": "${sourceDir}/toolchain-x64.cmake",
       "cacheVariables": {
+        "CMAKE_OSX_ARCHITECTURES": "x86_64",
         "ENABLE_EDITOR": "OFF"
       }
     }

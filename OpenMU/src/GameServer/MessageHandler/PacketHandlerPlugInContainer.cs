@@ -67,7 +67,17 @@ public class PacketHandlerPlugInContainer<THandler> : StrategyPlugInProvider<byt
     /// <param name="packet">The packet.</param>
     public async ValueTask HandlePacketAsync(RemotePlayer player, Memory<byte> packet)
     {
+        if (packet.IsEmpty)
+        {
+            return;
+        }
+
         var typeIndex = packet.Span[0] % 2 == 1 ? 2 : 3;
+        if (packet.Length <= typeIndex)
+        {
+            return;
+        }
+
         var packetType = packet.Span[typeIndex];
         var handler = this[packetType];
         await this.HandlePacketAsync(player, packet, handler).ConfigureAwait(false);
@@ -89,12 +99,21 @@ public class PacketHandlerPlugInContainer<THandler> : StrategyPlugInProvider<byt
     {
         if (!this._disposedValue)
         {
+            this._disposedValue = true;
             if (disposing)
             {
+                this._clientVersionProvider.ClientVersionChanged -= this.OnClientVersionChanged;
+                this.DetachFromManager();
+                foreach (var knownPlugIn in this.KnownPlugIns)
+                {
+                    if (knownPlugIn is IDisposable disposable && !HandlerCache.ContainsKey(knownPlugIn.GetType()))
+                    {
+                        disposable.Dispose();
+                    }
+                }
+
                 this._serviceContainer.Dispose();
             }
-
-            this._disposedValue = true;
         }
     }
 
@@ -172,7 +191,7 @@ public class PacketHandlerPlugInContainer<THandler> : StrategyPlugInProvider<byt
             // the plugin was effective before, so we need to set a replacement active.
             var replacement = this.KnownPlugIns
                 .Where(p => p.Key == deactivatedPlugIn.Key && p != deactivatedPlugIn)
-                .OrderByDescending(p => p.GetType().GetCustomAttribute(typeof(MinimumClientAttribute), inherit: false))
+                .OrderByDescending(p => p.GetType().GetCustomAttribute<MinimumClientAttribute>(inherit: false)?.Client ?? default)
                 .FirstOrDefault();
             if (replacement != null)
             {
@@ -202,6 +221,11 @@ public class PacketHandlerPlugInContainer<THandler> : StrategyPlugInProvider<byt
 
     private void OnClientVersionChanged(object? sender, EventArgs e)
     {
+        if (this._disposedValue)
+        {
+            return;
+        }
+
         this.Logger.LogWarning("Client version changed");
 
         foreach (var knownPlugIn in this.KnownPlugIns)
@@ -210,6 +234,10 @@ public class PacketHandlerPlugInContainer<THandler> : StrategyPlugInProvider<byt
             {
                 this.DeactivatePlugIn(knownPlugIn);
                 this.RemovePlugIn(knownPlugIn);
+                if (knownPlugIn is IDisposable disposable && !HandlerCache.ContainsKey(knownPlugIn.GetType()))
+                {
+                    disposable.Dispose();
+                }
             }
         }
 

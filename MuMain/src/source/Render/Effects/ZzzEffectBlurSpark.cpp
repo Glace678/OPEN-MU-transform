@@ -616,7 +616,11 @@ void AnimationFlag()
 
                 vec3_t DeltaP;
                 VectorSubtract(v1->p, v2->p, DeltaP);
-                float dist  = VectorLength(DeltaP);
+                float dist = VectorLength(DeltaP);
+                if (dist <= 1e-6f)
+                {
+                    continue;
+                }
                 float Hterm = (dist - FLAG_SCALE) * Ks;
 
                 vec3_t DeltaV;
@@ -649,6 +653,11 @@ void AnimationFlag()
 
 void RenderFlagFace(OBJECT* o, int x, int y, vec3_t Light, int Tex1, int Tex2)
 {
+    if (o == nullptr || o->BoneTransform == nullptr || o->Type < 0 || o->Type >= MAX_MODELS ||
+        Models[o->Type].NumBones <= 19 || x < 0 || x >= FLAG_WIDTH - 1 || y < 0 || y >= FLAG_HEIGHT - 1)
+    {
+        return;
+    }
     int   n  = 4;
     float su = (float)x / 6.f;
     float sv = (float)y / 9.f;

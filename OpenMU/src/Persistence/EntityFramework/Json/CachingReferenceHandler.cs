@@ -22,6 +22,6 @@ public class CachingReferenceHandler : ReferenceHandler, IIdReferenceHandler
     /// <inheritdoc />
     public override ReferenceResolver CreateResolver()
     {
-        return this.Current ??= new MultipleSourceReferenceResolver(new IdReferenceResolver(), ConfigurationIdReferenceResolver.Instance);
+        return this.Current = new MultipleSourceReferenceResolver(new IdReferenceResolver(), ConfigurationIdReferenceResolver.Instance);
     }
 }

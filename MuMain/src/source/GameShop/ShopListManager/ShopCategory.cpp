@@ -17,8 +17,17 @@
 
 CShopCategory::CShopCategory()  // OK
 {
+    this->ProductDisplaySeq = 0;
+    memset(this->CategroyName, 0, sizeof(this->CategroyName));
+    this->EventFlag               = 0;
+    this->OpenFlag                = 0;
+    this->ParentProductDisplaySeq = 0;
+    this->DisplayOrder            = 0;
+    this->Root                    = 0;
     this->CategoryList.clear();
+    this->Categoryiter = this->CategoryList.end();
     this->PackageList.clear();
+    this->Packageiter = this->PackageList.end();
 }
 
 CShopCategory::~CShopCategory()  // OK
@@ -31,7 +40,7 @@ bool CShopCategory::SetCategory(std::wstring strdata)  // OK
 
     CStringToken token(strdata, L"@");
 
-    if (token.hasMoreTokens() == 0)
+    if (token.countTokens() < 7)
         return 0;
 
     this->ProductDisplaySeq = _wtoi(token.nextToken().c_str());

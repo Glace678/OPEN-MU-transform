@@ -124,11 +124,11 @@ bool SEASON3B::CNewUIChatCommandWindow::Create(CNewUIManager* pNewUIMng, int x, 
 
 void SEASON3B::CNewUIChatCommandWindow::Release()
 {
-    UnloadImages();
     m_pValueInput.reset();
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -148,7 +148,7 @@ void SEASON3B::CNewUIChatCommandWindow::SetPos(int x, int y)
 void SEASON3B::CNewUIChatCommandWindow::InitButtons()
 {
     wchar_t closeText[256] = {};
-    mu_swprintf(closeText, I18N::Game::CloseS, L"J");
+    swprintf_s(closeText, _countof(closeText), I18N::Game::CloseS, L"J");
 
     m_BtnExit.ChangeButtonImgState(true, IMAGE_CHATCOMMAND_BTN_EXIT);
     m_BtnExit.ChangeToolTipText(closeText, true);

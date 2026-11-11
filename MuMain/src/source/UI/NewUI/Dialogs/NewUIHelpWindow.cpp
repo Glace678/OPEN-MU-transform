@@ -139,18 +139,18 @@ bool SEASON3B::CNewUIHelpWindow::Render()
     {
         int iTextNum = 0;
 
-        wcscpy(TextList[iTextNum], I18N::Game::KeyFunction);
+        wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), I18N::Game::KeyFunction, _TRUNCATE);
         TextListColor[iTextNum] = TEXT_COLOR_BLUE;
         TextBold[iTextNum]      = true;
         iTextNum++;
 
-        mu_swprintf(TextList[iTextNum], L"\n");
+        wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), L"\n", _TRUNCATE);
         iTextNum++;
 
         // Render F1-F4 entries (I18N::Game::Lookup(121..124)) first.
         for (int i = 0; i < 4; ++i)
         {
-            wcscpy(TextList[iTextNum], I18N::Game::Lookup(121 + i));
+            wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), I18N::Game::Lookup(121 + i), _TRUNCATE);
             TextListColor[iTextNum] = TEXT_COLOR_WHITE;
             TextBold[iTextNum]      = false;
             iTextNum++;
@@ -164,7 +164,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
         };
         for (const wchar_t* line : extraHelpLines)
         {
-            wcsncpy_s(TextList[iTextNum], line, 99);
+            wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), line, _TRUNCATE);
             TextListColor[iTextNum] = TEXT_COLOR_WHITE;
             TextBold[iTextNum]      = false;
             iTextNum++;
@@ -173,7 +173,7 @@ bool SEASON3B::CNewUIHelpWindow::Render()
         // Render the remaining shipped entries (I18N::Game::Lookup(125..139)).
         for (int i = 4; i < 19; ++i)
         {
-            wcscpy(TextList[iTextNum], I18N::Game::Lookup(121 + i));
+            wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), I18N::Game::Lookup(121 + i), _TRUNCATE);
             TextListColor[iTextNum] = TEXT_COLOR_WHITE;
             TextBold[iTextNum]      = false;
             iTextNum++;
@@ -185,26 +185,26 @@ bool SEASON3B::CNewUIHelpWindow::Render()
     {
         int iTextNum = 0;
 
-        mu_swprintf(TextList[iTextNum], L"\n");
+        wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), L"\n", _TRUNCATE);
         iTextNum++;
 
-        wcscpy(TextList[iTextNum], I18N::Game::ChattingInstructions);
+        wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), I18N::Game::ChattingInstructions, _TRUNCATE);
         TextListColor[iTextNum] = TEXT_COLOR_BLUE;
         TextBold[iTextNum]      = true;
         iTextNum++;
 
-        mu_swprintf(TextList[iTextNum], L"\n");
+        wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), L"\n", _TRUNCATE);
         iTextNum++;
 
         for (int i = 0; i < 16; ++i)
         {
-            wcscpy(TextList[iTextNum], I18N::Game::Lookup(141 + i));
+            wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), I18N::Game::Lookup(141 + i), _TRUNCATE);
             TextListColor[iTextNum] = TEXT_COLOR_WHITE;
             TextBold[iTextNum]      = false;
             iTextNum++;
         }
 
-        mu_swprintf(TextList[iTextNum], L"\n");
+        wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), L"\n", _TRUNCATE);
         iTextNum++;
 
         RenderTipTextList(1, 26, iTextNum, 0, RT3_SORT_CENTER);
@@ -213,23 +213,23 @@ bool SEASON3B::CNewUIHelpWindow::Render()
     {
         int iTextNum = 0;
 
-        mu_swprintf(TextList[iTextNum], L"\n");
+        wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), L"\n", _TRUNCATE);
         iTextNum++;
 
-        wcscpy(TextList[iTextNum], I18N::Game::AMPM);
+        wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), I18N::Game::AMPM, _TRUNCATE);
         TextListColor[iTextNum] = TEXT_COLOR_BLUE;
         TextBold[iTextNum]      = true;
         iTextNum++;
 
         for (int i = 0; i < 24; ++i)
         {
-            wcscpy(TextList[iTextNum], I18N::Game::Lookup(2422 + i));
+            wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), I18N::Game::Lookup(2422 + i), _TRUNCATE);
             TextListColor[iTextNum] = TEXT_COLOR_WHITE;
             TextBold[iTextNum]      = false;
             iTextNum++;
         }
 
-        mu_swprintf(TextList[iTextNum], L"\n");
+        wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), L"\n", _TRUNCATE);
         iTextNum++;
 
         RenderTipTextList(1, 26, iTextNum, 0, RT3_SORT_LEFT);
@@ -238,17 +238,17 @@ bool SEASON3B::CNewUIHelpWindow::Render()
     {
         int iTextNum = 0;
 
-        mu_swprintf(TextList[iTextNum], L"\n");
+        wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), L"\n", _TRUNCATE);
         iTextNum++;
 
-        wcscpy(TextList[iTextNum], I18N::Game::ChaosCastleDevilSSquare);
+        wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), I18N::Game::ChaosCastleDevilSSquare, _TRUNCATE);
         TextListColor[iTextNum] = TEXT_COLOR_BLUE;
         TextBold[iTextNum]      = true;
         iTextNum++;
 
         for (int i = 0; i < 18; ++i)
         {
-            wcscpy(TextList[iTextNum], I18N::Game::Lookup(2447 + i));
+            wcsncpy_s(TextList[iTextNum], _countof(TextList[iTextNum]), I18N::Game::Lookup(2447 + i), _TRUNCATE);
             if (i == 0 || i == 8 || i == 9)
             {
                 TextListColor[iTextNum] = TEXT_COLOR_BLUE;

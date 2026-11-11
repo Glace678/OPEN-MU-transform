@@ -21,10 +21,10 @@ namespace COMGEM
 {
 namespace
 {
-constexpr int kInvWidth        = 190;
-constexpr int kInvHeight       = 433;
-constexpr int kAttachValue     = 1000000;
-constexpr int kDetachUnitValue = 50000;
+constexpr int kInvWidth       = 190;
+constexpr int kInvHeight      = 433;
+constexpr int kDismantleFee   = 1000000;
+constexpr int kCombineUnitFee = 50000;
 
 SEASON3B::CNewUIInventoryCtrl* GetInventoryCtrl()
 {
@@ -53,12 +53,25 @@ CUIUnmixgemList m_UnmixTarList;
 
 void COMGEM::SendReqUnMix()
 {
+    if (SocketClient == nullptr || SocketClient->ToGameServer() == nullptr || m_cGemType < 0 || iUnMixLevel < 0 ||
+        iUnMixIndex < 0 || iUnMixIndex > 255)
+    {
+        return;
+    }
+
     SocketClient->ToGameServer()->SendLahapJewelMixRequest(MixType::Unmix, static_cast<ItemType>(m_cGemType / 2),
-                                                           static_cast<StackSize>(iUnMixLevel), iUnMixIndex);
+                                                           static_cast<StackSize>(iUnMixLevel),
+                                                           static_cast<BYTE>(iUnMixIndex));
 }
 
 void COMGEM::SendReqMix()
 {
+    if (SocketClient == nullptr || SocketClient->ToGameServer() == nullptr || m_cGemType < 0 ||
+        (m_cComType != FIRST && m_cComType != SECOND && m_cComType != THIRD))
+    {
+        return;
+    }
+
     SocketClient->ToGameServer()->SendLahapJewelMixRequest(MixType::Mix, static_cast<ItemType>(m_cGemType / 2),
                                                            static_cast<StackSize>(m_cComType / 10 - 1), 0);
 }
@@ -231,13 +244,13 @@ bool COMGEM::CheckMyInvValid()
 void COMGEM::CalcGen()
 {
     m_iValue = 0;
-    if (m_bType)
+    if (m_bType == DETACH)
     {
-        m_iValue = kAttachValue;
+        m_iValue = kDismantleFee;
     }
-    else
+    else if (m_cComType > 0)
     {
-        m_iValue = m_cComType * kDetachUnitValue;
+        m_iValue = m_cComType * kCombineUnitFee;
     }
     m_iValue = static_cast<int>(GameConfig::GetInstance().ScaleSoloPrice(m_iValue));
 }
@@ -318,7 +331,10 @@ void COMGEM::Exit()
 {
     Init();
 
-    SocketClient->ToGameServer()->SendCloseNpcRequest();
+    if (SocketClient != nullptr && SocketClient->ToGameServer() != nullptr)
+    {
+        SocketClient->ToGameServer()->SendCloseNpcRequest();
+    }
 }
 
 int COMGEM::GetJewelRequireCount(int i)
@@ -413,7 +429,7 @@ int COMGEM::GetJewelIndex(int _nJewel, int _nType)
             if (_nType == eGEM_NAME)
                 return 1806;
             if (_nType == eGEM_INDEX)
-                return ITEM_ORB_OF_GREATER_FORTITUDE;
+                return ITEM_PACKED_JEWEL_OF_BLESS;
             break;
         case eSOUL:
             if (_nType == eGEM_NAME)
@@ -425,7 +441,7 @@ int COMGEM::GetJewelIndex(int _nJewel, int _nType)
             if (_nType == eGEM_NAME)
                 return 1807;
             if (_nType == eGEM_INDEX)
-                return ITEM_ORB_OF_IMPALE;
+                return ITEM_PACKED_JEWEL_OF_SOUL;
             break;
         case eLIFE:
             if (_nType == eGEM_NAME)
@@ -437,7 +453,7 @@ int COMGEM::GetJewelIndex(int _nJewel, int _nType)
             if (_nType == eGEM_NAME)
                 return 3312;
             if (_nType == eGEM_INDEX)
-                return ITEM_ORB_OF_IMPALE;
+                return ITEM_PACKED_JEWEL_OF_LIFE;
             break;
         case eCREATE:
             if (_nType == eGEM_NAME)
@@ -449,7 +465,7 @@ int COMGEM::GetJewelIndex(int _nJewel, int _nType)
             if (_nType == eGEM_NAME)
                 return 3313;
             if (_nType == eGEM_INDEX)
-                return ITEM_ORB_OF_IMPALE;
+                return ITEM_PACKED_JEWEL_OF_CREATION;
             break;
         case ePROTECT:
             if (_nType == eGEM_NAME)
@@ -461,7 +477,7 @@ int COMGEM::GetJewelIndex(int _nJewel, int _nType)
             if (_nType == eGEM_NAME)
                 return 3314;
             if (_nType == eGEM_INDEX)
-                return ITEM_ORB_OF_IMPALE;
+                return ITEM_PACKED_JEWEL_OF_GUARDIAN;
             break;
         case eGEMSTONE:
             if (_nType == eGEM_NAME)
@@ -473,7 +489,7 @@ int COMGEM::GetJewelIndex(int _nJewel, int _nType)
             if (_nType == eGEM_NAME)
                 return 2081;
             if (_nType == eGEM_INDEX)
-                return ITEM_ORB_OF_IMPALE;
+                return ITEM_PACKED_GEMSTONE;
             break;
         case eHARMONY:
             if (_nType == eGEM_NAME)
@@ -485,7 +501,7 @@ int COMGEM::GetJewelIndex(int _nJewel, int _nType)
             if (_nType == eGEM_NAME)
                 return 3315;
             if (_nType == eGEM_INDEX)
-                return ITEM_ORB_OF_IMPALE;
+                return ITEM_PACKED_JEWEL_OF_HARMONY;
             break;
         case eCHAOS:
             if (_nType == eGEM_NAME)
@@ -497,7 +513,7 @@ int COMGEM::GetJewelIndex(int _nJewel, int _nType)
             if (_nType == eGEM_NAME)
                 return 3316;
             if (_nType == eGEM_INDEX)
-                return ITEM_ORB_OF_IMPALE;
+                return ITEM_PACKED_JEWEL_OF_CHAOS;
             break;
         case eLOW:
             if (_nType == eGEM_NAME)
@@ -509,7 +525,7 @@ int COMGEM::GetJewelIndex(int _nJewel, int _nType)
             if (_nType == eGEM_NAME)
                 return 3317;
             if (_nType == eGEM_INDEX)
-                return ITEM_ORB_OF_IMPALE;
+                return ITEM_PACKED_LOWER_REFINE_STONE;
             break;
         case eUPPER:
             if (_nType == eGEM_NAME)
@@ -521,7 +537,7 @@ int COMGEM::GetJewelIndex(int _nJewel, int _nType)
             if (_nType == eGEM_NAME)
                 return 3318;
             if (_nType == eGEM_INDEX)
-                return ITEM_ORB_OF_IMPALE;
+                return ITEM_PACKED_HIGHER_REFINE_STONE;
             break;
     }
 

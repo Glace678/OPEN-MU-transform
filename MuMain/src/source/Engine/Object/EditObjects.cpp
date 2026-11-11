@@ -69,18 +69,21 @@ void EditObjects()
         {
             MouseLButtonPush = false;
             bool Success     = RenderTerrainTile(SelectXF, SelectYF, (int)SelectXF, (int)SelectYF, 1.f, 1, true);
-            if (Success)
+            if (Success && SelectMonster >= 0 && SelectMonster < MAX_MONSTER)
             {
-                CHARACTER* c   = CreateMonster((EMonsterType)MonsterScript[SelectMonster].Type,
-                                               (BYTE)(CollisionPosition[0] / TERRAIN_SCALE),
-                                               (BYTE)(CollisionPosition[1] / TERRAIN_SCALE), MonsterKey++);
-                c->Object.Kind = KIND_EDIT;
+                CHARACTER* c = CreateMonster((EMonsterType)MonsterScript[SelectMonster].Type,
+                                             (BYTE)(CollisionPosition[0] / TERRAIN_SCALE),
+                                             (BYTE)(CollisionPosition[1] / TERRAIN_SCALE), MonsterKey++);
+                if (c != nullptr)
+                {
+                    c->Object.Kind = KIND_EDIT;
+                }
             }
         }
         if (MouseRButtonPush)
         {
             MouseRButtonPush = false;
-            if (SelectedCharacter != -1)
+            if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
             {
                 CharactersClient[SelectedCharacter].Object.Live = false;
             }
@@ -92,12 +95,15 @@ void EditObjects()
         {
             MouseRButtonPush = false;
             bool Success     = RenderTerrainTile(SelectXF, SelectYF, (int)SelectXF, (int)SelectYF, 1.f, 1, true);
-            if (Success)
+            if (Success && SelectModel >= 0 && SelectModel < MAX_MODELS)
             {
-                OBJECT* o      = CreateObject(SelectModel, CollisionPosition, PickObjectAngle);
-                int     Scale  = (int)TERRAIN_SCALE;
-                o->Position[0] = (float)((int)o->Position[0] / Scale + 0.5f) * Scale;
-                o->Position[1] = (float)((int)o->Position[1] / Scale + 0.5f) * Scale;
+                OBJECT* o = CreateObject(SelectModel, CollisionPosition, PickObjectAngle);
+                if (o != nullptr)
+                {
+                    int Scale      = (int)TERRAIN_SCALE;
+                    o->Position[0] = (float)((int)o->Position[0] / Scale + 0.5f) * Scale;
+                    o->Position[1] = (float)((int)o->Position[1] / Scale + 0.5f) * Scale;
+                }
             }
         }
         if (MouseLButtonPush)
@@ -199,7 +205,7 @@ void EditObjects()
     }
     if (EditFlag == EDIT_LIGHT)
     {
-        vec3_t Light;
+        vec3_t Light = {0.f, 0.f, 0.f};
         if (MouseLButton)
         {
             switch (SelectColor)

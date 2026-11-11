@@ -14,7 +14,7 @@
 
 CShopPackageList::CShopPackageList()  // OK
 {
-    this->m_Packages.clear();
+    this->Clear();
 }
 
 CShopPackageList::~CShopPackageList()  // OK
@@ -28,11 +28,17 @@ int CShopPackageList::GetSize()  // OK
 void CShopPackageList::Clear()  // OK
 {
     this->m_Packages.clear();
+    this->m_PackageIndex.clear();
+    this->m_iter = this->m_Packages.end();
 }
 
 void CShopPackageList::Append(CShopPackage package)  // OK
 {
-    this->m_Packages.insert(std::make_pair(package.PackageProductSeq, package));
+    auto [_, inserted] = this->m_Packages.insert(std::make_pair(package.PackageProductSeq, package));
+    if (inserted)
+    {
+        this->m_PackageIndex.push_back(package.PackageProductSeq);
+    }
 }
 
 void CShopPackageList::SetFirst()  // OK

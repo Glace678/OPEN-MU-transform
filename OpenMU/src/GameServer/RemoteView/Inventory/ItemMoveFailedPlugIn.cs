@@ -41,6 +41,7 @@ public class ItemMoveFailedPlugIn : IItemMoveFailedPlugIn
             var itemSerializer = this._player.ItemSerializer;
             var size = ItemMoveRequestFailedRef.GetRequiredSize(itemSerializer.NeededSpace);
             var span = connection.Output.GetSpan(size)[..size];
+            span.Clear();
             var packet = new ItemMoveRequestFailedRef(span);
             if (item != null)
             {

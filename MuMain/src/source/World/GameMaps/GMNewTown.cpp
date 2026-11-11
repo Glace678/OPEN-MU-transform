@@ -260,6 +260,7 @@ bool GMNewTown::RenderObjectVisual(OBJECT* pObject, BMD* pModel)
             }
             break;
         case 58:
+            Vector(1.f, 1.f, 1.f, Light);
             CreateParticleFpsChecked(BITMAP_WATERFALL_5, pObject->Position, pObject->Angle, Light, 0);
             break;
         case 59:
@@ -564,8 +565,19 @@ bool GMNewTown::RenderObjectVisual(OBJECT* pObject, BMD* pModel)
                 SetCharacterScale(pCharacter);
 
                 SetPlayerAttack(pCharacter);
-                pNewObject->PriorAnimationFrame = pNewObject->AnimationFrame =
-                    rand() % Models[pNewObject->Type].Actions[pNewObject->CurrentAction].NumAnimationKeys;
+                if (pNewObject->Type >= 0 && pNewObject->Type < MAX_MODELS &&
+                    pNewObject->CurrentAction >= 0 &&
+                    pNewObject->CurrentAction < Models[pNewObject->Type].NumActions &&
+                    Models[pNewObject->Type].Actions != nullptr &&
+                    Models[pNewObject->Type].Actions[pNewObject->CurrentAction].NumAnimationKeys > 0)
+                {
+                    pNewObject->PriorAnimationFrame = pNewObject->AnimationFrame =
+                        rand() % Models[pNewObject->Type].Actions[pNewObject->CurrentAction].NumAnimationKeys;
+                }
+                else
+                {
+                    pNewObject->PriorAnimationFrame = pNewObject->AnimationFrame = 0.f;
+                }
                 pObject->Owner   = pNewObject;
                 pObject->SubType = icntIndex;
             }
@@ -623,7 +635,10 @@ bool GMNewTown::RenderObjectVisual(OBJECT* pObject, BMD* pModel)
                 VectorCopy(pObject->Position, pNewObject->Position);
                 VectorCopy(pObject->Angle, pNewObject->Angle);
                 SetAction(pNewObject, MONSTER01_ATTACK1);
-                if (Models[pNewObject->Type].Actions[MONSTER01_ATTACK1].NumAnimationKeys > 0)
+                if (pNewObject->Type >= 0 && pNewObject->Type < MAX_MODELS &&
+                    MONSTER01_ATTACK1 < Models[pNewObject->Type].NumActions &&
+                    Models[pNewObject->Type].Actions != nullptr &&
+                    Models[pNewObject->Type].Actions[MONSTER01_ATTACK1].NumAnimationKeys > 0)
                 {
                     pNewObject->PriorAnimationFrame = pNewObject->AnimationFrame =
                         rand() % Models[pNewObject->Type].Actions[MONSTER01_ATTACK1].NumAnimationKeys;

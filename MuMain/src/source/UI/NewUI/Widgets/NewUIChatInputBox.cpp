@@ -130,8 +130,6 @@ bool SEASON3B::CNewUIChatInputBox::Create(CNewUIManager* pNewUIMng, CNewUIChatLo
 
 void SEASON3B::CNewUIChatInputBox::Release()
 {
-    UnloadImages();
-
     RemoveAllChatHIstory();
     RemoveAllWhsprIDHIstory();
 
@@ -140,6 +138,7 @@ void SEASON3B::CNewUIChatInputBox::Release()
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = nullptr;
     }
@@ -182,13 +181,15 @@ int SEASON3B::CNewUIChatInputBox::GetInputMsgType() const
 
 void SEASON3B::CNewUIChatInputBox::SetFont(HFONT hFont)
 {
-    m_pChatInputBox->SetFont(hFont);
-    m_pWhsprIDInputBox->SetFont(hFont);
+    if (m_pChatInputBox)
+        m_pChatInputBox->SetFont(hFont);
+    if (m_pWhsprIDInputBox)
+        m_pWhsprIDInputBox->SetFont(hFont);
 }
 
 bool SEASON3B::CNewUIChatInputBox::HaveFocus()
 {
-    return (m_pChatInputBox->HaveFocus() || m_pWhsprIDInputBox->HaveFocus());
+    return (m_pChatInputBox && m_pChatInputBox->HaveFocus()) || (m_pWhsprIDInputBox && m_pWhsprIDInputBox->HaveFocus());
 }
 
 void SEASON3B::CNewUIChatInputBox::AddChatHistory(const type_string& strText)
@@ -298,13 +299,16 @@ bool SEASON3B::CNewUIChatInputBox::UpdateMouseEvent()
         {
             m_bShowSystemMessages = !m_bShowSystemMessages;
 
-            if (m_bShowSystemMessages)
+            if (m_pNewUISystemLogWnd)
             {
-                m_pNewUISystemLogWnd->ShowMessages();
-            }
-            else
-            {
-                m_pNewUISystemLogWnd->HideMessages();
+                if (m_bShowSystemMessages)
+                {
+                    m_pNewUISystemLogWnd->ShowMessages();
+                }
+                else
+                {
+                    m_pNewUISystemLogWnd->HideMessages();
+                }
             }
 
             PlayBuffer(SOUND_CLICK01);
@@ -755,7 +759,7 @@ void SEASON3B::CNewUIChatInputBox::RenderButtons()
 
 void SEASON3B::CNewUIChatInputBox::RenderTooltip()
 {
-    if (m_iTooltipType == INPUT_TOOLTIP_NOTHING)
+    if (m_iTooltipType < 0 || m_iTooltipType >= 10)
     {
         return;
     }
@@ -800,53 +804,82 @@ float SEASON3B::CNewUIChatInputBox::GetKeyEventOrder()
 
 void SEASON3B::CNewUIChatInputBox::OpenningProcess()
 {
-    // Set the state before focusing: a portable field ignores GiveFocus() while
-    // still hidden, so focusing after showing lets Enter-to-open type right away.
-    m_pChatInputBox->SetState(UISTATE_NORMAL);
-    m_pChatInputBox->GiveFocus();
-    m_pChatInputBox->SetText(L"");
-
-    if (m_bWhisperSend == true)
+    if (m_pChatInputBox)
     {
-        m_pWhsprIDInputBox->SetState(UISTATE_NORMAL);
+        // Set the state before focusing: a portable field ignores GiveFocus() while
+        // still hidden, so focusing after showing lets Enter-to-open type right away.
+        m_pChatInputBox->SetState(UISTATE_NORMAL);
+        m_pChatInputBox->GiveFocus();
+        m_pChatInputBox->SetText(L"");
     }
-    else
+
+    if (m_pWhsprIDInputBox)
     {
-        m_pWhsprIDInputBox->SetState(UISTATE_HIDE);
+        if (m_bWhisperSend == true)
+        {
+            m_pWhsprIDInputBox->SetState(UISTATE_NORMAL);
+        }
+        else
+        {
+            m_pWhsprIDInputBox->SetState(UISTATE_HIDE);
+        }
     }
 }
 
 void SEASON3B::CNewUIChatInputBox::ClosingProcess()
 {
-    m_pNewUIChatLogWnd->HideFrame();
+    if (m_pNewUIChatLogWnd)
+    {
+        m_pNewUIChatLogWnd->HideFrame();
+    }
 
-    m_pChatInputBox->SetState(UISTATE_HIDE);
-    m_pWhsprIDInputBox->SetState(UISTATE_HIDE);
+    if (m_pChatInputBox)
+    {
+        m_pChatInputBox->SetState(UISTATE_HIDE);
+    }
+    if (m_pWhsprIDInputBox)
+    {
+        m_pWhsprIDInputBox->SetState(UISTATE_HIDE);
+    }
 
     SetFocus(g_hWnd);
 }
 
 void SEASON3B::CNewUIChatInputBox::GetChatText(type_string& strText)
 {
-    wchar_t szChatText[256];
+    if (!m_pChatInputBox)
+    {
+        strText.clear();
+        return;
+    }
+    wchar_t szChatText[256] = {};
     m_pChatInputBox->GetText(szChatText, 256);
     strText = szChatText;
 }
 void SEASON3B::CNewUIChatInputBox::GetWhsprID(type_string& strWhsprID)
 {
-    wchar_t szWhisperID[32];
+    if (!m_pWhsprIDInputBox)
+    {
+        strWhsprID.clear();
+        return;
+    }
+    wchar_t szWhisperID[32] = {};
     m_pWhsprIDInputBox->GetText(szWhisperID, 32);
     strWhsprID = szWhisperID;
 }
 
 void SEASON3B::CNewUIChatInputBox::SetWhsprID(const wchar_t* strWhsprID)
 {
-    m_pWhsprIDInputBox->SetText(strWhsprID);
+    if (m_pWhsprIDInputBox)
+    {
+        m_pWhsprIDInputBox->SetText(strWhsprID);
+    }
 }
 
 void SEASON3B::CNewUIChatInputBox::UpdateWhisperTargetFromRightClick()
 {
-    if (SelectedCharacter < 0 || !SEASON3B::IsRelease(VK_RBUTTON))
+    if (SelectedCharacter < 0 || SelectedCharacter >= MAX_CHARACTERS_CLIENT || Hero == nullptr ||
+        !SEASON3B::IsRelease(VK_RBUTTON))
     {
         return;
     }
@@ -874,10 +907,16 @@ void SEASON3B::CNewUIChatInputBox::UpdateWhisperTargetFromRightClick()
 
 void SEASON3B::CNewUIChatInputBox::SetTextPosition(int x, int y)
 {
-    m_pChatInputBox->SetPosition(x, y);
+    if (m_pChatInputBox)
+    {
+        m_pChatInputBox->SetPosition(x, y);
+    }
 }
 
 void SEASON3B::CNewUIChatInputBox::SetBuddyPosition(int x, int y)
 {
-    m_pWhsprIDInputBox->SetPosition(x, y);
+    if (m_pWhsprIDInputBox)
+    {
+        m_pWhsprIDInputBox->SetPosition(x, y);
+    }
 }

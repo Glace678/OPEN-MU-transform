@@ -167,6 +167,7 @@ internal class PlugInProxyTypeGenerator
     private MethodDeclarationSyntax ImplementAsyncMethod(Type type, MethodInfo method)
     {
         const string forEachVariableName = "plugIn";
+        var typeName = this.GetTypeName(type);
 
         var methodDeclaration = MethodDeclaration(IdentifierName(method.ReturnType.Name), method.Name)
             .AddModifiers(Token(SyntaxKind.PublicKeyword))
@@ -180,15 +181,21 @@ internal class PlugInProxyTypeGenerator
             forEachBody = Block(IfStatement(ParseExpression("!" + cancelEventArgs.Name + ".Cancel"), forEachBody));
         }
 
+        BlockSyntax snapshotBlock = Block(
+            ParseStatement("using var l = await this.Lock.ReaderLockAsync().ConfigureAwait(false);"),
+            ParseStatement("if (this.ActivePlugIns.Count == 0) { return; }"),
+            ParseStatement($"snapshot = new List<{typeName}>(this.ActivePlugIns);"));
+
         BlockSyntax forEachBlock = Block(
             ForEachStatement(
-                ParseTypeName(this.GetTypeName(type)),
+                ParseTypeName(typeName),
                 forEachVariableName,
-                ParseExpression("this.ActivePlugIns"),
+                ParseExpression("snapshot"),
                 forEachBody));
 
         BlockSyntax methodBody = Block(
-            ParseStatement("using var l = await this.Lock.ReaderLockAsync();"),
+            ParseStatement($"List<{typeName}> snapshot;"),
+            snapshotBlock,
             forEachBlock);
 
         methodDeclaration = methodDeclaration.WithBody(methodBody);
@@ -226,6 +233,7 @@ internal class PlugInProxyTypeGenerator
     private MethodDeclarationSyntax ImplementMethod(Type type, MethodInfo method)
     {
         const string forEachVariableName = "plugIn";
+        var typeName = this.GetTypeName(type);
 
         var methodDeclaration = MethodDeclaration(PredefinedType(Token(SyntaxKind.VoidKeyword)), method.Name)
             .AddModifiers(Token(SyntaxKind.PublicKeyword));
@@ -238,15 +246,21 @@ internal class PlugInProxyTypeGenerator
             forEachBody = Block(IfStatement(ParseExpression("!" + cancelEventArgs.Name + ".Cancel"), forEachBody));
         }
 
+        BlockSyntax snapshotBlock = Block(
+            ParseStatement("using var l = this.Lock.ReaderLock();"),
+            ParseStatement("if (this.ActivePlugIns.Count == 0) { return; }"),
+            ParseStatement($"snapshot = new List<{typeName}>(this.ActivePlugIns);"));
+
         BlockSyntax forEachBlock = Block(
             ForEachStatement(
-                ParseTypeName(this.GetTypeName(type)),
+                ParseTypeName(typeName),
                 forEachVariableName,
-                ParseExpression("this.ActivePlugIns"),
+                ParseExpression("snapshot"),
                 forEachBody));
 
         BlockSyntax methodBody = Block(
-            ParseStatement("using var l = this.Lock.ReaderLock();"),
+            ParseStatement($"List<{typeName}> snapshot;"),
+            snapshotBlock,
             forEachBlock);
 
         methodDeclaration = methodDeclaration.WithBody(methodBody);

@@ -87,6 +87,7 @@ public class BaseTradeAction
     /// <param name="trader">The trader.</param>
     protected void ResetTradeState(ITrader trader)
     {
+        trader.TradingMoney = 0;
         trader.TradingPartner = null;
         trader.BackupInventory = null;
         trader.TemporaryStorage!.Clear();

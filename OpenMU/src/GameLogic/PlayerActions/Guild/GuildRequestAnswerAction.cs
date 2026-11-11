@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.GameLogic.PlayerActions.Guild;
 
+using System.Runtime.CompilerServices;
 using MUnique.OpenMU.GameLogic.Views.Guild;
 using MUnique.OpenMU.Interfaces;
 
@@ -12,6 +13,8 @@ using MUnique.OpenMU.Interfaces;
 /// </summary>
 public class GuildRequestAnswerAction
 {
+    private static readonly ConditionalWeakTable<Player, object> RequestLocks = new();
+
     /// <summary>
     /// Answers the request.
     /// </summary>
@@ -26,7 +29,13 @@ public class GuildRequestAnswerAction
             return;
         }
 
-        var lastGuildRequester = player.LastGuildRequester;
+        Player? lastGuildRequester;
+        lock (RequestLocks.GetOrCreateValue(player))
+        {
+            lastGuildRequester = player.LastGuildRequester;
+            player.LastGuildRequester = null;
+        }
+
         if (lastGuildRequester?.SelectedCharacter is null)
         {
             return;
@@ -49,7 +58,6 @@ public class GuildRequestAnswerAction
             || lastGuildRequester.PlayerState.CurrentState != PlayerState.EnteredWorld)
         {
             await lastGuildRequester.InvokeViewPlugInAsync<IGuildJoinResponsePlugIn>(p => p.ShowGuildJoinResponseAsync(GuildRequestAnswerResult.GuildMasterOrRequesterIsBusy)).ConfigureAwait(false);
-            player.LastGuildRequester = null;
             return;
         }
 
@@ -59,6 +67,5 @@ public class GuildRequestAnswerAction
         }
 
         await lastGuildRequester.InvokeViewPlugInAsync<IGuildJoinResponsePlugIn>(p => p.ShowGuildJoinResponseAsync(accept ? GuildRequestAnswerResult.Accepted : GuildRequestAnswerResult.Refused)).ConfigureAwait(false);
-        player.LastGuildRequester = null;
     }
 }

@@ -19,6 +19,8 @@ public class CachedRepository<T> : IRepository<T>
 
     private readonly SemaphoreSlim _loadLock = new(1, 1);
 
+    private readonly HashSet<Guid> _deletedDuringLoad = new();
+
     private bool _allLoaded;
 
     private Task? _loadingTask;
@@ -80,12 +82,13 @@ public class CachedRepository<T> : IRepository<T>
             {
                 foreach (var obj in values)
                 {
-                    if (!this._cache.ContainsKey(obj.Id))
+                    if (!this._deletedDuringLoad.Contains(obj.Id) && !this._cache.ContainsKey(obj.Id))
                     {
                         this.AddToCache(obj.Id, obj);
                     }
                 }
 
+                this._deletedDuringLoad.Clear();
                 this._allLoaded = true;
             }
             finally
@@ -98,6 +101,7 @@ public class CachedRepository<T> : IRepository<T>
             await this._loadLock.WaitAsync().ConfigureAwait(false);
             try
             {
+                this._deletedDuringLoad.Clear();
                 this._loadingTask = null;
             }
             finally
@@ -142,7 +146,21 @@ public class CachedRepository<T> : IRepository<T>
             return false;
         }
 
-        this.RemoveFromCache(id);
+        await this._loadLock.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            if (!this._allLoaded && this._loadingTask is not null)
+            {
+                this._deletedDuringLoad.Add(id);
+            }
+
+            this.RemoveFromCache(id);
+        }
+        finally
+        {
+            this._loadLock.Release();
+        }
+
         return true;
     }
 
@@ -153,13 +171,14 @@ public class CachedRepository<T> : IRepository<T>
     /// <param name="obj">The object.</param>
     protected virtual void AddToCache(Guid id, T obj)
     {
-        // Correct semantics: if the same instance is already cached, the call is idempotent;
-        // a *different* instance with the same id is the real conflict and must throw.
+        // Correct semantics: if the exact same instance is already cached, the call is idempotent;
+        // a *different* instance with the same id is the real conflict and must throw. Note that
+        // BasicModel entities override Equals(object) by Id, so ReferenceEquals is required here.
         while (true)
         {
             if (this._cache.TryGetValue(id, out var value))
             {
-                if (Equals(value, obj))
+                if (ReferenceEquals(value, obj))
                 {
                     return;
                 }

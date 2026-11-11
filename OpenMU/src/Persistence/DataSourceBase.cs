@@ -72,7 +72,8 @@ public abstract class DataSourceBase<TOwner> : IDataSource<TOwner>
     /// <inheritdoc />
     public async ValueTask<IContext> GetContextAsync(CancellationToken cancellationToken)
     {
-        return this._context ??= await this.CreateNewContextAsync().ConfigureAwait(false);
+        using var l = await this._loadLock.LockAsync(cancellationToken).ConfigureAwait(false);
+        return await this.GetOrCreateContextCoreAsync().ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -86,7 +87,7 @@ public abstract class DataSourceBase<TOwner> : IDataSource<TOwner>
             return owner;
         }
 
-        var context = await this.GetContextAsync(cancellationToken).ConfigureAwait(false);
+        var context = await this.GetOrCreateContextCoreAsync().ConfigureAwait(false);
         this._logger.LogDebug("Loading owner ...");
         var stopwatch = new Stopwatch();
         stopwatch.Start();
@@ -169,6 +170,11 @@ public abstract class DataSourceBase<TOwner> : IDataSource<TOwner>
     protected virtual ValueTask<IContext> CreateNewContextAsync()
     {
         return ValueTask.FromResult(this.ContextProvider.CreateNewContext());
+    }
+
+    private async ValueTask<IContext> GetOrCreateContextCoreAsync()
+    {
+        return this._context ??= await this.CreateNewContextAsync().ConfigureAwait(false);
     }
 
     private IDictionary<Guid, IIdentifiable> BuildDictionary()

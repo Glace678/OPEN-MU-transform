@@ -87,7 +87,13 @@ void ApplyDataRoot()
 
     if (std::getenv("MU_CONFIG_FILE") == nullptr)
     {
-        const std::string configPath = (dataRoot.parent_path() / "config.ini").string();
+        std::filesystem::path configFile = dataRoot / "config.ini";
+        if (!std::filesystem::exists(configFile, error) &&
+            std::filesystem::exists(dataRoot.parent_path() / "config.ini", error))
+        {
+            configFile = dataRoot.parent_path() / "config.ini";
+        }
+        const std::string configPath = configFile.string();
         // SDL snapshots the process environment on first use; update both the
         // snapshot and libc so GameConfig sees the per-install config even if
         // SDL_SetHint ran before this point (same reasoning as Android).

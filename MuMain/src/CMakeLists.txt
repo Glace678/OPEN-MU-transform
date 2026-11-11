@@ -24,6 +24,7 @@ cmake_path(GET CMAKE_CURRENT_SOURCE_DIR PARENT_PATH REPO_ROOT)
 
 include("${REPO_ROOT}/cmake/EnsureSubmodule.cmake")
 include("${REPO_ROOT}/cmake/ClientLibraryPlatform.cmake")
+include("${REPO_ROOT}/cmake/StaticAnalysis.cmake")
 
 mu_ensure_submodule("ThirdParty/SDL"
   INDICATOR "CMakeLists.txt"
@@ -812,6 +813,30 @@ elseif (CMAKE_SYSTEM_NAME STREQUAL "Linux")
     ${GLEW_LIBRARY}
     ${TURBOJPEG_LIBRARY}
   )
+elseif(CMAKE_SYSTEM_NAME STREQUAL "iOS")
+  set(MU_IOS_TURBOJPEG_LIBRARY "" CACHE FILEPATH
+      "Path to an iOS turbojpeg library")
+  target_link_libraries(MuClient PUBLIC
+    "-framework OpenGLES"
+    "-framework UIKit"
+    "-framework Foundation"
+  )
+  if(MU_IOS_TURBOJPEG_LIBRARY)
+    if(NOT EXISTS "${MU_IOS_TURBOJPEG_LIBRARY}")
+      message(FATAL_ERROR
+        "MU_IOS_TURBOJPEG_LIBRARY does not exist: ${MU_IOS_TURBOJPEG_LIBRARY}")
+    endif()
+    target_link_libraries(MuClient PUBLIC "${MU_IOS_TURBOJPEG_LIBRARY}")
+  else()
+    find_library(IOS_TURBOJPEG_LIBRARY NAMES turbojpeg)
+    if(IOS_TURBOJPEG_LIBRARY)
+      target_link_libraries(MuClient PUBLIC "${IOS_TURBOJPEG_LIBRARY}")
+    else()
+      message(WARNING
+        "iOS turbojpeg is not configured. Final OpenMU-Game linkage requires "
+        "MU_IOS_TURBOJPEG_LIBRARY.")
+    endif()
+  endif()
 elseif(APPLE)
   target_include_directories(MuClient BEFORE PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/source/Core/Platform/macOS")
@@ -1158,13 +1183,14 @@ if (DOTNET_EXECUTABLE)
             OUTPUT "${DOTNET_DLL_PATH}"
             COMMAND ${CMAKE_COMMAND} -E echo "--- C# Changes Detected: Rebuilding Client Library ---"
             COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>"
+            COMMAND ${CMAKE_COMMAND} -E make_directory "${DOTNET_TEMP_OUTPUT}/$<CONFIG>"
             COMMAND ${CMAKE_COMMAND} -E env
                     "NUGET_PACKAGES=${DOTNET_NUGET_DIR_NATIVE}"
                     "DOTNET_CLI_HOME=${DOTNET_TEMP_DIR_NATIVE}"
                     "TEMP=${DOTNET_TEMP_DIR_NATIVE}"
                     "TMP=${DOTNET_TEMP_DIR_NATIVE}"
-                    "${DOTNET_EXECUTABLE}" publish "${DOTNET_PROJ_NATIVE}" -c $<CONFIG> -r ${DOTNET_RID} -p:PlatformTarget=${DOTNET_PLATFORM} ${DOTNET_EXTRA_ARGS} -o "${DOTNET_TEMP_OUTPUT_NATIVE}" --nologo
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${DOTNET_TEMP_OUTPUT}/${DOTNET_LIB_NAME}" "${DOTNET_DLL_PATH}"
+                    "${DOTNET_EXECUTABLE}" publish "${DOTNET_PROJ_NATIVE}" -c $<CONFIG> -r ${DOTNET_RID} -p:PlatformTarget=${DOTNET_PLATFORM} ${DOTNET_EXTRA_ARGS} -o "${DOTNET_TEMP_OUTPUT_NATIVE}/$<CONFIG>" --nologo
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different "${DOTNET_TEMP_OUTPUT}/$<CONFIG>/${DOTNET_LIB_NAME}" "${DOTNET_DLL_PATH}"
             DEPENDS "${DOTNET_PROJ}" ${DOTNET_SOURCES}
             COMMENT "Checking for .NET Client Library updates..."
             VERBATIM
@@ -1172,22 +1198,29 @@ if (DOTNET_EXECUTABLE)
     set(MU_CLIENT_LIBRARY_AVAILABLE TRUE)
   endif()
 
-  # ConstantsReplacer build target
+  # ConstantsReplacer build target (WinForms tool: requires Windows or WSL dotnet.exe)
   set(CONSTANTS_REPLACER_PROJ "${CMAKE_CURRENT_SOURCE_DIR}/../ConstantsReplacer/ConstantsReplacer.csproj")
   mu_native_path("${CONSTANTS_REPLACER_PROJ}" CONSTANTS_REPLACER_PROJ_NATIVE)
   mu_native_path("${CMAKE_BINARY_DIR}/ConstantsReplacer" CONSTANTS_REPLACER_OUTDIR_NATIVE)
   file(GLOB_RECURSE CONSTANTS_REPLACER_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/../ConstantsReplacer/*.cs")
-  set(CONSTANTS_REPLACER_OUTPUT "${CMAKE_BINARY_DIR}/ConstantsReplacer/ConstantsReplacer.exe")
+  list(FILTER CONSTANTS_REPLACER_SOURCES EXCLUDE REGEX "[/\\](obj|bin)[/\\]")
+  set(CONSTANTS_REPLACER_EXE_SUFFIX "")
+  if(WIN32 OR DOTNET_EXECUTABLE MATCHES "\\.exe$")
+    set(CONSTANTS_REPLACER_EXE_SUFFIX ".exe")
+  endif()
+  set(CONSTANTS_REPLACER_OUTPUT "${CMAKE_BINARY_DIR}/ConstantsReplacer/ConstantsReplacer${CONSTANTS_REPLACER_EXE_SUFFIX}")
 
-  add_custom_command(
-    OUTPUT "${CONSTANTS_REPLACER_OUTPUT}"
-    COMMAND "${DOTNET_EXECUTABLE}" build "${CONSTANTS_REPLACER_PROJ_NATIVE}" -c $<CONFIG> -o "${CONSTANTS_REPLACER_OUTDIR_NATIVE}" --nologo
-    DEPENDS "${CONSTANTS_REPLACER_PROJ}" ${CONSTANTS_REPLACER_SOURCES}
-    COMMENT "Building ConstantsReplacer tool..."
-    VERBATIM
-  )
+  if(WIN32 OR DOTNET_EXECUTABLE MATCHES "\\.exe$")
+    add_custom_command(
+      OUTPUT "${CONSTANTS_REPLACER_OUTPUT}"
+      COMMAND "${DOTNET_EXECUTABLE}" build "${CONSTANTS_REPLACER_PROJ_NATIVE}" -c $<CONFIG> -o "${CONSTANTS_REPLACER_OUTDIR_NATIVE}" --nologo
+      DEPENDS "${CONSTANTS_REPLACER_PROJ}" ${CONSTANTS_REPLACER_SOURCES}
+      COMMENT "Building ConstantsReplacer tool..."
+      VERBATIM
+    )
 
-  add_custom_target(ConstantsReplacer DEPENDS "${CONSTANTS_REPLACER_OUTPUT}")
+    add_custom_target(ConstantsReplacer DEPENDS "${CONSTANTS_REPLACER_OUTPUT}")
+  endif()
 
   # ResxGen: .resx -> typed C++ accessors under namespace I18N::<Group>.
   # Discovers groups from filenames (<Group>.<locale>.resx) and emits one

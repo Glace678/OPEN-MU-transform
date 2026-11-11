@@ -70,6 +70,7 @@ private:
     std::vector<std::unique_ptr<WorkerQueue>> m_queues;
 
     std::atomic<int>  m_remainingTasks{0};
+    std::atomic<int>  m_queuedTasks{0};
     std::atomic<bool> m_running{false};
     size_t            m_workerCount{0};
 

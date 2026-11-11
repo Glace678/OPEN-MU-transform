@@ -1,4 +1,4 @@
-﻿// <copyright file="ServerToClientPacketsRef.cs" company="MUnique">
+// <copyright file="ServerToClientPacketsRef.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -4183,7 +4183,7 @@ public readonly ref struct RageAttackRangeResponseRef
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)Math.Min(data.Length, Length);
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
         }
     }
 
@@ -13279,7 +13279,7 @@ public readonly ref struct CharacterCreationSuccessfulRef
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)Math.Min(data.Length, Length);
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
             this.Success = true;
         }
@@ -24299,8 +24299,8 @@ public readonly ref struct SkillStageUpdateRef
     /// </summary>
     public ushort ObjectId
     {
-        get => ReadUInt16LittleEndian(this._data[3..]);
-        set => WriteUInt16LittleEndian(this._data[3..], value);
+        get => ReadUInt16BigEndian(this._data[3..]);
+        set => WriteUInt16BigEndian(this._data[3..], value);
     }
 
     /// <summary>
@@ -24611,10 +24611,10 @@ public readonly ref struct IllusionTemplePartyEntryRef
     /// <summary>
     /// Gets or sets the map number.
     /// </summary>
-    public ushort MapNumber
+    public byte MapNumber
     {
-        get => ReadUInt16LittleEndian(this._data[2..]);
-        set => WriteUInt16LittleEndian(this._data[2..], value);
+        get => this._data[2];
+        set => this._data[2] = value;
     }
 
     /// <summary>
@@ -25272,7 +25272,7 @@ public readonly ref struct IllusionTempleHolyItemRelicsRef
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)Math.Min(data.Length, Length);
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -27328,7 +27328,7 @@ public readonly ref struct QuestProgressRef
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)Math.Min(data.Length, Length);
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -27399,7 +27399,7 @@ public readonly ref struct QuestProgressRef
     /// Gets the <see cref="QuestConditionRef"/> of the specified index.
     /// </summary>
     public QuestConditionRef GetQuestCondition(int index) =>
-        (index < 0 || 11 + index * QuestConditionRef.Length + QuestConditionRef.Length > this._data.Length)
+        (index < 0 || 11 + index * QuestConditionRef.Length + QuestConditionRef.Length > Math.Min(this._data.Length, 141))
             ? throw new System.ArgumentOutOfRangeException(nameof(index))
             : new (this._data[(11 + index * QuestConditionRef.Length)..]);
 
@@ -27426,11 +27426,11 @@ public readonly ref struct QuestProgressRef
     public static implicit operator Span<byte>(QuestProgressRef packet) => packet._data; 
 
     /// <summary>
-    /// Calculates the size of the packet for the specified count of <see cref="QuestConditionRef"/>.
+    /// Calculates the size of the packet for the specified count of <see cref="QuestRewardRef"/>.
     /// </summary>
-    /// <param name="conditionsCount">The count of <see cref="QuestConditionRef"/> from which the size will be calculated.</param>
+    /// <param name="rewardsCount">The count of <see cref="QuestRewardRef"/> from which the size will be calculated.</param>
         
-    public static int GetRequiredSize(int conditionsCount) => Math.Max(conditionsCount * QuestConditionRef.Length + 11, Length);
+    public static int GetRequiredSize(int rewardsCount) => Math.Max(rewardsCount * QuestRewardRef.Length + 141, Length);
 }
 
 
@@ -27464,7 +27464,7 @@ public readonly ref struct QuestProgressExtendedRef
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)Math.Min(data.Length, Length);
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -27544,7 +27544,7 @@ public readonly ref struct QuestProgressExtendedRef
     /// Gets the <see cref="QuestConditionExtendedRef"/> of the specified index.
     /// </summary>
     public QuestConditionExtendedRef GetQuestConditionExtended(int index) =>
-        (index < 0 || 12 + index * QuestConditionExtendedRef.Length + QuestConditionExtendedRef.Length > this._data.Length)
+        (index < 0 || 12 + index * QuestConditionExtendedRef.Length + QuestConditionExtendedRef.Length > Math.Min(this._data.Length, 152))
             ? throw new System.ArgumentOutOfRangeException(nameof(index))
             : new (this._data[(12 + index * QuestConditionExtendedRef.Length)..]);
 
@@ -27571,11 +27571,11 @@ public readonly ref struct QuestProgressExtendedRef
     public static implicit operator Span<byte>(QuestProgressExtendedRef packet) => packet._data; 
 
     /// <summary>
-    /// Calculates the size of the packet for the specified count of <see cref="QuestConditionExtendedRef"/>.
+    /// Calculates the size of the packet for the specified count of <see cref="QuestRewardExtendedRef"/>.
     /// </summary>
-    /// <param name="conditionsCount">The count of <see cref="QuestConditionExtendedRef"/> from which the size will be calculated.</param>
+    /// <param name="rewardsCount">The count of <see cref="QuestRewardExtendedRef"/> from which the size will be calculated.</param>
         
-    public static int GetRequiredSize(int conditionsCount) => Math.Max(conditionsCount * QuestConditionExtendedRef.Length + 12, Length);
+    public static int GetRequiredSize(int rewardsCount) => Math.Max(rewardsCount * QuestRewardExtendedRef.Length + 152, Length);
 }
 
 
@@ -27901,7 +27901,7 @@ public readonly ref struct QuestStateRef
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (byte)Math.Min(data.Length, Length);
+            header.Length = (byte)Math.Min(data.Length, (int)byte.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -27981,7 +27981,7 @@ public readonly ref struct QuestStateRef
     /// Gets the <see cref="QuestConditionRef"/> of the specified index.
     /// </summary>
     public QuestConditionRef GetQuestCondition(int index) =>
-        (index < 0 || 11 + index * QuestConditionRef.Length + QuestConditionRef.Length > this._data.Length)
+        (index < 0 || 11 + index * QuestConditionRef.Length + QuestConditionRef.Length > Math.Min(this._data.Length, 141))
             ? throw new System.ArgumentOutOfRangeException(nameof(index))
             : new (this._data[(11 + index * QuestConditionRef.Length)..]);
 
@@ -28008,11 +28008,11 @@ public readonly ref struct QuestStateRef
     public static implicit operator Span<byte>(QuestStateRef packet) => packet._data; 
 
     /// <summary>
-    /// Calculates the size of the packet for the specified count of <see cref="QuestConditionRef"/>.
+    /// Calculates the size of the packet for the specified count of <see cref="QuestRewardRef"/>.
     /// </summary>
-    /// <param name="conditionsCount">The count of <see cref="QuestConditionRef"/> from which the size will be calculated.</param>
+    /// <param name="rewardsCount">The count of <see cref="QuestRewardRef"/> from which the size will be calculated.</param>
         
-    public static int GetRequiredSize(int conditionsCount) => Math.Max(conditionsCount * QuestConditionRef.Length + 11, Length);
+    public static int GetRequiredSize(int rewardsCount) => Math.Max(rewardsCount * QuestRewardRef.Length + 141, Length);
 }
 
 
@@ -28046,7 +28046,7 @@ public readonly ref struct QuestStateExtendedRef
             var header = this.Header;
             header.Type = HeaderType;
             header.Code = Code;
-            header.Length = (ushort)Math.Min(data.Length, Length);
+            header.Length = (ushort)Math.Min(data.Length, (int)ushort.MaxValue);
             header.SubCode = SubCode;
         }
     }
@@ -28126,7 +28126,7 @@ public readonly ref struct QuestStateExtendedRef
     /// Gets the <see cref="QuestConditionExtendedRef"/> of the specified index.
     /// </summary>
     public QuestConditionExtendedRef GetQuestConditionExtended(int index) =>
-        (index < 0 || 12 + index * QuestConditionExtendedRef.Length + QuestConditionExtendedRef.Length > this._data.Length)
+        (index < 0 || 12 + index * QuestConditionExtendedRef.Length + QuestConditionExtendedRef.Length > Math.Min(this._data.Length, 152))
             ? throw new System.ArgumentOutOfRangeException(nameof(index))
             : new (this._data[(12 + index * QuestConditionExtendedRef.Length)..]);
 
@@ -28153,11 +28153,11 @@ public readonly ref struct QuestStateExtendedRef
     public static implicit operator Span<byte>(QuestStateExtendedRef packet) => packet._data; 
 
     /// <summary>
-    /// Calculates the size of the packet for the specified count of <see cref="QuestConditionExtendedRef"/>.
+    /// Calculates the size of the packet for the specified count of <see cref="QuestRewardExtendedRef"/>.
     /// </summary>
-    /// <param name="conditionsCount">The count of <see cref="QuestConditionExtendedRef"/> from which the size will be calculated.</param>
+    /// <param name="rewardsCount">The count of <see cref="QuestRewardExtendedRef"/> from which the size will be calculated.</param>
         
-    public static int GetRequiredSize(int conditionsCount) => Math.Max(conditionsCount * QuestConditionExtendedRef.Length + 12, Length);
+    public static int GetRequiredSize(int rewardsCount) => Math.Max(rewardsCount * QuestRewardExtendedRef.Length + 152, Length);
 }
 
 

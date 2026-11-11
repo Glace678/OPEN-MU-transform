@@ -7,11 +7,15 @@ internal static partial class PlaceholderScanner
     public static IReadOnlyList<string> Scan(string value)
     {
         var formatText = value.Replace("%%", string.Empty, StringComparison.Ordinal);
-        return PrintfPlaceholder()
+        var printfPlaceholders = PrintfPlaceholder()
             .Matches(formatText)
-            .Select(match => Normalize(match.Value))
-            .Concat(IndexedPlaceholder().Matches(formatText).Select(match => match.Value))
-            .Order(StringComparer.Ordinal)
+            .Select(match => Normalize(match.Value));
+        var indexedPlaceholders = IndexedPlaceholder()
+            .Matches(formatText)
+            .Select(match => match.Value)
+            .Order(StringComparer.Ordinal);
+        return printfPlaceholders
+            .Concat(indexedPlaceholders)
             .ToArray();
     }
 

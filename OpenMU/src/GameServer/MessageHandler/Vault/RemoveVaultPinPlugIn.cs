@@ -30,6 +30,11 @@ internal class RemoveVaultPinPlugIn : ISubPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < RemoveVaultPin.Length)
+        {
+            return;
+        }
+
         RemoveVaultPin message = packet;
         await this._unlockVaultAction.RemovePinAsync(player, message.Password).ConfigureAwait(false);
     }

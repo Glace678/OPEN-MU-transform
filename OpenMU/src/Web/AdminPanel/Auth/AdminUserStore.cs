@@ -96,8 +96,19 @@ public class AdminUserStore :
             return IdentityResult.Success;
         }
 
-        await this._repository.UpdateAsync(user, cancellationToken).ConfigureAwait(false);
-        return IdentityResult.Success;
+        try
+        {
+            await this._repository.UpdateAsync(user, cancellationToken).ConfigureAwait(false);
+            return IdentityResult.Success;
+        }
+        catch (AdminUserConcurrencyException)
+        {
+            return IdentityResult.Failed(new IdentityError
+            {
+                Code = "ConcurrencyFailure",
+                Description = "Optimistic concurrency failure, object has been modified.",
+            });
+        }
     }
 
     /// <inheritdoc />

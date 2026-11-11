@@ -220,22 +220,24 @@ public sealed class CastleSiegeNpcController
     {
         lock (this._gateTerrainLock)
         {
-            for (var x = area.StartX; x <= area.EndX; x++)
+            for (int x = area.StartX; x <= area.EndX; x++)
             {
-                for (var y = area.StartY; y <= area.EndY; y++)
+                for (int y = area.StartY; y <= area.EndY; y++)
                 {
-                    var point = new Point(x, y);
+                    var bx = (byte)x;
+                    var by = (byte)y;
+                    var point = new Point(bx, by);
                     if (this._gateTerrain.TryGetValue(point, out var state))
                     {
                         this._gateTerrain[point] = (state.WasWalkable, state.ReferenceCount + 1);
                     }
                     else
                     {
-                        this._gateTerrain[point] = (map.Terrain.WalkMap[x, y], 1);
+                        this._gateTerrain[point] = (map.Terrain.WalkMap[bx, by], 1);
                     }
 
-                    map.Terrain.WalkMap[x, y] = false;
-                    map.Terrain.UpdateAiGridValue(x, y);
+                    map.Terrain.WalkMap[bx, by] = false;
+                    map.Terrain.UpdateAiGridValue(bx, by);
                 }
             }
         }
@@ -254,11 +256,13 @@ public sealed class CastleSiegeNpcController
         var blockedAreas = new List<(byte StartX, byte StartY, byte EndX, byte EndY)>();
         lock (this._gateTerrainLock)
         {
-            for (var x = area.StartX; x <= area.EndX; x++)
+            for (int x = area.StartX; x <= area.EndX; x++)
             {
-                for (var y = area.StartY; y <= area.EndY; y++)
+                for (int y = area.StartY; y <= area.EndY; y++)
                 {
-                    var point = new Point(x, y);
+                    var bx = (byte)x;
+                    var by = (byte)y;
+                    var point = new Point(bx, by);
                     if (!this._gateTerrain.Remove(point, out var state))
                     {
                         continue;
@@ -267,17 +271,17 @@ public sealed class CastleSiegeNpcController
                     if (state.ReferenceCount > 1)
                     {
                         this._gateTerrain[point] = (state.WasWalkable, state.ReferenceCount - 1);
-                        map.Terrain.WalkMap[x, y] = false;
+                        map.Terrain.WalkMap[bx, by] = false;
                     }
                     else
                     {
-                        map.Terrain.WalkMap[x, y] = state.WasWalkable;
+                        map.Terrain.WalkMap[bx, by] = state.WasWalkable;
                     }
 
-                    map.Terrain.UpdateAiGridValue(x, y);
-                    if (!map.Terrain.WalkMap[x, y])
+                    map.Terrain.UpdateAiGridValue(bx, by);
+                    if (!map.Terrain.WalkMap[bx, by])
                     {
-                        blockedAreas.Add((x, y, x, y));
+                        blockedAreas.Add((bx, by, bx, by));
                     }
                 }
             }
@@ -482,11 +486,33 @@ public sealed class CastleSiegeNpcController
 
         await RemoveConfiguredDuplicateAsync(map, runtime).ConfigureAwait(false);
         var npc = this.CreateNpc(spawnArea, map, runtime);
-        npc.Initialize();
-        await map.AddAsync(npc).ConfigureAwait(false);
-        npc.OnSpawn();
-        runtime.SpawnedInstance = npc;
-        runtime.IsAlive = true;
+        var addedToMap = false;
+        try
+        {
+            npc.Initialize();
+            await map.AddAsync(npc).ConfigureAwait(false);
+            addedToMap = true;
+            npc.OnSpawn();
+            runtime.SpawnedInstance = npc;
+            runtime.IsAlive = true;
+        }
+        catch
+        {
+            if (addedToMap)
+            {
+                try
+                {
+                    await map.RemoveAsync(npc).ConfigureAwait(false);
+                }
+                catch
+                {
+                    // Best-effort map cleanup before disposing failed spawn.
+                }
+            }
+
+            npc.Dispose();
+            throw;
+        }
     }
 
     private NonPlayerCharacter CreateNpc(

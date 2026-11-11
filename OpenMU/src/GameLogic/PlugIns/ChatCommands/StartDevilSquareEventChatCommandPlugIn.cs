@@ -29,6 +29,13 @@ public class StartDevilSquareEventChatCommandPlugIn : IChatCommandPlugIn
     public async ValueTask HandleCommandAsync(Player player, string command)
     {
         var devilSquare = player.GameContext.PlugInManager.GetStrategy<MiniGameType, IPeriodicMiniGameStartPlugIn>(MiniGameType.DevilSquare);
-        devilSquare?.ForceStart();
+        if (devilSquare is IContextScopedPeriodicTaskPlugIn scoped)
+        {
+            scoped.ForceStart(player.GameContext);
+        }
+        else
+        {
+            devilSquare?.ForceStart();
+        }
     }
 }

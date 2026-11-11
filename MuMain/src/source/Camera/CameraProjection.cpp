@@ -1,4 +1,7 @@
 #include "stdafx.h"
+#include <algorithm>
+#include <cmath>
+#include <cstdint>
 #include "CameraProjection.h"
 #include "CameraState.h"
 #include "CameraConfig.h"
@@ -25,16 +28,17 @@ void CameraProjection::SetupPerspective(CameraState& state, float fov, float asp
     // Use actual viewport dimensions (set by SetViewport) for screen center and
     // perspective. This accounts for the game viewport being narrower/shorter than
     // the full window when UI panels (inventory, NPC shop, etc.) are open.
-    int vpWidth  = s_ViewportWidth > 0 ? s_ViewportWidth : OpenglWindowWidth;
-    int vpHeight = s_ViewportHeight > 0 ? s_ViewportHeight : OpenglWindowHeight;
+    const int   vpWidth    = std::max(1, s_ViewportWidth > 0 ? s_ViewportWidth : OpenglWindowWidth);
+    const int   vpHeight   = std::max(1, s_ViewportHeight > 0 ? s_ViewportHeight : OpenglWindowHeight);
+    const float safeAspect = (std::isfinite(aspect) && aspect > 1e-4f) ? aspect : 1.0f;
 
     state.ScreenCenterX     = OpenglWindowX + vpWidth / 2;
     state.ScreenCenterY     = OpenglWindowY + vpHeight / 2;
     state.ScreenCenterYFlip = WindowHeight - state.ScreenCenterY;
 
-    float fovRad       = fov * 0.5f * Q_PI / 180.0f;
-    state.PerspectiveX = tanf(fovRad) / (float)(vpWidth / 2) * aspect;
-    state.PerspectiveY = tanf(fovRad) / (float)(vpHeight / 2);
+    const float fovRad = fov * 0.5f * Q_PI / 180.0f;
+    state.PerspectiveX = (tanf(fovRad) / (0.5f * static_cast<float>(vpWidth))) * safeAspect;
+    state.PerspectiveY = tanf(fovRad) / (0.5f * static_cast<float>(vpHeight));
 }
 
 void CameraProjection::SetViewport(int x, int y, int width, int height)
@@ -74,16 +78,40 @@ void CameraProjection::ScreenToWorldRay(const CameraState& state, int sx, int sy
 
 void CameraProjection::WorldToScreen(const CameraState& state, const vec3_t worldPos, int* outX, int* outY)
 {
+    if (!outX || !outY)
+    {
+        return;
+    }
+
     vec3_t transformPos;
     VectorTransform(worldPos, state.Matrix, transformPos);
 
-    // Project to screen
-    *outX = -(int)(transformPos[0] / state.PerspectiveX / transformPos[2]) + state.ScreenCenterX;
-    *outY = (int)(transformPos[1] / state.PerspectiveY / transformPos[2]) + state.ScreenCenterY;
+    constexpr int   kOffscreenCoord = -10000;
+    constexpr float kMaxPixelCoord  = 1000000.0f;
+    if (!std::isfinite(state.PerspectiveX) || !std::isfinite(state.PerspectiveY) ||
+        std::abs(state.PerspectiveX) <= 1e-6f || std::abs(state.PerspectiveY) <= 1e-6f ||
+        !std::isfinite(transformPos[2]) || std::abs(transformPos[2]) <= 1e-4f || WindowWidth == 0 || WindowHeight == 0)
+    {
+        *outX = kOffscreenCoord;
+        *outY = kOffscreenCoord;
+        return;
+    }
+
+    const float projX = -(transformPos[0] / state.PerspectiveX / transformPos[2]) + static_cast<float>(state.ScreenCenterX);
+    const float projY = (transformPos[1] / state.PerspectiveY / transformPos[2]) + static_cast<float>(state.ScreenCenterY);
+    if (!std::isfinite(projX) || !std::isfinite(projY))
+    {
+        *outX = kOffscreenCoord;
+        *outY = kOffscreenCoord;
+        return;
+    }
+
+    const std::int64_t pixelX = static_cast<std::int64_t>(std::clamp(projX, -kMaxPixelCoord, kMaxPixelCoord));
+    const std::int64_t pixelY = static_cast<std::int64_t>(std::clamp(projY, -kMaxPixelCoord, kMaxPixelCoord));
 
     // Convert to 640×480 reference coordinates
-    *outX = *outX * REFERENCE_WIDTH / (int)WindowWidth;
-    *outY = *outY * REFERENCE_HEIGHT / (int)WindowHeight;
+    *outX = static_cast<int>((pixelX * REFERENCE_WIDTH) / static_cast<std::int64_t>(WindowWidth));
+    *outY = static_cast<int>((pixelY * REFERENCE_HEIGHT) / static_cast<std::int64_t>(WindowHeight));
 }
 
 void CameraProjection::TransformPosition(const CameraState& state, const vec3_t position, vec3_t outWorldPosition,
@@ -93,9 +121,36 @@ void CameraProjection::TransformPosition(const CameraState& state, const vec3_t 
     VectorSubtract(position, state.Position, temp);
     VectorRotate(temp, state.Matrix, outWorldPosition);
 
+    if (!outX || !outY)
+    {
+        return;
+    }
+
+    constexpr int   kOffscreenCoord = -10000;
+    constexpr float kMaxPixelCoord  = 1000000.0f;
+    if (!std::isfinite(state.PerspectiveX) || !std::isfinite(state.PerspectiveY) ||
+        std::abs(state.PerspectiveX) <= 1e-6f || std::abs(state.PerspectiveY) <= 1e-6f ||
+        !std::isfinite(outWorldPosition[2]) || std::abs(outWorldPosition[2]) <= 1e-4f)
+    {
+        *outX = kOffscreenCoord;
+        *outY = kOffscreenCoord;
+        return;
+    }
+
+    const float projX =
+        (outWorldPosition[0] / state.PerspectiveX / -outWorldPosition[2]) + static_cast<float>(state.ScreenCenterX);
+    const float projY =
+        (outWorldPosition[1] / state.PerspectiveY / -outWorldPosition[2]) + static_cast<float>(state.ScreenCenterYFlip);
+    if (!std::isfinite(projX) || !std::isfinite(projY))
+    {
+        *outX = kOffscreenCoord;
+        *outY = kOffscreenCoord;
+        return;
+    }
+
     // Project to screen (pixel coordinates)
-    *outX = (int)(outWorldPosition[0] / state.PerspectiveX / -outWorldPosition[2]) + state.ScreenCenterX;
-    *outY = (int)(outWorldPosition[1] / state.PerspectiveY / -outWorldPosition[2]) + state.ScreenCenterYFlip;
+    *outX = static_cast<int>(std::clamp(projX, -kMaxPixelCoord, kMaxPixelCoord));
+    *outY = static_cast<int>(std::clamp(projY, -kMaxPixelCoord, kMaxPixelCoord));
 }
 
 bool CameraProjection::TestDepthBuffer(const CameraState& state, const vec3_t position)
@@ -103,6 +158,11 @@ bool CameraProjection::TestDepthBuffer(const CameraState& state, const vec3_t po
     vec3_t worldPosition;
     int    x, y;
     TransformPosition(state, position, worldPosition, &x, &y);
+
+    if (worldPosition[2] >= -1e-4f)
+    {
+        return false;
+    }
 
     // Check if within viewport
     if (x < OpenglWindowX || y < OpenglWindowY || x >= OpenglWindowX + OpenglWindowWidth ||

@@ -68,7 +68,7 @@ std::wstring BuildFtpUrl(const std::wstring& host, unsigned short port, const st
 
 CFTPFileDownLoader::CFTPFileDownLoader()  // OK
 {
-    this->m_Break           = 0;
+    this->m_Break           = false;
     this->m_pFileDownloader = NULL;
 }
 
@@ -78,7 +78,13 @@ CFTPFileDownLoader::~CFTPFileDownLoader()  // OK
     // The WinInet FileDownloader is excluded off Windows (issue #462); the
     // pointer is always null there, and even a delete of a null pointer would
     // still link against the destructor symbol.
-    SafeDelete(this->m_pFileDownloader);
+    FileDownloader* downloader = NULL;
+    {
+        std::lock_guard<std::mutex> lock(this->m_DownloaderMutex);
+        downloader              = this->m_pFileDownloader;
+        this->m_pFileDownloader = NULL;
+    }
+    SafeDelete(downloader);
 #endif
 }
 
@@ -87,7 +93,7 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type, std::wstring str
                                            std::wstring strlocalpath, bool bPassiveMode, CListVersionInfo Version,
                                            std::vector<std::wstring> vScriptFiles)  // OK
 {
-    static WZResult result;
+    WZResult result;
 
 #ifndef _WIN32
     // Off Windows the WinINet FileDownloader is replaced by libcurl (issue #462).
@@ -101,6 +107,11 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type, std::wstring str
 
     for (std::vector<std::wstring>::iterator it = vScriptFiles.begin(); it != vScriptFiles.end(); ++it)
     {
+        if (this->m_Break.load())
+        {
+            result.SetResult(1, 0, L"Time Out Break");
+            break;
+        }
         if (!IsSafeScriptName(*it))
         {
             continue;
@@ -110,7 +121,7 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type, std::wstring str
 
         result = CurlFileDownloader::DownloadFile(url, localPath, strUserName, strPWD, bPassiveMode, &this->m_Break);
 
-        if (this->m_Break != 0)
+        if (this->m_Break.load())
         {
             result.SetResult(1, 0, L"Time Out Break");
             break;
@@ -146,6 +157,11 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type, std::wstring str
 
     for (std::vector<std::wstring>::iterator it = vScriptFiles.begin(); it != vScriptFiles.end(); it++)
     {
+        if (this->m_Break.load())
+        {
+            result.SetResult(1, 0, L"Time Out Break");
+            break;
+        }
         if (!IsSafeScriptName(*it))
         {
             continue;
@@ -155,13 +171,28 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type, std::wstring str
 
         FileInfo.SetFilePath((TCHAR*)it->c_str(), (TCHAR*)lPath.c_str(), (TCHAR*)rPath.c_str(), NULL);
 
-        this->m_pFileDownloader = new FileDownloader(NULL, &ServerInfo, &FileInfo);
+        FileDownloader* downloader = new FileDownloader(NULL, &ServerInfo, &FileInfo);
+        {
+            std::lock_guard<std::mutex> lock(this->m_DownloaderMutex);
+            this->m_pFileDownloader = downloader;
+            if (this->m_Break.load())
+            {
+                this->m_pFileDownloader->Break();
+            }
+        }
 
-        result = this->m_pFileDownloader->DownloadFile();
+        result = downloader->DownloadFile();
 
-        SafeDelete(this->m_pFileDownloader);
+        {
+            std::lock_guard<std::mutex> lock(this->m_DownloaderMutex);
+            if (this->m_pFileDownloader == downloader)
+            {
+                this->m_pFileDownloader = NULL;
+            }
+        }
+        SafeDelete(downloader);
 
-        if (this->m_Break != 0)
+        if (this->m_Break.load())
         {
             result.SetResult(1, 0, L"Time Out Break");
             break;
@@ -179,10 +210,11 @@ WZResult CFTPFileDownLoader::DownLoadFiles(DownloaderType type, std::wstring str
 
 void CFTPFileDownLoader::Break()  // OK
 {
-    this->m_Break = 1;
+    this->m_Break.store(true);
 #ifdef _WIN32
+    std::lock_guard<std::mutex> lock(this->m_DownloaderMutex);
     if (this->m_pFileDownloader != NULL)
-        m_pFileDownloader->Break();
+        this->m_pFileDownloader->Break();
 #endif
 }
 

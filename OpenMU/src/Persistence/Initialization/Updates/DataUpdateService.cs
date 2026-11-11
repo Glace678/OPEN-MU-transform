@@ -81,11 +81,20 @@ public class DataUpdateService
         try
         {
             using var context = this._contextProvider.CreateNewContext();
+            var installedUpdates = (await context.GetAsync<ConfigurationUpdate>().ConfigureAwait(false))
+                .Where(up => up.InstalledAt is not null)
+                .Select(up => (UpdateVersion)up.Version)
+                .ToHashSet();
             var updateStates = await context.GetAsync<ConfigurationUpdateState>().ConfigureAwait(false);
             var updateState = updateStates.FirstOrDefault() ?? context.CreateNew<ConfigurationUpdateState>();
             var gameConfiguration = (await context.GetAsync<GameConfiguration>().ConfigureAwait(false)).First();
             foreach (var update in updates)
             {
+                if (!installedUpdates.Add(update.Version))
+                {
+                    continue;
+                }
+
                 progress.Report((update.Version, false));
                 await update.ApplyUpdateAsync(context, gameConfiguration).ConfigureAwait(false);
 

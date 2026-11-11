@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.GameLogic.PlayerActions;
 
 using MUnique.OpenMU.GameLogic.PlayerActions.Quests;
+using MUnique.OpenMU.GameLogic.Views.Inventory;
 
 /// <summary>
 /// Abstract base class for actions to enter maps which are only available when
@@ -76,6 +77,23 @@ public abstract class EnterQuestMapAction
             return;
         }
 
+        if (!player.IsAlive || player.CurrentMap is not { } currentMap)
+        {
+            return;
+        }
+
+        var originPosition = player.Position;
+        var minQuestNumber = this._questNumbers.Length > 0 ? this._questNumbers.Min() : short.MaxValue;
+        var eligiblePartyMembers = player.Party?.PartyList
+            .OfType<Player>()
+            .Where(p => !ReferenceEquals(p, player)
+                && p.CurrentMap == currentMap
+                && p.IsAlive
+                && p.PlayerState.CurrentState == PlayerState.EnteredWorld
+                && p.IsInRange(originPosition, 10)
+                && this.IsQuestMapEligible(p, minQuestNumber))
+            .ToList();
+
         var price = (int)SoloBalance.ScalePrice(this._price, player.GameContext.Configuration);
         if (price > 0 && !player.TryRemoveMoney(price))
         {
@@ -84,16 +102,48 @@ public abstract class EnterQuestMapAction
             return;
         }
 
-        var partyPlayers = player.Party?.PartyList.Where(p => p.IsInRange(player.Position, 10)).OfType<Player>().ToList();
-        if (partyPlayers is null)
+        bool leaderWarped = false;
+        try
         {
-            await player.WarpToAsync(targetGate).ConfigureAwait(false);
+            leaderWarped = await player.TryWarpToAsync(targetGate).ConfigureAwait(false);
+        }
+        finally
+        {
+            if (!leaderWarped && price > 0)
+            {
+                player.TryAddMoney(price);
+                await player.InvokeViewPlugInAsync<IUpdateMoneyPlugIn>(p => p.UpdateMoneyAsync()).ConfigureAwait(false);
+            }
+        }
+
+        if (!leaderWarped || eligiblePartyMembers is null)
+        {
             return;
         }
 
-        foreach (var partyPlayer in partyPlayers)
+        foreach (var partyPlayer in eligiblePartyMembers)
         {
-            await partyPlayer.WarpToAsync(targetGate).ConfigureAwait(false);
+            if (partyPlayer.CurrentMap == currentMap
+                && partyPlayer.IsAlive
+                && partyPlayer.PlayerState.CurrentState == PlayerState.EnteredWorld)
+            {
+                await partyPlayer.TryWarpToAsync(targetGate).ConfigureAwait(false);
+            }
         }
+    }
+
+    private bool IsQuestMapEligible(Player candidate, short minQuestNumber)
+    {
+        if (candidate.GetQuestState(this._questGroup) is not { } questState)
+        {
+            return false;
+        }
+
+        if (questState.ActiveQuest is { } activeQuest && this._questNumbers.Contains(activeQuest.Number))
+        {
+            return true;
+        }
+
+        return questState.LastFinishedQuest is { } finishedQuest && finishedQuest.Number >= minQuestNumber;
     }
 }

@@ -37,10 +37,14 @@ public class UpdateMasterStatsPlugIn : IUpdateMasterStatsPlugIn
             return;
         }
 
+        var masterExpTable = this._player.GameServerContext.MasterExperienceTable;
+        var nextMasterExp = masterExpTable.Length > 0
+            ? (ulong)masterExpTable[Math.Clamp((int)this._player.Attributes[Stats.MasterLevel] + 1, 0, masterExpTable.Length - 1)]
+            : 0UL;
         await connection.SendMasterStatsUpdateAsync(
             (ushort)this._player.Attributes[Stats.MasterLevel],
             (ulong)character.MasterExperience,
-            (ulong)this._player.GameServerContext.MasterExperienceTable[(int)this._player.Attributes[Stats.MasterLevel] + 1],
+            nextMasterExp,
             (ushort)character.MasterLevelUpPoints,
             (ushort)this._player.Attributes[Stats.MaximumHealth],
             (ushort)this._player.Attributes[Stats.MaximumMana],

@@ -63,9 +63,17 @@ void CMsgBoxIGSStorageItemInfo::Initialize(int iStorageSeq, int iStorageItemSeq,
     m_wItemCode       = wItemCode;
     m_szItemType      = szItemType;
 
-    wcscpy(m_szName, pszName);
-    mu_swprintf(m_szNum, I18N::Game::QuantityS, pszNum);
-    mu_swprintf(m_szPeriod, I18N::Game::DurationS, pszPeriod);
+    if (pszName)
+    {
+        wcsncpy(m_szName, pszName, std::size(m_szName) - 1);
+        m_szName[std::size(m_szName) - 1] = L'\0';
+    }
+    else
+    {
+        m_szName[0] = L'\0';
+    }
+    mu_swprintf_trunc(m_szNum, I18N::Game::QuantityS, pszNum ? pszNum : L"");
+    mu_swprintf_trunc(m_szPeriod, I18N::Game::DurationS, pszPeriod ? pszPeriod : L"");
 }
 
 void CMsgBoxIGSStorageItemInfo::Release()
@@ -139,11 +147,16 @@ CALLBACK_RESULT CMsgBoxIGSStorageItemInfo::OKButtonDown(class CNewUIMessageBoxBa
                                                         const leaf::xstreambuf&     xParam)
 {
     auto* pOwnMsgBox = dynamic_cast<CMsgBoxIGSStorageItemInfo*>(pOwner);
+    if (!pOwnMsgBox)
+        return CALLBACK_CONTINUE;
 
     CMsgBoxIGSUseItemConfirm* pMsgBox = NULL;
     CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSUseItemConfirmLayout), &pMsgBox);
-    pMsgBox->Initialize(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode,
-                        pOwnMsgBox->m_szItemType, pOwnMsgBox->m_szName);
+    if (pMsgBox)
+    {
+        pMsgBox->Initialize(pOwnMsgBox->m_iStorageSeq, pOwnMsgBox->m_iStorageItemSeq, pOwnMsgBox->m_wItemCode,
+                            pOwnMsgBox->m_szItemType, pOwnMsgBox->m_szName);
+    }
 
     PlayBuffer(SOUND_CLICK01);
     g_MessageBox->SendEvent(pOwner, MSGBOX_EVENT_DESTROY);

@@ -11,12 +11,15 @@
 #include "GameLogic/Events/w_CursedTemple.h"
 #include "World/MapInfra/MapManager.h"
 
+#include <algorithm>
+
 using namespace SEASON3B;
 
 CNewUIPartyInfoWindow::CNewUIPartyInfoWindow()
 {
-    m_pNewUIMng = NULL;
+    m_pNewUIMng       = NULL;
     m_Pos.x = m_Pos.y = 0;
+    m_iSelectedCharID = -1;
     m_bParty          = false;
 }
 
@@ -46,10 +49,9 @@ bool CNewUIPartyInfoWindow::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIPartyInfoWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -88,9 +90,10 @@ bool CNewUIPartyInfoWindow::BtnProcess()
         return true;
     }
 
-    if (IsVisible())
+    if (IsVisible() && Hero != nullptr)
     {
-        for (int i = 0; i < PartyNumber; i++)
+        const int partyCount = std::clamp(PartyNumber, 0, MAX_PARTYS);
+        for (int i = 0; i < partyCount; i++)
         {
             if (!wcscmp(Party[0].Name, Hero->ID) || !wcscmp(Party[i].Name, Hero->ID))
             {
@@ -175,13 +178,14 @@ bool CNewUIPartyInfoWindow::Render()
 
     if (m_bParty)
     {
-        for (int i = 0; i < PartyNumber; i++)
+        const int partyCount = std::clamp(PartyNumber, 0, MAX_PARTYS);
+        for (int i = 0; i < partyCount; i++)
         {
             PARTY_t* pMember = &Party[i];
 
             bool bExitBtnRender = false;
 
-            if (!wcscmp(Party[0].Name, Hero->ID) || !wcscmp(Party[i].Name, Hero->ID))
+            if (Hero != nullptr && (!wcscmp(Party[0].Name, Hero->ID) || !wcscmp(Party[i].Name, Hero->ID)))
             {
                 bExitBtnRender = true;
             }
@@ -279,7 +283,12 @@ void CNewUIPartyInfoWindow::RenderMemberStatue(int iIndex, PARTY_t* pMember, boo
     mu_swprintf(szText, L"(%d,%d)", pMember->x, pMember->y);
     g_pRenderText->RenderText(iPosX + 85, iPosY + 26, szText, 60, 0, RT3_SORT_LEFT);
 
-    int iHP = (pMember->currHP * 147) / pMember->maxHP;
+    int iHP = 0;
+    if (pMember->maxHP > 0)
+    {
+        const long long scaledHP = (static_cast<long long>(pMember->currHP) * 147LL) / pMember->maxHP;
+        iHP                      = static_cast<int>(std::clamp(scaledHP, 0LL, 147LL));
+    }
     RenderImage(IMAGE_PARTY_HPBAR_BACK, iPosX + 8, iPosY + 39, 151, 8);
     RenderImage(IMAGE_PARTY_HPBAR, iPosX + 10, iPosY + 41, iHP, 4);
 
@@ -294,6 +303,9 @@ void CNewUIPartyInfoWindow::RenderMemberStatue(int iIndex, PARTY_t* pMember, boo
 
 bool CNewUIPartyInfoWindow::LeaveParty(const int iIndex)
 {
+    if (iIndex < 0 || iIndex >= MAX_PARTYS)
+        return false;
+
     if (!gMapManager.IsCursedTemple())
     {
         PlayBuffer(SOUND_CLICK01);

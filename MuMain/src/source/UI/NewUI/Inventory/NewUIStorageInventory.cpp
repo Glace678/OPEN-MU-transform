@@ -46,6 +46,8 @@ bool CNewUIStorageInventory::Create(CNewUIManager* pNewUIMng, int x, int y)
                                              y + 36, 8, 15))
     {
         SafeDelete(m_pNewInventoryCtrl);
+        m_pNewUIMng->RemoveUIObj(this);
+        m_pNewUIMng = nullptr;
         return false;
     }
 
@@ -74,12 +76,11 @@ bool CNewUIStorageInventory::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void CNewUIStorageInventory::Release()
 {
-    UnloadImages();
-
     SafeDelete(m_pNewInventoryCtrl);
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = nullptr;
     }
@@ -442,7 +443,8 @@ void CNewUIStorageInventory::SendRequestItemToMyInven(ITEM* pItemObj, int nStora
     else
     {
         SetBackupInvenIndex(nInvenIndex);
-        if (!IsItemAutoMove())
+        const bool isAutoMove = IsItemAutoMove() || (g_pStorageInventoryExt && g_pStorageInventoryExt->IsItemAutoMove());
+        if (!isAutoMove && g_pPickedItem != nullptr)
             g_pPickedItem->HidePickedItem();
 
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CPasswordKeyPadMsgBoxLayout));
@@ -456,8 +458,10 @@ void CNewUIStorageInventory::SendRequestItemToStorage(ITEM* pItemObj, int nInven
 #ifdef KJH_PBG_ADD_INGAMESHOP_SYSTEM
         // MessageBox
         CMsgBoxIGSCommon* pMsgBox = nullptr;
-        CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);
-        pMsgBox->Initialize(I18N::Game::Error, I18N::Game::TheseItemsCannotBeStoredInTheInventory);
+        if (CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox) && pMsgBox != nullptr)
+        {
+            pMsgBox->Initialize(I18N::Game::Error, I18N::Game::TheseItemsCannotBeStoredInTheInventory);
+        }
 #endif  // KJH_PBG_ADD_INGAMESHOP_SYSTEM
 
         g_pSystemLogBox->AddText(I18N::Game::TheseItemsCannotBeStoredInTheInventory, TYPE_ERROR_MESSAGE);
@@ -551,7 +555,7 @@ void CNewUIStorageInventory::SetBackupInvenIndex(int nInvenIndex)
 
 int CNewUIStorageInventory::FindEmptySlot(ITEM* pItemObj)
 {
-    if (pItemObj == nullptr)
+    if (pItemObj == nullptr || pItemObj->Type < 0 || pItemObj->Type >= MAX_ITEMS)
         return -1;
 
     ITEM_ATTRIBUTE* pItemAttr = &ItemAttribute[pItemObj->Type];
@@ -580,6 +584,10 @@ void CNewUIStorageInventory::ProcessToReceiveStorageStatus(BYTE byStatus)
             CreateOkMessageBox(I18N::Game::IncorrectPassword);
             CNewUIInventoryCtrl::BackupPickedItem();
             ProcessStorageItemAutoMoveFailure();
+            if (g_pStorageInventoryExt != nullptr)
+            {
+                g_pStorageInventoryExt->ProcessStorageItemAutoMoveFailure();
+            }
             break;
 
         case 11:
@@ -597,22 +605,44 @@ void CNewUIStorageInventory::ProcessToReceiveStorageStatus(BYTE byStatus)
                 }
                 else
                 {
-                    ITEM* pItemObj;
-                    int   nStorageIndex;
+                    ITEM* pItemObj      = nullptr;
+                    int   nStorageIndex = -1;
 
                     if (IsItemAutoMove())
                     {
-                        pItemObj      = m_pNewInventoryCtrl->FindItemAtPt(m_nBackupMouseX, m_nBackupMouseY);
-                        nStorageIndex = pItemObj->y * m_pNewInventoryCtrl->GetNumberOfColumn() + pItemObj->x;
+                        if (m_pNewInventoryCtrl != nullptr)
+                        {
+                            pItemObj = m_pNewInventoryCtrl->FindItemAtPt(m_nBackupMouseX, m_nBackupMouseY);
+                            if (pItemObj != nullptr)
+                            {
+                                nStorageIndex = m_pNewInventoryCtrl->GetIndexByItem(pItemObj);
+                            }
+                        }
                     }
-                    else
+                    else if (g_pStorageInventoryExt != nullptr && g_pStorageInventoryExt->IsItemAutoMove())
+                    {
+                        CNewUIInventoryCtrl* pExtCtrl = g_pStorageInventoryExt->GetInventoryCtrl();
+                        if (pExtCtrl != nullptr)
+                        {
+                            pItemObj = pExtCtrl->FindItemAtPt(g_pStorageInventoryExt->GetBackupMouseX(),
+                                                              g_pStorageInventoryExt->GetBackupMouseY());
+                            if (pItemObj != nullptr)
+                            {
+                                nStorageIndex = pExtCtrl->GetIndexByItem(pItemObj);
+                            }
+                        }
+                    }
+                    else if (g_pPickedItem != nullptr)
                     {
                         nStorageIndex = g_pPickedItem->GetSourceLinealPos();
                         pItemObj      = g_pPickedItem->GetItem();
                     }
 
-                    SendRequestEquipmentItem(STORAGE_TYPE::VAULT, nStorageIndex, pItemObj, STORAGE_TYPE::INVENTORY,
-                                             GetBackupInvenIndex());
+                    if (pItemObj != nullptr && nStorageIndex >= 0)
+                    {
+                        SendRequestEquipmentItem(STORAGE_TYPE::VAULT, nStorageIndex, pItemObj, STORAGE_TYPE::INVENTORY,
+                                                 GetBackupInvenIndex());
+                    }
 
                     InitBackupItemInfo();
                 }
@@ -631,7 +661,8 @@ void CNewUIStorageInventory::ProcessToReceiveStorageItems(int nIndex, std::span<
 {
     CNewUIInventoryCtrl::DeletePickedItem();
 
-    if (nIndex >= 0 && nIndex < (m_pNewInventoryCtrl->GetNumberOfColumn() * m_pNewInventoryCtrl->GetNumberOfRow()))
+    if (m_pNewInventoryCtrl != nullptr && nIndex >= 0 &&
+        nIndex < (m_pNewInventoryCtrl->GetNumberOfColumn() * m_pNewInventoryCtrl->GetNumberOfRow()))
     {
         if (IsItemAutoMove())
         {

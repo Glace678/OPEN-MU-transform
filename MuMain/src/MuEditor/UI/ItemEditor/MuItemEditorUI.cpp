@@ -149,7 +149,8 @@ void CMuItemEditorUI::Render(bool& showEditor)
 
         // Convert search to lowercase for case-insensitive search
         std::string searchLower = m_szItemSearchBuffer;
-        std::transform(searchLower.begin(), searchLower.end(), searchLower.begin(), ::tolower);
+        std::transform(searchLower.begin(), searchLower.end(), searchLower.begin(),
+                       [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
 
         // Render the item table
         if (m_pTable)
@@ -166,7 +167,7 @@ void CMuItemEditorUI::Render(bool& showEditor)
 void CMuItemEditorUI::RenderSearchBar()
 {
     // Search bar
-    ImGui::Text(I18N::Editor::Search);
+    ImGui::Text("%s", I18N::Editor::Search);
     ImGui::SameLine();
     ImGui::SetNextItemWidth(300);
     ImGui::InputText("##ItemSearch", m_szItemSearchBuffer, sizeof(m_szItemSearchBuffer));
@@ -185,7 +186,7 @@ void CMuItemEditorUI::RenderColumnVisibilityMenu()
 
     if (ImGui::BeginPopup("ColumnVisibility"))
     {
-        ImGui::Text(I18N::Editor::ToggleColumnVisibility);
+        ImGui::Text("%s", I18N::Editor::ToggleColumnVisibility);
         ImGui::Separator();
 
         // Select All / Unselect All buttons

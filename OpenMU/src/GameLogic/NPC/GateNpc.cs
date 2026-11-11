@@ -89,6 +89,8 @@ public class GateNpc : NonPlayerCharacter, ISummonable
         {
             var cancellationToken = this._cts.Token;
             var playersInRange = new List<Player>();
+            var enteredCharacterIds = new HashSet<Guid>();
+            var enteredPlayers = new HashSet<Player>();
             while (true)
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -117,8 +119,25 @@ public class GateNpc : NonPlayerCharacter, ISummonable
 
                 foreach (var player in playersInRange)
                 {
+                    var characterId = player.SelectedCharacter?.Id;
+                    if ((characterId.HasValue && enteredCharacterIds.Contains(characterId.Value))
+                        || enteredPlayers.Contains(player))
+                    {
+                        continue;
+                    }
+
                     this._logger.LogInformation("Player {player} passes the gate ({enterCount})", player, this._enterCount);
-                    await player.WarpToAsync(this.TargetGate).ConfigureAwait(false);
+                    if (!await player.TryWarpToAsync(this.TargetGate).ConfigureAwait(false))
+                    {
+                        continue;
+                    }
+
+                    if (characterId.HasValue)
+                    {
+                        enteredCharacterIds.Add(characterId.Value);
+                    }
+
+                    enteredPlayers.Add(player);
                     this._enterCount++;
                     if (this._enterCount >= this.SummonedBy.GameContext.Configuration.MaximumPartySize)
                     {

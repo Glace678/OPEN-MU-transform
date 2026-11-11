@@ -204,7 +204,10 @@ void CreateArrow(CHARACTER* c, OBJECT* o, OBJECT* to, WORD SkillIndex, WORD Skil
         SubType = 2;
         PlayBuffer(SOUND_BOW01, o);
     }
-    CurrentSkill = SKKey;
+    if (c == Hero)
+    {
+        CurrentSkill = SKKey;
+    }
     if (SKKey == AT_SKILL_ICE_ARROW || SKKey == AT_SKILL_ICE_ARROW_STR)
     {
         PlayBuffer(SOUND_ICEARROW, o);

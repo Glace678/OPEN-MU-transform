@@ -109,7 +109,7 @@ int DoEditGuildMarkConfirmAction(POPUP_RESULT Result)
         m_eCurrStep = STEP_EDIT_GUILD_MARK;
         SocketClient->ToGameServer()->SendGuildMasterAnswer(true);
 
-        if (Hero->GuildStatus != G_NONE)
+        if (Hero && Hero->GuildStatus != G_NONE && Hero->GuildMarkIndex >= 0 && Hero->GuildMarkIndex < MAX_MARKS)
             memcpy(&GuildMark[MARK_EDIT], &GuildMark[Hero->GuildMarkIndex], sizeof(MARK_t));
     }
     return 1;
@@ -161,7 +161,7 @@ CUIGuildMaster::~CUIGuildMaster() {}
 
 BOOL CUIGuildMaster::IsValidGuildName(const wchar_t* szName)
 {
-    if (wcslen(szName) >= 4)
+    if (szName && wcslen(szName) >= 4)
         return TRUE;
     else
         return FALSE;
@@ -297,7 +297,8 @@ void CUIGuildMaster::DoCreateGuildAction()
                     }
                     else if (g_iChatInputType == 0)
                     {
-                        wcscpy(GuildMark[MARK_EDIT].GuildName, InputText[0]);
+                        StringCchCopy(GuildMark[MARK_EDIT].GuildName, std::size(GuildMark[MARK_EDIT].GuildName),
+                                      InputText[0]);
                     }
                     StepNext();
                 }
@@ -411,11 +412,11 @@ void CUIGuildMaster::RenderCreateInfo()
 
     g_pRenderText->SetFont(g_hFont);
 
-    wchar_t szTemp[128];
+    wchar_t szTemp[128] = {0};
     g_pRenderText->SetBgColor(0);
 
     RenderGoldRect(ptOrigin.x, ptOrigin.y, 140, 20.f);
-    mu_swprintf(szTemp, L"%ls : %ls", I18N::Game::NAME, GuildMark[MARK_EDIT].GuildName);
+    mu_swprintf_trunc(szTemp, L"%ls : %ls", I18N::Game::NAME, GuildMark[MARK_EDIT].GuildName);
     ptOrigin.y += 6;
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, szTemp, 140, 0, RT3_SORT_CENTER);
 
@@ -460,8 +461,12 @@ void CUIGuildMaster::RenderEditGuildMark()
     g_pRenderText->SetBgColor(0, 0, 0, 0);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, I18N::Game::NAME);
 
-    wchar_t Text[100];
-    mu_swprintf(Text, L"%ls ( Score:%d )", GuildMark[Hero->GuildMarkIndex].GuildName, GuildTotalScore);
+    wchar_t        Text[100] = {0};
+    const wchar_t* guildName =
+        (Hero && Hero->GuildMarkIndex >= 0 && Hero->GuildMarkIndex < MAX_MARKS)
+            ? GuildMark[Hero->GuildMarkIndex].GuildName
+            : L"";
+    mu_swprintf_trunc(Text, L"%ls ( Score:%d )", guildName, GuildTotalScore);
     g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, Text, 140 * g_fScreenRate_x, 0, RT3_SORT_CENTER);
     g_pRenderText->SetFont(g_hFont);
 
@@ -483,9 +488,9 @@ void CUIGuildMaster::DoGuildMasterMainAction()
     }
     if (m_EditGuildMarkButton.DoMouseAction())
     {
-        wchar_t szText[50];
-        wcscpy(szText, I18N::Game::ThisFunctionIsNotActivated);
-        m_dwEditGuildMarkConfirmPopup = g_pUIPopup->SetPopup(szText, 1, 50, POPUP_OK, NULL);
+        wchar_t szText[128] = {0};
+        StringCchCopy(szText, std::size(szText), I18N::Game::ThisFunctionIsNotActivated);
+        m_dwEditGuildMarkConfirmPopup = g_pUIPopup->SetPopup(szText, 1, 128, POPUP_OK, NULL);
         /*		char szText[4][50];
                 wcscpy( szText[0], I18N::Game::ToChangeTheGuildMark );
                 wcscpy( szText[1], I18N::Game::XZenAndNJewelOfBlessIs );
@@ -514,10 +519,14 @@ void CUIGuildMaster::RenderGuildMasterMain()
     g_pRenderText->SetTextColor(230, 230, 230, 255);
     g_pRenderText->SetBgColor(0);
 
-    if (Hero->GuildStatus != G_NONE)
+    if (Hero && Hero->GuildStatus != G_NONE)
     {
-        wchar_t Text[100];
-        mu_swprintf(Text, L"%ls ( Score:%d )", GuildMark[Hero->GuildMarkIndex].GuildName, GuildTotalScore);
+        wchar_t        Text[100] = {0};
+        const wchar_t* guildName =
+            (Hero->GuildMarkIndex >= 0 && Hero->GuildMarkIndex < MAX_MARKS)
+                ? GuildMark[Hero->GuildMarkIndex].GuildName
+                : L"";
+        mu_swprintf_trunc(Text, L"%ls ( Score:%d )", guildName, GuildTotalScore);
         g_pRenderText->RenderText(ptOrigin.x, ptOrigin.y, Text, 140 * g_fScreenRate_x, 0, RT3_SORT_CENTER);
         m_CreateGuildButton.SetState(UISTATE_DISABLE);
         m_EditGuildMarkButton.SetState(UISTATE_NORMAL);
@@ -556,10 +565,15 @@ void CUIGuildMaster::RenderGuildMasterMain()
 void CUIGuildMaster::ReceiveGuildRelationShip(GuildRelationshipType byRelationShipType, GuildRequestType byRequestType,
                                               BYTE byTargetUserIndexH, BYTE byTargetUserIndexL)
 {
+    if (!g_pUIPopup || !SocketClient)
+    {
+        return;
+    }
+
     if (g_pUIPopup->GetPopupID() != 0)
     {
         SocketClient->ToGameServer()->SendGuildRelationshipChangeResponse(
-            byRelationShipType, byRequestType, 0x00, MAKEWORD(byTargetUserIndexH, byTargetUserIndexL));
+            byRelationShipType, byRequestType, 0x00, MAKEWORD(byTargetUserIndexL, byTargetUserIndexH));
         return;
     }
 
@@ -574,40 +588,40 @@ void CUIGuildMaster::ReceiveGuildRelationShip(GuildRelationshipType byRelationSh
         return;
     CHARACTER* pPlayer = &CharactersClient[nIndex];
 
-    wchar_t szText[3][64];
+    wchar_t szText[3][128] = {};
     if (m_byRelationShipType == GuildRelationshipType::Alliance)  // Union
     {
         if (m_byRelationShipRequestType == GuildRequestType::Join)  // Join
         {
-            mu_swprintf(szText[0], I18N::Game::FromSForAGuildAlliance);
-            mu_swprintf(szText[1], I18N::Game::ReceivedARegistrationRequest, pPlayer->ID);
-            mu_swprintf(szText[2], I18N::Game::Approve);
+            mu_swprintf_trunc(szText[0], I18N::Game::FromSForAGuildAlliance, pPlayer->ID);
+            StringCchCopy(szText[1], std::size(szText[1]), I18N::Game::ReceivedARegistrationRequest);
+            StringCchCopy(szText[2], std::size(szText[2]), I18N::Game::Approve);
         }
         else  // Break Off
         {
-            mu_swprintf(szText[0], I18N::Game::FromSForAGuildAlliance);
-            mu_swprintf(szText[1], I18N::Game::ReceivedAWithdrawalRequest, pPlayer->ID);
-            mu_swprintf(szText[2], I18N::Game::Approve);
+            mu_swprintf_trunc(szText[0], I18N::Game::FromSForAGuildAlliance, pPlayer->ID);
+            StringCchCopy(szText[1], std::size(szText[1]), I18N::Game::ReceivedAWithdrawalRequest);
+            StringCchCopy(szText[2], std::size(szText[2]), I18N::Game::Approve);
         }
     }
     else if (m_byRelationShipType == GuildRelationshipType::Hostility)  // Rival
     {
         if (m_byRelationShipRequestType == GuildRequestType::Join)  // Join
         {
-            mu_swprintf(szText[0], I18N::Game::FromSForAHostileGuild, pPlayer->ID);
-            mu_swprintf(szText[1], I18N::Game::ReceivedApprovalRequest);
-            mu_swprintf(szText[2], I18N::Game::Approve);
+            mu_swprintf_trunc(szText[0], I18N::Game::FromSForAHostileGuild, pPlayer->ID);
+            StringCchCopy(szText[1], std::size(szText[1]), I18N::Game::ReceivedApprovalRequest);
+            StringCchCopy(szText[2], std::size(szText[2]), I18N::Game::Approve);
         }
         else  // Break Off
         {
-            mu_swprintf(szText[0], I18N::Game::FromSForAHostileGuild, pPlayer->ID);
-            mu_swprintf(szText[1], I18N::Game::ReceivedCancellationRequest);
-            mu_swprintf(szText[2], I18N::Game::Approve);
+            mu_swprintf_trunc(szText[0], I18N::Game::FromSForAHostileGuild, pPlayer->ID);
+            StringCchCopy(szText[1], std::size(szText[1]), I18N::Game::ReceivedCancellationRequest);
+            StringCchCopy(szText[2], std::size(szText[2]), I18N::Game::Approve);
         }
     }
 
     m_dwGuildRelationShipReplyPopup =
-        g_pUIPopup->SetPopup(&szText[0][0], 3, 64, POPUP_YESNO, ::DoGuildRelationReplyAction);
+        g_pUIPopup->SetPopup(&szText[0][0], 3, 128, POPUP_YESNO, ::DoGuildRelationReplyAction);
 }
 
 BOOL CUIGuildMaster::DoMouseAction()

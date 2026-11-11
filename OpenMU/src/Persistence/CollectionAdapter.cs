@@ -66,15 +66,19 @@ public class CollectionAdapter<TClass, TEfCore> : ICollection<TClass>, INotifyCo
         }
 
         this._rawCollection.Add(efCoreItem);
-        this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new List<TEfCore> { efCoreItem }));
+        this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new List<TEfCore> { efCoreItem }));
     }
 
     /// <inheritdoc />
     public void Clear()
     {
-        var items = this._rawCollection.ToList();
+        if (this._rawCollection.Count == 0)
+        {
+            return;
+        }
+
         this._rawCollection.Clear();
-        this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset, items));
+        this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
     }
 
     /// <inheritdoc />
@@ -129,10 +133,19 @@ public class CollectionAdapter<TClass, TEfCore> : ICollection<TClass>, INotifyCo
 
         if (this._rawCollection.Remove(efCoreItem))
         {
-            this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, new List<TEfCore> { efCoreItem }));
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, new List<TEfCore> { efCoreItem }));
             return true;
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Raises the <see cref="CollectionChanged"/> event.
+    /// </summary>
+    /// <param name="args">The event arguments.</param>
+    protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
+    {
+        this.CollectionChanged?.Invoke(this, args);
     }
 }

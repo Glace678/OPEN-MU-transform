@@ -252,19 +252,21 @@ bool CreateHeavenRain(PARTICLE* o, int index)
         return false;
 
     int Rainly = RainCurrent * MAX_LEAVES / 100;
-    if (index < Rainly)
+    if (index >= Rainly)
     {
-        o->Type = BITMAP_RAIN;
-        Vector(Hero->Object.Position[0] + Random::RangeFloat(-800, 799),
-               Hero->Object.Position[1] + Random::RangeFloat(-500, 899),
-               Hero->Object.Position[2] + Random::RangeFloat(200, 399), o->Position);
-        Vector(-30.f, 0.f, 0.f, o->Angle);
-        vec3_t Velocity;
-        Vector(0.f, 0.f, -Random::RangeFloat(20, 43), Velocity);
-        float Matrix[3][4];
-        AngleMatrix(o->Angle, Matrix);
-        VectorRotate(Velocity, Matrix, o->Velocity);
+        return false;
     }
+
+    o->Type = BITMAP_RAIN;
+    Vector(Hero->Object.Position[0] + Random::RangeFloat(-800, 799),
+           Hero->Object.Position[1] + Random::RangeFloat(-500, 899),
+           Hero->Object.Position[2] + Random::RangeFloat(200, 399), o->Position);
+    Vector(-30.f, 0.f, 0.f, o->Angle);
+    vec3_t Velocity;
+    Vector(0.f, 0.f, -Random::RangeFloat(20, 43), Velocity);
+    float Matrix[3][4];
+    AngleMatrix(o->Angle, Matrix);
+    VectorRotate(Velocity, Matrix, o->Velocity);
     return true;
 }
 
@@ -527,6 +529,8 @@ bool MoveLeaves()
                 continue;
             if (g_UnitedMarketPlace.CreateRain(o))
                 continue;
+
+            o->Live = false;
         }
         else
         {

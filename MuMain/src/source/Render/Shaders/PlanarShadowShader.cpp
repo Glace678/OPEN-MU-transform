@@ -388,15 +388,18 @@ void CPlanarShadowShader::ShutdownGL()
 
 bool CPlanarShadowShader::BeginGL(const float* bodyOrigin, const float mvp[16], float sx, float sy, float alpha)
 {
-    if (!IsSupported() || !m_hProgram)
+    if (!IsSupported() || !m_hProgram || !mvp)
         return false;
+
+    const float  zeroOrigin[3] = {0.f, 0.f, 0.f};
+    const float* origin        = bodyOrigin ? bodyOrigin : zeroOrigin;
 
     m_bActive = true;
     BindProgram(m_hProgram);
 
     if (m_locBodyOrigin != -1)
     {
-        fn_glUniform3fv(m_locBodyOrigin, 1, bodyOrigin);
+        fn_glUniform3fv(m_locBodyOrigin, 1, origin);
         FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
     }
     if (m_locSx != -1)

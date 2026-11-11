@@ -53,6 +53,8 @@ bool SEASON3B::CNewUINPCShop::Create(CNewUIManager* pNewUIMng, int x, int y)
                                              y + 50, 8, 15))
     {
         SafeDelete(m_pNewInventoryCtrl);
+        m_pNewUIMng->RemoveUIObj(this);
+        m_pNewUIMng = NULL;
         return false;
     }
 
@@ -74,12 +76,11 @@ bool SEASON3B::CNewUINPCShop::Create(CNewUIManager* pNewUIMng, int x, int y)
 
 void SEASON3B::CNewUINPCShop::Release()
 {
-    UnloadImages();
-
     SafeDelete(m_pNewInventoryCtrl);
 
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -90,7 +91,8 @@ void SEASON3B::CNewUINPCShop::SetPos(int x, int y)
     m_Pos.x = x;
     m_Pos.y = y;
 
-    m_pNewInventoryCtrl->SetPos(x + 15, y + 50);
+    if (m_pNewInventoryCtrl)
+        m_pNewInventoryCtrl->SetPos(x + 15, y + 50);
 }
 
 bool SEASON3B::CNewUINPCShop::UpdateMouseEvent()
@@ -329,7 +331,7 @@ void SEASON3B::CNewUINPCShop::UnloadImages()
     DeleteBitmap(IMAGE_NPCSHOP_BACK);
     DeleteBitmap(IMAGE_NPCSHOP_TOP);
     DeleteBitmap(IMAGE_NPCSHOP_LEFT);
-    DeleteBitmap(IMAGE_NPCSHOP_LEFT);
+    DeleteBitmap(IMAGE_NPCSHOP_RIGHT);
     DeleteBitmap(IMAGE_NPCSHOP_BOTTOM);
     DeleteBitmap(IMAGE_NPCSHOP_BTN_REPAIR);
     DeleteBitmap(IMAGE_NPCSHOP_REPAIR_MONEY);
@@ -371,6 +373,8 @@ bool SEASON3B::CNewUINPCShop::InventoryProcess()
     if (!pPickedItem)
         return false;
     ITEM* pItem = pPickedItem->GetItem();
+    if (!pItem)
+        return false;
 
     if (IsSellingBan(pItem))
         m_pNewInventoryCtrl->SetSquareColorNormal(1.0f, 0.0f, 0.0f);
@@ -380,7 +384,7 @@ bool SEASON3B::CNewUINPCShop::InventoryProcess()
     if (SEASON3B::IsRelease(VK_LBUTTON) == true && m_pNewInventoryCtrl->CheckPtInRect(MouseX, MouseY) == true &&
         m_bSellingItem == false)
     {
-        if (CharacterMachine->Gold + ItemValue(pItem) > 2000000000)
+        if (static_cast<long long>(CharacterMachine->Gold) + ItemValue(pItem) > 2000000000LL)
         {
             g_pSystemLogBox->AddText(I18N::Game::ExceededMaximumAmountOfZenYouCanPossess,
                                      SEASON3B::TYPE_SYSTEM_MESSAGE);

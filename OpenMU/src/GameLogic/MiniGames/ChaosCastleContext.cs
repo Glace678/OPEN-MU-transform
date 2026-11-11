@@ -527,7 +527,7 @@ public sealed class ChaosCastleContext : MiniGameContext
             }
         }
 
-        this._aliveMonstersCount = requiredMonsters;
+        this._aliveMonstersCount = this._monsters.Count;
         this.Logger.LogDebug("Monsters created.");
     }
 

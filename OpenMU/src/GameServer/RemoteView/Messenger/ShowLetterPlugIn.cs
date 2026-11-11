@@ -36,8 +36,17 @@ public class ShowLetterPlugIn : IShowLetterPlugIn
             return;
         }
 
+        if (letter.Header is null)
+        {
+            return;
+        }
+
         var appearanceSerializer = this._player.AppearanceSerializer;
-        var letterIndex = this._player.SelectedCharacter.Letters.IndexOf(letter.Header!);
+        var letterIndex = this._player.SelectedCharacter.Letters.IndexOf(letter.Header);
+        if (letterIndex < 0)
+        {
+            return;
+        }
         int Write()
         {
             var size = OpenLetterRef.GetRequiredSize(letter.Message);

@@ -20,14 +20,13 @@ public class WarpGateAction
     /// <param name="gate">The enter gate.</param>
     public async ValueTask EnterGateAsync(Player player, EnterGate gate)
     {
-        if (await this.IsWarpLegitAsync(player, gate).ConfigureAwait(false))
+        if (await this.IsWarpLegitAsync(player, gate).ConfigureAwait(false)
+            && await player.TryWarpToAsync(gate.TargetGate!).ConfigureAwait(false))
         {
-            await player.WarpToAsync(gate.TargetGate!).ConfigureAwait(false);
+            return;
         }
-        else
-        {
-            await player.InvokeViewPlugInAsync<IMapChangePlugIn>(p => p.MapChangeFailedAsync()).ConfigureAwait(false);
-        }
+
+        await player.InvokeViewPlugInAsync<IMapChangePlugIn>(p => p.MapChangeFailedAsync()).ConfigureAwait(false);
     }
 
     private async ValueTask<bool> IsWarpLegitAsync(Player player, EnterGate? enterGate)
@@ -37,7 +36,10 @@ public class WarpGateAction
             return false;
         }
 
-        if (player.SelectedCharacter is null)
+        if (player.SelectedCharacter is null
+            || !player.IsAlive
+            || player.CurrentMap is not { } currentMap
+            || player.PlayerState.CurrentState != PlayerState.EnteredWorld)
         {
             return false;
         }
@@ -57,8 +59,8 @@ public class WarpGateAction
 
         var currentPosition = player.IsWalking ? player.WalkTarget : player.Position;
         var inaccuracy = player.GameContext.Configuration.InfoRange;
-        if (player.CurrentMap!.Definition.EnterGates.Contains(enterGate)
-            && !(this.IsXInRange(currentPosition, enterGate, inaccuracy)
+        if (!currentMap.Definition.EnterGates.Contains(enterGate)
+            || !(this.IsXInRange(currentPosition, enterGate, inaccuracy)
                  && this.IsYInRange(currentPosition, enterGate, inaccuracy)))
         {
             return false;

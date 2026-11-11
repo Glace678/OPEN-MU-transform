@@ -64,10 +64,9 @@ bool SEASON3B::CNewUIKanturu2ndEnterNpc::Create(CNewUIManager* pNewUIMng, int x,
 
 void SEASON3B::CNewUIKanturu2ndEnterNpc::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -228,16 +227,20 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
     {
         if (btDetailState == KANTURU_TOWER_REVITALIXATION || btDetailState == KANTURU_TOWER_NOTIFY)
         {
-            wcscpy(m_strSubject, I18N::Game::YouMayNowProceedToTheRefineryTower);
-            wcscpy(m_strStateText[0], I18N::Game::PathToTheRefineryTowerIsNowOpened);
-            mu_swprintf(m_strStateText[1], I18N::Game::PathToTheRefineryTowerWillBeClosedInDHours, iRemainTime / 3600);
+            wcsncpy_s(m_strSubject, _countof(m_strSubject), I18N::Game::YouMayNowProceedToTheRefineryTower, _TRUNCATE);
+            wcsncpy_s(m_strStateText[0], _countof(m_strStateText[0]),
+                      I18N::Game::PathToTheRefineryTowerIsNowOpened, _TRUNCATE);
+            swprintf_s(m_strStateText[1], _countof(m_strStateText[1]),
+                       I18N::Game::PathToTheRefineryTowerWillBeClosedInDHours, iRemainTime / 3600);
             m_iStateTextNum = 2;
         }
         else
         {
-            wcscpy(m_strSubject, I18N::Game::YouCanTWarpToTheRefineryTower);
-            wcscpy(m_strStateText[0], I18N::Game::DefeatTheNightmareThatControllingThe);
-            wcscpy(m_strStateText[1], I18N::Game::EntranceIsRestrictedToEnsureThe);
+            wcsncpy_s(m_strSubject, _countof(m_strSubject), I18N::Game::YouCanTWarpToTheRefineryTower, _TRUNCATE);
+            wcsncpy_s(m_strStateText[0], _countof(m_strStateText[0]),
+                      I18N::Game::DefeatTheNightmareThatControllingThe, _TRUNCATE);
+            wcsncpy_s(m_strStateText[1], _countof(m_strStateText[1]),
+                      I18N::Game::EntranceIsRestrictedToEnsureThe, _TRUNCATE);
             m_iStateTextNum = 2;
         }
     }
@@ -246,32 +249,35 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
         if (btDetailState != KANTURU_MAYA_DIRECTION_STANBY1 && btDetailState != KANTURU_MAYA_DIRECTION_STANBY2 &&
             btDetailState != KANTURU_MAYA_DIRECTION_STANBY3)
         {
-            wcscpy(m_strSubject, I18N::Game::BattleWithMayaIsOngoing);
-            mu_swprintf(m_strStateText[0], I18N::Game::DPlayersAreTryingToOpen, btUserCount);
+            wcsncpy_s(m_strSubject, _countof(m_strSubject), I18N::Game::BattleWithMayaIsOngoing, _TRUNCATE);
+            swprintf_s(m_strStateText[0], _countof(m_strStateText[0]), I18N::Game::DPlayersAreTryingToOpen, btUserCount);
         }
         else
         {
-            wcscpy(m_strSubject, I18N::Game::MorePlayersAreNeededToOpenThePathToTheTower);
+            wcsncpy_s(m_strSubject, _countof(m_strSubject),
+                      I18N::Game::MorePlayersAreNeededToOpenThePathToTheTower, _TRUNCATE);
 
             if (btDetailState == KANTURU_MAYA_DIRECTION_STANBY1)
             {
                 if (btUserCount < 15)
                 {
-                    wcscpy(m_strStateText[0], I18N::Game::YouMayNowEnter);
+                    wcsncpy_s(m_strStateText[0], _countof(m_strStateText[0]), I18N::Game::YouMayNowEnter, _TRUNCATE);
                 }
                 else if (btUserCount == 15)
                 {
-                    wcscpy(m_strStateText[0], I18N::Game::MoonstonePendantAuthenticationHasFailed);
+                    wcsncpy_s(m_strStateText[0], _countof(m_strStateText[0]),
+                              I18N::Game::MoonstonePendantAuthenticationHasFailed, _TRUNCATE);
                 }
                 else
                 {
                     if (m_BtnEnter.IsLock() == false)
                     {
-                        wcscpy(m_strStateText[0], I18N::Game::YouMayNowEnter);
+                        wcsncpy_s(m_strStateText[0], _countof(m_strStateText[0]), I18N::Game::YouMayNowEnter, _TRUNCATE);
                     }
                     else
                     {
-                        wcscpy(m_strStateText[0], I18N::Game::MoonstonePendantAuthenticationHasFailed);
+                        wcsncpy_s(m_strStateText[0], _countof(m_strStateText[0]),
+                                  I18N::Game::MoonstonePendantAuthenticationHasFailed, _TRUNCATE);
                     }
                 }
                 m_iStateTextNum = 1;
@@ -280,13 +286,16 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
             {
                 if (btUserCount < 15)
                 {
-                    mu_swprintf(m_strStateText[0], I18N::Game::NightmareHasLostTheControlOf, btUserCount);
-                    mu_swprintf(m_strStateText[1], I18N::Game::MorePowerFromDPlayersAreNeeded, 15 - btUserCount);
+                    swprintf_s(m_strStateText[0], _countof(m_strStateText[0]),
+                               I18N::Game::NightmareHasLostTheControlOf, btUserCount);
+                    swprintf_s(m_strStateText[1], _countof(m_strStateText[1]),
+                               I18N::Game::MorePowerFromDPlayersAreNeeded, 15 - btUserCount);
                     m_iStateTextNum = 2;
                 }
                 else if (btUserCount == 15)
                 {
-                    wcscpy(m_strStateText[0], I18N::Game::NightmareHasLostTheControlOfMayaSLeftHand);
+                    wcsncpy_s(m_strStateText[0], _countof(m_strStateText[0]),
+                              I18N::Game::NightmareHasLostTheControlOfMayaSLeftHand, _TRUNCATE);
                     m_iStateTextNum = 1;
                 }
             }
@@ -294,13 +303,16 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
             {
                 if (btUserCount < 15)
                 {
-                    mu_swprintf(m_strStateText[0], I18N::Game::NightmareHasLostTheControlOf2166, btUserCount);
-                    mu_swprintf(m_strStateText[1], I18N::Game::MorePowerFromDPlayersAreNeeded, 15 - btUserCount);
+                    swprintf_s(m_strStateText[0], _countof(m_strStateText[0]),
+                               I18N::Game::NightmareHasLostTheControlOf2166, btUserCount);
+                    swprintf_s(m_strStateText[1], _countof(m_strStateText[1]),
+                               I18N::Game::MorePowerFromDPlayersAreNeeded, 15 - btUserCount);
                     m_iStateTextNum = 2;
                 }
                 else if (btUserCount == 15)
                 {
-                    wcscpy(m_strStateText[0], I18N::Game::NightmareHasLostTheControlOfMayaSLeftHand);
+                    wcsncpy_s(m_strStateText[0], _countof(m_strStateText[0]),
+                              I18N::Game::NightmareHasLostTheControlOfMayaSLeftHand, _TRUNCATE);
                     m_iStateTextNum = 1;
                 }
             }
@@ -308,7 +320,7 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
             {
                 if (m_BtnEnter.IsLock() == false)
                 {
-                    wcscpy(m_strStateText[0], I18N::Game::YouMayNowEnter);
+                    wcsncpy_s(m_strStateText[0], _countof(m_strStateText[0]), I18N::Game::YouMayNowEnter, _TRUNCATE);
 
                     m_iStateTextNum = 1;
                 }
@@ -319,21 +331,24 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
             btDetailState == KANTURU_MAYA_DIRECTION_MAYA1 || btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA1 ||
             btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA1)
         {
-            mu_swprintf(m_strStateText[1], I18N::Game::CurrentlyDPlayersAreInBattleWithMayaSLefeHand, btUserCount);
+            swprintf_s(m_strStateText[1], _countof(m_strStateText[1]),
+                       I18N::Game::CurrentlyDPlayersAreInBattleWithMayaSLefeHand, btUserCount);
             m_iStateTextNum = 2;
         }
         else if (btDetailState == KANTURU_MAYA_DIRECTION_MONSTER2 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA2 ||
                  btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA2 ||
                  btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA2)
         {
-            mu_swprintf(m_strStateText[1], I18N::Game::CurrentlyDPlayersAreInBattleWithMayaSRightHand, btUserCount);
+            swprintf_s(m_strStateText[1], _countof(m_strStateText[1]),
+                       I18N::Game::CurrentlyDPlayersAreInBattleWithMayaSRightHand, btUserCount);
             m_iStateTextNum = 2;
         }
         else if (btDetailState == KANTURU_MAYA_DIRECTION_MONSTER3 || btDetailState == KANTURU_MAYA_DIRECTION_MAYA3 ||
                  btDetailState == KANTURU_MAYA_DIRECTION_END_MAYA3 ||
                  btDetailState == KANTURU_MAYA_DIRECTION_ENDCYCLE_MAYA3)
         {
-            mu_swprintf(m_strStateText[1], I18N::Game::CurrentlyDPlayersAreInBattleWithMayaSBothHands, btUserCount);
+            swprintf_s(m_strStateText[1], _countof(m_strStateText[1]),
+                       I18N::Game::CurrentlyDPlayersAreInBattleWithMayaSBothHands, btUserCount);
             m_iStateTextNum = 2;
         }
         else if (btDetailState == KANTURU_MAYA_DIRECTION_NONE || btDetailState == KANTURU_MAYA_DIRECTION_END ||
@@ -344,29 +359,34 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdInfo(BYTE btState, BYT
     }
     else if (btState == KANTURU_STATE_NIGHTMARE_BATTLE)
     {
-        wcscpy(m_strSubject, I18N::Game::BattleWithMayaIsOngoing);
-        mu_swprintf(m_strStateText[0], I18N::Game::DPlayersAreTryingToOpen, btUserCount);
-        mu_swprintf(m_strStateText[1], I18N::Game::CurrentlyDPlayersAreInBattleWithNightmare, btUserCount);
+        wcsncpy_s(m_strSubject, _countof(m_strSubject), I18N::Game::BattleWithMayaIsOngoing, _TRUNCATE);
+        swprintf_s(m_strStateText[0], _countof(m_strStateText[0]), I18N::Game::DPlayersAreTryingToOpen, btUserCount);
+        swprintf_s(m_strStateText[1], _countof(m_strStateText[1]),
+                   I18N::Game::CurrentlyDPlayersAreInBattleWithNightmare, btUserCount);
         m_iStateTextNum = 2;
     }
     else if (btState == KANTURU_STATE_STANDBY)
     {
-        wcscpy(m_strSubject, I18N::Game::BossBattleWillStartSoon);
+        wcsncpy_s(m_strSubject, _countof(m_strSubject), I18N::Game::BossBattleWillStartSoon, _TRUNCATE);
         if (btDetailState == 1)  // STANBY_START
         {
-            mu_swprintf(m_strStateText[0], I18N::Game::ForceOfTheNightmareHasInvaded, iRemainTime / 60);
+            swprintf_s(m_strStateText[0], _countof(m_strStateText[0]),
+                       I18N::Game::ForceOfTheNightmareHasInvaded, iRemainTime / 60);
         }
         else  // STANBY_NONE || STANBY_NOTIFY || STANBY_END || STANBY_ENDCYCLE
         {
-            mu_swprintf(m_strStateText[0], I18N::Game::YouWillBeAbleToApproachMayaShortly);
+            wcsncpy_s(m_strStateText[0], _countof(m_strStateText[0]),
+                      I18N::Game::YouWillBeAbleToApproachMayaShortly, _TRUNCATE);
         }
-        mu_swprintf(m_strStateText[1], I18N::Game::DefeatTheNightmareThatControllingThe);
-        mu_swprintf(m_strStateText[2], I18N::Game::EntranceIsRestrictedToEnsureThe);
+        wcsncpy_s(m_strStateText[1], _countof(m_strStateText[1]),
+                  I18N::Game::DefeatTheNightmareThatControllingThe, _TRUNCATE);
+        wcsncpy_s(m_strStateText[2], _countof(m_strStateText[2]),
+                  I18N::Game::EntranceIsRestrictedToEnsureThe, _TRUNCATE);
         m_iStateTextNum = 3;
     }
     else
     {
-        wcscpy(m_strSubject, I18N::Game::FailedToEnter);
+        wcsncpy_s(m_strSubject, _countof(m_strSubject), I18N::Game::FailedToEnter, _TRUNCATE);
     }
 
     if (g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_KANTURU2ND_ENTERNPC) == false)
@@ -380,9 +400,12 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::ReceiveKanturu3rdEnter(BYTE btResult)
     m_bEnterRequest = false;
     CreateMessageBox(btResult);
 
-    m_pNpcObject->AnimationFrame = 0;
-    m_bNpcAnimation              = false;
-    SetAction(m_pNpcObject, KANTURU2ND_NPC_ANI_STOP);
+    m_bNpcAnimation = false;
+    if (m_pNpcObject)
+    {
+        m_pNpcObject->AnimationFrame = 0;
+        SetAction(m_pNpcObject, KANTURU2ND_NPC_ANI_STOP);
+    }
 
     DeleteJoint(BITMAP_JOINT_ENERGY, NULL);
 
@@ -606,7 +629,7 @@ void SEASON3B::CNewUIKanturu2ndEnterNpc::RenderTexts()
 
         g_pRenderText->SetTextColor(CLRDW_BR_YELLOW);
 
-        ZeroMemory(strTemp[i], sizeof(strTemp[i]));
+        ZeroMemory(strTemp, sizeof(strTemp));
     }
 }
 
@@ -644,10 +667,9 @@ bool SEASON3B::CNewUIKanturuInfoWindow::Create(CNewUIManager* pNewUIMng, int x, 
 
 void SEASON3B::CNewUIKanturuInfoWindow::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -705,7 +727,7 @@ void SEASON3B::CNewUIKanturuInfoWindow::RenderInfo()
     g_pRenderText->SetFont(g_hFontBold);
 
     wchar_t strText[256];
-    mu_swprintf(strText, I18N::Game::CharacterD, UserCount);
+    swprintf_s(strText, _countof(strText), I18N::Game::CharacterD, UserCount);
     g_pRenderText->SetBgColor(0);
     g_pRenderText->SetTextColor(134, 134, 199, 255);
     g_pRenderText->RenderText(m_Pos.x + 10, m_Pos.y + 15, strText);
@@ -718,7 +740,7 @@ void SEASON3B::CNewUIKanturuInfoWindow::RenderInfo()
     }
     else
     {
-        mu_swprintf(strText, I18N::Game::MonsterD, MonsterCount);
+        swprintf_s(strText, _countof(strText), I18N::Game::MonsterD, MonsterCount);
         g_pRenderText->RenderText(m_Pos.x + 10, m_Pos.y + 35, strText);
     }
 

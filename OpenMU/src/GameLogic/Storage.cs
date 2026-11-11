@@ -18,6 +18,8 @@ public class Storage : IStorage
 
     private readonly int _boxOffset;
 
+    private readonly object _moneyLock = new();
+
     /// <summary>
     /// Initializes a new instance of the <see cref="Storage"/> class.
     /// </summary>
@@ -174,35 +176,52 @@ public class Storage : IStorage
     /// <inheritdoc/>
     public bool TryAddMoney(int value)
     {
-        // Negative amounts would silently reverse the operation (uint -> int cast at call sites);
-        // do the arithmetic in long to avoid integer overflow as well.
-        var newTotal = (long)this.ItemStorage.Money + value;
-        if (value < 0 || newTotal > int.MaxValue)
+        if (value < 0)
         {
             return false;
         }
 
-        // Enforce the configured storage cap here (not only in the transfer wrappers) so money can't
-        // exceed MaximumInventoryMoney / MaximumVaultMoney through any other call path.
-        if (this.MaximumMoney is { } maxMoney && newTotal > maxMoney)
+        lock (this._moneyLock)
         {
-            return false;
-        }
+            // Negative amounts would silently reverse the operation (uint -> int cast at call sites);
+            // do the arithmetic in long to avoid integer overflow as well.
+            var newTotal = (long)this.ItemStorage.Money + value;
+            if (newTotal < 0 || newTotal > int.MaxValue)
+            {
+                return false;
+            }
 
-        this.ItemStorage.Money = this.ItemStorage.Money + value;
-        return true;
+            // Enforce the configured storage cap here (not only in the transfer wrappers) so money can't
+            // exceed MaximumInventoryMoney / MaximumVaultMoney through any other call path.
+            if (this.MaximumMoney is { } maxMoney && newTotal > maxMoney)
+            {
+                return false;
+            }
+
+            this.ItemStorage.Money = (int)newTotal;
+            return true;
+        }
     }
 
     /// <inheritdoc/>
     public bool TryRemoveMoney(int value)
     {
-        if (value < 0 || (long)this.ItemStorage.Money - value < 0)
+        if (value < 0)
         {
             return false;
         }
 
-        this.ItemStorage.Money = this.ItemStorage.Money - value;
-        return true;
+        lock (this._moneyLock)
+        {
+            var newTotal = (long)this.ItemStorage.Money - value;
+            if (newTotal < 0)
+            {
+                return false;
+            }
+
+            this.ItemStorage.Money = (int)newTotal;
+            return true;
+        }
     }
 
     /// <inheritdoc/>
@@ -237,9 +256,9 @@ public class Storage : IStorage
     /// <inheritdoc/>
     public async ValueTask<bool> TryTakeAllAsync(IStorage anotherStorage)
     {
-        var result = true;
-
+        var completed = false;
         var itemsWithSlots = anotherStorage.Items.Select(item => (item.ItemSlot, Item: item)).ToList();
+        var movedItems = new List<(byte ItemSlot, Item Item)>(itemsWithSlots.Count);
         try
         {
             foreach (var item in itemsWithSlots)
@@ -247,23 +266,28 @@ public class Storage : IStorage
                 await anotherStorage.RemoveItemAsync(item.Item).ConfigureAwait(false);
                 if (!await this.AddItemAsync(item.Item).ConfigureAwait(false))
                 {
-                    result = false;
+                    await anotherStorage.AddItemAsync(item.ItemSlot, item.Item).ConfigureAwait(false);
+                    return false;
                 }
+
+                movedItems.Add(item);
             }
+
+            completed = true;
+            return true;
         }
         finally
         {
-            if (!result)
+            if (!completed)
             {
-                foreach (var item in itemsWithSlots)
+                for (var i = movedItems.Count - 1; i >= 0; i--)
                 {
-                    await this.RemoveItemAsync(item.Item).ConfigureAwait(false);
-                    await anotherStorage.AddItemAsync(item.ItemSlot, item.Item).ConfigureAwait(false);
+                    var moved = movedItems[i];
+                    await this.RemoveItemAsync(moved.Item).ConfigureAwait(false);
+                    await anotherStorage.AddItemAsync(moved.ItemSlot, moved.Item).ConfigureAwait(false);
                 }
             }
         }
-
-        return result;
     }
 
     /// <inheritdoc/>

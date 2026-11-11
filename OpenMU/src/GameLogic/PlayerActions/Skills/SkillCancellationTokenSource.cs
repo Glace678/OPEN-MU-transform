@@ -24,6 +24,13 @@ public class SkillCancellationTokenSource : CancellationTokenSource
     public void CancelWithExtraTarget(ushort? extraTarget)
     {
         this.ExplicitTargetId = extraTarget;
-        this.Cancel();
+        try
+        {
+            this.Cancel();
+        }
+        catch (ObjectDisposedException)
+        {
+            // Channeling already finished concurrently.
+        }
     }
 }

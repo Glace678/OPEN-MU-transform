@@ -71,13 +71,14 @@ public static class AttributeSystemExtensions
         var result = value.ConstantValue;
         if (relations?.Any() ?? false)
         {
+            var aggregateType = result?.AggregateType ?? AggregateType.AddRaw;
             var elements = relations
                 .Select(r => new AttributeRelationshipElement(
                     new[] { attributeSystem.GetOrCreateAttribute(r.InputAttribute ?? throw new InvalidOperationException($"InputAttribute value not set for AttributeRelationship {r.GetId()}.")) },
                     r.GetOperandElement(attributeSystem),
                     r.InputOperator)
                 {
-                    AggregateType = result.AggregateType,
+                    AggregateType = aggregateType,
                 })
                 .Cast<IElement>();
 
@@ -86,7 +87,7 @@ public static class AttributeSystemExtensions
                 elements = elements.Concat(value.ConstantValue.GetAsEnumerable());
             }
 
-            var composableResult = new ComposableAttribute(targetDefinition, result.AggregateType, value.MaximumValue);
+            var composableResult = new ComposableAttribute(targetDefinition, aggregateType, value.MaximumValue);
 
             elements.ForEach(element => composableResult.AddElement(element));
             return composableResult;

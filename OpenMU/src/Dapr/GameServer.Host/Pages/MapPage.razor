@@ -10,10 +10,17 @@
             <!--<span class="oi oi-home" aria-hidden="true"></span>-->
             <span>All</span>
         </NavLink>
-        <span> / @this._map?.MapName</span>
+        <span> / @(this._map?.MapName ?? "Not Found")</span>
     </div>
 
-    <Map Server="@GameServer" MapId="@MapId"></Map>
+    @if (this._map is not null)
+    {
+        <Map Server="@GameServer" MapId="@MapId"></Map>
+    }
+    else
+    {
+        <p>The requested map is not hosted on this game server.</p>
+    }
 }
 
 @code {
@@ -36,7 +43,7 @@
     /// <inheritdoc />
     protected override Task OnInitializedAsync()
     {
-        this._map = this.GameServer!.Maps.First(m => m.Id == this.MapId);
+        this._map = this.GameServer?.Maps.FirstOrDefault(m => m.Id == this.MapId);
         return base.OnInitializedAsync();
     }
 }

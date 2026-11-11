@@ -160,11 +160,16 @@ typedef struct _Mesh_t
 
     _Mesh_t()
     {
-        Vertices    = NULL;
-        Normals     = NULL;
-        Triangles   = NULL;
-        Commands    = NULL;
-        m_csTScript = NULL;
+        NoneBlendMesh   = false;
+        Texture         = 0;
+        NumCommandBytes = 0;
+        Vertices        = NULL;
+        Normals         = NULL;
+        TexCoords       = NULL;
+        VertexColors    = NULL;
+        Triangles       = NULL;
+        Commands        = NULL;
+        m_csTScript     = NULL;
 
         NumVertices = NumNormals = NumTexCoords = NumVertexColors = NumTriangles = 0;
     }
@@ -263,30 +268,24 @@ public:
     std::vector<float> m_Staging;  // Pre-allocated CPU staging buffer (size = flatOffset * 9)
 
     void UploadStaticVBOs();
-    void UploadDynamicBuffers(int meshIndex, float alpha = 1.0f, int renderFlags = 0);
+    void UploadDynamicBuffers(int meshIndex, float alpha = 1.0f, int renderFlags = 0, float bodyLightScale = 1.0f);
     void ReleaseDynamicVBOs();
     void ReleaseStaticVBOs();
 
     BMD()
-        : NumBones(0), NumActions(0), NumMeshs(0), Meshs(NULL), Bones(NULL), Actions(NULL), Textures(NULL),
-          IndexTexture(NULL), m_VAO_Static(0), m_VBO_Dynamic(0), m_EBO(0), m_VAO_StaticGPU(0), m_VBO_StaticGeom(0),
-          m_VBO_Color(0), m_HasStaticGPUVBO(false), m_StaticGeomReady(false), m_pCurrentBoneTransform(nullptr),
-          m_MeshUVOffset(nullptr), m_MeshIndexOffset(nullptr), m_MeshIndexCount(nullptr), m_DynBufsReady(false),
-          m_LastTranslate(false), m_SkinStamp(0), m_LastSkinScale(0.f), m_LastBoneScale(1.f)
+        : Name{}, Version(0), NumBones(0), NumMeshs(0), NumActions(0), Meshs(NULL), Bones(NULL), Actions(NULL),
+          Textures(NULL), IndexTexture(NULL), NumLightMaps(0), IndexLightMap(0), LightMaps(NULL), LightEnable(false),
+          ContrastEnable(false), BodyLight{1.f, 1.f, 1.f}, BoneHead(-1), BoneFoot{-1, -1, -1, -1}, BodyScale(1.f),
+          BodyOrigin{}, BodyAngle{}, BodyHeight(0.f), StreamMesh(-1), ShadowAngle{}, Skin(0), HideSkin(false),
+          Velocity(0.f), CurrentAction(0), PriorAction(0), CurrentAnimation(0.f), CurrentAnimationFrame(0), Sounds{},
+          renderCount(0), fTransformedSize(0.f), m_iBMDSeqID(0), bLightMap(false), bOffLight(false), iBillType(-1),
+          m_bCompletedAlloc(false), m_VAO_Static(0), m_VBO_Dynamic(0), m_EBO(0), m_VAO_StaticGPU(0),
+          m_VBO_StaticGeom(0), m_VBO_Color(0), m_HasStaticGPUVBO(false), m_StaticGeomReady(false),
+          m_pCurrentBoneTransform(nullptr), m_MeshUVOffset(nullptr), m_MeshIndexOffset(nullptr),
+          m_MeshIndexCount(nullptr), m_DynBufsReady(false), m_LastTranslate(false), m_LastLightPosition{},
+          m_SkinStamp(0), m_CpuVertsReady{}, m_CpuNormalsReady{}, m_LastSkinScale(0.f), m_LastBoneScale(1.f),
+          LightMapEnable(false)
     {
-        m_LastLightPosition[0] = m_LastLightPosition[1] = m_LastLightPosition[2] = 0.f;
-        for (int _i = 0; _i < MAX_MESH; _i++)
-        {
-            m_CpuVertsReady[_i]   = false;
-            m_CpuNormalsReady[_i] = false;
-        }
-        LightEnable       = false;
-        ContrastEnable    = false;
-        HideSkin          = false;
-        bLightMap         = false;
-        iBillType         = -1;
-        bOffLight         = false;
-        m_bCompletedAlloc = false;
     }
 
     ~BMD();

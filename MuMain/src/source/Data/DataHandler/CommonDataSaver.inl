@@ -200,15 +200,26 @@ bool WriteBufferToFile(const typename CommonDataSaver::SaveConfig<TRuntime, TFil
     }
 
     // Write buffer
-    fwrite(buffer, bufferSize, 1, fp);
+    if (bufferSize > 0 && fwrite(buffer, bufferSize, 1, fp) != 1)
+    {
+        fclose(fp);
+        return false;
+    }
 
     // Write checksum if needed
     if (config.generateChecksum)
     {
-        fwrite(&checksum, sizeof(DWORD), 1, fp);
+        if (fwrite(&checksum, sizeof(DWORD), 1, fp) != 1)
+        {
+            fclose(fp);
+            return false;
+        }
     }
 
-    fclose(fp);
+    if (fclose(fp) != 0)
+    {
+        return false;
+    }
     return true;
 }
 

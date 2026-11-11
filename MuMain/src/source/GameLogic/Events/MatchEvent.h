@@ -58,7 +58,7 @@ inline void RenderMatchTimes(void)
         g_csMatchInfo->RenderMatchTimes();
     }
 }
-inline void SetMatchResult(int iNumResult, int iMyResult, MatchResult* pResult, int Success = 0)
+inline void SetMatchResult(int iNumResult, int iMyResult, const MatchResult* pResult, int Success = 0)
 {
     if (g_csMatchInfo != NULL)
     {

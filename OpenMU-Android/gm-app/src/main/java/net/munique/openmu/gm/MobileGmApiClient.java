@@ -127,9 +127,9 @@ final class MobileGmApiClient {
             accountName = cleanString(object.optString("loginName", ""));
         }
 
-        JSONArray array = object.optJSONArray("characters");
+        JSONArray array = object.optJSONArray("onlineCharacters");
         if (array == null) {
-            array = object.optJSONArray("onlineCharacters");
+            array = object.optJSONArray("characters");
         }
         if (array == null) {
             throw new ApiException("服务器状态响应缺少 onlineCharacters");
@@ -250,6 +250,7 @@ final class MobileGmApiClient {
         connection.setConnectTimeout(CONNECT_TIMEOUT_MS);
         connection.setReadTimeout(READ_TIMEOUT_MS);
         connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestProperty("X-OpenMU-Client", "MobileGM");
         connection.setUseCaches(false);
         if (sessionCookie != null && !sessionCookie.isEmpty()) {
             connection.setRequestProperty("Cookie", sessionCookie);
@@ -407,7 +408,7 @@ final class MobileGmApiClient {
         }
         int[] parsed = new int[Math.min(numbers.length(), MAX_EXCELLENT_OPTIONS)];
         int written = 0;
-        for (int index = 0; index < excellentNumbers.length; index++) {
+        for (int index = 0; index < numbers.length() && written < parsed.length; index++) {
             int value = numbers.optInt(index);
             if (value >= 1 && value <= MAX_EXCELLENT_OPTIONS) {
                 parsed[written++] = value;
@@ -417,8 +418,8 @@ final class MobileGmApiClient {
     }
 
     static final class ItemOption {
-        final String group;
-        final String number;
+        final int group;
+        final int number;
         final String name;
         final int maxLevel;
         final boolean canHaveSkill;

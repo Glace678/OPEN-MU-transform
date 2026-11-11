@@ -42,7 +42,7 @@ public class FireScreamSkillPlugIn : IAreaSkillPlugIn
 
         bool FilterTarget(IAttackable attackable)
         {
-            if (attackable == attacker)
+            if (attackable == attacker || !attackable.IsAlive || attackable.IsAtSafezone())
             {
                 return false;
             }
@@ -65,9 +65,10 @@ public class FireScreamSkillPlugIn : IAreaSkillPlugIn
                 return true;
             }
 
-            if (attackable is Player { GuildWarContext.State: GuildWarState.Started } guildWarTarget
-                && attacker is Player { GuildWarContext.State: GuildWarState.Started } guildWarAttacker
-                && guildWarTarget.GuildWarContext == guildWarAttacker.GuildWarContext)
+            if (attackable is Player { GuildWarContext: { State: GuildWarState.Started } targetWarContext }
+                && attacker is Player { GuildWarContext: { State: GuildWarState.Started } attackerWarContext }
+                && targetWarContext.Score == attackerWarContext.Score
+                && targetWarContext.Team != attackerWarContext.Team)
             {
                 return true;
             }
@@ -78,8 +79,9 @@ public class FireScreamSkillPlugIn : IAreaSkillPlugIn
         var explosionTargets = target.CurrentMap?
             .GetAttackablesInRange(target.Position, this.Radius)
             .Where(a => a.GetDistanceTo(target) <= this.Radius)
-            .Where(FilterTarget) ?? [];
-        if (!explosionTargets.Any())
+            .Where(FilterTarget)
+            .ToList() ?? [];
+        if (explosionTargets.Count == 0)
         {
             return;
         }
@@ -89,7 +91,7 @@ public class FireScreamSkillPlugIn : IAreaSkillPlugIn
 
         foreach (var explosionTarget in explosionTargets)
         {
-            if (explosionTarget.IsActive())
+            if (explosionTarget.IsActive() && explosionTarget.IsAlive && !explosionTarget.IsAtSafezone())
             {
                 // We just need to apply the damage, so we can resort to the bleeding damage method which has DamageAttributes.Undefined
                 await explosionTarget.ApplyBleedingDamageAsync(attacker, explosionDamage).ConfigureAwait(false);

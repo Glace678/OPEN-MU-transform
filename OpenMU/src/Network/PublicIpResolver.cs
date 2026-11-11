@@ -46,11 +46,18 @@ public class PublicIpResolver : IIpAddressResolver
         {
             if (this._publicIPv4 is null || this._lastRequest + this._maximumCachedAddressLifetime < DateTime.UtcNow)
             {
-                this._publicIPv4 = await this.InternalGetIPv4Async().ConfigureAwait(false);
-                this._lastRequest = DateTime.UtcNow;
+                try
+                {
+                    this._publicIPv4 = await this.InternalGetIPv4Async().ConfigureAwait(false);
+                    this._lastRequest = DateTime.UtcNow;
+                }
+                catch (Exception ex) when (this._publicIPv4 is not null)
+                {
+                    this._logger.LogWarning(ex, "Refreshing public IP failed; keeping previously cached address {cachedIp}.", this._publicIPv4);
+                }
             }
 
-            return this._publicIPv4;
+            return this._publicIPv4!;
         }
         finally
         {
@@ -64,7 +71,36 @@ public class PublicIpResolver : IIpAddressResolver
 
     private static System.Net.Http.HttpClient CreateHttpClient()
     {
-        return new System.Net.Http.HttpClient { Timeout = TimeSpan.FromSeconds(10) };
+        var handler = new System.Net.Http.SocketsHttpHandler
+        {
+            AllowAutoRedirect = false,
+        };
+        return new System.Net.Http.HttpClient(handler)
+        {
+            Timeout = TimeSpan.FromSeconds(10),
+            MaxResponseContentBufferSize = 4096,
+        };
+    }
+
+    private static bool IsValidPublicIPv4(IPAddress address)
+    {
+        if (address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
+        {
+            return false;
+        }
+
+        var bytes = address.GetAddressBytes();
+        return bytes[0] switch
+        {
+            0 => false,
+            10 => false,
+            127 => false,
+            169 when bytes[1] == 254 => false,
+            172 when bytes[1] is >= 16 and <= 31 => false,
+            192 when bytes[1] == 168 => false,
+            >= 224 => false,
+            _ => true,
+        };
     }
 
     private async ValueTask<IPAddress> InternalGetIPv4Async()
@@ -72,9 +108,11 @@ public class PublicIpResolver : IIpAddressResolver
         const string url = "https://api.ipify.org/?format=text";
         this._logger.LogDebug("Start Requesting public ip from {url}", url);
         var response = await HttpClient.GetStringAsync(url).ConfigureAwait(false);
+        var trimmed = response.Trim();
 
-        var match = Regex.Match(response, @".*?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}).*");
-        if (match.Success && IPAddress.TryParse(match.Groups[1].Value, out var address))
+        if (Regex.IsMatch(trimmed, @"^\d{1,3}(?:\.\d{1,3}){3}$", RegexOptions.CultureInvariant)
+            && IPAddress.TryParse(trimmed, out var address)
+            && IsValidPublicIPv4(address))
         {
             var ipString = address.ToString();
             this._logger.LogDebug("Request of public ip answered with: {ipString}", ipString);
@@ -82,7 +120,7 @@ public class PublicIpResolver : IIpAddressResolver
         }
 
         var safeResponse = response.Length > 256 ? response[..256] + "..." : response;
-        this._logger.LogDebug("Request of public ip answered with unknown format: {response}", safeResponse);
+        this._logger.LogDebug("Request of public ip answered with unknown or non-public format: {response}", safeResponse);
         throw new FormatException($"Request of public ip answered with unknown format: {safeResponse}");
     }
 }

@@ -23,7 +23,18 @@ public class WarpAction
     {
         if (this.CheckRequirements(player, warpInfo, out var errorMessage))
         {
-            await player.WarpToAsync(warpInfo.Gate!).ConfigureAwait(false);
+            var warped = false;
+            try
+            {
+                warped = await player.TryWarpToAsync(warpInfo.Gate!).ConfigureAwait(false);
+            }
+            finally
+            {
+                if (!warped && warpInfo.Costs > 0)
+                {
+                    player.TryAddMoney(warpInfo.Costs);
+                }
+            }
         }
         else
         {
@@ -34,6 +45,12 @@ public class WarpAction
     private bool CheckRequirements(Player player, WarpInfo warpInfo, [MaybeNullWhen(true)] out string errorMessage)
     {
         errorMessage = null;
+
+        if (!player.IsAlive || player.CurrentMap is null || player.PlayerState.CurrentState != PlayerState.EnteredWorld)
+        {
+            errorMessage = "You cannot warp right now.";
+            return false;
+        }
 
         var requirement = player.SelectedCharacter?.GetEffectiveMoveLevelRequirement(warpInfo.LevelRequirement);
         if (requirement > player.Attributes?[Stats.Level])

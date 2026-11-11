@@ -71,6 +71,8 @@ public sealed class BackupManager
             CopyIfPresent(this._paths.SecretsFile, Path.Combine(workDirectory, Path.GetFileName(this._paths.SecretsFile)));
             CopyIfPresent(this._paths.SettingsFile, Path.Combine(workDirectory, "local-settings.json"));
             CopyIfPresent(this._paths.ManifestFile, Path.Combine(workDirectory, "manifest.json"));
+            CopyIfPresent(Path.Combine(this._paths.KeysDirectory, "mobile-gm-operations.json"), Path.Combine(workDirectory, "mobile-gm-operations.json"));
+            CopyIfPresent(Path.Combine(this._paths.KeysDirectory, "maintenance-token.txt"), Path.Combine(workDirectory, "maintenance-token.txt"));
             if (Directory.Exists(this._paths.DataProtectionKeysDirectory))
             {
                 CopyDirectory(this._paths.DataProtectionKeysDirectory, Path.Combine(workDirectory, "data-protection-keys"));
@@ -147,6 +149,9 @@ public sealed class BackupManager
             {
                 CopyDirectory(archivedKeyDirectory, this._paths.DataProtectionKeysDirectory);
             }
+
+            CopyIfPresent(Path.Combine(workDirectory, "mobile-gm-operations.json"), Path.Combine(this._paths.KeysDirectory, "mobile-gm-operations.json"));
+            CopyIfPresent(Path.Combine(workDirectory, "maintenance-token.txt"), Path.Combine(this._paths.KeysDirectory, "maintenance-token.txt"));
         }
         finally
         {

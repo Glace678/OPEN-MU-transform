@@ -229,7 +229,9 @@ public abstract class InitializerBase : IInitializer
         foreach (var durationRelatedValue in sourceMagicEffect.Duration.RelatedValues)
         {
             var durationRelatedValueCopy = this.Context.CreateNew<AttributeRelationship>();
-            durationRelatedValueCopy.InputAttribute = durationRelatedValue.InputAttribute!.GetPersistent(this.GameConfiguration);
+            durationRelatedValueCopy.TargetAttribute = durationRelatedValue.TargetAttribute?.GetPersistent(this.GameConfiguration);
+            durationRelatedValueCopy.InputAttribute = durationRelatedValue.InputAttribute?.GetPersistent(this.GameConfiguration);
+            durationRelatedValueCopy.OperandAttribute = durationRelatedValue.OperandAttribute?.GetPersistent(this.GameConfiguration);
             durationRelatedValueCopy.InputOperator = durationRelatedValue.InputOperator;
             durationRelatedValueCopy.InputOperand = durationRelatedValue.InputOperand;
             durationRelatedValueCopy.AggregateType = durationRelatedValue.AggregateType;
@@ -249,7 +251,9 @@ public abstract class InitializerBase : IInitializer
             foreach (var boostRelatedValue in powerUp.Boost.RelatedValues)
             {
                 var boostRelatedValueCopy = this.Context.CreateNew<AttributeRelationship>();
-                boostRelatedValueCopy.InputAttribute = boostRelatedValue.InputAttribute!.GetPersistent(this.GameConfiguration);
+                boostRelatedValueCopy.TargetAttribute = boostRelatedValue.TargetAttribute?.GetPersistent(this.GameConfiguration);
+                boostRelatedValueCopy.InputAttribute = boostRelatedValue.InputAttribute?.GetPersistent(this.GameConfiguration);
+                boostRelatedValueCopy.OperandAttribute = boostRelatedValue.OperandAttribute?.GetPersistent(this.GameConfiguration);
                 boostRelatedValueCopy.InputOperator = boostRelatedValue.InputOperator;
                 boostRelatedValueCopy.InputOperand = boostRelatedValue.InputOperand;
                 boostRelatedValueCopy.AggregateType = boostRelatedValue.AggregateType;

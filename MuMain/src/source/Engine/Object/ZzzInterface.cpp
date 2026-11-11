@@ -191,6 +191,11 @@ bool g_bExit = false;
 #ifdef PK_ATTACK_TESTSERVER_LOG
 void PrintPKLog(CHARACTER* pCha)
 {
+    if (pCha == nullptr)
+    {
+        return;
+    }
+
     static DWORD dwStartTime = 0;
     static SHORT sKey        = 0;
 
@@ -199,22 +204,20 @@ void PrintPKLog(CHARACTER* pCha)
         return;
     }
 
-    if (pCha)
+    if (pCha->PK >= PVP_MURDERER2 && pCha->Object.Kind == KIND_PLAYER)
     {
-        if (pCha->PK >= PVP_MURDERER2 && pCha->Object.Kind == KIND_PLAYER)
-        {
-            g_ErrorReport.Write(L"!!!!!!!!!!!!!!!!! PK !!!!!!!!!!!!!!!\n");
-            g_ErrorReport.WriteCurrentTime();
-            g_ErrorReport.Write(L" ID(%ls) PK(%d) GuildName(%ls)\n", pCha->ID, pCha->PK,
-                                GuildMark[pCha->GuildMarkIndex].GuildName);
+        const wchar_t* guildName =
+            (pCha->GuildMarkIndex >= 0 && pCha->GuildMarkIndex < MAX_MARKS) ? GuildMark[pCha->GuildMarkIndex].GuildName : L"";
+        g_ErrorReport.Write(L"!!!!!!!!!!!!!!!!! PK !!!!!!!!!!!!!!!\n");
+        g_ErrorReport.WriteCurrentTime();
+        g_ErrorReport.Write(L" ID(%ls) PK(%d) GuildName(%ls)\n", pCha->ID, pCha->PK, guildName);
 #ifdef CONSOLE_DEBUG
-            g_ConsoleDebug->Write(MCD_ERROR, L"[!!! PK !!! : ID(%ls) PK(%d) GuildName(%ls)\n]", pCha->ID, pCha->PK,
-                                  GuildMark[pCha->GuildMarkIndex].GuildName);
+        g_ConsoleDebug->Write(MCD_ERROR, L"[!!! PK !!! : ID(%ls) PK(%d) GuildName(%ls)\n]", pCha->ID, pCha->PK,
+                              guildName);
 #endif  // CONSOLE_DEBUG
 
-            sKey        = pCha->Key;
-            dwStartTime = timeGetTime();
-        }
+        sKey        = pCha->Key;
+        dwStartTime = timeGetTime();
     }
 }
 #endif  // PK_ATTACK_TESTSERVER_LOG
@@ -272,36 +275,34 @@ void RenderInputText(int x, int y, int Index, int Gold)
         g_pRenderText->SetTextColor(255, 230, 210, 255);
         g_pRenderText->SetBgColor(0);
 
-        SIZE*   Size;
-        wchar_t Text[256];
+        SIZE*        Size;
+        wchar_t      Text[256] = {};
+        const size_t inputLen  = std::min<size_t>(wcslen(InputText[Index]), std::size(Text) - 1);
         if (InputTextHide[Index] == 1)
         {
-            int iTextSize = 0;
-            for (unsigned int i = 0; i < wcslen(InputText[Index]); i++)
+            for (size_t i = 0; i < inputLen; i++)
             {
-                Text[i]   = '*';
-                iTextSize = i;
+                Text[i] = L'*';
             }
-            Text[iTextSize] = 0;
+            Text[inputLen] = L'\0';
         }
         else if (InputTextHide[Index] == 2)
         {
-            int iTextSize = 0;
-            for (unsigned int i = 0; i < 7; i++)
+            const size_t visibleLen = std::min<size_t>(7, inputLen);
+            for (size_t i = 0; i < visibleLen; i++)
             {
-                Text[i]   = InputText[Index][i];
-                iTextSize = i;
+                Text[i] = InputText[Index][i];
             }
-            for (unsigned int i = 7; i < wcslen(InputText[Index]); i++)
+            for (size_t i = visibleLen; i < inputLen; i++)
             {
-                Text[i]   = '*';
-                iTextSize = i;
+                Text[i] = L'*';
             }
-            Text[iTextSize] = 0;
+            Text[inputLen] = L'\0';
         }
         else
         {
-            wcscpy(Text, InputText[Index]);
+            memcpy(Text, InputText[Index], inputLen * sizeof(wchar_t));
+            Text[inputLen] = L'\0';
         }
         SIZE TextSize;
         g_pRenderText->RenderText(x, y, Text, InputTextWidth, 0, RT3_SORT_LEFT, &TextSize);
@@ -543,7 +544,13 @@ bool CheckWall(int sx1, int sy1, int sx2, int sy2)
     int error = 0, count = 0;
     do
     {
-        int _type = (SelectedCharacter >= 0 ? CharactersClient[SelectedCharacter].Object.Type : 0);
+        int _type = (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT
+                         ? CharactersClient[SelectedCharacter].Object.Type
+                         : 0);
+        if (Index < 0 || Index >= TERRAIN_SIZE * TERRAIN_SIZE)
+        {
+            return false;
+        }
         if ((_type != MODEL_EVIL_GATE && _type != MODEL_LION_GATE && _type != MODEL_STAR_GATE &&
              _type != MODEL_RUSH_GATE) &&
             (TerrainWall[Index] >= TW_NOMOVE && (TerrainWall[Index] & TW_ACTION) != TW_ACTION &&
@@ -575,14 +582,15 @@ bool CheckAttack_Fenrir(CHARACTER* c)
     }
     else if (::IsStrifeMap(gMapManager.WorldActive) && c != Hero && c->m_byGensInfluence != Hero->m_byGensInfluence)
     {
-        if (((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0) ||
-             (g_pPartyManager->IsPartyMember(SelectedCharacter))) &&
-            (Core::Input::IsKeyDown(VK_CONTROL)))
+        const bool sameGuild =
+            (Hero->GuildMarkIndex >= 0 && Hero->GuildMarkIndex < MAX_MARKS && c->GuildMarkIndex >= 0 &&
+             c->GuildMarkIndex < MAX_MARKS &&
+             wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0);
+        if ((sameGuild || (g_pPartyManager->IsPartyMember(SelectedCharacter))) && (Core::Input::IsKeyDown(VK_CONTROL)))
         {
             return true;
         }
-        else if ((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) != 0) &&
-                 !g_pPartyManager->IsPartyMember(SelectedCharacter))
+        else if (!sameGuild && !g_pPartyManager->IsPartyMember(SelectedCharacter))
         {
             return true;
         }
@@ -774,7 +782,9 @@ bool CheckAttack()
             else
                 return true;
         }
-        else if (wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
+        else if (Hero->GuildMarkIndex >= 0 && Hero->GuildMarkIndex < MAX_MARKS && c->GuildMarkIndex >= 0 &&
+                 c->GuildMarkIndex < MAX_MARKS &&
+                 wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
         {
             if (g_pPartyManager->IsPartyMember(SelectedCharacter))
             {
@@ -986,7 +996,8 @@ int getTargetCharacterKey(CHARACTER* c, int selected)
         return sc->Key;
     }
 
-    if (EnableGuildWar && sc->PK >= PVP_MURDERER2 && sc->GuildMarkIndex != -1 &&
+    if (EnableGuildWar && sc->PK >= PVP_MURDERER2 && Hero->GuildMarkIndex >= 0 && Hero->GuildMarkIndex < MAX_MARKS &&
+        sc->GuildMarkIndex >= 0 && sc->GuildMarkIndex < MAX_MARKS &&
         wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[sc->GuildMarkIndex].GuildName) == 0)
     {
         return -1;
@@ -1025,7 +1036,9 @@ int getTargetCharacterKey(CHARACTER* c, int selected)
             return sc->Key;
         }
 
-        if ((wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0) ||
+        if ((Hero->GuildMarkIndex >= 0 && Hero->GuildMarkIndex < MAX_MARKS && sc->GuildMarkIndex >= 0 &&
+             sc->GuildMarkIndex < MAX_MARKS &&
+             wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[sc->GuildMarkIndex].GuildName) == 0) ||
             g_pPartyManager->IsPartyMember(SelectedCharacter))
         {
             if (Core::Input::IsKeyDown(VK_CONTROL))
@@ -1515,9 +1528,13 @@ void Action(CHARACTER* c, OBJECT* o, bool Now)
                 case AT_SKILL_DRAGON_ROAR_STR:
                 case AT_SKILL_OCCUPY:
                 case AT_SKILL_PHOENIX_SHOT: {
+                    const int targetDead =
+                        (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT)
+                            ? CharactersClient[g_MovementSkill.m_iTarget].Dead
+                            : -1;
                     g_ConsoleDebug->Write(MCD_RECEIVE, L"Action ID : %d, %d | %d %d | %d %d", iSkill, Distance,
-                                          CharactersClient[g_MovementSkill.m_iTarget].Dead, g_MovementSkill.m_iTarget,
-                                          CheckTile(c, o, Distance * 1.2f), !c->SafeZone);
+                                          targetDead, g_MovementSkill.m_iTarget, CheckTile(c, o, Distance * 1.2f),
+                                          !c->SafeZone);
                     if (g_MovementSkill.m_iTarget >= 0 && g_MovementSkill.m_iTarget < MAX_CHARACTERS_CLIENT &&
                         CharactersClient[g_MovementSkill.m_iTarget].Dead == 0)
                     {
@@ -2041,12 +2058,12 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
 
     if (bMacroText == false && LogOut == false)
     {
-        wchar_t Name[256];
+        wchar_t Name[256] = {};
         int     iTextSize = 0;
-        for (int i = 0; i < 256 && Text[i] != ' ' && Text[i] != '\0'; i++)
+        for (int i = 0; i < 255 && Text[i] != ' ' && Text[i] != '\0'; i++)
         {
             Name[i]   = Text[i];
-            iTextSize = i;
+            iTextSize = i + 1;
         }
         Name[iTextSize] = 0;
 
@@ -2183,9 +2200,31 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                 g_pSystemLogBox->AddText(I18N::Game::StoreCanTBeOpened, SEASON3B::TYPE_SYSTEM_MESSAGE);
                 return false;
             }
-            wchar_t szCmd[24];
-            wchar_t szId[MAX_USERNAME_SIZE];
-            swscanf(Text, L"%ls %ls", szCmd, szId);
+            wchar_t        szCmd[24]                   = {};
+            wchar_t        szId[MAX_USERNAME_SIZE + 1] = {};
+            const wchar_t* pCursor                     = Text;
+            while (*pCursor == L' ')
+            {
+                ++pCursor;
+            }
+            size_t cmdLen = 0;
+            while (*pCursor != L'\0' && *pCursor != L' ')
+            {
+                if (cmdLen + 1 < std::size(szCmd))
+                {
+                    szCmd[cmdLen++] = *pCursor;
+                }
+                ++pCursor;
+            }
+            while (*pCursor == L' ')
+            {
+                ++pCursor;
+            }
+            size_t idLen = 0;
+            while (*pCursor != L'\0' && *pCursor != L' ' && idLen + 1 < std::size(szId))
+            {
+                szId[idLen++] = *pCursor++;
+            }
 
             if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
             {
@@ -2511,20 +2550,24 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
                 mu_swprintf(Name, L"/%d", i + 1);
             else
                 mu_swprintf(Name, L"/%d", 0);
-            if (Text[0] == Name[0] && Text[1] == Name[1])
+            const size_t textLen = wcslen(Text);
+            if (textLen >= 2 && Text[0] == Name[0] && Text[1] == Name[1] && (Text[2] == L' ' || Text[2] == L'\0'))
             {
                 if (CheckMacroLimit(Text) == true)
                 {
                     return false;
                 }
 
-                int iTextSize = 0;
-                for (int j = 3; j <= (int)wcslen(Text); j++)
+                if (textLen <= 3)
                 {
-                    MacroText[i][j - 3] = Text[j];
-                    iTextSize           = j;
+                    MacroText[i][0] = L'\0';
                 }
-                MacroText[i][iTextSize - 3] = 0;
+                else
+                {
+                    const size_t copyLen = std::min<size_t>(textLen - 3, std::size(MacroText[i]) - 1);
+                    memcpy(MacroText[i], Text + 3, copyLen * sizeof(wchar_t));
+                    MacroText[i][copyLen] = L'\0';
+                }
                 PlayBuffer(SOUND_CLICK01);
                 return true;
             }
@@ -2540,15 +2583,15 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
 #ifdef CSK_FIX_MACRO_MOVEMAP
     else if (bMacroText == true)
     {
-        wchar_t Name[256];
+        wchar_t Name[256] = {};
 
         int iTextSize = 0;
-        for (int i = 0; i < 256 && Text[i] != ' ' && Text[i] != '\0'; i++)
+        for (int i = 0; i < 255 && Text[i] != ' ' && Text[i] != '\0'; i++)
         {
             Name[i]   = Text[i];
-            iTextSize = i;
+            iTextSize = i + 1;
         }
-        Name[iTextSize] = NULL;
+        Name[iTextSize] = 0;
 
         if (wcscmp(Name, I18N::Game::Warp) == 0 || wcsicmp(Name, L"/move") == 0)
         {
@@ -2601,15 +2644,19 @@ bool CheckCommand(wchar_t* Text, bool bMacroText)
 
 bool FindText(const wchar_t* Text, const wchar_t* Token, bool First)
 {
-    int LengthToken = (int)wcslen(Token);
-    int Length      = (int)wcslen(Text) - LengthToken;
-    if (First)
-        Length = 0;
+    if (Text == nullptr || Token == nullptr)
+    {
+        return false;
+    }
+
+    int LengthToken = static_cast<int>(wcslen(Token));
+    int Length      = static_cast<int>(wcslen(Text)) - LengthToken;
     if (Length < 0)
         return false;
+    if (First)
+        Length = 0;
 
-    auto* lpszCheck = (unsigned char*)Text;
-    for (int i = 0; i <= Length; i += _mbclen(lpszCheck + i))
+    for (int i = 0; i <= Length; ++i)
     {
         bool Success = true;
         for (int j = 0; j < LengthToken; j++)
@@ -2628,29 +2675,7 @@ bool FindText(const wchar_t* Text, const wchar_t* Token, bool First)
 
 bool FindTextABS(const wchar_t* Text, const wchar_t* Token, bool First)
 {
-    int LengthToken = (int)wcslen(Token);
-    int Length      = (int)wcslen(Text) - LengthToken;
-    if (First)
-        Length = 0;
-    if (Length < 0)
-        return false;
-
-    auto* lpszCheck = (unsigned char*)Text;
-    for (int i = 0; i <= Length; i += _mbclen(lpszCheck + i))
-    {
-        bool Success = true;
-        for (int j = 0; j < LengthToken; j++)
-        {
-            if (Text[i + j] != Token[j])
-            {
-                Success = false;
-                break;
-            }
-        }
-        if (Success)
-            return true;
-    }
-    return false;
+    return FindText(Text, Token, First);
 }
 
 void SetActionClass(CHARACTER* c, OBJECT* o, int Action, int ActionType)
@@ -3031,7 +3056,7 @@ void MoveHero()
             if (!::IsStrifeMap(gMapManager.WorldActive))
             {
                 auto* pWindow = (CUITextInputWindow*)g_pWindowMgr->GetWindow(g_pWindowMgr->GetAddFriendWindow());
-                if (pWindow != NULL)
+                if (pWindow != NULL && SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT)
                 {
                     pWindow->SetText(CharactersClient[SelectedCharacter].ID);
                 }
@@ -3322,7 +3347,8 @@ void MoveHero()
                     }
                 }
             }
-            else if (SelectedOperate != -1 &&
+            else if (SelectedOperate >= 0 && SelectedOperate < MAX_OPERATES && Operates[SelectedOperate].Live &&
+                     Operates[SelectedOperate].Owner != nullptr &&
                      (c->SafeZone || (c->Helper.Type < MODEL_HORN_OF_UNIRIA || c->Helper.Type > MODEL_DARK_HORSE_ITEM ||
                                       c->Helper.Type != MODEL_HORN_OF_FENRIR)))
             {
@@ -3342,7 +3368,8 @@ void MoveHero()
                             Action(c, o, true);
                     }
             }
-            else if (SelectedNpc != -1 && !g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCSHOP) &&
+            else if (SelectedNpc >= 0 && SelectedNpc < MAX_CHARACTERS_CLIENT &&
+                     !g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_NPCSHOP) &&
                      !g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_STORAGE))
             {
                 // Talking to an NPC opens a window (dialogue/quest/shop). The physical button is
@@ -3396,7 +3423,7 @@ void MoveHero()
                         Action(c, o, true);
                 }
             }
-            else if (SelectedItem != -1)
+            else if (SelectedItem >= 0 && SelectedItem < MAX_ITEMS)
             {
                 c->MovementType = MOVEMENT_GET;
                 ItemKey         = SelectedItem;
@@ -4188,7 +4215,8 @@ void RenderCursor()
             RenderBitmap(BITMAP_CURSOR + 4, (float)MouseX - 2.f, (float)MouseY - 2.f, 24.f, 24.f, u, v, 0.5f, 0.5f);
         }
     }
-    else if (SelectedOperate != -1)
+    else if (SelectedOperate >= 0 && SelectedOperate < MAX_OPERATES && Operates[SelectedOperate].Live &&
+             Operates[SelectedOperate].Owner != nullptr)
     {
         if ((gMapManager.WorldActive == WD_0LORENCIA && Operates[SelectedOperate].Owner->Type == MODEL_POSE_BOX) ||
             (gMapManager.WorldActive == WD_1DUNGEON && Operates[SelectedOperate].Owner->Type == 60) ||
@@ -4273,11 +4301,14 @@ void BackSelectModel()
 {
     for (int i = 1; i < 20; i++)
     {
-        if (SelectModel - i < 0)
+        const int idx = SelectModel - i;
+        if (idx < 0)
             break;
-        if (Models[SelectModel - i].NumMeshs > 0)
+        if (idx >= MAX_MODELS)
+            continue;
+        if (Models[idx].NumMeshs > 0)
         {
-            SelectModel -= i;
+            SelectModel = idx;
             break;
         }
     }
@@ -4287,9 +4318,14 @@ void ForwardSelectModel()
 {
     for (int i = 1; i < 20; i++)
     {
-        if (Models[SelectModel + i].NumMeshs > 0)
+        const int idx = SelectModel + i;
+        if (idx >= MAX_MODELS)
+            break;
+        if (idx < 0)
+            continue;
+        if (Models[idx].NumMeshs > 0)
         {
-            SelectModel += i;
+            SelectModel = idx;
             break;
         }
     }

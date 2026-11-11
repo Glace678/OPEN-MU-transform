@@ -59,7 +59,8 @@ void WZResult::SetResult(DWORD dwErrorCode, DWORD dwWindowErrorCode, const TCHAR
     va_start(va, szFormat);
     this->m_dwErrorCode       = dwErrorCode;
     this->m_dwWindowErrorCode = dwWindowErrorCode;
-    StringCchVPrintf(this->m_szErrorMessage, std::size(this->m_szErrorMessage), szFormat, va);
+    StringCchVPrintf(this->m_szErrorMessage, std::size(this->m_szErrorMessage), szFormat ? szFormat : L"", va);
+    va_end(va);
 }
 
 void WZResult::SetSuccessResult()  // OK
@@ -71,27 +72,23 @@ void WZResult::SetSuccessResult()  // OK
 
 WZResult WZResult::BuildSuccessResult()  // OK
 {
-    WZResult result;
+    this->SetSuccessResult();
 
-    result.SetSuccessResult();
-
-    return result;
+    return *this;
 }
 
 WZResult WZResult::BuildResult(DWORD dwErrorCode, DWORD dwWindowErrorCode, const TCHAR* szFormat, ...)  // OK
 {
-    WZResult result;
-    wchar_t  Buffer[MAX_ERROR_MESSAGE];
-    va_list  args;
+    wchar_t Buffer[MAX_ERROR_MESSAGE] = {0};
+    va_list args;
 
     va_start(args, szFormat);
+    StringCchVPrintf(Buffer, std::size(Buffer), szFormat ? szFormat : L"", args);
+    va_end(args);
 
-    memset(Buffer, 0, sizeof(Buffer));
-    StringCchVPrintf(Buffer, std::size(Buffer), szFormat, args);
+    this->SetResult(dwErrorCode, dwWindowErrorCode, L"%ls", Buffer);
 
-    result.SetResult(dwErrorCode, dwWindowErrorCode, Buffer);
-
-    return result;
+    return *this;
 }
 
 #endif

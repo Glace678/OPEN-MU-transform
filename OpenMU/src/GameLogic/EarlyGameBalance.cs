@@ -44,7 +44,7 @@ public static class EarlyGameBalance
     /// <returns>The effective hit chance, floored inside the protected band.</returns>
     public static float AdjustHitChance(int playerLevel, float legacyHitChance)
     {
-        if (playerLevel > ProtectedLevel)
+        if (playerLevel <= 0 || playerLevel > ProtectedLevel)
         {
             return legacyHitChance;
         }
@@ -59,7 +59,7 @@ public static class EarlyGameBalance
     /// <param name="playerLevel">The attacking player's normal level.</param>
     /// <returns>The overrate damage multiplier.</returns>
     public static float GetOverrateMultiplier(int playerLevel) =>
-        playerLevel <= OverrateWaiverLevel ? 1.0f : LegacyOverrateMultiplier;
+        playerLevel is > 0 and <= OverrateWaiverLevel ? 1.0f : LegacyOverrateMultiplier;
 
     /// <summary>
     /// Reads an attacker's normal level, treating a non-player attacker as unbounded.

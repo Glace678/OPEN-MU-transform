@@ -5,6 +5,8 @@ import {
   CharacterOption,
   ItemOption,
   MobileGmClient,
+  NotAuthorizedError,
+  canonicalOrigin,
   isAllowedServerUrl,
   isLocalServerUrl,
   randomUuid
@@ -25,7 +27,14 @@ const MAX_ZEN = 2_000_000_000;
 @Component
 struct Index {
   @State serverUrl: string = DEFAULT_SERVER_URL;
+  @State draftServerUrl: string = DEFAULT_SERVER_URL;
   @State editingServer: boolean = false;
+  @State showLogin: boolean = false;
+  @State adminUser: string = 'admin';
+  @State adminPassword: string = '';
+  @State adminTwoFactor: string = '';
+  @State loginBusy: boolean = false;
+  @State loginError: string = '';
   @State connecting: boolean = false;
   @State statusText: string = '正在连接本地服务器…';
   @State serverReady: boolean = false;
@@ -59,9 +68,45 @@ struct Index {
   private grantFormSignature: string = '';
   private pendingZenId: string = '';
   private zenFormSignature: string = '';
+  private sessionCookie: string = '';
+  private sessionOrigin: string = '';
+
+  private activeCookie(): string {
+    const origin = canonicalOrigin(this.serverUrl);
+    if (origin.length === 0 || origin !== this.sessionOrigin) {
+      return '';
+    }
+    return this.sessionCookie;
+  }
+
+  private clearSession(): void {
+    this.sessionCookie = '';
+    this.sessionOrigin = '';
+  }
+
+  private resetPendingIds(): void {
+    this.pendingGrantId = '';
+    this.grantFormSignature = '';
+    this.pendingZenId = '';
+    this.zenFormSignature = '';
+  }
+
+  private handleAuthError(e: Object): boolean {
+    if (e instanceof NotAuthorizedError) {
+      this.clearSession();
+      this.serverReady = false;
+      this.accountName = '';
+      this.characters = [];
+      this.selectedCharacterIndex = 0;
+      this.loginError = e.message;
+      this.showLogin = true;
+      return true;
+    }
+    return false;
+  }
 
   private client(): MobileGmClient {
-    return new MobileGmClient(this.serverUrl, MOBILE_PACKAGE_KEY);
+    return new MobileGmClient(this.serverUrl, MOBILE_PACKAGE_KEY, this.activeCookie());
   }
 
   async aboutToAppear(): Promise<void> {
@@ -70,6 +115,7 @@ struct Index {
       const saved = await store.get(KEY_SERVER_URL, DEFAULT_SERVER_URL) as string;
       if (saved && isAllowedServerUrl(saved)) {
         this.serverUrl = saved;
+        this.draftServerUrl = saved;
       }
     } catch (e) {
       // Keep the default URL if preferences are unavailable.
@@ -85,16 +131,46 @@ struct Index {
 
   // Explicit confirmation before pairing with a public (non-local) host.
   // Returns true only when the user chooses to continue.
-  private async confirmPublicServer(): Promise<boolean> {
+  private async confirmPublicServer(targetUrl: string): Promise<boolean> {
     const result = await promptAction.showDialog({
       title: '确认连接到公网服务器？',
-      message: '该地址不是本机或局域网地址。继续将把 GM 配对密钥发送到 ' + this.serverUrl + '。请确认你信任该主机。',
+      message: '该地址不是本机或局域网地址。继续将把 GM 配对密钥发送到 ' + targetUrl + '。请确认你信任该主机。',
       buttons: [
         { text: '取消', color: '#6E7780' },
         { text: '仍要连接', color: '#C0392B' }
       ]
     });
     return result.index === 1;
+  }
+
+  private async submitLogin(): Promise<void> {
+    if (this.loginBusy) {
+      return;
+    }
+    const user = this.adminUser.trim();
+    if (user.length === 0 || this.adminPassword.length === 0) {
+      this.loginError = '请输入管理员账号和密码';
+      return;
+    }
+    this.loginBusy = true;
+    this.loginError = '';
+    const origin = canonicalOrigin(this.serverUrl);
+    try {
+      const cookie = await new MobileGmClient(this.serverUrl, MOBILE_PACKAGE_KEY).login(
+        user, this.adminPassword, this.adminTwoFactor.trim());
+      if (canonicalOrigin(this.serverUrl) === origin && origin.length > 0) {
+        this.sessionOrigin = origin;
+        this.sessionCookie = cookie;
+      }
+      this.adminPassword = '';
+      this.adminTwoFactor = '';
+      this.showLogin = false;
+      await this.loadStatus();
+    } catch (e) {
+      this.loginError = (e as Error).message ?? String(e);
+    } finally {
+      this.loginBusy = false;
+    }
   }
 
   async loadStatus(): Promise<void> {
@@ -118,7 +194,11 @@ struct Index {
         this.resultText = '当前没有在线角色，请先进入游戏后刷新。';
       }
     } catch (e) {
-      this.statusText = `连接失败：${(e as Error).message ?? e}`;
+      if (this.handleAuthError(e as Object)) {
+        this.statusText = `需要管理员登录：${this.serverUrl}`;
+      } else {
+        this.statusText = `连接失败：${(e as Error).message ?? e}`;
+      }
     } finally {
       this.connecting = false;
     }
@@ -133,7 +213,11 @@ struct Index {
       this.applySelectedItem();
       this.searchStatus = found.length === 0 ? '没有找到匹配的物品。' : `找到 ${found.length} 个物品。`;
     } catch (e) {
-      this.searchStatus = (e as Error).message ?? '搜索失败';
+      if (this.handleAuthError(e as Object)) {
+        this.searchStatus = '请先完成管理员登录后再搜索物品。';
+      } else {
+        this.searchStatus = (e as Error).message ?? '搜索失败';
+      }
     }
   }
 
@@ -180,8 +264,11 @@ struct Index {
   // same form keeps the same key (so a failed attempt can be retried against
   // the server's cached result), while any form change mints a new one.
   private itemFormSignature(): string {
-    const additional = this.currentItem()?.canHaveAdditional ? this.additionalLevel : 0;
-    return `${this.selectedCharacterIndex}|${this.selectedItemIndex}|${this.level}|${this.quantity}`
+    const charId = this.selectedCharacter()?.id ?? '';
+    const item = this.currentItem();
+    const itemKey = item ? `${item.group}:${item.number}` : '';
+    const additional = item?.canHaveAdditional ? this.additionalLevel : 0;
+    return `${canonicalOrigin(this.serverUrl)}|${charId}|${itemKey}|${this.level}|${this.quantity}`
       + `|${this.hasSkill}|${this.hasLuck}|${additional}|${this.excellentMask()}`;
   }
 
@@ -195,7 +282,8 @@ struct Index {
   }
 
   private zenGrantId(): string {
-    const signature = `${this.selectedCharacterIndex}|${this.zenAmount.trim()}`;
+    const charId = this.selectedCharacter()?.id ?? '';
+    const signature = `${canonicalOrigin(this.serverUrl)}|${charId}|${this.zenAmount.trim()}`;
     if (!this.pendingZenId || this.zenFormSignature !== signature) {
       this.zenFormSignature = signature;
       this.pendingZenId = randomUuid();
@@ -250,7 +338,11 @@ struct Index {
       promptAction.showToast({ message: '装备已发放' });
       await this.loadStatus();
     } catch (e) {
-      this.resultText = `操作失败：${(e as Error).message ?? e}`;
+      if (this.handleAuthError(e as Object)) {
+        this.resultText = '会话已过期，请重新登录管理员账号后重试（原请求幂等键已保留）。';
+      } else {
+        this.resultText = `操作失败：${(e as Error).message ?? e}`;
+      }
     } finally {
       this.grantBusy = false;
     }
@@ -280,7 +372,11 @@ struct Index {
       promptAction.showToast({ message: '金币已发放' });
       await this.loadStatus();
     } catch (e) {
-      this.resultText = `操作失败：${(e as Error).message ?? e}`;
+      if (this.handleAuthError(e as Object)) {
+        this.resultText = '会话已过期，请重新登录管理员账号后重试（原请求幂等键已保留）。';
+      } else {
+        this.resultText = `操作失败：${(e as Error).message ?? e}`;
+      }
     } finally {
       this.grantBusy = false;
     }
@@ -327,46 +423,90 @@ struct Index {
   }
 
   build() {
-    Column() {
-      Row() {
-        Text('OpenMU 鸿蒙 GM')
-          .fontSize(18).fontWeight(FontWeight.Bold).fontColor(Color.White)
-          .layoutWeight(1)
-        Button('刷新')
-          .type(ButtonType.Capsule).backgroundColor('#313840').fontColor(Color.White)
-          .margin({ right: 8 }).enabled(!this.connecting)
-          .onClick(() => this.loadStatus())
-        Button('服务器')
-          .type(ButtonType.Capsule).backgroundColor('#313840').fontColor(Color.White)
-          .onClick(() => {
-            this.editingServer = !this.editingServer;
-          })
-      }
-      .width('100%').height(56).padding({ left: 16, right: 8 })
-      .backgroundColor('#15191E')
-
-      if (this.connecting) {
-        Progress({ type: ProgressType.Linear }).width('100%').height(3).color('#D84133')
-      }
-
-      Scroll() {
-        GridRow({
-          columns: { sm: 4, md: 8, lg: 12 },
-          gutter: { x: 16, y: 8 },
-          breakpoints: { value: ['600vp', '840vp'] }
-        }) {
-          // Center and cap the form width on tablets, foldables and 2-in-1.
-          GridCol({ span: { sm: 4, md: 8, lg: 8 }, offset: { sm: 0, md: 0, lg: 2 } }) {
-            this.bodyColumn()
-          }
+    Stack() {
+      Column() {
+        Row() {
+          Text('OpenMU 鸿蒙 GM')
+            .fontSize(18).fontWeight(FontWeight.Bold).fontColor(Color.White)
+            .layoutWeight(1)
+          Button('刷新')
+            .type(ButtonType.Capsule).backgroundColor('#313840').fontColor(Color.White)
+            .margin({ right: 8 }).enabled(!this.connecting)
+            .onClick(() => this.loadStatus())
+          Button('登录')
+            .type(ButtonType.Capsule).backgroundColor('#313840').fontColor(Color.White)
+            .margin({ right: 8 })
+            .onClick(() => {
+              this.loginError = '';
+              this.showLogin = true;
+            })
+          Button('服务器')
+            .type(ButtonType.Capsule).backgroundColor('#313840').fontColor(Color.White)
+            .onClick(() => {
+              if (!this.editingServer) {
+                this.draftServerUrl = this.serverUrl;
+              }
+              this.editingServer = !this.editingServer;
+            })
         }
-        .width('100%')
-        .padding({ left: 16, right: 16, bottom: 32 })
+        .width('100%').height(56).padding({ left: 16, right: 8 })
+        .backgroundColor('#15191E')
+
+        if (this.connecting) {
+          Progress({ type: ProgressType.Linear }).width('100%').height(3).color('#D84133')
+        }
+
+        Scroll() {
+          GridRow({
+            columns: { sm: 4, md: 8, lg: 12 },
+            gutter: { x: 16, y: 8 },
+            breakpoints: { value: ['600vp', '840vp'] }
+          }) {
+            // Center and cap the form width on tablets, foldables and 2-in-1.
+            GridCol({ span: { sm: 4, md: 8, lg: 8 }, offset: { sm: 0, md: 0, lg: 2 } }) {
+              this.bodyColumn()
+            }
+          }
+          .width('100%')
+          .padding({ left: 16, right: 16, bottom: 32 })
+        }
+        .layoutWeight(1)
+        .scrollBar(BarState.Auto)
       }
-      .layoutWeight(1)
-      .scrollBar(BarState.Auto)
+      .width('100%').height('100%').backgroundColor('#F6F7F9')
+
+      if (this.showLogin) {
+        this.loginDialog()
+      }
     }
-    .width('100%').height('100%').backgroundColor('#F6F7F9')
+    .width('100%').height('100%')
+  }
+
+  @Builder
+  loginDialog() {
+    Column() {
+      Text('管理员登录').fontSize(20).fontWeight(FontWeight.Bold).margin({ bottom: 10 })
+      Text(`目标服务器：${this.serverUrl}`).fontSize(13).fontColor('#5C636C').width('100%').margin({ bottom: 8 })
+      TextInput({ placeholder: '管理员账号', text: this.adminUser })
+        .height(46).width('100%')
+        .onChange((v: string) => { this.adminUser = v; })
+      TextInput({ placeholder: '管理员密码', text: this.adminPassword })
+        .type(InputType.Password).height(46).width('100%').margin({ top: 8 })
+        .onChange((v: string) => { this.adminPassword = v; })
+      TextInput({ placeholder: '两步验证码（如未开启可留空）', text: this.adminTwoFactor })
+        .height(46).width('100%').margin({ top: 8 })
+        .onChange((v: string) => { this.adminTwoFactor = v; })
+      if (this.loginError.length > 0) {
+        Text(this.loginError).fontSize(13).fontColor('#C0392B').width('100%').margin({ top: 8 })
+      }
+      Row({ space: 12 }) {
+        Button('取消').backgroundColor('#313840').enabled(!this.loginBusy)
+          .onClick(() => { this.showLogin = false; })
+        Button('登录').backgroundColor('#BE3028').enabled(!this.loginBusy)
+          .onClick(() => this.submitLogin())
+      }.margin({ top: 14 })
+    }
+    .width('86%').backgroundColor(Color.White).borderRadius(14).padding(20)
   }
 
   @Builder
@@ -376,14 +516,15 @@ struct Index {
 
       if (this.editingServer) {
         Row() {
-          TextInput({ text: this.serverUrl })
+          TextInput({ text: this.draftServerUrl })
             .layoutWeight(1).height(44)
             .onChange((v: string) => {
-              this.serverUrl = v;
+              this.draftServerUrl = v;
             })
           Button('连接').height(44).margin({ left: 8 })
             .onClick(async () => {
-              if (!isAllowedServerUrl(this.serverUrl)) {
+              const candidate = this.draftServerUrl.trim();
+              if (!isAllowedServerUrl(candidate)) {
                 this.resultText = 'HTTP 仅允许本机或局域网 IP；公网必须用 HTTPS';
                 return;
               }
@@ -391,10 +532,16 @@ struct Index {
               // X-OpenMU-Mobile-Key on every request. Require an explicit
               // confirmation before trusting a non-local host (parity with
               // Android MainActivity.confirmPublicServer).
-              if (!isLocalServerUrl(this.serverUrl) && !(await this.confirmPublicServer())) {
+              if (!isLocalServerUrl(candidate) && !(await this.confirmPublicServer(candidate))) {
                 return;
               }
-              await this.saveServerUrl(this.serverUrl);
+              if (canonicalOrigin(candidate) !== canonicalOrigin(this.serverUrl)) {
+                this.clearSession();
+                this.resetPendingIds();
+              }
+              this.serverUrl = candidate;
+              this.draftServerUrl = candidate;
+              await this.saveServerUrl(candidate);
               this.editingServer = false;
               await this.loadStatus();
             })

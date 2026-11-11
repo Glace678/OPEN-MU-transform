@@ -28,17 +28,26 @@ public class TownPortalScrollConsumeHandlerPlugIn : BaseConsumeHandlerPlugIn
     /// <inheritdoc />
     public override async ValueTask<bool> ConsumeItemAsync(Player player, Item item, Item? targetItem, FruitUsage fruitUsage)
     {
-        if (await base.ConsumeItemAsync(player, item, targetItem, fruitUsage).ConfigureAwait(false))
+        if (!this.CheckPreconditions(player, item)
+            || !player.IsAlive
+            || player.CurrentMap is not { } currentMap)
         {
-            var targetMapDef = player.CurrentMap!.Definition.SafezoneMap ?? player.SelectedCharacter!.CharacterClass!.HomeMap;
-            if (targetMapDef is { }
-                && await player.GameContext.GetMapAsync((ushort)targetMapDef.Number).ConfigureAwait(false) is { SafeZoneSpawnGate: { } spawnGate })
-            {
-                await player.WarpToAsync(spawnGate).ConfigureAwait(false);
-                return true;
-            }
+            return false;
         }
 
-        return false;
+        var targetMapDef = currentMap.Definition.SafezoneMap ?? player.SelectedCharacter?.CharacterClass?.HomeMap;
+        if (targetMapDef is null
+            || await player.GameContext.GetMapAsync((ushort)targetMapDef.Number).ConfigureAwait(false) is not { SafeZoneSpawnGate: { } spawnGate })
+        {
+            return false;
+        }
+
+        if (!await player.TryWarpToAsync(spawnGate).ConfigureAwait(false))
+        {
+            return false;
+        }
+
+        await this.ConsumeSourceItemAsync(player, item).ConfigureAwait(false);
+        return true;
     }
 }

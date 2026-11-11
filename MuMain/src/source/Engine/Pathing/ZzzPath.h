@@ -70,10 +70,19 @@ public:
 
 inline PATH::PATH()
 {
+    m_iWidth        = 0;
+    m_iHeight       = 0;
+    m_iSize         = 0;
+    m_pbyMap        = NULL;
+    m_iNumPath      = 0;
     m_pbyClosed     = NULL;
+    m_iMinClosed    = MAX_INT_FORPATH;
+    m_iMaxClosed    = -1;
     m_piCostToStart = NULL;
     m_pxPrev        = NULL;
     m_pyPrev        = NULL;
+    ZeroMemory(m_xPath, sizeof(m_xPath));
+    ZeroMemory(m_yPath, sizeof(m_yPath));
 }
 
 inline PATH::~PATH()
@@ -170,6 +179,12 @@ inline int PATH::GetNewNodeToTest(void)
 inline bool PATH::FindPath(int xStart, int yStart, int xEnd, int yEnd, bool bErrorCheck, int iWall, bool Value,
                            float fDistance)
 {
+    if (!m_pbyMap || !m_pbyClosed || !m_piCostToStart || !m_pxPrev || !m_pyPrev || m_iWidth <= 0 || m_iHeight <= 0 ||
+        m_iSize <= 0)
+    {
+        return false;
+    }
+
     Init();
 
     if (xStart == 0 || yStart == 0)

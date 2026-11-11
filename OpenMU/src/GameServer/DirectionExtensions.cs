@@ -33,6 +33,6 @@ internal static class DirectionExtensions
     /// <returns>The direction.</returns>
     public static Direction ParseAsDirection(this byte packetByte)
     {
-        return (Direction)(packetByte + 1);
+        return packetByte < 8 ? (Direction)(packetByte + 1) : Direction.Undefined;
     }
 }

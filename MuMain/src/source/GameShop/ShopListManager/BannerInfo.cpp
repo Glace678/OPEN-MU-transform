@@ -24,6 +24,11 @@
 
 CBannerInfo::CBannerInfo()  // OK
 {
+    this->BannerSeq       = 0;
+    this->BannerOrder     = 0;
+    this->BannerDirection = 0;
+    this->BannerStartDate = {};
+    this->BannerEndDate   = {};
     memset(this->BannerName, 0, sizeof(this->BannerName));
     memset(this->BannerImageURL, 0, sizeof(this->BannerImageURL));
     memset(this->BannerImagePath, 0, sizeof(this->BannerImagePath));
@@ -39,7 +44,7 @@ bool CBannerInfo::SetBanner(std::wstring strdata, std::wstring strDirPath, bool 
 
     CStringToken Token(strdata, L"@");
 
-    if (Token.hasMoreTokens() == 0)
+    if (Token.countTokens() < 8)
         return 0;
 
     this->BannerSeq = _wtoi(Token.nextToken().c_str());

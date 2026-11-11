@@ -554,5 +554,5 @@ enum EMonsterType : int
     MONSTER_CAPTURED_STONE_STATUE_9              = 667,
     MONSTER_CAPTURED_STONE_STATUE_10             = 668,
 
-    MONSTER_END = 668
+    MONSTER_END = 669
 };

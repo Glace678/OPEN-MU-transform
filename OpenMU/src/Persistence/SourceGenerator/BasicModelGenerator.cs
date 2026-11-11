@@ -28,7 +28,7 @@ public class BasicModelGenerator : IIncrementalGenerator, IUnboundSourceGenerato
 
         context.RegisterSourceOutput(assemblyNameProvider, (sourceProductionContext, assemblyName) =>
         {
-            if (!(assemblyName?.EndsWith("Persistence") ?? false))
+            if (assemblyName != TargetAssemblyName)
             {
                 return;
             }

@@ -15,31 +15,34 @@ BuffTimeControl& TheBuffTimeControl();
 BuffStateValueControl& TheBuffStateValueControl();
 
 //Character Buff
-#define g_isNotCharacterBuff(o) o->m_BuffMap.isBuff()
+// Historical Webzen naming quirk: 8 callers in GMEmpireGuardian1..4.cpp rely on
+// g_isNotCharacterBuff(o) returning o->m_BuffMap.isBuff() ("has any active buff").
+// Do NOT invert this macro; parenthesize (o) for expression safety.
+#define g_isNotCharacterBuff(o) ((o)->m_BuffMap.isBuff())
 
-#define g_isCharacterBuff(o, bufftype) o->m_BuffMap.isBuff(bufftype)
+#define g_isCharacterBuff(o, bufftype) ((o)->m_BuffMap.isBuff(bufftype))
 
-#define g_isCharacterBufflist(o, bufftypelist) o->m_BuffMap.isBuff(bufftypelist)
+#define g_isCharacterBufflist(o, bufftypelist) ((o)->m_BuffMap.isBuff(bufftypelist))
 
-#define g_TokenCharacterBuff(o, bufftype) o->m_BuffMap.TokenBuff(bufftype)
+#define g_TokenCharacterBuff(o, bufftype) ((o)->m_BuffMap.TokenBuff(bufftype))
 
-#define g_CharacterBuffCount(o, bufftype) o->m_BuffMap.GetBuffCount(bufftype)
+#define g_CharacterBuffCount(o, bufftype) ((o)->m_BuffMap.GetBuffCount(bufftype))
 
-#define g_CharacterBuffSize(o) o->m_BuffMap.GetBuffSize()
+#define g_CharacterBuffSize(o) ((o)->m_BuffMap.GetBuffSize())
 
-#define g_CharacterBuff(o, iterindex) o->m_BuffMap.GetBuff(iterindex)
+#define g_CharacterBuff(o, iterindex) ((o)->m_BuffMap.GetBuff(iterindex))
 
-#define g_CharacterRegisterBuff(o, bufftype) o->m_BuffMap.RegisterBuff(bufftype)
+#define g_CharacterRegisterBuff(o, bufftype) ((o)->m_BuffMap.RegisterBuff(bufftype))
 
-#define g_CharacterRegisterBufflist(o, bufftypelist) o->m_BuffMap.RegisterBuff(bufftypelist)
+#define g_CharacterRegisterBufflist(o, bufftypelist) ((o)->m_BuffMap.RegisterBuff(bufftypelist))
 
-#define g_CharacterUnRegisterBuff(o, bufftype) o->m_BuffMap.UnRegisterBuff(bufftype)
+#define g_CharacterUnRegisterBuff(o, bufftype) ((o)->m_BuffMap.UnRegisterBuff(bufftype))
 
-#define g_CharacterUnRegisterBuffList(o, bufftypelist) o->m_BuffMap.UnRegisterBuff(bufftypelist)
+#define g_CharacterUnRegisterBuffList(o, bufftypelist) ((o)->m_BuffMap.UnRegisterBuff(bufftypelist))
 
-#define g_CharacterCopyBuff(outObj, inObj) outObj->m_BuffMap.m_Buff = inObj->m_BuffMap.m_Buff
+#define g_CharacterCopyBuff(outObj, inObj) ((outObj)->m_BuffMap.m_Buff = (inObj)->m_BuffMap.m_Buff)
 
-#define g_CharacterClearBuff(o) o->m_BuffMap.ClearBuff()
+#define g_CharacterClearBuff(o) ((o)->m_BuffMap.ClearBuff())
 
 //TheBuffInfo
 #define g_BuffInfo(buff) TheBuffInfo().GetBuffinfo(buff)

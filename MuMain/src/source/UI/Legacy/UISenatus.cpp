@@ -21,8 +21,8 @@ CSenatusInfo::CSenatusInfo()
 {
     m_iCurrGate   = 0;
     m_iCurrStatue = 0;
-    memset(m_GateInfo, 0, sizeof(PMSG_NPCDBLIST) * 6);
-    memset(m_StatueInfo, 0, sizeof(PMSG_NPCDBLIST) * 6);
+    memset(m_GateInfo, 0, sizeof(m_GateInfo));
+    memset(m_StatueInfo, 0, sizeof(m_StatueInfo));
 
     m_iChaosTaxRate     = 0;
     m_iNormalTaxRate    = 0;
@@ -35,6 +35,8 @@ CSenatusInfo::~CSenatusInfo() {}
 
 int CSenatusInfo::GetRepairCost(LPPMSG_NPCDBLIST pInfo)
 {
+    if (!pInfo)
+        return -1;
     if (pInfo->iNpcNumber == GATENPC_NUMBER)
         return (pInfo->iNpcMaxHp - pInfo->iNpcHp) * 5 + pInfo->iNpcDfLevel * 1000000;
     else if (pInfo->iNpcNumber == STATUENPC_NUMBER)
@@ -323,17 +325,19 @@ void CSenatusInfo::DoWithdrawAction(DWORD dwMoney)
 
 void CSenatusInfo::SetNPCInfo(LPPMSG_NPCDBLIST pInfo)
 {
-    if (pInfo->iNpcNumber == GATENPC_NUMBER)
+    if (!pInfo)
+        return;
+    if (pInfo->iNpcNumber == GATENPC_NUMBER && pInfo->iNpcIndex >= 1 && pInfo->iNpcIndex <= 6)
         memcpy(&m_GateInfo[pInfo->iNpcIndex - 1], pInfo, sizeof(PMSG_NPCDBLIST));
-    if (pInfo->iNpcNumber == STATUENPC_NUMBER)
+    if (pInfo->iNpcNumber == STATUENPC_NUMBER && pInfo->iNpcIndex >= 1 && pInfo->iNpcIndex <= 4)
         memcpy(&m_StatueInfo[pInfo->iNpcIndex - 1], pInfo, sizeof(PMSG_NPCDBLIST));
 }
 
 LPPMSG_NPCDBLIST CSenatusInfo::GetNPCInfo(int iNpcNumber, int iNpcIndex)
 {
-    if (iNpcNumber == GATENPC_NUMBER)
+    if (iNpcNumber == GATENPC_NUMBER && iNpcIndex >= 1 && iNpcIndex <= 6)
         return &m_GateInfo[iNpcIndex - 1];
-    else if (iNpcNumber == STATUENPC_NUMBER)
+    else if (iNpcNumber == STATUENPC_NUMBER && iNpcIndex >= 1 && iNpcIndex <= 4)
         return &m_StatueInfo[iNpcIndex - 1];
     else
         return NULL;
@@ -342,6 +346,8 @@ LPPMSG_NPCDBLIST CSenatusInfo::GetNPCInfo(int iNpcNumber, int iNpcIndex)
 void CSenatusInfo::BuyNewNPC(int iNpcNumber, int iNpcIndex)
 {
     LPPMSG_NPCDBLIST pNPCInfo = GetNPCInfo(iNpcNumber, iNpcIndex);
+    if (!pNPCInfo)
+        return;
     memset(pNPCInfo, 0, sizeof(PMSG_NPCDBLIST));
 
     pNPCInfo->btNpcLive   = 1;
@@ -358,6 +364,8 @@ void CSenatusInfo::BuyNewNPC(int iNpcNumber, int iNpcIndex)
 
 void CSenatusInfo::SetTaxInfo(LPPMSG_ANS_TAXMONEYINFO pInfo)
 {
+    if (!pInfo)
+        return;
     m_iChaosTaxRate = m_iRealTaxRateChaos = pInfo->btTaxRateChaos;
     m_iNormalTaxRate = m_iRealTaxRateStore = pInfo->btTaxRateStore;
     BYTE* pMoney                           = (BYTE*)&m_i64CastleMoney;

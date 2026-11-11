@@ -96,6 +96,7 @@ internal static class BotMasterHandler
             return false;
         }
 
+        var previousClass = character.CharacterClass;
         var masterClass = BotProgression.GetMasterEvolutionTarget(character.CharacterClass!)!;
         character.CharacterClass = masterClass;
         player.Logger.LogDebug(
@@ -112,7 +113,9 @@ internal static class BotMasterHandler
         }
         catch (Exception ex)
         {
-            player.Logger.LogWarning(ex, "Couldn't save bot '{Name}' right after its master evolution; the logout save will retry.", player.Name);
+            character.CharacterClass = previousClass;
+            player.Logger.LogWarning(ex, "Couldn't save bot '{Name}' right after its master evolution; rolling back class change to retry later.", player.Name);
+            return false;
         }
 
         return true;

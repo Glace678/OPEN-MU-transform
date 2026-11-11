@@ -41,6 +41,14 @@ def openMuServerScheme = providers.gradleProperty('OPENMU_SERVER_SCHEME').getOrE
 if (!(openMuServerScheme ==~ /https?/)) {
     throw new GradleException('OPENMU_SERVER_SCHEME must be "http" or "https".')
 }
+gradle.taskGraph.whenReady { graph ->
+    boolean hasReleaseTask = graph.allTasks.any { task ->
+        task.project == project && task.name.toLowerCase(Locale.ROOT).contains('release')
+    }
+    if (hasReleaseTask && openMuServerScheme == 'http') {
+        throw new GradleException('OPENMU_SERVER_SCHEME=http cannot be used for Release gm-app builds because release network_security_config forbids cleartext HTTP.')
+    }
+}
 
 android {
     namespace 'net.munique.openmu.gm'

@@ -34,8 +34,34 @@ PASSWORD_KEY_RE = re.compile(r"(?i:password)")
 KEY_VALUE_RE = re.compile(r"^(?P<indent>\s*)(?P<key>[A-Za-z0-9_-]+)\s*:\s*(?P<value>.*?)\s*$")
 
 INTERPOLATION_RE = re.compile(r"\$\{[A-Za-z_][A-Za-z0-9_]*(:[?\-+][^}]*)?}")
+DAPR_INTERPOLATION_RE = re.compile(
+    r"\$\{\{[A-Za-z_][A-Za-z0-9_]*\}\}|\$\{[A-Za-z_][A-Za-z0-9_]*(:[?\-+][^}]*)?\}"
+)
+ENV_LIST_RE = re.compile(r"^(?P<key>[A-Za-z_][A-Za-z0-9_]*)\s*=\s*(?P<value>.*)$")
 
 COMMENT_ONLY_RE = re.compile(r"^\s*#")
+
+
+def strip_yaml_comment(value: str) -> str:
+    """Strip an unquoted trailing YAML comment (# ...) from a scalar value."""
+    in_single = False
+    in_double = False
+    escaped = False
+    for idx, ch in enumerate(value):
+        if escaped:
+            escaped = False
+            continue
+        if in_double and ch == "\\":
+            escaped = True
+            continue
+        if ch == "'" and not in_double:
+            in_single = not in_single
+        elif ch == '"' and not in_single:
+            in_double = not in_double
+        elif ch == "#" and not in_single and not in_double:
+            if idx == 0 or value[idx - 1].isspace():
+                return value[:idx].rstrip()
+    return value
 
 
 def hard_coded_password_violation(path: pathlib.Path, line_number: int, key: str) -> str:
@@ -48,14 +74,14 @@ def hard_coded_password_violation(path: pathlib.Path, line_number: int, key: str
 def is_plain_secret_value(value: str) -> bool:
     """True when a password value is a hard-coded literal instead of an
     environment interpolation."""
-    value = value.strip()
+    value = strip_yaml_comment(value).strip()
     if not value:
-        return False
-    if value.startswith("#"):
         return False
     # Strip surrounding quotes.
     if len(value) >= 2 and value[0] in "\"'" and value[-1] == value[0]:
         value = value[1:-1]
+        if not value:
+            return True
     return INTERPOLATION_RE.search(value) is None
 
 
@@ -68,19 +94,19 @@ def audit_compose_file(path: pathlib.Path) -> list[str]:
 
     with path.open(encoding="utf-8") as handle:
         for line_number, raw_line in enumerate(handle, start=1):
-            line = raw_line.rstrip("\n")
+            line = raw_line.rstrip("\r\n")
             if COMMENT_ONLY_RE.match(line):
                 continue
 
-            # A list item marker starts a new sequence element; note its
-            # indentation so nested keys cannot be confused with siblings.
+            # A list item marker starts a new sequence element; push a unique
+            # sequence-item scope so sibling mappings in a list do not collide.
             list_match = re.match(r"^(?P<indent>\s*)-\s*(?P<rest>.*)$", line)
 
             match = KEY_VALUE_RE.match(line)
             if match:
                 indent = len(match.group("indent"))
                 key = match.group("key")
-                value = match.group("value")
+                value = strip_yaml_comment(match.group("value")).strip()
 
                 # Pop to the mapping this key belongs to.
                 while stack and indent <= stack[-1][0]:
@@ -103,29 +129,75 @@ def audit_compose_file(path: pathlib.Path) -> list[str]:
                 if key == "image" and re.search(r":latest\b", value):
                     violations.append(
                         f"{path.relative_to(REPO_ROOT)}:{line_number}: image pinned to ':latest'")
-            elif list_match and list_match.group("rest"):
-                # Inline "- key: value" -- check it like a regular entry by
-                # giving it the list marker's indentation.
-                indent = len(list_match.group("indent")) + 1
-                inline = " " * indent + list_match.group("rest")
+            elif list_match:
+                list_indent = len(list_match.group("indent"))
+                while stack and list_indent <= stack[-1][0]:
+                    stack.pop()
+                stack.append((list_indent, f"[{line_number}]"))
+
+                rest = list_match.group("rest")
+                if not rest:
+                    continue
+
+                env_match = ENV_LIST_RE.match(rest)
+                if env_match:
+                    key = env_match.group("key")
+                    value = env_match.group("value")
+                    if PASSWORD_KEY_RE.search(key) and is_plain_secret_value(value):
+                        violations.append(hard_coded_password_violation(path, line_number, key))
+                    continue
+
+                # Inline "- key: value" -- check it inside the new list-item scope.
+                item_indent = list_indent + 2
+                inline = " " * item_indent + rest
                 inline_match = KEY_VALUE_RE.match(inline)
                 if inline_match:
                     key = inline_match.group("key")
-                    value = inline_match.group("value")
+                    value = strip_yaml_comment(inline_match.group("value")).strip()
+                    parent_path = tuple(entry[1] for entry in stack)
+                    mapping_keys.setdefault(parent_path, set()).add(key)
+                    if not value:
+                        stack.append((item_indent, key))
                     if PASSWORD_KEY_RE.search(key) and is_plain_secret_value(value):
                         violations.append(hard_coded_password_violation(path, line_number, key))
+                    if key == "image" and re.search(r":latest\b", value):
+                        violations.append(
+                            f"{path.relative_to(REPO_ROOT)}:{line_number}: image pinned to ':latest'")
 
     return violations
 
 
 def audit_dapr_component(path: pathlib.Path) -> list[str]:
     violations: list[str] = []
-    text = path.read_text(encoding="utf-8")
+    raw_lines = path.read_text(encoding="utf-8").splitlines()
+    uncommented_lines = [
+        strip_yaml_comment(line)
+        for line in raw_lines
+        if not COMMENT_ONLY_RE.match(line)
+    ]
+    text = "\n".join(uncommented_lines)
 
-    if re.search(r"type:\s*(state\.redis|pubsub\.redis)", text) and not re.search(
-            r"name:\s*redisPassword", text):
-        violations.append(
-            f"{path.relative_to(REPO_ROOT)}: dapr redis component has no 'redisPassword' metadata entry")
+    if re.search(r"type:\s*(state\.redis|pubsub\.redis)\b", text):
+        redis_pw_match = re.search(
+            r"-\s*name:\s*redisPassword\b(?P<body>(?:\n(?!\s*-\s*name:)[^\n]*)*)",
+            text,
+        )
+        if not redis_pw_match:
+            violations.append(
+                f"{path.relative_to(REPO_ROOT)}: dapr redis component has no 'redisPassword' metadata entry")
+        else:
+            body = redis_pw_match.group("body")
+            has_secret_ref = re.search(r"\bsecretKeyRef\s*:", body) is not None
+            val_match = re.search(r"\bvalue\s*:\s*(?P<val>[^\n]+)", body)
+            if not has_secret_ref:
+                if not val_match:
+                    violations.append(
+                        f"{path.relative_to(REPO_ROOT)}: dapr 'redisPassword' metadata entry has neither 'value' nor 'secretKeyRef'")
+                else:
+                    raw_val = val_match.group("val").strip().strip("\"'")
+                    if DAPR_INTERPOLATION_RE.search(raw_val) is None:
+                        violations.append(
+                            f"{path.relative_to(REPO_ROOT)}: dapr 'redisPassword' must use environment interpolation (${{{{REDIS_PASSWORD}}}}) or secretKeyRef")
 
     return violations
 

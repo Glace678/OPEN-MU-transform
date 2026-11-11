@@ -78,23 +78,28 @@ internal class FtpRequestHandler : IPacketHandler<Client>
         {
             if (this._patchPacket is { } cachedPacket)
             {
-                var span = client.Connection.Output.GetSpan(cachedPacket.Length);
+                var span = client.Connection.Output.GetSpan(cachedPacket.Length)[..cachedPacket.Length];
                 cachedPacket.CopyTo(span);
+                return cachedPacket.Length;
             }
-            else
+
+            var patchAddress = this._connectServerSettings.PatchAddress ?? string.Empty;
+            var length = Math.Min(ClientNeedsPatchRef.GetRequiredSize(patchAddress), byte.MaxValue);
+            var spanNew = client.Connection.Output.GetSpan(length)[..length];
+            spanNew.Clear();
+            var packet = new ClientNeedsPatchRef(spanNew);
+            var header = packet.Header;
+            header.Length = (byte)length;
+            packet.PatchAddress = patchAddress;
+            var addressSize = Math.Min(Encoding.UTF8.GetByteCount(patchAddress), length - 6);
+
+            Xor3Bytes(spanNew.Slice(6), addressSize);
+            if (this._connectServerSettings.CurrentPatchVersion is { Length: > 2 } patchVersion)
             {
-                var length = ClientNeedsPatchRef.Length;
-                var span = client.Connection.Output.GetSpan(length)[..length];
-                var packet = new ClientNeedsPatchRef(span);
-                packet.PatchAddress = this._connectServerSettings.PatchAddress;
-                var addressSize = Encoding.UTF8.GetByteCount(this._connectServerSettings.PatchAddress);
-
-                Xor3Bytes(span.Slice(6), addressSize);
-                packet.PatchVersion = this._connectServerSettings.CurrentPatchVersion[2];
-
-                this._patchPacket = span.ToArray();
+                packet.PatchVersion = patchVersion[2];
             }
 
+            this._patchPacket = spanNew.ToArray();
             return this._patchPacket.Length;
         }
 
@@ -105,7 +110,13 @@ internal class FtpRequestHandler : IPacketHandler<Client>
             return PatchOk.Length;
         }
 
-        if (VersionCompare(this._connectServerSettings.CurrentPatchVersion, 0, packet.Span, 3, this._connectServerSettings.CurrentPatchVersion.Length) == VersionCompareResult.VersionTooLow)
+        var expectedVersion = this._connectServerSettings.CurrentPatchVersion;
+        if (expectedVersion is null || packet.Length < 3 + expectedVersion.Length)
+        {
+            return;
+        }
+
+        if (VersionCompare(expectedVersion, 0, packet.Span, 3, expectedVersion.Length) == VersionCompareResult.VersionTooLow)
         {
             await client.Connection.SendAsync(WritePatchPacket).ConfigureAwait(false);
         }

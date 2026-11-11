@@ -392,8 +392,8 @@ public sealed class GameServer : IGameServer, IDisposable, IGameServerContextPro
     /// <inheritdoc/>
     public async ValueTask GuildDeletedAsync(uint guildId)
     {
-        await this._gameContext.RemoveGuildAsync(guildId).ConfigureAwait(false);
         await this._gameContext.ForEachGuildPlayerAsync(guildId, p => this.RemovePlayerFromGuildAsync(p, false).AsTask()).ConfigureAwait(false);
+        await this._gameContext.RemoveGuildAsync(guildId).ConfigureAwait(false);
 
         //// todo: alliance things?
     }
@@ -478,15 +478,32 @@ public sealed class GameServer : IGameServer, IDisposable, IGameServerContextPro
     private async ValueTask OnPlayerConnectedAsync(PlayerConnectedEventArgs e)
     {
         var player = e.ConntectedPlayer;
+        player.PlayerDisconnected += this.OnPlayerDisconnectedAsync;
         await this._gameContext.AddPlayerAsync(player).ConfigureAwait(false);
-        await player.InvokeViewPlugInAsync<IShowLoginWindowPlugIn>(p => p.ShowLoginWindowAsync()).ConfigureAwait(false);
+        var loginWindowShown = false;
+        try
+        {
+            await player.InvokeViewPlugInAsync<IShowLoginWindowPlugIn>(p => p.ShowLoginWindowAsync()).ConfigureAwait(false);
+            loginWindowShown = true;
+        }
+        catch (Exception ex)
+        {
+            this._logger.LogDebug(ex, "Failed to send login window to newly connected player {Player}.", player);
+        }
+
         await player.PlayerState.TryAdvanceToAsync(PlayerState.LoginScreen).ConfigureAwait(false);
-        e.ConntectedPlayer.PlayerDisconnected += this.OnPlayerDisconnectedAsync;
+        if (!loginWindowShown || player is RemotePlayer { Connection: null or { Connected: false } })
+        {
+            await player.DisconnectAsync().ConfigureAwait(false);
+            return;
+        }
+
         this.OnPropertyChanged(nameof(this.CurrentConnections));
     }
 
     private async ValueTask OnPlayerDisconnectedAsync(Player remotePlayer)
     {
+        remotePlayer.PlayerDisconnected -= this.OnPlayerDisconnectedAsync;
         if (!remotePlayer.IsTemplatePlayer)
         {
             await this.SetOfflineAtLoginServerAsync(remotePlayer).ConfigureAwait(false);
@@ -507,7 +524,7 @@ public sealed class GameServer : IGameServer, IDisposable, IGameServerContextPro
         }
         catch (Exception ex)
         {
-            this._logger.LogError($"Couldn't set offline state at login server. Player: {this}", ex);
+            this._logger.LogError(ex, "Couldn't set offline state at login server. Player: {Player}", player);
         }
     }
 

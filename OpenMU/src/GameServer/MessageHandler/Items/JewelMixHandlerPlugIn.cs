@@ -30,33 +30,52 @@ internal class JewelMixHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
-        LahapJewelMixRequest message = packet;
         if (packet.Length < 6)
         {
             return;
         }
 
+        LahapJewelMixRequest message = packet;
+
         switch (message.Operation)
         {
             case LahapJewelMixRequest.MixType.Mix:
-                await this._mixAction.StackItemsAsync(player, (byte)message.Item, GetStackSize(message.MixingStackSize)).ConfigureAwait(false);
+                if (!TryGetStackSize(message.MixingStackSize, out var stackSize))
+                {
+                    return;
+                }
+
+                await this._mixAction.StackItemsAsync(player, (byte)message.Item, stackSize).ConfigureAwait(false);
                 break;
             case LahapJewelMixRequest.MixType.Unmix:
+                if (packet.Length < 7)
+                {
+                    return;
+                }
+
                 await this._mixAction.UnstackItemsAsync(player, (byte)message.Item, message.UnmixingSourceSlot).ConfigureAwait(false);
                 break;
             default:
-                throw new ArgumentException($"The mix operation {message.Operation} is unknown.");
+                return;
         }
     }
 
-    private static byte GetStackSize(LahapJewelMixRequest.StackSize stackSize)
+    private static bool TryGetStackSize(LahapJewelMixRequest.StackSize stackSize, out byte count)
     {
-        return stackSize switch
+        switch (stackSize)
         {
-            LahapJewelMixRequest.StackSize.Ten => 10,
-            LahapJewelMixRequest.StackSize.Twenty => 20,
-            LahapJewelMixRequest.StackSize.Thirty => 30,
-            _ => throw new InvalidEnumArgumentException(nameof(stackSize), (int)stackSize, typeof(LahapJewelMixRequest.StackSize)),
-        };
+            case LahapJewelMixRequest.StackSize.Ten:
+                count = 10;
+                return true;
+            case LahapJewelMixRequest.StackSize.Twenty:
+                count = 20;
+                return true;
+            case LahapJewelMixRequest.StackSize.Thirty:
+                count = 30;
+                return true;
+            default:
+                count = 0;
+                return false;
+        }
     }
 }

@@ -107,6 +107,8 @@ void CUIMng::CreateTitleSceneUI()
     m_pgbLoding->SetPositionArt(72 * kCanvasSX, 540 * kCanvasSY);
     for (int i = 0; i < UIM_TS_MAX; ++i)
     {
+        if (i == 2 || i == 4)
+            continue;
         m_asprTitle[i].Show();
     }
     m_pgbLoding->Show();
@@ -128,15 +130,21 @@ void CUIMng::RenderTitleSceneUI(HDC hDC, DWORD dwNow, DWORD dwTotal)
     ::ClearColorAndDepthBuffers();
     ::BeginBitmap();
 
-    for (int i = 0; i < UIM_TS_MAX; ++i)
+    if (m_asprTitle != NULL)
     {
-        if (i == 2)
-            continue;
-        m_asprTitle[i].Render();
+        for (int i = 0; i < UIM_TS_MAX; ++i)
+        {
+            if (i == 2 || i == 4)
+                continue;
+            m_asprTitle[i].Render();
+        }
     }
 
-    m_pgbLoding->SetValue(dwNow, dwTotal);
-    m_pgbLoding->Render();
+    if (m_pgbLoding != NULL)
+    {
+        m_pgbLoding->SetValue(dwNow, dwTotal);
+        m_pgbLoding->Render();
+    }
 
     ::EndBitmap();
     ::EndOpengl();

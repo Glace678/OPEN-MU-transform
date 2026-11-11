@@ -198,6 +198,7 @@ public class PersistenceContextProvider : IMigratableDatabaseContextProvider
         return new Disposable(() =>
         {
             this._changeListener = changePublisher;
+            this.ResetCache();
         });
     }
 

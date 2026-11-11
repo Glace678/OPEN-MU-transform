@@ -82,6 +82,11 @@ public partial class Item
     /// <param name="otherItem">The other item.</param>
     public void AssignValues(Item otherItem)
     {
+        if (ReferenceEquals(this, otherItem))
+        {
+            return;
+        }
+
         this.Definition = otherItem.Definition;
         this.Durability = otherItem.Durability;
         this.Level = otherItem.Level;
@@ -89,18 +94,18 @@ public partial class Item
         this.SocketCount = otherItem.SocketCount;
         this.PetExperience = otherItem.PetExperience;
         this.JewelUpgradeFailures = otherItem.JewelUpgradeFailures;
-        if (otherItem.ItemOptions != null && otherItem.ItemOptions.Any())
+        this.ItemOptions?.Clear();
+        if (otherItem.ItemOptions is { Count: > 0 } && this.ItemOptions is not null)
         {
-            this.ItemOptions.Clear();
             foreach (var option in otherItem.ItemOptions)
             {
                 this.ItemOptions.Add(this.CloneItemOptionLink(option));
             }
         }
 
-        if (otherItem.ItemSetGroups != null && otherItem.ItemSetGroups.Any())
+        this.ItemSetGroups?.Clear();
+        if (otherItem.ItemSetGroups is { Count: > 0 } && this.ItemSetGroups is not null)
         {
-            this.ItemSetGroups.Clear();
             foreach (var setGroup in otherItem.ItemSetGroups)
             {
                 this.ItemSetGroups.Add(setGroup);

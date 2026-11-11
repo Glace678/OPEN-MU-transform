@@ -58,6 +58,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 app.MapRazorComponents<MUnique.OpenMU.GameServer.Host.App>()
     .AddInteractiveServerRenderMode();
-await app.WaitForDatabaseConnectionInitializationAsync().ConfigureAwait(false);
+_ = app.Services.GetRequiredService<MUnique.OpenMU.Persistence.EntityFramework.IDatabaseConnectionSettingProvider>()
+    .InitializeAsync(app.Lifetime.ApplicationStopping);
 
 app.Run();

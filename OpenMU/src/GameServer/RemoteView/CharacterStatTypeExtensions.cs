@@ -42,6 +42,17 @@ public static class CharacterStatTypeExtensions
     }
 
     /// <summary>
+    /// Tries to get the attribute definition of a <see cref="CharacterStatAttribute"/>.
+    /// </summary>
+    /// <param name="statType">Type of the stat.</param>
+    /// <param name="attributeDefinition">The corresponding <see cref="AttributeDefinition"/>, if defined.</param>
+    /// <returns><c>True</c>, if the stat type is valid; otherwise, <c>false</c>.</returns>
+    public static bool TryGetAttributeDefinition(this CharacterStatAttribute statType, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out AttributeDefinition? attributeDefinition)
+    {
+        return StatTypesToAttributes.TryGetValue(statType, out attributeDefinition);
+    }
+
+    /// <summary>
     /// Gets the <see cref="CharacterStatAttribute"/> of the specified <see cref="AttributeDefinition"/>.
     /// </summary>
     /// <param name="attributeDefinition">The attribute definition.</param>

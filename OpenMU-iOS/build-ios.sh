@@ -33,11 +33,16 @@ if [[ -n "${DEVELOPMENT_TEAM:-}" ]]; then
   TEAM_ARGS+=("-DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=${DEVELOPMENT_TEAM}")
 fi
 
-# PLAT-1: point the engine at the dylib staged for embedding when it exists.
-# Passing a non-existent path is a FATAL, so only append when the file is there.
+# PLAT-1: point the engine at the dylib staged for embedding when it exists for
+# a device build. Simulator builds must not link the arm64 device Mach-O slice.
 PREBUILT_ARGS=()
 IOS_PREBUILT="${SCRIPT_DIR}/game-ios/native/libMUnique.Client.Library.dylib"
-if [[ -f "${IOS_PREBUILT}" ]]; then
+if [[ "${MU_IOS_SIMULATOR:-0}" == "1" ]]; then
+  PREBUILT_ARGS+=("-DMU_IOS_SIMULATOR=ON")
+  if [[ ! -f "${SCRIPT_DIR}/game-ios/resources/game-data.zip" ]]; then
+    PREBUILT_ARGS+=("-DMU_IOS_ALLOW_EMPTY_DATA=ON")
+  fi
+elif [[ -f "${IOS_PREBUILT}" ]]; then
   PREBUILT_ARGS+=("-DMU_CLIENT_LIBRARY_PREBUILT=${IOS_PREBUILT}")
 fi
 
@@ -49,8 +54,8 @@ cmake -S "${SCRIPT_DIR}/game-ios" -B "${BUILD_DIR}" -G Xcode \
   -DMU_IOS_PREVIEW=ON \
   -DENABLE_EDITOR=OFF \
   -DBUILD_TESTING=OFF \
-  "${TEAM_ARGS[@]}" \
-  "${PREBUILT_ARGS[@]}"
+  ${TEAM_ARGS[@]+"${TEAM_ARGS[@]}"} \
+  ${PREBUILT_ARGS[@]+"${PREBUILT_ARGS[@]}"}
 
 cmake --build "${BUILD_DIR}" --config Release --target Main -- -allowProvisioningUpdates
 

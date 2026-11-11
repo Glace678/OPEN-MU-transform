@@ -98,7 +98,12 @@ inline DWORD GenerateCheckSum2(const BYTE* pbyBuffer, DWORD dwSize, WORD wKey)
 {
     DWORD dwKey    = (DWORD)wKey;
     DWORD dwResult = dwKey << 9;
-    for (DWORD dwChecked = 0; dwChecked <= dwSize - 4; dwChecked += 4)
+    if (pbyBuffer == nullptr || dwSize < 4)
+    {
+        return dwResult;
+    }
+
+    for (DWORD dwChecked = 0; dwSize - dwChecked >= 4; dwChecked += 4)
     {
         DWORD dwTemp;
         memcpy(&dwTemp, pbyBuffer + dwChecked, sizeof(DWORD));

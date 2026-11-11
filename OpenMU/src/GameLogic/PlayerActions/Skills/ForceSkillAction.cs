@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.GameLogic.PlayerActions.Skills;
 
+using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using MUnique.OpenMU.PlugIns;
 
@@ -21,7 +22,7 @@ public class ForceSkillAction : TargetedSkillDefaultPlugin
     protected const ushort ForceWaveSkillId = 66;
     private const ushort ForceWaveStrengSkillId = 509;
 
-    private static FrustumBasedTargetFilter? frustumFilter;
+    private static readonly ConcurrentDictionary<AreaSkillSettings, FrustumBasedTargetFilter> FrustumFilters = new();
 
     /// <inheritdoc/>
     public override short Key => 60;
@@ -52,18 +53,20 @@ public class ForceSkillAction : TargetedSkillDefaultPlugin
         var targetsInRange = player.CurrentMap?
                     .GetAttackablesInRange(player.Position, skill.Range + 4)
                     .Where(a => a != player)
-                    .Where(a => !a.IsAtSafezone()).ToList()
+                    .Where(a => !a.IsAtSafezone() && a.IsActive())
+                    .Where(a => player.GameContext.Configuration.AreaSkillHitsPlayer || a is not Player)
+                    .Where(a => a.CheckSkillTargetRestrictions(player, skill))
+                    .ToList()
             ?? [];
 
         if (skill.AreaSkillSettings is { UseFrustumFilter: true } areaSkillSettings)
         {
-            if (frustumFilter is null)
-            {
-                CreateFrustumFilter(areaSkillSettings);
-            }
+            var filter = FrustumFilters.GetOrAdd(
+                areaSkillSettings,
+                static s => new FrustumBasedTargetFilter(s.FrustumStartWidth, s.FrustumEndWidth, s.FrustumDistance, s.ProjectileCount > 0 ? s.ProjectileCount : 1));
 
-            var rotationToTarget = (byte)(player.Position.GetAngleDegreeTo(targetedTarget.Position) / 360.0 * 255.0);
-            targetsInRange = targetsInRange.Where(a => frustumFilter!.IsTargetWithinBounds(player, a, rotationToTarget)).ToList();
+            var rotationToTarget = (byte)((player.Position.GetAngleDegreeTo(targetedTarget.Position) / 360.0) * 256.0);
+            targetsInRange = targetsInRange.Where(a => filter.IsTargetWithinBounds(player, a, rotationToTarget)).ToList();
         }
         else
         {
@@ -76,10 +79,5 @@ public class ForceSkillAction : TargetedSkillDefaultPlugin
         }
 
         return targetsInRange;
-    }
-
-    private static void CreateFrustumFilter(AreaSkillSettings areaSkillSettings)
-    {
-        frustumFilter ??= new FrustumBasedTargetFilter(areaSkillSettings.FrustumStartWidth, areaSkillSettings.FrustumEndWidth, areaSkillSettings.FrustumDistance);
     }
 }

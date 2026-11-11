@@ -14,15 +14,20 @@
 
 CShopProductList::CShopProductList()  // OK
 {
-    this->PriceSeqKey = -1;
-    this->m_Products.clear();
+    this->Clear();
 }
 CShopProductList::~CShopProductList()  // OK
 {}
 
 void CShopProductList::Clear()  // OK
 {
+    this->PriceSeqKey      = -1;
     this->m_Products.clear();
+    this->m_ProductIter    = this->m_Products.end();
+    this->m_ProductRange   = std::make_pair(this->m_Products.end(), this->m_Products.end());
+    this->m_ProductSeqIter = this->m_ProductRange.second;
+    this->m_PriceRange     = std::make_pair(this->m_Products.end(), this->m_Products.end());
+    this->m_PriceSeqIter   = this->m_PriceRange.second;
 }
 
 int CShopProductList::GetSize()  // OK
@@ -81,18 +86,18 @@ void CShopProductList::SetPriceSeqFirst(int ProductSeq, int PriceSeq)  // OK
 
 bool CShopProductList::GetPriceSeqNext(CShopProduct& product)  // OK
 {
-    if (this->m_PriceSeqIter == this->m_PriceRange.second)
-        return 0;
-
-    if (this->PriceSeqKey == this->m_PriceSeqIter->second.PriceSeq)
+    while (this->m_PriceSeqIter != this->m_PriceRange.second)
     {
-        product = this->m_PriceSeqIter->second;
+        if (this->PriceSeqKey == this->m_PriceSeqIter->second.PriceSeq)
+        {
+            product = this->m_PriceSeqIter->second;
+            this->m_PriceSeqIter++;
+            return 1;
+        }
+
         this->m_PriceSeqIter++;
-        return 1;
     }
 
-    this->m_PriceSeqIter++;
-
-    return this->GetPriceSeqNext(product);
+    return 0;
 }
 #endif

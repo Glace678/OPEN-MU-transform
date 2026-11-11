@@ -3,11 +3,17 @@
 # Installs x86-windows OpenSSL + CURL used by PlatformCrypto and GameShop.
 set -e
 
-VCPKG_DIR="/d/vcpkg"
+VCPKG_DIR="${VCPKG_DIR:-/d/vcpkg}"
+VCPKG_COMMIT="${VCPKG_COMMIT:-}"
 
 if [ ! -d "$VCPKG_DIR/.git" ]; then
-  echo "[setup] cloning vcpkg (shallow)..."
-  git clone --depth 1 https://github.com/microsoft/vcpkg.git "$VCPKG_DIR"
+  echo "[setup] cloning vcpkg..."
+  if [ -n "$VCPKG_COMMIT" ]; then
+    git clone https://github.com/microsoft/vcpkg.git "$VCPKG_DIR"
+    git -C "$VCPKG_DIR" checkout "$VCPKG_COMMIT"
+  else
+    git clone --depth 1 https://github.com/microsoft/vcpkg.git "$VCPKG_DIR"
+  fi
 fi
 
 cd "$VCPKG_DIR"

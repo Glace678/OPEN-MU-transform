@@ -11,7 +11,7 @@ using MUnique.OpenMU.GameLogic.Views.NPC;
 /// </summary>
 public class CloseNpcDialogAction
 {
-    private const ushort ChaosGoblinId = 238;
+    private const short ChaosGoblinId = 238;
 
     /// <summary>
     /// Closes the currently opened npc dialog.
@@ -23,11 +23,11 @@ public class CloseNpcDialogAction
         var npc = player.OpenedNpc;
         if (npc != null && await player.PlayerState.TryAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false))
         {
-            player.Logger.LogDebug($"Player {player.SelectedCharacter?.Name} closes NPC {player.OpenedNpc}");
+            player.Logger.LogDebug($"Player {player.SelectedCharacter?.Name} closes NPC {npc}");
             player.OpenedNpc = null;
             player.Vault = null;
             await player.InvokeViewPlugInAsync<INpcDialogClosedPlugIn>(p => p.DialogClosedAsync(npc.Definition)).ConfigureAwait(false);
-            if (npc.Id == ChaosGoblinId)
+            if (npc.Definition.Number == ChaosGoblinId || npc.Definition.NpcWindow == NpcWindow.ChaosMachine)
             {
                 try
                 {

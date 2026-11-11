@@ -6,6 +6,16 @@ import bridge from 'libopenmubridge.so';
 
 const DOMAIN = 0x4f50; // "OP"
 
+export let nativeStartupError: string | null = null;
+
+export function clearNativeStartupError(): void {
+  nativeStartupError = null;
+}
+
+export function setNativeStartupError(message: string): void {
+  nativeStartupError = message;
+}
+
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(DOMAIN, 'OpenMU-PC', 'PC ability created');
@@ -17,7 +27,9 @@ export default class EntryAbility extends UIAbility {
       Object.keys(env).forEach((name: string) => {
         bridge.setEnv(name, env[name]);
       });
+      nativeStartupError = null;
     } catch (e) {
+      nativeStartupError = 'native bridge init failed: ' + JSON.stringify(e);
       hilog.error(DOMAIN, 'OpenMU-PC', 'native bridge init failed: %{public}s', JSON.stringify(e));
     }
   }

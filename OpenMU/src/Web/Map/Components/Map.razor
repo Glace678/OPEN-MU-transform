@@ -3,7 +3,6 @@
 @using Nito.AsyncEx
 
 @implements IAsyncDisposable
-@implements IDisposable
 
 <div class="livemap">
     <LiveMap
@@ -113,14 +112,15 @@
     }
 
     /// <inheritdoc />
-    public void Dispose() => Task.Run(this.DisposeAsync).Wait();
-
-    /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
         if (this._controller is IAsyncDisposable disposable)
         {
             await disposable.DisposeAsync();
+        }
+        else if (this._controller is IDisposable syncDisposable)
+        {
+            syncDisposable.Dispose();
         }
 
         this._controller = null;

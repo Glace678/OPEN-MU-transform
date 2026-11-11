@@ -4,11 +4,18 @@
 
 namespace MUnique.OpenMU.GameLogic.GuildWar;
 
+using System.Threading;
+
 /// <summary>
 /// Holds the information about an ongoing guild war.
 /// </summary>
 public class GuildWarContext
 {
+    /// <summary>
+    /// Shared synchronization lock for guild war request/answer state transitions.
+    /// </summary>
+    internal static readonly Lock SyncRoot = new();
+
     /// <summary>
     /// Initializes a new instance of the <see cref="GuildWarContext"/> class.
     /// </summary>

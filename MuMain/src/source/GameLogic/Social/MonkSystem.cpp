@@ -374,16 +374,22 @@ bool CMonkSystem::SetRepeatedly(int _Damage, int _DamageType, bool _Double, bool
 
 int CMonkSystem::GetRepeatedlyDamage(int _index)
 {
+    if (_index < 0 || _index >= m_nRepeatedlyCnt || _index >= MAX_REPEATEDLY)
+        return 0;
     return m_arrRepeatedly[_index].m_Damage;
 }
 
 int CMonkSystem::GetRepeatedlyDamageType(int _index)
 {
+    if (_index < 0 || _index >= m_nRepeatedlyCnt || _index >= MAX_REPEATEDLY)
+        return 0;
     return m_arrRepeatedly[_index].m_DamageType;
 }
 
 bool CMonkSystem::GetRepeatedlyDouble(int _index)
 {
+    if (_index < 0 || _index >= m_nRepeatedlyCnt || _index >= MAX_REPEATEDLY)
+        return false;
     return m_arrRepeatedly[_index].m_Double;
 }
 
@@ -451,6 +457,11 @@ bool CMonkSystem::IsRageHalfwaySkillAni(int _nSkill)
 
 bool CMonkSystem::SendAttackPacket(CHARACTER* _pCha, int _nMoveTarget, int _nSkill)
 {
+    if (_pCha == nullptr || _nMoveTarget < 0 || _nMoveTarget >= MAX_CHARACTERS_CLIENT)
+    {
+        return false;
+    }
+
     OBJECT* pObj = &_pCha->Object;
 
     BYTE TargetPosX = (BYTE)(_pCha->TargetPosition[0] / TERRAIN_SCALE);
@@ -465,12 +476,11 @@ bool CMonkSystem::SendAttackPacket(CHARACTER* _pCha, int _nMoveTarget, int _nSki
     BYTE CharPosX = (BYTE)(vDis[0] / TERRAIN_SCALE);
     BYTE CharPosY = (BYTE)(vDis[1] / TERRAIN_SCALE);
 
-    if (_nMoveTarget <= -1)
+    int TargetIndex = TERRAIN_INDEX(TargetPosX, TargetPosY);
+    if (TargetIndex < 0 || TargetIndex >= TERRAIN_SIZE * TERRAIN_SIZE)
     {
         return false;
     }
-
-    int TargetIndex = TERRAIN_INDEX(TargetPosX, TargetPosY);
 
     if ((TerrainWall[TargetIndex] & TW_NOMOVE) != TW_NOMOVE && (TerrainWall[TargetIndex] & TW_NOGROUND) != TW_NOGROUND)
     {
@@ -544,6 +554,13 @@ bool CMonkSystem::RageFighterEffect(OBJECT* _pObj, int _Type)
 
 void CMonkSystem::SetDarksideTargetIndex(WORD* _pTargetIndex, ActionSkillType skill)
 {
+    if (_pTargetIndex == nullptr)
+    {
+        return;
+    }
+
+    InitDarksideTarget();
+
     for (int i = 0; i < DARKSIDE_TARGET_MAX; ++i)
     {
         m_DarksideIndex.push_back(_pTargetIndex[i]);
@@ -568,17 +585,11 @@ void CMonkSystem::SetDarksideTargetIndex(WORD* _pTargetIndex, ActionSkillType sk
     }
 }
 
-WORD CMonkSystem::GetDarksideTargetIndex(int _nIndex)
+int CMonkSystem::GetDarksideTargetIndex(int _nIndex)
 {
-    if (_nIndex >= (int)m_DarkTargetIndex.size())
+    if (_nIndex < 0 || _nIndex >= (int)m_DarkTargetIndex.size())
     {
-        return 0;
-    }
-
-    auto iter = m_DarkTargetIndex.begin();
-    if (iter == m_DarkTargetIndex.end())
-    {
-        return 0;
+        return -1;
     }
 
     return m_DarkTargetIndex[_nIndex];
@@ -599,14 +610,13 @@ bool CMonkSystem::SendDarksideAtt(OBJECT* _pObj)
     if (_pObj == NULL)
         return false;
 
-    if (m_nDarksideCnt >= DARKSIDE_TARGET_MAX)
+    if (m_nDarksideCnt < 0 || m_nDarksideCnt >= DARKSIDE_TARGET_MAX)
     {
         InitDarksideTarget();
         return false;
     }
 
-    auto iter = m_DarksideIndex.begin();
-    if (iter == m_DarksideIndex.end())
+    if (m_nDarksideCnt >= static_cast<int>(m_DarksideIndex.size()))
     {
         return false;
     }
@@ -734,7 +744,7 @@ void CMonkSystem::DarksideRendering(CHARACTER* pCha, PART_t* pPart, bool Transla
             m_fOtherAniFrame = 1.9f;
         }
 
-        if (_TargetIndex >= 0)
+        if (_TargetIndex >= 0 && _TargetIndex < MAX_CHARACTERS_CLIENT)
         {
             VectorCopy(CharactersClient[_TargetIndex].Object.Position, vPos);
         }
@@ -781,13 +791,17 @@ void CMonkSystem::DarksideRendering(CHARACTER* pCha, PART_t* pPart, bool Transla
     {
         if (fAnimationFrame > (m_nDummyIndex * 2) && m_nDummyIndex < 5)
         {
-            if (pObj->m_sTargetIndex >= 0)
+            if (pObj->m_sTargetIndex >= 0 && pObj->m_sTargetIndex < MAX_CHARACTERS_CLIENT)
             {
                 VectorCopy(CharactersClient[pObj->m_sTargetIndex].Object.Position, vPos);
             }
-            if (m_nDarksideEffectAttCnt < (int)m_DarkTargetIndex.size())
+            if (m_nDarksideEffectAttCnt >= 0 && m_nDarksideEffectAttCnt < (int)m_DarkTargetIndex.size())
             {
-                VectorCopy(CharactersClient[m_DarkTargetIndex[m_nDarksideEffectAttCnt]].Object.Position, vPos);
+                const int darkTargetIdx = m_DarkTargetIndex[m_nDarksideEffectAttCnt];
+                if (darkTargetIdx >= 0 && darkTargetIdx < MAX_CHARACTERS_CLIENT)
+                {
+                    VectorCopy(CharactersClient[darkTargetIdx].Object.Position, vPos);
+                }
             }
 
             VectorCopy(vPos, pObj->Position);
@@ -1110,6 +1124,9 @@ bool CMonkSystem::GetSkillUseState()
 
 bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
 {
+    if (_pObj == nullptr)
+        return false;
+
     switch (_nSkill)
     {
         case AT_SKILL_KILLING_BLOW:
@@ -1120,7 +1137,14 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
 
             m_bUseEffectOnce = true;
             vec3_t vPosition;
-            VectorCopy(CharactersClient[_pObj->m_sTargetIndex].Object.Position, vPosition);
+            if (_pObj->m_sTargetIndex >= 0 && _pObj->m_sTargetIndex < MAX_CHARACTERS_CLIENT)
+            {
+                VectorCopy(CharactersClient[_pObj->m_sTargetIndex].Object.Position, vPosition);
+            }
+            else
+            {
+                VectorCopy(_pObj->Position, vPosition);
+            }
             _pObj->Angle[2] = CreateAngle2D(_pObj->Position, vPosition);
             CreateEffect(MODEL_WOLF_HEAD_EFFECT, _pObj->Position, _pObj->Angle, _pObj->Light, 0, _pObj);
             CreateEffect(BITMAP_SBUMB, vPosition, _pObj->Angle, _pObj->Light, 0, _pObj, -1, 0, 0, 0, 2.1f);

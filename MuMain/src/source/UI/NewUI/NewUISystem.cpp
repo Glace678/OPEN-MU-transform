@@ -42,6 +42,7 @@ bool IsHeroPositionLayoutInterface(DWORD dwKey)
 CNewUISystem::CNewUISystem()
 {
     m_pNewUIMng                    = nullptr;
+    m_pNewUI3DRenderMng            = nullptr;
     m_pNewUIHotKey                 = nullptr;
     m_pNewChatLogWindow            = nullptr;
     m_pNewSystemLogWindow          = nullptr;
@@ -65,7 +66,9 @@ CNewUISystem::CNewUISystem()
     m_pNewStorageInventoryExt      = nullptr;
     m_pNewGuildInfoWindow          = nullptr;
     m_pNewMyShopInventory          = nullptr;
+    m_pNewPurchaseShopInventory    = nullptr;
     m_pNewCharacterInfoWindow      = nullptr;
+    m_pNewMyQuestInfoWindow        = nullptr;
     m_pNewPartyInfoWindow          = nullptr;
     m_pNewPartyListWindow          = nullptr;
     m_pNewNPCQuest                 = nullptr;
@@ -74,6 +77,7 @@ CNewUISystem::CNewUISystem()
     m_pNewBloodCastle              = nullptr;
     m_pNewTrade                    = nullptr;
     m_pNewKanturu2ndEnterNpc       = nullptr;
+    m_pNewKanturuInfoWindow        = nullptr;
     m_pNewCatapultWindow           = nullptr;
     m_pNewChaosCastleTime          = nullptr;
     m_pNewBattleSoccerScore        = nullptr;
@@ -87,6 +91,8 @@ CNewUISystem::CNewUISystem()
     m_pNewSetItemExplanation       = nullptr;
     m_pNewQuickCommandWindow       = nullptr;
     m_pNewMoveCommandWindow        = nullptr;
+    m_pNewDuelWindow               = nullptr;
+    m_pNewNameWindow               = nullptr;
     m_pNewSiegeWarfare             = nullptr;
     m_pNewItemEnduranceInfo        = nullptr;
     m_pNewBuffWindow               = nullptr;
@@ -100,6 +106,8 @@ CNewUISystem::CNewUISystem()
     m_pNewLuckyCoinRegistration    = nullptr;
     m_pNewExchangeLuckyCoinWindow  = nullptr;
     m_pNewDuelWatchWindow          = nullptr;
+    m_pNewDuelWatchMainFrameWindow = nullptr;
+    m_pNewDuelWatchUserListWindow  = nullptr;
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
     m_pNewInGameShop = nullptr;
 #endif  //PBG_ADD_INGAMESHOP_UI_MAINFRAME
@@ -112,12 +120,16 @@ CNewUISystem::CNewUISystem()
     m_pNewEmpireGuardianTimer = nullptr;
     m_pNewMiniMap             = nullptr;
 #ifdef PBG_MOD_STAMINA_UI
-    m_pNewUIStamina = NULL;
+    m_pNewUIStamina = nullptr;
 #endif  //PBG_MOD_STAMINA_UI
 #ifdef PBG_ADD_GENSRANKING
     m_pNewGensRanking = nullptr;
 #endif  //PBG_ADD_GENSRANKING
     m_pNewUnitedMarketPlaceWindow = nullptr;
+    m_pNewUILuckyItemWnd          = nullptr;
+    m_pNewUIMuHelper              = nullptr;
+    m_pNewUIMuHelperExt           = nullptr;
+    m_pNewUIMuHelperSkillList     = nullptr;
 }
 
 CNewUISystem::~CNewUISystem()
@@ -131,30 +143,44 @@ bool CNewUISystem::Create()
 
     m_pNewUI3DRenderMng = new CNewUI3DRenderMng;
     if (false == m_pNewUI3DRenderMng->Create(m_pNewUIMng))
+    {
+        Release();
         return false;
+    }
 
     m_pNewChatLogWindow = new CNewUIChatLogWindow;
     if (false == m_pNewChatLogWindow->Create(m_pNewUIMng, 0, 480 - 50 - 47, 6))
+    {
+        Release();
         return false;
+    }
 
     m_pNewSystemLogWindow = new CNewUISystemLogWindow;
     if (false == m_pNewSystemLogWindow->Create(m_pNewUIMng, 0, 80))
+    {
+        Release();
         return false;
+    }
 
     m_pNewOptionWindow = new CNewUIOptionWindow;
     if (m_pNewOptionWindow->Create(m_pNewUIMng, (640 / 2) - (570 / 2), 5) == false)
     {
+        Release();
         return false;
     }
 
     m_pNewSlideWindow = new CNewUISlideWindow;
     if (m_pNewSlideWindow->Create(m_pNewUIMng) == false)
     {
+        Release();
         return false;
     }
 
     if (g_MessageBox->Create(m_pNewUIMng) == false)
+    {
+        Release();
         return false;
+    }
 
     return true;
 }
@@ -177,6 +203,16 @@ void CNewUISystem::Release()
 
 bool CNewUISystem::LoadMainSceneInterface()
 {
+    if (!m_pNewUIMng || !m_pNewUI3DRenderMng || !m_pNewChatLogWindow || !m_pNewSystemLogWindow || !m_pNewSlideWindow)
+    {
+        return false;
+    }
+
+    auto failLoad = [this]() {
+        UnloadMainSceneInterface();
+        return false;
+    };
+
     g_MessageBox->Show(true);
     m_pNewChatLogWindow->Show(true);
     m_pNewSystemLogWindow->Show(true);
@@ -188,349 +224,351 @@ bool CNewUISystem::LoadMainSceneInterface()
 
     if (false == m_pNewChatInputBox->Create(m_pNewUIMng, m_pNewChatLogWindow, m_pNewSystemLogWindow, 0, 480 - 51 - 47))
     {
-        return false;
+        return failLoad();
     }
 
     SetFocus(g_hWnd);
 
     m_pNewUIHotKey = new CNewUIHotKey;
     if (false == m_pNewUIHotKey->Create(m_pNewUIMng))
-        return false;
+        return failLoad();
 
     m_pNewMainFrameWindow = new CNewUIMainFrameWindow;
     if (m_pNewMainFrameWindow->Create(m_pNewUIMng, m_pNewUI3DRenderMng) == false)
-        return false;
+        return failLoad();
 
     m_pNewSkillList = new CNewUISkillList;
     if (m_pNewSkillList->Create(m_pNewUIMng, m_pNewUI3DRenderMng) == false)
-        return false;
+        return failLoad();
 
     m_pNewFriendWindow = new CNewUIFriendWindow;
     if (m_pNewFriendWindow->Create(m_pNewUIMng) == false)
-        return false;
+        return failLoad();
 
     m_pNewMyInventory = new CNewUIMyInventory;
     if (false == m_pNewMyInventory->Create(m_pNewUIMng, m_pNewUI3DRenderMng, PanelColumnX(1), 0))
-        return false;
+        return failLoad();
 
     m_pNewMyInventoryExt = new CNewUIInventoryExtension;
     if (false == m_pNewMyInventoryExt->Create(m_pNewUIMng, PanelColumnX(2), 0))
-        return false;
+        return failLoad();
 
     m_pNewNPCShop = new CNewUINPCShop;
     if (false == m_pNewNPCShop->Create(m_pNewUIMng, CNewUINPCShop::NPCSHOP_POS_X, CNewUINPCShop::NPCSHOP_POS_Y))
-        return false;
+        return failLoad();
 
     m_pNewPetInfoWindow = new CNewUIPetInfoWindow;
     if (false == m_pNewPetInfoWindow->Create(m_pNewUIMng, PanelColumnX(2), 0))
-        return false;
+        return failLoad();
 
     m_pNewMixInventory = new CNewUIMixInventory;
     if (m_pNewMixInventory->Create(m_pNewUIMng, 260, 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewCastleWindow = new CNewUICastleWindow;
     if (m_pNewCastleWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewGuardWindow = new CNewUIGuardWindow;
     if (m_pNewGuardWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewGatemanWindow = new CNewUIGatemanWindow;
     if (m_pNewGatemanWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewGateSwitchWindow = new CNewUIGateSwitchWindow;
     if (m_pNewGateSwitchWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewStorageInventory = new CNewUIStorageInventory;
     if (m_pNewStorageInventory->Create(m_pNewUIMng, 260, 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewStorageInventoryExt = new CNewUIStorageInventoryExt;
     if (m_pNewStorageInventoryExt->Create(m_pNewUIMng, 260 - 190, 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewGuildInfoWindow = new CNewUIGuildInfoWindow;
     if (m_pNewGuildInfoWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewGuildMakeWindow = new CNewUIGuildMakeWindow;
     if (m_pNewGuildMakeWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     CreatePersonalItemTable();
 
     m_pNewMyShopInventory = new CNewUIMyShopInventory;
     if (m_pNewMyShopInventory->Create(m_pNewUIMng, PanelColumnX(2), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewPurchaseShopInventory = new CNewUIPurchaseShopInventory;
     if (m_pNewPurchaseShopInventory->Create(m_pNewUIMng, PanelColumnX(2), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewCharacterInfoWindow = new CNewUICharacterInfoWindow;
     if (m_pNewCharacterInfoWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewMyQuestInfoWindow = new CNewUIMyQuestInfoWindow;
     if (m_pNewMyQuestInfoWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewPartyInfoWindow = new CNewUIPartyInfoWindow;
     if (m_pNewPartyInfoWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewPartyListWindow = new CNewUIPartyListWindow;
     if (m_pNewPartyListWindow->Create(m_pNewUIMng, 640 - 79, 14) == false)
-        return false;
+        return failLoad();
 
     m_pNewNPCQuest = new CNewUINPCQuest;
     if (m_pNewNPCQuest->Create(m_pNewUIMng, m_pNewUI3DRenderMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewEnterBloodCastle = new CNewUIEnterBloodCastle;
     if (m_pNewEnterBloodCastle->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewEnterDevilSquare = new CNewUIEnterDevilSquare;
     if (m_pNewEnterDevilSquare->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewBloodCastle = new CNewUIBloodCastle;
     if (m_pNewBloodCastle->Create(m_pNewUIMng, 640 - 127, 480 - 132) == false)
-        return false;
+        return failLoad();
 
     m_pNewTrade = new CNewUITrade;
     if (m_pNewTrade->Create(m_pNewUIMng, 260, 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewKanturu2ndEnterNpc = new CNewUIKanturu2ndEnterNpc;
     if (m_pNewKanturu2ndEnterNpc->Create(m_pNewUIMng, (640 / 2) - (230 / 2), 20) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewKanturuInfoWindow = new CNewUIKanturuInfoWindow;
     if (m_pNewKanturuInfoWindow->Create(m_pNewUIMng, 541, 351) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewChaosCastleTime = new CNewUIChaosCastleTime;
     if (m_pNewChaosCastleTime->Create(m_pNewUIMng, 640 - 127, 480 - 132) == false)
-        return false;
+        return failLoad();
 
     m_pNewBattleSoccerScore = new CNewUIBattleSoccerScore;
     if (m_pNewBattleSoccerScore->Create(m_pNewUIMng, 509, 359) == false)
-        return false;
+        return failLoad();
 
     m_pNewCommandWindow = new CNewUICommandWindow;
     if (m_pNewCommandWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewCatapultWindow = new CNewUICatapultWindow;
     if (m_pNewCatapultWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewWindowMenu = new CNewUIWindowMenu;
     if (m_pNewWindowMenu->Create(m_pNewUIMng, 640 - 112, 480 - 171) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewHeroPositionInfo = new CNewUIHeroPositionInfo;
     if (m_pNewHeroPositionInfo->Create(m_pNewUIMng, 0, 0) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewChatCommandWindow = new CNewUIChatCommandWindow;
     if (m_pNewChatCommandWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewHelpWindow = new CNewUIHelpWindow;
     if (m_pNewHelpWindow->Create(m_pNewUIMng, 0, 0) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewItemExplanationWindow = new CNewUIItemExplanationWindow;
     if (m_pNewItemExplanationWindow->Create(m_pNewUIMng, 0, 0) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewSetItemExplanation = new CNewUISetItemExplanation;
     if (m_pNewSetItemExplanation->Create(m_pNewUIMng, 0, 0) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewQuickCommandWindow = new CNewUIQuickCommandWindow;
     if (m_pNewQuickCommandWindow->Create(m_pNewUIMng, 0, 0) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewMoveCommandWindow = new CNewUIMoveCommandWindow;
 
     if (m_pNewMoveCommandWindow->Create(m_pNewUIMng, 1, 1) == false)
-        return false;
+        return failLoad();
 
     m_pNewDuelWindow = new CNewUIDuelWindow;
     if (m_pNewDuelWindow->Create(m_pNewUIMng, 509, 359) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewNameWindow = new CNewUINameWindow;
     if (m_pNewNameWindow->Create(m_pNewUIMng, 0, 0) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewSiegeWarfare = new CNewUISiegeWarfare;
     if (m_pNewSiegeWarfare->Create(m_pNewUIMng, 486, 234) == false)
-        return false;
+        return failLoad();
 
     m_pNewItemEnduranceInfo = new CNewUIItemEnduranceInfo;
     if (m_pNewItemEnduranceInfo->Create(m_pNewUIMng, 2, 26) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewBuffWindow = new CNewUIBuffWindow;
     if (m_pNewBuffWindow->Create(m_pNewUIMng, 220, 15) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewCursedTempleEnterWindow = new CNewUICursedTempleEnter;
     if (m_pNewCursedTempleEnterWindow->Create(m_pNewUIMng, 640 / 2 - 230 / 2, 80) == false)
     {
-        return false;
+        return failLoad();
     }
     m_pNewCursedTempleWindow = new CNewUICursedTempleSystem;
     if (m_pNewCursedTempleWindow->Create(m_pNewUIMng, 0, 0) == false)
     {
-        return false;
+        return failLoad();
     }
     m_pNewCursedTempleResultWindow = new CNewUICursedTempleResult;
     if (m_pNewCursedTempleResultWindow->Create(m_pNewUIMng, 640 / 2 - 230 / 2, 120) == false)
     {
-        return false;
+        return failLoad();
     }
 
     m_pNewCryWolfInterface = new CNewUICryWolf;
     if (m_pNewCryWolfInterface->Create(m_pNewUIMng, 0, 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewMaster_Level_Interface = new CNewUIMasterLevel;
     if (m_pNewMaster_Level_Interface->Create(m_pNewUIMng) == false)
-        return false;
+        return failLoad();
 
     m_pNewMiniMap = new CNewUIMiniMap;
     if (m_pNewMiniMap->Create(m_pNewUIMng, 0, 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewGoldBowman = new CNewUIGoldBowmanWindow;
     if (m_pNewGoldBowman->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewGoldBowmanLena = new CNewUIGoldBowmanLena;
     if (m_pNewGoldBowmanLena->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewLuckyCoinRegistration = new CNewUIRegistrationLuckyCoin;
     if (m_pNewLuckyCoinRegistration->Create(m_pNewUIMng, PanelColumnX(2), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewExchangeLuckyCoinWindow = new CNewUIExchangeLuckyCoin;
     if (m_pNewExchangeLuckyCoinWindow->Create(m_pNewUIMng, PanelColumnX(2), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewDuelWatchWindow = new CNewUIDuelWatchWindow;
     if (m_pNewDuelWatchWindow->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewDuelWatchMainFrameWindow = new CNewUIDuelWatchMainFrameWindow;
     if (m_pNewDuelWatchMainFrameWindow->Create(m_pNewUIMng, m_pNewUI3DRenderMng) == false)
-        return false;
+        return failLoad();
 
     m_pNewDuelWatchUserListWindow = new CNewUIDuelWatchUserListWindow;
     if (m_pNewDuelWatchUserListWindow->Create(m_pNewUIMng, 640 - 57, 480 - 51) == false)
-        return false;
+        return failLoad();
 
 #ifdef PBG_ADD_INGAMESHOP_UI_MAINFRAME
     m_pNewInGameShop = new CNewUIInGameShop;
     if (m_pNewInGameShop->Create(m_pNewUIMng, 0, 0) == false)
-        return false;
+        return failLoad();
 #endif  //PBG_ADD_INGAMESHOP_UI_MAINFRAME
 
     m_pNewDoppelGangerWindow = new CNewUIDoppelGangerWindow;
     if (m_pNewDoppelGangerWindow->Create(m_pNewUIMng, m_pNewUI3DRenderMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewDoppelGangerFrame = new CNewUIDoppelGangerFrame;
     if (m_pNewDoppelGangerFrame->Create(m_pNewUIMng, 640 - 227, 480 - 51 - 87) == false)
-        return false;
+        return failLoad();
 
     m_pNewNPCDialogue = new CNewUINPCDialogue;
     if (m_pNewNPCDialogue->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewQuestProgress = new CNewUIQuestProgress;
     if (m_pNewQuestProgress->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewQuestProgressByEtc = new CNewUIQuestProgressByEtc;
     if (m_pNewQuestProgressByEtc->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewEmpireGuardianNPC = new CNewUIEmpireGuardianNPC;
     if (m_pNewEmpireGuardianNPC->Create(m_pNewUIMng, m_pNewUI3DRenderMng, 450, 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewEmpireGuardianTimer = new CNewUIEmpireGuardianTimer;
     if (m_pNewEmpireGuardianTimer->Create(m_pNewUIMng, 507, 342) == false)
-        return false;
+        return failLoad();
 
 #ifdef PBG_MOD_STAMINA_UI
     m_pNewUIStamina = new CNewUIStamina;
     if (m_pNewUIStamina->Create(m_pNewUIMng, 640, 480) == false)
-        return false;
+        return failLoad();
 #endif  //PBG_MOD_STAMINA_UI
 
+#ifdef PBG_ADD_GENSRANKING
     m_pNewGensRanking = new CNewUIGensRanking;
     if (m_pNewGensRanking->Create(m_pNewUIMng, 640, 480) == false)
-        return false;
+        return failLoad();
+#endif  //PBG_ADD_GENSRANKING
 
     m_pNewUnitedMarketPlaceWindow = new CNewUIUnitedMarketPlaceWindow;
     if (m_pNewUnitedMarketPlaceWindow->Create(m_pNewUIMng, m_pNewUI3DRenderMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewUILuckyItemWnd = new CNewUILuckyItemWnd;
     if (m_pNewUILuckyItemWnd->Create(m_pNewUIMng, 260, 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewUIMuHelper = new CNewUIMuHelper;
     if (m_pNewUIMuHelper->Create(m_pNewUIMng, PanelColumnX(1), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewUIMuHelperExt = new CNewUIMuHelperExt;
     if (m_pNewUIMuHelperExt->Create(m_pNewUIMng, PanelColumnX(2), 0) == false)
-        return false;
+        return failLoad();
 
     m_pNewUIMuHelperSkillList = new CNewUIMuHelperSkillList;
     if (m_pNewUIMuHelperSkillList->Create(m_pNewUIMng, m_pNewUI3DRenderMng) == false)
-        return false;
+        return failLoad();
 
     return true;
 }
@@ -569,6 +607,7 @@ void CNewUISystem::UnloadMainSceneInterface()
     SafeDelete(m_pNewGateSwitchWindow);
     SafeDelete(m_pNewNPCShop);
     SafeDelete(m_pNewPetInfoWindow);
+    SafeDelete(m_pNewMyInventoryExt);
     SafeDelete(m_pNewMyInventory);
     SafeDelete(m_pNewFriendWindow);
     SafeDelete(m_pNewChatInputBox);
@@ -612,15 +651,18 @@ void CNewUISystem::UnloadMainSceneInterface()
     SafeDelete(m_pNewEmpireGuardianNPC);
     SafeDelete(m_pNewEmpireGuardianTimer);
     SafeDelete(m_pNewMiniMap);
-    SafeDelete(m_pNewItemMng);
 #ifdef PBG_MOD_STAMINA_UI
     SafeDelete(m_pNewUIStamina);
 #endif  //PBG_MOD_STAMINA_UI
+#ifdef PBG_ADD_GENSRANKING
     SafeDelete(m_pNewGensRanking);
+#endif  //PBG_ADD_GENSRANKING
     SafeDelete(m_pNewUnitedMarketPlaceWindow);
-#ifdef LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
     SafeDelete(m_pNewUILuckyItemWnd);
-#endif  // LEM_FIX_LUCKYITEM_UICLASS_SAFEDELETE
+    SafeDelete(m_pNewUIMuHelperSkillList);
+    SafeDelete(m_pNewUIMuHelperExt);
+    SafeDelete(m_pNewUIMuHelper);
+    SafeDelete(m_pNewItemMng);
 
     ReleasePersonalItemTable();
 }
@@ -1135,12 +1177,17 @@ void CNewUISystem::Show(DWORD dwKey)
     {
         m_pNewMiniMap->OpenningProcess();
     }
+#ifdef PBG_ADD_GENSRANKING
     else if (dwKey == INTERFACE_GENSRANKING)
     {
         HideAllGroupA();
-        g_pNewUIGensRanking->OpenningProcess();
-        g_pNewUIGensRanking->SetPos(PanelColumnX(1), 0);
+        if (g_pNewUIGensRanking)
+        {
+            g_pNewUIGensRanking->OpenningProcess();
+            g_pNewUIGensRanking->SetPos(PanelColumnX(1), 0);
+        }
     }
+#endif  //PBG_ADD_GENSRANKING
     else if (dwKey == INTERFACE_UNITEDMARKETPLACE_NPC_JULIA)
     {
         m_pNewUnitedMarketPlaceWindow->OpeningProcess();
@@ -1161,9 +1208,12 @@ void CNewUISystem::Show(DWORD dwKey)
     UpdateHeroPositionInfoVisibilityForLayoutChange(dwKey);
 
     int iScreenWidth = GetScreenWidth();
-    m_pNewItemEnduranceInfo->SetPos(iScreenWidth);
-    m_pNewBuffWindow->SetPos(iScreenWidth);
-    m_pNewPartyListWindow->SetPos(iScreenWidth);
+    if (m_pNewItemEnduranceInfo)
+        m_pNewItemEnduranceInfo->SetPos(iScreenWidth);
+    if (m_pNewBuffWindow)
+        m_pNewBuffWindow->SetPos(iScreenWidth);
+    if (m_pNewPartyListWindow)
+        m_pNewPartyListWindow->SetPos(iScreenWidth);
 }
 
 void CNewUISystem::Hide(DWORD dwKey)
@@ -1450,7 +1500,8 @@ void CNewUISystem::Hide(DWORD dwKey)
     }
     else if (dwKey == INTERFACE_MOVEMAP)
     {
-        m_pNewCommandWindow->ClosingProcess();
+        if (m_pNewMoveCommandWindow)
+            m_pNewMoveCommandWindow->ClosingProcess();
     }
     else if (dwKey == INTERFACE_CHATINPUTBOX)
     {
@@ -1563,10 +1614,13 @@ void CNewUISystem::Hide(DWORD dwKey)
     {
         m_pNewMiniMap->ClosingProcess();
     }
+#ifdef PBG_ADD_GENSRANKING
     else if (dwKey == INTERFACE_GENSRANKING)
     {
-        g_pNewUIGensRanking->ClosingProcess();
+        if (g_pNewUIGensRanking)
+            g_pNewUIGensRanking->ClosingProcess();
     }
+#endif  //PBG_ADD_GENSRANKING
     else if (dwKey == INTERFACE_UNITEDMARKETPLACE_NPC_JULIA)
     {
         m_pNewUnitedMarketPlaceWindow->ClosingProcess();
@@ -1592,9 +1646,12 @@ void CNewUISystem::Hide(DWORD dwKey)
     UpdateHeroPositionInfoVisibilityForLayoutChange(dwKey);
 
     int iScreenWidth = GetScreenWidth();
-    m_pNewItemEnduranceInfo->SetPos(iScreenWidth);
-    m_pNewBuffWindow->SetPos(iScreenWidth);
-    m_pNewPartyListWindow->SetPos(iScreenWidth);
+    if (m_pNewItemEnduranceInfo)
+        m_pNewItemEnduranceInfo->SetPos(iScreenWidth);
+    if (m_pNewBuffWindow)
+        m_pNewBuffWindow->SetPos(iScreenWidth);
+    if (m_pNewPartyListWindow)
+        m_pNewPartyListWindow->SetPos(iScreenWidth);
 }
 
 void CNewUISystem::Toggle(DWORD dwKey)

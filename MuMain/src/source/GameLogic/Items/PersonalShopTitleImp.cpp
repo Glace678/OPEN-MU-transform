@@ -34,7 +34,7 @@ bool CPersonalShopTitleImp::AddShopTitle(int key, CHARACTER* pPlayer, const std:
     if (mi != m_listShopTitleDrawObj.end())
     {
         CShopTitleDrawObj* pDrawObj = (*mi).second;
-        if (pDrawObj->GetKey() == key)
+        if (pDrawObj->GetKey() == (key & 0x7FFF))
         {
             pDrawObj->SetBoxContent(full_name, title);
             pDrawObj->SetBoxPos(MakePos(-1, -1));
@@ -74,7 +74,7 @@ void CPersonalShopTitleImp::RemoveAllShopTitleExceptHero()
     auto mi = m_listShopTitleDrawObj.begin();
     for (; mi != m_listShopTitleDrawObj.end();)
     {
-        if ((*mi).second->GetKey() != Hero->Key)
+        if (Hero == nullptr || (*mi).second->GetKey() != Hero->Key)
         {
             delete (*mi).second;
             mi = m_listShopTitleDrawObj.erase(mi);
@@ -88,10 +88,11 @@ void CPersonalShopTitleImp::RemoveAllShopTitleExceptHero()
 
 CHARACTER* CPersonalShopTitleImp::FindCharacter(int key) const
 {
-    auto mi = m_listShopTitleDrawObj.begin();
+    const int maskedKey = key & 0x7FFF;
+    auto      mi        = m_listShopTitleDrawObj.begin();
     for (; mi != m_listShopTitleDrawObj.end(); ++mi)
     {
-        if ((*mi).second->GetKey() == key)
+        if ((*mi).second->GetKey() == maskedKey)
         {
             return (*mi).first;
         }
@@ -280,7 +281,8 @@ void CPersonalShopTitleImp::Draw()
         for (; mi != m_listShopTitleDrawObj.end(); ++mi)
         {
             CShopTitleDrawObj* pDrawObj = mi->second;
-            if (SelectedCharacter != -1 && isHighlightTime && g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_COMMAND) &&
+            if (SelectedCharacter >= 0 && SelectedCharacter < MAX_CHARACTERS_CLIENT && isHighlightTime &&
+                g_pNewUISystem->IsVisible(SEASON3B::INTERFACE_COMMAND) &&
                 g_pCommandWindow->GetCurCommandType() == COMMAND_PURCHASE)
             {
                 CHARACTER* selectedPlayer = &CharactersClient[SelectedCharacter];

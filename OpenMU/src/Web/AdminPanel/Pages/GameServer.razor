@@ -19,11 +19,17 @@
     </CascadingValue>
     </CascadingValue>
 }
+else if (this._errorMessage is not null)
+{
+    <div class="alert alert-warning" role="alert">@this._errorMessage</div>
+}
 
 @code {
     private string _liveMapRoute = string.Empty;
 
     private IObservableGameServer? _gameServer;
+
+    private string? _errorMessage;
 
     /// <summary>
     /// Gets or sets the server id on which the map is hosted.
@@ -46,8 +52,21 @@
     /// <inheritdoc />
     protected override async Task OnInitializedAsync()
     {
-        var gameServer = this.Servers.OfType<IGameServer>().First(gs => gs.Id == this.GameServerId);
-        var context = (gameServer as IGameServerContextProvider)?.Context ?? throw new InvalidOperationException("This map page just works in an All-In-One deployment.");
+        var gameServer = this.Servers.OfType<IGameServer>().FirstOrDefault(gs => gs.Id == this.GameServerId);
+        if (gameServer is null)
+        {
+            this._errorMessage = $"{Resources.GameServer} {this.GameServerId} was not found.";
+            await base.OnInitializedAsync();
+            return;
+        }
+
+        if ((gameServer as IGameServerContextProvider)?.Context is not { } context)
+        {
+            this._errorMessage = "This map page only works in an All-In-One deployment.";
+            await base.OnInitializedAsync();
+            return;
+        }
+
         var adapter = new ObservableGameServerAdapter(context);
         await adapter.InitializeAsync();
 

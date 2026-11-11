@@ -39,7 +39,7 @@ public class ClientAttribute : Attribute, IComparable<ClientAttribute>, ICompara
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static bool operator >(ClientAttribute left, ClientAttribute right) => Compare(left, right) > 0;
+    public static bool operator >(ClientAttribute? left, ClientAttribute? right) => Compare(left, right) > 0;
 
     /// <summary>
     /// Implements the operator &gt;=.
@@ -49,7 +49,7 @@ public class ClientAttribute : Attribute, IComparable<ClientAttribute>, ICompara
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static bool operator >=(ClientAttribute left, ClientAttribute right) => Compare(left, right) >= 0;
+    public static bool operator >=(ClientAttribute? left, ClientAttribute? right) => Compare(left, right) >= 0;
 
     /// <summary>
     /// Implements the operator &lt;.
@@ -59,7 +59,7 @@ public class ClientAttribute : Attribute, IComparable<ClientAttribute>, ICompara
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static bool operator <(ClientAttribute left, ClientAttribute right) => Compare(left, right) < 0;
+    public static bool operator <(ClientAttribute? left, ClientAttribute? right) => Compare(left, right) < 0;
 
     /// <summary>
     /// Implements the operator &lt;=.
@@ -69,7 +69,7 @@ public class ClientAttribute : Attribute, IComparable<ClientAttribute>, ICompara
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static bool operator <=(ClientAttribute left, ClientAttribute right) => Compare(left, right) <= 0;
+    public static bool operator <=(ClientAttribute? left, ClientAttribute? right) => Compare(left, right) <= 0;
 
     /// <summary>
     /// Implements the operator !=.
@@ -79,7 +79,7 @@ public class ClientAttribute : Attribute, IComparable<ClientAttribute>, ICompara
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static bool operator !=(ClientAttribute left, ClientAttribute right) => !(left == right);
+    public static bool operator !=(ClientAttribute? left, ClientAttribute? right) => !(left == right);
 
     /// <summary>
     /// Implements the operator ==.
@@ -89,18 +89,23 @@ public class ClientAttribute : Attribute, IComparable<ClientAttribute>, ICompara
     /// <returns>
     /// The result of the operator.
     /// </returns>
-    public static bool operator ==(ClientAttribute left, ClientAttribute right) => Compare(left, right) == 0;
+    public static bool operator ==(ClientAttribute? left, ClientAttribute? right) => Compare(left, right) == 0;
 
     /// <inheritdoc />
     public int CompareTo(ClientAttribute? other)
     {
-        return this.Client.CompareTo(other?.Client ?? default);
+        if (other is null)
+        {
+            return 1;
+        }
+
+        return this.Client.CompareTo(other.Client);
     }
 
     /// <inheritdoc />
     public int CompareTo(object? obj)
     {
-        return this.CompareTo(obj as ClientAttribute);
+        return obj is null ? 1 : this.CompareTo(obj as ClientAttribute);
     }
 
     /// <inheritdoc />
@@ -112,11 +117,29 @@ public class ClientAttribute : Attribute, IComparable<ClientAttribute>, ICompara
     /// <inheritdoc />
     public bool Equals(ClientAttribute? other)
     {
-        return this.CompareTo(other) == 0;
+        return other is not null && this.CompareTo(other) == 0;
     }
 
     /// <inheritdoc/>
     public override int GetHashCode() => this.Client.GetHashCode();
 
-    private static int Compare(ClientAttribute left, ClientAttribute right) => left.CompareTo(right);
+    private static int Compare(ClientAttribute? left, ClientAttribute? right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return 0;
+        }
+
+        if (left is null)
+        {
+            return -1;
+        }
+
+        if (right is null)
+        {
+            return 1;
+        }
+
+        return left.CompareTo(right);
+    }
 }

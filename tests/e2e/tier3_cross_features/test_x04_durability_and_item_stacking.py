@@ -37,9 +37,9 @@ class TestX04DurabilityAndItemStacking(unittest.TestCase):
             self.assertEqual(dur, 255)
 
     def test_crafting_failure_then_pickup_durability_invariants(self):
-        # Wing downgrades from 2 to 1
-        lvl = EconomyEngine.downgrade_wing_level(2)
-        self.assertEqual(lvl, 1)
+        # Third-wing downgrades by 2 or 3 steps and clamps at 0
+        self.assertEqual(EconomyEngine.downgrade_wing_level(3, downgrade_steps=2), 1)
+        self.assertEqual(EconomyEngine.downgrade_wing_level(2, downgrade_steps=3), 0)
 
         # Drop and re-pick item with durability additions
         res_dur = EconomyEngine.clamp_durability_addition(100, 155)

@@ -1,6 +1,7 @@
 @using MUnique.OpenMU.Web.Shared.Services;
 
 @typeparam TItem where TItem : class
+@implements IDisposable
 
 <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
     <div class="btn-group" role="group" aria-label="Navigation group">
@@ -123,11 +124,13 @@
         return this.GetPageAsync(this.Page);
     }
 
-    protected void Dispose()
+    /// <inheritdoc />
+    public void Dispose()
     {
         if (this._dataChangedNotification is not null)
         {
             this._dataChangedNotification.DataChanged -= this.OnDataChanged;
+            this._dataChangedNotification = null;
         }
     }
 

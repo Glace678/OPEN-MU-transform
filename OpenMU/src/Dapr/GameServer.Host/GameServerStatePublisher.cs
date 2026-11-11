@@ -43,19 +43,20 @@ public sealed class GameServerStatePublisher : IGameServerStateObserver, IDispos
     /// <inheritdoc />
     public void Dispose()
     {
-        this._heartbeatCancellationTokenSource?.Cancel();
-        this._heartbeatCancellationTokenSource?.Dispose();
+        var oldCts = Interlocked.Exchange(ref this._heartbeatCancellationTokenSource, null);
+        oldCts?.Cancel();
+        oldCts?.Dispose();
     }
 
     /// <inheritdoc />
     public void RegisterGameServer(ServerInfo serverInfo, IPEndPoint publicEndPoint)
     {
-        this._heartbeatCancellationTokenSource?.Cancel(false);
-        this._heartbeatCancellationTokenSource?.Dispose();
-
         this._serverInfo = serverInfo;
         this._publicEndPoint = publicEndPoint;
-        this._heartbeatCancellationTokenSource = new();
+        var cts = new CancellationTokenSource();
+        var oldCts = Interlocked.Exchange(ref this._heartbeatCancellationTokenSource, cts);
+        oldCts?.Cancel(false);
+        oldCts?.Dispose();
         try
         {
             this._logger.LogInformation("Starting heartbeat thread ...");
@@ -64,7 +65,11 @@ public sealed class GameServerStatePublisher : IGameServerStateObserver, IDispos
                 {
                     try
                     {
-                        this.HeartbeatLoop(this._heartbeatCancellationTokenSource.Token);
+                        this.HeartbeatLoop(cts.Token);
+                    }
+                    catch (OperationCanceledException) when (cts.IsCancellationRequested)
+                    {
+                        // Expected on unregister/dispose.
                     }
                     catch (Exception ex)
                     {

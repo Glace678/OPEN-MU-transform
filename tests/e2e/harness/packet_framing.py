@@ -37,6 +37,14 @@ PACKET_SIZE_TABLE: Dict[Tuple[int, Optional[int]], int] = {
 }
 
 
+# Multiplexed head codes carrying a SubCode byte (matching PacketDispatchPolicy.h)
+MULTIPLEXED_HEAD_CODES = frozenset({
+    0xF1, 0xF3, 0xF4, 0xEB, 0xBC, 0x8E, 0xF5, 0xF6, 0xF8, 0xF9,
+    0xAA, 0xF7, 0x3F, 0xAF, 0xB1, 0xB2, 0xB7, 0xB8, 0xB9, 0xBD,
+    0xD1, 0xBF, 0xDE, 0xD2, 0xB3, 0xB4, 0xB5,
+})
+
+
 @dataclass
 class PacketFrame:
     header: int
@@ -102,16 +110,26 @@ class PacketFramingEngine:
         if len(raw_data) < declared_size:
             return PacketFrame(header, declared_size, 0, None, b"", raw_data, False, f"Truncated packet: declared {declared_size} bytes, received {len(raw_data)} bytes")
 
-        if len(raw_data) < head_code_offset + 1:
-            return PacketFrame(header, declared_size, 0, None, b"", raw_data, False, "Packet truncated before HeadCode")
+        frame_bytes = raw_data[:declared_size]
+        if len(frame_bytes) < head_code_offset + 1:
+            return PacketFrame(
+                header,
+                declared_size,
+                0,
+                None,
+                b"",
+                frame_bytes,
+                False,
+                f"Declared size {declared_size} is less than required {head_code_offset + 1} bytes (Packet truncated before HeadCode)",
+            )
 
-        head_code = raw_data[head_code_offset]
+        head_code = frame_bytes[head_code_offset]
         sub_code = None
-        if len(raw_data) > head_code_offset + 1 and head_code in (0xF1, 0xF3, 0x3F):
-            sub_code = raw_data[head_code_offset + 1]
+        if len(frame_bytes) > head_code_offset + 1 and head_code in MULTIPLEXED_HEAD_CODES:
+            sub_code = frame_bytes[head_code_offset + 1]
 
-        payload = raw_data[head_code_offset + 1:]
-        return PacketFrame(header, declared_size, head_code, sub_code, payload, raw_data[:declared_size], True, None)
+        payload = frame_bytes[head_code_offset + 1:]
+        return PacketFrame(header, declared_size, head_code, sub_code, payload, frame_bytes, True, None)
 
     @classmethod
     def validate_client_dispatch(cls, raw_data: bytes) -> Tuple[bool, Optional[str]]:
@@ -124,14 +142,9 @@ class PacketFramingEngine:
             return False, frame.error_message
 
         # Dispatch gate check: minimum header + subcode bytes (matching PacketDispatchPolicy.h)
-        multiplexed_codes = {
-            0xF1, 0xF3, 0xF4, 0xEB, 0xBC, 0x8E, 0xF5, 0xF6, 0xF8, 0xF9,
-            0xAA, 0xF7, 0x3F, 0xAF, 0xB1, 0xB2, 0xB7, 0xB8, 0xB9, 0xBD,
-            0xD1, 0xBF, 0xDE, 0xD2, 0xB3, 0xB4, 0xB5
-        }
         is_c1_c3 = (frame.header in (0xC1, 0xC3))
         min_dispatch_bytes = 3 if is_c1_c3 else 4
-        if frame.head_code in multiplexed_codes:
+        if frame.head_code in MULTIPLEXED_HEAD_CODES:
             min_dispatch_bytes += 1
         if frame.head_code == 0xF1:
             min_dispatch_bytes += 1

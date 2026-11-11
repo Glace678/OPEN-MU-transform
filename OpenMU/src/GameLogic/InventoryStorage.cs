@@ -163,13 +163,10 @@ public class InventoryStorage : Storage, IInventoryStorage
         {
             var factory = this._gameContext.ItemPowerUpFactory;
             this._player.Attributes.ItemPowerUps.Add(item, factory.GetPowerUps(item, this._player.Attributes).ToList());
-
-            // reset player equipped ammunition amount
-            if (this.EquippedAmmunitionItem is { } ammoItem)
-            {
-                this._player.Attributes[Stats.AmmunitionAmount] = (float)ammoItem.Durability;
-            }
         }
+
+        // reset player equipped ammunition amount
+        this._player.Attributes[Stats.AmmunitionAmount] = (float)(this.EquippedAmmunitionItem?.Durability ?? 0);
     }
 
     private void InitializePowerUps()

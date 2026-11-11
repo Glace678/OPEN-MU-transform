@@ -33,6 +33,11 @@ internal class TargetedSkillHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public virtual async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < TargetedSkill.Length)
+        {
+            return;
+        }
+
         TargetedSkill message = packet;
 
         await this.HandleAsync(player, message.SkillId, message.TargetId).ConfigureAwait(false);
@@ -46,6 +51,11 @@ internal class TargetedSkillHandlerPlugIn : IPacketHandlerPlugIn
     /// <param name="targetId">The target identifier.</param>
     protected async ValueTask HandleAsync(Player player, ushort skillId, ushort targetId)
     {
+        if (!player.IsAlive)
+        {
+            return;
+        }
+
         var strategy = player.GameContext.
             PlugInManager.GetStrategy<short, ITargetedSkillPlugin>((short)skillId) ??
             this._defaultStrategy;

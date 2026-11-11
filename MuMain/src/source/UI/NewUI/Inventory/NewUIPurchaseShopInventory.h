@@ -82,13 +82,13 @@ private:
     void RenderTextInfo();
 
 private:
-    CNewUIManager*       m_pNewUIMng;
-    CNewUIInventoryCtrl* m_pNewInventoryCtrl;
-    POINT                m_Pos;
-    int                  m_ShopCharacterIndex;
+    CNewUIManager*       m_pNewUIMng          = nullptr;
+    CNewUIInventoryCtrl* m_pNewInventoryCtrl  = nullptr;
+    POINT                m_Pos                = {0, 0};
+    int                  m_ShopCharacterIndex = -1;
     std::wstring         m_TitleText;
-    CNewUIButton*        m_Button;
-    int                  m_SourceIndex;
+    CNewUIButton*        m_Button      = nullptr;
+    int                  m_SourceIndex = -1;
 };
 
 inline void CNewUIPurchaseShopInventory::SetPos(int x, int y)

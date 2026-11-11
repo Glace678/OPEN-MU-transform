@@ -12,21 +12,24 @@ import json, os, re, glob, shutil, sys, struct
 import formats
 from bmd import read_questwords, write_questwords, bux
 
-STR = json.load(open(config.STRINGS_JSON, encoding='utf-8'))['strings']
+with open(config.STRINGS_JSON, encoding='utf-8') as _fh:
+    STR = json.load(_fh)['strings']
 id2en = {s['id']: s for s in STR}
 
 # gather translated id->zh from out/*.json
 id2zh = {}
 outdir = config.LOC_OUT
-for fn in os.listdir(outdir):
-    if not fn.endswith('.json'):
-        continue
-    try:
-        d = json.load(open(os.path.join(outdir, fn), encoding='utf-8'))
-    except Exception as e:
-        print('!! cannot parse', fn, e); continue
-    for r in d.get('results', []):
-        id2zh[int(r['id'])] = r['zh'].strip()
+if os.path.isdir(outdir):
+    for fn in sorted(os.listdir(outdir)):
+        if not fn.endswith('.json'):
+            continue
+        try:
+            with open(os.path.join(outdir, fn), encoding='utf-8') as fh:
+                d = json.load(fh)
+        except Exception as e:
+            print('!! cannot parse', fn, e); continue
+        for r in d.get('results', []):
+            id2zh[int(r['id'])] = r['zh'].strip()
 
 WRITE = '--write' in sys.argv
 
@@ -38,6 +41,13 @@ PH = re.compile(r'%\d*(?:\.\d+)?[dsfuxX%]|\{[0-9]+\}')
 # after flagging 171 correct strings. Audit a new char with t2s first: keep it
 # only if t2s(c) != c.
 TRAD = set('發動裝傷擊殺煉藥經點這裡開關場當與進遠離連續還應對戰們劍師術語義務實驗證識選項顯視頻頁碼藍綠紅黃錢銀鐵鋼雙嚮導遊戲單凍遲鈍煉獄鬥爭寧願嚮')
+
+def _norm_en_fmt(t):
+    # Upstream Webzen MasterSkillTooltip strings contain 8 entries where %0.2f%%
+    # or %0.2f. lost the 'f' conversion specifier. Normalize for validation only
+    # while preserving the raw `en` lookup key for BMD matching.
+    s = t.replace('%0.2%%', '%0.2f%%')
+    return re.sub(r'%0\.2(?=\.|$)', '%0.2f', s)
 
 def phset(t):
     # normalise: %% counts as a literal % token
@@ -53,9 +63,10 @@ for s in STR:
         missing.append(sid); continue
     zh = id2zh[sid]
     en2zh[en] = zh
+    en_fmt = _norm_en_fmt(en)
     # placeholder parity
-    if phset(en) != phset(zh):
-        problems.append((sid, 'placeholder', en[:40], phset(en), phset(zh)))
+    if phset(en_fmt) != phset(zh):
+        problems.append((sid, 'placeholder', en[:40], phset(en_fmt), phset(zh)))
     # ';' parity (dialogue)
     if ';' in en and en.count(';') != zh.count(';'):
         problems.append((sid, 'semicolon', en[:40], en.count(';'), zh.count(';')))
@@ -98,6 +109,12 @@ def backup(path):
     if not os.path.exists(b):
         shutil.copy2(path, b)
 
+def _atomic_write_bytes(path, data):
+    tmp = path + '.tmp'
+    with open(tmp, 'wb') as fh:
+        fh.write(data)
+    os.replace(tmp, path)
+
 FIXED_FIELD = {k: {nm: (off, ln) for nm, off, ln in formats.FMT[k]['fields']}
                for k in ['item','skill','quest','movereq','socket','setoption','buff','harmony','mastertooltip']}
 
@@ -120,7 +137,7 @@ if WRITE:
                     f.set_field(i, off, ln, en2zh[en]); n += 1
         out = f.encode()
         backup(path)
-        open(path, 'wb').write(out)
+        _atomic_write_bytes(path, out)
         print(f'  wrote {kind:14s} {n:4d} fields -> {os.path.basename(path)}')
 
     # minimap (20 files)
@@ -131,11 +148,11 @@ if WRITE:
             en = f.field(i,16,100).strip()
             if en in en2zh:
                 f.set_field(i,16,100,en2zh[en]); n+=1
-        backup(p); open(p,'wb').write(f.encode())
+        backup(p); _atomic_write_bytes(p, f.encode())
         if n: print(f'  wrote minimap {os.path.basename(p):28s} {n}')
 
     # slide
-    sp = f'{formats.CHS}\\slide_chs.bmd'
+    sp = os.path.join(formats.CHS, 'slide_chs.bmd')
     raw, buf = formats.open_slide(sp)
     n=0
     for (L,j,iNumber,off,txt) in formats.slide_slots(buf):
@@ -146,11 +163,11 @@ if WRITE:
                 buf[off:off+256]=b'\x00'*256; buf[off:off+len(b)]=b; n+=1
             else:
                 print('  slide too long', L, j)
-    backup(sp); open(sp,'wb').write(formats.encode_slide(buf))
+    backup(sp); _atomic_write_bytes(sp, formats.encode_slide(buf))
     print(f'  wrote slide {n} slots')
 
     # questwords (variable records)
-    qp = f'{formats.CHS}\\QuestWords_chs.bmd'
+    qp = os.path.join(formats.CHS, 'QuestWords_chs.bmd')
     qw, sz = read_questwords(qp)
     n=0
     newrecs=[]
@@ -165,8 +182,9 @@ if WRITE:
     print(f'  wrote questwords {n}/{len(qw)} records ({newlen} bytes)')
 
     # npcname txt (regex replace quoted names)
-    npp = f'{formats.CHS}\\NpcName_Chs.txt'
-    raw = open(npp,'rb').read()
+    npp = os.path.join(formats.CHS, 'NpcName_Chs.txt')
+    with open(npp, 'rb') as fh:
+        raw = fh.read()
     text = raw.decode('utf-8','replace')
     def repl(m):
         nm = m.group(2)
@@ -175,7 +193,7 @@ if WRITE:
     newtext, nn = pat.subn(repl, text)
     # also free-standing minimap-style names are in quotes already
     backup(npp)
-    open(npp,'wb').write(newtext.encode('utf-8'))
+    _atomic_write_bytes(npp, newtext.encode('utf-8'))
     print(f'  wrote NpcName lines replaced={nn}')
 
     print('DEPLOY COMPLETE')

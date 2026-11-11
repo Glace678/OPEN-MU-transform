@@ -105,10 +105,9 @@ void SEASON3B::CNewUICryWolf::OpenningProcess()
 
 void SEASON3B::CNewUICryWolf::Release()
 {
-    UnloadImages();
-
     if (m_pNewUIMng)
     {
+        UnloadImages();
         m_pNewUIMng->RemoveUIObj(this);
         m_pNewUIMng = NULL;
     }
@@ -209,7 +208,10 @@ bool SEASON3B::CNewUICryWolf::Render()
         {
             int Exp_val[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0}, Exp_Dummy = 0, Val = 0;
 
-            g_pCryWolfInterface->Render(250 + 120, 188, 29, 28, 0.f, 0.f, 29.f / 32.f, 27.f / 32.f, 28 + Rank);
+            if (Rank <= 16)
+            {
+                g_pCryWolfInterface->Render(250 + 120, 188, 29, 28, 0.f, 0.f, 29.f / 32.f, 27.f / 32.f, 28 + Rank);
+            }
 
             for (int i = 0; i < 9; i++)
             {

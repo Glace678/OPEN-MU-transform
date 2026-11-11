@@ -259,7 +259,8 @@ void M34CryWolf1st::RenderNoticesCryWolf()
         nText = 1957 + i + iTemp;
         if (1966 == nText || 1967 == nText)
         {
-            mu_swprintf(szText, I18N::Game::Lookup(nText));
+            const wchar_t* text = I18N::Game::Lookup(nText);
+            wcsncpy_s(szText, _countof(szText), text ? text : L"", _TRUNCATE);
             g_pRenderText->RenderText(190, 63 + i * 13, szText);
         }
         else
@@ -579,7 +580,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
     {
         case MONSTER_HAMMER_SCOUT: {
             OpenMonsterModel(MONSTER_MODEL_SCOUT);
-            c                 = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
+            if (!c)
+                break;
             c->Object.Scale   = 1.2f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -587,7 +590,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_LANCE_SCOUT: {
             OpenMonsterModel(MONSTER_MODEL_SOLAM);
-            c                 = CreateCharacter(Key, MODEL_SOLAM, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_SOLAM, PosX, PosY);
+            if (!c)
+                break;
             c->Object.Scale   = 1.2f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -595,7 +600,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_BOW_SCOUT: {
             OpenMonsterModel(MONSTER_MODEL_VALAM);
-            c                 = CreateCharacter(Key, MODEL_VALAM, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_VALAM, PosX, PosY);
+            if (!c)
+                break;
             c->Object.Scale   = 1.2f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -607,7 +614,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_WEREWOLF: {
             OpenMonsterModel(MONSTER_MODEL_WEREWOLF_HERO);
-            c                 = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
+            if (!c)
+                break;
             c->Object.Scale   = 1.25f;
             c->Object.SubType = 0;
             c->Weapon[0].Type = -1;
@@ -618,7 +627,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_SCOUTHERO: {
             OpenMonsterModel(MONSTER_MODEL_SCOUT);
-            c                 = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_SCOUT, PosX, PosY);
+            if (!c)
+                break;
             c->Object.Scale   = 1.6f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -626,7 +637,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_WEREWOLFHERO: {
             OpenMonsterModel(MONSTER_MODEL_WEREWOLF_HERO);
-            c                 = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_WEREWOLF_HERO, PosX, PosY);
+            if (!c)
+                break;
             c->Object.Scale   = 1.65f;
             c->Object.SubType = 1;
             c->Weapon[0].Type = -1;
@@ -638,7 +651,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         case MONSTER_VALAM:
         case MONSTER_BALRAM: {
             OpenMonsterModel(MONSTER_MODEL_BALRAM);
-            c                 = CreateCharacter(Key, MODEL_BALRAM, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_BALRAM, PosX, PosY);
+            if (!c)
+                break;
             c->Object.Scale   = 1.25f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -647,7 +662,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         case MONSTER_SOLAM:
         case MONSTER_SORAM: {
             OpenMonsterModel(MONSTER_MODEL_SORAM);
-            c                 = CreateCharacter(Key, MODEL_SORAM, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_SORAM, PosX, PosY);
+            if (!c)
+                break;
             c->Object.Scale   = 1.3f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -655,7 +672,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_BALGASS: {
             OpenMonsterModel(MONSTER_MODEL_BALGASS);
-            c                 = CreateCharacter(Key, MODEL_BALGASS, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_BALGASS, PosX, PosY);
+            if (!c)
+                break;
             c->Object.Scale   = 2.f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -667,7 +686,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_DEATH_SPIRIT: {
             OpenMonsterModel(MONSTER_MODEL_DEATH_SPIRIT);
-            c                 = CreateCharacter(Key, MODEL_DEATH_SPIRIT, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_DEATH_SPIRIT, PosX, PosY);
+            if (!c)
+                break;
             c->Object.Scale   = 1.25f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -679,7 +700,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         case MONSTER_DARK_ELF:
         case MONSTER_DARKELF: {
             OpenMonsterModel(MONSTER_MODEL_DARK_ELF_1);
-            c                 = CreateCharacter(Key, MODEL_DARK_ELF_1, PosX, PosY);
+            c = CreateCharacter(Key, MODEL_DARK_ELF_1, PosX, PosY);
+            if (!c)
+                break;
             c->Object.Scale   = 1.5f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -688,7 +711,9 @@ CHARACTER* M34CryWolf1st::CreateCryWolf1stMonster(int iType, int PosX, int PosY,
         break;
         case MONSTER_BALLISTA: {
             OpenMonsterModel(MONSTER_MODEL_BALLISTA);
-            c                 = CreateCharacter(Key, MODEL_BALLISTA, PosX, PosY, 180);
+            c = CreateCharacter(Key, MODEL_BALLISTA, PosX, PosY, 180);
+            if (!c)
+                break;
             c->Object.Scale   = 1.0f;
             c->Weapon[0].Type = -1;
             c->Weapon[1].Type = -1;
@@ -717,6 +742,7 @@ bool M34CryWolf1st::MoveCryWolf1stMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
             b->Animation(BoneTransform, fAnimationFrame, o->PriorAnimationFrame, o->PriorAction, o->Angle,
                          o->HeadAngle);
             vec3_t Light;
+            Vector(1.f, 1.f, 1.f, Light);
             if (o->CurrentAction == MONSTER01_ATTACK2)
             {
                 vec3_t EndPos, EndPos1, EndRelative;
@@ -1025,6 +1051,7 @@ bool M34CryWolf1st::AttackEffectCryWolf1stMonster(CHARACTER* c, OBJECT* o, BMD* 
         break;
         case MODEL_BEAM_KNIGHT: {
             vec3_t p, Position, Angle;
+            Vector(0.f, 0.f, 0.f, p);
             for (int i = 0; i < 6; i++)
             {
                 int Hand = 0;
@@ -1305,7 +1332,8 @@ void M34CryWolf1st::MoveCryWolf1stBlurEffect(CHARACTER* c, OBJECT* o, BMD* b)
                 }
                 VectorCopy(TempAngle, o->Angle);
 
-                if (o->AnimationFrame > 4.5f && o->AnimationFrame < 5.0f)
+                if (o->AnimationFrame > 4.5f && o->AnimationFrame < 5.0f && c->TargetCharacter >= 0 &&
+                    c->TargetCharacter < MAX_CHARACTERS_CLIENT)
                 {
                     CHARACTER* tc    = &CharactersClient[c->TargetCharacter];
                     OBJECT*    to    = &tc->Object;
@@ -2202,16 +2230,39 @@ void M34CryWolf1st::Set_Message_Box(int Str, int Num, int Key, int ObjNum)
         return;
     if (Num < 0 || Num >= 2)
         return;  // #MG-32: Box_String[2][200]
-    if (ObjNum < 0 || ObjNum >= 5)
-        return;  // #MG-32: m_AltarState[5]
+    if (Str < 0 || Str > 100)
+        return;
 
     if (Str == 56)
     {
-        BYTE State = (m_AltarState[ObjNum] & 0x0f);
-        mu_swprintf(Box_String[Num], I18N::Game::Lookup(1950 + Str), State);
+        if (ObjNum < 0 || ObjNum >= 5)
+            return;  // #MG-32: m_AltarState[5]
+
+        BYTE           State = (m_AltarState[ObjNum] & 0x0f);
+        const wchar_t* fmt   = I18N::Game::ContractCanBeMadeForDTimes;
+        bool           valid = (fmt != nullptr);
+        int            specs = 0;
+        for (const wchar_t* p = fmt; valid && *p != L'\0'; ++p)
+        {
+            if (*p == L'%')
+            {
+                ++p;
+                if (*p == L'%')
+                    continue;
+                if ((*p == L'd' || *p == L'i' || *p == L'u') && specs == 0)
+                    ++specs;
+                else
+                    valid = false;
+            }
+        }
+        swprintf_s(Box_String[Num], _countof(Box_String[Num]),
+                   valid ? fmt : L"Contract can be made for %d times.", static_cast<int>(State));
     }
     else
-        wcscpy(Box_String[Num], I18N::Game::Lookup(1950 + Str));
+    {
+        const wchar_t* text = I18N::Game::Lookup(1950 + Str);
+        wcsncpy_s(Box_String[Num], _countof(Box_String[Num]), text ? text : L"", _TRUNCATE);
+    }
     if (Str == 56 || Str == 57)
         Message_Box = 1;
     else
