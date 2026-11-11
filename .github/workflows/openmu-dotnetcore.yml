@@ -19,4 +19,4 @@ jobs:
     - name: Build with dotnet
       run: dotnet publish OpenMU/src/Startup/MUnique.OpenMU.Startup.csproj --configuration Release -p:ci=true
     - name: Run tests
-      run: dotnet test OpenMU/src/MUnique.OpenMU.sln --configuration Release
+      run: dotnet test OpenMU/src/MUnique.OpenMU.sln --configuration Release -p:ci=true

@@ -75,7 +75,5 @@
     <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
     <!-- Do not update the following: License changed to non-OSS in newer versions! -->
     <PackageVersion Include="MathParser.org-mXparser" Version="4.4.2" />
-    <!-- 4.1.3: security fixes for GHSA-gwg2-r3hj-4w44 / j3p4 / j9gm / jjfr / wmxv (fixed only in 4.1.x); ImageSharp.Drawing was unused and removed. -->
-    <PackageVersion Include="SixLabors.ImageSharp" Version="4.1.3" />
   </ItemGroup>
 </Project>

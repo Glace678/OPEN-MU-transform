@@ -84,7 +84,7 @@ public class ItemConsumptionTest
     [TestCase(4, true, false, 3)]
     [TestCase(5, true, false, 4)]
     [TestCase(6, true, false, 5)]
-    [TestCase(7, true, false, 6)]
+    [TestCase(7, true, false, 6)] // the balance redesign no longer resets +7/+8 items to +0 on failure
     [TestCase(8, true, false, 7)]
     public async ValueTask JewelOfSoulAsync(byte itemLevel, bool consumptionExpectation, bool success, byte expectedItemLevel)
     {

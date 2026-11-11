@@ -13,6 +13,7 @@
 #include "Core/Platform/WinIni.h"  // private-profile (.ini) API
 #include "Core/Platform/Dpapi.h"   // DPAPI credential crypto (no-op off Windows)
 #include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <iterator>
 #include <map>
@@ -69,7 +70,7 @@ struct IniSection
 
 void SanitizeIniFile(const std::wstring& path)
 {
-    std::ifstream input(path, std::ios::binary);
+    std::ifstream input(std::filesystem::path(path), std::ios::binary);
     if (!input.is_open())
         return;
 
@@ -214,7 +215,7 @@ void SanitizeIniFile(const std::wstring& path)
 
     const std::wstring temporaryPath = path + L".sanitize.tmp";
     {
-        std::ofstream output(temporaryPath, std::ios::binary | std::ios::trunc);
+        std::ofstream output(std::filesystem::path(temporaryPath), std::ios::binary | std::ios::trunc);
         if (!output.is_open())
             return;
         output.write(normalized.data(), static_cast<std::streamsize>(normalized.size()));

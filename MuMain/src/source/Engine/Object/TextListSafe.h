@@ -16,6 +16,7 @@
 #pragma once
 
 #include "Engine/Object/ZzzInventory.h"
+#include "Core/Platform/SecureCrt.h"  // wcsncpy_s / _TRUNCATE on non-Windows (#462)
 
 #include <wchar.h>
 

@@ -50,6 +50,7 @@
 #include <array>
 #include <time.h>
 #include <unordered_map>
+#include <cstring>
 #include <unordered_set>
 #include <vector>
 

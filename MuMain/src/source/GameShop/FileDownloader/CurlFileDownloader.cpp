@@ -67,8 +67,8 @@ std::wstring Utf8ToWide(const char* value)
 // caller's break flag.
 int XferInfoCallback(void* clientp, curl_off_t, curl_off_t, curl_off_t, curl_off_t)
 {
-    const volatile int* pBreak = static_cast<const volatile int*>(clientp);
-    return (pBreak != nullptr && *pBreak != 0) ? 1 : 0;
+    const auto* pBreak = static_cast<const std::atomic<bool>*>(clientp);
+    return (pBreak != nullptr && pBreak->load()) ? 1 : 0;
 }
 
 size_t WriteToStream(char* ptr, size_t size, size_t nmemb, void* userdata)
@@ -83,7 +83,7 @@ size_t WriteToStream(char* ptr, size_t size, size_t nmemb, void* userdata)
 
 WZResult CurlFileDownloader::DownloadFile(const std::wstring& url, const std::wstring& localPath,
                                           const std::wstring& username, const std::wstring& password, bool passiveFtp,
-                                          const volatile int* pBreak)
+                                          const std::atomic<bool>* pBreak)
 {
     WZResult result;
 
@@ -127,7 +127,7 @@ WZResult CurlFileDownloader::DownloadFile(const std::wstring& url, const std::ws
     curl_easy_setopt(curl, CURLOPT_LOW_SPEED_TIME, kLowSpeedTimeoutSec);
     curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
     curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, &XferInfoCallback);
-    curl_easy_setopt(curl, CURLOPT_XFERINFODATA, const_cast<int*>(pBreak));
+    curl_easy_setopt(curl, CURLOPT_XFERINFODATA, const_cast<std::atomic<bool>*>(pBreak));
     curl_easy_setopt(curl, CURLOPT_FTP_USE_EPSV, passiveFtp ? 1L : 0L);
     if (!passiveFtp)
     {
