@@ -15,6 +15,10 @@
 #include <filesystem>
 #include <fstream>
 
+#ifndef ERROR_INVALID_PARAMETER
+#define ERROR_INVALID_PARAMETER 87L
+#endif
+
 CShopList::CShopList()  // OK
 {
     this->m_CategoryListPtr = new CShopCategoryList;
@@ -398,3 +402,4 @@ std::vector<std::wstring> CShopList::ReadShopListLines(const wchar_t* szFilePath
 
     return lines;
 }
+#endif
