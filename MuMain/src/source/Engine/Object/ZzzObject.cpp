@@ -6412,7 +6412,13 @@ void ItemAngle(OBJECT* o)
 
 void CreateItemDrop(ITEM_t* ip, ItemCreationParams params, vec3_t position, bool isFreshDrop)
 {
-    int   Type              = params.Group * MAX_ITEM_INDEX + params.Number;
+    if (params.Group >= MAX_ITEM_TYPE || params.Number >= MAX_ITEM_INDEX)
+    {
+        ip->Object.Live = false;
+        return;
+    }
+
+    const int Type          = params.Group * MAX_ITEM_INDEX + params.Number;
     ITEM* n                 = &ip->Item;
     n->Type                 = Type;
     n->Level                = params.Level;

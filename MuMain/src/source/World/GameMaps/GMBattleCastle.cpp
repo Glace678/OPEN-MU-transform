@@ -439,6 +439,9 @@ bool SettingBattleFormation(CHARACTER* c, eBuffState state)
 
 bool GetGuildMaster(CHARACTER* c)
 {
+    if (c->GuildMarkIndex < 0 || c->GuildMarkIndex >= MAX_MARKS)
+        return false;
+
     if (wcscmp(GuildMark[c->GuildMarkIndex].GuildName, L"") == 0)
         return false;
     if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, L"") == 0 && c->GuildStatus != G_MASTER)
@@ -512,7 +515,8 @@ void ChangeBattleFormation(wchar_t* GuildName, bool bEffect)
         if (o->Live && o->Visible)
         {
             DeleteParts(c);
-            if (wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildName) == 0)
+            if (c->GuildMarkIndex >= 0 && c->GuildMarkIndex < MAX_MARKS &&
+                wcscmp(GuildMark[c->GuildMarkIndex].UnionName, GuildName) == 0)
             {
                 // _buffwani_
                 g_TokenCharacterBuff(o, eBuff_CastleRegimentDefense);
@@ -749,9 +753,9 @@ bool MoveBattleCastleObjectSetting(int& objCount, int object)
     if (gMapManager.InBattleCastle() == false)
         return false;
 
-    DWORD  current = timeGetTime();
-    double dif     = (double)(current - g_iMp3PlayTime) / CLOCKS_PER_SEC;
-    if (dif > 1800 || g_iMp3PlayTime == 0)
+    const DWORD current = timeGetTime();
+    constexpr DWORD musicReplayIntervalMs = 30 * 60 * 1000;
+    if (current - g_iMp3PlayTime > musicReplayIntervalMs || g_iMp3PlayTime == 0)
     {
         g_iMp3PlayTime = current;
         if (IsBattleCastleStart())

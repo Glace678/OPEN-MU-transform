@@ -411,7 +411,7 @@ void PrintItem(wchar_t* FileName)
                 {
                     RequireEnergy = 0;
                 }
-                if (i >= ITEM_STAFF && i < ITEM_STAFF * MAX_ITEM_INDEX)
+                if (i >= ITEM_STAFF && i < ITEM_STAFF + MAX_ITEM_INDEX)
                 {
                     DamageMin = DamageMin / 2 + Level * 2;
                     DamageMax = 0;

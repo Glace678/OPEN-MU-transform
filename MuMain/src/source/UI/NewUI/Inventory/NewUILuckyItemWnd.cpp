@@ -176,7 +176,7 @@ void CNewUILuckyItemWnd::RenderMixEffect()
     for (int i = 0; i < (int)m_pNewInventoryCtrl->GetNumberOfItems(); ++i)
     {
         ITEM* pItem = m_pNewInventoryCtrl->GetItem(i);
-        if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEMS)
+        if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEM)
         {
             continue;
         }

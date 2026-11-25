@@ -23,6 +23,18 @@ static std::mutex g_consoleMutex;
 
 namespace
 {
+constexpr std::size_t maxInMemoryLogBytes = 4 * 1024 * 1024;
+
+void AppendConsoleLine(std::string& console, const std::string& line)
+{
+    console.append(line).push_back('\n');
+    if (console.size() > maxInMemoryLogBytes)
+    {
+        const auto nextLine = console.find('\n', console.size() - maxInMemoryLogBytes / 2);
+        console.erase(0, nextLine + 1);
+    }
+}
+
 int FormatWideLog(wchar_t* buffer, std::size_t bufferCount, const wchar_t* format, va_list args)
 {
     if (!buffer || bufferCount == 0 || !format)
@@ -347,8 +359,7 @@ void CMuEditorConsoleUI::LogEditor(const std::string& message)
     std::string fullMessage = std::string(timestamp) + " " + message;
 
     std::lock_guard<std::mutex> lock(g_consoleMutex);
-    m_strEditorConsole += fullMessage;
-    m_strEditorConsole += "\n";
+    AppendConsoleLine(m_strEditorConsole, fullMessage);
 
     // Write to log file
     WriteToLogFile(fullMessage);
@@ -358,8 +369,7 @@ void CMuEditorConsoleUI::LogGame(const std::string& message)
 {
     std::lock_guard<std::mutex> lock(g_consoleMutex);
 
-    m_strGameConsole += message;
-    m_strGameConsole += "\n";
+    AppendConsoleLine(m_strGameConsole, message);
 
     // Write to log file with prefix
     WriteToLogFile("[GAME] " + message);

@@ -682,7 +682,8 @@ bool CheckAttack_Fenrir(CHARACTER* c)
             return true;
         }
 
-        if (EnableGuildWar && c->PK >= PVP_MURDERER2 && c->GuildMarkIndex != -1 &&
+        if (EnableGuildWar && c->PK >= PVP_MURDERER2 && c->GuildMarkIndex >= 0 && c->GuildMarkIndex < MAX_MARKS &&
+            Hero->GuildMarkIndex >= 0 && Hero->GuildMarkIndex < MAX_MARKS &&
             wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
         {
             return false;
@@ -920,7 +921,8 @@ bool CheckAttack()
             return true;
         }
 
-        if (EnableGuildWar && c->PK >= PVP_MURDERER2 && c->GuildMarkIndex != -1 &&
+        if (EnableGuildWar && c->PK >= PVP_MURDERER2 && c->GuildMarkIndex >= 0 && c->GuildMarkIndex < MAX_MARKS &&
+            Hero->GuildMarkIndex >= 0 && Hero->GuildMarkIndex < MAX_MARKS &&
             wcscmp(GuildMark[Hero->GuildMarkIndex].GuildName, GuildMark[c->GuildMarkIndex].GuildName) == 0)
         {
             return false;
@@ -3954,7 +3956,7 @@ void RenderTournamentInterface()
     int     WindowX = (REFERENCE_WIDTH - Width) / 2;
     int     WindowY = 120 + 0;
     float   x = 0.0f, y = 0.0f;
-    wchar_t t_Str[20];
+    wchar_t t_Str[64];
     wcscpy(t_Str, L"");
 
     if (g_wtMatchTimeLeft.m_Time)
@@ -3970,7 +3972,7 @@ void RenderTournamentInterface()
             if (g_wtMatchTimeLeft.m_Type == 3)
             {
                 g_pRenderText->SetTextColor(255, 255, 10, 255);
-                mu_swprintf(t_Str, I18N::Game::ItWillStartAfterDSeconds, t_valueSec);
+                mu_swprintf_trunc(t_Str, std::size(t_Str), I18N::Game::ItWillStartAfterDSeconds, t_valueSec);
             }
             else
             {
@@ -3980,11 +3982,11 @@ void RenderTournamentInterface()
                 }
                 if (t_valueSec < 10)
                 {
-                    mu_swprintf(t_Str, I18N::Game::RemainingHoursD0D, t_valueMin, t_valueSec);
+                    mu_swprintf_trunc(t_Str, std::size(t_Str), I18N::Game::RemainingHoursD0D, t_valueMin, t_valueSec);
                 }
                 else
                 {
-                    mu_swprintf(t_Str, I18N::Game::RemainingSecondsDD, t_valueMin, t_valueSec);
+                    mu_swprintf_trunc(t_Str, std::size(t_Str), I18N::Game::RemainingSecondsDD, t_valueMin, t_valueSec);
                 }
             }
             x += (float)GetScreenWidth() / 2;

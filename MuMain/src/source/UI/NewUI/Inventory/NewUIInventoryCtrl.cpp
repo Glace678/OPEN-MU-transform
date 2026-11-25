@@ -42,7 +42,7 @@ bool SEASON3B::CNewUIPickedItem::Create(CNewUIItemMng* pNewItemMng, CNewUIInvent
         return false;
     }
 
-    if (pDuplicated->Type < 0 || pDuplicated->Type >= MAX_ITEMS)
+    if (pDuplicated->Type < 0 || pDuplicated->Type >= MAX_ITEM)
     {
         pNewItemMng->DeleteDuplicatedItem(pDuplicated);
         return false;
@@ -145,7 +145,7 @@ int SEASON3B::CNewUIPickedItem::GetSourceLinealPos()
 
 bool SEASON3B::CNewUIPickedItem::GetTargetPos(CNewUIInventoryCtrl* pDest, int& iTargetColumnX, int& iTargetRowY)
 {
-    if (pDest != nullptr && m_pPickedItem != nullptr && m_pPickedItem->Type >= 0 && m_pPickedItem->Type < MAX_ITEMS)
+    if (pDest != nullptr && m_pPickedItem != nullptr && m_pPickedItem->Type >= 0 && m_pPickedItem->Type < MAX_ITEM)
     {
         RECT rcInventory;
         pDest->GetRect(rcInventory);
@@ -268,7 +268,7 @@ void SEASON3B::CNewUIInventoryCtrl::UnloadImages()
 
 void SEASON3B::CNewUIInventoryCtrl::SetItemColorState(ITEM* pItem)
 {
-    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEMS)
+    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEM)
     {
         return;
     }
@@ -553,7 +553,7 @@ void SEASON3B::CNewUIInventoryCtrl::RemoveItem(ITEM* pItem)
         {
             m_vecItem.erase(li);
 
-            if (m_pdwItemCheckBox != nullptr && pItem->Type >= 0 && pItem->Type < MAX_ITEMS)
+            if (m_pdwItemCheckBox != nullptr && pItem->Type >= 0 && pItem->Type < MAX_ITEM)
             {
                 const ITEM_ATTRIBUTE* pItemAttr = &ItemAttribute[pItem->Type];
                 for (int y = 0; y < pItemAttr->Height; y++)
@@ -1082,7 +1082,7 @@ void SEASON3B::CNewUIInventoryCtrl::Render()
             if (IntersectRect(&rcIntersect, &rcPickedItem, &rcInventory))
             {
                 ITEM* pPickItem = ms_pPickedItem->GetItem();
-                if (pPickItem != nullptr && pPickItem->Type >= 0 && pPickItem->Type < MAX_ITEMS)
+                if (pPickItem != nullptr && pPickItem->Type >= 0 && pPickItem->Type < MAX_ITEM)
                 {
                     const ITEM_ATTRIBUTE* pItemAttr    = &ItemAttribute[pPickItem->Type];
                     const int             iPickedItemX = MouseX - ((pItemAttr->Width - 1) * INVENTORY_SQUARE_WIDTH / 2);
@@ -1450,7 +1450,7 @@ bool SEASON3B::CNewUIInventoryCtrl::CheckRectInRect(const RECT& rcBox)
 
 bool SEASON3B::CNewUIInventoryCtrl::CanMove(int iLinealPos, ITEM* pItem)
 {
-    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEMS)
+    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEM)
     {
         return false;
     }
@@ -1467,7 +1467,7 @@ bool SEASON3B::CNewUIInventoryCtrl::CanMove(int iLinealPos, ITEM* pItem)
 
 bool SEASON3B::CNewUIInventoryCtrl::CanMove(int iColumnX, int iRowY, ITEM* pItem)
 {
-    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEMS)
+    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEM)
     {
         return false;
     }

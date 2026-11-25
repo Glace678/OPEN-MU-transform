@@ -1034,7 +1034,7 @@ bool CNewUIMixInventory::AutoMoveItem(CNewUIInventoryCtrl* srcCtrl, STORAGE_TYPE
     srcCtrl->RemoveItem(pItemObj);
     pPickedItem->HidePickedItem();
 
-    if (!SendRequestEquipmentItem(srcType, pPickedItem->GetSourceLinealPos(), pItemObj, dstType, iTargetIndex))
+    if (!SendRequestEquipmentItem(srcType, pPickedItem->GetSourceLinealPos(), pPickedItem->GetItem(), dstType, iTargetIndex))
     {
         CNewUIInventoryCtrl::BackupPickedItem();
         return false;

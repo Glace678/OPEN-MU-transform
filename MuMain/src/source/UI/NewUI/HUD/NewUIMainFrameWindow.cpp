@@ -706,7 +706,9 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
         {
             wchar_t strTipText[256];
 
-            mu_swprintf(strTipText, I18N::Game::EXPI64dI64d, dwExperience, dwNexExperience);
+            mu_swprintf(strTipText, I18N::Game::EXPI64dI64d,
+                        static_cast<unsigned long long>(dwExperience),
+                        static_cast<unsigned long long>(dwNexExperience));
             RenderTipText((int)HudX(280), (int)HudY(418), strTipText);
         }
     }
@@ -829,7 +831,9 @@ void SEASON3B::CNewUIMainFrameWindow::RenderExperience()
         {
             wchar_t strTipText[256];
 
-            mu_swprintf(strTipText, I18N::Game::EXPI64dI64d, dwExperience, dwNexExperience);
+            mu_swprintf(strTipText, I18N::Game::EXPI64dI64d,
+                        static_cast<unsigned long long>(dwExperience),
+                        static_cast<unsigned long long>(dwNexExperience));
             RenderTipText((int)HudX(280), (int)HudY(418), strTipText);
         }
     }
@@ -2337,7 +2341,7 @@ bool SEASON3B::CNewUISkillList::Render()
                 {
                     BYTE bySkillUseType = SkillAttribute[iSkillType].SkillUseType;
 
-                    if (bySkillUseType == SKILL_USE_TYPE_MASTER || bySkillUseType == SKILL_USE_TYPE_MASTERLEVEL)
+                    if (bySkillUseType == SKILL_USE_TYPE_MASTERLEVEL)
                     {
                         continue;
                     }

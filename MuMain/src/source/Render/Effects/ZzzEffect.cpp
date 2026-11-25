@@ -4575,7 +4575,7 @@ void CreateEffect(int Type, vec3_t Position, vec3_t Angle, vec3_t Light, int Sub
                     int    irandom;
 
                     BMD* p_b = &Models[o->Owner->Type];
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < 10 && p_b->NumBones > 0; i++)
                     {
                         irandom = rand() % p_b->NumBones;
                         Vector(0.0f, 0.0f, 0.0f, vPos);

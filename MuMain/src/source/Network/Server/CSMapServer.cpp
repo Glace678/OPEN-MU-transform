@@ -90,8 +90,8 @@ void CSMServer::GetServerAddress(wchar_t* szAddress)
         return;
     }
 
-    CMultiLanguage::ConvertFromUtf8(szAddress, m_serverInfo.m_szMapSvrIpAddress.data(),
-                                    static_cast<int>(kIpAddressLength));
+    CMultiLanguage::ConvertFromUtf8Buffer(szAddress, kIpAddressLength, m_serverInfo.m_szMapSvrIpAddress.data(),
+                                          static_cast<int>(kIpAddressLength));
 }
 
 extern BOOL g_bGameServerConnected;
@@ -111,8 +111,8 @@ void        CSMServer::ConnectChangeMapServer(MServerInfo sInfo)
     std::this_thread::sleep_for(kReconnectDelay);
 
     std::array<wchar_t, kIpAddressLength> ipAddress{};
-    CMultiLanguage::ConvertFromUtf8(ipAddress.data(), m_serverInfo.m_szMapSvrIpAddress.data(),
-                                    static_cast<int>(kIpAddressLength));
+    CMultiLanguage::ConvertFromUtf8Buffer(ipAddress.data(), ipAddress.size(), m_serverInfo.m_szMapSvrIpAddress.data(),
+                                          static_cast<int>(kIpAddressLength));
 
     if (CreateSocket(ipAddress.data(), m_serverInfo.m_wMapSvrPort))
     {

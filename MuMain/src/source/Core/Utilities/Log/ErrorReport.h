@@ -40,7 +40,14 @@ protected:
 
 public:
     void WriteDebugInfoStr(wchar_t* lpszToWrite);
-    void Write(const wchar_t* lpszFormat, ...);
+    void Write(const wchar_t* text);
+
+    template <typename First, typename... Rest>
+    void Write(const wchar_t* format, First first, Rest... rest)
+    {
+        WriteFormatted(format, first, rest...);
+    }
+
     void HexWrite(void* pBuffer, int iSize);
 
     void AddSeparator(void);
@@ -52,6 +59,9 @@ public:
     void WriteFontInfo(void);
     void WriteImeInfo(HWND hWnd);
     void WriteSoundCardInfo(void);
+
+private:
+    void WriteFormatted(const wchar_t* format, ...);
 };
 
 extern CErrorReport g_ErrorReport;

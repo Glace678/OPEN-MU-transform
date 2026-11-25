@@ -48,12 +48,10 @@ void CNewBloodCastleSystem::SetMatchGameCommand(const LPPRECEIVE_MATCH_GAME_STAT
                 WORD Key = data->m_wIndex;
                 Key &= 0x7FFF;
 
-                int        index = HangerBloodCastleQuestItem(Key);
-                CHARACTER* c     = &CharactersClient[index];
-
-                if (c != NULL)
+                const int index = HangerBloodCastleQuestItem(Key);
+                if (index >= 0 && index < MAX_CHARACTERS_CLIENT)
                 {
-                    c->EtcPart = data->m_byItemType;
+                    CharactersClient[index].EtcPart = data->m_byItemType;
                 }
             }
             break;
@@ -76,12 +74,10 @@ void CNewBloodCastleSystem::SetMatchGameCommand(const LPPRECEIVE_MATCH_GAME_STAT
                 WORD Key = data->m_wIndex;
                 Key &= 0x7FFF;
 
-                int        index = HangerBloodCastleQuestItem(Key);
-                CHARACTER* c     = &CharactersClient[index];
-
-                if (c != NULL)
+                const int index = HangerBloodCastleQuestItem(Key);
+                if (index >= 0 && index < MAX_CHARACTERS_CLIENT)
                 {
-                    c->EtcPart = data->m_byItemType;
+                    CharactersClient[index].EtcPart = data->m_byItemType;
                 }
             }
             break;

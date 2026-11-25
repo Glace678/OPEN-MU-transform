@@ -407,6 +407,7 @@ void PassthroughShader::SetTexCombineAdd(bool add)
     const int v = add ? 1 : 0;
     if (m_LocTexCombineAdd != -1 && fn_glUniform1i != nullptr && v != m_LastTexCombineAdd)
     {
+        IR::Flush(IR::FlushCause::Uniform);
         fn_glUniform1i(m_LocTexCombineAdd, v);
         FrameProfiler::CountGLCall(FrameProfiler::Counter::UniformWrites);
         m_LastTexCombineAdd = v;

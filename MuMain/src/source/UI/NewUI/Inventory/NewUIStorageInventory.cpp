@@ -555,7 +555,7 @@ void CNewUIStorageInventory::SetBackupInvenIndex(int nInvenIndex)
 
 int CNewUIStorageInventory::FindEmptySlot(ITEM* pItemObj)
 {
-    if (pItemObj == nullptr || pItemObj->Type < 0 || pItemObj->Type >= MAX_ITEMS)
+    if (pItemObj == nullptr || pItemObj->Type < 0 || pItemObj->Type >= MAX_ITEM)
         return -1;
 
     ITEM_ATTRIBUTE* pItemAttr = &ItemAttribute[pItemObj->Type];

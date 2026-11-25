@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MuHelperData.h"
+#include "Data/Translation/MultiLanguage.h"
 
 namespace MUHelper
 {
@@ -123,20 +124,21 @@ void ConfigDataSerDe::Serialize(const ConfigData& gameData, PRECEIVE_MUHELPER_DA
     netData.AddExtraItem      = gameData.bPickExtraItems ? 1 : 0;
 
     memset(netData.ExtraItems, 0, sizeof(netData.ExtraItems));
+    constexpr int keywordBytes = sizeof(netData.ExtraItems[0]);
     int iItemIndex = 0;
     for (const auto& wsItem : gameData.aExtraItems)
     {
-        if (iItemIndex >= 12)
+        if (iItemIndex >= static_cast<int>(std::size(netData.ExtraItems)))
         {
             break;
         }
 
-        size_t n = wcstombs(netData.ExtraItems[iItemIndex], wsItem.c_str(), 15);
-        if (n == (size_t)-1 || n == 15)
+        const int bytes = WideCharToMultiByte(CP_UTF8, 0, wsItem.c_str(), -1, nullptr, 0, nullptr, nullptr);
+        if (bytes > 1 && bytes <= keywordBytes)
         {
-            memset(netData.ExtraItems[iItemIndex], 0, 15);
+            WideCharToMultiByte(CP_UTF8, 0, wsItem.c_str(), -1, netData.ExtraItems[iItemIndex], keywordBytes, nullptr, nullptr);
+            iItemIndex++;
         }
-        iItemIndex++;
     }
 
     // byte 33, client-local. server echoes unchanged, see MuHelperData.h
@@ -214,19 +216,14 @@ void ConfigDataSerDe::Deserialize(const PRECEIVE_MUHELPER_DATA& netData, ConfigD
     gameData.bPickAncient     = (bool)netData.SetItem;
     gameData.bPickExtraItems  = (bool)netData.AddExtraItem;
 
-    wchar_t wsExtraItemBuffer[15 + 1];
-    for (int i = 0; i < sizeof(netData.ExtraItems) / sizeof(netData.ExtraItems[0]); i++)
+    constexpr int keywordBytes = sizeof(netData.ExtraItems[0]);
+    gameData.aExtraItems.clear();
+    for (const auto& keyword : netData.ExtraItems)
     {
-        memset(wsExtraItemBuffer, 0, sizeof(wsExtraItemBuffer));
-
-        size_t n = std::mbstowcs(wsExtraItemBuffer, &netData.ExtraItems[i][0], 15);
-        if (n > 0 && n <= 15)
+        wchar_t buffer[keywordBytes + 1]{};
+        if (CMultiLanguage::ConvertFromUtf8(buffer, keyword, keywordBytes) > 0)
         {
-            wsExtraItemBuffer[n] = L'\0';
-            if (wsExtraItemBuffer[0] != L'\0')
-            {
-                gameData.aExtraItems.insert(std::wstring(wsExtraItemBuffer));
-            }
+            gameData.aExtraItems.emplace(buffer);
         }
     }
 

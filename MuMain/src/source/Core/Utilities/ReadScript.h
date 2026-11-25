@@ -18,21 +18,27 @@ static SMDToken CurrentToken;
 
 static SMDToken GetToken()
 {
-    char ch;
+    int ch;
     TokenString[0] = '\0';
     do
     {
-        if ((ch = (char)fgetc(SMDFile)) == EOF)
+        if ((ch = fgetc(SMDFile)) == EOF)
             return END;
-        if (ch == '/' && (ch = (char)fgetc(SMDFile)) == '/')
+        if (ch == '/')
         {
-            int commentChar;
-            while ((commentChar = fgetc(SMDFile)) != '\n' && commentChar != EOF)
+            const int next = fgetc(SMDFile);
+            if (next != '/')
             {
-                // skip the rest of the comment line
+                if (next != EOF)
+                    ungetc(next, SMDFile);
+                break;
             }
-            ch = (commentChar == EOF) ? static_cast<char>(EOF) : '\n';
-            if (commentChar == EOF)
+
+            while ((ch = fgetc(SMDFile)) != '\n' && ch != EOF)
+            {
+                // Skip the rest of the comment.
+            }
+            if (ch == EOF)
             {
                 return END;
             }
@@ -67,14 +73,14 @@ static SMDToken GetToken()
             ungetc(ch, SMDFile);
             p                         = TempString;
             char* const tempStringEnd = TempString + sizeof(TempString) - 1;
-            while (p < tempStringEnd && ((ch = (char)getc(SMDFile)) != EOF) && (ch == '.' || isdigit(ch) || ch == '-'))
+            while (p < tempStringEnd && ((ch = getc(SMDFile)) != EOF) && (ch == '.' || isdigit(ch) || ch == '-'))
             {
                 *p++ = ch;
             }
             *p = 0;
             if (p == tempStringEnd)
             {
-                while (((ch = (char)getc(SMDFile)) != EOF) && (ch == '.' || isdigit(ch) || ch == '-'))
+                while (((ch = getc(SMDFile)) != EOF) && (ch == '.' || isdigit(ch) || ch == '-'))
                 {
                     // discard the remaining digits of an over-long number
                 }
@@ -88,13 +94,13 @@ static SMDToken GetToken()
             p = TokenString;
             {
                 char* const tokenEnd = TokenString + sizeof(TokenString) - 1;
-                while (p < tokenEnd && ((ch = (char)getc(SMDFile)) != EOF) && ch != '"')
+                while (p < tokenEnd && ((ch = getc(SMDFile)) != EOF) && ch != '"')
                 {
                     *p++ = ch;
                 }
                 if (p == tokenEnd && ch != '"')
                 {
-                    while (((ch = (char)getc(SMDFile)) != EOF) && ch != '"')
+                    while (((ch = getc(SMDFile)) != EOF) && ch != '"')
                     {
                         // discard over-long quoted input
                     }
@@ -110,13 +116,13 @@ static SMDToken GetToken()
                 p                    = TokenString;
                 char* const tokenEnd = TokenString + sizeof(TokenString) - 1;
                 *p++                 = ch;
-                while (p < tokenEnd && ((ch = (char)getc(SMDFile)) != EOF) && (ch == '.' || ch == '_' || isalnum(ch)))
+                while (p < tokenEnd && ((ch = getc(SMDFile)) != EOF) && (ch == '.' || ch == '_' || isalnum(ch)))
                 {
                     *p++ = ch;
                 }
                 if (p == tokenEnd)
                 {
-                    while (((ch = (char)getc(SMDFile)) != EOF) && (ch == '.' || ch == '_' || isalnum(ch)))
+                    while (((ch = getc(SMDFile)) != EOF) && (ch == '.' || ch == '_' || isalnum(ch)))
                     {
                         // discard over-long identifier
                     }

@@ -2080,7 +2080,8 @@ void GetItemName(int iType, int iLevel, wchar_t* Text)
     {
         for (int i = 0; i < MAX_MONSTER; i++)
         {
-            if (iLevel >= 0 && iLevel < 6 && SommonTable[iLevel] == MonsterScript[i].Type)
+            if (iLevel >= 0 && static_cast<std::size_t>(iLevel) < std::size(SommonTable) &&
+                SommonTable[iLevel] == MonsterScript[i].Type)
             {
                 mu_swprintf(Text, L"%ls %ls", MonsterScript[i].Name, I18N::Game::TransformationRing);
             }
@@ -7435,7 +7436,7 @@ void BuildGroundItemLabelDescriptor(OBJECT* o, ITEM* ip, GroundItemLabelDescript
     {
         CopyGroundItemLabelText(descriptor.Name, I18N::Game::RingOfWizard);
     }
-    else if (o->Type == MODEL_TRANSFORMATION_RING)
+    else if (o->Type == MODEL_TRANSFORMATION_RING && static_cast<std::size_t>(ItemLevel) < std::size(SommonTable))
     {
         for (int i = 0; i < MAX_MONSTER; i++)
         {

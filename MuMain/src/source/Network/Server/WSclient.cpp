@@ -7510,9 +7510,12 @@ void ReceiveSetPointsExtended(const BYTE* ReceiveBuffer)
     gSkillManager.InvalidateSkillAttributeRequirementsCache();
 }
 
-void ReceiveStatsExtended(const BYTE* ReceiveBuffer)
+void ReceiveStatsExtended(std::span<const BYTE> packet)
 {
-    auto Data = (LPPRECEIVE_STATS_EXTENDED)ReceiveBuffer;
+    if (packet.size() < sizeof(PRECEIVE_STATS_EXTENDED))
+        return;
+
+    const auto* Data = reinterpret_cast<const PRECEIVE_STATS_EXTENDED*>(packet.data());
     switch (Data->Index)
     {
         case 0xff:
@@ -9483,9 +9486,16 @@ void ReceiveMoveToEventMatchResult2(const BYTE* ReceiveBuffer)
     }
 }
 
-void ReceiveSetAttribute(const BYTE* ReceiveBuffer)
+void ReceiveSetAttribute(std::span<const BYTE> packet)
 {
-    auto Data = (LPPRECEIVE_SET_MAPATTRIBUTE)ReceiveBuffer;
+    constexpr std::size_t headerSize = offsetof(PRECEIVE_SET_MAPATTRIBUTE, m_vAttribute);
+    if (packet.size() < headerSize)
+        return;
+
+    const auto* Data = reinterpret_cast<const PRECEIVE_SET_MAPATTRIBUTE*>(packet.data());
+    const std::size_t pointCount = Data->m_byCount * (Data->m_byType == 0 ? 2u : 1u);
+    if (pointCount > (packet.size() - headerSize) / sizeof(PRECEIVE_MAP_ATTRIBUTE))
+        return;
 
     g_ErrorReport.Write(L"Type:%d \r\n", Data->m_byType);
 
@@ -14608,7 +14618,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
             ReceiveDurability(ReceiveBuffer);
             break;
         case 0x26:
-            ReceiveStatsExtended(ReceiveBuffer);
+            ReceiveStatsExtended(received_span);
             break;
         case 0x28:
             ReceiveDeleteInventory(ReceiveBuffer);
@@ -14702,7 +14712,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
             ReceivePartyInfo(received_span);
             break;
         case 0x46:
-            ReceiveSetAttribute(ReceiveBuffer);
+            ReceiveSetAttribute(received_span);
             break;
         case 0x47:
             ReceivePartyGetItem(ReceiveBuffer);

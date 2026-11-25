@@ -676,6 +676,12 @@ bool SEASON3B::CNewUIItemEnduranceInfo::RenderItemEndurance(int ix, int iY)
     if (m_iTooltipIndex != -1)
     {
         ITEM* pItem   = &CharacterMachine->Equipment[m_iTooltipIndex];
+        if (pItem->Type < 0 || pItem->Type >= MAX_ITEM)
+        {
+            m_iTooltipIndex = -1;
+            return true;
+        }
+
         DWORD dwColor = 0xFFFFFFFF;
 
         ITEM_ATTRIBUTE* pItemAttr      = &ItemAttribute[pItem->Type];
@@ -702,8 +708,8 @@ bool SEASON3B::CNewUIItemEnduranceInfo::RenderItemEndurance(int ix, int iY)
             }
 
             RenderTooltip(MouseX, MouseY - 10, pItem, dwColor);
-            m_iTooltipIndex = -1;
         }
+        m_iTooltipIndex = -1;
     }
     return true;
 }

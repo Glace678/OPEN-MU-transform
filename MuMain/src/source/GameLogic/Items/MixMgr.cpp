@@ -596,9 +596,9 @@ int CMixRecipes::GetCurMixID()
     return pRecipe->m_iMixID;
 }
 
-BOOL CMixRecipes::GetCurRecipeName(wchar_t* pszNameOut, int iNameLine)
+BOOL CMixRecipes::GetCurRecipeName(std::span<wchar_t> pszNameOut, int iNameLine)
 {
-    if (pszNameOut == NULL)
+    if (pszNameOut.empty())
         return FALSE;
 
     if (!IsReadyToMix())
@@ -608,19 +608,19 @@ BOOL CMixRecipes::GetCurRecipeName(wchar_t* pszNameOut, int iNameLine)
             switch (g_MixRecipeMgr.GetMixInventoryType())
             {
                 case MIXTYPE_TRAINER:
-                    mu_swprintf(pszNameOut, I18N::Game::ItemInappropriateForS, I18N::Game::Resurrection);
+                    mu_swprintf_trunc(pszNameOut.data(), pszNameOut.size(), I18N::Game::ItemInappropriateForS, I18N::Game::Resurrection);
                     break;
                 case MIXTYPE_OSBOURNE:
-                    mu_swprintf(pszNameOut, I18N::Game::ItemInappropriateForS, I18N::Game::Refine);
+                    mu_swprintf_trunc(pszNameOut.data(), pszNameOut.size(), I18N::Game::ItemInappropriateForS, I18N::Game::Refine);
                     break;
                 case MIXTYPE_JERRIDON:
-                    mu_swprintf(pszNameOut, I18N::Game::ItemInappropriateForS, I18N::Game::Restore);
+                    mu_swprintf_trunc(pszNameOut.data(), pszNameOut.size(), I18N::Game::ItemInappropriateForS, I18N::Game::Restore);
                     break;
                 case MIXTYPE_ELPIS:
-                    mu_swprintf(pszNameOut, I18N::Game::ItemInappropriateForS, I18N::Game::Refine);
+                    mu_swprintf_trunc(pszNameOut.data(), pszNameOut.size(), I18N::Game::ItemInappropriateForS, I18N::Game::Refine);
                     break;
                 default:
-                    mu_swprintf(pszNameOut, L"%ls", I18N::Game::ImproperItemsForCombination);
+                    mu_swprintf_trunc(pszNameOut.data(), pszNameOut.size(), L"%ls", I18N::Game::ImproperItemsForCombination);
                     break;
             }
             return TRUE;
@@ -631,9 +631,9 @@ BOOL CMixRecipes::GetCurRecipeName(wchar_t* pszNameOut, int iNameLine)
     return GetRecipeName(GetCurRecipe(), pszNameOut, iNameLine, FALSE);
 }
 
-BOOL CMixRecipes::GetRecipeName(MIX_RECIPE* pRecipe, wchar_t* pszNameOut, int iNameLine, BOOL bSimilarRecipe)
+BOOL CMixRecipes::GetRecipeName(MIX_RECIPE* pRecipe, std::span<wchar_t> pszNameOut, int iNameLine, BOOL bSimilarRecipe)
 {
-    if (pRecipe == NULL || pszNameOut == NULL)
+    if (pRecipe == NULL || pszNameOut.empty())
         return FALSE;
     if (iNameLine > 2 || iNameLine < 1)
         return FALSE;
@@ -648,19 +648,19 @@ BOOL CMixRecipes::GetRecipeName(MIX_RECIPE* pRecipe, wchar_t* pszNameOut, int iN
         {
             if (iNameLine == 1)
             {
-                mu_swprintf(pszNameOut, L"%ls", I18N::Game::Add380ItemOption);
+                mu_swprintf_trunc(pszNameOut.data(), pszNameOut.size(), L"%ls", I18N::Game::Add380ItemOption);
                 return TRUE;
             }
             return FALSE;
         }
         if (iNameLine == 1 && optionTextlist.size() >= 1)
         {
-            wcscpy(pszNameOut, optionTextlist[0].c_str());
+            mu_swprintf_trunc(pszNameOut.data(), pszNameOut.size(), L"%ls", optionTextlist[0].c_str());
             return TRUE;
         }
         else if (iNameLine == 2 && optionTextlist.size() >= 2)
         {
-            wcscpy(pszNameOut, optionTextlist[1].c_str());
+            mu_swprintf_trunc(pszNameOut.data(), pszNameOut.size(), L"%ls", optionTextlist[1].c_str());
             return TRUE;
         }
         return FALSE;
@@ -670,12 +670,12 @@ BOOL CMixRecipes::GetRecipeName(MIX_RECIPE* pRecipe, wchar_t* pszNameOut, int iN
         if (iNameLine == 1)
         {
             if (pRecipe->m_iMixName[1] == 0)
-                mu_swprintf(pszNameOut, L"%ls", I18N::Game::Lookup(pRecipe->m_iMixName[0]));
+                mu_swprintf_trunc(pszNameOut.data(), pszNameOut.size(), L"%ls", I18N::Game::Lookup(pRecipe->m_iMixName[0]));
             else if (pRecipe->m_iMixName[2] == 0)
-                mu_swprintf(pszNameOut, L"%ls %ls", I18N::Game::Lookup(pRecipe->m_iMixName[0]),
+                mu_swprintf_trunc(pszNameOut.data(), pszNameOut.size(), L"%ls %ls", I18N::Game::Lookup(pRecipe->m_iMixName[0]),
                             I18N::Game::Lookup(pRecipe->m_iMixName[1]));
             else
-                mu_swprintf(pszNameOut, L"%ls %ls %ls", I18N::Game::Lookup(pRecipe->m_iMixName[0]),
+                mu_swprintf_trunc(pszNameOut.data(), pszNameOut.size(), L"%ls %ls %ls", I18N::Game::Lookup(pRecipe->m_iMixName[0]),
                             I18N::Game::Lookup(pRecipe->m_iMixName[1]), I18N::Game::Lookup(pRecipe->m_iMixName[2]));
             return TRUE;
         }
@@ -683,33 +683,33 @@ BOOL CMixRecipes::GetRecipeName(MIX_RECIPE* pRecipe, wchar_t* pszNameOut, int iN
     }
 }
 
-BOOL CMixRecipes::GetCurRecipeDesc(wchar_t* pszDescOut, int iDescLine)
+BOOL CMixRecipes::GetCurRecipeDesc(std::span<wchar_t> pszDescOut, int iDescLine)
 {
-    if (iDescLine > 3 || iDescLine < 1)
+    if (pszDescOut.empty() || iDescLine > 3 || iDescLine < 1)
         return FALSE;
     if (GetCurRecipe() == NULL)
         return FALSE;
     if (GetCurRecipe()->m_iMixDesc[iDescLine - 1] > 0)
-        wcscpy(pszDescOut, I18N::Game::Lookup(GetCurRecipe()->m_iMixDesc[iDescLine - 1]));
+        mu_swprintf_trunc(pszDescOut.data(), pszDescOut.size(), L"%ls", I18N::Game::Lookup(GetCurRecipe()->m_iMixDesc[iDescLine - 1]));
     else
         return FALSE;
     return TRUE;
 }
 
-BOOL CMixRecipes::GetMostSimilarRecipeName(wchar_t* pszNameOut, int iNameLine)
+BOOL CMixRecipes::GetMostSimilarRecipeName(std::span<wchar_t> pszNameOut, int iNameLine)
 {
     return GetRecipeName(GetMostSimilarRecipe(), pszNameOut, iNameLine, TRUE);
 }
 
-BOOL CMixRecipes::GetRecipeAdvice(wchar_t* pszAdviceOut, int iAdivceLine)
+BOOL CMixRecipes::GetRecipeAdvice(std::span<wchar_t> pszAdviceOut, int iAdivceLine)
 {
     if (GetMostSimilarRecipe() == NULL)
         return FALSE;
-    if (iAdivceLine > 3 || iAdivceLine < 1)
+    if (pszAdviceOut.empty() || iAdivceLine > 3 || iAdivceLine < 1)
         return FALSE;
 
     if (GetMostSimilarRecipe()->m_iMixAdvice[iAdivceLine - 1] > 0)
-        wcscpy(pszAdviceOut, I18N::Game::Lookup(GetMostSimilarRecipe()->m_iMixAdvice[iAdivceLine - 1]));
+        mu_swprintf_trunc(pszAdviceOut.data(), pszAdviceOut.size(), L"%ls", I18N::Game::Lookup(GetMostSimilarRecipe()->m_iMixAdvice[iAdivceLine - 1]));
     else
         return FALSE;
     return TRUE;

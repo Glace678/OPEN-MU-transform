@@ -192,7 +192,13 @@ void CErrorReport::WriteDebugInfoStr(wchar_t* lpszToWrite)
     }
 }
 
-void CErrorReport::Write(const wchar_t* lpszFormat, ...)
+void CErrorReport::Write(const wchar_t* text)
+{
+    if (text != nullptr)
+        WriteFormatted(L"%ls", text);
+}
+
+void CErrorReport::WriteFormatted(const wchar_t* lpszFormat, ...)
 {
     if (lpszFormat == nullptr)
     {

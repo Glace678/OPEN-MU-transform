@@ -769,7 +769,7 @@ void CSItemOption::AddStatsBySetOptions(std::uint16_t* Strength, std::uint16_t* 
                 continue;
             }
 
-            switch (option.OptionNumber)
+            switch (option.OptionNumber + AT_SET_OPTION_IMPROVE_STRENGTH)
             {
                 case AT_SET_OPTION_IMPROVE_STRENGTH:
                     *Strength += option.Value;

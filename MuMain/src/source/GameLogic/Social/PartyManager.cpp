@@ -123,8 +123,7 @@ bool CPartyManager::IsPartyMemberChar(CHARACTER* c)
     {
         PARTY_t* p = &Party[i];
 
-        int length = std::max<int>(1, wcslen(c->ID));
-        if (!wcsncmp(p->Name, c->ID, length))
+        if (c->ID[0] != L'\0' && wcscmp(p->Name, c->ID) == 0)
             return true;
     }
 

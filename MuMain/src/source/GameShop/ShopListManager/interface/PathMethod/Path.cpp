@@ -161,8 +161,8 @@ TCHAR* Path::ChangeSlashToBackSlash(TCHAR* szPath)
 
     for (std::size_t n = 0; n < len; n++)
     {
-        if (szPath[n] == '\\')
-            szPath[n] = '/';
+        if (szPath[n] == '/')
+            szPath[n] = '\\';
     }
 
     return szPath;
@@ -179,8 +179,8 @@ TCHAR* Path::ChangeBackSlashToSlash(TCHAR* szPath)
 
     for (std::size_t n = 0; n < len; n++)
     {
-        if (szPath[n] == '/')
-            szPath[n] = '\\';
+        if (szPath[n] == '\\')
+            szPath[n] = '/';
     }
 
     return szPath;
@@ -229,9 +229,13 @@ BOOL Path::ReadFileLastLine(TCHAR* szFile, TCHAR* szLastLine)
         src += 3;
     }
 
-    int cchWide = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, src, -1, NULL, 0);
     UINT codePage = CP_UTF8;
+#ifdef _WIN32
     DWORD flags = MB_ERR_INVALID_CHARS;
+#else
+    DWORD flags = 0;
+#endif
+    int cchWide = MultiByteToWideChar(codePage, flags, src, -1, NULL, 0);
     if (cchWide <= 0)
     {
         codePage = CP_ACP;
@@ -290,7 +294,9 @@ BOOL Path::CreateDirectorys(TCHAR* szFilePath, BOOL bIsFile)
     if (bIsFile)
         Path::GetDirectory(PathName);
 
-    if (CreateDirectory(PathName, 0) != 0 || GetLastError() == ERROR_ALREADY_EXISTS)
+    if (CreateDirectory(PathName, 0) != 0 ||
+        (GetFileAttributes(PathName) != INVALID_FILE_ATTRIBUTES &&
+         (GetFileAttributes(PathName) & FILE_ATTRIBUTE_DIRECTORY) != 0))
     {
         return 1;
     }
@@ -308,6 +314,8 @@ BOOL Path::CreateDirectorys(TCHAR* szFilePath, BOOL bIsFile)
     if (!Path::CreateDirectorys(buff2, 0))
         return 0;
 
-    return (CreateDirectory(PathName, 0) != 0 || GetLastError() == ERROR_ALREADY_EXISTS) ? 1 : 0;
+    return (CreateDirectory(PathName, 0) != 0 ||
+        (GetFileAttributes(PathName) != INVALID_FILE_ATTRIBUTES &&
+         (GetFileAttributes(PathName) & FILE_ATTRIBUTE_DIRECTORY) != 0)) ? 1 : 0;
 }
 #endif

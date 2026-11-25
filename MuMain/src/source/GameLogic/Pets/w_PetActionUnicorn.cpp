@@ -106,7 +106,7 @@ bool PetActionUnicorn::Move(OBJECT* obj, CHARACTER* Owner, int targetKey, double
             //------------------------------//
             Distance = sqrtf(Range[0] * Range[0] + Range[1] * Range[1]);
 
-            if (80.0f >= FlyRange)
+            if (Distance >= FlyRange)
             {
                 float Angle   = CreateAngle2D(obj->Position, targetPos);  //test
                 obj->Angle[2] = TurnAngle2(obj->Angle[2], Angle, 8.0f * FPS_ANIMATION_FACTOR);

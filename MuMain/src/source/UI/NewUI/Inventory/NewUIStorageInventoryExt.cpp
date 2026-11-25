@@ -376,7 +376,7 @@ void CNewUIStorageInventoryExt::SetItemAutoMove(bool bItemAutoMove, int nSourceI
 
 int CNewUIStorageInventoryExt::FindEmptySlot(const ITEM* pItemObj) const
 {
-    if (pItemObj == nullptr || pItemObj->Type < 0 || pItemObj->Type >= MAX_ITEMS)
+    if (pItemObj == nullptr || pItemObj->Type < 0 || pItemObj->Type >= MAX_ITEM)
         return -1;
 
     const ITEM_ATTRIBUTE* pItemAttr = &ItemAttribute[pItemObj->Type];

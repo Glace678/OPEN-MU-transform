@@ -643,7 +643,7 @@ bool OpenTerrainHeight(wchar_t* filename)
     wchar_t   NewFileName[256] = {};
 
     const size_t maxCopy = std::size(NewFileName) - 1;
-    for (size_t i = 0; filename[i] != L'\0' && i < maxCopy; i++)
+    for (size_t i = 0; i < maxCopy && filename[i] != L'\0'; i++)
     {
         NewFileName[i]     = filename[i];
         NewFileName[i + 1] = L'\0';
@@ -788,7 +788,7 @@ bool OpenTerrainHeightNew(const wchar_t* strFilename)
     wchar_t NewFileName[256] = {};
 
     const size_t maxCopy = std::size(NewFileName) - 1;
-    for (size_t i = 0; strFilename[i] != L'\0' && i < maxCopy; ++i)
+    for (size_t i = 0; i < maxCopy && strFilename[i] != L'\0'; ++i)
     {
         NewFileName[i]     = strFilename[i];
         NewFileName[i + 1] = L'\0';

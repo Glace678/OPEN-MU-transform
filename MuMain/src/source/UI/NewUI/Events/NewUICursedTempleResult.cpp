@@ -266,11 +266,11 @@ void SEASON3B::CNewUICursedTempleResult::RenderTextLine(const CursedTempleGameRe
     DrawText(Text, x + 5, y, color, backcolor, RT3_SORT_LEFT, 0, false);
 
     memset(&Text, 0, sizeof(wchar_t) * 200);
-    mu_swprintf(Text, resultinfo.s_characterId);
+    mu_swprintf(Text, L"%ls", resultinfo.s_characterId);
     DrawText(Text, x + 56, y, color, backcolor, RT3_SORT_LEFT, 0, false);
 
     memset(&Text, 0, sizeof(wchar_t) * 200);
-    mu_swprintf(Text, gCharacterManager.GetCharacterClassText(resultinfo.s_class));
+    mu_swprintf(Text, L"%ls", gCharacterManager.GetCharacterClassText(resultinfo.s_class));
     DrawText(Text, x + 106, y, color, backcolor, RT3_SORT_LEFT, 0, false);
 
     memset(&Text, 0, sizeof(wchar_t) * 200);

@@ -5,6 +5,9 @@
 
 #include <cmath>
 #include <cwchar>
+#ifndef _WIN32
+#include <poll.h>
+#endif
 
 #include "Network/Server/WSclient.h"     // SocketClient, CreateSocket, DeleteSocket,
                                          // ResetClientToLoginScene, protocol states
@@ -27,6 +30,31 @@ constexpr double RETRY_INTERVAL_MS  = 5000.0;   // gap between re-login retries
 constexpr int    STEP_COUNT         = 4;        // progress-bar steps
 
 const uintptr_t NO_PROBE = static_cast<uintptr_t>(~0ull);  // == INVALID_SOCKET
+
+enum class ProbeStatus { Pending, Ready, Failed };
+
+ProbeStatus GetProbeStatus(SOCKET socket)
+{
+#ifdef _WIN32
+    fd_set writeSet;
+    fd_set errorSet;
+    FD_ZERO(&writeSet);
+    FD_ZERO(&errorSet);
+    FD_SET(socket, &writeSet);
+    FD_SET(socket, &errorSet);
+    timeval immediate = {};
+    const int ready = select(0, nullptr, &writeSet, &errorSet, &immediate);
+    if (ready < 0 || (ready > 0 && FD_ISSET(socket, &errorSet)))
+        return ProbeStatus::Failed;
+    return ready > 0 && FD_ISSET(socket, &writeSet) ? ProbeStatus::Ready : ProbeStatus::Pending;
+#else
+    pollfd descriptor{socket, POLLOUT, 0};
+    const int ready = poll(&descriptor, 1, 0);
+    if (ready < 0 || (descriptor.revents & (POLLERR | POLLHUP | POLLNVAL)))
+        return ProbeStatus::Failed;
+    return descriptor.revents & POLLOUT ? ProbeStatus::Ready : ProbeStatus::Pending;
+#endif
+}
 }
 
 extern double  WorldTime;
@@ -295,25 +323,15 @@ void ReconnectManager::PollProbe()
 {
     const SOCKET probe = static_cast<SOCKET>(m_probeSocket);
 
-    fd_set writeSet;
-    fd_set errorSet;
-    FD_ZERO(&writeSet);
-    FD_ZERO(&errorSet);
-    FD_SET(probe, &writeSet);
-    FD_SET(probe, &errorSet);
-
-    timeval immediate = {};
-    // POSIX needs nfds = highest fd + 1; Windows ignores the first argument.
-    select(static_cast<int>(probe + 1), nullptr, &writeSet, &errorSet, &immediate);
-
-    if (FD_ISSET(probe, &writeSet))
+    const auto status = GetProbeStatus(probe);
+    if (status == ProbeStatus::Ready)
     {
         int       soError = 0;
         socklen_t len     = sizeof(soError);
-        getsockopt(probe, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&soError), &len);
+        const int result = getsockopt(probe, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&soError), &len);
         CloseProbe();
 
-        if (soError == 0)
+        if (result == 0 && soError == 0)
         {
             // Server is up - defer to Begin() (called by the main loop each
             // frame) to tear down and re-login between frames.
@@ -326,7 +344,7 @@ void ReconnectManager::PollProbe()
         return;
     }
 
-    if (FD_ISSET(probe, &errorSet) || (WorldTime - m_probeStartTime) > PROBE_TIMEOUT_MS)
+    if (status == ProbeStatus::Failed || (WorldTime - m_probeStartTime) > PROBE_TIMEOUT_MS)
     {
         CloseProbe();
         EnterPhase(Phase::Probing);

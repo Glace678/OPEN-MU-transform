@@ -322,7 +322,7 @@ bool CNewUIInventoryActionController::HandleInventoryRightClickActions(CNewUIInv
 
 int CNewUIInventoryActionController::FindAlternateEquipSlot(int nOriginalSlot, ITEM* pItem) const
 {
-    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEMS)
+    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEM)
     {
         return -1;
     }
@@ -361,7 +361,7 @@ bool CNewUIInventoryActionController::IsSlotOccupied(int nSlot) const
 bool CNewUIInventoryActionController::TryEquipItem(CNewUIInventoryCtrl* targetControl, ITEM* pItem, int iSrcIndex) const
 {
     if (targetControl == nullptr || m_pContext == nullptr || pItem == nullptr || pItem->Type < 0 ||
-        pItem->Type >= MAX_ITEMS)
+        pItem->Type >= MAX_ITEM)
     {
         return false;
     }
@@ -994,7 +994,7 @@ bool CNewUIInventoryActionController::TryTransferBetweenInventorySections(CNewUI
     }
 
     ITEM* pItem = sourceControl->FindItemAtPt(MouseX, MouseY);
-    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEMS)
+    if (pItem == nullptr || pItem->Type < 0 || pItem->Type >= MAX_ITEM)
     {
         return false;
     }

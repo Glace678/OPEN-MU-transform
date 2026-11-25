@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <span>
+
 namespace SEASON3A
 {
 class CMixItem
@@ -189,11 +191,11 @@ public:
     BOOL        IsMixSource(ITEM* pItem);
     MIX_RECIPE* GetCurRecipe();
     int         GetCurMixID();
-    BOOL        GetCurRecipeName(wchar_t* pszNameOut, int iNameLine);
-    BOOL        GetCurRecipeDesc(wchar_t* pszDescOut, int iDescLine);
+    BOOL        GetCurRecipeName(std::span<wchar_t> pszNameOut, int iNameLine);
+    BOOL        GetCurRecipeDesc(std::span<wchar_t> pszDescOut, int iDescLine);
     MIX_RECIPE* GetMostSimilarRecipe();
-    BOOL        GetMostSimilarRecipeName(wchar_t* pszNameOut, int iNameLine);
-    BOOL        GetRecipeAdvice(wchar_t* pszAdviceOut, int iAdivceLine);
+    BOOL        GetMostSimilarRecipeName(std::span<wchar_t> pszNameOut, int iNameLine);
+    BOOL        GetRecipeAdvice(std::span<wchar_t> pszAdviceOut, int iAdivceLine);
     int         GetSourceName(int iItemNum, wchar_t* pszNameOut, int iNumMixItems, CMixItem* pMixItems);
     BOOL        IsReadyToMix() { return (m_iCurMixIndex > 0); }
     int         GetSuccessRate() { return m_iSuccessRate; }
@@ -230,7 +232,7 @@ protected:
     void EvaluateMixItems(int iNumMixItems, CMixItem* pMixItems);
     void CalcMixRate(int iNumMixItems, CMixItem* pMixItems);
     void CalcMixReqZen(int iNumMixItems, CMixItem* pMixItems);
-    BOOL GetRecipeName(MIX_RECIPE* pRecipe, wchar_t* pszNameOut, int iNameLine,
+    BOOL GetRecipeName(MIX_RECIPE* pRecipe, std::span<wchar_t> pszNameOut, int iNameLine,
                        BOOL bSimilarRecipe);  // 주어진 조합법의 이름 얻기
     BOOL IsChaosItem(CMixItem& rSource);
     BOOL IsChaosJewel(CMixItem& rSource);
@@ -315,20 +317,20 @@ public:
     int         GetSuccessRate() { return m_MixRecipe[GetMixInventoryType()].GetSuccessRate(); }
     int         GetReqiredZen() { return m_MixRecipe[GetMixInventoryType()].GetReqiredZen(); }
     int         GetCurMixID() { return m_MixRecipe[GetMixInventoryType()].GetCurMixID(); }
-    BOOL        GetCurRecipeName(wchar_t* pszNameOut, int iNameLine)
+    BOOL        GetCurRecipeName(std::span<wchar_t> pszNameOut, int iNameLine)
     {
         return m_MixRecipe[GetMixInventoryType()].GetCurRecipeName(pszNameOut, iNameLine);
     }
-    BOOL GetCurRecipeDesc(wchar_t* pszDescOut, int iDescLine)
+    BOOL GetCurRecipeDesc(std::span<wchar_t> pszDescOut, int iDescLine)
     {
         return m_MixRecipe[GetMixInventoryType()].GetCurRecipeDesc(pszDescOut, iDescLine);
     }
     MIX_RECIPE* GetMostSimilarRecipe() { return m_MixRecipe[GetMixInventoryType()].GetMostSimilarRecipe(); }
-    BOOL        GetMostSimilarRecipeName(wchar_t* pszNameOut, int iNameLine)
+    BOOL        GetMostSimilarRecipeName(std::span<wchar_t> pszNameOut, int iNameLine)
     {
         return m_MixRecipe[GetMixInventoryType()].GetMostSimilarRecipeName(pszNameOut, iNameLine);
     }
-    BOOL GetRecipeAdvice(wchar_t* pszAdviceOut, int iAdivceLine)
+    BOOL GetRecipeAdvice(std::span<wchar_t> pszAdviceOut, int iAdivceLine)
     {
         return m_MixRecipe[GetMixInventoryType()].GetRecipeAdvice(pszAdviceOut, iAdivceLine);
     }
