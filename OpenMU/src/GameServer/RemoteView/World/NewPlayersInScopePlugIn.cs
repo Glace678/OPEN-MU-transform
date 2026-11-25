@@ -149,13 +149,14 @@ public class NewPlayersInScopePlugIn : INewPlayersInScopePlugIn
         var newPlayerList = newPlayers.ToList();
         foreach (var newPlayer in newPlayerList)
         {
-            if (newPlayer.Attributes?[Stats.TransformationSkin] == 0)
+            var skin = (ushort)(newPlayer.Attributes?[Stats.TransformationSkin] ?? 0);
+            if (skin == 0)
             {
                 await this.SendCharacterAsync(newPlayer, isSpawned).ConfigureAwait(false);
             }
             else
             {
-                await this.SendTransformedCharacterAsync(newPlayer, isSpawned).ConfigureAwait(false);
+                await this.SendTransformedCharacterAsync(newPlayer, isSpawned, skin).ConfigureAwait(false);
             }
 
             if (newPlayer.ShopStorage?.StoreOpen ?? false)
@@ -172,7 +173,7 @@ public class NewPlayersInScopePlugIn : INewPlayersInScopePlugIn
         return (shopPlayers, guildPlayers);
     }
 
-    private async ValueTask SendTransformedCharacterAsync(Player newPlayer, bool isSpawned)
+    private async ValueTask SendTransformedCharacterAsync(Player newPlayer, bool isSpawned, ushort skin)
     {
         var connection = this.Player.Connection;
         if (connection is null)
@@ -188,12 +189,16 @@ public class NewPlayersInScopePlugIn : INewPlayersInScopePlugIn
 
         int Write()
         {
+            const int standardAppearanceSize = 18;
             var appearanceSerializer = this.Player.AppearanceSerializer;
             var activeEffects = newPlayer.MagicEffectList.VisibleEffects;
-            const int estimatedEffectsPerPlayer = 5;
-            var estimatedSizePerCharacter = AddTransformedCharactersToScopeRef.CharacterDataRef.GetRequiredSize(Math.Max(estimatedEffectsPerPlayer, activeEffects.Count));
-            var estimatedSize = AddTransformedCharactersToScopeRef.GetRequiredSize(1, estimatedSizePerCharacter);
-            var span = connection.Output.GetSpan(estimatedSize)[..estimatedSize];
+            var effectCount = Math.Min(activeEffects.Count, byte.MaxValue);
+            var appearanceSize = appearanceSerializer.NeededSpace;
+            var characterSize = AddTransformedCharactersToScopeRef.CharacterDataRef.GetRequiredSize(effectCount)
+                                - standardAppearanceSize + appearanceSize;
+            var size = AddTransformedCharactersToScopeRef.GetRequiredSize(1, characterSize);
+            var span = connection.Output.GetSpan(size)[..size];
+            span.Clear();
             var packet = new AddTransformedCharactersToScopeRef(span)
             {
                 CharacterCount = 1,
@@ -209,7 +214,6 @@ public class NewPlayersInScopePlugIn : INewPlayersInScopePlugIn
             playerBlock.CurrentPositionX = newPlayer.Position.X;
             playerBlock.CurrentPositionY = newPlayer.Position.Y;
 
-            appearanceSerializer.WriteAppearanceData(playerBlock.Appearance, newPlayer.AppearanceData, true); // 4 ... 21
             playerBlock.Name = selectedCharacter.Name;
             if (newPlayer.IsWalking)
             {
@@ -225,19 +229,19 @@ public class NewPlayersInScopePlugIn : INewPlayersInScopePlugIn
             playerBlock.Rotation = newPlayer.Rotation.ToPacketByte();
             playerBlock.HeroState = selectedCharacter.State.Convert();
 
-            playerBlock.EffectCount = (byte)activeEffects.Count;
-            playerBlock.Skin = (ushort)newPlayer.Attributes![Stats.TransformationSkin];
-            for (int e = playerBlock.EffectCount - 1; e >= 0; e--)
+            playerBlock.Skin = skin;
+
+            // The record prefix is shared. Extended clients read 27 appearance bytes before the effect count.
+            var appearanceAndEffects = span[^(appearanceSize + 1 + effectCount)..];
+            appearanceSerializer.WriteAppearanceData(appearanceAndEffects[..appearanceSize], newPlayer.AppearanceData, true);
+            appearanceAndEffects[appearanceSize] = (byte)effectCount;
+            for (var i = 0; i < effectCount; i++)
             {
-                var effectBlock = playerBlock[e];
-                effectBlock.Id = (byte)activeEffects[e].Id;
+                appearanceAndEffects[appearanceSize + 1 + i] = (byte)activeEffects[i].Id;
             }
 
-            // The calculation of the final size is not a requirement, but we do it to save some traffic.
-            // The original server also doesn't send more bytes than necessary.
-            var finalSize = packet.FinalSize;
-            span.Slice(0, finalSize).SetPacketSize();
-            return finalSize;
+            span.SetPacketSize();
+            return span.Length;
         }
 
         await connection.SendAsync(Write).ConfigureAwait(false);

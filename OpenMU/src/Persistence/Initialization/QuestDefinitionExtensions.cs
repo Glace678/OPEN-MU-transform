@@ -138,6 +138,7 @@ internal static class QuestDefinitionExtensions
     /// <param name="hasSkill">If set to <c>true</c>, the item must have skill.</param>
     /// <param name="itemCount">The item count, default 1.</param>
     /// <returns>This quest definition.</returns>
+    /// <remarks>Durability, level, and option arguments are retained for existing initializer callers. The requirement stores the item type and count.</remarks>
     public static QuestDefinition WithItemRequirement(
         this QuestDefinition questDefinition,
         int itemGroup,
@@ -153,31 +154,7 @@ internal static class QuestDefinitionExtensions
     {
         var requirement = context.CreateNew<QuestItemRequirement>();
         requirement.MinimumNumber = itemCount;
-        var item = context.CreateNew<Item>();
-        item.Definition = gameConfiguration.Items.First(def => def.Group == itemGroup && def.Number == itemNumber);
-        item.HasSkill = item.Definition.Skill != null && hasSkill;
-        item.Durability = durability;
-        item.Level = itemLevel;
-        if (hasLuck
-            && item.Definition.PossibleItemOptions.SelectMany(o => o.PossibleOptions)
-                .FirstOrDefault(o => o.OptionType == ItemOptionTypes.Luck) is { } luckOption)
-        {
-            var optionLink = context.CreateNew<ItemOptionLink>();
-            optionLink.ItemOption = luckOption;
-            item.ItemOptions.Add(optionLink);
-        }
-
-        if (itemOption > 0
-            && item.Definition.PossibleItemOptions.SelectMany(o => o.PossibleOptions)
-                .FirstOrDefault(o => o.OptionType == ItemOptionTypes.Option) is { } optionOption)
-        {
-            var optionLink = context.CreateNew<ItemOptionLink>();
-            optionLink.ItemOption = optionOption;
-            optionLink.Level = itemOption / 4;
-            item.ItemOptions.Add(optionLink);
-        }
-
-        requirement.Item = item.Definition; // TODO?
+        requirement.Item = gameConfiguration.Items.First(def => def.Group == itemGroup && def.Number == itemNumber);
 
         questDefinition.RequiredItems.Add(requirement);
         return questDefinition;
