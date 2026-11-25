@@ -1,4 +1,4 @@
-﻿// <copyright file="OpenMuServerManagerTests.cs" company="MUnique">
+// <copyright file="OpenMuServerManagerTests.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -24,6 +24,17 @@ public class OpenMuServerManagerTests
         this._paths = new LocalPaths(this._directory);
         Directory.CreateDirectory(this._paths.ServerDirectory);
         File.Copy(WaitExecutable, this._paths.ServerExecutable);
+        if (!OperatingSystem.IsWindows())
+        {
+            // File.Copy does not preserve the execute bit on every Unix filesystem; without it
+            // Process.Start cannot launch the copied stand-in and the test would race against
+            // an immediately exiting process.
+            File.SetUnixFileMode(
+                this._paths.ServerExecutable,
+                UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute
+                | UnixFileMode.GroupRead | UnixFileMode.GroupExecute
+                | UnixFileMode.OtherRead | UnixFileMode.OtherExecute);
+        }
     }
 
     /// <summary>Removes the isolated package directory.</summary>
