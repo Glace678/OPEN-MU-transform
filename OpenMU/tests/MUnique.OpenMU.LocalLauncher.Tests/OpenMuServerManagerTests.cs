@@ -120,7 +120,7 @@ public class OpenMuServerManagerTests
     }
 
     private static string WaitExecutable => OperatingSystem.IsWindows()
-        ? Path.Combine(Environment.SystemDirectory, "ping.exe") : "/bin/sleep";
+        ? Path.Combine(Environment.SystemDirectory, "ping.exe") : "/bin/dash";
 
     private static Process StartWaiting(string executable)
     {
@@ -136,7 +136,10 @@ public class OpenMuServerManagerTests
         }
         else
         {
-            startInfo.ArgumentList.Add("60");
+            // A shell is less dependent on argv[0] than coreutils applets and stays alive
+            // for the whole test; the child sleep keeps it from exiting early.
+            startInfo.ArgumentList.Add("-c");
+            startInfo.ArgumentList.Add("sleep 60");
         }
         return Process.Start(startInfo) ?? throw new InvalidOperationException("Could not start the test process.");
     }

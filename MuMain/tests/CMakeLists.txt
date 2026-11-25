@@ -58,6 +58,21 @@ function(mu_add_test)
     cmake_parse_arguments(MAT "" "NAME" "SOURCES;LINK_LIBS" ${ARGN})
     add_executable(${MAT_NAME} ${MAT_SOURCES})
     target_link_libraries(${MAT_NAME} PRIVATE mu_test_main ${MAT_LINK_LIBS})
+    if(MINGW)
+        # The -posix thread model imports libwinpthread-1.dll; wine does not search the
+        # compiler's runtime directory, so place it next to each test executable.
+        if(NOT DEFINED MINGW_WINPTHREAD_DLL)
+            execute_process(
+                COMMAND "${CMAKE_CXX_COMPILER}" -print-file-name=libwinpthread-1.dll
+                OUTPUT_VARIABLE MINGW_WINPTHREAD_DLL
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
+        endif()
+        if(EXISTS "${MINGW_WINPTHREAD_DLL}")
+            add_custom_command(TARGET ${MAT_NAME} POST_BUILD
+                COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+                    "${MINGW_WINPTHREAD_DLL}" "$<TARGET_FILE_DIR:${MAT_NAME}>")
+        endif()
+    endif()
     target_include_directories(${MAT_NAME} PRIVATE
         ${CMAKE_SOURCE_DIR}/src/source
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/doctest

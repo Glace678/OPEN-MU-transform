@@ -21,9 +21,6 @@ set(CMAKE_FIND_ROOT_PATH /usr/i686-w64-mingw32)
 # Prefer static GCC runtimes to avoid shipping libgcc_s_dw2-1.dll / libstdc++-6.dll
 set(CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_EXE_LINKER_FLAGS_INIT} -static-libgcc -static-libstdc++")
 set(CMAKE_SHARED_LINKER_FLAGS_INIT "${CMAKE_SHARED_LINKER_FLAGS_INIT} -static-libgcc -static-libstdc++")
-# The -posix thread model links libwinpthread dynamically by default; link it statically
-# so test and client executables stay self-contained under wine.
-set(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -Wl,--whole-archive -lwinpthread -Wl,--no-whole-archive")
 
 # Only search libraries and headers in the target environment
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)

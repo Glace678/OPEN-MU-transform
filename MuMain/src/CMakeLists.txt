@@ -465,6 +465,18 @@ else()
 endif()
 target_compile_features(Main PUBLIC cxx_std_20)
 target_link_libraries(Main PRIVATE MuClient::MuClient)
+if(MINGW)
+  # The POSIX thread model imports this runtime DLL; ship it next to the client.
+  execute_process(
+    COMMAND "${CMAKE_CXX_COMPILER}" -print-file-name=libwinpthread-1.dll
+    OUTPUT_VARIABLE MINGW_MAIN_WINPTHREAD_DLL
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  if(EXISTS "${MINGW_MAIN_WINPTHREAD_DLL}")
+    add_custom_command(TARGET Main POST_BUILD
+      COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+        "${MINGW_MAIN_WINPTHREAD_DLL}" "$<TARGET_FILE_DIR:Main>")
+  endif()
+endif()
 
 # Static analysis / sanitizers attach to the engine library and the entry-point
 # executable only. Vendored third-party (SDL, SDL_mixer, imgui) is deliberately
