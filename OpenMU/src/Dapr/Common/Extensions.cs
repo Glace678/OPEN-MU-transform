@@ -263,7 +263,7 @@ public static class Extensions
     /// <param name="builder">The builder.</param>
     /// <param name="addBlazor">If set to <c>true</c>, it configures the application to provide a blazor server app.</param>
     /// <returns>The built and configured web application.</returns>
-    public static WebApplication BuildAndConfigure(this WebApplicationBuilder builder, bool addBlazor = false, bool internalTokenGate = true)
+    public static WebApplication BuildAndConfigure(this WebApplicationBuilder builder, bool addBlazor = false, bool internalTokenGate = true, IReadOnlyCollection<string>? internalTokenPaths = null)
     {
         var pathBase = Environment.GetEnvironmentVariable("PATH_BASE");
         var useReverseProxy = !string.IsNullOrWhiteSpace(pathBase);
@@ -324,7 +324,7 @@ public static class Extensions
             app.UseForwardedHeaders();
         }
 
-        app.ConfigureDaprService(addBlazor, internalTokenGate);
+        app.ConfigureDaprService(addBlazor, internalTokenGate, internalTokenPaths);
         app.MapPrometheusScrapingEndpoint();
 
         return app;
@@ -336,7 +336,7 @@ public static class Extensions
     /// <param name="app">The application.</param>
     /// <param name="addBlazor">If set to <c>true</c>, it configures the application to provide a blazor server app.</param>
     /// <returns>The configured web application.</returns>
-    public static WebApplication ConfigureDaprService(this WebApplication app, bool addBlazor = false, bool internalTokenGate = true)
+    public static WebApplication ConfigureDaprService(this WebApplication app, bool addBlazor = false, bool internalTokenGate = true, IReadOnlyCollection<string>? internalTokenPaths = null)
     {
         if (app.Environment.IsDevelopment())
         {
@@ -386,7 +386,10 @@ public static class Extensions
             // token. Previously only MVC controller actions were checked, which left the Razor
             // live-map pages reachable through the reverse proxy without authorization. Endpoints
             // which must be public (e.g. server info) opt out with [AllowAnonymous].
+            var isGatedInternalPath = internalTokenPaths is null
+                || internalTokenPaths.Any(gatedPath => path.StartsWithSegments(gatedPath));
             if (!isInfrastructure
+                && isGatedInternalPath
                 && DaprEndpointSecurity.RequiresAuthorization(context)
                 && !DaprEndpointSecurity.IsAuthorized(context, appApiToken))
             {

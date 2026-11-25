@@ -140,7 +140,7 @@ internal partial class NpcInitialization
 
             this.ItemHelper.CreateWeapon(72, ItemGroups.Swords, 0, 2, 1, true, false, null),  // Kris             +2+4+L
             this.ItemHelper.CreateWeapon(73, ItemGroups.Swords, 6, 3, 1, true, true, null),   // Gladius          +3+4+L+S
-            this.ItemHelper.CreateWeapon(73, ItemGroups.Swords, 7, 3, 1, true, true, null),   // Falchion         +3+4+L+S
+            this.ItemHelper.CreateWeapon(76, ItemGroups.Swords, 7, 3, 1, true, true, null),   // Falchion         +3+4+L+S
             this.ItemHelper.CreateWeapon(74, ItemGroups.Swords, 8, 3, 1, true, false, null),  // Serpent Sword    +3+4+L
             this.ItemHelper.CreateWeapon(75, ItemGroups.Swords, 5, 3, 1, true, true, null),   // Blade            +3+4+L+S
         };

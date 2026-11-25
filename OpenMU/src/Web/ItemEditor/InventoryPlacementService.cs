@@ -27,6 +27,14 @@ public sealed class InventoryPlacementService
     }
 
     /// <summary>
+    /// Finds a free slot for an item which has not been created in the persistence context yet.
+    /// This prevents leaving a tracked, unsaved item behind when the storage is full.
+    /// </summary>
+    /// <param name="existingItems">The items already occupying the storage.</param>
+    /// <returns>The free slot, or <c>null</c> if the storage is full.</returns>
+    public byte? FindFreeSlotForNewItem(IEnumerable<Item> existingItems) => this.FindFirstEmptySlot(existingItems);
+
+    /// <summary>
     /// Finds the first available slot where the item can be placed.
     /// </summary>
     /// <param name="item">The item to place.</param>

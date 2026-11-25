@@ -191,16 +191,19 @@
     {
         if (this.Value is { } itemStorage)
         {
-            var item = this.PersistenceContext.CreateNew<Item>();
-            var freeSlot = this._placementService!.FindFreeSlot(item, itemStorage.Items);
-            
+            var freeSlot = this._placementService!.FindFreeSlotForNewItem(itemStorage.Items);
             if (freeSlot is { } slot)
             {
+                var item = this.PersistenceContext.CreateNew<Item>();
                 item.ItemSlot = slot;
                 itemStorage.Items.Add(item);
                 this._selectedItem = item;
             }
-            
+            else
+            {
+                this._selectedItem = null;
+            }
+
             await this.InvokeAsync(this.StateHasChanged);
         }
     }

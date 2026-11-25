@@ -28,11 +28,16 @@ public class AddCaseInsensitiveLoginNameIndex : Migration
             DECLARE
                 conflicts text;
             BEGIN
-                SELECT string_agg(format('%s (%sx)', lower("LoginName"), count), ', ')
+                SELECT string_agg(format('%s (%sx)', normalized_name, account_count),
+                                  ', ' ORDER BY normalized_name)
                 INTO conflicts
-                FROM data."Account"
-                GROUP BY lower("LoginName")
-                HAVING count(*) > 1;
+                FROM (
+                    SELECT lower("LoginName") AS normalized_name,
+                           count(*) AS account_count
+                    FROM data."Account"
+                    GROUP BY lower("LoginName")
+                    HAVING count(*) > 1
+                ) AS duplicate_names;
 
                 IF conflicts IS NOT NULL THEN
                     RAISE EXCEPTION 'Cannot create the case-insensitive login name index: duplicate accounts exist for %', conflicts;

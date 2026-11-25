@@ -1,4 +1,4 @@
-﻿// <copyright file="Program.cs" company="MUnique">
+// <copyright file="Program.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -38,10 +38,13 @@ var metricsRegistry = new MetricsRegistry();
 builder.AddOpenTelemetryMetrics(metricsRegistry);
 
 // The admin panel is browser-facing: its pages, interactive circuits and own UI APIs are
-// protected by the admin cookie session and the role policies. The internal Dapr token gate
-// must not run in front of them, otherwise every proxied browser request would be rejected
-// before the cookie authentication has a chance to run.
-var app = builder.BuildAndConfigure(false, internalTokenGate: false);
+// protected by the admin cookie session and the role policies. The Dapr token gate is
+// therefore limited to the internal pub/sub callback endpoints, which are called by the
+// sidecar and carry the APP_API_TOKEN.
+var app = builder.BuildAndConfigure(
+    false,
+    internalTokenGate: true,
+    internalTokenPaths: ["/" + ManagableServerStatePublisher.TopicName]);
 
 // Align the Dapr-hosted admin panel with the shared ConfigureAdminPanel pipeline.
 // BuildAndConfigure only wires the generic Dapr middleware; without these the panel

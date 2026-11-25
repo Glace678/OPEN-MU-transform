@@ -174,6 +174,37 @@ if not MANIFEST.is_file():
     print(f"manifest.json not found: {MANIFEST}", file=sys.stderr)
     raise SystemExit(2)
 
+# Read the old manifest and signature before touching the live deployment. A signed
+# manifest requires the signing key and signer up front; otherwise we must fail while
+# the server is still running and the deployment directory is unchanged.
+try:
+    previous_manifest_bytes = MANIFEST.read_bytes()
+    if SIGNATURE.is_file():
+        previous_signature_bytes = SIGNATURE.read_bytes()
+except Exception as error:
+    print(f"could not read the current manifest or signature: {error}", file=sys.stderr)
+    raise SystemExit(2)
+
+if previous_signature_bytes is not None:
+    if not os.environ.get(SIGNING_KEY_ENV):
+        print(
+            f"{MANIFEST} is signed ({SIGNATURE.name} exists) but {SIGNING_KEY_ENV} is not set. "
+            f"Point it to the offline manifest signing key so the new manifest can be signed.",
+            file=sys.stderr)
+        raise SystemExit(2)
+    if not SIGNER_SCRIPT.is_file():
+        print(f"manifest signer not found: {SIGNER_SCRIPT}", file=sys.stderr)
+        raise SystemExit(2)
+
+try:
+    manifest = json.loads(previous_manifest_bytes.decode("utf-8"))
+except Exception as error:
+    print(f"invalid manifest.json: {error}", file=sys.stderr)
+    raise SystemExit(2)
+if not isinstance(manifest.get("files"), list):
+    print("invalid manifest.json: missing 'files' array", file=sys.stderr)
+    raise SystemExit(2)
+
 # 1. Stop the stack.
 if not stop_server():
     print("aborting deploy because server processes did not terminate cleanly", file=sys.stderr)
@@ -205,33 +236,13 @@ for name in FILES:
         rollback(f"copying {name}")
     print("copied", name)
 
-# 3. Sync the manifest.
-try:
-    previous_manifest_bytes = MANIFEST.read_bytes()
-    manifest = json.loads(previous_manifest_bytes.decode("utf-8"))
-    if SIGNATURE.is_file():
-        previous_signature_bytes = SIGNATURE.read_bytes()
-except Exception:
-    rollback("reading manifest.json")
-
-# A signed distribution must be re-signed whenever the manifest changes; otherwise the launcher
-# rejects the new manifest at the next start (fail-closed). Refuse before stopping the server.
-if previous_signature_bytes is not None and not os.environ.get(SIGNING_KEY_ENV):
-    print(
-        f"{MANIFEST} is signed ({SIGNATURE.name} exists) but {SIGNING_KEY_ENV} is not set. "
-        f"Point it to the offline manifest signing key so the new manifest can be signed.",
-        file=sys.stderr)
-    raise SystemExit(2)
-
+# 3. Sync the manifest (already parsed and validated before the server was stopped).
 backup = MANIFEST.with_name(f"manifest.json.bak-{stamp}")
 try:
     shutil.copy2(MANIFEST, backup)
     print("manifest backup:", backup.name)
 except Exception:
     rollback("backing up manifest.json")
-
-if not isinstance(manifest.get("files"), list):
-    rollback("invalid manifest.json: missing 'files' array")
 
 entries = {}
 for file_entry in manifest["files"]:

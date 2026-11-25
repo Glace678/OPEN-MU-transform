@@ -105,10 +105,10 @@ public unsafe partial class ConnectionManager
     }
 
     /// <summary>
-    /// Upper bound for the UTF-8 encoded message body: the C1 length byte allows 255 bytes and
-    /// the name field takes ten of them plus the three byte header.
+    /// Upper bound for the UTF-8 encoded message body: the C1 length byte allows 255 bytes, the
+    /// three byte header and ten byte name field take 13, and the trailing terminator takes one more.
     /// </summary>
-    private const int MaxChatMessageBytes = 255 - 13;
+    private const int MaxChatMessageBytes = byte.MaxValue - 14;
 
     /// <summary>
     /// Cuts a chat message at a complete UTF-16 character boundary so the encoded packet stays

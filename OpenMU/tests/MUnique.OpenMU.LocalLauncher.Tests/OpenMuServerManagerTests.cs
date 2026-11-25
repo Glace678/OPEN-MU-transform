@@ -1,4 +1,4 @@
-// <copyright file="OpenMuServerManagerTests.cs" company="MUnique">
+﻿// <copyright file="OpenMuServerManagerTests.cs" company="MUnique">
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 // </copyright>
 
@@ -51,7 +51,7 @@ public class OpenMuServerManagerTests
             await manager.StopAsync(force: true, timeout.Token);
             await shutdownResponse;
 
-            Assert.That(process.HasExited, Is.True);
+            Assert.That(process.WaitForExit(5000), Is.True, "the force-stopped process should terminate");
         }
         finally
         {

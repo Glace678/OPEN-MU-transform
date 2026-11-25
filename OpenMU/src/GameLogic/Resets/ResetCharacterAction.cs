@@ -125,6 +125,18 @@ public class ResetCharacterAction
         await this._player.InvokeViewPlugInAsync<IShowMessageOfObjectPlugIn>(p => p.ShowMessageOfObjectAsync(message, this._npc)).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Remembers what a reset cost deduction changed, without creating a tracked persistence entity.
+    /// </summary>
+    /// <param name="Item">The consumed item.</param>
+    /// <param name="OriginalDurability">The durability before the deduction.</param>
+    /// <param name="WasRemovedWhole">True when the whole item stack was removed, false when only part of it was consumed.</param>
+    private sealed record ConsumedResetCost(Item Item, double OriginalDurability, bool WasRemovedWhole)
+    {
+        /// <summary>Gets the original item slot.</summary>
+        public byte OriginalSlot => this.Item.ItemSlot;
+    }
+
     private int GetResetCount()
     {
         return (int)this._player.Attributes![Stats.Resets];
@@ -152,7 +164,7 @@ public class ResetCharacterAction
         // Consume the items first and the money last, so a failure while removing an item can never
         // leave the player with the price paid but the items still missing. If anything below fails,
         // the already removed items are restored before the exception or the failure result is reported.
-        var consumedItems = new List<Item>();
+        var consumedItems = new List<ConsumedResetCost>();
         try
         {
             var remainingToConsume = resetProgression.RequiredItemAmount;
@@ -166,16 +178,14 @@ public class ResetCharacterAction
                 var itemUnits = GetStackUnitCount(item);
                 if (item.IsStackable() && itemUnits > remainingToConsume)
                 {
+                    consumedItems.Add(new ConsumedResetCost(item, item.Durability, false));
                     item.Durability -= (byte)remainingToConsume;
                     remainingToConsume = 0;
                     await this._player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
                 }
                 else
                 {
-                    var snapshot = this._player.PersistenceContext.CreateNew<Item>();
-                    snapshot.AssignValues(item);
-                    snapshot.ItemSlot = item.ItemSlot;
-                    consumedItems.Add(snapshot);
+                    consumedItems.Add(new ConsumedResetCost(item, item.Durability, true));
                     remainingToConsume -= itemUnits;
                     await this._player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
                 }
@@ -199,24 +209,31 @@ public class ResetCharacterAction
         return true;
     }
 
-    private async ValueTask RestoreConsumedItemsAsync(IEnumerable<Item> consumedItems)
+    private async ValueTask RestoreConsumedItemsAsync(IEnumerable<ConsumedResetCost> consumedCosts)
     {
-        foreach (var consumedItem in consumedItems)
+        foreach (var cost in consumedCosts)
         {
+            if (!cost.WasRemovedWhole)
+            {
+                cost.Item.Durability = cost.OriginalDurability;
+                await this._player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(cost.Item, false)).ConfigureAwait(false);
+                continue;
+            }
+
             var restoredItem = this._player.PersistenceContext.CreateNew<Item>();
-            restoredItem.AssignValues(consumedItem);
+            restoredItem.AssignValues(cost.Item);
             if (this._player.Inventory is { } inventory
-                && await inventory.AddItemAsync(consumedItem.ItemSlot, restoredItem).ConfigureAwait(false))
+                && await inventory.AddItemAsync(cost.OriginalSlot, restoredItem).ConfigureAwait(false))
             {
                 continue;
             }
 
             this._player.Logger.LogError(
                 "Reset rollback could not restore item {Definition} (level {Level}, durability {Durability}) in slot {Slot}.",
-                consumedItem.Definition?.Name,
-                consumedItem.Level,
-                consumedItem.Durability,
-                consumedItem.ItemSlot);
+                cost.Item.Definition?.Name,
+                cost.Item.Level,
+                cost.Item.Durability,
+                cost.OriginalSlot);
         }
     }
 
