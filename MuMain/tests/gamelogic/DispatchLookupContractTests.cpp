@@ -144,8 +144,15 @@ TEST_SUITE("DispatchLookupContract")
             {0xF3, 0x23, 22},  // GuildSoccerScoreUpdate
             {0xF3, 0x40, 7},   // ShowSwirl / server command
             {0xF3, 0x52, 28},  // MasterSkillLevelUpdate
+            {0xAA, 0x01, 17},  // DuelStartResult
+            {0xAA, 0x02, 16},  // DuelStartRequest
+            {0xAA, 0x03, 17},  // DuelEnd
             {0xAA, 0x04, 10},  // DuelScore
             {0xAA, 0x05, 12},  // DuelHealthUpdate
+            {0xAA, 0x07, 30},  // DuelInit
+            {0xAA, 0x08, 14},  // DuelSpectatorAdded
+            {0xAA, 0x0A, 14},  // DuelSpectatorRemoved
+            {0xAA, 0x0C, 24},  // DuelFinished
             {0xDE, 0x00, 5},   // CharacterClassCreationUnlock
         };
 

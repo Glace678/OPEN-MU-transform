@@ -207,10 +207,24 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
         case 0xAA:
             switch (subCode)
             {
+                case 0x01:  // DuelStartResult (17 bytes C1: header + SubCode + result + 2 byte index + 10 byte name)
+                    return 17 + headerDelta;
+                case 0x02:  // DuelStartRequest (16 bytes C1)
+                    return 16 + headerDelta;
+                case 0x03:  // DuelEnd (17 bytes C1)
+                    return 17 + headerDelta;
                 case 0x04:  // PRECEIVE_DUEL_SCORE / DuelScore (10 bytes C1)
                     return 10 + headerDelta;
                 case 0x05:  // PRECEIVE_DUEL_HEALTH / DuelHealthUpdate (12 bytes C1)
                     return 12 + headerDelta;
+                case 0x07:  // DuelInit (30 bytes C1)
+                    return 30 + headerDelta;
+                case 0x08:  // DuelSpectatorAdded (14 bytes C1)
+                    return 14 + headerDelta;
+                case 0x0A:  // DuelSpectatorRemoved (14 bytes C1)
+                    return 14 + headerDelta;
+                case 0x0C:  // DuelFinished (24 bytes C1: header + SubCode + two 10 byte names)
+                    return 24 + headerDelta;
                 default:
                     return minBytes;
             }
