@@ -213,6 +213,33 @@ public class DebouncerTests
     }
 
     /// <summary>
+    /// Verifies that a cancellation callback can dispose the debouncer without deadlocking.
+    /// </summary>
+    [Test]
+    public async Task Cancel_ReentrantDispose_DoesNotDeadlock()
+    {
+        using var debouncer = new Debouncer(1);
+        var started = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var cancelled = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        var pending = debouncer.DebounceAsync(async token =>
+        {
+            using var registration = token.Register(() =>
+            {
+                debouncer.Dispose();
+                cancelled.TrySetResult(true);
+            });
+            started.TrySetResult(true);
+            await cancelled.Task.ConfigureAwait(false);
+        });
+
+        await started.Task.WaitAsync(TimeSpan.FromSeconds(5));
+        await Task.Run(debouncer.Cancel).WaitAsync(TimeSpan.FromSeconds(5));
+        await pending.WaitAsync(TimeSpan.FromSeconds(5));
+        Assert.That(cancelled.Task.IsCompletedSuccessfully, Is.True);
+    }
+
+    /// <summary>
     /// Tests that disposing multiple times does not throw an exception.
     /// </summary>
     [Test]
