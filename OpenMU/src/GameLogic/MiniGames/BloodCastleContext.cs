@@ -247,8 +247,8 @@ public sealed class BloodCastleContext : MiniGameContext
         if (this._highScoreTable is { } table)
         {
             var isSuccessful = this._winner is not null;
-            var (name, score, bonusMoney, bonusExp) = table.First(t => t.Name == player.Name);
-            await player.InvokeViewPlugInAsync<IBloodCastleScoreTableViewPlugin>(p => p.ShowScoreTableAsync(isSuccessful, name, score, bonusExp, bonusMoney)).ConfigureAwait(false);
+            var score = table.First(t => t.Name == player.Name);
+            await player.InvokeViewPlugInAsync<IBloodCastleScoreTableViewPlugin>(p => p.ShowScoreTableAsync(isSuccessful, score.Name, score.Score, score.BonusExp, score.BonusMoney)).ConfigureAwait(false);
         }
     }
 

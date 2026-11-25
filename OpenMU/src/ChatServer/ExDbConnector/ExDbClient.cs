@@ -204,8 +204,8 @@ public class ExDbClient
         {
             roomId = NumberConversionExtensions.MakeWord(packet[4], packet[5]);
             clientName = packet.ExtractString(6, 10, Encoding.UTF8);
-            clientPlayerId = packet.TryMakeWordBigEndian(16);
-            clientServerId = packet.TryMakeWordBigEndian(18);
+            clientPlayerId = packet.TryMakeWordLittleEndian(16);
+            clientServerId = packet.TryMakeWordLittleEndian(18);
             type = packet.Length > 20 ? packet[20] : (byte)0x57;
         }
 
@@ -249,10 +249,10 @@ public class ExDbClient
         {
             clientName = packet.ExtractString(3, 10, Encoding.UTF8);
             friendName = packet.ExtractString(13, 10, Encoding.UTF8);
-            clientPlayerId = packet.TryMakeWordBigEndian(24);
-            clientServerId = packet.TryMakeWordBigEndian(26);
-            friendPlayerId = packet.TryMakeWordBigEndian(28);
-            friendServerId = packet.TryMakeWordBigEndian(30);
+            clientPlayerId = packet.TryMakeWordLittleEndian(24);
+            clientServerId = packet.TryMakeWordLittleEndian(26);
+            friendPlayerId = packet.TryMakeWordLittleEndian(28);
+            friendServerId = packet.TryMakeWordLittleEndian(30);
         }
 
         Extract(packet.Span);

@@ -310,7 +310,7 @@ public sealed class ChatServer : IChatServer, IDisposable, IConnectionSource
         var authenticationToken = new byte[4];
         this._randomNumberGenerator.GetBytes(authenticationToken, 1, 3);
         authenticationToken[0] = clientIndex;
-        var tokenValue = authenticationToken.MakeDwordBigEndian(0);
+        var tokenValue = authenticationToken.AsSpan().MakeDwordSmallEndian(0);
 
         // The wire field holds 10 ASCII digits. uint.MaxValue (4294967295) already has 10 digits,
         // so no padding is needed; the value range covers the full 10-digit-capable uint space.

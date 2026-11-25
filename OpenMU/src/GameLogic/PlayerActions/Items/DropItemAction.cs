@@ -25,6 +25,8 @@ public class DropItemAction
         var item = player.Inventory?.GetItem(slot);
 
         if (item is null
+            || player.PlayerState.CurrentState == PlayerState.TradeOpened
+            || player.PlayerState.CurrentState == PlayerState.TradeButtonPressed
             || !(player.CurrentMap?.Terrain.WalkMap[target.X, target.Y] ?? false))
         {
             await player.InvokeViewPlugInAsync<IItemDropResultPlugIn>(p => p.ItemDropResultAsync(slot, false)).ConfigureAwait(false);

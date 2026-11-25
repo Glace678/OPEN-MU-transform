@@ -73,7 +73,7 @@ public class BaseTradeAction
                     }
                 }
 
-                trader.Inventory.ItemStorage.Money = trader.BackupInventory.Money;
+                trader.Money = trader.BackupInventory.Money;
                 trader.BackupInventory = null;
             }
         }
@@ -90,7 +90,7 @@ public class BaseTradeAction
         trader.TradingMoney = 0;
         trader.TradingPartner = null;
         trader.BackupInventory = null;
-        trader.TemporaryStorage!.Clear();
+        trader.TemporaryStorage?.Clear();
     }
 
     /// <summary>

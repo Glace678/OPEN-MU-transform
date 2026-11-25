@@ -47,11 +47,6 @@ public class ApplyMagicEffectConsumeHandlerPlugIn : BaseConsumeHandlerPlugIn
             return false;
         }
 
-        if (await player.MagicEffectList.TryGetActiveEffectOfSubTypeAsync(effectDefinition.SubType).ConfigureAwait(false) is { } existingEffect)
-        {
-            await existingEffect.DisposeAsync().ConfigureAwait(false);
-        }
-
         var boosts = effectDefinition.PowerUpDefinitions
             .Where(def => def.Boost is not null && def.TargetAttribute is not null)
             .Select(def => new MagicEffect.ElementWithTarget(player.Attributes!.CreateElement(def), def.TargetAttribute!))
@@ -64,6 +59,11 @@ public class ApplyMagicEffectConsumeHandlerPlugIn : BaseConsumeHandlerPlugIn
         if (!await base.ConsumeItemAsync(player, item, targetItem, fruitUsage).ConfigureAwait(false))
         {
             return false;
+        }
+
+        if (await player.MagicEffectList.TryGetActiveEffectOfSubTypeAsync(effectDefinition.SubType).ConfigureAwait(false) is { } existingEffect)
+        {
+            await existingEffect.DisposeAsync().ConfigureAwait(false);
         }
 
         var effect = new MagicEffect(TimeSpan.FromSeconds(durationInSeconds), effectDefinition, boosts!);

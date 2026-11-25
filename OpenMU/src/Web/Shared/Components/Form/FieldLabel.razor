@@ -20,7 +20,7 @@
 }
 
 @code {
-    private string _actualLabel = null!;
+    private string? _actualLabel;
     private FieldIdentifier _fieldIdentifier;
     private string? _description;
 
@@ -44,11 +44,7 @@
         var type = this._fieldIdentifier.Model.GetType();
         var property = type.GetProperty(this._fieldIdentifier.FieldName);
         var displayAttribute = property?.GetCustomAttribute<DisplayAttribute>(true);
-        if (property is not null)
-        {
-            // DisplayAttribute has priority
-            this._actualLabel = displayAttribute?.GetName() ?? type.GetPropertyCaption(property.Name);
-            this._description = displayAttribute?.GetDescription() ?? type.GetPropertyDescription(property.Name);
-        }
+        this._actualLabel = this.Text ?? displayAttribute?.GetName() ?? (property is null ? null : type.GetPropertyCaption(property.Name));
+        this._description = displayAttribute?.GetDescription() ?? (property is null ? null : type.GetPropertyDescription(property.Name));
     }
 }

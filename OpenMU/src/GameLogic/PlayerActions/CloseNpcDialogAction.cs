@@ -21,9 +21,21 @@ public class CloseNpcDialogAction
     {
         using var loggerScope = player.Logger.BeginScope(this.GetType());
         var npc = player.OpenedNpc;
+        if (npc is not null && npc.Definition.ItemCraftings.Any()
+            && player.PlayerState.CurrentState == PlayerState.NpcDialogOpened
+            && player.TemporaryStorage is { } craftingStorage
+            && player.Inventory is { } inventory
+            && !await inventory.TryTakeAllAsync(craftingStorage).ConfigureAwait(false))
+        {
+            await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.InventoryFull)).ConfigureAwait(false);
+            await player.InvokeViewPlugInAsync<IOpenNpcWindowPlugIn>(p => p.OpenNpcWindowAsync(npc.Definition.NpcWindow)).ConfigureAwait(false);
+            return;
+        }
+
         if (npc != null && await player.PlayerState.TryAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false))
         {
             player.Logger.LogDebug($"Player {player.SelectedCharacter?.Name} closes NPC {npc}");
+            player.BackupInventory = null;
             player.OpenedNpc = null;
             player.Vault = null;
             await player.InvokeViewPlugInAsync<INpcDialogClosedPlugIn>(p => p.DialogClosedAsync(npc.Definition)).ConfigureAwait(false);
@@ -31,7 +43,6 @@ public class CloseNpcDialogAction
             {
                 try
                 {
-                    await Task.Delay(1000).ConfigureAwait(false);
                     player.Logger.LogInformation("Saving changes after closing the chaos goblin ...");
                     await player.SaveProgressAsync().ConfigureAwait(false);
                     player.Logger.LogInformation("Saved changes after closing the chaos goblin ...");

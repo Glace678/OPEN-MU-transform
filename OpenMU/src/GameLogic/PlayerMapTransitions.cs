@@ -405,6 +405,17 @@ internal sealed class PlayerMapTransitions
     {
         var player = this._player;
         var spawnPoint = gate.GetRandomPoint();
+        if (this._isRecoveringFromBlockedSpawn
+            && gate.Map is { } definition
+            && await player.GameContext.GetMapAsync(definition.Number.ToUnsigned()).ConfigureAwait(false) is { } targetMap
+            && !targetMap.Terrain.WalkMap[spawnPoint.X, spawnPoint.Y])
+        {
+            spawnPoint = targetMap.Terrain.GetWalkableCoordinate(gate)
+                         ?? targetMap.Terrain.GetWalkableCoordinate(targetMap.SafeZoneSpawnGate)
+                         ?? targetMap.Terrain.AnyWalkableCoordinate
+                         ?? spawnPoint;
+        }
+
         player.SelectedCharacter!.PositionX = spawnPoint.X;
         player.SelectedCharacter.PositionY = spawnPoint.Y;
         player.SelectedCharacter.CurrentMap = gate.Map;
@@ -434,7 +445,7 @@ internal sealed class PlayerMapTransitions
     private async ValueTask<bool> RecoverFromBlockedSpawnAsync()
     {
         var player = this._player;
-        if (!this._isRecoveringFromBlockedSpawn)
+        if (!this._isRecoveringFromBlockedSpawn && player.CurrentMap?.Terrain.AnyWalkableCoordinate is not null)
         {
             this._isRecoveringFromBlockedSpawn = true;
             try

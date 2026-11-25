@@ -36,7 +36,12 @@ internal class LetterSendHandlerPlugIn : IPacketHandlerPlugIn
         if (packet.Length < 83)
         {
             await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.LetterInvalid)).ConfigureAwait(false);
-            await player.InvokeViewPlugInAsync<ILetterSendResultPlugIn>(p => p.LetterSendResultAsync(LetterSendSuccess.TryAgain, message.LetterId)).ConfigureAwait(false);
+            const int minimumLengthWithLetterId = 8;
+            if (packet.Length >= minimumLengthWithLetterId)
+            {
+                await player.InvokeViewPlugInAsync<ILetterSendResultPlugIn>(p => p.LetterSendResultAsync(LetterSendSuccess.TryAgain, message.LetterId)).ConfigureAwait(false);
+            }
+
             return;
         }
 

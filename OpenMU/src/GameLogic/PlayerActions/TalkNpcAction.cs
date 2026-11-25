@@ -170,10 +170,6 @@ public class TalkNpcAction
                 break;
         }
 
-        if (npcStats.ItemCraftings.Any())
-        {
-            player.BackupInventory = new BackupItemStorage(player.Inventory!.ItemStorage);
-        }
     }
 
     private async ValueTask ShowLegacyQuestDialogAsync(Player player)

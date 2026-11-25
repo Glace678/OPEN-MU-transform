@@ -94,8 +94,8 @@ public static class WebApplicationExtensions
         services.AddSingleton<MobileGmService>();
         services.AddAccountSelfServiceGuard();
 
-        services.AddSingleton<IDataSource<GameConfiguration>, GameConfigurationDataSource>();
-        services.AddSingleton<IDataSource<Account>, AccountDataSource>();
+        services.AddScoped<IDataSource<GameConfiguration>, GameConfigurationDataSource>();
+        services.AddScoped<IDataSource<Account>, AccountDataSource>();
         services.AddSingleton<ConfigurationSearchIndexCache>();
         services.AddSingleton<SetupService>();
         services.AddScoped<DataUpdateService>();

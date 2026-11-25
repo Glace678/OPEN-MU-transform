@@ -54,6 +54,7 @@ public class SetLevelChatCommandPlugIn : ChatCommandPlugInBase<SetLevelChatComma
         }
 
         targetPlayer.Attributes![Stats.Level] = checked(arguments.Level);
+        targetPlayer.SelectedCharacter.Experience = targetPlayer.GameContext.ExperienceTable[arguments.Level];
         await targetPlayer.InvokeViewPlugInAsync<IUpdateLevelPlugIn>(p => p.UpdateLevelAsync()).ConfigureAwait(false);
         await targetPlayer.ForEachWorldObserverAsync<IShowEffectPlugIn>(p => p.ShowEffectAsync(targetPlayer, IShowEffectPlugIn.EffectType.LevelUp), true).ConfigureAwait(false);
         await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.SetLevelResult), arguments.Level).ConfigureAwait(false);

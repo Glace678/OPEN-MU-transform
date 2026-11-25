@@ -199,17 +199,20 @@ public sealed class DuelRoom : AsyncDisposable
     /// <param name="spectator">The spectator which should be removed.</param>
     public async ValueTask RemoveSpectatorAsync(Player spectator)
     {
+        Player[] remaining;
         using (await this._spectatorLock.LockAsync())
         {
             if (!this.Spectators.Remove(spectator))
             {
                 return;
             }
+
+            spectator.DuelRoom = null;
+            remaining = this.Spectators.ToArray();
         }
 
-        for (int j = this.Spectators.Count - 1; j >= 0; --j)
+        foreach (var player in remaining)
         {
-            var player = this.Spectators[j];
             await player.InvokeViewPlugInAsync<IDuelSpectatorRemovedPlugIn>(p => p.SpectatorRemovedAsync(spectator)).ConfigureAwait(false);
         }
 
@@ -334,17 +337,32 @@ public sealed class DuelRoom : AsyncDisposable
         Player[] spectators;
         using (await this._spectatorLock.LockAsync())
         {
-            if (this.Spectators.Count >= this._maximumSpectators)
+            if (player.DuelRoom is not null
+                || this.State is not (DuelState.DuelAccepted or DuelState.DuelStarted)
+                || this.Spectators.Count >= this._maximumSpectators)
             {
                 return false;
             }
 
             spectators = this.Spectators.ToArray();
             this.Spectators.Add(player);
+            player.DuelRoom = this;
         }
 
-        await player.AddInvisibleEffectAsync().ConfigureAwait(false);
-        await player.WarpToAsync(spectatorsGate).ConfigureAwait(false);
+        try
+        {
+            await player.AddInvisibleEffectAsync().ConfigureAwait(false);
+            if (!await player.TryWarpToAsync(spectatorsGate).ConfigureAwait(false))
+            {
+                await this.RemoveSpectatorAsync(player).ConfigureAwait(false);
+                return false;
+            }
+        }
+        catch
+        {
+            await this.RemoveSpectatorAsync(player).ConfigureAwait(false);
+            throw;
+        }
 
         await player.InvokeViewPlugInAsync<IInitializeDuelPlugIn>(p => p.InitializeDuelAsync(this)).ConfigureAwait(false);
         await player.InvokeViewPlugInAsync<IDuelHealthUpdatePlugIn>(p => p.UpdateHealthAsync(this)).ConfigureAwait(false);

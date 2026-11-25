@@ -104,7 +104,7 @@ public class MagicEffectsList : AsyncDisposable
         }
         else
         {
-            effect.Dispose();
+            await effect.DisposeAsync().ConfigureAwait(false);
         }
     }
 

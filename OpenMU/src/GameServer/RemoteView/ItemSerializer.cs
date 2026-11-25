@@ -131,7 +131,7 @@ public class ItemSerializer : IItemSerializer
             throw new ArgumentException($"Input byte array is too short ({array.Length} < {this.NeededSpace}).", nameof(array));
         }
 
-        var itemNumber = array[0] + ((array[0] & 0x80) << 1);
+        var itemNumber = array[0] + ((array[3] & 0x80) << 1);
         var itemGroup = (array[5] & 0xF0) >> 4;
         var definition = gameConfiguration.Items.FirstOrDefault(def => def.Number == itemNumber && def.Group == itemGroup)
                          ?? throw new ArgumentException($"Couldn't find the item definition for the given byte array. Extracted item number and group: {itemNumber}, {itemGroup}");

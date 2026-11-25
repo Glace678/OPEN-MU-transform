@@ -53,6 +53,21 @@ internal class AccountRepository : CachingGenericRepository<Account>
                 account = await objectLoader.LoadObjectAsync<Account>(id, context.Context, cancellationToken).ConfigureAwait(false);
                 if (account != null && !(context.Context.Entry(account) is { } entry && entry.State != EntityState.Detached))
                 {
+                    // These fields are excluded from account JSON exports and must be loaded separately.
+                    var credentials = await context.Context.Set<Account>()
+                        .Where(a => a.Id == id)
+                        .Select(a => new { a.PasswordHash, a.RecoveryCodeHash, a.SecurityCode, a.VaultPassword })
+                        .AsNoTracking()
+                        .SingleOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+                    if (credentials is null)
+                    {
+                        return null;
+                    }
+
+                    account.PasswordHash = credentials.PasswordHash;
+                    account.RecoveryCodeHash = credentials.RecoveryCodeHash;
+                    account.SecurityCode = credentials.SecurityCode;
+                    account.VaultPassword = credentials.VaultPassword;
                     context.Context.Attach(account);
                 }
             }

@@ -31,6 +31,11 @@ internal class RageSkillAttackRequestHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < RageAttackRangeRequest.Length)
+        {
+            return;
+        }
+
         RageAttackRangeRequest message = packet;
         var skillId = message.SkillId;
         var targetId = message.TargetId;

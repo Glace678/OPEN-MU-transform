@@ -77,6 +77,7 @@ internal abstract class SkillsInitializerBase : InitializerBase
         skill.MovesToTarget = movesToTarget;
         skill.MovesTarget = movesTarget;
         skill.AttackDamage = damage;
+        skill.CooldownSeconds = checked(cooldownMinutes * 60);
         skill.NumberOfHitsPerAttack = hitsPerAttack;
 
         this.CreateSkillRequirementIfNeeded(skill, Stats.Level, levelRequirement);

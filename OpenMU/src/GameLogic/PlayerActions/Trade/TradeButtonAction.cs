@@ -21,6 +21,11 @@ public class TradeButtonAction : BaseTradeAction
     public async ValueTask TradeButtonChangedAsync(ITrader trader, TradeButtonState tradeButtonState)
     {
         using var loggerScope = (trader as Player)?.Logger.BeginScope(this.GetType());
+        if (trader.BackupInventory is null || trader.TradingPartner?.BackupInventory is null)
+        {
+            return;
+        }
+
         var success = (tradeButtonState == TradeButtonState.Checked && await trader.PlayerState.TryAdvanceToAsync(PlayerState.TradeButtonPressed).ConfigureAwait(false))
                       || (tradeButtonState == TradeButtonState.Unchecked && await trader.PlayerState.TryAdvanceToAsync(PlayerState.TradeOpened).ConfigureAwait(false));
         if (!success)
@@ -37,6 +42,12 @@ public class TradeButtonAction : BaseTradeAction
             TradeResult result = await this.InternalFinishTradeAsync(trader, tradingPartner).ConfigureAwait(false);
             if (result != TradeResult.Success)
             {
+                if (!ReferenceEquals(trader.TradingPartner, tradingPartner)
+                    || !ReferenceEquals(tradingPartner.TradingPartner, trader))
+                {
+                    return;
+                }
+
                 await this.CancelTradeAsync(tradingPartner, false).ConfigureAwait(false);
                 await this.CancelTradeAsync(trader, false).ConfigureAwait(false);
                 (trader as Player)?.Logger.LogDebug($"Cancelled the trade because of unfinished state. trader: {trader.Name}, partner:{tradingPartner.Name}");
@@ -47,7 +58,7 @@ public class TradeButtonAction : BaseTradeAction
         }
         else if (tradingPartner is not null)
         {
-            await tradingPartner.InvokeViewPlugInAsync<IChangeTradeButtonStatePlugIn>(p => p.ChangeTradeButtonStateAsync(TradeButtonState.Checked)).ConfigureAwait(false);
+            await tradingPartner.InvokeViewPlugInAsync<IChangeTradeButtonStatePlugIn>(p => p.ChangeTradeButtonStateAsync(tradeButtonState)).ConfigureAwait(false);
         }
         else
         {
@@ -107,7 +118,11 @@ public class TradeButtonAction : BaseTradeAction
 
         var context = ReferenceEquals(first, trader) ? firstContext : secondContext;
         var partnerContext = ReferenceEquals(first, trader) ? secondContext : firstContext;
-        if (!context.Allowed || !partnerContext.Allowed)
+        if (!context.Allowed || !partnerContext.Allowed
+            || trader.PlayerState.CurrentState != PlayerState.TradeButtonPressed
+            || tradingPartner.PlayerState.CurrentState != PlayerState.TradeButtonPressed
+            || !ReferenceEquals(trader.TradingPartner, tradingPartner)
+            || !ReferenceEquals(tradingPartner.TradingPartner, trader))
         {
             context.Allowed = false;
             partnerContext.Allowed = false;

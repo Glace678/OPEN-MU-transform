@@ -29,6 +29,6 @@ internal static class AccountExtensions
 
         builder.Property(account => account.RecoveryCodeHash).HasMaxLength(64).IsRequired(false);
 
-        builder.Property(account => account.LanguageIsoCode).HasMaxLength(3).IsRequired().HasDefaultValue("en");
+        builder.Property(account => account.LanguageIsoCode).HasMaxLength(16).IsRequired().HasDefaultValue("en");
     }
 }

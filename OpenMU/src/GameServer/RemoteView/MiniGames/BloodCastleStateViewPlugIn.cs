@@ -36,7 +36,7 @@ public class BloodCastleStateViewPlugIn : IBloodCastleStateViewPlugin
             (ushort)remainingTime.TotalSeconds,
             (ushort)maxMonster,
             (ushort)curMonster,
-            questItemOwner?.GetId(this._player) ?? 0xFF,
+            questItemOwner?.GetId(this._player) ?? ushort.MaxValue,
             (byte)((questItem?.Level + 1) ?? 0xFF))
             .ConfigureAwait(false);
     }

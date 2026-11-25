@@ -83,11 +83,11 @@ internal class ClientSettings
     {
         using var currentUserKey = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry32);
         using var key = currentUserKey.CreateSubKey(@"SOFTWARE\WebZen\Mu\Config");
-        key.SetValue("ColorDepth", this.ClientColorDepth, RegistryValueKind.DWord);
-        key.SetValue("MusicOnOff", this.IsMusicEnabled, RegistryValueKind.DWord);
-        key.SetValue("SoundOnOff", this.IsSoundEnabled, RegistryValueKind.DWord);
+        key.SetValue("ColorDepth", (int)this.ClientColorDepth, RegistryValueKind.DWord);
+        key.SetValue("MusicOnOff", this.IsMusicEnabled ? 1 : 0, RegistryValueKind.DWord);
+        key.SetValue("SoundOnOff", this.IsSoundEnabled ? 1 : 0, RegistryValueKind.DWord);
         key.SetValue("VolumeLevel", this.VolumeLevel, RegistryValueKind.DWord);
-        key.SetValue("WindowMode", this.IsWindowModeActive, RegistryValueKind.DWord);
+        key.SetValue("WindowMode", this.IsWindowModeActive ? 1 : 0, RegistryValueKind.DWord);
         key.SetValue("Resolution", this.ResolutionIndex, RegistryValueKind.DWord);
         key.SetValue("LangSelection", this.LangSelection.GetString() ?? DefaultLanguage, RegistryValueKind.String);
     }

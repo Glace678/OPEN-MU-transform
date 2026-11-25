@@ -72,6 +72,8 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
 
     private readonly object _moneyLock = new();
 
+    private readonly Dictionary<short, long> _skillCooldowns = new();
+
     private CancellationTokenSource? _respawnAfterDeathCts;
 
     private Character? _selectedCharacter;
@@ -696,6 +698,10 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             this.RemovePetCommandManager();
             this.LastAttackedTarget.SetTarget(null);
             this._comboStateLazy = null;
+            lock (this._skillCooldowns)
+            {
+                this._skillCooldowns.Clear();
+            }
 
             this._appearanceData.RaiseAppearanceChanged();
 
@@ -706,7 +712,11 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
 
             if (this.DuelRoom is { } duelRoom)
             {
-                if (duelRoom.State is DuelState.DuelRequested or DuelState.DuelAccepted)
+                if (!duelRoom.IsDuelist(this))
+                {
+                    await duelRoom.RemoveSpectatorAsync(this).ConfigureAwait(false);
+                }
+                else if (duelRoom.State is DuelState.DuelRequested or DuelState.DuelAccepted)
                 {
                     // The other player did not respond (or the duel did not start yet); without this,
                     // the room and the other player's duel state would leak until a server restart.
@@ -776,8 +786,8 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
             return null;
         }
 
-        if (!this.GameContext.PvpEnabled && this.CurrentMap?.Definition.BattleZone == null &&
-            this.CurrentMiniGame?.AllowPlayerKilling is false)
+        if (attacker is Player or AttackerSurrogate or Monster { SummonedBy: not null }
+            && !(this.CurrentMiniGame?.AllowPlayerKilling ?? (this.GameContext.PvpEnabled || this.CurrentMap?.Definition.BattleZone is not null)))
         {
             return null;
         }
@@ -1278,8 +1288,8 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
         }
 
         using var l = await this.ObserverLock.WriterLockAsync();
-        this.Observers.Add(observer);
-        if (this.Party is not null
+        if (this.Observers.Add(observer)
+            && this.Party is not null
             && observer is Player observingPlayer
             && observingPlayer.Party == this.Party
             && observingPlayer.Attributes is { } attributes)
@@ -1292,8 +1302,8 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     public async ValueTask RemoveObserverAsync(IWorldObserver observer)
     {
         using var l = await this.ObserverLock.WriterLockAsync();
-        this.Observers.Remove(observer);
-        if (this.Party is not null
+        if (this.Observers.Remove(observer)
+            && this.Party is not null
             && observer is Player observingPlayer
             && observingPlayer.Party == this.Party
             && observingPlayer.Attributes is { } attributes)
@@ -1334,26 +1344,37 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     ///     <c>True</c>, if the <see cref="Skill.ConsumeRequirements"/> and <see cref="Skill.Requirements"/>
     ///     are being met, and the <see cref="Skill.ConsumeRequirements"/> have been consumed; Otherwise, <c>false</c>.
     /// </returns>
-    public async ValueTask<bool> TryConsumeForSkillAsync(SkillEntry skillEntry)
+    public ValueTask<bool> TryConsumeForSkillAsync(SkillEntry skillEntry)
     {
-        if (skillEntry.Skill is not { } skill)
+        lock (this._skillCooldowns)
+        {
+            return ValueTask.FromResult(this.TryConsumeForSkill(skillEntry));
+        }
+    }
+
+    private bool TryConsumeForSkill(SkillEntry skillEntry)
+    {
+        if (skillEntry.Skill is not { } skill || this.Attributes is not { } attributes)
         {
             return false;
         }
 
-        if (skill.Requirements.Any(r => r.MinimumValue > this.Attributes![r.Attribute]))
-        {
-            return false;
-        }
-
-        if (skill.ConsumeRequirements.Any(r => this.GetRequiredValue(r, skillEntry) > this.Attributes![r.Attribute]))
+        var now = Environment.TickCount64;
+        if ((skill.CooldownSeconds > 0 && this._skillCooldowns.GetValueOrDefault(skill.Number) > now)
+            || skill.Requirements.Any(r => r.MinimumValue > attributes[r.Attribute])
+            || skill.ConsumeRequirements.Any(r => this.GetRequiredValue(r, skillEntry) > attributes[r.Attribute]))
         {
             return false;
         }
 
         foreach (var requirement in skill.ConsumeRequirements)
         {
-            this.Attributes![requirement.Attribute] -= this.GetRequiredValue(requirement, skillEntry);
+            attributes[requirement.Attribute] -= this.GetRequiredValue(requirement, skillEntry);
+        }
+
+        if (skill.CooldownSeconds > 0)
+        {
+            this._skillCooldowns[skill.Number] = now + (skill.CooldownSeconds * 1000L);
         }
 
         return true;
@@ -1418,6 +1439,8 @@ public class Player : AsyncDisposable, IBucketMapObserver, IAttackable, IAttacke
     /// </summary>
     public async ValueTask RemoveFromGameAsync()
     {
+        await this.CloseTradeIfNeededAsync().ConfigureAwait(false);
+
         if (this.Party is { } party)
         {
             await party.LeaveTemporarilyAsync(this).ConfigureAwait(false);

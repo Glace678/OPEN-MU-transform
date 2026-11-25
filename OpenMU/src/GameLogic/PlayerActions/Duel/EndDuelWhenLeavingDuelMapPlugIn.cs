@@ -16,8 +16,6 @@ using MUnique.OpenMU.PlugIns;
 [Guid("3DF85180-4C51-437A-8072-8F42EEFED983")]
 public class EndDuelWhenLeavingDuelMapPlugIn : IObjectRemovedFromMapPlugIn
 {
-    private readonly DuelActions _duelActions = new();
-
     /// <summary>
     /// Handles the logic for when a player leaves the duel map.
     /// </summary>
@@ -53,13 +51,9 @@ public class EndDuelWhenLeavingDuelMapPlugIn : IObjectRemovedFromMapPlugIn
             return;
         }
 
-        var config = player.GameContext.Configuration.DuelConfiguration;
-        var isInDuelMap = config?.DuelAreas.Any(area => area.SpectatorsGate?.Map == player.CurrentMap?.Definition) ?? false;
-        if (!isInDuelMap)
+        if (duelRoom.Area.SpectatorsGate?.Map == map.Definition)
         {
-            return;
+            await duelRoom.RemoveSpectatorAsync(player).ConfigureAwait(false);
         }
-
-        await duelRoom.RemoveSpectatorAsync(player).ConfigureAwait(false);
     }
 }

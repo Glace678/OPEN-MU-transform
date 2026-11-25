@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.Web.AdminPanel.Services;
 
 using System.Diagnostics;
 using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.Interfaces;
@@ -17,7 +18,7 @@ using MUnique.OpenMU.Persistence;
 public class ConfigurationSearchIndexCache : IDisposable
 {
     private readonly IMigratableDatabaseContextProvider _persistenceContextProvider;
-    private readonly IDataSource<GameConfiguration> _configDataSource;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<ConfigurationSearchIndexCache> _logger;
     private readonly SetupService _setupService;
     private readonly SemaphoreSlim _loadingLock = new(1, 1);
@@ -29,17 +30,17 @@ public class ConfigurationSearchIndexCache : IDisposable
     /// Initializes a new instance of the <see cref="ConfigurationSearchIndexCache"/> class.
     /// </summary>
     /// <param name="persistenceContextProvider">The persistence context provider.</param>
-    /// <param name="configDataSource">The configuration data source.</param>
+    /// <param name="scopeFactory">The factory for the configuration data scope.</param>
     /// <param name="logger">The logger.</param>
     /// <param name="setupService">The setup service.</param>
     public ConfigurationSearchIndexCache(
         IMigratableDatabaseContextProvider persistenceContextProvider,
-        IDataSource<GameConfiguration> configDataSource,
+        IServiceScopeFactory scopeFactory,
         ILogger<ConfigurationSearchIndexCache> logger,
         SetupService setupService)
     {
         this._persistenceContextProvider = persistenceContextProvider;
-        this._configDataSource = configDataSource;
+        this._scopeFactory = scopeFactory;
         this._logger = logger;
         this._setupService = setupService;
 
@@ -145,7 +146,9 @@ public class ConfigurationSearchIndexCache : IDisposable
                 return Array.Empty<ConfigurationSearchEntry>();
             }
 
-            var gameConfiguration = await this._configDataSource.GetOwnerAsync(id, cancellationToken).ConfigureAwait(false);
+            await using var scope = this._scopeFactory.CreateAsyncScope();
+            var configDataSource = scope.ServiceProvider.GetRequiredService<IDataSource<GameConfiguration>>();
+            var gameConfiguration = await configDataSource.GetOwnerAsync(id, cancellationToken).ConfigureAwait(false);
             this._logger.LogInformation("Configuration search data loaded in {0} ms.", stopwatch.ElapsedMilliseconds);
             stopwatch.Restart();
 

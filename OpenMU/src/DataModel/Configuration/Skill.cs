@@ -207,6 +207,11 @@ public partial class Skill
     public int AttackDamage { get; set; }
 
     /// <summary>
+    /// Gets or sets the cooldown in seconds after a skill is used.
+    /// </summary>
+    public int CooldownSeconds { get; set; }
+
+    /// <summary>
     /// Gets or sets the requirements to execute the skill.
     /// </summary>
     [MemberOfAggregate]

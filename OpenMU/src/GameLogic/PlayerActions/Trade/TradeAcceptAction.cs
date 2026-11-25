@@ -66,7 +66,7 @@ public class TradeAcceptAction : BaseTradeAction
         // first make sure that all items which could be transferred are already present in the database
         await trader.SaveProgressAsync().ConfigureAwait(false);
 
-        trader.BackupInventory = new BackupItemStorage(trader.Inventory!.ItemStorage);
+        trader.BackupInventory = new BackupItemStorage(trader.Inventory!.ItemStorage) { Money = trader.Money };
         trader.TradingMoney = 0;
         await trader.InvokeViewPlugInAsync<IShowTradeRequestAnswerPlugIn>(p => p.ShowTradeRequestAnswerAsync(true)).ConfigureAwait(false);
     }

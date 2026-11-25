@@ -39,6 +39,8 @@ public sealed class SkillList : ISkillList, IDisposable
 
     private readonly Player _player;
 
+    private readonly IInventoryStorage _inventory;
+
     private List<IDisposable>? _passivePowerUps;
 
     /// <summary>
@@ -58,16 +60,17 @@ public sealed class SkillList : ISkillList, IDisposable
         }
 
         this._player = player;
+        this._inventory = player.Inventory;
         this._learnedSkills = this._player.SelectedCharacter.LearnedSkills ?? new List<SkillEntry>();
         this._learnedSkills.Where(entry => entry.Skill is null).ForEach(entry => throw Error.NotInitializedProperty(entry, nameof(entry.Skill)));
 
         this._availableSkills = this._learnedSkills.ToDictionary(skillEntry => skillEntry.Skill!.Number.ToUnsigned());
         this._itemSkills = new List<SkillEntry>();
-        this._player.Inventory.EquippedItems
+        this._inventory.EquippedItems
             .Where(item => item.HasSkill)
             .Where(item => (item.Definition ?? throw Error.NotInitializedProperty(item, nameof(item.Definition))).Skill != null)
             .ForEach(item => this.AddItemSkillAsync(item.Definition!.Skill!).AsTask().WaitAndUnwrapException());
-        this._player.Inventory.EquippedItemsChanged += this.Inventory_WearingItemsChangedAsync;
+        this._inventory.EquippedItemsChanged += this.Inventory_WearingItemsChangedAsync;
         foreach (var skill in this._learnedSkills
             .Where(s => s.Skill!.SkillType == SkillType.PassiveBoost || this._castedSkillsWithPassiveBoost.Contains(s.Skill.Number)))
         {
@@ -86,6 +89,7 @@ public sealed class SkillList : ISkillList, IDisposable
     /// <inheritdoc />
     public void Dispose()
     {
+        this._inventory.EquippedItemsChanged -= this.Inventory_WearingItemsChangedAsync;
         this._passivePowerUps?.ForEach(p => p.Dispose());
         this._passivePowerUps = null;
     }

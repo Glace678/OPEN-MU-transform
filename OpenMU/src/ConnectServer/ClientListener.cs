@@ -155,6 +155,7 @@ internal class ClientListener
             return;
         }
 
+        using var disconnectedClient = client;
         foreach (var plugin in this.ClientSocketDisconnectPlugins)
         {
             plugin.OnAfterDisconnect(client);

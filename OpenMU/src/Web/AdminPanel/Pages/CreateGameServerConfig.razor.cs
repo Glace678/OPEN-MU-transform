@@ -128,20 +128,25 @@ public partial class CreateGameServerConfig : ComponentBase, IAsyncDisposable
             var clients = await persistenceContext.GetAsync<GameClientDefinition>(cancellationToken).ConfigureAwait(false);
             var existingServerDefinitions = (await persistenceContext.GetAsync<GameServerDefinition>(cancellationToken).ConfigureAwait(false)).ToList();
 
-            var nextServerId = 0;
+            var nextServerId = -1;
             var networkPort = 55901;
+            var usedIds = existingServerDefinitions.Select(s => (int)s.ServerID).ToHashSet();
+            for (int i = 0; i <= byte.MaxValue; i++)
+            {
+                if (!usedIds.Contains(i))
+                {
+                    nextServerId = i;
+                    break;
+                }
+            }
+
+            if (nextServerId < 0)
+            {
+                throw new InvalidOperationException("All game server IDs are already in use.");
+            }
+
             if (existingServerDefinitions.Count > 0)
             {
-                var usedIds = existingServerDefinitions.Select(s => (int)s.ServerID).ToHashSet();
-                for (int i = 0; i <= byte.MaxValue; i++)
-                {
-                    if (!usedIds.Contains(i))
-                    {
-                        nextServerId = i;
-                        break;
-                    }
-                }
-
                 networkPort = existingServerDefinitions.Max(s => s.Endpoints.FirstOrDefault()?.NetworkPort ?? 55900) + 1;
             }
 

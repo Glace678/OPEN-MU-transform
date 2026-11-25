@@ -52,38 +52,23 @@ internal class IndexedLinkedList<T> : IPriorityQueue<T>
             return;
         }
 
-        var inIndex = true;
         if (!this._index.TryGetValue(indexValue, out var node))
         {
             node = this._innerList.First;
-            inIndex = false;
         }
 
-        while (node != null && this._comparer.Compare(item, node.Value) > 0)
+        while (node?.Previous is { } previous && this._comparer.Compare(item, previous.Value) <= 0)
+        {
+            node = previous;
+        }
+
+        while (node != null && this._comparer.Compare(item, node.Value) >= 0)
         {
             node = node.Next;
         }
 
-        if (node != null)
-        {
-            if (inIndex)
-            {
-                this._innerList.AddAfter(node, item);
-            }
-            else
-            {
-                var addedNode = this._innerList.AddAfter(node, item);
-                this._index.Add(indexValue, addedNode);
-            }
-        }
-        else
-        {
-            var addedNode = this._innerList.AddLast(item);
-            if (!inIndex)
-            {
-                this._index.Add(indexValue, addedNode);
-            }
-        }
+        var added = node is not null ? this._innerList.AddBefore(node, item) : this._innerList.AddLast(item);
+        this._index[indexValue] = added;
     }
 
     /// <inheritdoc/>

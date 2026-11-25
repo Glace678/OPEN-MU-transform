@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.Dapr.Common;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using MUnique.OpenMU.Interfaces;
 
 /// <summary>
@@ -15,14 +16,17 @@ using MUnique.OpenMU.Interfaces;
 public class ManageableServerController
 {
     private readonly IManageableServer _manageableServer;
+    private readonly IHostApplicationLifetime _hostApplicationLifetime;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ManageableServerController"/> class.
     /// </summary>
     /// <param name="manageableServer">The manageable server.</param>
-    public ManageableServerController(IManageableServer manageableServer)
+    /// <param name="hostApplicationLifetime">The host lifetime for game server shutdown.</param>
+    public ManageableServerController(IManageableServer manageableServer, IHostApplicationLifetime hostApplicationLifetime)
     {
         this._manageableServer = manageableServer;
+        this._hostApplicationLifetime = hostApplicationLifetime;
     }
 
     /// <summary>
@@ -32,6 +36,10 @@ public class ManageableServerController
     public async Task ShutdownAsync()
     {
         await this._manageableServer.ShutdownAsync().ConfigureAwait(false);
+        if (this._manageableServer is IGameServer)
+        {
+            this._hostApplicationLifetime.StopApplication();
+        }
     }
 
     /// <summary>

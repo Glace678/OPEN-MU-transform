@@ -255,7 +255,6 @@ public class DuelActions
             await player.WarpToSafezoneAsync().ConfigureAwait(false);
         }
 
-        await player.RemoveInvisibleEffectAsync().ConfigureAwait(false);
         await duelRoom.RemoveSpectatorAsync(player).ConfigureAwait(false);
     }
 

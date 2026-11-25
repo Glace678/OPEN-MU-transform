@@ -28,6 +28,12 @@ public class LoginAction
     {
         using var loggerScope = player.Logger.BeginScope(this.GetType());
 
+        if (player.Account is not null || player.SelectedCharacter is not null)
+        {
+            await player.InvokeViewPlugInAsync<IShowLoginResultPlugIn>(p => p.ShowLoginResultAsync(LoginResult.ConnectionError)).ConfigureAwait(false);
+            return;
+        }
+
         var state = await this.AuthenticateAsync(player, username, password).ConfigureAwait(false);
         if (state is null)
         {

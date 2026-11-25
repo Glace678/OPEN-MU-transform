@@ -47,8 +47,8 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
                     b.Property<string>("LanguageIsoCode")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
                         .HasDefaultValue("en");
 
                     b.Property<string>("LoginName")
@@ -3641,6 +3641,9 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<int>("AttackDamage")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CooldownSeconds")
                         .HasColumnType("integer");
 
                     b.Property<int>("DamageType")

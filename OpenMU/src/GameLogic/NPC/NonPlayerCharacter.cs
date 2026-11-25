@@ -49,7 +49,7 @@ public class NonPlayerCharacter : AsyncDisposable, IObservable, IRotatable, ILoc
     public AsyncReaderWriterLock ObserverLock { get; } = new();
 
     /// <inheritdoc/>
-    public GameMap CurrentMap { get; }
+    public GameMap CurrentMap { get; internal set; }
 
     /// <summary>
     /// Gets or sets the spawn area of this instance.

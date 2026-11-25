@@ -116,7 +116,7 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
             rate = Math.Min(this._settings.MaximumSuccessPercent, rate);
         }
 
-        successRate = (byte)Math.Min(100, rate);
+        successRate = (byte)Math.Clamp(rate, 0, 100);
 
         return default;
     }
@@ -124,7 +124,8 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
     /// <inheritdoc />
     protected override int GetPrice(byte successRate, IList<CraftingRequiredItemLink> requiredItems)
     {
-        return this._settings.Money + (this._settings.MoneyPerFinalSuccessPercentage * successRate);
+        var unitPrice = (long)this._settings.Money + ((long)this._settings.MoneyPerFinalSuccessPercentage * successRate);
+        return (int)Math.Clamp(unitPrice * this.GetCraftingCount(requiredItems), 0, int.MaxValue);
     }
 
     /// <summary>
@@ -255,9 +256,7 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
 
     private async ValueTask<List<Item>> CreateResultItemsAsync(Player player, IList<CraftingRequiredItemLink> referencedItems, ItemCraftingResultItem craftingResultItem, byte successRate)
     {
-        int resultItemCount = this._settings.MultipleAllowed
-            ? referencedItems.FirstOrDefault(r => r.ItemRequirement.Reference > 0)?.Items.Count() ?? 1
-            : 1;
+        int resultItemCount = this.GetCraftingCount(referencedItems);
 
         var resultList = new List<Item>(resultItemCount);
         for (int i = 0; i < resultItemCount; i++)
@@ -280,5 +279,12 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
         }
 
         return resultList;
+    }
+
+    private int GetCraftingCount(IList<CraftingRequiredItemLink> requiredItems)
+    {
+        return this._settings.MultipleAllowed
+            ? requiredItems.FirstOrDefault(r => r.ItemRequirement.Reference > 0)?.Items.Count() ?? 1
+            : 1;
     }
 }

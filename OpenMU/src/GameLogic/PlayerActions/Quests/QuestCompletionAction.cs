@@ -40,7 +40,8 @@ public class QuestCompletionAction
             {
                 var requiredLevel = requiredItem.DropItemGroup?.ItemLevel;
                 var itemCount = player.Inventory?.Items
-                    .Where(i => Equals(i.Definition, requiredItem.Item)
+                    .Where(i => i.ItemSlot > InventoryConstants.LastEquippableItemSlotIndex
+                                && Equals(i.Definition, requiredItem.Item)
                                 && (requiredLevel is null || requiredLevel == i.Level))
                     .Sum(i => i.IsStackable() ? Math.Max(1, (int)i.Durability) : 1) ?? 0;
 
@@ -76,7 +77,8 @@ public class QuestCompletionAction
                 var requiredLevel = requiredItem.DropItemGroup?.ItemLevel;
                 var remainingToConsume = (int)requiredItem.MinimumNumber;
                 var matchingItems = player.Inventory!.Items
-                    .Where(item => Equals(item.Definition, requiredItem.Item)
+                    .Where(item => item.ItemSlot > InventoryConstants.LastEquippableItemSlotIndex
+                                   && Equals(item.Definition, requiredItem.Item)
                                    && (requiredLevel is null || requiredLevel == item.Level))
                     .ToList();
 
@@ -136,11 +138,13 @@ public class QuestCompletionAction
                 await player.InvokeViewPlugInAsync<ILegacyQuestRewardPlugIn>(p => p.ShowAsync(player, QuestRewardType.Attribute, reward.Value, attribute.Definition)).ConfigureAwait(false);
                 break;
             case QuestRewardType.Item:
-                var item = player.PersistenceContext.CreateNew<Item>();
+                var item = new TemporaryItem();
                 item.AssignValues(reward.ItemReward ?? throw new InvalidOperationException($"Reward {reward.GetId()} is defined as item reward, but has no item assigned"));
-                if (await player.Inventory!.AddItemAsync(item).ConfigureAwait(false))
+                var slot = player.Inventory!.CheckInvSpace(item);
+                if (slot >= 0 && await player.Inventory.AddItemAsync((byte)slot, item).ConfigureAwait(false))
                 {
-                    await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(item)).ConfigureAwait(false);
+                    var rewardItem = player.Inventory.GetItem((byte)slot)!;
+                    await player.InvokeViewPlugInAsync<IItemAppearPlugIn>(p => p.ItemAppearAsync(rewardItem)).ConfigureAwait(false);
                 }
                 else if (player.CurrentMap is { } currentMap)
                 {

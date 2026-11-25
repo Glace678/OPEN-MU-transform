@@ -248,15 +248,15 @@
             <div class="map-object-form">
                 @if (this._focusedObject is EnterGate enterGate)
                 {
-                    <AutoForm Model="@enterGate" OnValidSubmit="@this.OnValidSubmit" />
+                    <AutoForm Model="@enterGate" OnValidSubmit="@this.SaveAsync" />
                 }
                 else if (this._focusedObject is ExitGate exitGate)
                 {
-                    <AutoForm Model="@exitGate" OnValidSubmit="@this.OnValidSubmit" />
+                    <AutoForm Model="@exitGate" OnValidSubmit="@this.SaveAsync" />
                 }
                 else if (this._focusedObject is MonsterSpawnArea spawn)
                 {
-                    <AutoForm Model="@spawn" OnValidSubmit="@this.OnValidSubmit" />
+                    <AutoForm Model="@spawn" OnValidSubmit="@this.SaveAsync" />
                 }
             </div>
         }

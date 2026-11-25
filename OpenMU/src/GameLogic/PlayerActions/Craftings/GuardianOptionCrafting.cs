@@ -36,7 +36,13 @@ public class GuardianOptionCrafting : SimpleItemCraftingHandler
             return error;
         }
 
-        if (items.Where(i => i.ItemRequirement.Reference == ItemReference).Sum(i => i.Items.Count()) > 1)
+        var equipmentCount = items.Where(i => i.ItemRequirement.Reference == ItemReference).Sum(i => i.Items.Count());
+        if (equipmentCount == 0)
+        {
+            return CraftingResult.IncorrectMixItems;
+        }
+
+        if (equipmentCount > 1)
         {
             return CraftingResult.TooManyItems;
         }

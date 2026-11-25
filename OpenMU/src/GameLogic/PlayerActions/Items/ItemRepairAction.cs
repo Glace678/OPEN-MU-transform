@@ -61,10 +61,10 @@ public class ItemRepairAction
     /// </remarks>
     public async ValueTask RepairAllItemsAsync(Player player)
     {
-        if (player.OpenedNpc is null)
+        if (player.OpenedNpc?.Definition.MerchantStore is null)
         {
-            // probably cheater
-            player.Logger.LogWarning("Cheater Warning: Player tried to repair all items, without opened NPC. Character: [{0}], Account: [{1}]", player.SelectedCharacter?.Name, player.Account?.LoginName);
+            player.Logger.LogWarning("Player tried to repair all items without an open merchant. Character: [{0}], Account: [{1}]", player.SelectedCharacter?.Name, player.Account?.LoginName);
+            return;
         }
 
         // TODO: Check if NPC is able to repair all items. Maybe specified by npc dialog type
@@ -103,7 +103,9 @@ public class ItemRepairAction
     private static bool IsMoneySufficient(Player player, Item item)
     {
         var priceCalculator = new ItemPriceCalculator();
-        var price = priceCalculator.CalculateRepairPrice(item, player.OpenedNpc != null, player.GameContext.Configuration);
+        var npc = player.OpenedNpc?.Definition;
+        var hasRepairService = npc?.MerchantStore is not null || (npc?.NpcWindow is NpcWindow.PetTrainer && item.IsTrainablePet());
+        var price = priceCalculator.CalculateRepairPrice(item, hasRepairService, player.GameContext.Configuration);
         price = SoloBalance.ScalePrice(price, player.GameContext.Configuration);
         if (price < 0 || price > int.MaxValue)
         {

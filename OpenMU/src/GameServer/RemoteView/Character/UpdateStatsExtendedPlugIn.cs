@@ -48,20 +48,20 @@ public class UpdateStatsExtendedPlugIn : UpdateStatsBasePlugIn
     private static async ValueTask OnMaximumStatsChangedAsync(RemotePlayer player)
     {
         await player.Connection.SendMaximumStatsExtendedAsync(
-            (uint)player.Attributes![Stats.MaximumHealth],
-            (uint)player.Attributes[Stats.MaximumShield],
-            (uint)player.Attributes[Stats.MaximumMana],
-            (uint)player.Attributes[Stats.MaximumAbility]).ConfigureAwait(false);
+            uint.CreateSaturating(player.Attributes![Stats.MaximumHealth]),
+            uint.CreateSaturating(player.Attributes[Stats.MaximumShield]),
+            uint.CreateSaturating(player.Attributes[Stats.MaximumMana]),
+            uint.CreateSaturating(player.Attributes[Stats.MaximumAbility])).ConfigureAwait(false);
     }
 
     private static async ValueTask OnCurrentStatsChangedAsync(RemotePlayer player)
     {
         await player.Connection.SendCurrentStatsExtendedAsync(
-            (uint)player.Attributes![Stats.CurrentHealth],
-            (uint)player.Attributes[Stats.CurrentShield],
-            (uint)player.Attributes[Stats.CurrentMana],
-            (uint)player.Attributes[Stats.CurrentAbility],
-            (ushort)player.Attributes[Stats.AttackSpeed],
-            (ushort)player.Attributes[Stats.MagicSpeed]).ConfigureAwait(false);
+            uint.CreateSaturating(player.Attributes![Stats.CurrentHealth]),
+            uint.CreateSaturating(player.Attributes[Stats.CurrentShield]),
+            uint.CreateSaturating(player.Attributes[Stats.CurrentMana]),
+            uint.CreateSaturating(player.Attributes[Stats.CurrentAbility]),
+            ushort.CreateSaturating(player.Attributes[Stats.AttackSpeed]),
+            ushort.CreateSaturating(player.Attributes[Stats.MagicSpeed])).ConfigureAwait(false);
     }
 }

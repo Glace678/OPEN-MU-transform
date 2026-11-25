@@ -45,7 +45,7 @@ public class IncreaseStatsAction
                 && player.Attributes![attributeDef.Attribute] is { } current
                 && current + amount > maximumValue)
             {
-                amount = (ushort)(maximumValue - current);
+                amount = (ushort)Math.Clamp(Math.Floor(maximumValue - current), 0, amount);
                 if (amount == 0)
                 {
                     await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.MaximumAttributeValueReachedFormat), attributeDef.Attribute?.MaximumValue, new LocalizedString(attributeDef.Attribute?.Designation).GetTranslation(player.Culture)).ConfigureAwait(false);

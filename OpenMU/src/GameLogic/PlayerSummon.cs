@@ -130,6 +130,7 @@ internal sealed class PlayerSummon
     {
         if (this.AliveMonster is { } summon)
         {
+            summon.CurrentMap = map;
             await map.AddAsync(summon).ConfigureAwait(false);
             summon.OnSpawn();
         }

@@ -4,6 +4,8 @@
 
 namespace MUnique.OpenMU.Network;
 
+using System.Buffers.Binary;
+
 /// <summary>
 /// Extensions for arrays.
 /// </summary>
@@ -49,8 +51,7 @@ public static class ArrayExtensions
     /// <returns>An unsigned integer.</returns>
     public static uint MakeDwordBigEndian(this Span<byte> array, int startIndex)
     {
-        var source = array.Slice(startIndex, 4);
-        return unchecked(((uint)source[3] << 24) | (uint)(source[2] << 16) | (uint)(source[1] << 8) | source[0]);
+        return BinaryPrimitives.ReadUInt32BigEndian(array[startIndex..]);
     }
 
     /// <summary>
@@ -70,8 +71,7 @@ public static class ArrayExtensions
     /// <returns>An unsigned integer.</returns>
     public static uint MakeDwordSmallEndian(this Span<byte> array, int startIndex)
     {
-        var source = array.Slice(startIndex, 4);
-        return unchecked(((uint)source[0] << 24) | (uint)(source[1] << 16) | (uint)(source[2] << 8) | source[3]);
+        return BinaryPrimitives.ReadUInt32LittleEndian(array[startIndex..]);
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public static class ArrayExtensions
     /// <returns>An unsigned short.</returns>
     public static ushort MakeWordSmallEndian(this Span<byte> array, int startIndex)
     {
-        return (ushort)((array[startIndex] << 8) | array[startIndex + 1]);
+        return BinaryPrimitives.ReadUInt16LittleEndian(array[startIndex..]);
     }
 
     /// <summary>
@@ -93,7 +93,7 @@ public static class ArrayExtensions
     /// <returns>An unsigned short.</returns>
     public static ushort MakeWordBigEndian(this Span<byte> array, int startIndex)
     {
-        return (ushort)((array[startIndex + 1] << 8) | array[startIndex]);
+        return BinaryPrimitives.ReadUInt16BigEndian(array[startIndex..]);
     }
 
     /// <summary>
@@ -105,7 +105,18 @@ public static class ArrayExtensions
     /// <returns>An unsigned short.</returns>
     public static ushort TryMakeWordBigEndian(this Span<byte> array, int startIndex)
     {
-        return startIndex >= 0 && array.Length > startIndex + 1 ? array.MakeWordBigEndian(startIndex) : default;
+        return startIndex >= 0 && startIndex <= array.Length - sizeof(ushort) ? array.MakeWordBigEndian(startIndex) : default;
+    }
+
+    /// <summary>
+    /// Reads a little-endian unsigned short, or returns zero if there are not enough bytes.
+    /// </summary>
+    /// <param name="array">The source array.</param>
+    /// <param name="startIndex">The index of the first byte.</param>
+    /// <returns>The unsigned short.</returns>
+    public static ushort TryMakeWordLittleEndian(this Span<byte> array, int startIndex)
+    {
+        return startIndex >= 0 && startIndex <= array.Length - sizeof(ushort) ? array.MakeWordSmallEndian(startIndex) : default;
     }
 
     /// <summary>
@@ -230,13 +241,18 @@ public static class ArrayExtensions
         {
             case 0xC1:
             case 0xC3:
+                if (size > byte.MaxValue)
+                {
+                    throw new ArgumentException("Packet length exceeds the C1/C3 header capacity.", nameof(packet));
+                }
+
                 packet[1] = (byte)size;
                 break;
             case 0xC2:
             case 0xC4:
-                if (size < 3)
+                if (size is < 3 or > ushort.MaxValue)
                 {
-                    throw new ArgumentException("Packet buffer is too small for a C2/C4 header.", nameof(packet));
+                    throw new ArgumentException("Packet length is outside the C2/C4 header capacity.", nameof(packet));
                 }
 
                 packet[1] = (byte)((size & 0xFF00) >> 8);

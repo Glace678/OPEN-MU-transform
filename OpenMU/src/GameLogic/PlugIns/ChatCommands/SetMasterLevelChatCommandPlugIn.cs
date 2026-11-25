@@ -54,6 +54,7 @@ public class SetMasterLevelChatCommandPlugIn : ChatCommandPlugInBase<SetMasterLe
         }
 
         targetPlayer.Attributes![Stats.MasterLevel] = checked(arguments.MasterLevel);
+        targetPlayer.SelectedCharacter.MasterExperience = targetPlayer.GameContext.MasterExperienceTable[arguments.MasterLevel];
         await targetPlayer.InvokeViewPlugInAsync<IUpdateLevelPlugIn>(p => p.UpdateMasterLevelAsync()).ConfigureAwait(false);
         await targetPlayer.ForEachWorldObserverAsync<IShowEffectPlugIn>(p => p.ShowEffectAsync(targetPlayer, IShowEffectPlugIn.EffectType.LevelUp), true).ConfigureAwait(false);
         await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.SetMasterLevelResult), arguments.MasterLevel).ConfigureAwait(false);

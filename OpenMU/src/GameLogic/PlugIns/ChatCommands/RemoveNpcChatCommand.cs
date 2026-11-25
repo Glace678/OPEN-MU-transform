@@ -36,7 +36,7 @@ internal class RemoveNpcChatCommand : ChatCommandPlugInBase<IdCommandArgs>
             return;
         }
 
-        monster.Dispose();
+        await monster.DisposeAsync().ConfigureAwait(false);
         await gameMaster.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.NpcRemovedById), arguments.Id).ConfigureAwait(false);
     }
 }

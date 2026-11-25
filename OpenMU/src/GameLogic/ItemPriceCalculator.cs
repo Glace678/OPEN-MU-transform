@@ -338,6 +338,14 @@ public class ItemPriceCalculator
         item.ThrowNotInitializedProperty(item.Definition is null, nameof(item.Definition));
 
         var sellingPrice = CalculateBuyingPrice(item) / 3;
+        if (item.Definition.Group == ItemConstants.SiegePotion.Group && item.Definition.Number == ItemConstants.SiegePotion.Number)
+        {
+            // A default mix produces ten potions. Keep the stack resale below its crafting fee.
+            const int blessPotionResale = 5000;
+            const int soulPotionResale = 2500;
+            return Math.Min(sellingPrice, (long)durability * (item.Level == 0 ? blessPotionResale : soulPotionResale));
+        }
+
         if (item.Definition.Group == 14 && item.Definition.Number <= 8)
         {
             // Potions + Antidote

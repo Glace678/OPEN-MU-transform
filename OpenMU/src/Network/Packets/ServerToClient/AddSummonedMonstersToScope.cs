@@ -52,7 +52,7 @@ public readonly ref partial struct AddSummonedMonstersToScopeRef
     private int GetIndexOfMonster(int characterIndex, out int nextIndex)
     {
         const int monstersStartIndex = 5;
-        const int sizeWithoutEffects = 19;
+        var sizeWithoutEffects = SummonedMonsterDataRef.GetRequiredSize(0);
         var currentIndex = monstersStartIndex;
         nextIndex = currentIndex;
         if (characterIndex < 0)

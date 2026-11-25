@@ -211,7 +211,7 @@ public class ItemViewModel : INotifyPropertyChanged
                 return;
             }
 
-            foreach (var optionLink in this.Item.ItemOptions.Where(io => io.ItemOption?.OptionType == ItemOptionTypes.GuardianOption))
+            foreach (var optionLink in this.Item.ItemOptions.Where(io => io.ItemOption?.OptionType == ItemOptionTypes.GuardianOption).ToList())
             {
                 this.Item.ItemOptions.Remove(optionLink);
                 this.DeleteOptionLink(optionLink);

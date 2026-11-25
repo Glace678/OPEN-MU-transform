@@ -62,7 +62,7 @@ public sealed class DevilSquareContext : MiniGameContext
             .OrderByDescending(state => state.Score)
             .ToList();
 
-        var scoreList = new List<(string Name, int Score, int BonusMoney, int BonusExp)>();
+        var scoreList = new List<(string Name, int Score, int BonusExp, int BonusMoney)>();
         int rank = 0;
         foreach (var state in sortedFinishers)
         {
@@ -73,8 +73,8 @@ public sealed class DevilSquareContext : MiniGameContext
             scoreList.Add((
                 state.Player.Name,
                 state.Score,
-                givenMoney,
-                this.Definition.Rewards.FirstOrDefault(r => r.RewardType == MiniGameRewardType.Experience && (r.Rank is null || r.Rank == rank))?.RewardAmount ?? 0));
+                this.Definition.Rewards.FirstOrDefault(r => r.RewardType == MiniGameRewardType.Experience && (r.Rank is null || r.Rank == rank))?.RewardAmount ?? 0,
+                givenMoney));
         }
 
         this._highScoreTable = scoreList.AsReadOnly();

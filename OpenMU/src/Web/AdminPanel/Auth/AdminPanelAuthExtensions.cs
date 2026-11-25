@@ -225,13 +225,19 @@ public static class AdminPanelAuthExtensions
                 return;
             }
 
-            var policyProvider = context.RequestServices.GetRequiredService<IAuthorizationPolicyProvider>();
             var authorizationService = context.RequestServices.GetRequiredService<IAuthorizationService>();
-            var policy = await policyProvider.GetDefaultPolicyAsync().ConfigureAwait(false);
-            var result = await authorizationService.AuthorizeAsync(context.User, null, policy).ConfigureAwait(false);
+            var result = await authorizationService.AuthorizeAsync(context.User, null, AdminPolicies.Administrator).ConfigureAwait(false);
             if (!result.Succeeded)
             {
-                await context.ChallengeAsync().ConfigureAwait(false);
+                if (context.User.Identity?.IsAuthenticated is true)
+                {
+                    await context.ForbidAsync().ConfigureAwait(false);
+                }
+                else
+                {
+                    await context.ChallengeAsync().ConfigureAwait(false);
+                }
+
                 return;
             }
 

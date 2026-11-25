@@ -299,7 +299,12 @@ internal class Weapons : InitializerBase
 
         item.Durability = durability;
         var classes = wizardClass == 1 ? CharacterClasses.DarkWizard | CharacterClasses.MagicGladiator : CharacterClasses.None;
-        classes |= knightClass == 1 ? CharacterClasses.DarkKnight | CharacterClasses.MagicGladiator : CharacterClasses.None;
+        classes |= knightClass switch
+        {
+            1 => CharacterClasses.DarkKnight | CharacterClasses.MagicGladiator,
+            2 => CharacterClasses.DarkKnight,
+            _ => CharacterClasses.None,
+        };
         classes |= elfClass == 1 ? CharacterClasses.FairyElf : CharacterClasses.None;
         classes |= magicGladiatorClass == 1 ? CharacterClasses.MagicGladiator : CharacterClasses.None;
         var qualifiedCharacterClasses = this.GameConfiguration.DetermineCharacterClasses(classes);

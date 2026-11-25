@@ -228,6 +228,12 @@ public sealed class BackupManager
                 throw new InvalidDataException($"压缩包包含路径穿越条目: {entry.FullName}");
             }
 
+            if (entry.Name.Length == 0)
+            {
+                Directory.CreateDirectory(destinationPath);
+                continue;
+            }
+
             var destinationDir = Path.GetDirectoryName(destinationPath);
             if (!string.IsNullOrEmpty(destinationDir))
             {

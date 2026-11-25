@@ -34,7 +34,7 @@ public static class EventExtensions
             return ValueTask.CompletedTask;
         }
 
-        return handler.Invoke(argsFactory());
+        return handler.SafeInvokeAsync(argsFactory());
     }
 
     /// <summary>
@@ -43,27 +43,23 @@ public static class EventExtensions
     /// <typeparam name="T">The type of the event args.</typeparam>
     /// <param name="handler">The handler.</param>
     /// <param name="args">The arguments.</param>
-    public static ValueTask SafeInvokeAsync<T>(this AsyncEventHandler<T>? handler, T args)
+    public static async ValueTask SafeInvokeAsync<T>(this AsyncEventHandler<T>? handler, T args)
     {
-        if (handler is null)
+        foreach (var subscriber in Delegate.EnumerateInvocationList(handler))
         {
-            return ValueTask.CompletedTask;
+            await subscriber(args).ConfigureAwait(false);
         }
-
-        return handler.Invoke(args);
     }
 
     /// <summary>
     /// Invokes an event if any event handler is registered. If none is registered, nothing happens.
     /// </summary>
     /// <param name="handler">The handler.</param>
-    public static ValueTask SafeInvokeAsync(this AsyncEventHandler? handler)
+    public static async ValueTask SafeInvokeAsync(this AsyncEventHandler? handler)
     {
-        if (handler is null)
+        foreach (var subscriber in Delegate.EnumerateInvocationList(handler))
         {
-            return ValueTask.CompletedTask;
+            await subscriber().ConfigureAwait(false);
         }
-
-        return handler.Invoke();
     }
 }

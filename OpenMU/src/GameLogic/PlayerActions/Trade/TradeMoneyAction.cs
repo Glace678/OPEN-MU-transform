@@ -20,7 +20,8 @@ public class TradeMoneyAction
     public async ValueTask TradeMoneyAsync(Player player, uint moneyAmount)
     {
         // Check if Trade is open
-        if (player.PlayerState.CurrentState != PlayerState.TradeOpened)
+        if (player.PlayerState.CurrentState != PlayerState.TradeOpened
+            || player.BackupInventory is null || player.TradingPartner?.BackupInventory is null)
         {
             await player.ShowLocalizedBlueMessageAsync(nameof(PlayerMessage.UncheckTradeAcceptButtonFirst)).ConfigureAwait(false);
             return;

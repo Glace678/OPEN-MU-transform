@@ -22,7 +22,7 @@ public static class ClientLanguageExtensions
     public static string? GetString(this ClientLanguage clientLanguage)
     {
         var index = (int)clientLanguage;
-        return index < LanguageKeys.Length ? LanguageKeys[index] : null;
+        return index >= 0 && index < LanguageKeys.Length ? LanguageKeys[index] : null;
     }
 
     /// <summary>
@@ -32,6 +32,7 @@ public static class ClientLanguageExtensions
     /// <returns>The <see cref="ClientLanguage"/> based on the given key, which is set in the registry.</returns>
     public static ClientLanguage GetLanguage(this string languageKey)
     {
-        return (ClientLanguage)Array.IndexOf(LanguageKeys, languageKey);
+        var index = Array.IndexOf(LanguageKeys, languageKey);
+        return index < 0 ? ClientLanguage.English : (ClientLanguage)index;
     }
 }

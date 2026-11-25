@@ -68,6 +68,18 @@ public class MoveItemAction
         var toItemStorage = toStorageInfo?.Storage;
 
         var movement = await this.CanMoveAsync(player, item, toSlot, fromSlot, toStorageInfo, fromStorageInfo).ConfigureAwait(false);
+        if (player.TradingPartner is { } partner && (fromStorage == Storages.Trade || toStorage == Storages.Trade))
+        {
+            if (player.BackupInventory is null || partner.BackupInventory is null)
+            {
+                movement = Movement.None;
+            }
+            else if (movement != Movement.None && await partner.PlayerState.TryAdvanceToAsync(PlayerState.TradeOpened).ConfigureAwait(false))
+            {
+                await partner.InvokeViewPlugInAsync<IChangeTradeButtonStatePlugIn>(p => p.ChangeTradeButtonStateAsync(TradeButtonState.Red)).ConfigureAwait(false);
+            }
+        }
+
         if (movement != Movement.None)
         {
             var cancelEventArgs = new CancelEventArgs();

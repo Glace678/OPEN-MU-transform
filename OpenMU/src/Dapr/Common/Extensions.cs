@@ -129,7 +129,8 @@ public static class Extensions
                 return;
             }
 
-            var configs = await persistenceContextProvider.CreateNewTypedContext(typeof(PlugInConfiguration), false).GetAsync<PlugInConfiguration>().ConfigureAwait(false);
+            using var context = persistenceContextProvider.CreateNewTypedContext(typeof(PlugInConfiguration), false);
+            var configs = await context.GetAsync<PlugInConfiguration>().ConfigureAwait(false);
             plugInConfigurations.AddRange(configs);
         }
         catch

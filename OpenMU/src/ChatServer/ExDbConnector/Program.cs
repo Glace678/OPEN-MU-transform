@@ -63,7 +63,7 @@ internal class Program
             await chatServer.StartAsync().ConfigureAwait(false);
             var exDbClient = new ExDbClient(exDbHost, exDbPort, chatServer, chatServerListenerPort, loggerFactory);
             _logger.LogInformation("ChatServer started and ready");
-            while (Console.ReadLine() != "exit")
+            while (Console.ReadLine() is { } command && command != "exit")
             {
                 // keep application running
             }

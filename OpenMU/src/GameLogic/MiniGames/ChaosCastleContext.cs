@@ -213,14 +213,18 @@ public sealed class ChaosCastleContext : MiniGameContext
         var sortedFinishers = finishers
             .Select(f => this._gameStates.GetValueOrDefault(f.Name))
             .WhereNotNull()
-            .OrderByDescending(state => state.Score)
+            .OrderByDescending(state => state.Player.IsAlive)
+            .ThenByDescending(state => state.Score)
             .ToList();
 
         var scoreList = new List<(string Name, int Score, int BonusExp, int BonusMoney)>();
         int rank = 0;
         foreach (var state in sortedFinishers)
         {
-            this._winner ??= state.Player;
+            if (state.Player.IsAlive)
+            {
+                this._winner ??= state.Player;
+            }
             rank++;
             state.Rank = rank;
             var (bonusScore, givenMoney) = await this.GiveRewardsAndGetBonusScoreAsync(state.Player, rank).ConfigureAwait(false);
@@ -245,7 +249,7 @@ public sealed class ChaosCastleContext : MiniGameContext
         if (this._highScoreTable is { } table)
         {
             var isSuccessful = this._winner is not null;
-            var (name, score, bonusMoney, bonusExp) = table.First(t => t.Name == player.Name);
+            var (name, score, bonusExp, bonusMoney) = table.First(t => t.Name == player.Name);
             await player.InvokeViewPlugInAsync<IBloodCastleScoreTableViewPlugin>(p => p.ShowScoreTableAsync(isSuccessful, name, score, bonusExp, bonusMoney)).ConfigureAwait(false);
         }
     }

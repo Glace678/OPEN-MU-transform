@@ -26,7 +26,7 @@ internal class MagicEffectCancelHandlerPlugIn : IPacketHandlerPlugIn
     private const int InfinityArrowStrengSkillId = 441;
 
     /// <inheritdoc/>
-    public bool IsEncryptionExpected => true;
+    public bool IsEncryptionExpected => MagicEffectCancelRequest.HeaderType >= 0xC3;
 
     /// <inheritdoc/>
     public byte Key => MagicEffectCancelRequest.Code;
@@ -34,6 +34,11 @@ internal class MagicEffectCancelHandlerPlugIn : IPacketHandlerPlugIn
     /// <inheritdoc/>
     public async ValueTask HandlePacketAsync(Player player, Memory<byte> packet)
     {
+        if (packet.Length < MagicEffectCancelRequest.Length)
+        {
+            return;
+        }
+
         MagicEffectCancelRequest message = packet;
         if (!IsCancellableSkill(message.SkillId) || player.SkillList is null || !player.SkillList.ContainsSkill(message.SkillId))
         {

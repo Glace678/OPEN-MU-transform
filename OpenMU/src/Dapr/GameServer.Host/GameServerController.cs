@@ -6,7 +6,6 @@ namespace MUnique.OpenMU.GameServer.Host;
 
 using global::Dapr;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.ServerClients;
 
@@ -18,31 +17,14 @@ using MUnique.OpenMU.ServerClients;
 public class GameServerController : ControllerBase
 {
     private readonly IGameServer _gameServer;
-    private readonly IHostApplicationLifetime _hostApplicationLifetime;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="GameServerController"/> class.
     /// </summary>
     /// <param name="gameServer">The game server.</param>
-    /// <param name="hostApplicationLifetime">The host application lifetime, used to stop the process gracefully.</param>
-    public GameServerController(GameServer gameServer, IHostApplicationLifetime hostApplicationLifetime)
+    public GameServerController(GameServer gameServer)
     {
         this._gameServer = gameServer;
-        this._hostApplicationLifetime = hostApplicationLifetime;
-    }
-
-    /// <summary>
-    /// Shuts down the server gracefully.
-    /// </summary>
-    [HttpPost(nameof(IGameServer.ShutdownAsync))]
-    public async ValueTask ShutdownAsync()
-    {
-        await this._gameServer.ShutdownAsync().ConfigureAwait(false);
-
-        // Stop the host cooperatively instead of Environment.Exit(0): an HTTP-reachable
-        // action must not hard-kill the process. The endpoint is internal (app token /
-        // loopback) and is used by the orchestrator to recycle the game server container.
-        this._hostApplicationLifetime.StopApplication();
     }
 
     /// <summary>
