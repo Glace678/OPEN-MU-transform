@@ -171,9 +171,17 @@ public sealed class OfflinePlayerManager
             return 0;
         }
 
-        var totalLevel = player.Level + (int)(player.Attributes?[Stats.MasterLevel] ?? 0);
+        var totalLevel = (long)player.Level + (long)(player.Attributes?[Stats.MasterLevel] ?? 0);
+        var cost = (long)costPerStage * totalLevel;
+        if (cost <= 0)
+        {
+            return 0;
+        }
 
-        return costPerStage * totalLevel;
+        // The money storage is 32 bit; a cost above its range must not wrap around into a negative
+        // (or small) price. Such a cost is capped, which means the player can only pay it with the
+        // maximum possible amount - the removal itself still fails when he does not own that much.
+        return (int)Math.Min(cost, int.MaxValue);
     }
 
     /// <summary>

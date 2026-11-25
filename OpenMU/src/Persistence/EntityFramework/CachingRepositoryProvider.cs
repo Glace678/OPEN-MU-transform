@@ -69,7 +69,13 @@ internal class CachingRepositoryProvider : RepositoryProvider
         this.RegisterRepository(new ConfigurationTypeRepository<CharacterClass>(this._parent, this.LoggerFactory, config => config.RawCharacterClasses));
         this.RegisterRepository(new ConfigurationTypeRepository<ItemOptionType>(this._parent, this.LoggerFactory, config => config.RawItemOptionTypes));
         this.RegisterRepository(new ConfigurationTypeRepository<ItemSetGroup>(this._parent, this.LoggerFactory, config => config.RawItemSetGroups));
-        this.RegisterRepository(new ConfigurationTypeRepository<ItemOfItemSet>(this._parent, this.LoggerFactory, config => config.RawItemSetGroups.SelectMany(g => g.RawItems).ToList()));
+        this.RegisterRepository(new ConfigurationTypeRepository<ItemOfItemSet>(
+            this._parent,
+            this.LoggerFactory,
+            config => config.RawItemSetGroups.SelectMany(g => g.RawItems).ToList(),
+            (config, item) => config.RawItemSetGroups
+                .Select(group => group.RawItems)
+                .FirstOrDefault(items => items.Remove(item)) is not null));
         this.RegisterRepository(new ConfigurationTypeRepository<ItemSlotType>(this._parent, this.LoggerFactory, config => config.RawItemSlotTypes));
         this.RegisterRepository(new ConfigurationTypeRepository<ItemDefinition>(this._parent, this.LoggerFactory, config => config.RawItems));
         this.RegisterRepository(new ConfigurationTypeRepository<JewelMix>(this._parent, this.LoggerFactory, config => config.RawJewelMixes));
@@ -79,7 +85,13 @@ internal class CachingRepositoryProvider : RepositoryProvider
         this.RegisterRepository(new ConfigurationTypeRepository<MonsterDefinition>(this._parent, this.LoggerFactory, config => config.RawMonsters));
         this.RegisterRepository(new ConfigurationTypeRepository<Skill>(this._parent, this.LoggerFactory, config => config.RawSkills));
         this.RegisterRepository(new ConfigurationTypeRepository<PlugInConfiguration>(this._parent, this.LoggerFactory, config => config.RawPlugInConfigurations));
-        this.RegisterRepository(new ConfigurationTypeRepository<QuestDefinition>(this._parent, this.LoggerFactory, config => config.RawMonsters.SelectMany(m => m.RawQuests).ToList()));
+        this.RegisterRepository(new ConfigurationTypeRepository<QuestDefinition>(
+            this._parent,
+            this.LoggerFactory,
+            config => config.RawMonsters.SelectMany(m => m.RawQuests).ToList(),
+            (config, quest) => config.RawMonsters
+                .Select(monster => monster.RawQuests)
+                .FirstOrDefault(quests => quests.Remove(quest)) is not null));
         this.RegisterRepository(new ConfigurationTypeRepository<Item>(this._parent, this.LoggerFactory, config => config.RawMonsters.SelectMany(m => m.RawMerchantStore?.RawItems ?? Enumerable.Empty<Item>()).ToList()));
 
         base.Initialize();

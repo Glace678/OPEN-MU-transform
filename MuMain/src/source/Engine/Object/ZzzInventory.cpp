@@ -2378,7 +2378,11 @@ void RenderItemInfo(int sx, int sy, ITEM* ip, bool Sell, int Inventype, bool bIt
         if (ip->lExpireTime == 0)
             return;
 
-        ExpireTime = localtime((time_t*)&(ip->lExpireTime));
+        // lExpireTime is a long (32 bit on Windows), while time_t is 64 bit there. Passing the
+        // address of the long as a time_t* made localtime read past the field. Convert the value
+        // into a real time_t object instead.
+        const time_t expireTime = static_cast<time_t>(ip->lExpireTime);
+        ExpireTime = localtime(&expireTime);
     }
 
     ITEM_ATTRIBUTE* p = &ItemAttribute[ip->Type];

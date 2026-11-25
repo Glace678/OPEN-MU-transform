@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.GameServer.RemoteView.World;
 
+using System.Linq;
 using System.Runtime.InteropServices;
 using MUnique.OpenMU.GameLogic;
 using MUnique.OpenMU.GameLogic.Views;
@@ -37,27 +38,58 @@ public class ObjectsOutOfScopePlugIn : IObjectsOutOfScopePlugIn
             return;
         }
 
-        var count = objects.Count();
-        int Write()
+        var objectList = objects.ToList();
+        if (objectList.Count == 0)
         {
-            var size = MapObjectOutOfScopeRef.GetRequiredSize(count);
-            var span = connection.Output.GetSpan(size)[..size];
-            var packet = new MapObjectOutOfScopeRef(span)
+            await connection.SendAsync(() =>
             {
-                ObjectCount = (byte)count,
-            };
-
-            int i = 0;
-            foreach (var m in objects)
-            {
-                var objectId = packet[i];
-                objectId.Id = m.GetId(this._player);
-                i++;
-            }
-
-            return size;
+                var size = MapObjectOutOfScopeRef.GetRequiredSize(0);
+                var span = connection.Output.GetSpan(size)[..size];
+                _ = new MapObjectOutOfScopeRef(span) { ObjectCount = 0 };
+                return size;
+            }).ConfigureAwait(false);
+            return;
         }
 
-        await connection.SendAsync(Write).ConfigureAwait(false);
+        // The packet length is a single byte (C1 header). A dense scene can contain more objects
+        // than fit into one packet, so send them in chunks sized by the real encoded length.
+        var maxObjectsPerPacket = GetMaxObjectsPerPacket();
+        foreach (var chunk in objectList.Chunk(maxObjectsPerPacket))
+        {
+            var chunkObjects = chunk.ToList();
+            int Write()
+            {
+                var count = chunkObjects.Count;
+                var size = MapObjectOutOfScopeRef.GetRequiredSize(count);
+                var span = connection.Output.GetSpan(size)[..size];
+                var packet = new MapObjectOutOfScopeRef(span)
+                {
+                    ObjectCount = (byte)count,
+                };
+
+                int i = 0;
+                foreach (var m in chunkObjects)
+                {
+                    var objectId = packet[i];
+                    objectId.Id = m.GetId(this._player);
+                    i++;
+                }
+
+                return size;
+            }
+
+            await connection.SendAsync(Write).ConfigureAwait(false);
+        }
+
+        static int GetMaxObjectsPerPacket()
+        {
+            var max = 0;
+            while (max < byte.MaxValue && MapObjectOutOfScopeRef.GetRequiredSize(max + 1) <= byte.MaxValue)
+            {
+                max++;
+            }
+
+            return Math.Max(1, max);
+        }
     }
 }

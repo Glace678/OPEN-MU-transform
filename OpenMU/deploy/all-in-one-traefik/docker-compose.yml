@@ -5,14 +5,14 @@ services:
     networks:
       - proxy
     ports:
-      - "55901:55901"
-      - "55902:55902"
-      - "55903:55903"
-      - "55904:55904"
-      - "55905:55905"
-      - "55906:55906"
-      - "44405:44405"
-      - "55980:55980"
+      - "${OPENMU_GAME_BIND:-127.0.0.1}:55901:55901"
+      - "${OPENMU_GAME_BIND:-127.0.0.1}:55902:55902"
+      - "${OPENMU_GAME_BIND:-127.0.0.1}:55903:55903"
+      - "${OPENMU_GAME_BIND:-127.0.0.1}:55904:55904"
+      - "${OPENMU_GAME_BIND:-127.0.0.1}:55905:55905"
+      - "${OPENMU_GAME_BIND:-127.0.0.1}:55906:55906"
+      - "${OPENMU_GAME_BIND:-127.0.0.1}:44405:44405"
+      - "${OPENMU_GAME_BIND:-127.0.0.1}:55980:55980"
     environment:
       ASPNETCORE_URLS: http://+:8080
       DB_HOST: database

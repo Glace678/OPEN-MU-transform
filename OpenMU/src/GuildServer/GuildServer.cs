@@ -6,6 +6,7 @@ namespace MUnique.OpenMU.GuildServer;
 
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Persistence;
@@ -885,6 +886,31 @@ public class GuildServer : IGuildServer
             if (guildContainer.Guild.AllianceGuild is not null)
             {
                 guildContainer.Guild.AllianceGuild = null;
+                await guildContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
+            }
+
+            // The hostility reference is a nullable foreign key without a database delete rule.
+            // Other guilds may still point at this one, and those rows are not necessarily part of
+            // the current change tracker, so clear the incoming references explicitly.
+            var deletedGuildId = guildContainer.Guild.Id;
+            var hostileGuilds = (await guildContainer.DatabaseContext.GetAsync<Guild>().ConfigureAwait(false))
+                .Where(guild => guild.Hostility is DataModel.Entities.Guild hostile && hostile.Id == deletedGuildId)
+                .ToList();
+            foreach (var hostileGuild in hostileGuilds)
+            {
+                hostileGuild.Hostility = null;
+            }
+
+            foreach (var container in this._guildDictionary.Values)
+            {
+                if (container.Guild.Hostility is DataModel.Entities.Guild cachedHostility && cachedHostility.Id == deletedGuildId)
+                {
+                    container.Guild.Hostility = null;
+                }
+            }
+
+            if (hostileGuilds.Count > 0)
+            {
                 await guildContainer.DatabaseContext.SaveChangesAsync().ConfigureAwait(false);
             }
 

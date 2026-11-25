@@ -45,7 +45,20 @@ public class ConfigurationChangeListener : IConfigurationChangeListener
     /// <inheritdoc />
     public async ValueTask ConfigurationAddedAsync(Type type, Guid id, object configuration, object? parent, INavigationBase? parentCollectionNavigation)
     {
-        if (parentCollectionNavigation?.GetCollectionAccessor() is { } collectionAccessor
+        // Without the parent relationship the added child can't be attached to the cached parent.
+        // Dropping the cache makes the next access reload the affected configuration set from the
+        // database, so a change which was published without this information (e.g. across
+        // processes) is still applied consistently instead of leaving a stale collection behind.
+        var hasParentInformation = parentCollectionNavigation is not null
+            && (parent?.GetId() ?? parent as Guid?) is not null;
+        if (!hasParentInformation)
+        {
+            if (this._contextProvider.Value.RepositoryProvider is ICacheAwareRepositoryProvider cacheAwareRepositoryProvider)
+            {
+                cacheAwareRepositoryProvider.ResetCache();
+            }
+        }
+        else if (parentCollectionNavigation?.GetCollectionAccessor() is { } collectionAccessor
             && (parent?.GetId() ?? parent as Guid?) is { } parentId)
         {
             using var configContext = this._contextProvider.Value.CreateNewConfigurationContext();
@@ -79,7 +92,16 @@ public class ConfigurationChangeListener : IConfigurationChangeListener
     /// <inheritdoc />
     public async ValueTask ConfigurationRemovedAsync(Type type, Guid id, object? parent, INavigationBase? parentCollectionNavigation)
     {
-        if (parentCollectionNavigation?.GetCollectionAccessor() is { } collectionAccessor
+        var hasParentInformation = parentCollectionNavigation is not null
+            && (parent?.GetId() ?? parent as Guid?) is not null;
+        if (!hasParentInformation)
+        {
+            if (this._contextProvider.Value.RepositoryProvider is ICacheAwareRepositoryProvider cacheAwareRepositoryProvider)
+            {
+                cacheAwareRepositoryProvider.ResetCache();
+            }
+        }
+        else if (parentCollectionNavigation?.GetCollectionAccessor() is { } collectionAccessor
             && (parent?.GetId() ?? parent as Guid?) is { } parentId)
         {
             using var configContext = this._contextProvider.Value.CreateNewConfigurationContext();

@@ -209,10 +209,14 @@ foreach ($destination in @(
 }
 
 $postgresLicense = @(
+    (Join-Path $packageRoot 'Runtime\PostgreSQL\LICENSE.txt'),
     (Join-Path $packageRoot 'Runtime\PostgreSQL\doc\COPYRIGHT'),
     (Join-Path $packageRoot 'Runtime\PostgreSQL\COPYRIGHT'),
     (Join-Path $packageRoot 'Runtime\PostgreSQL\server_license.txt')
 ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+if (-not $postgresLicense) {
+    throw 'The PostgreSQL runtime does not contain its license file.'
+}
 Copy-Item -LiteralPath $postgresLicense -Destination (Join-Path $packageRoot 'Licenses\PostgreSQL.txt')
 $postgresThirdPartyLicense = Join-Path $packageRoot 'Runtime\PostgreSQL\commandlinetools_3rd_party_licenses.txt'
 if (-not (Test-Path -LiteralPath $postgresThirdPartyLicense)) {

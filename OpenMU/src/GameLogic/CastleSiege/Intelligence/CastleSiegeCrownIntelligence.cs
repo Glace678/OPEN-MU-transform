@@ -62,11 +62,18 @@ public sealed class CastleSiegeCrownIntelligence : CastleSiegeNpcIntelligenceBas
             return ValueTask.CompletedTask;
         }
 
-        var candidate = crown.CurrentMap.GetAttackablesInRange(crown.Position, 1)
+        // Filter the candidates by the very same capture rules which the crown mechanics apply
+        // afterwards, and only then select one. Otherwise an ineligible player standing on the crown
+        // (for example without a guild of the attacking side) would shadow an eligible one, just
+        // because his entity id happens to be lower.
+        var nearbyPlayers = crown.CurrentMap.GetAttackablesInRange(crown.Position, 1)
             .OfType<Player>()
-            .Where(player => player.IsAlive
-                             && player.CurrentMap == crown.CurrentMap)
-            .MinBy(player => player.Id);
+            .Where(player => player.IsAlive && player.CurrentMap == crown.CurrentMap)
+            .ToList();
+        var candidate = nearbyPlayers
+            .Where(player => CastleSiegeCrownMechanics.GetCaptureSide(this._context, player) is not null)
+            .MinBy(player => player.Id)
+            ?? nearbyPlayers.MinBy(player => player.Id);
         this._context.CrownUser = candidate;
         return ValueTask.CompletedTask;
     }

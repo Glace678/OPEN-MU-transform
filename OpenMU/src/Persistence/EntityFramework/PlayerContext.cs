@@ -30,7 +30,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
     {
         using var l = await this.Lock.LockAsync(cancellationToken).ConfigureAwait(false);
         return await this.Context.Set<Account>().AsNoTracking()
-            .Where(account => account.LoginName == loginName)
+            .Where(account => account.LoginName.ToLower() == loginName.ToLowerInvariant())
             .Select(account => new AccountCredentialSnapshot(account.LoginName, account.PasswordHash, account.RecoveryCodeHash))
             .SingleOrDefaultAsync(cancellationToken).ConfigureAwait(false);
     }
@@ -63,7 +63,7 @@ internal class PlayerContext : CachingEntityFrameworkContext, IPlayerContext, IA
             // credential properties so unsaved gameplay fields (such as VaultPassword) are preserved.
             var trackedAccount = this.Context.ChangeTracker.Entries<Account>()
                 .FirstOrDefault(entry => entry.State != EntityState.Added
-                    && entry.Entity.LoginName == expected.LoginName);
+                    && string.Equals(entry.Entity.LoginName, expected.LoginName, StringComparison.OrdinalIgnoreCase));
             if (trackedAccount is { })
             {
                 var passwordProperty = trackedAccount.Property(account => account.PasswordHash);

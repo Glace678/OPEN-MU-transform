@@ -82,30 +82,34 @@ public static class QuestStructExtensions
         message.QuestNumber = (ushort)activeQuest.Number;
 
         var itemSerializer = player.ItemSerializer;
-        if (activeQuest.RequiredItems.Any())
+
+        // A quest can require items and monster kills at the same time; both sets belong to the
+        // client's condition list. The packet has five fixed condition slots.
+        const int MaxConditionSlots = 5;
+        int conditionIndex = 0;
+        foreach (var requiredItem in activeQuest.RequiredItems)
         {
-            message.ConditionCount = (byte)activeQuest.RequiredItems.Count;
-            int i = 0;
-            foreach (var requiredItem in activeQuest.RequiredItems)
+            if (conditionIndex >= MaxConditionSlots)
             {
-                requiredItem.AssignTo(message.GetQuestCondition(i), player);
-                i++;
+                break;
             }
+
+            requiredItem.AssignTo(message.GetQuestCondition(conditionIndex), player);
+            conditionIndex++;
         }
-        else if (activeQuest.RequiredMonsterKills.Any())
+
+        foreach (var requiredKill in activeQuest.RequiredMonsterKills)
         {
-            message.ConditionCount = (byte)activeQuest.RequiredMonsterKills.Count;
-            int i = 0;
-            foreach (var requiredKill in activeQuest.RequiredMonsterKills)
+            if (conditionIndex >= MaxConditionSlots)
             {
-                requiredKill.AssignTo(message.GetQuestCondition(i), questState!);
-                i++;
+                break;
             }
+
+            requiredKill.AssignTo(message.GetQuestCondition(conditionIndex), questState!);
+            conditionIndex++;
         }
-        else
-        {
-            // no requirement states available
-        }
+
+        message.ConditionCount = (byte)conditionIndex;
 
         int r = 0;
         foreach (var reward in activeQuest.Rewards)
@@ -134,30 +138,34 @@ public static class QuestStructExtensions
         message.QuestNumber = (ushort)activeQuest.Number;
 
         var itemSerializer = player.ItemSerializer;
-        if (activeQuest.RequiredItems.Any())
+
+        // See AssignActiveQuestData(QuestStateRef): items and kills share the condition list and
+        // the extended packet also has five fixed condition slots.
+        const int MaxConditionSlots = 5;
+        int conditionIndex = 0;
+        foreach (var requiredItem in activeQuest.RequiredItems)
         {
-            message.ConditionCount = (byte)activeQuest.RequiredItems.Count;
-            int i = 0;
-            foreach (var requiredItem in activeQuest.RequiredItems)
+            if (conditionIndex >= MaxConditionSlots)
             {
-                requiredItem.AssignTo(message.GetQuestConditionExtended(i), player);
-                i++;
+                break;
             }
+
+            requiredItem.AssignTo(message.GetQuestConditionExtended(conditionIndex), player);
+            conditionIndex++;
         }
-        else if (activeQuest.RequiredMonsterKills.Any())
+
+        foreach (var requiredKill in activeQuest.RequiredMonsterKills)
         {
-            message.ConditionCount = (byte)activeQuest.RequiredMonsterKills.Count;
-            int i = 0;
-            foreach (var requiredKill in activeQuest.RequiredMonsterKills)
+            if (conditionIndex >= MaxConditionSlots)
             {
-                requiredKill.AssignTo(message.GetQuestConditionExtended(i), questState!);
-                i++;
+                break;
             }
+
+            requiredKill.AssignTo(message.GetQuestConditionExtended(conditionIndex), questState!);
+            conditionIndex++;
         }
-        else
-        {
-            // no requirement states available
-        }
+
+        message.ConditionCount = (byte)conditionIndex;
 
         int r = 0;
         foreach (var reward in activeQuest.Rewards)

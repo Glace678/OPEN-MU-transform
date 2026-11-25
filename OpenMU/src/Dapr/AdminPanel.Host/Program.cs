@@ -37,7 +37,11 @@ var metricsRegistry = new MetricsRegistry();
 // todo: add some meaningful metrics
 builder.AddOpenTelemetryMetrics(metricsRegistry);
 
-var app = builder.BuildAndConfigure(false);
+// The admin panel is browser-facing: its pages, interactive circuits and own UI APIs are
+// protected by the admin cookie session and the role policies. The internal Dapr token gate
+// must not run in front of them, otherwise every proxied browser request would be rejected
+// before the cookie authentication has a chance to run.
+var app = builder.BuildAndConfigure(false, internalTokenGate: false);
 
 // Align the Dapr-hosted admin panel with the shared ConfigureAdminPanel pipeline.
 // BuildAndConfigure only wires the generic Dapr middleware; without these the panel

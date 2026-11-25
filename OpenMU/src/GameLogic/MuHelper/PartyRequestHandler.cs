@@ -98,8 +98,19 @@ public static class PartyRequestHandler
         }
         finally
         {
-            await receiver.PlayerState.TryAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
-            receiver.LastPartyRequester = null;
+            // Only clean up the state which belongs to this request. The auto-accept path can run
+            // while the receiver is in another state (trade, NPC dialog, a pending invitation of
+            // somebody else), and it must not end or reset that state.
+            if (ReferenceEquals(receiver.LastPartyRequester, requester))
+            {
+                receiver.LastPartyRequester = null;
+            }
+
+            if (receiver.LastPartyRequester is null
+                && receiver.PlayerState.CurrentState == PlayerState.PartyRequest)
+            {
+                await receiver.PlayerState.TryAdvanceToAsync(PlayerState.EnteredWorld).ConfigureAwait(false);
+            }
         }
 
         return success;

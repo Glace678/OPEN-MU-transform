@@ -97,9 +97,10 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
 
         // Reset backup inventory to avoid items are restored after failure and sudden disconnect of the client.
         player.BackupInventory = null;
+        var batchCount = this.GetBatchCount(items);
         foreach (var i in items)
         {
-            await this.RequiredItemChangeAsync(player, i, false).ConfigureAwait(false);
+            await this.RequiredItemChangeAsync(player, i, false, batchCount).ConfigureAwait(false);
         }
 
         return (CraftingResult.Failed, null);
@@ -171,9 +172,10 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
 
         try
         {
+            var batchCount = this.GetBatchCount(requiredItems);
             foreach (var requiredItemLink in requiredItems)
             {
-                await this.RequiredItemChangeAsync(player, requiredItemLink, true).ConfigureAwait(false);
+                await this.RequiredItemChangeAsync(player, requiredItemLink, true, batchCount).ConfigureAwait(false);
             }
 
             if (player.TemporaryStorage is { } temporaryStorage)
@@ -217,7 +219,16 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
     /// <param name="player">The player.</param>
     /// <param name="itemLink">The item link.</param>
     /// <param name="success"><c>true</c>, if the crafting was successful; Otherwise, <c>false</c>.</param>
-    private async ValueTask RequiredItemChangeAsync(Player player, CraftingRequiredItemLink itemLink, bool success)
+    /// <summary>
+    /// Gets the number of crafting batches which the given materials produce. Handlers which support
+    /// stacking materials override this so that validation, price, output and consumption all use the
+    /// same unit of measurement.
+    /// </summary>
+    /// <param name="requiredItems">The linked required items.</param>
+    /// <returns>The number of batches.</returns>
+    protected virtual int GetBatchCount(IList<CraftingRequiredItemLink> requiredItems) => 1;
+
+    private async ValueTask RequiredItemChangeAsync(Player player, CraftingRequiredItemLink itemLink, bool success, int batchCount)
     {
         var mixResult = success ? itemLink.ItemRequirement.SuccessResult : itemLink.ItemRequirement.FailResult;
 
@@ -225,29 +236,30 @@ public abstract class BaseItemCraftingHandler : IItemCraftingHandler
         {
             case MixResult.Disappear:
                 var point = player.GameContext.PlugInManager.GetPlugInPoint<IItemDestroyedPlugIn>();
-                var hasExactRequiredAmount = itemLink.ItemRequirement.MinimumAmount > 0
-                    && itemLink.ItemRequirement.MaximumAmount == itemLink.ItemRequirement.MinimumAmount
-                    && itemLink.ItemRequirement.AddPercentage == 0;
-                var remainingToConsume = hasExactRequiredAmount ? itemLink.ItemRequirement.MinimumAmount : int.MaxValue;
+
+                // Consume exactly what the material plan promises: the minimum amount per batch, once
+                // for every produced batch. Without a minimum amount the requirement means "all given
+                // items", which keeps the previous behaviour for such recipes.
+                var hasDefinedAmount = itemLink.ItemRequirement.MinimumAmount > 0;
+                var remainingToConsume = hasDefinedAmount
+                    ? (long)itemLink.ItemRequirement.MinimumAmount * Math.Max(1, batchCount)
+                    : long.MaxValue;
                 foreach (var item in itemLink.Items.ToList())
                 {
-                    if (hasExactRequiredAmount && remainingToConsume <= 0)
+                    if (remainingToConsume <= 0)
                     {
                         break;
                     }
 
-                    if (hasExactRequiredAmount && item.IsStackable() && item.Durability > remainingToConsume)
+                    if (item.IsStackable() && item.Durability > remainingToConsume)
                     {
-                        item.Durability -= remainingToConsume;
+                        item.Durability -= (byte)remainingToConsume;
                         remainingToConsume = 0;
                         await player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
                         break;
                     }
 
-                    if (hasExactRequiredAmount)
-                    {
-                        remainingToConsume -= item.IsStackable() ? Math.Max(1, (int)item.Durability) : 1;
-                    }
+                    remainingToConsume -= item.IsStackable() ? Math.Max(1, (int)item.Durability) : 1;
 
                     player.Logger.LogDebug("Item {0} is getting destroyed.", item);
                     await player.TemporaryStorage!.RemoveItemAsync(item).ConfigureAwait(false);

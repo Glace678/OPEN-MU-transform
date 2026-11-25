@@ -54,27 +54,17 @@ WZResult CShopList::LoadCategroy(const wchar_t* szFilePath)  // OK
         LastError = GetLastError();
     }
 
-    char buff[1024] = {0};
-
     if (ifs.is_open())
     {
         this->GetCategoryListPtr()->Clear();
 
-        int linesRead  = 0;
+        const std::vector<std::wstring> lines = this->ReadShopListLines(szFilePath, enc);
+        const int linesRead  = static_cast<int>(lines.size());
         int rowsParsed = 0;
 
-        while (true)
+        for (const std::wstring& data : lines)
         {
-            memset(buff, 0, sizeof(buff));
-
-            if (!ifs.getline(buff, sizeof(buff)))
-                break;
-
-            ++linesRead;
-
             CShopCategory cat;
-
-            const std::wstring data = this->GetDecodedString(buff, enc);
 
             if (cat.SetCategory(data))
             {
@@ -126,20 +116,15 @@ WZResult CShopList::LoadPackage(const wchar_t* szFilePath)  // OK
         LastError = GetLastError();
     }
 
-    char buff[1024] = {0};
-
     if (ifs.is_open())
     {
         this->GetPackageListPtr()->Clear();
 
-        while (true)
+        for (const std::wstring& data : this->ReadShopListLines(szFilePath, enc))
         {
-            if (!ifs.getline(buff, sizeof(buff)))
-                break;
-
             CShopPackage pack;
 
-            if (pack.SetPackage(this->GetDecodedString(buff, enc)))
+            if (pack.SetPackage(data))
             {
                 this->GetPackageListPtr()->Append(pack);
                 this->GetCategoryListPtr()->InsertPackage(pack.ProductDisplaySeq, pack.PackageProductSeq);
@@ -183,22 +168,13 @@ WZResult CShopList::LoadProduct(const wchar_t* szFilePath)  // OK
         LastError = GetLastError();
     }
 
-    char buff[1024] = {0};
-
     if (ifs.is_open())
     {
         this->GetProductListPtr()->Clear();
 
-        while (true)
+        for (const std::wstring& data : this->ReadShopListLines(szFilePath, enc))
         {
-            memset(buff, 0, sizeof(buff));
-
-            if (!ifs.getline(buff, sizeof(buff)))
-                break;
-
             CShopProduct product;
-
-            std::wstring data = this->GetDecodedString(buff, enc);
 
             if (product.SetProduct(data))
             {
@@ -267,59 +243,46 @@ FILE_ENCODE CShopList::IsFileEncodingUtf8(const wchar_t* szFilePath)  // OK
     return FE_ANSI;
 }
 
-std::wstring CShopList::GetDecodedString(const char* buffer, FILE_ENCODE encode)  // OK
+std::wstring CShopList::DecodeShopListLine(const std::string& line, FILE_ENCODE encode)
 {
     std::wstring result;
 
-    if (!buffer)
+    if (line.empty())
     {
         return result;
     }
 
     if (encode == FE_UNICODE)
     {
-        if (static_cast<unsigned char>(buffer[0]) == 0xFF && static_cast<unsigned char>(buffer[1]) == 0xFE)
+        // The bytes are UTF-16LE code units. The line splitter already removed the BOM and
+        // the wide line breaks, so decode each little-endian pair into a wide character.
+        for (size_t i = 0; i + 1 < line.size(); i += 2)
         {
-            buffer += 2;
+            const wchar_t ch = static_cast<wchar_t>(
+                static_cast<unsigned char>(line[i]) |
+                (static_cast<unsigned char>(line[i + 1]) << 8));
+            if (ch == L'\0')
+            {
+                break;
+            }
+
+            result.push_back(ch);
         }
-        // UTF-16LE input: std::ifstream::getline read the raw little-endian bytes
-        // into a narrow buffer, so they already are wide characters. Reinterpret
-        // is the correct decode here (catalog files are ANSI today, so this path
-        // is not normally exercised, but keep it lossless rather than empty).
-        result = reinterpret_cast<const wchar_t*>(buffer);
-        while (!result.empty() && (result.back() == L'\r' || result.back() == L'\n'))
-        {
-            result.pop_back();
-        }
+
         return result;
     }
 
-    if (encode == FE_UTF8 && static_cast<unsigned char>(buffer[0]) == 0xEF &&
-        static_cast<unsigned char>(buffer[1]) == 0xBB && static_cast<unsigned char>(buffer[2]) == 0xBF)
-    {
-        buffer += 3;
-    }
-
-    // FE_ANSI -> CP_ACP, FE_UTF8 -> CP_UTF8. Convert the narrow bytes to UTF-16
-    // properly. The old decompiled code reinterpret-cast the narrow ASCII bytes
-    // as wchar_t* ("todo: check if that's correct"), which turned a row like
-    // "10@Item@200@..." into a single garbage token with no wide '@'
-    // delimiters. CStringToken then yielded 1 field instead of 7, so every row
-    // decoded to Root=0 -> zero category zones -> no tabs and an empty grid.
+    std::string bytes = line;
     const UINT codePage = (encode == FE_UTF8) ? CP_UTF8 : CP_ACP;
 
-    int cchWideChar = MultiByteToWideChar(codePage, 0, buffer, -1, 0, 0);
+    const int cchWideChar = MultiByteToWideChar(codePage, 0, bytes.data(), static_cast<int>(bytes.size()), nullptr, 0);
     if (cchWideChar <= 0)
     {
-        return result;  // empty string on conversion failure
+        return result;
     }
 
-    auto lpWideCharStr = new WCHAR[cchWideChar];
-    MultiByteToWideChar(codePage, 0, buffer, -1, lpWideCharStr, cchWideChar);
-
-    result = lpWideCharStr;
-
-    delete[] lpWideCharStr;
+    result.resize(static_cast<size_t>(cchWideChar));
+    MultiByteToWideChar(codePage, 0, bytes.data(), static_cast<int>(bytes.size()), &result[0], cchWideChar);
 
     while (!result.empty() && (result.back() == L'\r' || result.back() == L'\n'))
     {
@@ -328,4 +291,110 @@ std::wstring CShopList::GetDecodedString(const char* buffer, FILE_ENCODE encode)
 
     return result;
 }
-#endif
+
+std::vector<std::wstring> CShopList::ReadShopListLines(const wchar_t* szFilePath, FILE_ENCODE encode)
+{
+    std::vector<std::wstring> lines;
+
+    if (!szFilePath || !*szFilePath)
+    {
+        return lines;
+    }
+
+    std::ifstream ifs(std::filesystem::path(szFilePath), std::ifstream::in | std::ifstream::binary);
+    if (!ifs.is_open())
+    {
+        return lines;
+    }
+
+    const std::string content((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    ifs.close();
+
+    if (encode == FE_UNICODE)
+    {
+        size_t pos = 0;
+        if (content.size() >= 2 &&
+            static_cast<unsigned char>(content[0]) == 0xFF &&
+            static_cast<unsigned char>(content[1]) == 0xFE)
+        {
+            pos = 2;
+        }
+
+        std::wstring current;
+        for (; pos + 1 < content.size(); pos += 2)
+        {
+            const wchar_t ch = static_cast<wchar_t>(
+                static_cast<unsigned char>(content[pos]) |
+                (static_cast<unsigned char>(content[pos + 1]) << 8));
+
+            if (ch == L'\0')
+            {
+                break;
+            }
+
+            if (ch == L'\r')
+            {
+                const bool followedByLineFeed =
+                    (pos + 3 < content.size()) &&
+                    static_cast<unsigned char>(content[pos + 3]) == 0x0A;
+                if (!followedByLineFeed)
+                {
+                    lines.push_back(current);
+                    current.clear();
+                }
+
+                continue;
+            }
+
+            if (ch == L'\n')
+            {
+                lines.push_back(current);
+                current.clear();
+                continue;
+            }
+
+            current.push_back(ch);
+        }
+
+        if (!current.empty())
+        {
+            lines.push_back(current);
+        }
+
+        return lines;
+    }
+
+    size_t pos = 0;
+    if (encode == FE_UTF8 && content.size() >= 3 &&
+        static_cast<unsigned char>(content[0]) == 0xEF &&
+        static_cast<unsigned char>(content[1]) == 0xBB &&
+        static_cast<unsigned char>(content[2]) == 0xBF)
+    {
+        pos = 3;
+    }
+
+    std::string current;
+    for (; pos < content.size(); ++pos)
+    {
+        const char ch = content[pos];
+        if (ch == '\n' || ch == '\r')
+        {
+            if (!current.empty())
+            {
+                lines.push_back(this->DecodeShopListLine(current, encode));
+                current.clear();
+            }
+
+            continue;
+        }
+
+        current.push_back(ch);
+    }
+
+    if (!current.empty())
+    {
+        lines.push_back(this->DecodeShopListLine(current, encode));
+    }
+
+    return lines;
+}

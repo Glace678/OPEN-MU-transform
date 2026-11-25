@@ -220,21 +220,35 @@ bool SaveTerrainAttribute(wchar_t* FileName, int iMap)
         SendMessage(g_hWnd, WM_DESTROY, 0, 0);
         return false;
     }
+    // Write the same layout, width and encoding which OpenTerrainAttribute parses: a four byte
+    // header (version, one byte map number, width, height) followed by 16 bit wall words, encrypted
+    // with BuxConvert and then MapFileEncrypt (the exact inverse of the load path).
     const BYTE Version = 0;
     const BYTE Width   = 255;
     const BYTE Height  = 255;
 
-    fwrite(&Version, sizeof(Version), 1, fp);
-    fwrite(&iMap, sizeof(iMap), 1, fp);
-    fwrite(&Width, sizeof(Width), 1, fp);
-    fwrite(&Height, sizeof(Height), 1, fp);
+    const std::size_t plainSize = Data::Terrain::AttributeHeaderSize + (TERRAIN_SIZE * TERRAIN_SIZE * sizeof(WORD));
+    std::vector<BYTE> plain(plainSize, 0);
+    plain[0] = Version;
+    plain[1] = static_cast<BYTE>(iMap);
+    plain[2] = Width;
+    plain[3] = Height;
 
-    // Add Frustum Culling here
+    for (int i = 0; i < TERRAIN_SIZE * TERRAIN_SIZE; ++i)
+    {
+        const std::size_t offset = Data::Terrain::AttributeHeaderSize + (static_cast<std::size_t>(i) * sizeof(WORD));
+        plain[offset]            = static_cast<BYTE>(TerrainWall[i] & 0xFF);
+        plain[offset + 1]        = static_cast<BYTE>((TerrainWall[i] >> 8) & 0xFF);
+    }
 
-    fwrite(TerrainWall, TERRAIN_SIZE * TERRAIN_SIZE * sizeof(WORD), 1, fp);
+    BuxConvert(plain.data(), static_cast<int>(plain.size()));
 
+    std::vector<BYTE> encrypted(plain.size(), 0);
+    MapFileEncrypt(encrypted.data(), plain.data(), static_cast<int>(plain.size()));
+
+    const bool written = fwrite(encrypted.data(), encrypted.size(), 1, fp) == 1;
     fclose(fp);
-    return true;
+    return written;
 }
 
 void AddTerrainAttribute(int x, int y, BYTE att)

@@ -35,10 +35,23 @@ public class QuestCancelledPlugIn : IQuestCancelledPlugIn
     {
         if (quest.Group == QuestConstants.LegacyQuestGroup)
         {
-            this._player.SelectedCharacter?.QuestStates.FirstOrDefault(q => q.Group == QuestConstants.LegacyQuestGroup)?.SendLegacyQuestStateAsync(this._player);
+            var legacyState = this._player.SelectedCharacter?.QuestStates
+                .FirstOrDefault(q => q.Group == QuestConstants.LegacyQuestGroup);
+            if (legacyState is not null)
+            {
+                // The state update must complete before the cancel flow reports back, otherwise
+                // a following event could overtake this packet (and errors could escape it).
+                await legacyState.SendLegacyQuestStateAsync(this._player).ConfigureAwait(false);
+            }
+
             return;
         }
 
-        await this._player.Connection.SendQuestCancelledAsync((ushort)quest.Number, (ushort)quest.Group).ConfigureAwait(false);
+        if (this._player.Connection is not { } connection)
+        {
+            return;
+        }
+
+        await connection.SendQuestCancelledAsync((ushort)quest.Number, (ushort)quest.Group).ConfigureAwait(false);
     }
 }

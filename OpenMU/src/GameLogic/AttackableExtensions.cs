@@ -424,6 +424,20 @@ public static class AttackableExtensions
     /// <param name="skillEntry">The skill entry.</param>
     /// <param name="hitInfo">The hit information.</param>
     /// <returns>The success of the appliance.</returns>
+    /// <summary>
+    /// Elemental resistances are initialized on a normalized 0..1 scale (e.g. 253.2 / 255 for a
+    /// boss). A resistance of 1 means immunity; otherwise the chance to apply the effect is
+    /// 1 / (resistance * 255 + 1), which reproduces the legacy raw 0..255 curve.
+    /// </summary>
+    /// <param name="resistance">The normalized resistance value.</param>
+    /// <returns>True if the elemental effect should be applied.</returns>
+    private static bool IsElementalEffectApplied(float resistance)
+    {
+        var normalizedResistance = Math.Clamp(resistance, 0f, 1f);
+        return normalizedResistance < 1f
+            && Rand.NextRandomBool(1 / ((normalizedResistance * 255f) + 1));
+    }
+
     public static async ValueTask<bool> TryApplyElementalEffectsAsync(this IAttackable target, IAttacker attacker, SkillEntry skillEntry, HitInfo? hitInfo = null)
     {
         if (!target.IsAlive)
@@ -437,8 +451,7 @@ public static class AttackableExtensions
 
         if (modifier is not null && !skipModifier)
         {
-            var resistance = target.Attributes[modifier];
-            if (resistance >= 255 || !Rand.NextRandomBool(1 / (resistance + 1)))
+            if (!IsElementalEffectApplied(target.Attributes[modifier]))
             {
                 return false;
             }
@@ -486,8 +499,7 @@ public static class AttackableExtensions
             return false;
         }
 
-        var resistance = target.Attributes[modifier];
-        if (resistance >= 255 || !Rand.NextRandomBool(1 / (resistance + 1)))
+        if (!IsElementalEffectApplied(target.Attributes[modifier]))
         {
             return false;
         }

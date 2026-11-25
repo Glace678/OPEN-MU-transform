@@ -158,12 +158,14 @@ public static class AdminPanelAuthExtensions
 
         services.AddSingleton<IAuthorizationHandler, AdminAccessRequirementHandler>();
         services.AddSingleton<IAuthorizationHandler, AdminSetupRequirementHandler>();
+        services.AddSingleton<IAuthorizationHandler, AdminMfaSetupRequirementHandler>();
         services.AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder().AddRequirements(new AdminAccessRequirement()).Build())
             .AddPolicy(AdminPolicies.Viewer, policy => policy.AddRequirements(new AdminAccessRequirement(AdminRoles.Viewer)))
             .AddPolicy(AdminPolicies.Operator, policy => policy.AddRequirements(new AdminAccessRequirement(AdminRoles.Operator)))
             .AddPolicy(AdminPolicies.Administrator, policy => policy.AddRequirements(new AdminAccessRequirement(AdminRoles.Administrator)))
             .AddPolicy(AdminPolicies.Setup, policy => policy.AddRequirements(new AdminSetupRequirement()))
+            .AddPolicy(AdminPolicies.MfaSetup, policy => policy.AddRequirements(new AdminMfaSetupRequirement()))
             .AddPolicy(MobileGmAuthenticationDefaults.Policy, policy =>
             {
                 // F1: reuse the admin-panel cookie session (same scheme as the web
@@ -172,6 +174,14 @@ public static class AdminPanelAuthExtensions
                 policy.AddAuthenticationSchemes(CookieAuthenticationDefaults.AuthenticationScheme);
                 policy.RequireAuthenticatedUser();
                 policy.RequireRole(AdminRoles.Administrator);
+                if (authOptions.RequireTwoFactor)
+                {
+                    // A password-only session is not allowed to use the mobile GM write API either;
+                    // it has to complete the second factor first.
+                    policy.RequireAssertion(context => context.User.FindFirst(
+                        AdminAuthenticationDefaults.AuthenticationMethodClaimType)?.Value
+                        == AdminAuthenticationDefaults.MultiFactorAuthenticationMethod);
+                }
             });
         services.AddCascadingAuthenticationState();
         services.AddScoped<AdminAuthenticationStateProvider>();

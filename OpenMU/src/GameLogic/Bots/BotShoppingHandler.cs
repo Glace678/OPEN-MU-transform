@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.GameLogic.Bots;
 
 using MUnique.OpenMU.DataModel.Entities;
+using MUnique.OpenMU.GameLogic.CastleSiege;
 using MUnique.OpenMU.GameLogic.NPC;
 using MUnique.OpenMU.GameLogic.Offline;
 using MUnique.OpenMU.GameLogic.PlayerActions;
@@ -55,6 +56,7 @@ internal static class BotShoppingHandler
     private static readonly ItemRepairAction RepairAction = new();
     private static readonly CloseNpcDialogAction CloseAction = new();
     private static readonly ItemPriceCalculator PriceCalculator = new();
+    private static readonly CastleSiegeTaxProvider TaxProvider = new();
 
     /// <summary>
     /// Determines whether the bot should go shopping: the backpack is filling up with sellable junk,
@@ -306,6 +308,14 @@ internal static class BotShoppingHandler
                 continue;
             }
 
+            // A refusal due to the money limit is the only case where destroying is an acceptable
+            // way out. Items which a merchant refuses because they are bound or not sellable at all
+            // (quest items, for example) must never be destroyed, no matter how full the backpack is.
+            if (!IsSellableToMerchant(item))
+            {
+                continue;
+            }
+
             if (underPressure || IsDeadWeight(item))
             {
                 await player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
@@ -395,7 +405,7 @@ internal static class BotShoppingHandler
         {
             for (var i = 0; i < MaxPurchasesPerKind && GetCharges(player, priority) < target; i++)
             {
-                if (FindBestOffer(player, store, priority) is not { } offer)
+                if (await FindBestOfferAsync(player, store, priority).ConfigureAwait(false) is not { } offer)
                 {
                     break; // the merchant has none of this kind, or none the bot can afford.
                 }
@@ -428,7 +438,7 @@ internal static class BotShoppingHandler
         {
             while (bought < MaxJewelPurchasesPerTrip
                    && BotJewelHandler.CountInStock(player, identifier) < stockLimit
-                   && FindAffordableOffer(player, store, identifier, JewelPurchaseReserve) is { } offer)
+                   && await FindAffordableOfferAsync(player, store, identifier, JewelPurchaseReserve).ConfigureAwait(false) is { } offer)
             {
                 var moneyBefore = player.Money;
                 await BuyAction.BuyItemAsync(player, offer.ItemSlot).ConfigureAwait(false);
@@ -478,14 +488,14 @@ internal static class BotShoppingHandler
     /// afford, and of that kind the biggest stack - one purchase of a 255 charge stack beats twenty
     /// purchases of a stack of three, in Zen spent per charge as well as in backpack slots used.
     /// </summary>
-    private static Item? FindBestOffer(Player player, ItemStorage store, ItemIdentifier[] priority)
+    private static async ValueTask<Item?> FindBestOfferAsync(Player player, ItemStorage store, ItemIdentifier[] priority)
     {
         foreach (var identifier in priority)
         {
             // No reserve for potions on purpose: they are what keeps the bot alive and hunting, so
             // spending the last coin on them is right. Holding a reserve back here meant a bot which
             // the repair had left just under it walked to the merchant and bought nothing at all.
-            if (FindAffordableOffer(player, store, identifier, 0) is { } offer)
+            if (await FindAffordableOfferAsync(player, store, identifier, 0).ConfigureAwait(false) is { } offer)
             {
                 return offer;
             }
@@ -494,15 +504,37 @@ internal static class BotShoppingHandler
         return null;
     }
 
-    private static Item? FindAffordableOffer(Player player, ItemStorage store, ItemIdentifier identifier, int reserve)
+    private static async ValueTask<Item?> FindAffordableOfferAsync(Player player, ItemStorage store, ItemIdentifier identifier, int reserve)
     {
-        return store.Items
-            .Where(i => Matches(i, identifier))
-            .Where(i => SoloBalance.ScalePrice(
-                PriceCalculator.CalculateFinalBuyingPrice(i, player.GameContext.Configuration),
-                player.GameContext.Configuration) + reserve <= player.Money)
-            .OrderByDescending(i => i.Durability)
-            .FirstOrDefault();
+        // The actual purchase charges the store price including the Castle Siege tax, so the
+        // affordability check has to use the same quote. Otherwise a tax which is only added at the
+        // till makes a "affordable" offer fail, and the restock loop would stop even though smaller
+        // stacks would still fit into the budget.
+        foreach (var item in store.Items
+                     .Where(i => Matches(i, identifier))
+                     .OrderByDescending(i => i.Durability))
+        {
+            var basePrice = SoloBalance.ScalePrice(
+                PriceCalculator.CalculateFinalBuyingPrice(item, player.GameContext.Configuration),
+                player.GameContext.Configuration);
+            var totalPrice = await TaxProvider.GetStoreTotalCostAsync(player, basePrice).ConfigureAwait(false);
+            if (totalPrice is { } cost && cost + reserve <= player.Money)
+            {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Determines whether a merchant would accept the item in principle. It mirrors the checks of
+    /// <see cref="SellItemToNpcAction"/>; only such items may ever be destroyed after a failed sale,
+    /// because for them the only remaining reason of the refusal is the money limit.
+    /// </summary>
+    private static bool IsSellableToMerchant(Item item)
+    {
+        return item.Definition is { IsSellableToNpc: true, IsBoundToCharacter: false };
     }
 
     /// <summary>

@@ -7,6 +7,7 @@ namespace MUnique.OpenMU.Web.AdminPanel.Services;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using Microsoft.AspNetCore.Identity;
 using MUnique.OpenMU.Persistence.AdminAuth;
 using MUnique.OpenMU.Web.AdminPanel.Auth;
@@ -20,6 +21,12 @@ using MUnique.OpenMU.Web.Shared.Components.Toast;
 /// </summary>
 public class AdminUserManagementService
 {
+    // Serializes the mutations which have to keep at least one active administrator. The check and
+    // the write are separate statements against the user store; without a common gate two
+    // concurrent demotions/deletions of different administrators could both see "another admin
+    // exists" and both succeed, leaving none behind.
+    private static readonly SemaphoreSlim LastAdminGuard = new(1, 1);
+
     private readonly UserManager<AdminUser> _userManager;
     private readonly IAdminUserRepository _repository;
     private readonly AuthenticatorSetupService _authenticatorSetupService;
@@ -141,6 +148,19 @@ public class AdminUserManagementService
             return false;
         }
 
+        await LastAdminGuard.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            return await this.SetRoleCoreAsync(user, role).ConfigureAwait(false);
+        }
+        finally
+        {
+            LastAdminGuard.Release();
+        }
+    }
+
+    private async Task<bool> SetRoleCoreAsync(AdminUser user, string role)
+    {
         var currentRole = user.Roles;
         if (string.Equals(currentRole, AdminRole.Administrator.ToString(), StringComparison.Ordinal)
             && !string.Equals(role, AdminRole.Administrator.ToString(), StringComparison.Ordinal))
@@ -197,6 +217,19 @@ public class AdminUserManagementService
             return false;
         }
 
+        await LastAdminGuard.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            return await this.DeleteCoreAsync(user).ConfigureAwait(false);
+        }
+        finally
+        {
+            LastAdminGuard.Release();
+        }
+    }
+
+    private async Task<bool> DeleteCoreAsync(AdminUser user)
+    {
         if (await this._repository.GetCountAsync().ConfigureAwait(false) <= 1)
         {
             this._toastService.ShowError(Resources.CannotDeleteLastUser);

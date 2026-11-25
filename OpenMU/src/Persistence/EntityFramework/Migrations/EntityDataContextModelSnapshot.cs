@@ -4491,7 +4491,7 @@ namespace MUnique.OpenMU.Persistence.EntityFramework.Migrations
                     b.HasOne("MUnique.OpenMU.Persistence.EntityFramework.Model.CastleSiegeConfiguration", "RawCastleSiegeConfiguration")
                         .WithOne()
                         .HasForeignKey("MUnique.OpenMU.Persistence.EntityFramework.Model.GameConfiguration", "CastleSiegeConfigurationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("MUnique.OpenMU.Persistence.EntityFramework.Model.DuelConfiguration", "RawDuelConfiguration")
                         .WithOne()

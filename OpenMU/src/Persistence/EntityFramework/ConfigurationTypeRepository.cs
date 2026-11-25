@@ -26,6 +26,8 @@ internal class ConfigurationTypeRepository<T> : IRepository<T>, IConfigurationTy
 
     private readonly Func<GameConfiguration, ICollection<T>> _collectionSelector;
 
+    private readonly Func<GameConfiguration, T, bool>? _itemRemover;
+
     /// <summary>
     /// A cache which holds each <typeparamref name="T"/> in a dictionary to be able to access it by faster by id.
     /// There is one cache for each <see cref="GameConfiguration"/>, because it could be possible that more than one
@@ -43,10 +45,20 @@ internal class ConfigurationTypeRepository<T> : IRepository<T>, IConfigurationTy
     /// <param name="repositoryProvider">The repository provider.</param>
     /// <param name="loggerFactory">The logger factory.</param>
     /// <param name="collectionSelector">The collection selector which returns the collection of <typeparamref name="T" /> of a <see cref="GameConfiguration" />.</param>
-    public ConfigurationTypeRepository(IContextAwareRepositoryProvider repositoryProvider, ILoggerFactory loggerFactory, Func<GameConfiguration, ICollection<T>> collectionSelector)
+    /// <param name="itemRemover">
+    /// An optional remover for collections which are projections (e.g. all quests of all monsters).
+    /// It removes the item from its real owning collection; without it a removal on a projected
+    /// temporary list would report success but change nothing.
+    /// </param>
+    public ConfigurationTypeRepository(
+        IContextAwareRepositoryProvider repositoryProvider,
+        ILoggerFactory loggerFactory,
+        Func<GameConfiguration, ICollection<T>> collectionSelector,
+        Func<GameConfiguration, T, bool>? itemRemover = null)
     {
         this._repositoryProvider = repositoryProvider;
         this._collectionSelector = collectionSelector;
+        this._itemRemover = itemRemover;
         this._logger = loggerFactory.CreateLogger(this.GetType());
     }
 
@@ -93,8 +105,21 @@ internal class ConfigurationTypeRepository<T> : IRepository<T>, IConfigurationTy
         }
 
         var gameConfiguration = this.GetCurrentGameConfiguration();
-        var collection = this._collectionSelector(gameConfiguration);
-        return collection.Remove(item);
+        var removed = this._itemRemover is { } itemRemover
+            ? itemRemover(gameConfiguration, item)
+            : this._collectionSelector(gameConfiguration).Remove(item);
+        if (removed && item is IIdentifiable identifiable)
+        {
+            lock (this._cacheLock)
+            {
+                if (this._cache.TryGetValue(gameConfiguration, out var cachedItems))
+                {
+                    cachedItems.Remove(identifiable.Id);
+                }
+            }
+        }
+
+        return removed;
     }
 
     /// <inheritdoc />

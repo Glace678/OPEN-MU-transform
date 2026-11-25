@@ -243,32 +243,50 @@ public sealed class GameServer : IGameServer, IDisposable, IGameServerContextPro
             return;
         }
 
-        if (player.SelectedCharacter?.Letters.Contains(letter) ?? true)
+        var receivingCharacter = player.SelectedCharacter;
+        if (receivingCharacter is null || receivingCharacter.Letters.Contains(letter))
         {
             // We already know this letter, so we do nothing.
             // This usually never happens, but who knows...
             return;
         }
 
-        // The letter we get here might not be of the right type to be attached
-        // to the players context and letter collection.
-        // So, we simply load it from the database.
-        var loadedLetter = await player.PersistenceContext.GetByIdAsync<LetterHeader>(letter.Id).ConfigureAwait(false);
-        if (loadedLetter is null)
+        // The loading and the update run in the recipient's persistence boundary, and the character
+        // selection is validated again after each await: the player can log out or switch the
+        // character while the letter is being loaded. The persisted letter id keeps the update
+        // idempotent if the same letter is delivered twice.
+        await player.RunPersistenceExclusiveAsync(async () =>
         {
-            // something went wrong here, this should never happen.
-            this._logger.LogError("Couldn't find letter with id {0} on the database: {1}", letter.Id, letter);
-            return;
-        }
+            if (player.SelectedCharacter != receivingCharacter)
+            {
+                return;
+            }
 
-        var letterIndex = player.SelectedCharacter.Letters.IndexOf(loadedLetter);
-        if (letterIndex < 0)
-        {
-            letterIndex = player.SelectedCharacter!.Letters.Count;
-            player.SelectedCharacter.Letters.Add(loadedLetter);
-        }
+            // The letter we get here might not be of the right type to be attached
+            // to the players context and letter collection.
+            // So, we simply load it from the database.
+            var loadedLetter = await player.PersistenceContext.GetByIdAsync<LetterHeader>(letter.Id).ConfigureAwait(false);
+            if (loadedLetter is null)
+            {
+                // something went wrong here, this should never happen.
+                this._logger.LogError("Couldn't find letter with id {0} on the database: {1}", letter.Id, letter);
+                return;
+            }
 
-        await player.InvokeViewPlugInAsync<IAddToLetterListPlugIn>(p => p.AddToLetterListAsync(letter, (ushort)letterIndex, true)).ConfigureAwait(false);
+            if (player.SelectedCharacter != receivingCharacter || receivingCharacter.Letters.Contains(loadedLetter))
+            {
+                return;
+            }
+
+            var letterIndex = receivingCharacter.Letters.IndexOf(loadedLetter);
+            if (letterIndex < 0)
+            {
+                letterIndex = receivingCharacter.Letters.Count;
+                receivingCharacter.Letters.Add(loadedLetter);
+            }
+
+            await player.InvokeViewPlugInAsync<IAddToLetterListPlugIn>(p => p.AddToLetterListAsync(letter, (ushort)letterIndex, true)).ConfigureAwait(false);
+        }).ConfigureAwait(false);
     }
 
     /// <inheritdoc />

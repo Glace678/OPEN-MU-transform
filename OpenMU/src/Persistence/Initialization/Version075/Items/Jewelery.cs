@@ -14,7 +14,7 @@ using MUnique.OpenMU.GameLogic.Attributes;
 /// </summary>
 internal class Jewelery : InitializerBase
 {
-    private static readonly float[] ResistanceIncreaseByLevel = { 0, 1, 2, 3, 4 };
+    private static readonly float[] ResistanceIncreaseByLevel = { 0, 1f / 255, 2f / 255, 3f / 255, 4f / 255 };
     private ItemOptionDefinition? _healthRecoverOptionDefinition;
     private ItemLevelBonusTable? _resistancesBonusTable;
 

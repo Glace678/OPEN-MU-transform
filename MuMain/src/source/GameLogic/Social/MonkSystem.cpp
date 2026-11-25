@@ -21,6 +21,19 @@
 //////////////////////////////////////////////////////////////////////
 CMonkSystem g_CMonkSystem;
 
+/// <summary>
+/// A tracked target index is only usable while it is inside the character array and the character
+/// is still alive in the view. FindCharacterIndex returns MAX_CHARACTERS_CLIENT for "not found",
+/// which must not be dereferenced, and a stale index of a removed character is just as invalid.
+/// </summary>
+static bool IsUsableCharacterIndex(short index)
+{
+    const int characterIndex = static_cast<int>(index);
+    return characterIndex >= 0
+        && characterIndex < MAX_CHARACTERS_CLIENT
+        && CharactersClient[characterIndex].Object.Live;
+}
+
 CItemEqualType::CItemEqualType()
 {
     m_nModelType    = 0;
@@ -791,7 +804,7 @@ void CMonkSystem::DarksideRendering(CHARACTER* pCha, PART_t* pPart, bool Transla
     {
         if (fAnimationFrame > (m_nDummyIndex * 2) && m_nDummyIndex < 5)
         {
-            if (pObj->m_sTargetIndex >= 0 && pObj->m_sTargetIndex < MAX_CHARACTERS_CLIENT)
+            if (IsUsableCharacterIndex(pObj->m_sTargetIndex))
             {
                 VectorCopy(CharactersClient[pObj->m_sTargetIndex].Object.Position, vPos);
             }
@@ -1137,7 +1150,7 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
 
             m_bUseEffectOnce = true;
             vec3_t vPosition;
-            if (_pObj->m_sTargetIndex >= 0 && _pObj->m_sTargetIndex < MAX_CHARACTERS_CLIENT)
+            if (IsUsableCharacterIndex(_pObj->m_sTargetIndex))
             {
                 VectorCopy(CharactersClient[_pObj->m_sTargetIndex].Object.Position, vPosition);
             }
@@ -1270,7 +1283,7 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
 
             vec3_t Light, Position, P, dp, vAngle;
 
-            if (_pObj->m_sTargetIndex < 0)
+            if (!IsUsableCharacterIndex(_pObj->m_sTargetIndex))
                 return true;
 
             VectorCopy(CharactersClient[_pObj->m_sTargetIndex].Object.Position, Position);
@@ -1380,7 +1393,7 @@ bool CMonkSystem::RageCreateEffect(OBJECT* _pObj, int _nSkill)
 
             m_bUseEffectOnce = true;
 
-            if (_pObj->m_sTargetIndex < 0)
+            if (!IsUsableCharacterIndex(_pObj->m_sTargetIndex))
                 return true;
 
             vec3_t Position, vAngle, Light;

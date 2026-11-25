@@ -133,8 +133,9 @@ internal class AccountRepository : CachingGenericRepository<Account>
         using var context = this.GetContext();
         cancellationToken.ThrowIfCancellationRequested();
 
+        var normalizedLoginName = loginName.ToLowerInvariant();
         var accountInfo = await context.Context.Set<Account>()
-            .Where(a => a.LoginName == loginName)
+            .Where(a => a.LoginName.ToLower() == normalizedLoginName)
             .Select(a => new { a.PasswordHash, a.State })
             .AsNoTracking()
             .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
@@ -165,10 +166,11 @@ internal class AccountRepository : CachingGenericRepository<Account>
     {
         using var context = this.GetContext();
 
+        var normalizedLoginName = loginName.ToLowerInvariant();
         var accountInfo = await context.Context.Set<Account>()
            .Select(a => new { a.Id, a.LoginName })
            .AsNoTracking()
-           .FirstOrDefaultAsync(a => a.LoginName == loginName, cancellationToken).ConfigureAwait(false);
+           .FirstOrDefaultAsync(a => a.LoginName.ToLower() == normalizedLoginName, cancellationToken).ConfigureAwait(false);
 
         if (accountInfo != null)
         {
@@ -185,7 +187,7 @@ internal class AccountRepository : CachingGenericRepository<Account>
         var accountInfo = await context.Context.Set<Account>()
             .Select(a => new { a.Id, a.LoginName, a.PasswordHash })
             .AsNoTracking()
-            .FirstOrDefaultAsync(a => a.LoginName == loginName, cancellationToken).ConfigureAwait(false);
+            .FirstOrDefaultAsync(a => a.LoginName.ToLower() == loginName.ToLowerInvariant(), cancellationToken).ConfigureAwait(false);
 
         if (accountInfo is null)
         {

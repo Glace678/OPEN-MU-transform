@@ -515,6 +515,12 @@ public class BalanceV1EarlyEconomyTests
         await player.PlayerState.TryAdvanceToAsync(PlayerState.LoginScreen).ConfigureAwait(false);
         await player.PlayerState.TryAdvanceToAsync(PlayerState.Authenticated).ConfigureAwait(false);
         await player.PlayerState.TryAdvanceToAsync(PlayerState.CharacterSelection).ConfigureAwait(false);
+        var characterClass = configuration.CharacterClasses.FirstOrDefault(c => c.Number == stageNumber);
+        if (characterClass is { CreationAllowedFlag: not 0 })
+        {
+            player.Account.UnlockedCharacterClasses.Add(characterClass);
+        }
+
         await new CreateCharacterAction().CreateCharacterAsync(player, "BudgetTest", stageNumber).ConfigureAwait(false);
         var character = player.Account.Characters.Single();
         var weights = stageNumber switch

@@ -48,11 +48,26 @@ public class UpdateMasterStatsExtendedPlugIn : IUpdateMasterStatsPlugIn
             (ulong)character.MasterExperience,
             nextMasterExp,
             (ushort)character.MasterLevelUpPoints,
-            (ushort)this._player.Attributes[Stats.MaximumHealth],
-            (ushort)this._player.Attributes[Stats.MaximumMana],
-            (ushort)this._player.Attributes[Stats.MaximumShield],
-            (ushort)this._player.Attributes[Stats.MaximumAbility]).ConfigureAwait(false);
+            ToUnsignedInt(this._player.Attributes[Stats.MaximumHealth]),
+            ToUnsignedInt(this._player.Attributes[Stats.MaximumMana]),
+            ToUnsignedInt(this._player.Attributes[Stats.MaximumShield]),
+            ToUnsignedInt(this._player.Attributes[Stats.MaximumAbility]))
+            .ConfigureAwait(false);
 
         await this._player.InvokeViewPlugInAsync<IUpdateMasterSkillsPlugIn>(p => p.UpdateMasterSkillsAsync()).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Converts an attribute value to the unsigned 32 bit fields of the extended packet without
+    /// truncating it to 16 bits first. Out-of-range values are clamped to the field width.
+    /// </summary>
+    private static uint ToUnsignedInt(float value)
+    {
+        if (value <= 0f)
+        {
+            return 0;
+        }
+
+        return value >= uint.MaxValue ? uint.MaxValue : (uint)value;
     }
 }

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "UI/Chat/Chat.h"
+#include <algorithm>
 #include <cstdlib>
 #include <memory>
 #include "UI/Legacy/UIManager.h"
@@ -2141,20 +2142,23 @@ void ReceiveChatWhisper(const std::span<const BYTE> Packet)
         return;
     }
 
-    constexpr int MinimumWhisperPacketSize = sizeof(PCHATING);
-    if (Packet.size() < MinimumWhisperPacketSize)
+    // PCHATING declares the message as its maximum array, while the wire format is variable
+    // length. Using sizeof(PCHATING) as a lower bound rejected every ordinary short whisper.
+    constexpr int WhisperFixedSize = static_cast<int>(sizeof(PBMSG_HEADER)) + MAX_USERNAME_SIZE;
+    if (Packet.size() < static_cast<size_t>(WhisperFixedSize) + 1)
     {
-        g_ErrorReport.Write(L"Rejected whisper packet shorter than %d bytes.\r\n", MinimumWhisperPacketSize);
+        g_ErrorReport.Write(L"Rejected whisper packet shorter than %d bytes.\r\n", WhisperFixedSize + 1);
         return;
     }
 
     auto Data = (LPPCHATING)Packet.data();
 
-    const int messageSize =
-        static_cast<int>(Data->Header.Size) - MAX_USERNAME_SIZE - static_cast<int>(sizeof(PBMSG_HEADER));
-    if (messageSize <= 0 || messageSize > MAX_CHAT_SIZE)
+    const int messageSize = static_cast<int>(Data->Header.Size) - WhisperFixedSize;
+    const int receivedMessageSize = static_cast<int>(Packet.size()) - WhisperFixedSize;
+    if (messageSize <= 0 || messageSize > MAX_CHAT_SIZE || messageSize > receivedMessageSize)
     {
-        g_ErrorReport.Write(L"Rejected whisper packet with invalid message size %d.\r\n", messageSize);
+        g_ErrorReport.Write(L"Rejected whisper packet with invalid message size %d (received %d).\r\n",
+                            messageSize, receivedMessageSize);
         return;
     }
 
@@ -2163,8 +2167,13 @@ void ReceiveChatWhisper(const std::span<const BYTE> Packet)
     ID[MAX_USERNAME_SIZE] = L'\0';
 
     wchar_t Text[MAX_CHAT_SIZE + 1]{};
-    CMultiLanguage::ConvertFromUtf8(Text, Data->ChatText, messageSize);
-    Text[messageSize] = L'\0';
+    int textLength = CMultiLanguage::ConvertFromUtf8(Text, Data->ChatText, messageSize);
+    if (textLength < 0)
+    {
+        textLength = 0;
+    }
+
+    Text[std::min<size_t>(static_cast<size_t>(textLength), MAX_CHAT_SIZE)] = L'\0';
 
     UI::Chat::Whisper::Register(10, ID);
 
@@ -10539,12 +10548,13 @@ void ReceiveLetter(const BYTE* ReceiveBuffer)
     CMultiLanguage::ConvertFromUtf8(szTime, Data->Time, MAX_LETTER_TIME_LENGTH);
 
     wchar_t szName[MAX_USERNAME_SIZE + 1] = {};
-    CMultiLanguage::ConvertFromUtf8(szName, Data->Name, MAX_USERNAME_SIZE);
-    szName[MAX_USERNAME_SIZE] = '\0';
+    int nameLength = CMultiLanguage::ConvertFromUtf8(szName, Data->Name, MAX_USERNAME_SIZE);
+    szName[std::min(std::max(nameLength, 0), MAX_USERNAME_SIZE)] = '\0';
 
-    wchar_t szSubject[MAX_TEXT_LENGTH + 1] = {};
-    CMultiLanguage::ConvertFromUtf8(szSubject, Data->Subject, MAX_USERNAME_SIZE);
-    szSubject[MAX_USERNAME_SIZE] = '\0';
+    // The subject has its own protocol field length; it is not limited to the user name length.
+    wchar_t szSubject[MAX_LETTER_TITLE_LENGTH + 1] = {};
+    int subjectLength = CMultiLanguage::ConvertFromUtf8(szSubject, Data->Subject, MAX_LETTER_TITLE_LENGTH);
+    szSubject[std::min(std::max(subjectLength, 0), MAX_LETTER_TITLE_LENGTH)] = '\0';
 
     switch (Data->Read)
     {
@@ -12855,10 +12865,22 @@ void ReceiveGuildNpcLocation(std::span<const BYTE> ReceiveBuffer)
     }
 }
 
-void ReceiveMatchTimer(const BYTE* ReceiveBuffer)
+void ReceiveMatchTimer(std::span<const BYTE> ReceiveBuffer)
 {
-    auto pData = (LPPRECEIVE_MATCH_TIMER)ReceiveBuffer;
+    if (!g_pSiegeWarfare)
+    {
+        // The siege UI is created lazily while entering the map; messages can arrive before it.
+        return;
+    }
 
+    if (ReceiveBuffer.size() < sizeof(PRECEIVE_MATCH_TIMER))
+    {
+        g_ErrorReport.Write(L"Rejected match timer packet shorter than %d bytes.\r\n",
+                            static_cast<int>(sizeof(PRECEIVE_MATCH_TIMER)));
+        return;
+    }
+
+    const auto* pData = reinterpret_cast<const PRECEIVE_MATCH_TIMER*>(ReceiveBuffer.data());
     g_pSiegeWarfare->SetTime(pData->m_byHour, pData->m_byMinute);
 }
 
@@ -15269,7 +15291,7 @@ static void ProcessPacket(const BYTE* ReceiveBuffer, int32_t Size)
                     break;
 
                 case 0x1E:
-                    ReceiveMatchTimer(ReceiveBuffer);
+                    ReceiveMatchTimer(received_span);
                     break;
             }
         }

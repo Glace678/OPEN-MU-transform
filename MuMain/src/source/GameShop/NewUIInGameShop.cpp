@@ -753,8 +753,12 @@ bool CNewUIInGameShop::IsInGameShopOpen()
     if (Hero->Movement)
         return false;
 
-    if (!(Hero->SafeZone) && !(WD_0LORENCIA == gMapManager.WorldActive && WD_3NORIA == gMapManager.WorldActive &&
-                               WD_2DEVIAS == gMapManager.WorldActive && WD_51HOME_6TH_CHAR == gMapManager.WorldActive))
+    const bool isWhitelistedTown = WD_0LORENCIA == gMapManager.WorldActive
+                                   || WD_3NORIA == gMapManager.WorldActive
+                                   || WD_2DEVIAS == gMapManager.WorldActive
+                                   || WD_51HOME_6TH_CHAR == gMapManager.WorldActive;
+
+    if (!Hero->SafeZone && !isWhitelistedTown)
     {
         CMsgBoxIGSCommon* pMsgBox = NULL;
         CreateMessageBox(MSGBOX_LAYOUT_CLASS(CMsgBoxIGSCommonLayout), &pMsgBox);

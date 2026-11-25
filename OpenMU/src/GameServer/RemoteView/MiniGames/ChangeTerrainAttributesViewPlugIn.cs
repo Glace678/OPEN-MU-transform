@@ -4,6 +4,7 @@
 
 namespace MUnique.OpenMU.GameServer.RemoteView.MiniGames;
 
+using System.Linq;
 using System.Runtime.InteropServices;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.GameLogic.MiniGames;
@@ -35,32 +36,64 @@ public class ChangeTerrainAttributesViewPlugIn : IChangeTerrainAttributesViewPlu
             return;
         }
 
-        int Write()
+        // The packet length is a single byte (C1 header); large area updates have to be split.
+        var areaList = areas as IReadOnlyList<(byte StartX, byte StartY, byte EndX, byte EndY)> ?? areas.ToList();
+        var maxAreasPerPacket = 0;
+        while (maxAreasPerPacket < byte.MaxValue
+            && ChangeTerrainAttributesRef.GetRequiredSize(maxAreasPerPacket + 1) <= byte.MaxValue)
         {
-            var size = ChangeTerrainAttributesRef.GetRequiredSize(areas.Count);
-            var span = connection.Output.GetSpan(size)[..size];
-            var message = new ChangeTerrainAttributesRef(span)
-            {
-                Attribute = Convert(attribute),
-                RemoveAttribute = !setAttribute,
-                AreaCount = (byte)areas.Count,
-            };
-
-            var i = 0;
-            foreach (var (startX, startY, endX, endY) in areas)
-            {
-                var item = message[i];
-                item.StartX = startX;
-                item.StartY = startY;
-                item.EndX = endX;
-                item.EndY = endY;
-                i++;
-            }
-
-            return size;
+            maxAreasPerPacket++;
         }
 
-        await connection.SendAsync(Write).ConfigureAwait(false);
+        maxAreasPerPacket = Math.Max(1, maxAreasPerPacket);
+
+        if (areaList.Count == 0)
+        {
+            await connection.SendAsync(() =>
+            {
+                var size = ChangeTerrainAttributesRef.GetRequiredSize(0);
+                var span = connection.Output.GetSpan(size)[..size];
+                _ = new ChangeTerrainAttributesRef(span)
+                {
+                    Attribute = Convert(attribute),
+                    RemoveAttribute = !setAttribute,
+                    AreaCount = 0,
+                };
+                return size;
+            }).ConfigureAwait(false);
+            return;
+        }
+
+        for (var offset = 0; offset < areaList.Count; offset += maxAreasPerPacket)
+        {
+            var chunk = areaList.Skip(offset).Take(maxAreasPerPacket).ToList();
+            int Write()
+            {
+                var size = ChangeTerrainAttributesRef.GetRequiredSize(chunk.Count);
+                var span = connection.Output.GetSpan(size)[..size];
+                var message = new ChangeTerrainAttributesRef(span)
+                {
+                    Attribute = Convert(attribute),
+                    RemoveAttribute = !setAttribute,
+                    AreaCount = (byte)chunk.Count,
+                };
+
+                var i = 0;
+                foreach (var (startX, startY, endX, endY) in chunk)
+                {
+                    var item = message[i];
+                    item.StartX = startX;
+                    item.StartY = startY;
+                    item.EndX = endX;
+                    item.EndY = endY;
+                    i++;
+                }
+
+                return size;
+            }
+
+            await connection.SendAsync(Write).ConfigureAwait(false);
+        }
     }
 
     private static ChangeTerrainAttributes.TerrainAttributeType Convert(TerrainAttributeType type)

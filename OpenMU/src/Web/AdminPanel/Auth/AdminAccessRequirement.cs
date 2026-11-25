@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.Web.AdminPanel.Auth;
 
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 using MUnique.OpenMU.Persistence.AdminAuth;
 
 /// <summary>
@@ -26,10 +27,27 @@ public record AdminAccessRequirement(string? RequiredRole = null) : IAuthorizati
 public sealed record AdminSetupRequirement : IAuthorizationRequirement;
 
 /// <summary>
+/// The requirement for the pages and actions which a password-only session may still use when the
+/// configuration demands a second factor: the security page where the user sets it up.
+/// </summary>
+public sealed record AdminMfaSetupRequirement : IAuthorizationRequirement;
+
+/// <summary>
 /// Handles the <see cref="AdminAccessRequirement"/>.
 /// </summary>
 public class AdminAccessRequirementHandler : AuthorizationHandler<AdminAccessRequirement>
 {
+    private readonly AdminPanelAuthOptions _options;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AdminAccessRequirementHandler"/> class.
+    /// </summary>
+    /// <param name="options">The admin panel authentication options.</param>
+    public AdminAccessRequirementHandler(IOptions<AdminPanelAuthOptions> options)
+    {
+        this._options = options.Value;
+    }
+
     /// <inheritdoc />
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminAccessRequirement requirement)
     {
@@ -41,7 +59,37 @@ public class AdminAccessRequirementHandler : AuthorizationHandler<AdminAccessReq
             return Task.CompletedTask;
         }
 
+        // When the configuration demands a second factor, a session which was only authenticated
+        // with a password must not reach business pages, APIs or commands. Such a session is
+        // limited to the MFA setup policy (the security page) until it re-authenticates with the
+        // second factor. Identities without an authentication method claim (API keys) are not
+        // password sessions and keep their existing rules.
+        if (this._options.RequireTwoFactor
+            && context.User.FindFirst(AdminAuthenticationDefaults.AuthenticationMethodClaimType)?.Value
+                == AdminAuthenticationDefaults.PasswordAuthenticationMethod)
+        {
+            return Task.CompletedTask;
+        }
+
         if (requirement.RequiredRole is null || context.User.IsInRole(requirement.RequiredRole))
+        {
+            context.Succeed(requirement);
+        }
+
+        return Task.CompletedTask;
+    }
+}
+
+/// <summary>
+/// Handles the <see cref="AdminMfaSetupRequirement"/>: any authenticated user may reach the pages
+/// which are necessary to set up or verify the second factor, independent of the role level.
+/// </summary>
+public class AdminMfaSetupRequirementHandler : AuthorizationHandler<AdminMfaSetupRequirement>
+{
+    /// <inheritdoc />
+    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminMfaSetupRequirement requirement)
+    {
+        if (context.User.Identity?.IsAuthenticated is true)
         {
             context.Succeed(requirement);
         }

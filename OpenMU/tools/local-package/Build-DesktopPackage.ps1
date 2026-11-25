@@ -196,12 +196,20 @@ else {
 }
 
 # Tolerate unsigned development packages in the --verify smoke run (signed release builds are fail-closed).
+# Remember the caller's setting so the value is restored (not dropped) in the same session.
+$hadUnsignedManifestOverride = Test-Path -LiteralPath 'Env:\OPENMU_ALLOW_UNSIGNED_MANIFEST'
+$previousUnsignedManifestOverride = if ($hadUnsignedManifestOverride) { $env:OPENMU_ALLOW_UNSIGNED_MANIFEST } else { $null }
 $env:OPENMU_ALLOW_UNSIGNED_MANIFEST = '1'
 try {
     Invoke-Checked (Join-Path $output 'App/GMHost/OpenMU-GM') @('--root', $output, '--verify')
 }
 finally {
-    Remove-Item Env:\OPENMU_ALLOW_UNSIGNED_MANIFEST -ErrorAction SilentlyContinue
+    if ($hadUnsignedManifestOverride) {
+        $env:OPENMU_ALLOW_UNSIGNED_MANIFEST = $previousUnsignedManifestOverride
+    }
+    else {
+        Remove-Item Env:\OPENMU_ALLOW_UNSIGNED_MANIFEST -ErrorAction SilentlyContinue
+    }
 }
 Write-Output "Development package created: $output"
 Write-Output 'Not a release: native playthrough, controller/motor tests and macOS signing/notarization are still required.'

@@ -1,4 +1,4 @@
-# param() must be the first statement.
+﻿# param() must be the first statement.
 param([switch]$Force)
 
 $ErrorActionPreference = 'Stop'
@@ -13,11 +13,18 @@ $ruleName = 'OpenMU Mobile LAN'
 # P-04: keep exposure minimal -- Private profile + local subnet only. Refuse to
 # install a rule that cannot apply while Windows labels the network Public (same
 # guard as the developer firewall script), unless -Force is passed.
-$connectionProfile = Get-NetConnectionProfile | Select-Object -First 1
-if ($null -ne $connectionProfile -and $connectionProfile.NetProfileCategory -ne 'Private') {
-    throw "The current network is '$($connectionProfile.NetProfileCategory)'. The rule " +
+# Get-NetConnectionProfile exposes the category as NetworkCategory (NetProfileCategory is
+# not a property of that object). Pick the profile of an interface which is actually
+# classified as Private; a machine can have several profiles at once.
+$connectionProfiles = @(Get-NetConnectionProfile)
+$privateProfile = $connectionProfiles |
+    Where-Object { $_.NetworkCategory -eq 'Private' } |
+    Select-Object -First 1
+if ($null -eq $privateProfile -and -not $Force) {
+    $categories = ($connectionProfiles | ForEach-Object { "$($_.InterfaceAlias): $($_.NetworkCategory)" }) -join ', '
+    throw "No network interface is classified as Private ($categories). The rule " +
         "applies to the Private profile only, so the mobile ports would stay blocked. " +
-        "Set the network to Private and re-run, or pass -Force."
+        "Set the relevant network to Private and re-run, or pass -Force."
 }
 $firewallProfile = if ($Force) { 'Any' } else { 'Private' }
 

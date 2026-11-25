@@ -29,4 +29,10 @@ internal static class AdminPolicies
     /// admin user exists yet; afterwards it requires the administrator role.
     /// </summary>
     internal const string Setup = "OpenMU.Setup";
+
+    /// <summary>
+    /// Gets the policy for the pages and actions which stay reachable for a password-only session
+    /// while the configuration demands a second factor (setting it up).
+    /// </summary>
+    internal const string MfaSetup = "OpenMU.MfaSetup";
 }

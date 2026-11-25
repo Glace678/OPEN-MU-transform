@@ -78,7 +78,7 @@ public class AdminPanelAuthorizationTests
         switch (requirement)
         {
             case AdminAccessRequirement access:
-                await new AdminAccessRequirementHandler().HandleAsync(context);
+                await new AdminAccessRequirementHandler(Options.Create(new AdminPanelAuthOptions())).HandleAsync(context);
                 break;
             case AdminSetupRequirement:
                 await new AdminSetupRequirementHandler(this._availability).HandleAsync(context);

@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include "ShopPackage.h"
 #include "ShopProduct.h"
 
@@ -39,5 +42,6 @@ private:
     CShopProductList*  m_ProductListPtr;
 
     FILE_ENCODE  IsFileEncodingUtf8(const wchar_t* szFilePath);
-    std::wstring GetDecodedString(const char* buffer, FILE_ENCODE encode);
+    std::vector<std::wstring> ReadShopListLines(const wchar_t* szFilePath, FILE_ENCODE encode);
+    std::wstring DecodeShopListLine(const std::string& line, FILE_ENCODE encode);
 };

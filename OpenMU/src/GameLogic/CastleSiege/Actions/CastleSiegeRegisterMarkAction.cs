@@ -66,7 +66,19 @@ public class CastleSiegeRegisterMarkAction
                 return (CastleSiegeMarkRegistrationResult.GuildNotRegistered, guild.Name, registration.Marks);
             }
 
-            await player.DestroyInventoryItemAsync(signOfLord).ConfigureAwait(false);
+            try
+            {
+                await player.DestroyInventoryItemAsync(signOfLord).ConfigureAwait(false);
+            }
+            catch
+            {
+                // The mark was persisted before the item removal; take it back so that the persisted
+                // mark and the inventory stay in sync instead of losing the item without credit or
+                // granting credit without losing the item.
+                await context.DecrementMarksAsync(registration).ConfigureAwait(false);
+                throw;
+            }
+
             return (CastleSiegeMarkRegistrationResult.Success, guild.Name, marks);
         }
         finally

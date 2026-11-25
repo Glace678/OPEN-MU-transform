@@ -162,15 +162,29 @@ internal sealed class ChatRoom : IDisposable, IAsyncDisposable
         {
             foreach (var connectedClient in connectedClients)
             {
-                await connectedClient.LogOffAsync().ConfigureAwait(false);
+                try
+                {
+                    await connectedClient.LogOffAsync().ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    // One broken connection must not keep the remaining clients connected or
+                    // prevent the room closed notification (and the id recycling) below.
+                    this._logger.LogWarning(ex, "Could not log off chat client {ChatClientIndex} of room {RoomId}.", connectedClient.Index, this.RoomId);
+                }
             }
-
-            this.RoomClosed?.Invoke(this, new ChatRoomClosedEventArgs(this));
-            this.RoomClosed = null;
         }
         finally
         {
-            this._logger.LogDebug("Room {RoomId} disposed.", this.RoomId);
+            try
+            {
+                this.RoomClosed?.Invoke(this, new ChatRoomClosedEventArgs(this));
+            }
+            finally
+            {
+                this.RoomClosed = null;
+                this._logger.LogDebug("Room {RoomId} disposed.", this.RoomId);
+            }
         }
     }
 

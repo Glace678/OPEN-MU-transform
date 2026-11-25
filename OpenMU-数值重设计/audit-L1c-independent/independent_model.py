@@ -1,9 +1,27 @@
 # -*- coding: utf-8 -*-
 import json, math, os, csv
 
-BASE = r"D:\openmu自用\OpenMU-数值重设计\artifacts\_afterchange5"
-cat = json.load(open(os.path.join(BASE, "engine-catalog.json"), encoding="utf-8"))
-probe = json.load(open(os.path.join(BASE, "combat-probe.json"), encoding="utf-8"))
+import sys
+from pathlib import Path
+
+# Inputs are looked up relative to the repository (or passed as the first argument /
+# OPENMU_AUDIT_DATA_DIR), so the script works from any checkout location.
+_script_dir = Path(__file__).resolve().parent
+_default_dir = _script_dir.parent / "artifacts" / "_afterchange5"
+BASE = Path(
+    sys.argv[1] if len(sys.argv) > 1
+    else os.environ.get("OPENMU_AUDIT_DATA_DIR", str(_default_dir))
+)
+_required = ["engine-catalog.json", "combat-probe.json"]
+_missing = [name for name in _required if not (BASE / name).is_file()]
+if _missing:
+    raise SystemExit(
+        f"missing input file(s) {', '.join(_missing)} in {BASE}. "
+        "Pass the data directory as the first argument or set OPENMU_AUDIT_DATA_DIR."
+    )
+
+cat = json.load(open(BASE / "engine-catalog.json", encoding="utf-8"))
+probe = json.load(open(BASE / "combat-probe.json", encoding="utf-8"))
 mon = {m["id"]: m for m in cat["monsters"]}
 prof = {p["className"]: p for p in probe["Profile"]}
 

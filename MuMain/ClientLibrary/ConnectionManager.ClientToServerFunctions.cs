@@ -105,6 +105,49 @@ public unsafe partial class ConnectionManager
     }
 
     /// <summary>
+    /// Upper bound for the UTF-8 encoded message body: the C1 length byte allows 255 bytes and
+    /// the name field takes ten of them plus the three byte header.
+    /// </summary>
+    private const int MaxChatMessageBytes = 255 - 13;
+
+    /// <summary>
+    /// Cuts a chat message at a complete UTF-16 character boundary so the encoded packet stays
+    /// within what a single C1 packet can carry. The input box limits wide characters, but a
+    /// multi byte character consumes several bytes of the wire budget.
+    /// </summary>
+    private static string LimitChatMessage(string message)
+    {
+        if (string.IsNullOrEmpty(message))
+        {
+            return string.Empty;
+        }
+
+        var builder = new System.Text.StringBuilder(message.Length);
+        var usedBytes = 0;
+        for (var i = 0; i < message.Length; i++)
+        {
+            var isSurrogatePair = char.IsHighSurrogate(message[i])
+                && i + 1 < message.Length
+                && char.IsLowSurrogate(message[i + 1]);
+            var codePoint = isSurrogatePair ? message.Substring(i, 2) : message[i].ToString();
+            var byteCount = Encoding.UTF8.GetByteCount(codePoint);
+            if (usedBytes + byteCount > MaxChatMessageBytes)
+            {
+                break;
+            }
+
+            builder.Append(codePoint);
+            usedBytes += byteCount;
+            if (isSurrogatePair)
+            {
+                i++;
+            }
+        }
+
+        return builder.ToString();
+    }
+
+    /// <summary>
     /// Sends a <see cref="PublicChatMessage" /> to this connection.
     /// </summary>
     /// <param name="handle">The handle of the connection.</param>
@@ -126,10 +169,11 @@ public unsafe partial class ConnectionManager
         {
             connection.CreateAndSend(pipeWriter =>
             {
-                var length = PublicChatMessageRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@message)!));
+                var messageText = LimitChatMessage(NativeInterop.PtrToWideString(@message)!);
+                var length = PublicChatMessageRef.GetRequiredSize(Encoding.UTF8.GetByteCount(messageText));
                 var packet = new PublicChatMessageRef(pipeWriter.GetSpan(length)[..length]);
                 packet.Character = NativeInterop.PtrToWideString(@character);
-                packet.Message = NativeInterop.PtrToWideString(@message);
+                packet.Message = messageText;
 
                 return length;
             });
@@ -162,10 +206,11 @@ public unsafe partial class ConnectionManager
         {
             connection.CreateAndSend(pipeWriter =>
             {
-                var length = WhisperMessageRef.GetRequiredSize(Encoding.UTF8.GetByteCount(NativeInterop.PtrToWideString(@message)!));
+                var messageText = LimitChatMessage(NativeInterop.PtrToWideString(@message)!);
+                var length = WhisperMessageRef.GetRequiredSize(Encoding.UTF8.GetByteCount(messageText));
                 var packet = new WhisperMessageRef(pipeWriter.GetSpan(length)[..length]);
                 packet.ReceiverName = NativeInterop.PtrToWideString(@receiverName);
-                packet.Message = NativeInterop.PtrToWideString(@message);
+                packet.Message = messageText;
 
                 return length;
             });

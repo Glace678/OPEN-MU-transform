@@ -36,6 +36,9 @@ if not BUILD.is_dir():
     print("build the server first or set OPENMU_BUILD_DIR to the output directory", file=sys.stderr)
     raise SystemExit(2)
 LAUNCHER_EXE = ROOT / "OpenMU-Local.exe"
+SIGNATURE = MANIFEST.with_name(MANIFEST.name + ".sig")
+SIGNER_SCRIPT = Path(__file__).resolve().parent / "OpenMU" / "tools" / "ManifestSigner" / "Sign-Manifest.ps1"
+SIGNING_KEY_ENV = "OPENMU_MANIFEST_SIGNING_KEY"
 HEALTH_URL = os.environ.get("OPENMU_HEALTH_URL", "http://127.0.0.1:5080/_health")
 SERVER_PROCESS_NAMES = ["OpenMU-Local", "MUnique.OpenMU.Startup"]
 STOP_TIMEOUT_SECONDS = 30
@@ -50,6 +53,7 @@ FILES = [
 
 # Values written only after every step below succeeded; used to roll back.
 previous_manifest_bytes = None
+previous_signature_bytes = None
 backups = {}
 # Files that did not exist before this run; rollback must remove them again.
 new_files = set()
@@ -142,6 +146,15 @@ def rollback(step):
         except Exception as error:
             print(f"could not restore {MANIFEST}: {error}", file=sys.stderr)
 
+    if previous_signature_bytes is not None:
+        try:
+            tmp_signature = SIGNATURE.with_name(SIGNATURE.name + ".rollback.tmp")
+            tmp_signature.write_bytes(previous_signature_bytes)
+            os.replace(tmp_signature, SIGNATURE)
+            print("restored", SIGNATURE)
+        except Exception as error:
+            print(f"could not restore {SIGNATURE}: {error}", file=sys.stderr)
+
     if server_was_stopped and LAUNCHER_EXE.is_file():
         try:
             os.startfile(str(LAUNCHER_EXE))
@@ -196,8 +209,19 @@ for name in FILES:
 try:
     previous_manifest_bytes = MANIFEST.read_bytes()
     manifest = json.loads(previous_manifest_bytes.decode("utf-8"))
+    if SIGNATURE.is_file():
+        previous_signature_bytes = SIGNATURE.read_bytes()
 except Exception:
     rollback("reading manifest.json")
+
+# A signed distribution must be re-signed whenever the manifest changes; otherwise the launcher
+# rejects the new manifest at the next start (fail-closed). Refuse before stopping the server.
+if previous_signature_bytes is not None and not os.environ.get(SIGNING_KEY_ENV):
+    print(
+        f"{MANIFEST} is signed ({SIGNATURE.name} exists) but {SIGNING_KEY_ENV} is not set. "
+        f"Point it to the offline manifest signing key so the new manifest can be signed.",
+        file=sys.stderr)
+    raise SystemExit(2)
 
 backup = MANIFEST.with_name(f"manifest.json.bak-{stamp}")
 try:
@@ -231,9 +255,30 @@ except Exception as error:
 try:
     tmp_manifest = MANIFEST.with_name(MANIFEST.name + ".tmp")
     tmp_manifest.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    tmp_signature = None
+    if previous_signature_bytes is not None:
+        if not SIGNER_SCRIPT.is_file():
+            rollback(f"manifest signer not found: {SIGNER_SCRIPT}")
+        run([
+            "pwsh", "-NoProfile", "-File", SIGNER_SCRIPT,
+            "-ManifestPath", tmp_manifest,
+            "-PrivateKeyXmlPath", os.environ[SIGNING_KEY_ENV],
+        ])
+        tmp_signature = tmp_manifest.with_name(tmp_manifest.name + ".sig")
+        if not tmp_signature.is_file():
+            rollback("signing the new manifest")
+        if SIGNATURE.is_file():
+            backups[SIGNATURE] = SIGNATURE.with_name(f"{SIGNATURE.name}.bak-{stamp}")
+            shutil.copy2(SIGNATURE, backups[SIGNATURE])
+        else:
+            new_files.add(SIGNATURE)
+
     os.replace(tmp_manifest, MANIFEST)
-except Exception:
-    rollback("writing manifest.json")
+    if tmp_signature is not None:
+        os.replace(tmp_signature, SIGNATURE)
+except Exception as error:
+    rollback(f"writing manifest.json: {error}")
 
 # 4. Restart the launcher and wait until it actually serves.
 try:

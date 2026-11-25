@@ -102,7 +102,13 @@ public class QuestCompletionAction
                 }
             }
 
-            questState!.LastFinishedQuest = activeQuest;
+            // Keep the highest finished number of the group as progress marker; the earlier ones stay
+            // finished by the group's ascending number chain (see QuestCompletionRules).
+            if (questState!.LastFinishedQuest is not { } previousFinishedQuest
+                || previousFinishedQuest.Number <= activeQuest.Number)
+            {
+                questState!.LastFinishedQuest = activeQuest;
+            }
             await questState.ClearAsync(player.PersistenceContext).ConfigureAwait(false);
 
             foreach (var reward in activeQuest.Rewards)

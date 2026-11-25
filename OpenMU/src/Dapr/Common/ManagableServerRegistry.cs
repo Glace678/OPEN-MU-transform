@@ -19,6 +19,7 @@ public class ManagableServerRegistry : IServerProvider, IDisposable
 {
     private readonly TimeSpan _timeout = TimeSpan.FromSeconds(20);
     private readonly CancellationTokenSource _disposeCts = new();
+    private readonly CancellationToken _disposeToken;
     private readonly ILogger<ManagableServerRegistry> _logger;
     private readonly DaprClient _daprClient;
     private readonly ConcurrentDictionary<int, ManageableServerClient> _serverClients = new();
@@ -32,12 +33,18 @@ public class ManagableServerRegistry : IServerProvider, IDisposable
     {
         this._daprClient = daprClient;
         this._logger = logger;
+        this._disposeToken = this._disposeCts.Token;
 
         async Task RunTimeoutLoopAsync()
         {
             try
             {
-                await this.TimeoutLoopAsync(this._disposeCts.Token).ConfigureAwait(false);
+                await this.TimeoutLoopAsync(this._disposeToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException) when (this._disposeToken.IsCancellationRequested)
+            {
+                // Normal shutdown: the loop was cancelled by Dispose.
+                this._logger.LogDebug("Cleanup loop stopped because the registry is disposed.");
             }
             catch (Exception ex)
             {
@@ -98,7 +105,7 @@ public class ManagableServerRegistry : IServerProvider, IDisposable
 
     private async Task TimeoutLoopAsync(CancellationToken cancellationToken)
     {
-        while (!this._disposeCts.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested)
         {
             await Task.Delay(2000, cancellationToken).ConfigureAwait(false);
 

@@ -180,6 +180,7 @@ services:
       - "44405:44405"
       - "127.0.0.1::9464" # Prometheus
     environment:
+      APP_API_TOKEN: ${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}
       APPID: connectServer
       ASPNETCORE_URLS: http://+:8080
     depends_on:
@@ -196,7 +197,8 @@ services:
     command: [ "./daprd", "-app-id", "connectServer", "-app-port", "8080",
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
-                "-placement-host-address", "dapr-placement:50006"  ]
+                "-placement-host-address", "dapr-placement:50006",
+                "-app-api-token", "${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}"  ]
     environment:
       # Expanded by daprd for the ${{REDIS_PASSWORD}} placeholder in the
       # login-state component (the stack fails fast when it is not provided).
@@ -217,6 +219,7 @@ services:
       - "127.0.0.1::50001"
       - "127.0.0.1::9464" # Prometheus
     environment:
+      APP_API_TOKEN: ${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}
       ASPNETCORE_URLS: http://+:8080
     depends_on:
       zipkin:
@@ -230,7 +233,8 @@ services:
     command: [ "./daprd", "-app-id", "loginServer", "-app-port", "8080",
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
-                "-placement-host-address", "dapr-placement:50006"  ]
+                "-placement-host-address", "dapr-placement:50006",
+                "-app-api-token", "${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
       RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
@@ -249,6 +253,7 @@ services:
       - "127.0.0.1::50001"
       - "127.0.0.1::9464" # Prometheus
     environment:
+      APP_API_TOKEN: ${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}
       ASPNETCORE_URLS: http://+:8080
     depends_on:
       chatServer-dapr:
@@ -264,7 +269,8 @@ services:
     command: [ "./daprd", "-app-id", "friendServer", "-app-port", "8080",
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
-                "-placement-host-address", "dapr-placement:50006"  ]
+                "-placement-host-address", "dapr-placement:50006",
+                "-app-api-token", "${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
       RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
@@ -283,6 +289,7 @@ services:
       - "127.0.0.1::50001"
       - "127.0.0.1::9464" # Prometheus
     environment:
+      APP_API_TOKEN: ${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}
       ASPNETCORE_URLS: http://+:8080
     depends_on:
       database:
@@ -296,7 +303,8 @@ services:
     command: [ "./daprd", "-app-id", "guildServer", "-app-port", "8080",
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
-                "-placement-host-address", "dapr-placement:50006"  ]
+                "-placement-host-address", "dapr-placement:50006",
+                "-app-api-token", "${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
       RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
@@ -312,6 +320,7 @@ services:
     image: munique/openmu-chat:0.9.10
     container_name: chatServer
     environment:
+      APP_API_TOKEN: ${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}
       APPID: chatServer
       ASPNETCORE_URLS: http://+:8080
     ports:
@@ -330,7 +339,8 @@ services:
     command: [ "./daprd", "-app-id", "chatServer", "-app-port", "8080",
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
-                "-placement-host-address", "dapr-placement:50006"  ]
+                "-placement-host-address", "dapr-placement:50006",
+                "-app-api-token", "${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
       RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
@@ -355,6 +365,7 @@ services:
       - "127.0.0.1::8080"
       - "127.0.0.1::9464" # Prometheus
     environment:
+      APP_API_TOKEN: ${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}
       ASPNETCORE_URLS: http://+:8080
       PATH_BASE: /admin/
       # Bootstrap admin panel user. Compose refuses to start when it is unset or empty,
@@ -373,7 +384,8 @@ services:
     command: [ "./daprd", "-app-id", "adminPanel", "-app-port", "8080",
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
-                "-placement-host-address", "dapr-placement:50006"  ]
+                "-placement-host-address", "dapr-placement:50006",
+                "-app-api-token", "${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}"  ]
 
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
@@ -399,6 +411,7 @@ services:
       - "55902:55902"
       - "127.0.0.1::9464" # Prometheus
     environment:
+      APP_API_TOKEN: ${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}
       GS_ID: 0
       APPID: gameServer0
       PATH_BASE: /gameServer/0/
@@ -425,7 +438,8 @@ services:
     command: [ "./daprd", "-app-id", "gameServer0", "-app-port", "8080",
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
-                "-placement-host-address", "dapr-placement:50006"  ]
+                "-placement-host-address", "dapr-placement:50006",
+                "-app-api-token", "${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
       RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}
@@ -450,6 +464,7 @@ services:
       - "55904:55904"
       - "127.0.0.1::9464" # Prometheus
     environment:
+      APP_API_TOKEN: ${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}
       GS_ID: 1
       APPID: gameServer1
       PATH_BASE: /gameServer/1/
@@ -476,7 +491,8 @@ services:
     command: [ "./daprd", "-app-id", "gameServer1", "-app-port", "8080",
                 "-components-path", "/components",
                 "-config", "/components/config.yaml",
-                "-placement-host-address", "dapr-placement:50006"  ]
+                "-placement-host-address", "dapr-placement:50006",
+                "-app-api-token", "${APP_API_TOKEN:?APP_API_TOKEN is required - see .env.example}"  ]
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?set a Redis password}
       RABBITMQ_USER: ${RABBITMQ_USER:?set a RabbitMQ user}

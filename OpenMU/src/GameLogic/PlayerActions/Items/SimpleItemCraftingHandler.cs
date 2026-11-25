@@ -281,10 +281,26 @@ public class SimpleItemCraftingHandler : BaseItemCraftingHandler
         return resultList;
     }
 
+    /// <inheritdoc />
+    protected override int GetBatchCount(IList<CraftingRequiredItemLink> requiredItems) => this.GetCraftingCount(requiredItems);
+
     private int GetCraftingCount(IList<CraftingRequiredItemLink> requiredItems)
     {
-        return this._settings.MultipleAllowed
-            ? requiredItems.FirstOrDefault(r => r.ItemRequirement.Reference > 0)?.Items.Count() ?? 1
-            : 1;
+        if (!this._settings.MultipleAllowed)
+        {
+            return 1;
+        }
+
+        if (requiredItems.FirstOrDefault(r => r.ItemRequirement.Reference > 0) is not { } reference)
+        {
+            return 1;
+        }
+
+        // Validation counts stackable materials in units, so the batch count has to use the same
+        // unit. Counting records instead made splitting or merging the same amount of materials
+        // produce a different number of results.
+        var availableUnits = reference.Items.Sum(item => item.IsStackable() ? Math.Max(1, (int)item.Durability) : 1);
+        var minimumPerBatch = Math.Max(1, (int)reference.ItemRequirement.MinimumAmount);
+        return Math.Max(1, availableUnits / minimumPerBatch);
     }
 }

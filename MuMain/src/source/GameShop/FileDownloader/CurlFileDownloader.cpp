@@ -29,6 +29,12 @@ constexpr long kConnectTimeoutMs = 3000;
 constexpr long kLowSpeedLimitBytesPerSec = 1;
 constexpr long kLowSpeedTimeoutSec       = 30;
 
+// Whole-transfer guards: the low speed limit alone does not stop a transfer which keeps
+// trickling above it, and an unexpectedly large response could fill the disk while the caller
+// waits synchronously.
+constexpr long   kTotalTimeoutSec  = 300;
+constexpr size_t kMaxDownloadBytes = 64u * 1024u * 1024u;
+
 // libcurl needs one process-wide init before any easy handle is created.
 // curl_easy_init would do it lazily, but not thread-safely; do it once here.
 void EnsureCurlGlobalInit()
@@ -65,19 +71,39 @@ std::wstring Utf8ToWide(const char* value)
 
 // Progress callback: a non-zero return aborts the transfer. Used to honour the
 // caller's break flag.
+struct DownloadContext
+{
+    std::ofstream*            out = nullptr;
+    const std::atomic<bool>*  pBreak = nullptr;
+    size_t                    writtenBytes = 0;
+    bool                      exceededSizeLimit = false;
+};
+
 int XferInfoCallback(void* clientp, curl_off_t, curl_off_t, curl_off_t, curl_off_t)
 {
-    const auto* pBreak = static_cast<const std::atomic<bool>*>(clientp);
-    return (pBreak != nullptr && pBreak->load()) ? 1 : 0;
+    const auto* context = static_cast<const DownloadContext*>(clientp);
+    return (context != nullptr && context->pBreak != nullptr && context->pBreak->load()) ? 1 : 0;
 }
 
 size_t WriteToStream(char* ptr, size_t size, size_t nmemb, void* userdata)
 {
-    auto*        out       = static_cast<std::ofstream*>(userdata);
+    auto*        context   = static_cast<DownloadContext*>(userdata);
     const size_t byteCount = size * nmemb;
-    out->write(ptr, static_cast<std::streamsize>(byteCount));
-    // A short return tells libcurl the write failed and aborts the transfer.
-    return out->good() ? byteCount : 0;
+
+    if (context->writtenBytes + byteCount > kMaxDownloadBytes)
+    {
+        context->exceededSizeLimit = true;
+        return 0;  // abort: the file is larger than the accepted maximum
+    }
+
+    context->out->write(ptr, static_cast<std::streamsize>(byteCount));
+    if (!context->out->good())
+    {
+        return 0;
+    }
+
+    context->writtenBytes += byteCount;
+    return byteCount;
 }
 }  // namespace
 
@@ -116,18 +142,23 @@ WZResult CurlFileDownloader::DownloadFile(const std::wstring& url, const std::ws
         return result;
     }
 
+    DownloadContext context;
+    context.out    = &out;
+    context.pBreak = pBreak;
+
     curl_easy_setopt(curl, CURLOPT_URL, urlUtf8.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &WriteToStream);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &out);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &context);
     curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);  // HTTP >= 400 is a failure
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
     curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT_MS, kConnectTimeoutMs);
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, kTotalTimeoutSec);
     curl_easy_setopt(curl, CURLOPT_LOW_SPEED_LIMIT, kLowSpeedLimitBytesPerSec);
     curl_easy_setopt(curl, CURLOPT_LOW_SPEED_TIME, kLowSpeedTimeoutSec);
     curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
     curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, &XferInfoCallback);
-    curl_easy_setopt(curl, CURLOPT_XFERINFODATA, const_cast<std::atomic<bool>*>(pBreak));
+    curl_easy_setopt(curl, CURLOPT_XFERINFODATA, &context);
     curl_easy_setopt(curl, CURLOPT_FTP_USE_EPSV, passiveFtp ? 1L : 0L);
     if (!passiveFtp)
     {
@@ -152,7 +183,12 @@ WZResult CurlFileDownloader::DownloadFile(const std::wstring& url, const std::ws
     // Remove the partial file so a failed download is not mistaken for a good one.
     std::filesystem::remove(targetPath, fsError);
 
-    if (code == CURLE_ABORTED_BY_CALLBACK)
+    if (context.exceededSizeLimit)
+    {
+        result.SetResult(DL_READ_REMOTEFILE, code, L"[CurlFileDownloader] Fail : file exceeds %llu bytes (%ls)",
+                         static_cast<unsigned long long>(kMaxDownloadBytes), url.c_str());
+    }
+    else if (code == CURLE_ABORTED_BY_CALLBACK)
     {
         result.SetResult(WZ_USER_BREAK, code, L"[CurlFileDownloader] User Break : %ls", url.c_str());
     }

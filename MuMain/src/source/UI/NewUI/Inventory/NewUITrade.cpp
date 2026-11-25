@@ -591,7 +591,16 @@ void CNewUITrade::ProcessToReceiveTradeRequest(char* pbyYourID)
         return;
     }
 
-    CMultiLanguage::ConvertFromUtf8(m_szYourID, pbyYourID);
+    if (pbyYourID == nullptr)
+    {
+        SocketClient->ToGameServer()->SendTradeRequestResponse(false);
+        return;
+    }
+
+    // The wire field is a fixed width name without a terminator; pass its real byte length so the
+    // decoder does not read past the end of the packet for a full-width name.
+    m_szYourID[0] = L'\0';
+    CMultiLanguage::ConvertFromUtf8(m_szYourID, pbyYourID, MAX_USERNAME_SIZE);
 
     SEASON3B::CreateMessageBox(MSGBOX_LAYOUT_CLASS(SEASON3B::CTradeMsgBoxLayout));
 

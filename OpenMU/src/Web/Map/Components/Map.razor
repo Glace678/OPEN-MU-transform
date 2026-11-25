@@ -83,14 +83,31 @@
 
     private AsyncLazy<IMapController>? _lazyController;
 
+    private bool _disposed;
+
     /// <inheritdoc />
     protected override void OnInitialized()
     {
         _lazyController = new AsyncLazy<IMapController>(async () =>
         {
-            this._controller = await this.MapFactory.CreateMapAsync(this.Server, this.MapId);
-            await this.InvokeAsync(this.StateHasChanged);
-            return this._controller;
+            var controller = await this.MapFactory.CreateMapAsync(this.Server, this.MapId);
+            if (this._disposed)
+            {
+                // The page was closed while the controller was still being created. Nobody will
+                // ever dispose it through the component, so it has to be released right here.
+                await DisposeControllerAsync(controller);
+                return controller;
+            }
+
+            this._controller = controller;
+            await this.InvokeAsync(() =>
+            {
+                if (!this._disposed)
+                {
+                    this.StateHasChanged();
+                }
+            });
+            return controller;
         });
         base.OnInitialized();
     }
@@ -114,15 +131,23 @@
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
-        if (this._controller is IAsyncDisposable disposable)
+        this._disposed = true;
+        if (this._controller is { } controller)
         {
-            await disposable.DisposeAsync();
+            this._controller = null;
+            await DisposeControllerAsync(controller);
         }
-        else if (this._controller is IDisposable syncDisposable)
-        {
-            syncDisposable.Dispose();
-        }
+    }
 
-        this._controller = null;
+    private static async ValueTask DisposeControllerAsync(IMapController controller)
+    {
+        if (controller is IAsyncDisposable asyncDisposable)
+        {
+            await asyncDisposable.DisposeAsync();
+        }
+        else if (controller is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
     }
 }

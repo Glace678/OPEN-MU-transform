@@ -202,7 +202,7 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
             sRequestReward.m_aRequest[i].m_wCurValue = pRequestPacket->m_wCurValue;
 #endif  // ASG_ADD_TIME_LIMIT_QUEST
             if (pRequestPacket->m_dwType == QUEST_REQUEST_ITEM)
-                sRequestReward.m_aRequest[i].m_pItem = g_pNewItemMng->CreateItemOld(pRequestPacket->m_byItemInfo);
+                sRequestReward.m_aRequest[i].m_pItem = g_pNewItemMng->CreateItemExtended(pRequestPacket->m_byItemInfo);
             ++pRequestPacket;
         }
     }
@@ -236,7 +236,7 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
                     aTempRandReward[byRandCount].m_dwValue = pRewardPacket->m_dwValue;
                     if (aTempRandReward[byRandCount].m_dwType == QUEST_REWARD_ITEM)
                         aTempRandReward[byRandCount].m_pItem =
-                            g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
+                            g_pNewItemMng->CreateItemExtended(pRewardPacket->m_byItemInfo);
                     ++byRandCount;
                 }
             }
@@ -249,7 +249,7 @@ void CQuestMng::SetQuestRequestReward(const BYTE* pbyRequestRewardPacket)
                     sRequestReward.m_aReward[byGeneralCount].m_dwValue = pRewardPacket->m_dwValue;
                     if (pRewardPacket->m_dwType == QUEST_REWARD_ITEM)
                         sRequestReward.m_aReward[byGeneralCount].m_pItem =
-                            g_pNewItemMng->CreateItemOld(pRewardPacket->m_byItemInfo);
+                            g_pNewItemMng->CreateItemExtended(pRewardPacket->m_byItemInfo);
                     ++byGeneralCount;
                 }
             }

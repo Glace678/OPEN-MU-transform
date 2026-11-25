@@ -106,6 +106,11 @@ try {
         throw 'The PostgreSQL archive did not contain its COPYRIGHT license file.'
     }
 
+    # Keep the verified license at a stable location before the doc directory is removed below;
+    # packaging reads this copy, because 'doc\COPYRIGHT' no longer exists afterwards.
+    $retainedLicensePath = Join-Path $payloadRoot 'LICENSE.txt'
+    Copy-Item -LiteralPath $licenseSource -Destination $retainedLicensePath -Force
+
     foreach ($nonRuntimePath in @(
         'pgAdmin 4',
         'StackBuilder',

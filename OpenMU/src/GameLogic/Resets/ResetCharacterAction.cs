@@ -149,35 +149,75 @@ public class ResetCharacterAction
             return false;
         }
 
-        if (resetProgression.RequiredZen > 0 && !this._player.TryRemoveMoney(resetProgression.RequiredZen))
+        // Consume the items first and the money last, so a failure while removing an item can never
+        // leave the player with the price paid but the items still missing. If anything below fails,
+        // the already removed items are restored before the exception or the failure result is reported.
+        var consumedItems = new List<Item>();
+        try
         {
+            var remainingToConsume = resetProgression.RequiredItemAmount;
+            foreach (var item in requiredItems)
+            {
+                if (remainingToConsume <= 0)
+                {
+                    break;
+                }
+
+                var itemUnits = GetStackUnitCount(item);
+                if (item.IsStackable() && itemUnits > remainingToConsume)
+                {
+                    item.Durability -= (byte)remainingToConsume;
+                    remainingToConsume = 0;
+                    await this._player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
+                }
+                else
+                {
+                    var snapshot = this._player.PersistenceContext.CreateNew<Item>();
+                    snapshot.AssignValues(item);
+                    snapshot.ItemSlot = item.ItemSlot;
+                    consumedItems.Add(snapshot);
+                    remainingToConsume -= itemUnits;
+                    await this._player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
+                }
+            }
+        }
+        catch
+        {
+            await this.RestoreConsumedItemsAsync(consumedItems).ConfigureAwait(false);
+            throw;
+        }
+
+        if (resetProgression.RequiredZen > 0
+            && (!this._player.TryRemoveMoney(resetProgression.RequiredZen)
+                || this._player.Money < 0))
+        {
+            await this.RestoreConsumedItemsAsync(consumedItems).ConfigureAwait(false);
             await this.ShowMessageAsync(nameof(PlayerMessage.NotEnoughMoneyForReset), resetProgression.RequiredZen).ConfigureAwait(false);
             return false;
         }
 
-        var remainingToConsume = resetProgression.RequiredItemAmount;
-        foreach (var item in requiredItems)
-        {
-            if (remainingToConsume <= 0)
-            {
-                break;
-            }
-
-            var itemUnits = GetStackUnitCount(item);
-            if (item.IsStackable() && itemUnits > remainingToConsume)
-            {
-                item.Durability -= (byte)remainingToConsume;
-                remainingToConsume = 0;
-                await this._player.InvokeViewPlugInAsync<IItemDurabilityChangedPlugIn>(p => p.ItemDurabilityChangedAsync(item, false)).ConfigureAwait(false);
-            }
-            else
-            {
-                remainingToConsume -= itemUnits;
-                await this._player.DestroyInventoryItemAsync(item).ConfigureAwait(false);
-            }
-        }
-
         return true;
+    }
+
+    private async ValueTask RestoreConsumedItemsAsync(IEnumerable<Item> consumedItems)
+    {
+        foreach (var consumedItem in consumedItems)
+        {
+            var restoredItem = this._player.PersistenceContext.CreateNew<Item>();
+            restoredItem.AssignValues(consumedItem);
+            if (this._player.Inventory is { } inventory
+                && await inventory.AddItemAsync(consumedItem.ItemSlot, restoredItem).ConfigureAwait(false))
+            {
+                continue;
+            }
+
+            this._player.Logger.LogError(
+                "Reset rollback could not restore item {Definition} (level {Level}, durability {Durability}) in slot {Slot}.",
+                consumedItem.Definition?.Name,
+                consumedItem.Level,
+                consumedItem.Durability,
+                consumedItem.ItemSlot);
+        }
     }
 
     private async ValueTask<IList<Item>?> GetRequiredItemsToConsumeAsync(ResetConfiguration configuration, int requiredItemAmount)
@@ -194,7 +234,8 @@ public class ResetCharacterAction
 
         var requiredDefinition = configuration.RequiredResetItem;
         var candidateItems = this._player.Inventory.Items
-            .Where(item => item.Definition is { } definition
+            .Where(item => item.ItemSlot > InventoryConstants.LastEquippableItemSlotIndex
+                           && item.Definition is { } definition
                            && definition.Group == requiredDefinition.Group
                            && definition.Number == requiredDefinition.Number
                            && GetStackUnitCount(item) > 0)

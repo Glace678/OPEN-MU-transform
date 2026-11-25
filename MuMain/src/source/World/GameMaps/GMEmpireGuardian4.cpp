@@ -14,6 +14,14 @@
 
 #include "Data/DataHandler/LoadData.h"
 
+/// <summary>
+/// True when the tracked target index refers to a live character which is still in view.
+/// </summary>
+static bool IsUsableTargetCharacter(int index)
+{
+    return index >= 0 && index < MAX_CHARACTERS_CLIENT && CharactersClient[index].Object.Live;
+}
+
 GMEmpireGuardian4Ptr GMEmpireGuardian4::Make()
 {
     GMEmpireGuardian4Ptr doppelganger(new GMEmpireGuardian4);
@@ -278,7 +286,7 @@ bool GMEmpireGuardian4::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
                     CreateEffect(MODEL_SWORDMAIN01_EMPIREGUARDIAN_BOSS_GAION_, o->Position, o->Angle, o->Light, 0, o,
                                  -1, 0, 0, 0, o->Scale);
 
-                    if (o->AnimationFrame >= 0.0f && o->AnimationFrame < 0.5f)
+                    if (o->AnimationFrame >= 0.0f && o->AnimationFrame < 0.5f && IsUsableTargetCharacter(c->TargetCharacter))
                     {
                         CHARACTER* tc = &CharactersClient[c->TargetCharacter];
                         OBJECT*    to = &tc->Object;
@@ -310,7 +318,7 @@ bool GMEmpireGuardian4::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
                     CreateEffect(MODEL_SWORDMAIN01_EMPIREGUARDIAN_BOSS_GAION_, o->Position, o->Angle, o->Light, 0, o,
                                  -1, 0, 0, 0, o->Scale);
 
-                    if (o->AnimationFrame >= 0.0f && o->AnimationFrame < 0.7f)
+                    if (o->AnimationFrame >= 0.0f && o->AnimationFrame < 0.7f && IsUsableTargetCharacter(c->TargetCharacter))
                     {
                         CHARACTER* tc = &CharactersClient[c->TargetCharacter];
                         OBJECT*    to = &tc->Object;
@@ -334,7 +342,7 @@ bool GMEmpireGuardian4::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
                 }
                 break;
                 case MONSTER01_ATTACK3: {
-                    if (o->AnimationFrame >= 0.0f && o->AnimationFrame < 0.5f)
+                    if (o->AnimationFrame >= 0.0f && o->AnimationFrame < 0.5f && IsUsableTargetCharacter(c->TargetCharacter))
                     {
                         CHARACTER* tc = &CharactersClient[c->TargetCharacter];
                         OBJECT*    to = &tc->Object;
@@ -380,7 +388,7 @@ bool GMEmpireGuardian4::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
                     CreateEffect(MODEL_SWORDRIGHT02_EMPIREGUARDIAN_BOSS_GAION_, o->Position, o->Angle, o->Light, 0, o,
                                  -1, 0, 0, 0, o->Scale);
 
-                    if (o->AnimationFrame >= 0.0f && o->AnimationFrame < 0.5f)
+                    if (o->AnimationFrame >= 0.0f && o->AnimationFrame < 0.5f && IsUsableTargetCharacter(c->TargetCharacter))
                     {
                         CHARACTER* tc = &CharactersClient[c->TargetCharacter];
                         OBJECT*    to = &tc->Object;
@@ -571,7 +579,7 @@ bool GMEmpireGuardian4::MoveMonsterVisual(CHARACTER* c, OBJECT* o, BMD* b)
                 }
                 break;
                 case MONSTER01_ATTACK3: {
-                    if (o->AnimationFrame >= 0.2f && o->AnimationFrame <= 1.0f)
+                    if (o->AnimationFrame >= 0.2f && o->AnimationFrame <= 1.0f && IsUsableTargetCharacter(c->TargetCharacter))
                     {
                         CHARACTER* chT         = &CharactersClient[c->TargetCharacter];
                         vec3_t&    v3TargetPos = chT->Object.Position;

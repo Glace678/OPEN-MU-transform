@@ -481,6 +481,9 @@ size_t AppendBuffer(BufferHandle handle, const void* data, size_t sizeBytes)
     return (size_t)offsetWritten;
 }
 
+// Defined next to the vertex layout cache; declared here so buffer destruction can invalidate it.
+void ForgetVertexLayoutBufferId(GLuint id);
+
 void DestroyBuffer(BufferHandle handle)
 {
     if (!handle.IsValid() || !LoadBufferGLFunctions())
@@ -495,6 +498,9 @@ void DestroyBuffer(BufferHandle handle)
     g_BufferCapacity.erase(handle.id);
     g_BufferWriteOffset.erase(handle.id);
     g_BufferWrapCount.erase(handle.id);  // GLP-25 -- same lifetime as the two maps above
+    // The VAO layout cache stores the GL name of the bound buffer. Names are recycled by the
+    // driver, so a new buffer could reuse the name and be mistaken for an already configured one.
+    ForgetVertexLayoutBufferId(handle.id);
 }
 
 // ---- Uniform blocks: GLP-09 per-slot ring allocator ----
@@ -1045,6 +1051,17 @@ bool LoadVertexLayoutGLFunctions()
 constexpr int kVertexLayoutCount                        = 4;  // PosUvColor, BMDMesh, Terrain, PosOnly
 GLuint        g_LayoutVAO[kVertexLayoutCount]           = {};
 uint32_t      g_LayoutBoundBufferId[kVertexLayoutCount] = {};
+
+void ForgetVertexLayoutBufferId(GLuint id)
+{
+    for (int i = 0; i < kVertexLayoutCount; ++i)
+    {
+        if (g_LayoutBoundBufferId[i] == id)
+        {
+            g_LayoutBoundBufferId[i] = 0;
+        }
+    }
+}
 
 void ConfigurePosUvColorVAO(GLuint vbo)
 {

@@ -216,7 +216,7 @@ public static class CastleSiegeCrownMechanics
         await BroadcastOwnershipAsync(context, ownerName).ConfigureAwait(false);
     }
 
-    private static CastleSiegeJoinSide? GetCaptureSide(CastleSiegeContext context, Player? crownUser)
+    internal static CastleSiegeJoinSide? GetCaptureSide(CastleSiegeContext context, Player? crownUser)
     {
         if (crownUser is not { IsAlive: true, GuildStatus: not null }
             || context.SwitchUsers[0] is not { IsAlive: true, GuildStatus: not null } firstSwitchUser

@@ -263,7 +263,7 @@ public static class Extensions
     /// <param name="builder">The builder.</param>
     /// <param name="addBlazor">If set to <c>true</c>, it configures the application to provide a blazor server app.</param>
     /// <returns>The built and configured web application.</returns>
-    public static WebApplication BuildAndConfigure(this WebApplicationBuilder builder, bool addBlazor = false)
+    public static WebApplication BuildAndConfigure(this WebApplicationBuilder builder, bool addBlazor = false, bool internalTokenGate = true)
     {
         var pathBase = Environment.GetEnvironmentVariable("PATH_BASE");
         var useReverseProxy = !string.IsNullOrWhiteSpace(pathBase);
@@ -324,7 +324,7 @@ public static class Extensions
             app.UseForwardedHeaders();
         }
 
-        app.ConfigureDaprService(addBlazor);
+        app.ConfigureDaprService(addBlazor, internalTokenGate);
         app.MapPrometheusScrapingEndpoint();
 
         return app;
@@ -336,7 +336,7 @@ public static class Extensions
     /// <param name="app">The application.</param>
     /// <param name="addBlazor">If set to <c>true</c>, it configures the application to provide a blazor server app.</param>
     /// <returns>The configured web application.</returns>
-    public static WebApplication ConfigureDaprService(this WebApplication app, bool addBlazor = false)
+    public static WebApplication ConfigureDaprService(this WebApplication app, bool addBlazor = false, bool internalTokenGate = true)
     {
         if (app.Environment.IsDevelopment())
         {
@@ -360,6 +360,18 @@ public static class Extensions
             }
 
             app.Logger.LogWarning("Dapr 服务未配置 APP_API_TOKEN，当前仅在显式开发模式下放行 loopback 调用；生产部署必须配置 APP_API_TOKEN。");
+        }
+
+        if (!internalTokenGate)
+        {
+            // Browser-facing hosts (the admin panel) are protected by the cookie session and the
+            // role policies instead. The internal token gate would reject every request which
+            // arrives through the reverse proxy before the cookie authentication ever runs.
+            app.UseCloudEvents();
+            app.MapControllers();
+            app.MapSubscribeHandler();
+            app.MapDaprServiceHealthChecks();
+            return app;
         }
 
         app.Use(async (context, next) =>

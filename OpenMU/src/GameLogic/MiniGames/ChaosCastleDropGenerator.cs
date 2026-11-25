@@ -45,21 +45,44 @@ public class ChaosCastleDropGenerator : IDropGenerator
         var blessDefinition = this._gameContext.Configuration.Items.First(item => item is { Group: 14, Number: 13 });
         var soulDefinition = this._gameContext.Configuration.Items.First(item => item is { Group: 14, Number: 14 });
         var drops = MonsterJewelDropsPerLevel[context.Definition.GameLevel];
-        AddItems(drops.Blesses, blessDefinition);
-        AddItems(drops.Souls, soulDefinition);
 
-        void AddItems(int count, ItemDefinition definition)
+        var dropDefinitions = new List<ItemDefinition>(drops.Blesses + drops.Souls);
+        for (var i = 0; i < drops.Blesses; i++)
         {
-            for (var i = 0; i < count; i++)
-            {
-                bool assigned;
-                do
-                {
-                    var randomKillCount = Rand.NextInt(1, spawnedMonstersCount + 1);
-                    assigned = this._monsterDrops.TryAdd(randomKillCount, definition);
-                }
-                while (!assigned);
-            }
+            dropDefinitions.Add(blessDefinition);
+        }
+
+        for (var i = 0; i < drops.Souls; i++)
+        {
+            dropDefinitions.Add(soulDefinition);
+        }
+
+        // Every jewel has to be assigned to a distinct kill. The number of kills is limited by the
+        // monsters which are actually spawned, so more pre-allocated jewels than kills can never be
+        // distributed - the assignment loop below must not wait for an impossible free kill.
+        var killCount = Math.Max(0, spawnedMonstersCount);
+        if (dropDefinitions.Count > killCount)
+        {
+            dropDefinitions.RemoveRange(killCount, dropDefinitions.Count - killCount);
+        }
+
+        var availableKills = new List<int>(killCount);
+        for (var kill = 1; kill <= killCount; kill++)
+        {
+            availableKills.Add(kill);
+        }
+
+        // Shuffle the kills and take the first ones, so every jewel still gets a random kill, but a
+        // jewel count which is too high for the monster count can no longer spin forever.
+        for (var i = availableKills.Count - 1; i > 0; i--)
+        {
+            var swapIndex = Rand.NextInt(0, i + 1);
+            (availableKills[i], availableKills[swapIndex]) = (availableKills[swapIndex], availableKills[i]);
+        }
+
+        for (var i = 0; i < dropDefinitions.Count; i++)
+        {
+            this._monsterDrops[availableKills[i]] = dropDefinitions[i];
         }
     }
 

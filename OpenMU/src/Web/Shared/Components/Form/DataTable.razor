@@ -121,7 +121,10 @@
 
     private Task RefreshAsync()
     {
-        return this.GetPageAsync(this.Page);
+        // After a data change the current page may be beyond the end of the (now shorter) result
+        // set. In that case fall back to the last page which still has entries instead of showing
+        // an empty page although matching rows exist on the previous pages.
+        return this.GetPageAsync(this.Page, adjustToLastAvailablePage: true);
     }
 
     /// <inheritdoc />
@@ -154,13 +157,22 @@
         return this.GetPageAsync(this.Page - 1);
     }
 
-    private async Task GetPageAsync(int page)
+    private async Task GetPageAsync(int page, bool adjustToLastAvailablePage = false)
     {
         this._isLoading = true;
         try
         {
             await this.InvokeAsync(this.StateHasChanged).ConfigureAwait(false);
             var loadedItems = await this.DataService.GetAsync((page - 1) * this.PageSize, this.PageSize);
+            if (adjustToLastAvailablePage)
+            {
+                while (!loadedItems.Any() && page > 1)
+                {
+                    page--;
+                    loadedItems = await this.DataService.GetAsync((page - 1) * this.PageSize, this.PageSize);
+                }
+            }
+
             var isRefresh = this.Page == page;
             if (isRefresh)
             {

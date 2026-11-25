@@ -55,8 +55,10 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
 
             player.Attributes?.AddElement(multiplier, Stats.ExperienceRate);
             player.Attributes?.AddElement(multiplier, Stats.MasterExperienceRate);
-            var isEnabled = state.State != PeriodicTaskState.NotStarted;
-            if (!isEnabled)
+            // Only an actually started event has the increased multiplier (see OnStartedAsync), so only
+            // then the "happy hour started" message is correct. During the preparation phase the
+            // multiplier is still neutral.
+            if (state.State != PeriodicTaskState.Started)
             {
                 return;
             }
@@ -82,17 +84,18 @@ public class HappyHourPlugIn : PeriodicTaskBasePlugIn<HappyHourConfiguration, Pe
     }
 
     /// <inheritdoc/>
-    protected override async ValueTask OnPreparedAsync(PeriodicTaskGameServerState state)
+    protected override ValueTask OnPreparedAsync(PeriodicTaskGameServerState state)
     {
-        await state.Context.ForEachPlayerAsync(this.TrySendStartMessageAsync).ConfigureAwait(false);
+        return ValueTask.CompletedTask;
     }
 
     /// <inheritdoc/>
-    protected override ValueTask OnStartedAsync(PeriodicTaskGameServerState state)
+    protected override async ValueTask OnStartedAsync(PeriodicTaskGameServerState state)
     {
+        // Apply the multiplier first, then announce the start: players must never be told that the
+        // event is running while experience is still calculated with the old multiplier.
         this.GetMultiplier(state.Context).Value = this.Configuration?.ExperienceMultiplier ?? 1.0f;
-
-        return ValueTask.CompletedTask;
+        await state.Context.ForEachPlayerAsync(this.TrySendStartMessageAsync).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>

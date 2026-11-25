@@ -39,29 +39,36 @@ public class LegacyQuestRewardPlugIn : ILegacyQuestRewardPlugIn
     /// <inheritdoc />
     public async ValueTask ShowAsync(Player receiver, QuestRewardType reward, int value, AttributeDefinition? attributeReward)
     {
+        if (this._player.Connection is not { } connection)
+        {
+            return;
+        }
+
         var receiverId = receiver.GetId(this._player);
         switch (reward)
         {
             case QuestRewardType.LevelUpPoints:
-                await this._player.Connection.SendLegacyQuestRewardAsync(receiverId, LegacyQuestReward.QuestRewardType.LevelUpPoints, (byte)value).ConfigureAwait(false);
+                await connection.SendLegacyQuestRewardAsync(receiverId, LegacyQuestReward.QuestRewardType.LevelUpPoints, (byte)value).ConfigureAwait(false);
                 break;
             case QuestRewardType.CharacterEvolutionFirstToSecond:
-                await this._player.Connection.SendLegacyQuestRewardAsync(receiverId, LegacyQuestReward.QuestRewardType.CharacterEvolutionFirstToSecond, (byte)(this._player.SelectedCharacter!.CharacterClass!.Number << 3)).ConfigureAwait(false);
+                // The notification describes the receiver (the character which evolved), not the
+                // observer whose connection sends the packet.
+                await connection.SendLegacyQuestRewardAsync(receiverId, LegacyQuestReward.QuestRewardType.CharacterEvolutionFirstToSecond, (byte)((receiver.SelectedCharacter?.CharacterClass?.Number ?? 0) << 3)).ConfigureAwait(false);
                 break;
             case QuestRewardType.CharacterEvolutionSecondToThird:
-                await this._player.Connection.SendLegacyQuestRewardAsync(receiverId, LegacyQuestReward.QuestRewardType.CharacterEvolutionSecondToThird, (byte)(this._player.SelectedCharacter!.CharacterClass!.Number << 3)).ConfigureAwait(false);
+                await connection.SendLegacyQuestRewardAsync(receiverId, LegacyQuestReward.QuestRewardType.CharacterEvolutionSecondToThird, (byte)((receiver.SelectedCharacter?.CharacterClass?.Number ?? 0) << 3)).ConfigureAwait(false);
                 break;
             case QuestRewardType.Attribute:
                 if (attributeReward == Stats.IsSkillComboAvailable)
                 {
-                    await this._player.Connection.SendLegacyQuestRewardAsync(receiverId, LegacyQuestReward.QuestRewardType.ComboSkill, 0).ConfigureAwait(false);
+                    await connection.SendLegacyQuestRewardAsync(receiverId, LegacyQuestReward.QuestRewardType.ComboSkill, 0).ConfigureAwait(false);
                 }
 
                 if (attributeReward == Stats.PointsPerLevelUp)
                 {
                     var questLevel = this._player.GetQuestState(QuestConstants.LegacyQuestGroup)?.ActiveQuest?.MinimumCharacterLevel ?? 220;
                     var points = (this._player.Level - questLevel) * value;
-                    await this._player.Connection.SendLegacyQuestRewardAsync(receiverId, LegacyQuestReward.QuestRewardType.LevelUpPointsPerLevelIncrease, (byte)points).ConfigureAwait(false);
+                    await connection.SendLegacyQuestRewardAsync(receiverId, LegacyQuestReward.QuestRewardType.LevelUpPointsPerLevelIncrease, (byte)points).ConfigureAwait(false);
                 }
 
                 break;

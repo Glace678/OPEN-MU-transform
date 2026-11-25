@@ -16,9 +16,9 @@
       },
       "Microsoft.AspNetCore.App.Internal.Assets": {
         "type": "Direct",
-        "requested": "[10.0.2, )",
-        "resolved": "10.0.2",
-        "contentHash": "fMAqrUm+aspxRAsCJ6Hlgs96XSHwNIr9HBNt7wyBAzQkPlfE7w+0C4NzDoJnso5YZyDI0VcRtEXxG9odt3KiZA=="
+        "requested": "[10.0.15, )",
+        "resolved": "10.0.15",
+        "contentHash": "cineG7aU2cpo+CC5rDORY4bFRya0mlaULDpzQ+ncfG0tMyZlWATyVAo2P29i0hH40EElK5O204pjT4XEYALb6g=="
       },
       "Microsoft.AspNetCore.Components.QuickGrid": {
         "type": "Direct",
@@ -263,7 +263,6 @@
         "dependencies": {
           "BCrypt.Net-Next": "[4.0.3, )",
           "BlazorInputFile": "[0.2.0, )",
-          "BuildWebCompiler2022": "[1.14.15, )",
           "MUnique.OpenMU.GameLogic": "[1.0.0, )",
           "MUnique.OpenMU.Persistence": "[1.0.0, )",
           "MUnique.OpenMU.Web.ItemEditor": "[1.0.0, )",
@@ -272,12 +271,6 @@
           "Nito.AsyncEx": "[5.1.2, )",
           "System.Security.Cryptography.Pkcs": "[10.0.13, )"
         }
-      },
-      "BuildWebCompiler2022": {
-        "type": "CentralTransitive",
-        "requested": "[1.14.15, )",
-        "resolved": "1.14.15",
-        "contentHash": "/bfbMI6LBrLX5kn0sOVqscfe2kbsS0nUtIsKUUJg/puL4ey9J0y4DdGA+YaCAsu4Vi5tyNM8wWjlSOgjywxpzg=="
       },
       "Mapster": {
         "type": "CentralTransitive",

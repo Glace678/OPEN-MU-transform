@@ -616,6 +616,30 @@ public class CastleSiegeContext : IEventStateProvider
     }
 
     /// <summary>
+    /// Decrements and persists the submitted mark count again, e.g. when the item removal of the
+    /// corresponding submission failed after the mark had already been persisted.
+    /// </summary>
+    /// <param name="registration">The registration.</param>
+    /// <returns>The updated mark count, or <see langword="null"/> if the registration no longer exists.</returns>
+    internal async ValueTask<int?> DecrementMarksAsync(CastleSiegeGuildRegistration registration)
+    {
+        using var context = this._gameContext.PersistenceContextProvider.CreateNewTypedContext(
+            typeof(CastleSiegeGuildRegistration),
+            false,
+            this._gameContext.Configuration);
+        if (await context.GetByIdAsync<CastleSiegeGuildRegistration>(registration.Id).ConfigureAwait(false) is not { } persistentRegistration)
+        {
+            this.RegisteredGuilds.TryRemove(registration.GuildId, out _);
+            return null;
+        }
+
+        persistentRegistration.Marks = Math.Max(0, persistentRegistration.Marks - 1);
+        await context.SaveChangesAsync().ConfigureAwait(false);
+        registration.Marks = persistentRegistration.Marks;
+        return registration.Marks;
+    }
+
+    /// <summary>
     /// Increments and persists the submitted mark count.
     /// </summary>
     /// <param name="registration">The registration.</param>

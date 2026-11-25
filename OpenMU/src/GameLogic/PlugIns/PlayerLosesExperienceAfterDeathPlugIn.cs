@@ -140,7 +140,20 @@ public class PlayerLosesExperienceAfterDeathPlugIn : IAttackableGotKilledPlugIn,
         var expForNextLevel = expTable[level + 1];
         var expDiff = expForNextLevel - expForCurrentLevel;
         var lossPercentage = this.GetLossPercentage(level, levelDefinition == Stats.MasterLevel, character.State);
-        var loss = (int)(expDiff * (lossPercentage / 100.0));
+
+        // The experience table and the character experience are 64 bit values; the loss must be
+        // calculated in the same width so that high tables do not get truncated to a wrong int value.
+        var loss = (long)(expDiff * (lossPercentage / 100.0));
+        if (loss < 0)
+        {
+            loss = 0;
+        }
+
+        if (loss > expDiff)
+        {
+            loss = expDiff;
+        }
+
         return Math.Max(expForCurrentLevel, currentExperience - loss);
     }
 

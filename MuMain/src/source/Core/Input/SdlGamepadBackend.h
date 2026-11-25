@@ -2,6 +2,7 @@
 
 #include "Core/Haptics/Haptics.h"
 #include "Core/Input/GamepadTypes.h"
+#include "Core/Platform/PlatformDetect.h"
 
 #include <SDL3/SDL.h>
 
@@ -56,7 +57,9 @@ private:
 #endif
 
     SDL_Gamepad* m_gamepad = nullptr;
-#if defined(__ANDROID__) || defined(__OHOS__)
+#if MU_PLATFORM_MOBILE
+    // Declared for every mobile target (Android, HarmonyOS, iOS) which the implementation's
+    // MU_PLATFORM_MOBILE branch initializes.
     SDL_Haptic* m_systemHaptic               = nullptr;
     bool        m_hapticSubsystemInitialized = false;
 #endif

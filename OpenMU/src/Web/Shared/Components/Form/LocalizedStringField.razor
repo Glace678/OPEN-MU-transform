@@ -77,35 +77,53 @@
 
     private void SetValueForCulture(CultureInfo culture, string? newValue)
     {
-        var existingError = this._validationMessageStore?[this.FieldIdentifier].FirstOrDefault(message => message.StartsWith(culture.Name + ":"));
+        var existingError = this._validationMessageStore?[this.FieldIdentifier]
+            .FirstOrDefault(message => message.StartsWith(culture.Name + ":"));
 
-      if (this.EditContext is not null
-          && this._validationMessageStore is not null
-          && newValue is not null
-          && existingError is null
-          && newValue.Contains(OpenMU.Interfaces.LocalizedString.Separator, StringComparison.Ordinal))
-      {
-            this._validationMessageStore.Add(
-              this.FieldIdentifier,
-              string.Format(MUnique.OpenMU.Web.Shared.Properties.Resources.TheValueMustNotContain, culture.Name, MUnique.OpenMU.Interfaces.LocalizedString.Separator));
+        var isInvalid = newValue is not null
+            && newValue.Contains(OpenMU.Interfaces.LocalizedString.Separator, StringComparison.Ordinal);
+        if (this.EditContext is not null && this._validationMessageStore is not null)
+        {
+            if (isInvalid)
+            {
+                // Keep the error (or add it once) and keep the last valid value. The previous code
+                // removed the existing error in its cleanup block on every repeated invalid input,
+                // so the field looked valid although the text was still invalid.
+                if (existingError is null)
+                {
+                    this._validationMessageStore.Add(
+                        this.FieldIdentifier,
+                        string.Format(
+                            MUnique.OpenMU.Web.Shared.Properties.Resources.TheValueMustNotContain,
+                            culture.Name,
+                            OpenMU.Interfaces.LocalizedString.Separator));
+                    this.EditContext.NotifyValidationStateChanged();
+                }
 
-        // Notify the EditContext that validation state changed
-        this.EditContext.NotifyValidationStateChanged();
-      }
+                return;
+            }
 
-      if (this.EditContext is not null && this._validationMessageStore is not null)
-      {
-        var otherErrors = this._validationMessageStore[this.FieldIdentifier].Where(message => message != existingError).ToList();
+            if (existingError is not null)
+            {
+                // The value became valid: only the error of this culture is cleared, errors of
+                // other cultures stay untouched.
+                var otherErrors = this._validationMessageStore[this.FieldIdentifier]
+                    .Where(message => !ReferenceEquals(message, existingError))
+                    .ToList();
+                this._validationMessageStore.Clear(this.FieldIdentifier);
+                foreach (var message in otherErrors)
+                {
+                    this._validationMessageStore.Add(this.FieldIdentifier, message);
+                }
 
-        // Clear any previous error when the value becomes valid
-        this._validationMessageStore.Clear(this.FieldIdentifier);
-        this._validationMessageStore.Add(this.FieldIdentifier, otherErrors);
-        this.EditContext.NotifyValidationStateChanged();
-      }
+                this.EditContext.NotifyValidationStateChanged();
+            }
+        }
 
-      this.CurrentValue = this.CurrentValue.WithTranslation(culture, newValue);
+        this.CurrentValue = this.CurrentValue.WithTranslation(culture, newValue);
     }
-    
+
+
     private bool HasErrors(CultureInfo culture)
     {
       return this._validationMessageStore?[this.FieldIdentifier].Any(message => message.StartsWith(culture.Name + ":")) is true;

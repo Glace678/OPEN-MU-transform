@@ -83,6 +83,54 @@ public sealed class CastleSiegeTaxProvider
         => this.TryPayPercentageCostAsync(player, baseCost, GetContext(player), CastleSiegeTaxType.Store);
 
     /// <summary>
+    /// Gets the total store cost including the Castle Siege tax which <see cref="TryPayStoreCostAsync(Player, long)"/>
+    /// would charge, without removing any money. Used by callers which have to select an affordable
+    /// offer before they can actually buy it (e.g. bots).
+    /// </summary>
+    /// <param name="player">The player who would buy.</param>
+    /// <param name="baseCost">The untaxed store cost.</param>
+    /// <returns>The total cost including tax, or <see langword="null"/> when the cost is out of range and can never be paid.</returns>
+    public async ValueTask<long?> GetStoreTotalCostAsync(Player player, long baseCost)
+    {
+        if (baseCost is < 0 or > int.MaxValue)
+        {
+            return null;
+        }
+
+        var context = GetContext(player);
+        if (!IsEconomyActive(context) || GetTax(context, CastleSiegeTaxType.Store) == 0)
+        {
+            return baseCost;
+        }
+
+        // The tax rate and the exemption are read under the same lock which the actual payment uses,
+        // so the quote can't diverge from the charge within the same call chain.
+        await context.ExecutionLock.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            if (!IsEconomyActive(context))
+            {
+                return baseCost;
+            }
+
+            var persistentGuildId = await GetPersistentAllianceMasterGuildIdAsync(player).ConfigureAwait(false);
+            var rate = persistentGuildId == context.SiegeData.OwnerGuildId
+                ? 0
+                : GetTax(context, CastleSiegeTaxType.Store);
+            var tax = checked((baseCost * rate) / 100);
+            return checked(baseCost + tax);
+        }
+        catch (OverflowException)
+        {
+            return null;
+        }
+        finally
+        {
+            context.ExecutionLock.Release();
+        }
+    }
+
+    /// <summary>
     /// Gets the initialized Castle Siege context of a player.
     /// </summary>
     /// <param name="player">The player.</param>

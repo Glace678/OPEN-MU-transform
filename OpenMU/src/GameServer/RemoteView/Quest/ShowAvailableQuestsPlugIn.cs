@@ -4,6 +4,8 @@
 
 namespace MUnique.OpenMU.GameServer.RemoteView.Quest;
 
+using System.Linq;
+
 using System.Runtime.InteropServices;
 using MUnique.OpenMU.GameLogic.PlayerActions.Quests;
 using MUnique.OpenMU.GameLogic.Views.Quest;
@@ -40,28 +42,58 @@ public class ShowAvailableQuestsPlugIn : IShowAvailableQuestsPlugIn
         }
 
         var totalQuests = this._player.GetAvailableQuestsOfOpenedNpc().ToList();
-        var questCount = totalQuests.Count;
-        int Write()
+
+        // The length field of this C1 packet is a single byte; long quest lists must be chunked.
+        var maxQuestsPerPacket = 0;
+        while (maxQuestsPerPacket < byte.MaxValue
+            && AvailableQuestsRef.GetRequiredSize(maxQuestsPerPacket + 1) <= byte.MaxValue)
         {
-            var size = AvailableQuestsRef.GetRequiredSize(questCount);
-            var span = connection.Output.GetSpan(size)[..size];
-            var packet = new AvailableQuestsRef(span)
-            {
-                QuestCount = (ushort)questCount,
-                QuestNpcNumber = (ushort)this._player.OpenedNpc.Definition.Number,
-            };
-
-            for (int i = 0; i < questCount; i++)
-            {
-                var block = packet[i];
-                var quest = totalQuests[i];
-                block.Number = (ushort)quest.StartingNumber;
-                block.Group = (ushort)quest.Group;
-            }
-
-            return size;
+            maxQuestsPerPacket++;
         }
 
-        await connection.SendAsync(Write).ConfigureAwait(false);
+        maxQuestsPerPacket = Math.Max(1, maxQuestsPerPacket);
+
+        if (totalQuests.Count == 0)
+        {
+            await connection.SendAsync(() =>
+            {
+                var size = AvailableQuestsRef.GetRequiredSize(0);
+                var span = connection.Output.GetSpan(size)[..size];
+                _ = new AvailableQuestsRef(span)
+                {
+                    QuestCount = 0,
+                    QuestNpcNumber = (ushort)this._player.OpenedNpc.Definition.Number,
+                };
+                return size;
+            }).ConfigureAwait(false);
+            return;
+        }
+
+        for (var offset = 0; offset < totalQuests.Count; offset += maxQuestsPerPacket)
+        {
+            var chunk = totalQuests.Skip(offset).Take(maxQuestsPerPacket).ToList();
+            int Write()
+            {
+                var size = AvailableQuestsRef.GetRequiredSize(chunk.Count);
+                var span = connection.Output.GetSpan(size)[..size];
+                var packet = new AvailableQuestsRef(span)
+                {
+                    QuestCount = (ushort)chunk.Count,
+                    QuestNpcNumber = (ushort)this._player.OpenedNpc.Definition.Number,
+                };
+
+                for (int i = 0; i < chunk.Count; i++)
+                {
+                    var block = packet[i];
+                    var quest = chunk[i];
+                    block.Number = (ushort)quest.StartingNumber;
+                    block.Group = (ushort)quest.Group;
+                }
+
+                return size;
+            }
+
+            await connection.SendAsync(Write).ConfigureAwait(false);
+        }
     }
 }

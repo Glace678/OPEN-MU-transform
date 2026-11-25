@@ -46,6 +46,6 @@
     background-color: var(--bs-table-hover-bg);
 }
 
-.quickgrid tbody tr:has(td:empty) {
+.quickgrid tbody tr:has(> td[colspan]:only-child:empty) {
   display: none;
 }

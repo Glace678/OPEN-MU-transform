@@ -172,6 +172,61 @@ std::string BundledFontPath(const std::string& family, bool bold)
     return {};
 }
 
+// Validates the sfnt container before handing the buffer to stb_truetype, which only gets a
+// pointer and would otherwise trust arbitrary offsets and lengths from a corrupted file.
+bool IsFontContainerSane(const unsigned char* data, size_t size, int fontOffset)
+{
+    constexpr size_t HeaderSize  = 12;
+    constexpr size_t TableEntry  = 16;
+    if (data == nullptr || fontOffset < 0 || static_cast<size_t>(fontOffset) + HeaderSize > size)
+    {
+        return false;
+    }
+
+    const unsigned char* header = data + fontOffset;
+    const unsigned int version  = (static_cast<unsigned int>(header[0]) << 24)
+                                | (static_cast<unsigned int>(header[1]) << 16)
+                                | (static_cast<unsigned int>(header[2]) << 8)
+                                | static_cast<unsigned int>(header[3]);
+
+    // TrueType outlines, CFF outlines ('OTTO') and the Apple 'true' tag.
+    if (version != 0x00010000u && version != 0x4F54544Fu && version != 0x74727565u)
+    {
+        return false;
+    }
+
+    const unsigned int numTables = (static_cast<unsigned int>(header[4]) << 8) | header[5];
+    if (numTables == 0 || numTables > 512)
+    {
+        return false;
+    }
+
+    const size_t tableDirectorySize = HeaderSize + (numTables * TableEntry);
+    if (static_cast<size_t>(fontOffset) + tableDirectorySize > size)
+    {
+        return false;
+    }
+
+    for (unsigned int i = 0; i < numTables; ++i)
+    {
+        const unsigned char* entry = header + HeaderSize + (i * TableEntry);
+        const unsigned int offset = (static_cast<unsigned int>(entry[8]) << 24)
+                                  | (static_cast<unsigned int>(entry[9]) << 16)
+                                  | (static_cast<unsigned int>(entry[10]) << 8)
+                                  | static_cast<unsigned int>(entry[11]);
+        const unsigned int length = (static_cast<unsigned int>(entry[12]) << 24)
+                                  | (static_cast<unsigned int>(entry[13]) << 16)
+                                  | (static_cast<unsigned int>(entry[14]) << 8)
+                                  | static_cast<unsigned int>(entry[15]);
+        if (static_cast<size_t>(offset) + length > size)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 // Loads (and caches) the TTF face for a UI font family + weight. The cache is
 // a std::map so node pointers stay stable: when the user switches fonts a new
 // face loads under a new key, and MuGdiFont objects created earlier keep
@@ -224,10 +279,14 @@ const MuGdiFace* LoadFace(const std::string& family, bool bold)
         if (size > 0)
         {
             face.data.resize(static_cast<size_t>(size));
-            if (std::fread(face.data.data(), 1, face.data.size(), fp) == face.data.size() &&
-                stbtt_InitFont(&face.info, face.data.data(), stbtt_GetFontOffsetForIndex(face.data.data(), 0)))
+            if (std::fread(face.data.data(), 1, face.data.size(), fp) == face.data.size())
             {
-                face.valid = true;
+                const int fontOffset = stbtt_GetFontOffsetForIndex(face.data.data(), 0);
+                if (IsFontContainerSane(face.data.data(), face.data.size(), fontOffset) &&
+                    stbtt_InitFont(&face.info, face.data.data(), fontOffset))
+                {
+                    face.valid = true;
+                }
             }
         }
         std::fclose(fp);
