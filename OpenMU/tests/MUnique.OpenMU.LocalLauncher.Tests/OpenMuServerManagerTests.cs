@@ -20,7 +20,11 @@ public class OpenMuServerManagerTests
     [SetUp]
     public void SetUp()
     {
-        this._directory = Path.Combine(Path.GetTempPath(), $"OpenMU 强停 tests {Guid.NewGuid():N}");
+        // Use the test output directory instead of the system temp directory: CI runners can
+        // mount /tmp with noexec, where a copied stand-in executable starts and immediately dies.
+        var testDataRoot = Path.Combine(AppContext.BaseDirectory, "test-data");
+        Directory.CreateDirectory(testDataRoot);
+        this._directory = Path.Combine(testDataRoot, $"OpenMU 强停 tests {Guid.NewGuid():N}");
         this._paths = new LocalPaths(this._directory);
         Directory.CreateDirectory(this._paths.ServerDirectory);
         File.Copy(WaitExecutable, this._paths.ServerExecutable);
