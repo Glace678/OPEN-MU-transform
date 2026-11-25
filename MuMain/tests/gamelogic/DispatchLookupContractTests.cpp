@@ -132,6 +132,62 @@ TEST_SUITE("DispatchLookupContract")
         CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0x36, 0x00, 13));
     }
 
+    TEST_CASE("dispatch gate: fixed-layout by-server packets require their documented size")
+    {
+        // The receive buffer is allocated with the exact packet size, but the gate only required
+        // the 3 byte header for these opcodes while the handlers read further fields. A short
+        // packet therefore read past the buffer end. Every minimum below is the language
+        // independent length from OpenMU/docs/Packets (the client contract), cross-checked
+        // against the fields the handlers actually read.
+        static const struct { std::uint8_t code; int min; } cases[] = {
+        {0x07, 7},
+        {0x0B, 5},
+        {0x0F, 4},
+        {0x1B, 7},
+        {0x28, 5},
+        {0x2A, 6},
+        {0x2C, 7},
+        {0x33, 8},
+        {0x38, 4},
+        {0x3B, 8},
+        {0x3C, 4},
+        {0x3D, 4},
+        {0x40, 5},
+        {0x50, 5},
+        {0x51, 4},
+        {0x53, 4},
+        {0x56, 5},
+        {0x5D, 5},
+        {0x60, 4},
+        {0x61, 12},
+        {0x62, 13},
+        {0x63, 12},
+        {0x64, 6},
+        {0x81, 12},
+        {0x83, 4},
+        {0x91, 7},
+        {0x92, 4},
+        {0x94, 11},
+        {0x9A, 4},
+        {0xA0, 54},
+        {0xA1, 5},
+        {0xA2, 6},
+        {0xA3, 7},
+        {0xA7, 7},
+        {0xA8, 9},
+        {0xA9, 13},
+        {0xBA, 7},        };
+
+        for (const auto& c : cases)
+        {
+            CHECK_EQ(PacketDispatchPolicy::ExpectedPacketMinSize(true, c.code), c.min);
+            CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, c.code, 0, c.min - 1));
+            CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, c.code, 0, c.min));
+            // Same packet with the C2/C4 framing needs exactly one byte more.
+            CHECK_EQ(PacketDispatchPolicy::ExpectedPacketMinSize(false, c.code), c.min + 1);
+        }
+    }
+
     TEST_CASE("lookup contract: miss returns false and out=-1, never out of range")
     {
         // Roster of 8 slots; only slot 5 is live with key=100 / monster=216.

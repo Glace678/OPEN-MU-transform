@@ -235,6 +235,84 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
         case 0xDB:  // Magic attack (8 bytes C1)
             return 8 + headerDelta;
 
+        // Minimum sizes of fixed-layout by-server packets the client reads through a raw struct
+        // cast. The receive buffer holds exactly the received bytes, so shorter packets would read
+        // past its end; every length below is confirmed against docs/Packets.
+        case 0x07:  // fixed layout, see docs/Packets
+            return 7 + headerDelta;
+        case 0x0B:  // fixed layout, see docs/Packets
+            return 5 + headerDelta;
+        case 0x0F:  // fixed layout, see docs/Packets
+            return 4 + headerDelta;
+        case 0x1B:  // fixed layout, see docs/Packets
+            return 7 + headerDelta;
+        case 0x28:  // fixed layout, see docs/Packets
+            return 5 + headerDelta;
+        case 0x2A:  // fixed layout, see docs/Packets
+            return 6 + headerDelta;
+        case 0x2C:  // fixed layout, see docs/Packets
+            return 7 + headerDelta;
+        case 0x33:  // fixed layout, see docs/Packets
+            return 8 + headerDelta;
+        case 0x38:  // fixed layout, see docs/Packets
+            return 4 + headerDelta;
+        case 0x3B:  // fixed layout, see docs/Packets
+            return 8 + headerDelta;
+        case 0x3C:  // fixed layout, see docs/Packets
+            return 4 + headerDelta;
+        case 0x3D:  // fixed layout, see docs/Packets
+            return 4 + headerDelta;
+        case 0x40:  // fixed layout, see docs/Packets
+            return 5 + headerDelta;
+        case 0x50:  // fixed layout, see docs/Packets
+            return 5 + headerDelta;
+        case 0x51:  // fixed layout, see docs/Packets
+            return 4 + headerDelta;
+        case 0x53:  // fixed layout, see docs/Packets
+            return 4 + headerDelta;
+        case 0x56:  // fixed layout, see docs/Packets
+            return 5 + headerDelta;
+        case 0x5D:  // fixed layout, see docs/Packets
+            return 5 + headerDelta;
+        case 0x60:  // fixed layout, see docs/Packets
+            return 4 + headerDelta;
+        case 0x61:  // fixed layout, see docs/Packets
+            return 12 + headerDelta;
+        case 0x62:  // fixed layout, see docs/Packets
+            return 13 + headerDelta;
+        case 0x63:  // fixed layout, see docs/Packets
+            return 12 + headerDelta;
+        case 0x64:  // fixed layout, see docs/Packets
+            return 6 + headerDelta;
+        case 0x81:  // fixed layout, see docs/Packets
+            return 12 + headerDelta;
+        case 0x83:  // fixed layout, see docs/Packets
+            return 4 + headerDelta;
+        case 0x91:  // fixed layout, see docs/Packets
+            return 7 + headerDelta;
+        case 0x92:  // fixed layout, see docs/Packets
+            return 4 + headerDelta;
+        case 0x94:  // fixed layout, see docs/Packets
+            return 11 + headerDelta;
+        case 0x9A:  // fixed layout, see docs/Packets
+            return 4 + headerDelta;
+        case 0xA0:  // fixed layout, see docs/Packets
+            return 54 + headerDelta;
+        case 0xA1:  // fixed layout, see docs/Packets
+            return 5 + headerDelta;
+        case 0xA2:  // fixed layout, see docs/Packets
+            return 6 + headerDelta;
+        case 0xA3:  // fixed layout, see docs/Packets
+            return 7 + headerDelta;
+        case 0xA7:  // fixed layout, see docs/Packets
+            return 7 + headerDelta;
+        case 0xA8:  // fixed layout, see docs/Packets
+            return 9 + headerDelta;
+        case 0xA9:  // fixed layout, see docs/Packets
+            return 13 + headerDelta;
+        case 0xBA:  // fixed layout, see docs/Packets
+            return 7 + headerDelta;
+
         default:
             return minBytes;
     }
