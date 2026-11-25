@@ -91,7 +91,7 @@ public class ResetCharacterAction
             this.UpdateStats(configuration, resetProgression);
             if (configuration.MoveHome)
             {
-                await this.MoveHomeAsync().ConfigureAwait(false);
+                await this.MoveHomeAsync(configuration).ConfigureAwait(false);
             }
 
             completedConfiguration = configuration;
@@ -233,14 +233,21 @@ public class ResetCharacterAction
         }
     }
 
-    private async ValueTask MoveHomeAsync()
+    private async ValueTask MoveHomeAsync(ResetConfiguration configuration)
     {
         var homeMapDef = this._player.SelectedCharacter!.CharacterClass!.HomeMap;
         if (homeMapDef is { }
             && await this._player.GameContext.GetMapAsync((ushort)homeMapDef.Number).ConfigureAwait(false) is { SafeZoneSpawnGate: { } spawnGate })
         {
-            this._player.SelectedCharacter.PositionX = (byte)Rand.NextInt(spawnGate.X1, spawnGate.X2);
-            this._player.SelectedCharacter.PositionY = (byte)Rand.NextInt(spawnGate.Y1, spawnGate.Y2);
+            if (!configuration.LogOut)
+            {
+                await this._player.WarpToAsync(spawnGate).ConfigureAwait(false);
+                return;
+            }
+
+            var spawnPoint = spawnGate.GetRandomPoint();
+            this._player.SelectedCharacter.PositionX = spawnPoint.X;
+            this._player.SelectedCharacter.PositionY = spawnPoint.Y;
             this._player.SelectedCharacter.CurrentMap = spawnGate.Map;
             this._player.Rotation = spawnGate.Direction;
         }
