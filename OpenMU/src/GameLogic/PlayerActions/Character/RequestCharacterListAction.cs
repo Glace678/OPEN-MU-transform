@@ -17,6 +17,19 @@ public class RequestCharacterListAction
     /// <param name="player">The player who requests the character list.</param>
     public async ValueTask RequestCharacterListAsync(Player player)
     {
+        // A character-list packet is not a logout. Do not bypass removal of the
+        // active character and its guild/map state by advancing straight from the world.
+        if (player.PlayerState.CurrentState != PlayerState.Authenticated
+            && player.PlayerState.CurrentState != PlayerState.CharacterSelection)
+        {
+            return;
+        }
+
+        if (player.SelectedCharacter is not null)
+        {
+            return;
+        }
+
         if (await player.PlayerState.TryAdvanceToAsync(PlayerState.CharacterSelection).ConfigureAwait(false))
         {
             await player.InvokeViewPlugInAsync<IShowCharacterListPlugIn>(p => p.ShowCharacterListAsync()).ConfigureAwait(false);
