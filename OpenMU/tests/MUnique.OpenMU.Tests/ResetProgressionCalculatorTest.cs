@@ -115,6 +115,62 @@ public class ResetProgressionCalculatorTest
         Assert.That(progression.TotalPointsAfterReset, Is.EqualTo(600));
     }
 
+    /// <summary>
+    /// Verifies that a zero-reward tier does not cause billions of iterations or counter overflow.
+    /// </summary>
+    [Test]
+    public void MaximumResetCountWithZeroRewardTerminates()
+    {
+        var configuration = new ResetConfiguration
+        {
+            PointsTiers = [new() { MinimumResetCount = 1, PointsGranted = 0 }],
+        };
+
+        var progression = ResetProgressionCalculator.Calculate(int.MaxValue - 1, 0, configuration);
+        Assert.That(progression.NextResetCount, Is.EqualTo(int.MaxValue));
+        Assert.That(progression.TotalPointsAfterReset, Is.Zero);
+    }
+
+    /// <summary>
+    /// Verifies the legacy prefix and duplicate tier ordering in the cumulative sum.
+    /// </summary>
+    [Test]
+    public void CumulativePointsRespectLegacyPrefixAndDuplicateTiers()
+    {
+        var configuration = new ResetConfiguration
+        {
+            PointsPerReset = 10,
+            MultiplyPointsByResetCount = true,
+            PointsTiers =
+            [
+                new() { MinimumResetCount = 5, PointsGranted = 3 },
+                new() { MinimumResetCount = 5, PointsGranted = 99 },
+                new() { MinimumResetCount = 8, PointsGranted = 7 },
+            ],
+        };
+
+        var progression = ResetProgressionCalculator.Calculate(8, 0, configuration);
+        Assert.That(progression.TotalPointsAfterReset, Is.EqualTo(123));
+        Assert.That(progression.PointsForReset, Is.EqualTo(7));
+    }
+
+    /// <summary>
+    /// Verifies that a large legacy prefix saturates without overflowing.
+    /// </summary>
+    [Test]
+    public void CumulativePointsSaturateWithLargeLegacyPrefix()
+    {
+        var configuration = new ResetConfiguration
+        {
+            PointsPerReset = int.MaxValue,
+            MultiplyPointsByResetCount = true,
+            PointsTiers = [new() { MinimumResetCount = int.MaxValue, PointsGranted = 0 }],
+        };
+
+        var progression = ResetProgressionCalculator.Calculate(int.MaxValue - 1, 0, configuration);
+        Assert.That(progression.TotalPointsAfterReset, Is.EqualTo(int.MaxValue));
+    }
+
     private ResetConfiguration CreateTieredConfiguration()
     {
         return new ResetConfiguration
