@@ -834,6 +834,7 @@ class CUIRenderTextOriginal : public IUIRenderText
     HDC               m_hFontDC;
     HBITMAP           m_hBitmap;
     BYTE*             m_pFontBuffer;
+    SIZE              m_fontBufferSize{};
     DWORD             m_dwTextColor, m_dwBackColor;
     std::vector<BYTE> m_tightUploadBuffer;
 
@@ -861,7 +862,7 @@ public:
                     int iSort = RT3_SORT_LEFT, OUT SIZE* lpTextSize = NULL);
 
 protected:
-    void WriteText(int iOffset, int iWidth, int iHeight);
+    bool WriteText(int iOffset, int iWidth, int iHeight);
     void UploadText(float sx, float sy, int Width, int Height, float scale = 1.f);
     void RenderTextSections(const wchar_t* text, float x, float y, int width, int height, int clipPixels, float scale);
 

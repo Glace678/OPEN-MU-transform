@@ -2212,6 +2212,9 @@ void CUILetterListBox::DeleteText(DWORD dwLetterID)
             break;
     }
 
+    if (m_TextListIter == m_TextList.end())
+        return;
+
     if (m_bForceEditList == TRUE || m_TextList.size() == 1)
     {
         m_TextList.erase(m_TextListIter);
@@ -2837,24 +2840,21 @@ CUIRenderTextOriginal::~CUIRenderTextOriginal()
 
 bool CUIRenderTextOriginal::Create(HDC hDC)
 {
-    BITMAPINFO* DIB_INFO;
-    DIB_INFO = (BITMAPINFO*)new BYTE[sizeof(BITMAPINFOHEADER) + sizeof(PALETTEENTRY) * 256];
-    memset(DIB_INFO, 0x00, sizeof(BITMAPINFOHEADER));
-    DIB_INFO->bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
-    DIB_INFO->bmiHeader.biWidth       = REFERENCE_WIDTH * g_fScreenRate_x;      //. 640
-    DIB_INFO->bmiHeader.biHeight      = -(REFERENCE_HEIGHT * g_fScreenRate_y);  //. 480
-    DIB_INFO->bmiHeader.biPlanes      = 1;
-    DIB_INFO->bmiHeader.biBitCount    = 24;
-    DIB_INFO->bmiHeader.biCompression = BI_RGB;
+    BITMAPINFO bitmapInfo{};
+    bitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bitmapInfo.bmiHeader.biWidth = static_cast<LONG>(REFERENCE_WIDTH * g_fScreenRate_x);
+    bitmapInfo.bmiHeader.biHeight = -static_cast<LONG>(REFERENCE_HEIGHT * g_fScreenRate_y);
+    bitmapInfo.bmiHeader.biPlanes = 1;
+    bitmapInfo.bmiHeader.biBitCount = 24;
+    bitmapInfo.bmiHeader.biCompression = BI_RGB;
 
-    m_hBitmap = CreateDIBSection(hDC, DIB_INFO, DIB_RGB_COLORS, (void**)&m_pFontBuffer, nullptr, 0);
+    m_fontBufferSize = {bitmapInfo.bmiHeader.biWidth, -bitmapInfo.bmiHeader.biHeight};
+    m_hBitmap = CreateDIBSection(hDC, &bitmapInfo, DIB_RGB_COLORS, (void**)&m_pFontBuffer, nullptr, 0);
     m_hFontDC = CreateCompatibleDC(hDC);
     SelectObject(m_hFontDC, m_hBitmap);
     SelectObject(m_hFontDC, g_hFont);
     m_dwBackColor = 0;           //. Default Background Color;
     m_dwTextColor = 0xFFFFFFFF;  //. Default Text Color
-
-    delete[] DIB_INFO;
 
     if (nullptr == m_hFontDC || nullptr == m_hBitmap)
     {
@@ -2868,14 +2868,15 @@ void CUIRenderTextOriginal::Release()
     if (m_hFontDC != nullptr)
     {
         DeleteDC(m_hFontDC);
-        m_hFontDC     = nullptr;
-        m_pFontBuffer = nullptr;
+        m_hFontDC = nullptr;
     }
     if (m_hBitmap != nullptr)
     {
         DeleteObject(m_hBitmap);
         m_hBitmap = nullptr;
     }
+    m_pFontBuffer = nullptr;
+    m_fontBufferSize = {};
 }
 
 HDC CUIRenderTextOriginal::GetFontDC() const
@@ -2961,28 +2962,29 @@ void CUIRenderTextOriginal::EnsureFontAtlasHeight(int neededHeightPx)
 }
 
 /// \brief Reads the Picture created by GDI and copies it to the texture bitmap.
-void CUIRenderTextOriginal::WriteText(int iOffset, int iWidth, int iHeight)
+bool CUIRenderTextOriginal::WriteText(int iOffset, int iWidth, int iHeight)
 {
     const int LIMIT_WIDTH  = 256;
-    BITMAP_t* pBitmapFont  = &Bitmaps[BITMAP_FONT];
-    const int LIMIT_HEIGHT = static_cast<int>(pBitmapFont->Height);  // atlas may grow past the shipped 32px
+    BITMAP_t* pBitmapFont = Bitmaps.FindTexture(BITMAP_FONT);
+    if (!m_pFontBuffer || !pBitmapFont || !pBitmapFont->Buffer ||
+        iOffset < 0 || iWidth <= 0 || iWidth > LIMIT_WIDTH || iHeight <= 0)
+        return false;
 
-    SIZE FontDCSize = {(int)(REFERENCE_WIDTH * g_fScreenRate_x), (int)(REFERENCE_HEIGHT * g_fScreenRate_y)};
-    int  iPitch     = ((FontDCSize.cx * 24 + 31) & ~31) >> 3;
+    if (m_fontBufferSize.cx <= 0 || iHeight > m_fontBufferSize.cy)
+        return false;
+
+    const std::size_t sourcePitch = (static_cast<std::size_t>(m_fontBufferSize.cx) * 3 + 3) & ~std::size_t{3};
+    const std::size_t destinationPitch = LIMIT_WIDTH * 4;
+    if (static_cast<std::size_t>(iOffset) + static_cast<std::size_t>(iWidth) * 3 > sourcePitch ||
+        static_cast<std::size_t>(iHeight) * destinationPitch > pBitmapFont->BufferStorage.size())
+        return false;
 
     for (int y = 0; y < iHeight; ++y)
     {
-        int SrcIndex = y * iPitch + iOffset;
-        int DstIndex = y * LIMIT_WIDTH * 4;
+        std::size_t SrcIndex = y * sourcePitch + iOffset;
+        std::size_t DstIndex = y * destinationPitch;
         for (int x = 0; x < iWidth; ++x)
         {
-            if ((SrcIndex > iPitch * FontDCSize.cy) || (DstIndex > LIMIT_WIDTH * 4 * LIMIT_HEIGHT))
-            {
-#ifdef _DEBUG
-                MU_DEBUG_BREAK();
-#endif  // _DEBUG
-                return;
-            }
             if (*(m_pFontBuffer + SrcIndex) == 255)  // we hit a white pixel, so here is Text
             {
                 *reinterpret_cast<unsigned int*>(pBitmapFont->Buffer + DstIndex) = m_dwTextColor;
@@ -3007,6 +3009,7 @@ void CUIRenderTextOriginal::WriteText(int iOffset, int iWidth, int iHeight)
             DstIndex += 4;  // RGBA
         }
     }
+    return true;
 }
 
 /// \brief Binds the previously created texture bitmap to the opengl texture.
@@ -3233,16 +3236,16 @@ void CUIRenderTextOriginal::RenderTextSections(const wchar_t* text, float x, flo
     for (int offset = 0; offset < width; offset += sectionWidth)
     {
         const int currentWidth = std::min(sectionWidth, width - offset);
-        if (width + clipPixels > WindowWidth)
+        int sourceOffset = (offset + clipPixels) * bytesPerPixel;
+        if (width + clipPixels > m_fontBufferSize.cx)
         {
             // Long fitted labels may exceed the DC width before scaling.
             // Rasterize each slice at the origin instead of reading beyond it.
             TextOut(m_hFontDC, -(offset + clipPixels), 0, text, lstrlen(text));
-            WriteText(0, currentWidth, height);
+            sourceOffset = 0;
         }
-        else
-            WriteText((offset + clipPixels) * bytesPerPixel, currentWidth, height);
-        UploadText(x + offset * scale, y, currentWidth, height, scale);
+        if (WriteText(sourceOffset, currentWidth, height))
+            UploadText(x + offset * scale, y, currentWidth, height, scale);
     }
 }
 
