@@ -25,7 +25,7 @@ public class CreateCharacterAction
         using var loggerScope = player.Logger.BeginScope(this.GetType());
         if (player.PlayerState.CurrentState != PlayerState.CharacterSelection)
         {
-            player.Logger.LogError($"Account {player.Account!.LoginName} not in the right state, but {player.PlayerState.CurrentState}.");
+            player.Logger.LogError($"Account {player.Account?.LoginName} not in the right state, but {player.PlayerState.CurrentState}.");
             return;
         }
 
@@ -93,9 +93,20 @@ public class CreateCharacterAction
 
         return await player.RunPersistenceExclusiveAsync(async () =>
         {
-            if (player.PlayerState.CurrentState != PlayerState.CharacterSelection)
+            if (player.PlayerState.CurrentState != PlayerState.CharacterSelection
+                || !ReferenceEquals(player.Account, account))
             {
                 return null;
+            }
+
+            if (characterClass.CreationAllowedFlag != 0)
+            {
+                var unlockedFlags = account.UnlockedCharacterClasses
+                    .Aggregate(0, (flags, unlockedClass) => flags | unlockedClass.CreationAllowedFlag);
+                if ((unlockedFlags & characterClass.CreationAllowedFlag) != characterClass.CreationAllowedFlag)
+                {
+                    return null;
+                }
             }
 
             var freeSlot = this.GetFreeSlot(player);
