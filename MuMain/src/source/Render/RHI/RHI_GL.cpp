@@ -482,7 +482,10 @@ size_t AppendBuffer(BufferHandle handle, const void* data, size_t sizeBytes)
 }
 
 // Defined next to the vertex layout cache; declared here so buffer destruction can invalidate it.
+namespace
+{
 void ForgetVertexLayoutBufferId(GLuint id);
+}
 
 void DestroyBuffer(BufferHandle handle)
 {
