@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 public sealed class Debouncer : IDisposable
 {
     private readonly int _delayMs;
-    private readonly SemaphoreSlim _lock = new(1, 1);
+    private readonly object _lock = new();
     private CancellationTokenSource? _cts;
     private bool _disposed;
 
@@ -46,35 +46,26 @@ public sealed class Debouncer : IDisposable
     {
         ArgumentNullException.ThrowIfNull(action);
 
-        if (this._disposed)
-        {
-            return;
-        }
-
         CancellationToken token;
-
-        await this._lock.WaitAsync().ConfigureAwait(false);
-        try
+        CancellationTokenSource? previous;
+        lock (this._lock)
         {
             if (this._disposed)
             {
                 return;
             }
 
-            this.CancelPending();
+            previous = this._cts;
+            this._cts = new CancellationTokenSource();
+            token = this._cts.Token;
+        }
 
-            var cts = new CancellationTokenSource();
-            this._cts = cts;
-            token = cts.Token;
-        }
-        finally
-        {
-            this._lock.Release();
-        }
+        CancelAndDispose(previous);
 
         try
         {
             await Task.Delay(this._delayMs, token).ConfigureAwait(false);
+            token.ThrowIfCancellationRequested();
             await action().ConfigureAwait(false);
         }
         catch (OperationCanceledException)
@@ -96,28 +87,24 @@ public sealed class Debouncer : IDisposable
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="action"/> is null.</exception>
     public async Task DebounceAsync(Func<CancellationToken, Task> action)
     {
-        ObjectDisposedException.ThrowIf(this._disposed, this);
         ArgumentNullException.ThrowIfNull(action);
 
         CancellationToken token;
-
-        await this._lock.WaitAsync().ConfigureAwait(false);
-        try
+        CancellationTokenSource? previous;
+        lock (this._lock)
         {
-            this.CancelPending();
+            ObjectDisposedException.ThrowIf(this._disposed, this);
+            previous = this._cts;
+            this._cts = new CancellationTokenSource();
+            token = this._cts.Token;
+        }
 
-            var cts = new CancellationTokenSource();
-            this._cts = cts;
-            token = cts.Token;
-        }
-        finally
-        {
-            this._lock.Release();
-        }
+        CancelAndDispose(previous);
 
         try
         {
             await Task.Delay(this._delayMs, token).ConfigureAwait(false);
+            token.ThrowIfCancellationRequested();
             await action(token).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
@@ -131,55 +118,51 @@ public sealed class Debouncer : IDisposable
     /// </summary>
     public void Cancel()
     {
-        if (this._disposed)
+        CancellationTokenSource? previous;
+        lock (this._lock)
         {
-            return;
+            previous = this._cts;
+            this._cts = null;
         }
 
-        this._lock.Wait();
-        try
-        {
-            this.CancelPending();
-        }
-        finally
-        {
-            this._lock.Release();
-        }
+        CancelAndDispose(previous);
     }
 
     /// <inheritdoc />
     public void Dispose()
     {
-        if (this._disposed)
+        CancellationTokenSource? previous;
+        lock (this._lock)
+        {
+            if (this._disposed)
+            {
+                return;
+            }
+
+            this._disposed = true;
+            previous = this._cts;
+            this._cts = null;
+        }
+
+        CancelAndDispose(previous);
+    }
+
+    private static void CancelAndDispose(CancellationTokenSource? source)
+    {
+        // Cancellation callbacks can call back into the debouncer. Never run them
+        // while holding the state lock, and never dispose a lock with pending waiters.
+        if (source is null)
         {
             return;
         }
 
-        this._disposed = true;
-        this._lock.Wait();
         try
         {
-            this.CancelPending();
+            source.Cancel();
         }
         finally
         {
-            this._lock.Release();
-        }
-
-        this._lock.Dispose();
-    }
-
-    /// <summary>
-    /// Cancels and disposes the current <see cref="CancellationTokenSource"/>.
-    /// Must be called within the lock.
-    /// </summary>
-    private void CancelPending()
-    {
-        if (this._cts is { } existing)
-        {
-            existing.Cancel();
-            existing.Dispose();
-            this._cts = null;
+            source.Dispose();
         }
     }
 }
