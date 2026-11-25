@@ -7648,7 +7648,7 @@ void ReceiveDurability(const BYTE* ReceiveBuffer)
 
 BOOL ReceiveHelperItem(const BYTE* ReceiveBuffer, BOOL bEncrypted)
 {
-    static_assert(std::size(CHARACTER_ATTRIBUTE{}.AbilityTime) == MuPacketBounds::AbilityTimeSlots,
+    static_assert(std::extent_v<decltype(CHARACTER_ATTRIBUTE::AbilityTime)> == MuPacketBounds::AbilityTimeSlots,
                   "AbilityTime array size drifted from MuPacketBounds::AbilityTimeSlots");
     auto Data = (LPPRECEIVE_HELPER_ITEM)ReceiveBuffer;
     if (MuPacketBounds::IsAbilityIndexValid(Data->Index))
