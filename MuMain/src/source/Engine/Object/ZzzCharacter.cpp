@@ -15536,13 +15536,14 @@ CHARACTER* CreateHellGate(char* ID, int Key, EMonsterType Index, int x, int y, i
         return nullptr;
 
     portal->Level = Index - 152 + 1;
-    wchar_t name[std::size(portal->ID)]{};
+    constexpr size_t nameLength = MAX_USERNAME_SIZE + 1;
+    wchar_t name[nameLength]{};
     if (ID != nullptr)
     {
         CMultiLanguage::ConvertFromUtf8(name, ID, MAX_USERNAME_SIZE);
     }
 
-    wchar_t templateText[std::size(portal->ID)]{};
+    wchar_t templateText[nameLength]{};
     wcsncpy_s(templateText, portal->ID, _TRUNCATE);
 
     const wchar_t* placeholder    = wcsstr(templateText, L"%ls");
@@ -15555,7 +15556,7 @@ CHARACTER* CreateHellGate(char* ID, int Key, EMonsterType Index, int x, int y, i
 
     if (placeholder != nullptr)
     {
-        mu_swprintf_s(portal->ID, std::size(portal->ID), L"%.*ls%ls%ls", static_cast<int>(placeholder - templateText),
+        mu_swprintf_s(portal->ID, nameLength, L"%.*ls%ls%ls", static_cast<int>(placeholder - templateText),
                       templateText, name, placeholder + placeholderLen);
     }
     else if (portal->ID[0] == L'\0' && name[0] != L'\0')
