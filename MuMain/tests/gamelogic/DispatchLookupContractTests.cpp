@@ -138,6 +138,7 @@ TEST_SUITE("DispatchLookupContract")
         // layout depends on the sub code. Lengths are from OpenMU/docs/Packets and cross-checked
         // against the receive structs in WSclient.h.
         static const struct { std::uint8_t head; std::uint8_t sub; int min; } cases[] = {
+            {0xF3, 0x08, 7},   // HeroStateChanged / PK
             {0xF3, 0x20, 5},   // SummonHealthUpdate
             {0xF3, 0x22, 6},   // GuildSoccerTimeUpdate
             {0xF3, 0x23, 22},  // GuildSoccerScoreUpdate

@@ -171,8 +171,8 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
                     return 11 + headerDelta;
                 case 0x07:  // PRECEIVE_DAMAGE / PoisonDamage (8 bytes C1)
                     return 8 + headerDelta;
-                case 0x08:  // PRECEIVE_PK / HeroStateChanged (7 bytes C1)
-                    return 6 + headerDelta;
+                case 0x08:  // PRECEIVE_PK / HeroStateChanged (7 bytes C1: header + SubCode + KeyH + KeyL + PK)
+                    return 7 + headerDelta;
                 case 0x10:  // PRECEIVE_INVENTORY (5 bytes C1 / 6 bytes C2)
                     return 5 + headerDelta;
                 case 0x30:  // PRECEIVE_OPTION (19+ bytes C1)
