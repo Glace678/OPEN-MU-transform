@@ -29,7 +29,16 @@ class SecurityScanner:
         Feature 23: Audits ConnectionSettings.xml for plaintext passwords.
         """
         if not os.path.exists(file_path):
-            return {"exists": False, "leaks": [], "is_clean": False, "error": f"File not found: {file_path}"}
+            # Keep the result shape identical on every path: callers read
+            # is_well_formed_xml/connection_count and must not crash with a KeyError.
+            return {
+                "exists": False,
+                "is_well_formed_xml": False,
+                "connection_count": 0,
+                "leaks": [],
+                "is_clean": False,
+                "error": f"File not found: {file_path}",
+            }
 
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -55,7 +64,14 @@ class SecurityScanner:
                 "is_clean": len(leaks) == 0,
             }
         except Exception as e:
-            return {"exists": True, "leaks": [], "is_clean": False, "error": str(e)}
+            return {
+                "exists": True,
+                "is_well_formed_xml": False,
+                "connection_count": 0,
+                "leaks": [],
+                "is_clean": False,
+                "error": str(e),
+            }
 
     @staticmethod
     def audit_quickstart_powershell_compatibility(file_path: str) -> Dict[str, any]:
