@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.GameServer.RemoteView.Character;
 
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
 using MUnique.OpenMU.DataModel.Configuration;
 using MUnique.OpenMU.GameLogic;
 using MUnique.OpenMU.GameLogic.Views.Character;
@@ -72,7 +73,16 @@ public class SkillListViewPlugIn075 : SkillListViewPlugIn
 
         int Write()
         {
-            var count = Math.Min(this.SkillList.Count, byte.MaxValue);
+            // 5 bytes header, 3 bytes per entry.
+            var maxCount = SkillListPacketSize.GetMaximumEntryCount(5, 3);
+            if (this.SkillList.Count > maxCount)
+            {
+                this.Player.Logger.LogWarning(
+                    "Skill list of {0} has {1} entries, but only {2} fit into one packet; the rest is not shown.",
+                    this.Player, this.SkillList.Count, maxCount);
+            }
+
+            var count = Math.Min(this.SkillList.Count, maxCount);
             var size = SkillListUpdate075Ref.GetRequiredSize(count);
             var span = connection.Output.GetSpan(size)[..size];
             var packet = new SkillListUpdate075Ref(span)
