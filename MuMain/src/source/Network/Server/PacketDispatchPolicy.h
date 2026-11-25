@@ -177,6 +177,16 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
                     return 5 + headerDelta;
                 case 0x30:  // PRECEIVE_OPTION (19+ bytes C1)
                     return 19 + headerDelta;
+                case 0x20:  // PRECEIVE_SUMMON_LIFE / SummonHealthUpdate (5 bytes C1)
+                    return 5 + headerDelta;
+                case 0x22:  // PRECEIVE_WT_TIME_LEFT / GuildSoccerTimeUpdate (6 bytes C1)
+                    return 6 + headerDelta;
+                case 0x23:  // PRECEIVE_SOCCER_SCORE / GuildSoccerScoreUpdate (22 bytes C1)
+                    return 22 + headerDelta;
+                case 0x40:  // PRECEIVE_SERVER_COMMAND / ShowSwirl (7 bytes C1)
+                    return 7 + headerDelta;
+                case 0x52:  // PRECEIVE_MASTER_LEVEL / MasterSkillLevelUpdate (28 bytes C1)
+                    return 28 + headerDelta;
                 case 0x32:  // PRECEIVE_SET_POINTS_EXTENDED (24 bytes C1)
                     return 24 + headerDelta;
                 default:
@@ -190,6 +200,26 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
                     return 22 + headerDelta;
                 case 0x06:  // PRECEIVE_SERVER_LIST / ServerListResponse (6 bytes C1 / 7 bytes C2)
                     return 6 + headerDelta;
+                default:
+                    return minBytes;
+            }
+
+        case 0xAA:
+            switch (subCode)
+            {
+                case 0x04:  // PRECEIVE_DUEL_SCORE / DuelScore (10 bytes C1)
+                    return 10 + headerDelta;
+                case 0x05:  // PRECEIVE_DUEL_HEALTH / DuelHealthUpdate (12 bytes C1)
+                    return 12 + headerDelta;
+                default:
+                    return minBytes;
+            }
+
+        case 0xDE:
+            switch (subCode)
+            {
+                case 0x00:  // PRECEIVE_CHARACTER_CARD / CharacterClassCreationUnlock (5 bytes C1)
+                    return 5 + headerDelta;
                 default:
                     return minBytes;
             }

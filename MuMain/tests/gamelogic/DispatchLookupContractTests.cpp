@@ -132,6 +132,30 @@ TEST_SUITE("DispatchLookupContract")
         CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0x36, 0x00, 13));
     }
 
+    TEST_CASE("dispatch gate: multiplexed families require the documented sub packet size")
+    {
+        // Same root cause as the fixed-layout opcodes, but for the multiplexed families the
+        // layout depends on the sub code. Lengths are from OpenMU/docs/Packets and cross-checked
+        // against the receive structs in WSclient.h.
+        static const struct { std::uint8_t head; std::uint8_t sub; int min; } cases[] = {
+            {0xF3, 0x20, 5},   // SummonHealthUpdate
+            {0xF3, 0x22, 6},   // GuildSoccerTimeUpdate
+            {0xF3, 0x23, 22},  // GuildSoccerScoreUpdate
+            {0xF3, 0x40, 7},   // ShowSwirl / server command
+            {0xF3, 0x52, 28},  // MasterSkillLevelUpdate
+            {0xAA, 0x04, 10},  // DuelScore
+            {0xAA, 0x05, 12},  // DuelHealthUpdate
+            {0xDE, 0x00, 5},   // CharacterClassCreationUnlock
+        };
+
+        for (const auto& c : cases)
+        {
+            CHECK_EQ(PacketDispatchPolicy::ExpectedPacketMinSize(true, c.head, c.sub), c.min);
+            CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, c.head, c.sub, c.min - 1));
+            CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, c.head, c.sub, c.min));
+        }
+    }
+
     TEST_CASE("dispatch gate: fixed-layout by-server packets require their documented size")
     {
         // The receive buffer is allocated with the exact packet size, but the gate only required
