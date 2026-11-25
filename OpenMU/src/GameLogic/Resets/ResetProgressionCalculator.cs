@@ -72,17 +72,52 @@ public static class ResetProgressionCalculator
             return pointsForReset;
         }
 
+        // Each tier is constant over its entire range. Iterating every reset
+        // can take billions of steps and overflow the loop counter at int.MaxValue.
+        // Preserve the first configured tier when minimum counts are equal.
         long total = 0;
-        for (var resetCount = 1; resetCount <= nextResetCount; resetCount++)
+        long start = 1;
+        int? tierPoints = null;
+        var legacyPoints = Math.Max(0, pointsPerResetOverride == 0 ? configuration.PointsPerReset : pointsPerResetOverride);
+
+        foreach (var tier in configuration.PointsTiers
+                     .GroupBy(t => t.MinimumResetCount)
+                     .Select(g => g.First())
+                     .OrderBy(t => t.MinimumResetCount))
         {
-            total += GetPointsForReset(configuration, pointsPerResetOverride, resetCount);
+            if (tier.MinimumResetCount > nextResetCount)
+            {
+                break;
+            }
+
+            var boundary = Math.Max(1L, tier.MinimumResetCount);
+            total += GetRangePoints(boundary - start, tierPoints);
             if (total >= int.MaxValue)
             {
                 return int.MaxValue;
             }
+
+            start = boundary;
+            tierPoints = Math.Max(0, tier.PointsGranted);
         }
 
-        return (int)total;
+        total += GetRangePoints((long)nextResetCount - start + 1, tierPoints);
+        return (int)Math.Min(int.MaxValue, total);
+
+        long GetRangePoints(long count, int? points)
+        {
+            if (points is { } fixedPoints)
+            {
+                return count * fixedPoints;
+            }
+
+            // The legacy range always starts at reset 1. Cap before multiplying
+            // to avoid overflow even when both the count and reward are maximal.
+            var factor = configuration.MultiplyPointsByResetCount ? count * (count + 1) / 2 : count;
+            return legacyPoints > 0 && factor > int.MaxValue / legacyPoints
+                ? int.MaxValue
+                : factor * legacyPoints;
+        }
     }
 
     private static TTier? GetMatchingTier<TTier>(IEnumerable<TTier> tiers, int resetCount, Func<TTier, int> getMinimumResetCount)
