@@ -41,15 +41,23 @@ public class ApplyMagicEffectConsumeHandlerPlugIn : BaseConsumeHandlerPlugIn
     /// </returns>
     protected async ValueTask<bool> ConsumeItemCoreAsync(Player player, Item item, Item? targetItem, FruitUsage fruitUsage, MagicEffectDefinition effectDefinition)
     {
-        if (!effectDefinition.PowerUpDefinitions.Any()
-            || effectDefinition.Duration?.ConstantValue.Value is not { } durationInSeconds)
+        if (!this.CheckPreconditions(player, item)
+            || player.Attributes is not { } attributes
+            || !effectDefinition.PowerUpDefinitions.Any()
+            || effectDefinition.Duration?.ConstantValue.Value is not { } durationInSeconds
+            || !double.IsFinite(durationInSeconds)
+            || durationInSeconds < 0.001
+            || (double)durationInSeconds * 1000 > int.MaxValue)
         {
             return false;
         }
 
+        // MagicEffect uses an int-millisecond timer. Validate before charging the
+        // item or removing an existing effect, including during character selection.
+        var duration = TimeSpan.FromSeconds(durationInSeconds);
         var boosts = effectDefinition.PowerUpDefinitions
             .Where(def => def.Boost is not null && def.TargetAttribute is not null)
-            .Select(def => new MagicEffect.ElementWithTarget(player.Attributes!.CreateElement(def), def.TargetAttribute!))
+            .Select(def => new MagicEffect.ElementWithTarget(attributes.CreateElement(def), def.TargetAttribute!))
             .ToArray();
         if (boosts.Length == 0)
         {
@@ -66,7 +74,7 @@ public class ApplyMagicEffectConsumeHandlerPlugIn : BaseConsumeHandlerPlugIn
             await existingEffect.DisposeAsync().ConfigureAwait(false);
         }
 
-        var effect = new MagicEffect(TimeSpan.FromSeconds(durationInSeconds), effectDefinition, boosts!);
+        var effect = new MagicEffect(duration, effectDefinition, boosts!);
         await player.MagicEffectList.AddEffectAsync(effect).ConfigureAwait(false);
         return true;
     }
