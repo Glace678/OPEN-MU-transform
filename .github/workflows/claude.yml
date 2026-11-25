@@ -19,7 +19,7 @@ jobs:
     # pull_request_review(_comment) payloads carry the pull_request object, so
     # head.repo.fork can be checked directly here.
     if: |
-      github.actor == 'sven-n' && (
+      github.actor == github.repository_owner && (
         (github.event_name == 'issue_comment'
           && github.event.issue.pull_request
           && contains(github.event.comment.body, '@claude')) ||
@@ -43,10 +43,10 @@ jobs:
         if: github.event_name == 'issue_comment'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_API_URL: ${{ github.event.issue.pull_request.url }}
         run: |
           set -euo pipefail
-          api_url="${{ github.event.issue.pull_request.url }}"
-          fork="$(gh api "$api_url" --jq '.head.repo.fork')"
+          fork="$(gh api "$PR_API_URL" --jq '.head.repo.fork')"
           if [ "$fork" != "false" ]; then
             echo "Refusing to run: associated pull request comes from a fork."
             exit 1
@@ -59,7 +59,7 @@ jobs:
 
       - name: Run Claude Code
         id: claude
-        uses: anthropics/claude-code-action@1bc23c05956f182d538474fec6c62d9c830b47e9 # v1
+        uses: anthropics/claude-code-action@4411a9e9b0283becf4b924f7bce360fd7756c78c # v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |
