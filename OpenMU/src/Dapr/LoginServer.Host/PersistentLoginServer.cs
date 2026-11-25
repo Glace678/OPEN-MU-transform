@@ -51,14 +51,18 @@ public sealed class PersistentLoginServer : ILoginServer
                 return;
             }
 
-            foreach (var accountName in serverIndex)
+            // Keep entries whose account state could not be updated, so a failed
+            // cleanup does not permanently orphan their login locks.
+            foreach (var accountName in serverIndex.ToArray())
             {
-                await this.SetAccountOfflineAsync(accountName, serverId).ConfigureAwait(false);
+                if (await this.TrySetAccountOfflineAsync(accountName, serverId).ConfigureAwait(false))
+                {
+                    serverIndex.Remove(accountName);
+                }
             }
 
-            serverIndex.Clear();
-
-            if (await this._daprClient.TrySaveStateAsync(StoreName, indexName, serverIndex, eTag).ConfigureAwait(false))
+            if (await this._daprClient.TrySaveStateAsync(StoreName, indexName, serverIndex, eTag).ConfigureAwait(false)
+                && serverIndex.Count == 0)
             {
                 return;
             }
@@ -274,21 +278,32 @@ public sealed class PersistentLoginServer : ILoginServer
             accountName);
     }
 
-    private async Task SetAccountOfflineAsync(string accountName, byte expectedServerId)
+    private async Task<bool> TrySetAccountOfflineAsync(string accountName, byte expectedServerId)
     {
         try
         {
-            var (currentServerId, eTag) = await this._daprClient.GetStateAndETagAsync<int?>(StoreName, accountName, ConsistencyMode.Strong).ConfigureAwait(false);
-            if (currentServerId is null || currentServerId == OfflineServerId || currentServerId != expectedServerId)
+            for (int attempt = 0; attempt < MaxAttempts; attempt++)
             {
-                return;
-            }
+                var (currentServerId, eTag) = await this._daprClient.GetStateAndETagAsync<int?>(StoreName, accountName, ConsistencyMode.Strong).ConfigureAwait(false);
+                if (currentServerId != expectedServerId)
+                {
+                    // Already offline or logged in on another server. Never clear
+                    // the newer session using a stale server index.
+                    return true;
+                }
 
-            await this._daprClient.TrySaveStateAsync<int?>(StoreName, accountName, OfflineServerId, eTag).ConfigureAwait(false);
+                if (!string.IsNullOrEmpty(eTag)
+                    && await this._daprClient.TrySaveStateAsync<int?>(StoreName, accountName, OfflineServerId, eTag).ConfigureAwait(false))
+                {
+                    return true;
+                }
+            }
         }
         catch (Exception ex)
         {
             this._logger.LogError(ex, "Couldn't get/set logged-out state for account {0}", accountName);
         }
+
+        return false;
     }
 }
