@@ -20,13 +20,7 @@ export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(DOMAIN, 'OpenMU-PC', 'PC ability created');
     try {
-      // Inject auto-login identity + data root before SDL_main starts, same as
-      // the phone build.
       bridge.setDataRoot(MobileConfig.dataRoot(this.context));
-      const env = MobileConfig.autoLoginEnv();
-      Object.keys(env).forEach((name: string) => {
-        bridge.setEnv(name, env[name]);
-      });
       nativeStartupError = null;
     } catch (e) {
       nativeStartupError = 'native bridge init failed: ' + JSON.stringify(e);

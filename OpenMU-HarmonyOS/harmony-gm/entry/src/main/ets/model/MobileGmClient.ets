@@ -329,9 +329,9 @@ export class MobileGmClient {
 
   async login(username: string, password: string, twoFactorCode: string = ''): Promise<string> {
     const payload = JSON.stringify({
-      username: clean(username),
+      loginName: clean(username),
       password: password ?? '',
-      twoFactorCode: clean(twoFactorCode)
+      code: clean(twoFactorCode)
     });
     const response = await this.send('POST', '/login', payload);
     if (response.code === 401 || response.code === 403) {

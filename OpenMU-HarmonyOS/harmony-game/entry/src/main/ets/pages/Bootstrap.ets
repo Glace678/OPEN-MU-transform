@@ -140,14 +140,9 @@ struct Bootstrap {
   private async startGame(): Promise<void> {
     const context = getContext(this);
     try {
-      await MobileConfig.writeConfig(context);
-      // The extracted data folder now definitely exists (writeConfig also
-      // mkdirs it), so re-point the native process at it. onCreate's earlier
-      // setDataRoot ran before first-run extraction and could not chdir there;
-      // when it threw, the auto-login setEnv calls were skipped, so re-apply
-      // both the data root AND the auto-login env here and clear nativeStartupError.
+      const server = await MobileConfig.writeConfig(context);
       bridge.setDataRoot(MobileConfig.dataRoot(context));
-      const env = MobileConfig.autoLoginEnv();
+      const env = MobileConfig.autoLoginEnv(server);
       Object.keys(env).forEach((name: string) => {
         bridge.setEnv(name, env[name]);
       });

@@ -24,14 +24,7 @@ export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.info(DOMAIN, 'OpenMU', 'Game ability created');
     try {
-      // Point the native game at the extracted data directory and inject the
-      // auto-login identity. This mirrors Android GameActivity, which sets the
-      // same variables via SDLActivity.nativeSetenv before the SDL thread runs.
       bridge.setDataRoot(MobileConfig.dataRoot(this.context));
-      const env = MobileConfig.autoLoginEnv();
-      Object.keys(env).forEach((name: string) => {
-        bridge.setEnv(name, env[name]);
-      });
     } catch (e) {
       // H-05: record the failure instead of silently continuing. native_bridge
       // now throws on bad args / failed setenv/chdir, and Bootstrap will refuse

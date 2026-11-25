@@ -128,12 +128,9 @@ struct Bootstrap {
   private async startGame(): Promise<void> {
     const context = getContext(this);
     try {
-      await MobileConfig.writeConfig(context);
-      // Data folder now exists; re-point the native process at it and re-apply
-      // auto-login environment variables (onCreate's setDataRoot threw before
-      // first-run extraction, skipping autoLoginEnv).
+      const server = await MobileConfig.writeConfig(context);
       bridge.setDataRoot(MobileConfig.dataRoot(context));
-      const env = MobileConfig.autoLoginEnv();
+      const env = MobileConfig.autoLoginEnv(server);
       Object.keys(env).forEach((name: string) => {
         bridge.setEnv(name, env[name]);
       });

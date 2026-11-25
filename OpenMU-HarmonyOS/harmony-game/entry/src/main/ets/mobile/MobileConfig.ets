@@ -135,7 +135,7 @@ export class MobileConfig {
   // ([CONNECTION SETTINGS]/ServerIP, [Render]/FrameRateMode, [Input]/Handedness,
   // ...), merged into the shipped config instead of replacing it so the
   // [LOGIN]/[Audio] defaults from the data archive survive.
-  static async writeConfig(context: Context): Promise<void> {
+  static async writeConfig(context: Context): Promise<string> {
     const root = MobileConfig.dataRoot(context);
     fs.mkdirSync(root, true);
 
@@ -213,11 +213,20 @@ export class MobileConfig {
       fs.closeSync(out);
     }
     fs.renameSync(pendingPath, configPath);
+    return server;
   }
 
   // Returns the env vars injected before SDL_main starts (same values Android
   // GameActivity sets via nativeSetenv).
-  static autoLoginEnv(): Record<string, string> {
+  static autoLoginEnv(server: string): Record<string, string> {
+    if (server !== '127.0.0.1' && server.toLowerCase() !== 'localhost') {
+      return {
+        'MU_LOCAL_AUTO_LOGIN': '0',
+        'MU_MOBILE_LOCAL_AUTO_LOGIN': '0',
+        'MU_LOCAL_GAME_USERNAME': '',
+        'MU_LOCAL_GAME_PASSWORD': ''
+      };
+    }
     const credentials = deriveCredentials(MOBILE_PACKAGE_KEY);
     return {
       'MU_LOCAL_AUTO_LOGIN': '1',
