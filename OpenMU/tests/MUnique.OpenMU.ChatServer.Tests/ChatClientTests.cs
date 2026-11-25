@@ -5,9 +5,12 @@
 namespace MUnique.OpenMU.ChatServer.Tests;
 
 using System.Buffers;
+using System.Text;
 using Microsoft.Extensions.Logging.Abstractions;
 using MUnique.OpenMU.Interfaces;
 using MUnique.OpenMU.Network;
+using MUnique.OpenMU.Network.Packets.ChatServer;
+using MUnique.OpenMU.Network.Xor;
 
 /// <summary>
 /// Unit tests for the <see cref="ChatClient"/>.
@@ -132,6 +135,58 @@ public class ChatClientTests
         await duplexPipe.ReceivePipe.Writer.WriteAndWaitForFlushAsync(authenticationPacket).ConfigureAwait(false);
 
         Assert.That(client.Index, Is.EqualTo(authInfo.Index));
+    }
+
+    /// <summary>
+    /// Tests that a message longer than the single byte packet length allows is cut at a character
+    /// boundary instead of overflowing the header: the C1 header can only declare 255 bytes, so a
+    /// 260 byte packet desynchronizes the receiving client.
+    /// </summary>
+    /// <returns>The async task.</returns>
+    [Test]
+    public async Task LongMessageStaysWithinSingleByteHeaderAsync()
+    {
+        var manager = new ChatRoomManager(new NullLoggerFactory());
+        var duplexPipe = new DuplexPipe();
+        var connection = new Connection(duplexPipe, null, null, new NullLogger<Connection>());
+        var client = new ChatClient(connection, manager, new NullLogger<ChatClient>());
+
+        await client.SendMessageAsync(1, new string('A', 300)).ConfigureAwait(false);
+
+        var sendResult = await duplexPipe.SendPipe.Reader.ReadAsync().ConfigureAwait(false);
+        var sentPacket = sendResult.Buffer.ToArray();
+
+        Assert.That(sentPacket[0], Is.EqualTo(0xC1));
+        Assert.That(sentPacket[1], Is.EqualTo(byte.MaxValue));
+        Assert.That(sentPacket.Length, Is.EqualTo(ChatMessageRef.GetRequiredSize(sentPacket[4])));
+        Assert.That(sentPacket[4], Is.LessThanOrEqualTo(byte.MaxValue - 5));
+    }
+
+    /// <summary>
+    /// Tests that a long multi byte message is not cut in the middle of an UTF-8 sequence.
+    /// </summary>
+    /// <returns>The async task.</returns>
+    [Test]
+    public async Task LongMultiByteMessageIsCutAtCharacterBoundaryAsync()
+    {
+        var manager = new ChatRoomManager(new NullLoggerFactory());
+        var duplexPipe = new DuplexPipe();
+        var connection = new Connection(duplexPipe, null, null, new NullLogger<Connection>());
+        var client = new ChatClient(connection, manager, new NullLogger<ChatClient>());
+
+        // 120 euro signs: 360 UTF-8 bytes, so the cut has to fall inside the string.
+        await client.SendMessageAsync(1, new string('\u20AC', 120)).ConfigureAwait(false);
+
+        var sendResult = await duplexPipe.SendPipe.Reader.ReadAsync().ConfigureAwait(false);
+        var sentPacket = sendResult.Buffer.ToArray();
+
+        Assert.That(sentPacket.Length, Is.EqualTo(ChatMessageRef.GetRequiredSize(sentPacket[4])));
+        Assert.That(sentPacket[4], Is.LessThanOrEqualTo(byte.MaxValue - 5));
+
+        var decrypted = (byte[])sentPacket.Clone();
+        new Xor3Decryptor(5).Decrypt(decrypted);
+        var message = Encoding.UTF8.GetString(decrypted, 5, decrypted[4]);
+        Assert.That(message, Is.EqualTo(new string('\u20AC', 83)));
     }
 
     /// <summary>

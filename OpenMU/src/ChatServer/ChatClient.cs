@@ -23,6 +23,13 @@ internal class ChatClient : IChatClient
 {
     private const int TokenOffset = 6;
     private const int MessageOffset = 5;
+
+    /// <summary>
+    /// Maximum number of UTF-8 bytes the message body may contain. The C1 header stores the
+    /// complete packet length in one byte, and the header, code, sender index and length fields
+    /// already consume five of them.
+    /// </summary>
+    private const int MaximumMessageBytes = byte.MaxValue - 5;
     private static readonly ISpanDecryptor TokenDecryptor = new Xor3Decryptor(TokenOffset);
 
     /// <summary>
@@ -95,14 +102,32 @@ internal class ChatClient : IChatClient
 
         int WritePacket()
         {
-            Span<byte> utf8Buffer = stackalloc byte[byte.MaxValue];
-            Encoding.UTF8.GetEncoder().Convert(message.AsSpan(), utf8Buffer, true, out _, out var actualByteCount, out _);
-            var messageLength = (byte)actualByteCount;
+            var messageBytes = Encoding.UTF8.GetBytes(message);
+            if (messageBytes.Length > MaximumMessageBytes)
+            {
+                // Cut at a complete character boundary. Encoding into a fixed 255 byte buffer used
+                // to produce 260 byte packets whose single byte header could only declare 255,
+                // which desynchronized the client stream.
+                var truncatedLength = MaximumMessageBytes;
+                while (truncatedLength > 0 && (messageBytes[truncatedLength] & 0xC0) == 0x80)
+                {
+                    truncatedLength--;
+                }
+
+                this._logger.LogWarning(
+                    "Chat message of client {sender} was truncated from {originalBytes} to {truncatedBytes} UTF-8 bytes to fit the packet length.",
+                    senderId,
+                    messageBytes.Length,
+                    truncatedLength);
+                messageBytes = messageBytes[..truncatedLength];
+            }
+
+            var messageLength = (byte)messageBytes.Length;
             var length = ChatMessageRef.GetRequiredSize(messageLength);
             var packet = new ChatMessageRef(connection.Output.GetSpan(length)[..length]);
             packet.SenderIndex = senderId;
             packet.MessageLength = messageLength;
-            utf8Buffer[..actualByteCount].CopyTo(packet.Message);
+            messageBytes.AsSpan().CopyTo(packet.Message);
             MessageEncryptor.Encrypt(packet);
             return length;
         }

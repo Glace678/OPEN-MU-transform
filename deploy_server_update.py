@@ -195,6 +195,16 @@ if previous_signature_bytes is not None:
     if not SIGNER_SCRIPT.is_file():
         print(f"manifest signer not found: {SIGNER_SCRIPT}", file=sys.stderr)
         raise SystemExit(2)
+    # Resolve the interpreter now: the patch_manifest tooling supports Windows PowerShell 5.1
+    # and PowerShell 7, so a host without "pwsh" must fail here, while the server is still
+    # running and nothing has been copied, instead of after the binaries were replaced.
+    signer_host = shutil.which("pwsh") or shutil.which("powershell")
+    if not signer_host:
+        print(
+            "neither pwsh nor powershell is available to sign the new manifest. "
+            "The running server and the deployment directory were not modified.",
+            file=sys.stderr)
+        raise SystemExit(2)
 
 try:
     manifest = json.loads(previous_manifest_bytes.decode("utf-8"))
@@ -272,7 +282,7 @@ try:
         if not SIGNER_SCRIPT.is_file():
             rollback(f"manifest signer not found: {SIGNER_SCRIPT}")
         run([
-            "pwsh", "-NoProfile", "-File", SIGNER_SCRIPT,
+            signer_host, "-NoProfile", "-File", SIGNER_SCRIPT,
             "-ManifestPath", tmp_manifest,
             "-PrivateKeyXmlPath", os.environ[SIGNING_KEY_ENV],
         ])

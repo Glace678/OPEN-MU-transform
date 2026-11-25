@@ -177,6 +177,8 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
                     return 5 + headerDelta;
                 case 0x30:  // PRECEIVE_OPTION (19+ bytes C1)
                     return 19 + headerDelta;
+                case 0x32:  // PRECEIVE_SET_POINTS_EXTENDED (24 bytes C1)
+                    return 24 + headerDelta;
                 default:
                     return minBytes;
             }
@@ -198,8 +200,8 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
         case 0x0D:  // Notice
             return baseHeader + 1;
 
-        case 0x11:  // Attack (7 bytes C1)
-            return 7 + headerDelta;
+        case 0x11:  // ObjectHitExtended (16 bytes C1); the handler always casts the extended layout
+            return 16 + headerDelta;
         case 0x15:  // Position (5 bytes C1)
             return 5 + headerDelta;
         case 0x16:  // Die character (7 bytes C1)
@@ -216,6 +218,8 @@ inline constexpr int ExpectedPacketMinSize(bool isC1C3, std::uint8_t headCode, s
             return 4 + headerDelta;
         case 0x22:  // Get item / ItemPickUpRequestFailed (4 bytes C1)
             return 4 + headerDelta;
+        case 0x36:  // TradeRequest (13 bytes C3: header + 10 byte name)
+            return 13 + headerDelta;
         case 0x23:  // Drop item (5 bytes C1)
             return 5 + headerDelta;
         case 0x24:  // Equipment item (7 bytes C1)

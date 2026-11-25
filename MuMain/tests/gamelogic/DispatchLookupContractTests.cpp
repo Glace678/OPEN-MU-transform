@@ -114,10 +114,22 @@ TEST_SUITE("DispatchLookupContract")
         CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0xF3, 0x03, 12));
         CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0xF3, 0x03, 13));
 
-        // Attack (0x11) requires 7 bytes for C1
-        CHECK(PacketDispatchPolicy::ExpectedPacketMinSize(true, 0x11) == 7);
-        CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0x11, 0x00, 6));
-        CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0x11, 0x00, 7));
+        // ObjectHitExtended (0x11) requires the full 16 byte extended layout for C1. The handler
+        // casts LPPRECEIVE_ATTACK_EXTENDED unconditionally, so the older 7 byte minimum let a
+        // truncated packet read HealthDamage/ShieldDamage beyond the received buffer.
+        CHECK(PacketDispatchPolicy::ExpectedPacketMinSize(true, 0x11) == 16);
+        CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0x11, 0x00, 15));
+        CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0x11, 0x00, 16));
+
+        // BaseStatsExtended (0xF3/0x32) requires the full 24 byte layout for C1
+        CHECK(PacketDispatchPolicy::ExpectedPacketMinSize(true, 0xF3, 0x32) == 24);
+        CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0xF3, 0x32, 23));
+        CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0xF3, 0x32, 24));
+
+        // TradeRequest (0x36) requires header + 10 byte name = 13 bytes
+        CHECK(PacketDispatchPolicy::ExpectedPacketMinSize(true, 0x36) == 13);
+        CHECK_FALSE(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0x36, 0x00, 12));
+        CHECK(PacketDispatchPolicy::PassesSubCodeDispatchGate(true, 0x36, 0x00, 13));
     }
 
     TEST_CASE("lookup contract: miss returns false and out=-1, never out of range")
