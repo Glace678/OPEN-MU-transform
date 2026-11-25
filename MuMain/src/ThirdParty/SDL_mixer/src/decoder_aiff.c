@@ -378,8 +378,12 @@ static bool AIFF_init_audio_internal(AIFF_AudioData *adata, SDL_IOStream *io, SD
         return SDL_SetError("AIFF: Bad AIFF-C file (no FVER chunk)");
     }
 
+    if (channels == 0 || channels > SDL_MAX_UINT8 || frequency == 0 || frequency > SDL_MAX_SINT32) {
+        return SDL_SetError("AIFF: invalid number of channels or sample rate");
+    }
+
     adata->framesize = channels * (samplesize / 8);
-    adata->stop = adata->start + channels * numsamples * (samplesize / 8);
+    adata->stop = adata->start + (Sint64) adata->framesize * numsamples;
     adata->fetch = FetchPCM;
 
     // Decode the audio data format

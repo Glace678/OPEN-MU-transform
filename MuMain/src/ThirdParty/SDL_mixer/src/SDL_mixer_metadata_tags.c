@@ -572,7 +572,7 @@ static Uint32 ape_handle_tag(SDL_PropertiesID props, Uint8 *data, size_t valsize
 
     const Uint32 key_len = (Uint32)(value - key);
 
-    if (valsize > (APE_BUFFER_SIZE - key_len)) {
+    if (valsize > (APE_BUFFER_SIZE - APE_FRAME_TAG_KEY - key_len)) {
         // maybe it's a list? convert embedded null chars to newlines. Note this will mess up binary data, but the APE spec doesn't currently list any binary keys.
         for (size_t i = 0; i < APE_BUFFER_SIZE; i++) {
             if (data[i] == '\0') {

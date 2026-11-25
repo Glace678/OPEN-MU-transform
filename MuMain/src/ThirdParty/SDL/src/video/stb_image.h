@@ -4128,8 +4128,9 @@ static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp
          // with a 4x subsample ratio (4:1:1 / 4x vertical) would make
          // output_jpeg_nv12 step the source pointer backwards and read before the
          // chroma plane allocation. Reject it up front instead of decoding.
-         if (z->img_h_max / z->img_comp[1].h > 2 || z->img_v_max / z->img_comp[1].v > 2 ||
-             z->img_h_max / z->img_comp[2].h > 2 || z->img_v_max / z->img_comp[2].v > 2) {
+         if (z->s->img_n == 3 &&
+             (z->img_h_max / z->img_comp[1].h > 2 || z->img_v_max / z->img_comp[1].v > 2 ||
+              z->img_h_max / z->img_comp[2].h > 2 || z->img_v_max / z->img_comp[2].v > 2)) {
              stbi__cleanup_jpeg(z);
              return stbi__errpuc("nv12subsample", "Unsupported NV12 chroma subsampling");
          }

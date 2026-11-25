@@ -426,7 +426,7 @@ static bool SDLCALL FLAC_init_track(void *audio_userdata, SDL_IOStream *io, cons
         flac.FLAC__stream_decoder_finish(tdata->decoder);
         flac.FLAC__stream_decoder_delete(tdata->decoder);
         SDL_free(tdata);
-        SDL_SetError("FLAC__stream_decoder_process_until_end_of_metadata() failed");
+        return SDL_SetError("FLAC__stream_decoder_process_until_end_of_metadata() failed");
     }
 
     SDL_copyp(&tdata->spec, spec);
